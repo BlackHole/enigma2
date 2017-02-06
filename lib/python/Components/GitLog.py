@@ -1,16 +1,12 @@
 import urllib, socket
 from sys import modules
 from os import path
-from boxbranding import getImageDistro, getImageType, getImageVersion
+from boxbranding import getImageType, getFeedsUrl
 
 def fetchlog(logtype):
 	releasenotes = ""
 	try:
-# TODO: fix url for obh
-		if getImageType() == 'release':
-			sourceurl = 'http://www.vuplus-community.net/feeds/%s/%s/%s/%s-git.log' % (getImageDistro(), getImageType(), getImageVersion(), logtype)
-		else:
-			sourceurl = 'http://www.vuplus-community.net/feeds/%s/%s/%s/%s-git.log' % (getImageDistro(), getImageType(), getImageVersion(), logtype)
+		sourceurl = "%s/%s-git.log" % (getFeedsUrl().rsplit("/", 1)[0], logtype)
 		print "[GitLog]",sourceurl
 		sourcefile,headers = urllib.urlretrieve(sourceurl)
 		fd = open(sourcefile, 'r')
