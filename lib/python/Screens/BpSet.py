@@ -15,7 +15,6 @@ from Tools.Directories import fileExists, pathExists, resolveFilename, SCOPE_CUR
 from os import system, remove as os_remove, rename as os_rename, popen, getcwd, chdir
 from Screens.Setup import Setup
 from Plugins.SystemPlugins.NetworkBrowser.NetworkBrowser import NetworkBrowser
-from Plugins.SystemPlugins.SoftwareManager.BackupRestore import BackupScreen
 from enigma import eTimer
 from Screens.Console import Console
 import process
