@@ -167,7 +167,7 @@ class DeliteAddons(Screen):
 	
 	def runUpgrade(self, result):
 		if result:
-			from Plugins.SystemPlugins.SoftwareManager.plugin import UpdatePlugin
+			from Screens.SoftwareUpdate import UpdatePlugin
 			self.session.open(UpdatePlugin, "Open Black Hole ")
 	
 	def checkPanel(self):
