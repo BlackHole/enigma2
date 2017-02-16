@@ -22,10 +22,10 @@ class AVSwitch:
 	rates["Multi"] =	{	"multi":	{ 50: "pal", 60: "ntsc" } }
 
 	rates["480i"] =		{	"60Hz": 	{ 60: "480i" } }
+	
+	rates["480p"] =		{	"60Hz": 	{ 60: "480p" } }
 
 	rates["576i"] =		{	"50Hz": 	{ 50: "576i" } }
-
-	rates["480p"] =		{	"60Hz": 	{ 60: "480p" } }
 
 	rates["576p"] =		{	"50Hz": 	{ 50: "576p" } }
 
@@ -40,7 +40,11 @@ class AVSwitch:
 	rates["1080p"] =	{	"50Hz":		{ 50: "1080p50" },
 							"60Hz":		{ 60: "1080p" },
 							"multi":	{ 50: "1080p50", 60: "1080p" } }
-							
+
+	rates["2160p30"] =	{ 	"25Hz":		{ 50: "2160p25" },
+							"30Hz":		{ 60: "2160p30"} ,
+							"multi": { 50: "2160p25", 60: "2160p30" } }				
+
 	rates["2160p"] =	{	"50Hz":		{ 50: "2160p50" },
 							"60Hz":		{ 60: "2160p" },
 							"multi":	{ 50: "2160p50", 60: "2160p" } }
@@ -65,17 +69,17 @@ class AVSwitch:
 	# modes["DVI-PC"] = ["PC"]
 
 	if about.getChipSetString() in ('5272s', '7251', '7251s', '7252', '7252s', '7366', '7376', '7444s'):
-		modes["HDMI"] = ["720p", "1080p", "2160p", "1080i", "576p", "576i", "480p", "480i"]
-		widescreen_modes = {"720p", "1080p", "2160p", "1080i"}
+		modes["HDMI"] = ["480i", "480p", "576i", "576p", "720p", "1080i", "1080p", "2160p30", "2160p"]
+		widescreen_modes = {"720p", "1080i", "1080p", "2160p30", "2160p"}
 	elif about.getChipSetString() in ('7241', '7356', '73565', '7358', '7362', '73625', '7424', '7425', '7552'):
-		modes["HDMI"] = ["720p", "1080p", "1080i", "576p", "576i", "480p", "480i"]
-		widescreen_modes = {"720p", "1080p", "1080i"}
+		modes["HDMI"] = ["480i", "480p", "576i", "576p", "720p", "1080i", "1080p"]
+		widescreen_modes = {"720p", "1080i", "1080p"}
 	else:
-		modes["HDMI"] = ["720p", "1080i", "576p", "576i", "480p", "480i"]
+		modes["HDMI"] = ["480i", "480p", "576i", "576p", "720p", "1080i"]
 		widescreen_modes = {"720p", "1080i"}
 
 	modes["YPbPr"] = modes["HDMI"]
-	if getBrandOEM() == 'vuplus' and getBoxType() not in ('vusolo4k', 'vuultimo4k', 'vuuno4k'):
+	if getBrandOEM() == 'vuplus' and getBoxType() not in ('vusolo4k', 'vuuno4k', 'vuultimo4k'):
 		modes["Scart-YPbPr"] = modes["HDMI"]
 
 	# if modes.has_key("DVI-PC") and not getModeList("DVI-PC"):
