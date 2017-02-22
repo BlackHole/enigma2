@@ -359,9 +359,8 @@ class UpdatePlugin(Screen, ProtectedScreen):
 						elif package_tmp[0].startswith('enigma2-plugin-picons-srp'):
 							ocram = ocram + '[ocram-picons] ' + package_tmp[0].split('enigma2-plugin-picons-srp-')[1].replace('.',' ') + ' updated ' + package_tmp[2].replace('--',' ') + '\n'
 					config.softwareupdate.updatefound.setValue(True)
-#					choices = [(_("View the changes"), "changes"),
-#						(_("Upgrade and reboot system"), "cold")]
-					choices = [(_("Upgrade and reboot system"), "cold")]
+					choices = [(_("View the changes"), "changes"),
+						(_("Upgrade and reboot system"), "cold")]
 					if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/ViX/BackupManager.pyo"):
 						if not config.softwareupdate.autosettingsbackup.value and config.backupmanager.backuplocation.value:
 							choices.append((_("Perform a settings backup,") + '\n\t' + _("making a backup before updating") + '\n\t' +_("is strongly advised."), "backup"))
@@ -430,9 +429,8 @@ class UpdatePlugin(Screen, ProtectedScreen):
 				message = _("The current update may be unstable") + "\n" + _("Are you sure you want to update your %s %s ?") % (getMachineBrand(), getMachineName()) + "\n(%s " % self.total_packages + _("Packages") + ")"
 			elif config.softwareupdate.updateisunstable.value == '0':
 				message = _("Do you want to update your %s %s ?") % (getMachineBrand(), getMachineName()) + "\n(%s " % self.total_packages + _("Packages") + ")"
-#			choices = [(_("View the changes"), "changes"),
-#				(_("Upgrade and reboot system"), "cold")]
-			choices = [(_("Upgrade and reboot system"), "cold")]
+			choices = [(_("View the changes"), "changes"),
+				(_("Upgrade and reboot system"), "cold")]
 			if not self.SettingsBackupDone and not config.softwareupdate.autosettingsbackup.value and config.backupmanager.backuplocation.value:
 				choices.append((_("Perform a settings backup, making a backup before updating is strongly advised."), "backup"))
 			if not self.ImageBackupDone and not config.softwareupdate.autoimagebackup.value and config.imagemanager.backuplocation.value:
@@ -453,9 +451,9 @@ class UpdatePlugin(Screen, ProtectedScreen):
 			self.slider.setValue(1)
 			self.ipkg.startCmd(IpkgComponent.CMD_LIST, args = {'installed_only': True})
 		elif answer[1] == "cold":
-#			if (config.softwareupdate.autosettingsbackup.value and config.backupmanager.backuplocation.value) or (config.softwareupdate.autoimagebackup.value and config.imagemanager.backuplocation.value):
-#				self.doAutoBackup()
-#			else:
+			if (config.softwareupdate.autosettingsbackup.value and config.backupmanager.backuplocation.value) or (config.softwareupdate.autoimagebackup.value and config.imagemanager.backuplocation.value):
+				self.doAutoBackup()
+			else:
 				self.session.open(TryQuitMainloop,retvalue=42)
 				self.close()
 
