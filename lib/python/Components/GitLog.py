@@ -11,16 +11,16 @@ def fetchlog(logtype):
 		sourcefile,headers = urllib.urlretrieve(sourceurl)
 		fd = open(sourcefile, 'r')
 		for line in fd.readlines():
-			if getImageType() == 'release' and line.startswith('openvix: developer'):
+			if getImageType() == 'release' and line.startswith('openbh: developer'):
 				print '[GitLog] Skipping dev line'
 				continue
-			elif getImageType() == 'developer' and line.startswith('openvix: release'):
+			elif getImageType() == 'developer' and line.startswith('openbh: release'):
 				print '[GitLog] Skipping release line'
 				continue
 			releasenotes += line
 		fd.close()
-		releasenotes = releasenotes.replace('\nopenvix: build',"\n\nopenvix: build")
-		releasenotes = releasenotes.replace('\nopenvix: %s' % getImageType(),"\n\nopenvix: %s" % getImageType())
+		releasenotes = releasenotes.replace('\nopenbh: build',"\n\nopenbh: build")
+		releasenotes = releasenotes.replace('\nopenbh: %s' % getImageType(),"\n\nopenbh: %s" % getImageType())
 	except:
 		releasenotes = '404 Not Found'
 	return releasenotes
