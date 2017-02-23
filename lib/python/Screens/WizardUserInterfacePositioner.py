@@ -29,7 +29,7 @@ class UserInterfacePositionerWizard(WizardLanguage, Rc):
 	def welcomeWarning(self):
 		if self.welcomeWarning in self.onShow:
 			self.onShow.remove(self.welcomeWarning)
-		popup = self.session.openWithCallback(self.welcomeAction, MessageBox, _("Welcome to OpenBH!\n\n"
+		popup = self.session.openWithCallback(self.welcomeAction, MessageBox, _("Welcome to OpenBlackHole!\n\n"
 			"NOTE: This section of the wizard is intended for people who cannot disable overscan "
 			"on their television / display.  Please first try to disable overscan before using this feature.\n\n"
 			"USAGE: If you continue adjust the screen size and position settings so that the shaded user interface layer *just* "
