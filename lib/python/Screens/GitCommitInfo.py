@@ -49,14 +49,20 @@ def readGithubCommitLogsSoftwareUpdate():
 		except:
 			log = loads(urllib2.urlopen(url, timeout=5).read())
 		for c in log:
-			if gitstart and not c['commit']['message'].startswith('openbh:') and getScreenTitle() in ("Enigma2", "OE-A Core"):
+			if gitstart and not c['commit']['message'].startswith('open') and getScreenTitle() in ("Enigma2", "OE-A Core"):
 					continue
-			if c['commit']['message'].startswith('openbh:'):
+			if c['commit']['message'].startswith('open'):
 				gitstart = False
 				if getImageType() == 'release' and c['commit']['message'].startswith('openbh: developer'):
 					print '[GitCommitLog] Skipping developer line'
 					continue
+				elif getImageType() == 'release' and c['commit']['message'].startswith('openvix: developer'):
+					print '[GitCommitLog] Skipping developer line'
+					continue
 				elif getImageType() == 'developer' and c['commit']['message'].startswith('openbh: release'):
+					print '[GitCommitLog] Skipping release line'
+					continue
+				elif getImageType() == 'developer' and c['commit']['message'].startswith('openvix: release'):
 					print '[GitCommitLog] Skipping release line'
 					continue
 				tmp = c['commit']['message'].split(' ')[2].split('.')
@@ -109,15 +115,21 @@ def readGithubCommitLogs():
 		except:
 			log = loads(urllib2.urlopen(url, timeout=5).read())
 		for c in log:
-			if gitstart and not c['commit']['message'].startswith('openbh:') and getScreenTitle() in ("Enigma2", "OE-A Core"):
+			if gitstart and not c['commit']['message'].startswith('open') and getScreenTitle() in ("Enigma2", "OE-A Core"):
 				continue
-			if c['commit']['message'].startswith('openbh:'):
+			if c['commit']['message'].startswith('open'):
 				blockstart = False
 				gitstart = False
 				if getImageType() == 'release' and c['commit']['message'].startswith('openbh: developer'):
 					print '[GitCommitLog] Skipping developer line'
 					continue
+				elif getImageType() == 'release' and c['commit']['message'].startswith('openvix: developer'):
+					print '[GitCommitLog] Skipping developer line'
+					continue
 				elif getImageType() == 'developer' and c['commit']['message'].startswith('openbh: release'):
+					print '[GitCommitLog] Skipping release line'
+					continue
+				elif getImageType() == 'developer' and c['commit']['message'].startswith('openvix: release'):
 					print '[GitCommitLog] Skipping release line'
 					continue
 				tmp = c['commit']['message'].split(' ')[2].split('.')
