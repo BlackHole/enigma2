@@ -22,7 +22,7 @@ else:
 
 E2Branches = {
 	'developer' : 'Dev',
-	'release' : 'Master'
+	'release' : 'master'
 	}
 
 project = 0
