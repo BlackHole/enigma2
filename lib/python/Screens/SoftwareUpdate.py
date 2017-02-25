@@ -251,7 +251,7 @@ class UpdatePlugin(Screen, ProtectedScreen):
 					config.softwareupdate.updatefound.setValue(True)
 					choices = [(_("View the changes"), "changes"),
 						(_("Upgrade and reboot system"), "cold")]
-					if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/ViX/BackupManager.pyo"):
+					if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/OBH/BackupManager.pyo"):
 						if not config.softwareupdate.autosettingsbackup.value and config.backupmanager.backuplocation.value:
 							choices.append((_("Perform a settings backup,") + '\n\t' + _("making a backup before updating") + '\n\t' +_("is strongly advised."), "backup"))
 						if not config.softwareupdate.autoimagebackup.value and config.imagemanager.backuplocation.value:
@@ -352,23 +352,23 @@ class UpdatePlugin(Screen, ProtectedScreen):
 
 	def doSettingsBackup(self):
 		backup = None
-		from Plugins.SystemPlugins.ViX.BackupManager import BackupFiles
+		from Plugins.SystemPlugins.OBH.BackupManager import BackupFiles
 		self.BackupFiles = BackupFiles(self.session, True)
 		Components.Task.job_manager.AddJob(self.BackupFiles.createBackupJob())
 		Components.Task.job_manager.in_background = False
 		for job in Components.Task.job_manager.getPendingJobs():
-			if job.name == dgettext('vix', 'Backup Manager'):
+			if job.name == dgettext('obh', 'Backup Manager'):
 				break
 		self.showJobView(job)
 
 	def doImageBackup(self):
 		backup = None
-		from Plugins.SystemPlugins.ViX.ImageManager import ImageBackup
+		from Plugins.SystemPlugins.OBH.ImageManager import ImageBackup
 		self.ImageBackup = ImageBackup(self.session, True)
 		Components.Task.job_manager.AddJob(self.ImageBackup.createBackupJob())
 		Components.Task.job_manager.in_background = False
 		for job in Components.Task.job_manager.getPendingJobs():
-			if job.name == dgettext('vix', 'Image Manager'):
+			if job.name == dgettext('obh', 'Image Manager'):
 				break
 		self.showJobView(job)
 
@@ -383,9 +383,9 @@ class UpdatePlugin(Screen, ProtectedScreen):
 			self.close()
 
 	def showJobView(self, job):
-		if job.name == dgettext('vix', 'Image Manager'):
+		if job.name == dgettext('OBH', 'Image Manager'):
 			self.ImageBackupDone = True
-		elif job.name == dgettext('vix', 'Backup Manager'):
+		elif job.name == dgettext('obh', 'Backup Manager'):
 			self.SettingsBackupDone = True
 		from Screens.TaskView import JobView
 		Components.Task.job_manager.in_background = False
