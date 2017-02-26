@@ -29,7 +29,7 @@ project = 0
 projects = [
 	("https://api.github.com/repos/BlackHole/enigma2-obh10/commits?sha=%s" % E2Branches[getImageType()], "Enigma2"),
 	("https://api.github.com/repos/BlackHole/obh-core/commits", "OBH Core"),
-	("https://api.github.com/repos/OpenViX/skins/commits", "ViX Skins"),
+#	("https://api.github.com/repos/OpenViX/skins/commits", "ViX Skins"),
 	("https://api.github.com/repos/oe-alliance/oe-alliance-core/commits?sha=4.0", "OE-A Core"),
 	("https://api.github.com/repos/oe-alliance/oe-alliance-plugins/commits?sha=2.3", "OE-A Plugins"),
 	("https://api.github.com/repos/oe-alliance/AutoBouquetsMaker/commits", "AutoBouquetsMaker"),
@@ -72,7 +72,7 @@ def readGithubCommitLogsSoftwareUpdate():
 					else:
 						releasever = '%s.%s' % (tmp[2], tmp[3])
 				releasever = float(releasever)
-				if ImageVer <= releasever:
+				if ImageVer >= releasever:
 					blockstart = True
 					break
 
