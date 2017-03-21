@@ -973,7 +973,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 			self.pluglist.append(["Chromium Browser & HbbTV", "webkit-hbbtv-browser-"+ machine ])
 			
 		if machine not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero"): 
-			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-vuplus-kodi"])	
+			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-mx3l-kodi"])	
 					
 		self.activityTimer = eTimer()
 		self.activityTimer.timeout.get().append(self.updateFeed2)
@@ -1041,7 +1041,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 				self.mycmdlist.append(cmd)
 				if cmd == "opkg remove --force-depends --force-remove enigma2-plugin-extensions-hbbtv":
 					self.mycmdlist.append("opkg remove --force-depends --force-remove vuplus-opera-browser-util vuplus-opera-dumpait")
-				elif cmd == "opkg remove --force-depends --force-remove enigma2-plugin-extensions-vuplus-kodi":
+				elif cmd == "opkg remove --force-depends --force-remove enigma2-plugin-extensions-mx3l-kodi":
 					self.mycmdlist.append("rm -rf /usr/lib/enigma2/python/Plugins/Extensions/Kodi")
 					self.mycmdlist.append("opkg remove --force-depends --force-remove enigma2-plugin-extensions-subssupport")
 				elif cmd.startswith("opkg remove --force-depends --force-remove webkit-hbbtv-browser-"):	
