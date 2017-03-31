@@ -14,7 +14,6 @@ dist_pkgdata_DATA = \
 	videowizard.xml \
 	freesat.t1 \
 	freesat.t2 \
-	timezone.xml \
 	unicable.xml \
 	hd-testcard.mvi \
 	distro-logo.png
