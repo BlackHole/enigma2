@@ -3317,10 +3317,8 @@ class InfoBarSubserviceSelection:
 				self.session.open(DeliteGreenPanel)
 			except:
 				pass
-#		if not config.vixsettings.Subservice.value:
-#			self.openTimerList()
-#		else:
-#			self.subserviceSelection()
+		else:
+			self.subserviceSelection()
 
 	def __removeNotifications(self):
 		self.session.nav.event.remove(self.checkSubservicesAvail)
