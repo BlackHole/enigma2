@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: enigam2 Russian translation OpenBH 06\n"
+"Project-Id-Version: enigam2 Russian translation OpenBH\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
@@ -651,6 +651,9 @@ msgstr "Транскодирование AAC"
 
 msgid "AC3"
 msgstr "AC3"
+
+msgid "AC3 downmix"
+msgstr "AC3 микширование"
 
 msgid "ACQUIRING TSID/ONID"
 msgstr "ПОЛУЧЕНИЕ TSID/ONID"
@@ -1809,6 +1812,18 @@ msgstr "Выберите, следует ли транскодирования A
 msgid "Choose whether multi channel sound tracks should be downmixed to stereo."
 msgstr "Выберите, следует ли многоканальную звуковую дорожку декодировать в стереозвук."
 
+msgid ""
+"Choose whether multi channel aac sound tracks should be downmixed to stereo."
+msgstr ""
+"Выберите, следует ли многоканальную звуковую дорожку AAC декодировать в "
+"стереозвук."
+
+msgid ""
+"Choose whether multi channel ac3 sound tracks should be downmixed to stereo."
+msgstr ""
+"Выберите, следует ли многоканальную звуковую дорожку AC3 декодировать в "
+"стереозвук."
+
 msgid "Choose whether or not to show an icon when a motorised dish is moving."
 msgstr "Выберите, нужно ли показывать иконку при движении антенны с мотоподвесом."
 
@@ -2616,6 +2631,9 @@ msgstr "Датский"
 
 msgid "Date"
 msgstr "Дата"
+
+msgid "Date style"
+msgstr "Стиль даты"
 
 msgid "Deactivate"
 msgstr "Отключить"
@@ -3437,6 +3455,9 @@ msgstr "Эстонский"
 msgid "Ethernet network interface"
 msgstr "Интерфейс локальной сети"
 
+msgid "Europe"
+msgstr "Европа"
+
 msgid "Event Info"
 msgstr "Информация о событие"
 
@@ -3654,6 +3675,9 @@ msgstr "Не удалось"
 
 msgid "Failed to write /tmp/positionersetup.log: "
 msgstr "Не удалось записать /tmp/positionersetup.log: "
+
+msgid "Fallback configuration"
+msgstr "Удаленный ресивер"
 
 msgid "Fallback remote receiver URL"
 msgstr "URL резервного удаленного ресивера"
@@ -4584,6 +4608,9 @@ msgstr "Настройки клавиатуры"
 
 msgid "Keyboard settings"
 msgstr "Настройки клавиатуры"
+
+msgid "Kiev"
+msgstr "Киев"
 
 msgid "LAN adapter"
 msgstr "Сетевой адаптер"
@@ -7728,7 +7755,7 @@ msgid "Settings"
 msgstr "Настройки"
 
 msgid "Settings..."
-msgstr "Настройки..."
+msgstr "Настройки"
 
 msgid "Settings Backup"
 msgstr "Резервная копия параметров"
@@ -7756,6 +7783,9 @@ msgstr "Настройки вашего позиционера"
 
 msgid "Setup your satellite equipment"
 msgstr "Настройка спутникового оборудованияt"
+
+msgid "Setup your timezone area."
+msgstr "Настройки региона часового пояса."
 
 msgid "Setup your timezone."
 msgstr "Настройки Вашего часового пояса."
@@ -7870,6 +7900,9 @@ msgstr "Показать список таймеров"
 
 msgid "Show Transponder Remaining/Elapsed as"
 msgstr "Показать оставшееся/истекшее время в"
+
+msgid "Show True/False as graphical switch"
+msgstr "Показывать графический переключатель"
 
 msgid "Show VCR scart on main menu"
 msgstr "Показать Scart в главном меню"
@@ -8221,6 +8254,9 @@ msgstr "Таймер сна"
 
 msgid "Sleep delay"
 msgstr "Задержка перед выключением"
+
+msgid "Slim"
+msgstr "Компакт"
 
 msgid "Slide drop"
 msgstr "Слайд вниз"
@@ -9420,6 +9456,9 @@ msgstr "Поддержка TiVo"
 msgid "Time"
 msgstr "Время"
 
+msgid "Time style"
+msgstr "Стиль времени"
+
 msgid "Time Update in Minutes:"
 msgstr "Время обновления в минутах"
 
@@ -9523,6 +9562,9 @@ msgstr "Таймшифт-сохранение при переключении к
 
 msgid "Timezone"
 msgstr "Часовой пояс"
+
+msgid "Timezone area"
+msgstr "Регион часового пояса"
 
 msgid "Title"
 msgstr "Название"
@@ -10955,6 +10997,9 @@ msgstr "Ваш %s %s будет выключен"
 
 msgid "Your %s %s is shutting down. Please wait..."
 msgstr "Ваш %s %s выключается. Пожалуйста, подождите..."
+
+msgid "Your timezone in the area."
+msgstr "Ваш часовой пояс в этом регионе."
 
 msgid ""
 "Your %s %s might be unusable now. Please consult the manual for further assistance before "
