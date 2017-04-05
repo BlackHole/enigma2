@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: enigma2 3.0.0\n"
+"Project-Id-Version: enigma2 for Open BlackHole 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-24 18:23+0100\n"
-"PO-Revision-Date: 2017-01-10 12:44+0000\n"
+"PO-Revision-Date: 2017-04-05 21:22+0100\n"
 "Last-Translator: nunigaia\n"
 "Language-Team: BH Team\n"
 "Language: pt_PT\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 2.0\n"
 
 msgid ""
 "\n"
@@ -3475,7 +3475,7 @@ msgid "Netmask:"
 msgstr "Máscara:"
 
 msgid "Network"
-msgstr "Rede Internet e Segurança"
+msgstr "Rede e Internet"
 
 msgid "Network ID"
 msgstr "ID de Rede"
@@ -8471,7 +8471,7 @@ msgid "MiniDLNA setup"
 msgstr "MiniDLNA Partilha da Rede"
 
 msgid "Mounts setup"
-msgstr "Configuração e Montagens de Rede"
+msgstr "Montagens de Rede"
 
 msgid "NFS setup"
 msgstr "NFS Partilha para Rede Windows"
@@ -11549,3 +11549,81 @@ msgstr "Mostrar números nos Menus"
 
 msgid "This option allows you to show menu number quick links."
 msgstr "Esta opção permite usar teclas numéricas de atalhos nos menus."
+
+msgid "HDMI Colordepth"
+msgstr "HDMI Profundidade de Cor"
+
+msgid "This option allows you to change the Colordepth for UHD"
+msgstr "Esta opção permite que altere a Profundidade de Cor em UHD"
+
+msgid "AC3 downmix"
+msgstr "Mistura áudio AC3"
+
+msgid "Choose whether multi channel ac3 sound tracks should be downmixed to stereo."
+msgstr "Escolha se multi canal ac3 faixas de som deve ser downmix estéreo."
+
+msgid "Choose whether multi channel aac sound tracks should be downmixed to stereo."
+msgstr "Escolha se as trilhas de áudio multi canal aac devem ser misturadas para estéreo."
+
+msgid "Preferred tuner DVB-C"
+msgstr "Tuner DVB-C preferido"
+
+msgid "Preferred tuner DVB-C for recordings"
+msgstr "Tuner DVB-C preferido para gravações"
+
+msgid "Country for EPG event rating information"
+msgstr "País para informações de avaliação de evento EPG"
+
+msgid "Country for EPG event genre information"
+msgstr "País para informações de gênero de evento EPG"
+
+msgid "Choose a country scheme for decoding rating information in EPG events."
+msgstr "Escolha um esquema de país para a decodificação de informações de classificação em eventos EPG."
+
+msgid "Choose a country scheme for decoding genre information in EPG events."
+msgstr "Escolha um esquema de país para a decodificação de informações de gênero em eventos EPG."
+
+msgid "Front display settings"
+msgstr "Definição do Painel Frontal"
+
+msgid "Clone TV screen to LCD"
+msgstr "Clonar o Ecrã de TV no LCD"
+
+msgid "Password setup"
+msgstr "Definir Password"
+
+msgid "Enter a new password"
+msgstr "Entre a nova Password"
+
+msgid "Random Password"
+msgstr "Password aleatória"
+
+msgid "Set Password"
+msgstr "Definir Password"
+
+msgid "Hard disk settings"
+msgstr "Definições de Disco Rígido"
+
+msgid "Timezone area"
+msgstr "Área de fuso horário"
+
+msgid "Setup your timezone area."
+msgstr "Configuração da sua área de fuso horário."
+
+msgid "Fallback configuration"
+msgstr "Configuração Fallback"
+
+msgid "Timer conflict detection when fallback is enabled"
+msgstr "Detecção de conflitos de Timer quando fallback é habilitado"
+
+msgid "Specify the complete URL of the fallback remote receiver including the port number (:8001 by default), e.g. 'http://IP_second_box:8001'."
+msgstr "Especifique a URL completa do receptor remoto fallback incluindo o número da porta (: 8001 por padrão), por exemplo, 'http://IP_segunda_box:8001'."
+
+msgid "When using the remote fallback tuner for recordings, it is impossible to correctly detect timer conflicts. This option allows you to skip timer confict detection when remote fallback is enabled, but can lead to timer conflicts. This setting is only for advanced users; the default is 'yes'."
+msgstr "Ao utilizar o sintonizador fallback remoto para gravações, é impossível de detetar corretamente os conflitos do temporizador. Esta opção permite que ignore a deteção de conflitos de Timers quando fallback remoto está ativado, mas pode levar a conflitos de Timers. Essa configuração é apenas para usuários avançados; o padrão é 'Sim'."
+
+msgid "Bluetooth Setup"
+msgstr "Configuração Bluetooth"
+
+msgid "Press red key to enable bluetooth."
+msgstr "Prima a tecla <vermelha> para ativar o bluetooth."
