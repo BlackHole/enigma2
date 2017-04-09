@@ -10285,6 +10285,9 @@ msgstr "Просмотр изображений..."
 msgid "View teletext..."
 msgstr "Просмотр телетекста..."
 
+msgid "View the changes"
+msgstr "Просмотр изменений"
+
 msgid "View video CD..."
 msgstr "Просмотр Video CD..."
 
