@@ -6762,7 +6762,7 @@ msgid "View teletext..."
 msgstr "Ver teletexto..."
 
 msgid "View the changes"
-msgstr "Ver as mudança"
+msgstr "Ver as alterações"
 
 msgid "View video CD..."
 msgstr "Ver Vídeo CD's..."
