@@ -9,6 +9,23 @@ from Tools.Transponder import ConvertToHumanReadable, getChannelNumber
 from Tools.GetEcmInfo import GetEcmInfo
 from Poll import Poll
 
+caid_data = (
+	("0x1700", "0x17ff", "BetaCrypt",      "B",  True ),
+	( "0x600",  "0x6ff", "Irdeto",         "I",  True ),
+	("0x1800", "0x18ff", "Nagravision",    "N",  True ),
+	( "0x100",  "0x1ff", "Seca Mediaguard","S",  True ),
+	("0x1000", "0x10FF", "Tandberg",       "T",  True ),
+	( "0x500",  "0x5ff", "Viaccess",       "V",  True ),
+	("0x2600", "0x2600", "Biss",           "BI", True ),
+	("0x4aee", "0x4aee", "BulCrypt",       "BU", True ),
+	("0x5581", "0x5581", "BulCrypt",       "BU", False),
+	( "0xb00",  "0xbff", "Conax",          "CO", True ),
+	( "0xd00",  "0xdff", "CryptoWorks",    "CW", True ),
+	("0x4ae0", "0x4ae1", "DRE-Crypt",      "DC", True ),
+	( "0x900",  "0x9ff", "NDS Videoguard", "ND", True ),
+	( "0xe00",  "0xeff", "PowerVu",        "PV", True )
+)
+
 def addspace(text):
 	if text:
 		text += "  "
@@ -21,22 +38,6 @@ class PliExtraInfo(Poll, Converter, object):
 		self.type = type
 		self.poll_interval = 1000
 		self.poll_enabled = True
-		self.caid_data = (
-			("0x1700", "0x17ff", "BetaCrypt",      "B",  True ),
-			( "0x600",  "0x6ff", "Irdeto",         "I",  True ),
-			("0x1800", "0x18ff", "Nagravision",    "N",  True ),
-			( "0x100",  "0x1ff", "Seca Mediaguard","S",  True ),
-			("0x1000", "0x10FF", "Tandberg",       "T",  True ),
-			( "0x500",  "0x5ff", "Viaccess",       "V",  True ),
-			("0x2600", "0x2600", "Biss",           "BI", True ),
-			("0x4aee", "0x4aee", "BulCrypt",       "BU", True ),
-			("0x5581", "0x5581", "BulCrypt",       "BU", False),
-			( "0xb00",  "0xbff", "Conax",          "CO", True ),
-			( "0xd00",  "0xdff", "CryptoWorks",    "CW", True ),
-			("0x4ae0", "0x4ae1", "DRE-Crypt",      "DC", True ),
-			( "0x900",  "0x9ff", "NDS Videoguard", "ND", True ),
-			( "0xe00",  "0xeff", "PowerVu",        "PV", True ),
-		)
 		self.ca_table = (
 			("CryptoCaidBetatAvailable",    "B",	False),
 			("CryptoCaidIrdetoAvailable"    "I",	False),
@@ -87,7 +88,7 @@ class PliExtraInfo(Poll, Converter, object):
 		res = ""
 		available_caids = info.getInfoObject(iServiceInformation.sCAIDs)
 
-		for caid_entry in self.caid_data:
+		for caid_entry in caid_data:
 			if int(caid_entry[0], 16) <= int(self.current_caid, 16) <= int(caid_entry[1], 16):
 				color="\c0000??00"
 			else:
@@ -333,7 +334,7 @@ class PliExtraInfo(Poll, Converter, object):
 	def createCryptoSpecial(self, info):
 		caid_name = "Free to Air"
 		try:
-			for caid_entry in self.caid_data:
+			for caid_entry in caid_data:
 				if int(caid_entry[0], 16) <= int(self.current_caid, 16) <= int(caid_entry[1], 16):
 					caid_name = caid_entry[2]
 					break
@@ -848,7 +849,7 @@ class PliExtraInfo(Poll, Converter, object):
 
 		available_caids = info.getInfoObject(iServiceInformation.sCAIDs)
 
-		for caid_entry in self.caid_data:
+		for caid_entry in caid_data:
 			if caid_entry[3] == request_caid:
 				if request_selected:
 					if int(caid_entry[0], 16) <= int(current_caid, 16) <= int(caid_entry[1], 16):
