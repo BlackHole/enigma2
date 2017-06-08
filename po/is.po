@@ -4083,6 +4083,9 @@ msgstr "Bara full mynd"
 msgid "Just zap"
 msgstr "Bara full mynd"
 
+msgid "KA-SAT"
+msgstr "KA-SAT (9°E)"
+
 #
 #, fuzzy
 msgid "Keep service"

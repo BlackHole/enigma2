@@ -4202,6 +4202,9 @@ msgstr "Tam ekran"
 msgid "Just zap"
 msgstr "Kanal değiştir"
 
+msgid "KA-SAT"
+msgstr "KA-SAT (9°E)"
+
 #
 msgid "Keep service"
 msgstr "Kanalı tut"

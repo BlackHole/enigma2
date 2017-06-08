@@ -4250,6 +4250,9 @@ msgstr "Sólo escalar"
 msgid "Just zap"
 msgstr "Zapear"
 
+msgid "KA-SAT"
+msgstr "KA-SAT (9°E)"
+
 #
 #, fuzzy
 msgid "Keep service"

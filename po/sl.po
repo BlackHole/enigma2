@@ -4338,6 +4338,9 @@ msgstr "Samodejno"
 msgid "Just zap"
 msgstr "Samodejno"
 
+msgid "KA-SAT"
+msgstr "KA-SAT (9°E)"
+
 #
 #, fuzzy
 msgid "Keep service"

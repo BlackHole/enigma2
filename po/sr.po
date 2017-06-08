@@ -4309,6 +4309,9 @@ msgstr "Samo razmeri"
 msgid "Just zap"
 msgstr "Samo razmeri"
 
+msgid "KA-SAT"
+msgstr "KA-SAT (9°E)"
+
 #
 #, fuzzy
 msgid "Keep service"
