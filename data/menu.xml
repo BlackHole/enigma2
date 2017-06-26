@@ -37,8 +37,10 @@
 			<!-- Menu / Setup / EPG -->
 			<menu weight="3" text="EPG" entryID="epg_menu">
 				<id val="epg"/>
-				<item level="0" entryID="epg_setup"><setup id="epgsettings"/></item>
-				<menu level="2" text="Load-save-delete" entryID="epgloadsave_menu">
+				<item weight="1" level="0" entryID="epg_setup"><setup id="epgsettings"/></item>
+				<item weight="4" level="2" entryID="setup_epggraphical"><setup id="epggraphical"/></item>
+				<item weight="5" level="2" entryID="setup_epginfobargraphical"><setup id="epginfobargraphical"/></item>
+				<menu weight="6" level="2" text="Load-save-delete" entryID="epgloadsave_menu">
 					<id val="epgloadsave_menu"/>
 					<item level="0" entryID="saveepgcache" text="Save EPG">
 <code>
@@ -77,12 +79,10 @@ def msgClosed(ret):
 self.session.openWithCallback(msgClosed, EpgDeleteMsg)
 </code>
 					</item>
-				</menu>
-				<item level="2" entryID="setup_epgmulti"><setup id="epgmulti"/></item>
-				<item level="2" entryID="setup_epgenhanced"><setup id="epgenhanced"/></item>
-				<item level="2" entryID="setup_epginfobar"><setup id="epginfobar"/></item>
-				<item level="2" entryID="setup_epginfobargraphical"><setup id="epginfobargraphical"/></item>
-				<item level="2" entryID="setup_epggraphical"><setup id="epggraphical"/></item>
+				</menu>				
+				<item weight="7" level="2" entryID="setup_epginfobar"><setup id="epginfobar"/></item>
+				<item weight="8" level="2" entryID="setup_epgmulti"><setup id="epgmulti"/></item>
+				<item weight="9" level="2" entryID="setup_epgenhanced"><setup id="epgenhanced"/></item>
 			</menu>
 			<!-- Menu / Setup / User Interface -->
 			<menu weight="4" text="User interface" entryID="osd_setup" requires="OsdMenu">
@@ -110,10 +110,10 @@ self.session.openWithCallback(msgClosed, EpgDeleteMsg)
 				</menu>
 				<!-- Menu / Setup / User Interface / Button Setup -->
 				<item weight="6" level="2" text="Button setup" entryID="buttonsetup_setup"><screen module="ButtonSetup" screen="ButtonSetup"/></item>
-				<!-- Menu / Setup / User Interface / Subtitles -->
-				<item weight="7" level="2" entryID="subtitle_setup"><setup id="subtitlesetup"/></item>
 				<!-- Menu / Setup / User Interface / Language Selection -->
-				<item weight="8" level="0" text="Language" entryID="language_setup"><screen module="LanguageSelection"/></item>
+				<item weight="7" level="0" text="Language" entryID="language_setup"><screen module="LanguageSelection"/></item>
+				<!-- Menu / Setup / User Interface / Subtitles -->
+				<item weight="8" level="2" entryID="subtitle_setup"><setup id="subtitlesetup"/></item>
 				<!-- Menu / Setup / User Interface / Parental Control -->
 				<item weight="9" level="0" text="Parental control" entryID="parental_setup"><screen module="ParentalControlSetup" screen="ParentalControlSetup"/></item>
 			</menu>
@@ -152,7 +152,14 @@ self.session.open(SABnzbdSetupScreen)
 				<id val="cicam"/>
 				<item weight="10" level="1" text="Common interface" entryID="ci_setup" requires="CommonInterface"><screen module="Ci" screen="CiSelection"/></item>
 			</menu>
-			
+
+			<!-- Menu / Setup / Recording, Playback & Timeshift -->
+			<menu weight="8" level="1" text="Recording / Playback &amp; Timeshift" entryID="rec_setup">
+			 	<id val="rec" />
+					<item weight="10" level="0" text="Recording &amp; playback" entryID="recording_setup"><screen module="Recordings" screen="RecordingSettings" /></item>
+					<item weight="15" level="0" text="Timeshift" entryID="timshift_setup"><screen module="Timeshift" screen="TimeshiftSettings" /></item>
+			</menu>
+		
 			<!-- Menu / Setup / Storage -->
 			<menu weight="9" level="0" text="Storage" entryID="hardisk_selection" requires="Harddisk">
 				<id val="harddisk"/>
@@ -168,20 +175,9 @@ self.session.open(SABnzbdSetupScreen)
 				<item weight="1" level="0" text="Settings" entryID="onlineupdate_setup"><setup id="softwareupdate"/></item>
 				<item weight="2" level="0" text="Software update" entryID="software_update"><screen module="SoftwareUpdate" screen="UpdatePlugin"/></item>	
 			</menu>
-			<!-- Menu / Setup / Time Settings -->
-			<item level="0" entryID="time_setup"><setup id="time"/></item>
-			<!-- Menu / Setup / RF Setup -->
-			<item level="1" entryID="rfmod_setup" requires="RfModulator"><setup id="RFmod"/></item>
-
-			<!-- Menu / Setup / Recordings, Playback & Timeshift -->
-			<menu weight="11" level="1" text="Timeshift, Recording &amp; Playback" entryID="rec_setup">
-			 	<id val="rec" />
-					<item weight="10" level="0" text="Timeshift" entryID="timshift_setup"><screen module="Timeshift" screen="TimeshiftSettings" /></item>
-					<item weight="15" level="0" text="Recording &amp; playback" entryID="recording_setup"><screen module="Recordings" screen="RecordingSettings" /></item>
-			</menu>
 
 			<!-- Menu / Setup / System (OLD SYSTEM ENTRY FOR COMPATIBILITY) -->
-			<menu weight="50" level="0" text="System" entryID="system_selection">
+			<menu weight="40" level="0" text="System" entryID="system_selection">
 				<id val="system"/>
 			<!-- Menu / Setup / System / Input Devices -->
 			<item level="1" text="Input devices" entryID="input_device_setup"><screen module="InputDeviceSetup" screen="InputDeviceSelection"/></item>
@@ -193,6 +189,8 @@ self.session.open(SABnzbdSetupScreen)
 				<item level="2" text="Settings" entryID="logs_setup"><setup id="logs"/></item>
 				<item level="2" text="Log manager" entryID="logs_man"><screen module="LogManager" screen="LogManager"/></item>
 			</menu>
+			<!-- Menu / Setup / System / RF Setup -->
+			<item level="1" entryID="rfmod_setup" requires="RfModulator"><setup id="RFmod"/></item>
 			<!-- Menu / Setup / System / Factory Reset -->
 				<item weight="99" level="0" text="Factory reset" entryID="factory_reset">
 <code>
@@ -208,6 +206,9 @@ self.session.openWithCallback(msgClosed, FactoryReset)
 </code>
 				</item>
 			</menu>	
+
+			<!-- Menu / Setup / Time Settings -->
+			<item weight="50" level="0" entryID="time_setup"><setup id="time"/></item>
 
 			<!-- Menu / Setup / HDMI-CEC -->
 			<item weight="99" text="HDMI CEC" entryID="hdmicec" requires="HDMICEC">
