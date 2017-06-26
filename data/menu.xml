@@ -152,20 +152,12 @@ self.session.open(SABnzbdSetupScreen)
 				<id val="cicam"/>
 				<item weight="10" level="1" text="Common interface" entryID="ci_setup" requires="CommonInterface"><screen module="Ci" screen="CiSelection"/></item>
 			</menu>
-
-			<!-- Menu / Setup / Softcam -->
-			<menu weight="8" text="SoftCam" entryID="cam_setup">
-				<id val="cam"/>
-				<item weight="1" level="2" text="Settings" entryID="softcam_setup"><setup id="softcamsetup"/></item>
-				<item weight="98" level="2" text="CCcam info" entryID="cccaminfo" requires="CCcamInstalled"><screen module="CCcamInfo" screen="CCcamInfoMain"/></item>
-				<item weight="99" level="2" text="OScam info" entryID="oscaminfo" requires="OScamInstalled"><screen module="OScamInfo" screen="OscamInfoMenu"/></item>
-			</menu>
 			
 			<!-- Menu / Setup / Storage -->
 			<menu weight="9" level="0" text="Storage" entryID="hardisk_selection" requires="Harddisk">
 				<id val="harddisk"/>
 				<item level="1" text="Settings" entryID="harddisk_setup"><setup id="harddisk"/></item>
-				<item level="0" text="Initialize devices" entryID="harddisk_init"><screen module="HarddiskSetup" screen="HarddiskSelection"/></item>
+				<item level="0" text="Initialise devices" entryID="harddisk_init"><screen module="HarddiskSetup" screen="HarddiskSelection"/></item>
 				<item level="0" text="Filesystem check" entryID="harddisk_check"><screen module="HarddiskSetup" screen="HarddiskFsckSelection"/></item>
 				<item level="0" text="Convert ext3 to ext4" entryID="harddisk_convert" requires="ext4"><screen module="HarddiskSetup" screen="HarddiskConvertExt4Selection"/></item>
 			</menu>
@@ -180,16 +172,7 @@ self.session.open(SABnzbdSetupScreen)
 			<item level="0" entryID="time_setup"><setup id="time"/></item>
 			<!-- Menu / Setup / RF Setup -->
 			<item level="1" entryID="rfmod_setup" requires="RfModulator"><setup id="RFmod"/></item>
-			<!-- Menu / Setup / Input Devices -->
-			<item level="1" text="Input devices" entryID="input_device_setup"><screen module="InputDeviceSetup" screen="InputDeviceSelection"/></item>
-			<!-- Menu / Setup / Keyboard Setup -->
-			<item entryID="keyboard_setup" text="Keyboard"><setup id="keyboard"/></item>
-			<!-- Menu / Setup / Logs -->
-			<menu level="2" text="Logs" entryID="logs_setup">
-				<id val="logs_menu"/>
-				<item level="2" text="Settings" entryID="logs_setup"><setup id="logs"/></item>
-				<item level="2" text="Log manager" entryID="logs_man"><screen module="LogManager" screen="LogManager"/></item>
-			</menu>
+
 			<!-- Menu / Setup / Recordings, Playback & Timeshift -->
 			<menu weight="11" level="1" text="Timeshift, Recording &amp; Playback" entryID="rec_setup">
 			 	<id val="rec" />
@@ -198,9 +181,19 @@ self.session.open(SABnzbdSetupScreen)
 			</menu>
 
 			<!-- Menu / Setup / System (OLD SYSTEM ENTRY FOR COMPATIBILITY) -->
-			<menu weight="98" level="0" text="System" entryID="system_selection">
+			<menu weight="50" level="0" text="System" entryID="system_selection">
 				<id val="system"/>
-				<!-- Menu / Setup / System / Factory Reset -->
+			<!-- Menu / Setup / System / Input Devices -->
+			<item level="1" text="Input devices" entryID="input_device_setup"><screen module="InputDeviceSetup" screen="InputDeviceSelection"/></item>
+			<!-- Menu / Setup / System / Keyboard Setup -->
+			<item entryID="keyboard_setup" text="Keyboard"><setup id="keyboard"/></item>
+			<!-- Menu / Setup / System / Logs -->
+			<menu level="2" text="Logs" entryID="logs_setup">
+				<id val="logs_menu"/>
+				<item level="2" text="Settings" entryID="logs_setup"><setup id="logs"/></item>
+				<item level="2" text="Log manager" entryID="logs_man"><screen module="LogManager" screen="LogManager"/></item>
+			</menu>
+			<!-- Menu / Setup / System / Factory Reset -->
 				<item weight="99" level="0" text="Factory reset" entryID="factory_reset">
 <code>
 from Screens.FactoryReset import FactoryReset
@@ -225,8 +218,15 @@ self.session.open(HdmiCECSetupScreen)
 			</item>	
 		</menu>
 
-<!-- Menu / Backup Menu -->
-		<menu weight="2" text="Backup Menu" entryID="backup_screen">
+	<!-- Menu / Timers -->
+		<menu weight="2" text="Timers" entryID="timer_menu">
+			<id val="timermenu"/>
+			<item weight="1" level="0" text="Timers" entryID="timer_edit"><screen module="TimerEdit" screen="TimerEditList"/></item>
+			<item weight="100" level="0" text="CronTimers" entryID="crontimer_edit"><screen module="CronTimer" screen="CronTimers"/></item>
+			<item weight="100" level="0" text="PowerTimers" entryID="powertimer_edit"><screen module="PowerTimerEdit" screen="PowerTimerEditList"/></item>
+		</menu>
+	<!-- Menu / Backup Menu -->
+		<menu weight="3" text="Backup Menu" entryID="backup_screen">
 			<id val="bhbackup" />
 			<item weight="5" level="1" text="Full Backup">
 <code>
@@ -242,21 +242,15 @@ self.session.open(VIXBackupManager)
 			</item>
 		</menu>
 
-<!-- Menu / BH Apps -->
-		<item weight="3" text="Black Hole Apps" entryID="blackhole_extra"><screen module="BpSet" screen="DeliteSettings"/></item>
+	<!-- Menu / BH Apps -->
+		<item weight="4" text="Black Hole Apps" entryID="blackhole_extra"><screen module="BpSet" screen="DeliteSettings"/></item>
 
-<!-- Menu / Plugins -->
-		<item weight="4" text="Plugins" entryID="plugin_selection"><screen module="PluginBrowser" screen="PluginBrowser"/></item>
+	<!-- Menu / Plugins -->
+		<item weight="5" text="Plugins" entryID="plugin_selection"><screen module="PluginBrowser" screen="PluginBrowser"/></item>
 
-<!-- Menu / Timers -->
-		<menu weight="5" text="Timers" entryID="timer_menu">
-			<id val="timermenu"/>
-			<item weight="1" level="0" text="Timers" entryID="timer_edit"><screen module="TimerEdit" screen="TimerEditList"/></item>
-			<item weight="100" level="0" text="CronTimers" entryID="crontimer_edit"><screen module="CronTimer" screen="CronTimers"/></item>
-			<item weight="100" level="0" text="PowerTimers" entryID="powertimer_edit"><screen module="PowerTimerEdit" screen="PowerTimerEditList"/></item>
-		</menu>
 
-<!-- Menu / Information -->
+
+	<!-- Menu / Information -->
 		<menu weight="6" text="Information" entryID="info_screen">
 			<id val="information"/>
 			<item level="0" text="About" entryID="about_screen"><screen module="About" screen="About"/></item>
@@ -267,16 +261,16 @@ self.session.open(VIXBackupManager)
 			<item level="2" text="Streaming clients" entryID="streaming_clients_info_screen"><screen module="StreamingClientsInfo"/></item>
 		</menu>
 
-<!-- Menu / VCR Scart -->
+	<!-- Menu / VCR Scart -->
 		<item weight="7" text="VCR scart" entryID="scart_switch" configcondition="config.usage.show_vcr_scart" requires="ScartSwitch"><code>self.session.scart.VCRSbChanged(3)</code></item>
 
-<!-- Menu / Standby and Restart -->
+	<!-- Menu / Standby and Restart -->
 		<menu weight="99" text="Standby and Restart" entryID="standby_restart_list">
 			<id val="shutdown"/>
 			<item text="Standby" entryID="standby"><screen module="Standby" screen="Standby"/></item>
-			<item text="Restart GUI" entryID="restart_enigma"><screen module="Standby" screen="TryQuitMainloop">3</screen></item>
-			<item text="Restart" entryID="restart"><screen module="Standby" screen="TryQuitMainloop">2</screen></item>
 			<item text="Deep standby" requires="DeepstandbySupport" entryID="deep_standby"><screen module="Standby" screen="TryQuitMainloop">1</screen></item>
 			<item text="Shut down" requires="!DeepstandbySupport" entryID="deep_standby"><screen module="Standby" screen="TryQuitMainloop">1</screen></item>
+			<item text="Restart" entryID="restart"><screen module="Standby" screen="TryQuitMainloop">2</screen></item>
+			<item text="Restart GUI" entryID="restart_enigma"><screen module="Standby" screen="TryQuitMainloop">3</screen></item>
 		</menu>
 </menu>
