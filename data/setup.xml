@@ -256,15 +256,12 @@
 		<item level="1" text="Background check" description="Perform an online update check in the background">config.softwareupdate.check</item>
 		<item level="1" text="Check every (hours)" description="Setup the interval (in hours) to check for online updates." requires="config.softwareupdate.check">config.softwareupdate.checktimer</item>
 		<item level="1" text="Allow unstable (experimental) updates" description="When enabled the online checker will also check for experimental versions">config.softwareupdate.updatebeta</item>
-<<<<<<< HEAD
-=======
 		<item level="1" text="Automatic settings backup" description="Perform a settings backup before updating.">config.softwareupdate.autosettingsbackup</item>
 		<item level="1" text="Automatic image backup" description="Perform a complete image backup before updating.">config.softwareupdate.autoimagebackup</item>
 	</setup>
 	<setup key="softcamsetup" title="Settings">
 		<item level="2" text="Show CCcam Info in extensions?" description="Allows you to show/hide CCcam Info in extensions (blue button).">config.cccaminfo.showInExtensions</item>
 		<item level="2" text="Show OScam Info in extensions?" description="Allows you to show/hide OScam Info in extensions (blue button).">config.oscaminfo.showInExtensions</item>
->>>>>>> 542ee11ca0ed2d1ed05e87a9960fb6a08bbfc6db
 	</setup>
 	<setup key="logs" title="Settings">
 		<item level="2" text="Logs folder location" description="Choose the location for crash and debug logs folder.">config.crash.debug_path</item>
