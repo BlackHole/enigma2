@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: enigma2 3.0.0\n"
+"Project-Id-Version: enigma2 pt translation for Open BlackHole 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-24 18:23+0100\n"
-"PO-Revision-Date: 2017-01-10 12:44+0000\n"
+"PO-Revision-Date: 2017-09-17 21:38+0100\n"
 "Last-Translator: nunigaia\n"
 "Language-Team: BH Team\n"
 "Language: pt_PT\n"
@@ -17,14 +17,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 2.0.3\n"
 
 msgid ""
 "\n"
 "Advanced options and settings."
 msgstr ""
 "\n"
-"Opções avançadas e definições"
+"Opções avançadas e definições."
 
 msgid ""
 "\n"
@@ -54,7 +54,7 @@ msgid ""
 "Manage extensions or plugins for your %s %s"
 msgstr ""
 "\n"
-"Gerir extensões ou plugins para a sua %s %s."
+"Gerir extensões ou plugins para a sua %s %s"
 
 #, python-format
 msgid ""
@@ -108,7 +108,7 @@ msgid ""
 msgstr ""
 "\n"
 "Selecione o dispositivo para backup.\n"
-"Dispositivo atual:"
+"Dispositivo atual: "
 
 msgid ""
 "\n"
@@ -127,7 +127,7 @@ msgid " (TV)"
 msgstr " (TV)"
 
 msgid " and"
-msgstr "e"
+msgstr " e"
 
 msgid "%-H:%M"
 msgstr "%-H:%M"
@@ -545,7 +545,7 @@ msgstr ""
 "O que deseja fazer?"
 
 msgid "A recording is currently running. Please stop the recording before trying to configure the positioner."
-msgstr "Uma gravação está a decorrer.Por favor páre a gravação antes de tentar configurar o posicionador"
+msgstr "Uma gravação está a decorrer.Por favor páre a gravação antes de tentar configurar o posicionador."
 
 msgid "A recording is currently running. Please stop the recording before trying to scan."
 msgstr "Uma gravação está em progresso. Por favor páre antes de tentar uma procura."
@@ -570,7 +570,7 @@ msgid ""
 msgstr ""
 "Uma segunda interface configurada foi encontrada.\n"
 "\n"
-"Deseja desabilitar a segunda interface de rede? "
+"Deseja desabilitar a segunda interface de rede?"
 
 #, python-format
 msgid ""
@@ -649,7 +649,7 @@ msgid "Activate current configuration"
 msgstr "Ativar a configuração existente"
 
 msgid "Active"
-msgstr "ativo"
+msgstr "Ativo"
 
 msgid "Active clients"
 msgstr "Clientes Ativos"
@@ -735,7 +735,7 @@ msgid "Add to favourites"
 msgstr "Adicionar aos favoritos"
 
 msgid "Add/Remove timer for current event"
-msgstr "Adicionar/Remover Timer para o evento atual "
+msgstr "Adicionar/Remover Timer para o evento atual"
 
 msgid "Adding schedule..."
 msgstr "Adicionar agendamento ..."
@@ -868,7 +868,9 @@ msgstr "Tem a certeza que deseja excluir este log:\n"
 msgid ""
 "Are you sure you want to delete this:\n"
 " "
-msgstr "Tem certeza que deseja apagar este:"
+msgstr ""
+"Tem certeza que deseja apagar este:\n"
+" "
 
 msgid "Are you sure you want to exit this wizard?"
 msgstr "Tem a certeza que quer sair deste assistente?"
@@ -951,7 +953,7 @@ msgid "Audio track (%s) language"
 msgstr "Idioma  (%s)  trilha de Áudio"
 
 msgid "Author: "
-msgstr "Autor:"
+msgstr "Autor: "
 
 msgid "Authoring mode"
 msgstr "Modo criativo"
@@ -1039,7 +1041,7 @@ msgid "Backup completed."
 msgstr "Backup completo."
 
 msgid "Backup failed."
-msgstr "Backup falhou!"
+msgstr "Backup falhou."
 
 msgid "Backup is running..."
 msgstr "Backup a decorrer..."
@@ -1078,7 +1080,13 @@ msgid "Black screen till locked"
 msgstr "Ecrã preto até trancar"
 
 msgid "Black Hole Apps"
-msgstr "App's  Black Hole "
+msgstr "App's  Black Hole"
+
+msgid "Blindscan"
+msgstr "Blindscan"
+
+msgid "Blind Scan"
+msgstr "Blind Scan"
 
 msgid "Block noise reduction"
 msgstr "Bloquear a redução de ruído"
@@ -1250,7 +1258,7 @@ msgid "Cancel save timeshift as movie"
 msgstr "Cancelar salvar timeshift como filme"
 
 msgid "Cannot delete file"
-msgstr "Não pode apagar este Arquivo!"
+msgstr "Não pode apagar este Arquivo"
 
 msgid "Cannot determine"
 msgstr "Não pode determinar"
@@ -1262,7 +1270,7 @@ msgid "Cannot move to trash can"
 msgstr "Não pode ser movido para a reciclagem"
 
 msgid "Capacity: "
-msgstr "Capacidade:"
+msgstr "Capacidade: "
 
 msgid "Card infos (CCcam-Reader)"
 msgstr "Card infos (Leitor-CCcam)"
@@ -1271,7 +1279,7 @@ msgid "Cards:"
 msgstr "Cartões:"
 
 msgid "Cards: "
-msgstr "Cartões:"
+msgstr "Cartões: "
 
 msgid "Cards: 0"
 msgstr "Cartões: 0"
@@ -1431,7 +1439,7 @@ msgid "Close"
 msgstr "Fechar"
 
 msgid "Close bouquet list."
-msgstr "Fechar Lista de Bouquets"
+msgstr "Fechar Lista de Bouquets."
 
 msgid "Close dialog"
 msgstr "Fechar diálogo"
@@ -1523,7 +1531,7 @@ msgid "Configure your wireless LAN again"
 msgstr "Configure a sua rede sem fios outra vez"
 
 msgid "Configures which video output connector will be used."
-msgstr "Configurar qual  o conetor de saída de vídeo será usado"
+msgstr "Configurar qual  o conetor de saída de vídeo será usado."
 
 msgid "Configuring"
 msgstr "A configurar"
@@ -1538,7 +1546,7 @@ msgid "Connect to a wireless network"
 msgstr "Conecta a uma rede sem fios"
 
 msgid "Connected clients"
-msgstr "Clientes ligados."
+msgstr "Clientes ligados"
 
 msgid "Connected to"
 msgstr "Ligado a"
@@ -1634,7 +1642,7 @@ msgid "Create DVD-ISO"
 msgstr "Criar DVD-ISO"
 
 msgid "Create directory"
-msgstr "criar pasta"
+msgstr "Criar pasta"
 
 msgid "Creating AP and SC Files"
 msgstr "A criar AP e arquivos SC"
@@ -1668,7 +1676,7 @@ msgid "Current Status:"
 msgstr "Estado atual:"
 
 msgid "Current device: "
-msgstr "Dispositivo atual:"
+msgstr "Dispositivo atual: "
 
 msgid "Current settings:"
 msgstr "Definições atuais:"
@@ -1680,7 +1688,7 @@ msgid "Current transponder"
 msgstr "Transponder atual"
 
 msgid "Current value: "
-msgstr "Valor atual:"
+msgstr "Valor atual: "
 
 msgid "Current version:"
 msgstr "Versão atual:"
@@ -1749,7 +1757,7 @@ msgid "DVD media toolbox"
 msgstr "Ferramentas de mídia do DVD"
 
 msgid "DVD player"
-msgstr "Leitor DVD "
+msgstr "Leitor DVD"
 
 msgid "DVD titlelist"
 msgstr "DVD lista de títulos"
@@ -1847,7 +1855,7 @@ msgid "Deselect"
 msgstr "Desmarcar"
 
 msgid "Details for plugin: "
-msgstr "Detalhes do plugin:"
+msgstr "Detalhes do plugin: "
 
 msgid "Detected Devices:"
 msgstr "Dispositivos detetados:"
@@ -1915,7 +1923,7 @@ msgid "Disable timer"
 msgstr "Desativar timer"
 
 msgid "Disabled"
-msgstr "inativo"
+msgstr "Inativo"
 
 msgid "Disconnect"
 msgstr "Desconetar"
@@ -2018,7 +2026,7 @@ msgid ""
 "(choose 'No' to type message using virtual keyboard.)"
 msgstr ""
 "Pretende anexar um arquivo de texto para explicar o log?\n"
-"(escolha 'Não' para o tipo de mensagem usando o teclado virtual)."
+"(escolha 'Não' para o tipo de mensagem usando o teclado virtual.)"
 
 msgid "Do you want to burn this collection to DVD medium?"
 msgstr "Deseja gravar esta colecção para DVD?"
@@ -2045,7 +2053,7 @@ msgstr "Deseja previsualizar este DVD antes de gravar?"
 
 #, python-format
 msgid "Do you want to reboot your %s %s"
-msgstr "Quer reiniciar a sua %s %s ?"
+msgstr "Quer reiniciar a sua %s %s"
 
 msgid "Do you want to reboot your receiver?"
 msgstr "Quer reiniciar o seu receptor?"
@@ -2102,7 +2110,7 @@ msgid "Download plugins"
 msgstr "Descarga de Plugins"
 
 msgid "Downloading"
-msgstr "a transferir..."
+msgstr "A transferir..."
 
 msgid "Downloading plugin information. Please wait..."
 msgstr "A descarregar novos plugins. Por favor espere..."
@@ -2221,10 +2229,10 @@ msgid "Enable parental control"
 msgstr "Ativar o Controlo Paternal"
 
 msgid "Enabled"
-msgstr "ativo"
+msgstr "Ativado"
 
 msgid "Encrypted: "
-msgstr "Descodificado:"
+msgstr "Codificado: "
 
 msgid "Encryption"
 msgstr "Codificação"
@@ -2251,7 +2259,7 @@ msgid "Enimga2 Changes"
 msgstr "Enigma2 ( Modificações )"
 
 msgid "Enter main menu..."
-msgstr "Exibir o Menu Principal"
+msgstr "Exibir o Menu Principal ..."
 
 msgid "Enter pin code"
 msgstr "Insira o código PIN"
@@ -2333,7 +2341,7 @@ msgid "Exit editor"
 msgstr "Sair do Editor"
 
 msgid "Exit input device selection."
-msgstr "Sair da selecção de dispositivos de entrada"
+msgstr "Sair da selecção de dispositivos de entrada."
 
 msgid "Exit media player?"
 msgstr "Sair do Leitor de Mídia?"
@@ -2351,7 +2359,7 @@ msgid "Exit nameserver configuration"
 msgstr "Sair da configuração de nomes de servidor"
 
 msgid "Exit network interface list"
-msgstr "Sair da Lista de interface de rede "
+msgstr "Sair da Lista de interface de rede"
 
 msgid "Exit network wizard"
 msgstr "Sair do assistente de Rede"
@@ -2360,10 +2368,10 @@ msgid "Expert"
 msgstr "Especialista"
 
 msgid "Extended Networksetup Plugin..."
-msgstr "Plugin de Configuração de Rede Avançado"
+msgstr "Plugin de Configuração de Rede Avançada"
 
 msgid "Extended Setup..."
-msgstr "Configurações Avançadas"
+msgstr "Configurações Avançadas..."
 
 msgid "Extended Shares"
 msgstr "Partilhas Avançadas"
@@ -2378,7 +2386,7 @@ msgid "Extended network setup plugin..."
 msgstr "Plugin de instalação de rede avançada..."
 
 msgid "Extended setup..."
-msgstr "Configurações Avançadas"
+msgstr "Configurações Avançadas..."
 
 msgid "Extensions"
 msgstr "Extensões"
@@ -2452,7 +2460,7 @@ msgid "Fine movement"
 msgstr "Movimento fino"
 
 msgid "Finished"
-msgstr "Terminado!"
+msgstr "Terminado"
 
 msgid "Finished configuring your network"
 msgstr "Terminou a configuração de rede"
@@ -2488,7 +2496,7 @@ msgid "Format"
 msgstr "Formato"
 
 msgid "Forward volume keys"
-msgstr "Avançar teclas de volume "
+msgstr "Teclas de aumento do Volume"
 
 msgid "Frame size in full view"
 msgstr "Tamanho da janela em ecrã total"
@@ -2503,13 +2511,13 @@ msgid "Free To Air"
 msgstr "FTA-Canais Livres"
 
 msgid "Free memory"
-msgstr "Memória Livre:"
+msgstr "Memória Livre"
 
 msgid "Free memory:"
 msgstr "Memória Livre:"
 
 msgid "Free:"
-msgstr "Livre: "
+msgstr "Livre:"
 
 msgid "French"
 msgstr "Francês"
@@ -2524,7 +2532,7 @@ msgid "Frequency scan step size(khz)"
 msgstr "Tamanho das etapas de frequência(khz)"
 
 msgid "Frequency steps"
-msgstr "Passos de frequência "
+msgstr "Passos de frequência"
 
 msgid "Fri"
 msgstr "Sex"
@@ -2535,8 +2543,8 @@ msgstr "Sexta feira"
 msgid "From :"
 msgstr "De :"
 
-msgid "Front Display Panel"
-msgstr "Visor do Painel Frontal"
+msgid "Front panel display"
+msgstr "Visor Lcd Frontal"
 
 #, python-format
 msgid "Frontprocessor version: %d"
@@ -3475,7 +3483,7 @@ msgid "Netmask:"
 msgstr "Máscara:"
 
 msgid "Network"
-msgstr "Rede Internet e Segurança"
+msgstr "Rede e Internet"
 
 msgid "Network ID"
 msgstr "ID de Rede"
@@ -4189,6 +4197,9 @@ msgid "Please wait... Loading list..."
 msgstr "Por favor espere...a carregar a lista..."
 
 msgid "Plugin Browser"
+msgstr "Explorador de Plugins"
+
+msgid "Plugins Browser"
 msgstr "Explorador de Plugins"
 
 msgid "Plugin details"
@@ -5392,7 +5403,7 @@ msgid "Skin Setting"
 msgstr "Definição da Skin"
 
 msgid "Skin setup"
-msgstr "Mudar de Skin"
+msgstr "Skins, 3D & Osd"
 
 msgid "Skins"
 msgstr "Skins"
@@ -5520,7 +5531,7 @@ msgstr "Normal"
 msgid "Standby"
 msgstr "On / Off"
 
-msgid "Standby / restart"
+msgid "Standby and Restart"
 msgstr "Gestão de Energia"
 
 msgid "Start"
@@ -6163,7 +6174,7 @@ msgid "TiVo support"
 msgstr "Suporte TiVo"
 
 msgid "Time"
-msgstr "Hora"
+msgstr "Fuso Horário"
 
 msgid "Time Update in Minutes"
 msgstr "Tempo atualização em minutos"
@@ -6379,6 +6390,12 @@ msgstr "Tuner"
 
 msgid "Tuner configuration"
 msgstr "Configuração do Tuner"
+
+msgid "Tuner Config"
+msgstr "Configurar Tuners"
+
+msgid "Tuner setup"
+msgstr "Definições do Tuner"
 
 msgid "Tuner settings"
 msgstr "Definições do Tuner"
@@ -6762,7 +6779,7 @@ msgid "View teletext..."
 msgstr "Ver teletexto..."
 
 msgid "View the changes"
-msgstr "Ver as mudança"
+msgstr "Ver as alterações"
 
 msgid "View video CD..."
 msgstr "Ver Vídeo CD's..."
@@ -7996,7 +8013,7 @@ msgstr "repetir lista de reprodução"
 msgid "repeated"
 msgstr "repetido"
 
-msgid "restart GUI"
+msgid "Restart Gui"
 msgstr "Reiniciar Enigma2"
 
 msgid "reverse by date"
@@ -8471,7 +8488,7 @@ msgid "MiniDLNA setup"
 msgstr "MiniDLNA Partilha da Rede"
 
 msgid "Mounts setup"
-msgstr "Configuração e Montagens de Rede"
+msgstr "Montagens de Rede"
 
 msgid "NFS setup"
 msgstr "NFS Partilha para Rede Windows"
@@ -8483,7 +8500,7 @@ msgid "OpenVPN setup"
 msgstr "OpenVPN Rede Privada Virtual"
 
 msgid "Plugins"
-msgstr "Plugins Browser"
+msgstr "Explorador de Plugins"
 
 msgid "Position setup"
 msgstr "Ajustar tamanho do Ecrã"
@@ -8533,7 +8550,7 @@ msgstr "Telnet Protocolo de Rede"
 msgid "Timeshift settings"
 msgstr "Definições TimeShift"
 
-msgid "User interface"
+msgid "User Interface"
 msgstr "Interface do Utilizador"
 
 msgid "VCR scart"
@@ -11549,3 +11566,142 @@ msgstr "Mostrar números nos Menus"
 
 msgid "This option allows you to show menu number quick links."
 msgstr "Esta opção permite usar teclas numéricas de atalhos nos menus."
+
+msgid "HDMI Colordepth"
+msgstr "HDMI Profundidade de Cor"
+
+msgid "This option allows you to change the Colordepth for UHD"
+msgstr "Esta opção permite que altere a Profundidade de Cor em UHD"
+
+msgid "AC3 downmix"
+msgstr "Mistura áudio AC3"
+
+msgid "Choose whether multi channel ac3 sound tracks should be downmixed to stereo."
+msgstr "Escolha se multi canal ac3 faixas de som deve ser downmix estéreo."
+
+msgid "Choose whether multi channel aac sound tracks should be downmixed to stereo."
+msgstr "Escolha se as trilhas de áudio multi canal aac devem ser misturadas para estéreo."
+
+msgid "Preferred tuner DVB-C"
+msgstr "Tuner DVB-C preferido"
+
+msgid "Preferred tuner DVB-C for recordings"
+msgstr "Tuner DVB-C preferido para gravações"
+
+msgid "Country for EPG event rating information"
+msgstr "País para informações de avaliação de evento EPG"
+
+msgid "Country for EPG event genre information"
+msgstr "País para informações de gênero de evento EPG"
+
+msgid "Choose a country scheme for decoding rating information in EPG events."
+msgstr "Escolha um esquema de país para a decodificação de informações de classificação em eventos EPG."
+
+msgid "Choose a country scheme for decoding genre information in EPG events."
+msgstr "Escolha um esquema de país para a decodificação de informações de gênero em eventos EPG."
+
+msgid "Front display settings"
+msgstr "Definição do Painel Frontal"
+
+msgid "Clone TV screen to LCD"
+msgstr "Clonar o Ecrã de TV no LCD"
+
+msgid "Password setup"
+msgstr "Definir Password"
+
+msgid "Enter a new password"
+msgstr "Entre a nova Password"
+
+msgid "Random Password"
+msgstr "Password aleatória"
+
+msgid "Set Password"
+msgstr "Definir Password"
+
+msgid "Hard disk settings"
+msgstr "Definições de Disco Rígido"
+
+msgid "Timezone area"
+msgstr "Área de fuso horário"
+
+msgid "Setup your timezone area."
+msgstr "Configuração da sua área de fuso horário."
+
+msgid "Fallback configuration"
+msgstr "Configuração Fallback"
+
+msgid "Timer conflict detection when fallback is enabled"
+msgstr "Detecção de conflitos de Timer quando fallback é habilitado"
+
+msgid "Specify the URL/IP of the fallback remote receiver, e.g. '192.168.0.1'. The other details such as http:// and the port number will be filled in automatically when you select save"
+msgstr "Especifica o URL/IP do recetor remoto fallback, i.e. '192.168.0.1' Os outros detalhes, http:// e o número da porta, serão preenchidos automaticamente, quando selecionar <salvar>."
+
+msgid "When using the remote fallback tuner for recordings, it is impossible to correctly detect timer conflicts. This option allows you to skip timer confict detection when remote fallback is enabled, but can lead to timer conflicts. This setting is only for advanced users; the default is 'yes'."
+msgstr "Ao utilizar o sintonizador fallback remoto para gravações, é impossível de detetar corretamente os conflitos do temporizador. Esta opção permite que ignore a deteção de conflitos de Timers quando fallback remoto está ativado, mas pode levar a conflitos de Timers. Essa configuração é apenas para usuários avançados; o padrão é 'Sim'."
+
+msgid "Bluetooth Setup"
+msgstr "Configuração Bluetooth"
+
+msgid "Press red key to enable bluetooth."
+msgstr "Prima a tecla <vermelha> para ativar o bluetooth."
+
+msgid "Automatic language"
+msgstr "Idioma automático"
+
+msgid "Video Enhancement"
+msgstr "Otimização de vídeo"
+
+msgid "Recording, Playback & Timeshift"
+msgstr "Gravar & Reproduzir"
+
+msgid "Recording & playback"
+msgstr "Gravar & Reproduzir"
+
+msgid "Streaming clients"
+msgstr "Transmissão a clientes"
+
+msgid "No clients streaming"
+msgstr "Sem transmissões para clientes"
+
+msgid "Show event genre information"
+msgstr "Informação do género do evento"
+
+msgid "This option allows you to choose whether or not to display genre information for the event."
+msgstr "Esta opção permite que escolha se quer ou não exibir informações de género para o evento."
+
+msgid "Show True/False as graphical switch"
+msgstr "Mostrar Verdadeiro/Falso como interruptor gráfico"
+
+msgid "Enable to display all true/false, yes/no, on/off and enable/disable setup options as a graphical switch."
+msgstr "Permite exibir as definições verdadeiro/falso, sim/não, on/off e ativo/inativo como símbolos gráficos."
+
+msgid "Shows live tv or informations on LCD."
+msgstr "Exibe TV ao vivo ou informações no LCD."
+
+msgid "Initialise devices"
+msgstr "Inicializar dispositivos"
+
+msgid ""
+"NOTE: This feature is intended for people who cannot disable overscan on their television / display.  Please first try to disable overscan before using this feature.\n"
+"\n"
+"USAGE: Adjust the screen size and position settings so that the shaded user interface layer *just* covers the test pattern in the background.\n"
+"\n"
+"Select Yes to continue or No to exit."
+msgstr ""
+"Nota: Esse recurso destina-se às pessoas que não podem desativar o overscan na sua televisão / monitor.  Primeiro tente desabilitar overscan antes de utilizar este recurso.\n"
+"\n"
+"USO: Ajustar as configurações de tamanho e posição da tela para que a camada de interface de usuário sombreado * apenas * cubra o teste padrão no fundo.\n"
+"\n"
+"Selecione SIM para continuar ou NÂO para sair."
+
+msgid "OSD position"
+msgstr "OSD ajuste da posição"
+
+msgid "Audio & Video"
+msgstr "Áudio & Vídeo"
+
+msgid "Video enhancement"
+msgstr "Otimização de Vídeo"
+
+msgid "3D"
+msgstr "3D Modo e Definição"
