@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: enigma2 pt translation for Open BlackHole 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-24 18:23+0100\n"
-"PO-Revision-Date: 2017-09-17 21:38+0100\n"
+"PO-Revision-Date: 2017-10-05 23:00+0100\n"
 "Last-Translator: nunigaia\n"
 "Language-Team: BH Team\n"
 "Language: pt_PT\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.4\n"
 
 msgid ""
 "\n"
@@ -2821,7 +2821,7 @@ msgstr ""
 msgid "Image Information"
 msgstr "Informação da Imagem"
 
-msgid "Image Manager"
+msgid "Image manager"
 msgstr "Gestor de Imagens"
 
 msgid "Immediate shutdown"
@@ -5802,7 +5802,7 @@ msgstr ""
 
 #, python-format
 msgid "The DVD standard doesn't support H.264 (HDTV) video streams. Do you want to create a %s %s format data DVD (which will not play in stand-alone DVD players) instead?"
-msgstr "O padrão de DVD não oferece suporte a fluxos de vídeo h. 264 (HDTV). Quer criar um %s %s formato DVD de dados (que não pode ser reprouzido em Leitores DVD) em vez disso?"
+msgstr "O padrão de DVD não oferece suporte a fluxos de vídeo h. 264 (HDTV). Quer criar um %s %s formato DVD de dados (que não pode ser reproduzido em Leitores DVD) em vez disso?"
 
 msgid ""
 "The EPGSearch plugin is not installed!\n"
@@ -8473,7 +8473,7 @@ msgid "Load/Save"
 msgstr "Carregar/Salvar"
 
 msgid "Logs"
-msgstr "Logs"
+msgstr "Logs de depuração"
 
 msgid "Logs manager"
 msgstr "Gestor de Logs"
@@ -11705,3 +11705,158 @@ msgstr "Otimização de Vídeo"
 
 msgid "3D"
 msgstr "3D Modo e Definição"
+
+msgid "Common interface assignment"
+msgstr "Escolha da Interface Comum"
+
+msgid "Slot 1 - No module found"
+msgstr "Slot 1 - nenhum módulo encontrado"
+
+msgid "Slot 2 - No module found"
+msgstr "Slot 2 - nenhum módulo encontrado"
+
+msgid "Device is enabled."
+msgstr "Dispositivo está ativado."
+
+msgid "Device is disabling..."
+msgstr "O dispositivo irá ser desativado..."
+
+msgid "Device is enabling..."
+msgstr "O dispositivo irá ser ativado..."
+
+msgid "Log manager"
+msgstr "Gestor de Logs"
+
+msgid "Keyboard settings"
+msgstr "Definições de Teclado"
+
+msgid "Default (US)"
+msgstr "Padrão (US)"
+
+msgid "azerty keyboard"
+msgstr "Teclado AZERTY"
+
+msgid "Dreambox Keyboard Deutsch"
+msgstr "Teclado Dreambox Alemão"
+
+msgid "German keyboard"
+msgstr "Teclado alemão"
+
+msgid "Dreambox Keyboard English"
+msgstr "Teclado Dreambox Inglês"
+
+msgid "Logs folder location"
+msgstr "Pasta para guardar Logs"
+
+msgid "Enable debug logs *"
+msgstr "Ativar logs de depuração *"
+
+msgid "Maximum number of days"
+msgstr "Número máximo de dias"
+
+msgid "Choose the location for crash and debug logs folder."
+msgstr "Escolha o local para salvar Crash´s e logs de depuração."
+
+msgid "Allows you to enable the debug logs. They contain very detailed information about everything the system does. Reboot required to enable this!"
+msgstr "Pemite-lhe ativar os logs de depuração. Eles contêm informação muito detalhada sobre o que o sistema está a executar. Reinício requerido para ativar!"
+
+msgid "Logs older than the specified number of days will be deleted."
+msgstr "Registos mais antigos do que o número especificado de dias serão excluídos."
+
+msgid "Scan and setup Vu+ Bluetooth RCU"
+msgstr "Procura e define o telecomando Vu+"
+
+msgid "Scan other bluetooth 3.0 device (A2DP, HID)"
+msgstr "Procurar outro dispositivo bluetooth 3.0 (A2DP, HID)"
+
+msgid "Vu+ Bluetooth RCU Setup"
+msgstr "Definir telecomando Bluetooh Vu+"
+
+msgid ""
+"Press and hold the buttons <MENU+AUDIO>\n"
+" for five seconds to start."
+msgstr ""
+"Prima em simultâneo por 5 segundos as teclas\n"
+" <MENU+ÁUDIO> para iniciar."
+
+msgid "Please select scan mode."
+msgstr "Seleção do modo de procura"
+
+msgid "Scanning bluetooth devices"
+msgstr "À procura de dispositivos Bluetooth"
+
+msgid "%s is connected."
+msgstr "%s está ligado."
+
+msgid "%s Pairing fail"
+msgstr "%s Erro no Emparelhamento"
+
+msgid "Can't communicate with %s"
+msgstr "Não pode comunicar com %s"
+
+msgid "Wrong pin number for %s. Please try again and check pin number."
+msgstr "Pin errado para %s. Por favor, tente novamente e verifique o número pin."
+
+msgid "%s is disconnected."
+msgstr "%s está desligado."
+
+msgid "Type %s on %s to connect, then press Enter or Return."
+msgstr "Digite %s na %s para se conectar e, em seguida, pressione Enter ou Return."
+
+msgid "Scan failed! try again."
+msgstr "Procura falhou! Tentar novamente."
+
+msgid ""
+"Pairing Failed.\n"
+"Another audio device is connected. (%s)"
+msgstr ""
+"Emparelhamento falhou.\n"
+"Outro dispositivo de áudio está ligado. (%s)"
+
+msgid "Pairing %s"
+msgstr "A emparelhar %s"
+
+msgid "Pairing %s failed!!"
+msgstr "%s Erro no Emparelhamento!!"
+
+msgid "Disconnecting %s"
+msgstr "A desconetar %s"
+
+msgid "Disconnect %s failed!!"
+msgstr "Desconexão falhada para %s"
+
+msgid "Press green key to connect device."
+msgstr "Pressione a tecla verde para conetar o dispositivo."
+
+msgid "No nearby bluetooth devices were found."
+msgstr "Não existem dispositivos bluetooth nas proximidades."
+
+msgid "%s is not found."
+msgstr "%s não foi encontrado."
+
+msgid "Bluetooth Scan"
+msgstr "Procurar Bluetooth"
+
+msgid "Release notes"
+msgstr "Notas da versão"
+
+msgid "New backup"
+msgstr "Novo Backup"
+
+msgid "Next backup:"
+msgstr "Backup seguinte:"
+
+msgid "Backup location"
+msgstr "Localização do Backup"
+
+msgid "Location of where image backup should be saved."
+msgstr "Localização onde o backup da imagem será salvo."
+
+msgid "Allows you to tag your image backup to a box. (default is box name/type)"
+msgstr "Permite-lhe etiquetar a imagem com o nome da STB. (padrão é o nome/tipo)"
+
+msgid "Schedule backups"
+msgstr "Agendar backups"
+
+msgid "Allows you schedule your image backups."
+msgstr "Permite-lhe agendar os Backups da imagem. "
