@@ -34,8 +34,8 @@ class HarddiskSetup(Screen):
 		self["model"] = Label(_("Model: ") + hdd.model())
 		self["capacity"] = Label(_("Capacity: ") + hdd.capacity())
 		self["bus"] = Label(_("Bus: ") + hdd.bus())
-		self["initialise"] = Pixmap()
-		self["initialisetext"] = Label(text)
+		self["initialize"] = Pixmap()
+		self["initializetext"] = Label(text)
 		self["actions"] = ActionMap(["OkCancelActions"],
 		{
 			"ok": self.hddQuestion,
@@ -69,7 +69,7 @@ class HarddiskSetup(Screen):
 		try:
 			job_manager.AddJob(self.action())
 			for job in job_manager.getPendingJobs():
-				if job.name in (_("Initialising storage device..."), _("Checking filesystem..."),_("Converting ext3 to ext4...")):
+				if job.name in (_("Initializing storage device..."), _("Checking filesystem..."),_("Converting ext3 to ext4...")):
 					self.showJobView(job)
 					break
 		except Exception, ex:
@@ -127,7 +127,7 @@ class HarddiskSelection(Screen):
 
 	def doIt(self, selection):
 		self.session.openWithCallback(self.close, HarddiskSetup, selection,
-			 action=selection.createInitialiseJob,
+			 action=selection.createInitializeJob,
 			 text=_("Initialise"),
 			 question=_("Do you really want to initialise this device?\nAll the data on the device will be lost!"), menu_path=self.menu_path)
 
