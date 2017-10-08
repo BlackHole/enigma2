@@ -69,7 +69,7 @@ class HarddiskSetup(Screen):
 		try:
 			job_manager.AddJob(self.action())
 			for job in job_manager.getPendingJobs():
-				if job.name in (_("Initializing storage device..."), _("Checking filesystem..."),_("Converting ext3 to ext4...")):
+				if job.name in (_("Initialising storage device..."), _("Checking filesystem..."),_("Converting ext3 to ext4...")):
 					self.showJobView(job)
 					break
 		except Exception, ex:
