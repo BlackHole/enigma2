@@ -32,7 +32,7 @@
 				<item weight="3" text="Tuner setup" entryID="client_mode" requires="ClientModeEnabled"><screen module="ClientMode" screen="ClientModeScreen"/></item>
 				<item weight="20" text="Automatic scan" entryID="auto_scan" requires="ClientModeDisabled"><screen module="ScanSetup" screen="ScanSimple"/></item>
 				<item weight="30" text="Manual scan" entryID="manual_scan" requires="ClientModeDisabled"><screen module="ScanSetup"/></item>
-				<item weight="100" text="Fallback configuration" entryID="fallback_setup" requires="ClientModeDisabled"><setup id="fallback"/></item>
+				<item weight="100" text="Fallback configuration" entryID="fallback_mode" requires="ClientModeDisabled"><screen  module="FallbackTunerSetup" screen="FallbackTunerSetup"/></item>
 			</menu>
 			<!-- Menu / Setup / EPG -->
 			<menu weight="3" text="EPG" entryID="epg_menu">
@@ -173,7 +173,7 @@ self.session.open(SABnzbdSetupScreen)
 			<menu weight="10" level="0" text="Software update" entryID="software_update">
 				<id val="softwareupdatemenu"/>
 				<item weight="1" level="0" text="Settings" entryID="onlineupdate_setup"><setup id="softwareupdate"/></item>
-				<item weight="2" level="0" text="Software update" entryID="software_update"><screen module="SoftwareUpdate" screen="UpdatePlugin"/></item>	
+				<item weight="2" level="0" text="Software update" entryID="software_update"><screen module="SoftwareUpdate" screen="UpdatePlugin"/></item>
 			</menu>
 
 			<!-- Menu / Setup / System (OLD SYSTEM ENTRY FOR COMPATIBILITY) -->
@@ -205,7 +205,7 @@ def msgClosed(ret):
 self.session.openWithCallback(msgClosed, FactoryReset)
 </code>
 				</item>
-			</menu>	
+			</menu>
 
 			<!-- Menu / Setup / Time Settings -->
 			<item weight="50" level="0" entryID="time_setup"><setup id="time"/></item>
@@ -216,7 +216,7 @@ self.session.openWithCallback(msgClosed, FactoryReset)
 from Plugins.SystemPlugins.HdmiCEC.plugin import HdmiCECSetupScreen
 self.session.open(HdmiCECSetupScreen)
 </code>
-			</item>	
+			</item>
 		</menu>
 
 	<!-- Menu / Timers -->
