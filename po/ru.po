@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: enigam2 Russian translation OpenBH 06\n"
+"Project-Id-Version: enigam2 Russian translation OpenBH\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
@@ -652,6 +652,9 @@ msgstr "Транскодирование AAC"
 msgid "AC3"
 msgstr "AC3"
 
+msgid "AC3 downmix"
+msgstr "AC3 микширование"
+
 msgid "ACQUIRING TSID/ONID"
 msgstr "ПОЛУЧЕНИЕ TSID/ONID"
 
@@ -731,7 +734,7 @@ msgid "Add"
 msgstr "Добавить"
 
 msgid "Add AutoTimer"
-msgstr "Добавить автотаймер"
+msgstr "Автотаймер"
 
 msgid "Add Timer"
 msgstr "Добавить таймер"
@@ -1144,6 +1147,9 @@ msgstr "Данный таймер уже установлен ранее!\n"
 msgid "Audio"
 msgstr "Аудио"
 
+msgid "Audio & Video"
+msgstr "Аудио и Видео"
+
 msgid "Audio PID"
 msgstr "Аудио PID"
 
@@ -1228,6 +1234,9 @@ msgstr "Обзор автотаймеров"
 msgid "Automatic"
 msgstr "Автоматически"
 
+msgid "Automatic language"
+msgstr "Автоматический выбор языка"
+
 msgid "Automatic Scan"
 msgstr "Автоматический поиск"
 
@@ -1243,11 +1252,17 @@ msgstr "Метка авторазрешения экрана"
 msgid "Automatic save"
 msgstr "Автосохранение"
 
+msgid "Automatic settings backup"
+msgstr "Автосохранение настроек"
+
 msgid "Automatic scan"
 msgstr "Автосканирование"
 
 msgid "Automatically start timeshift after"
 msgstr "Автозапуск таймшифта после"
+
+msgid "Automatic image backup"
+msgstr "Автосохранение имиджа"
 
 msgid "Automatically turn on external subtitles"
 msgstr "Автоматически переключать на внешние субтитры"
@@ -1301,6 +1316,9 @@ msgid "Backup Menu"
 msgstr "Резервное копирование"
 
 msgid "Backup Manager"
+msgstr "Резервное копирование"
+
+msgid "Backup manager"
 msgstr "Резервное копирование"
 
 msgid "Backup completed."
@@ -1551,6 +1569,9 @@ msgstr "Частота:\t%s\n"
 msgid "CPU:\t%s\n"
 msgstr "Процессор:\t%s\n"
 
+msgid "CPU:\t%s %s %s\n"
+msgstr "Процессор:\t%s %s %s\n"
+
 msgid "CVBS"
 msgstr "CVBS"
 
@@ -1780,6 +1801,19 @@ msgstr "Выбор тега для быстрого поиска записи."
 msgid "Choose between Daily, Weekly, Weekdays or user defined."
 msgstr "Выбор между ежедневно, еженедельно, по будням, или определить самостоятельно."
 
+msgid "Choose the front panel display formatting style for dates. 'D' / 'DD' is the date "
+"and 'M' / 'MM' is the month in digits.  ('DD' and 'MM' have leading zeros for single digit "
+"values.) The screen display will be based on your choice but can be influenced by the skin."
+msgstr "Выберите стиль дисплея на передней панели для форматирования даты. 'D'/'DD' - дата, "
+"'M'/'MM' - месяц в цифрах."
+
+msgid "Choose the front panel display formatting style for times. 'H' / 'HH' is the hour for "
+"a 24 hour clock, 'h' / 'hh' is the hour for a 12 hour clock, 'mm' is the minutes.  ('HH' and "
+"'hh' have leading zeros for single digit values.) The front panel display will be based on your "
+"choice but can be influenced any applicable skin."
+msgstr "Выберите стиль дисплея на передней панели для форматирования времени. 'H'/'HH' - 24-часовой "
+"формат времени, 'h'/'hh' - 12-часовой формат времени, 'mm' - минуты."
+
 msgid "Choose the location for crash and debug logs folder."
 msgstr "Выберите каталог для журналов."
 
@@ -1808,6 +1842,21 @@ msgstr "Выберите, следует ли транскодирования A
 
 msgid "Choose whether multi channel sound tracks should be downmixed to stereo."
 msgstr "Выберите, следует ли многоканальную звуковую дорожку декодировать в стереозвук."
+
+msgid ""
+"Choose whether multi channel aac sound tracks should be downmixed to stereo."
+msgstr ""
+"Выберите, следует ли многоканальную звуковую дорожку AAC декодировать в "
+"стереозвук."
+
+msgid ""
+"Choose whether multi channel ac3 sound tracks should be downmixed to stereo."
+msgstr ""
+"Выберите, следует ли многоканальную звуковую дорожку AC3 декодировать в "
+"стереозвук."
+
+msgid "Choose whether multi channel sound tracks should be output as PCM."
+msgstr "Выберите, следует ли многоканальную звуковую дорожку выводить как PCM."
 
 msgid "Choose whether or not to show an icon when a motorised dish is moving."
 msgstr "Выберите, нужно ли показывать иконку при движении антенны с мотоподвесом."
@@ -1916,6 +1965,9 @@ msgid "Common Interface Assignment"
 msgstr "Права доступа CI модулей"
 
 msgid "Common Interface assignment"
+msgstr "Права доступа CI модулей"
+
+msgid "Common interface assignment"
 msgstr "Права доступа CI модулей"
 
 msgid "Common interface"
@@ -2470,6 +2522,9 @@ msgstr "Хорватский"
 msgid "Cron Manager"
 msgstr "Планировщик"
 
+msgid "Cron manager"
+msgstr "Планировщик"
+
 msgid "CrossEPG Setup"
 msgstr "Настройки CrossEPG"
 
@@ -2483,6 +2538,9 @@ msgid "Current Event:"
 msgstr "Текущее событие:"
 
 msgid "Current Status:"
+msgstr "Текущий статус:"
+
+msgid "Current status:"
 msgstr "Текущий статус:"
 
 msgid "Current device: "
@@ -2616,6 +2674,9 @@ msgstr "Датский"
 
 msgid "Date"
 msgstr "Дата"
+
+msgid "Date style"
+msgstr "Стиль даты"
 
 msgid "Deactivate"
 msgstr "Отключить"
@@ -3333,6 +3394,9 @@ msgstr ""
 "быть настроены локально для записи(например ресивер занят или тип сервиса недоступен на "
 "локальном ресивере."
 
+msgid "Enable to display all true/false, yes/no, on/off and enable/disable set up options as a graphical switch."
+msgstr "Включить отображение параметров 'Да/Нет' и 'Вкл./Выкл.' в качестве графического переключателя."
+
 msgid "Enable timer conflict detection"
 msgstr "Активировать обнаружение конфликтов таймера"
 
@@ -3436,6 +3500,9 @@ msgstr "Эстонский"
 
 msgid "Ethernet network interface"
 msgstr "Интерфейс локальной сети"
+
+msgid "Europe"
+msgstr "Европа"
 
 msgid "Event Info"
 msgstr "Информация о событие"
@@ -3655,6 +3722,9 @@ msgstr "Не удалось"
 msgid "Failed to write /tmp/positionersetup.log: "
 msgstr "Не удалось записать /tmp/positionersetup.log: "
 
+msgid "Fallback configuration"
+msgstr "Удаленный ресивер"
+
 msgid "Fallback remote receiver URL"
 msgstr "URL резервного удаленного ресивера"
 
@@ -3829,6 +3899,9 @@ msgstr "Из :"
 msgid "Front Display Panel"
 msgstr "Дисплей ресивера"
 
+msgid "Front panel display"
+msgstr "Дисплей ресивера"
+
 msgid "Front display settings"
 msgstr "Настройки дисплея ресивера"
 
@@ -3949,6 +4022,12 @@ msgstr "Калибровка позиции Х"
 
 msgid "Graphical EPG"
 msgstr "Графический телегид"
+
+msgid "GraphicalEPG"
+msgstr "Графический телегид"
+
+msgid "Graphical InfobarEPG"
+msgstr "Графический инфобар"
 
 msgid "Graphical Infobar EPG settings"
 msgstr "Настройки графичес. инфобара"
@@ -4273,7 +4352,13 @@ msgstr "Имидж:\t%s.%s%s (%s)\n"
 msgid "ImageBackup"
 msgstr "Резервная копия имиджа"
 
+msgid "Image Information"
+msgstr "Информация об имидже"
+
 msgid "Image Manager"
+msgstr "Управление имиджами"
+
+msgid "Image manager"
 msgstr "Управление имиджами"
 
 msgid "Immediate shutdown"
@@ -4342,6 +4427,9 @@ msgstr "Режим телегида"
 msgid "Infobar EPG"
 msgstr "Быстрый телегид"
 
+msgid "InfobarEPG"
+msgstr "Быстрый телегид"
+
 msgid "Infobar fade-out speed"
 msgstr "Скорость затухания инфобара"
 
@@ -4356,6 +4444,9 @@ msgstr "Информация"
 
 msgid "Init"
 msgstr "Инициализация"
+
+msgid "Initialise devices"
+msgstr "Инициализация устройств"
 
 msgid "Initial fast forward speed"
 msgstr "Начальная скорость перемотки вперед"
@@ -4585,6 +4676,9 @@ msgstr "Настройки клавиатуры"
 msgid "Keyboard settings"
 msgstr "Настройки клавиатуры"
 
+msgid "Kiev"
+msgstr "Киев"
+
 msgid "LAN adapter"
 msgstr "Сетевой адаптер"
 
@@ -4773,6 +4867,9 @@ msgstr "Загружать невыбранные пакеты пользова�
 msgid "Load-Save-Delete"
 msgstr "Загрузить/Сохранить/Удалить"
 
+msgid "Load-save-delete"
+msgstr "Загрузить/Сохранить/Удалить"
+
 msgid "Local box"
 msgstr "Ресивер"
 
@@ -4792,6 +4889,9 @@ msgid "Log"
 msgstr "Отчёт"
 
 msgid "Log Manager"
+msgstr "Управление журналами"
+
+msgid "Log manager"
 msgstr "Управление журналами"
 
 msgid "Log results to harddisk"
@@ -5168,6 +5268,9 @@ msgstr "Перемещение на запад ..."
 msgid "Multi EPG"
 msgstr "Мультителегид"
 
+msgid "MultiEPG"
+msgstr "Мультителегид"
+
 msgid "MultiEPG settings"
 msgstr "Настройки мультителегида"
 
@@ -5209,6 +5312,19 @@ msgstr "Слот и тип"
 
 msgid "NO"
 msgstr "NO"
+
+msgid ""
+"NOTE: This feature is intended for people who cannot disable overscan on their television / display.  Please first try to disable overscan before using this feature.\n"
+"\n"
+"USAGE: Adjust the screen size and position settings so that the shaded user interface layer *just* covers the test pattern in the background.\n"
+"\n"
+"Select Yes to continue or No to exit."
+msgstr ""
+"ПРИМЕЧАНИЕ: Эта функция предназначена для пользователей, которые не могут отключить оверскан на своем телевизоре.\n"
+"\n"
+"ИСПОЛЬЗОВАНИЕ: Отрегулируйте размер и положение экрана так, чтобы затененный слой пользовательского интерфейса *just* покрывал тестовый шаблон.\n"
+"\n"
+"Выберите 'Да' для продолжения или 'Нет' для выхода."
 
 msgid "NTP"
 msgstr "NTP"
@@ -5297,6 +5413,9 @@ msgstr "Сеть:"
 msgid "New"
 msgstr "Новые"
 
+msgid "New backup"
+msgstr "Новая копия"
+
 msgid "New profile: "
 msgstr "Новый профиль: "
 
@@ -5312,6 +5431,9 @@ msgstr "Новости о текущих событиях"
 msgid "Next"
 msgstr "Далее"
 
+msgid "Next backup:"
+msgstr "Следующая копия:"
+
 msgid "NEXT"
 msgstr "ДАЛЕЕ"
 
@@ -5323,6 +5445,9 @@ msgstr "Не найден (поддерживаемый) DVDROM!"
 
 msgid "No Connection"
 msgstr "Нет подключения"
+
+msgid "No clients streaming"
+msgstr "Нет клиентов потоковой передачи"
 
 msgid "No HDD found or HDD not initialized!"
 msgstr "Жесткий диск не найден или не установлен!"
@@ -5387,6 +5512,9 @@ msgstr "В oscam.conf не указан пароль"
 
 msgid "No httpuser defined in oscam.conf"
 msgstr "В oscam.conf не указан пользователь"
+
+msgid "No module found"
+msgstr "Не найден модуль"
 
 msgid "No network connection available."
 msgstr "Нет доступных подключений."
@@ -5643,6 +5771,9 @@ msgstr "Настройки OSD"
 
 msgid "Osd settings"
 msgstr "Настройки OSD"
+
+msgid "OSD position"
+msgstr "Положение OSD"
 
 msgid "Osd Position setup"
 msgstr "Настройка позиции OSD"
@@ -5920,8 +6051,14 @@ msgstr "Проценты справа"
 msgid "Perform a full image backup"
 msgstr "Выполнить полное резервное копирование"
 
+msgid "Perform a complete image backup before updating."
+msgstr "Перед обновлением выполнять полное резервное копирование"
+
 msgid "Perform a settings backup,"
 msgstr "Выполнить резервное копирование настроек,"
+
+msgid "Perform a settings backup before updating."
+msgstr "Перед обновлением выполнять резервное копирование настроек."
 
 msgid "Perform a settings backup, making a backup before updating is strongly advised."
 msgstr "Выполнить резервное копирование настроек, рекомендуется перед обновлением"
@@ -6253,6 +6390,9 @@ msgstr "Подождите, идет активация вашей сетево�
 
 msgid "Please wait..."
 msgstr "Пожалуйста, подождите..."
+
+msgid "Please wait"
+msgstr "Пожалуйста, подождите"
 
 msgid "Please wait... Loading list..."
 msgstr "Пожалуйста ждите...Загружается список..."
@@ -6647,6 +6787,9 @@ msgstr "Готовы к установке \"%s\" ?"
 msgid "Ready to remove \"%s\" ?"
 msgstr "Готовы к удалению \"%s\" ?"
 
+msgid "Release notes"
+msgstr "Изменения"
+
 msgid "Really close without saving settings?"
 msgstr "Действительно закрыть без сохранения настроек?"
 
@@ -6703,6 +6846,12 @@ msgstr "Время записи ограничено ввиду конфликт
 
 msgid "Recording"
 msgstr "Запись"
+
+msgid "Recording, Playback & Timeshift"
+msgstr "Запись, воспр. и таймшифт"
+
+msgid "Recording & playback"
+msgstr "Запись и воспроизведение"
 
 msgid "Recording and playback settings"
 msgstr "Запись и воспроизведение"
@@ -6972,6 +7121,9 @@ msgstr "Разрешение"
 msgid "Restart"
 msgstr "Перезагрузка"
 
+msgid "Restart Gui"
+msgstr "Перезагрузка GUI"
+
 msgid "Restart GUI"
 msgstr "Перезагрузка GUI"
 
@@ -7091,6 +7243,14 @@ msgstr "SNR:"
 
 msgid "SPDIF"
 msgstr "SPDIF"
+
+msgid "Speed:"
+msgstr "Скорость:"
+
+msgid "Specify the complete URL of the fallback remote receiver including the port number (:8001 by "
+"default), e.g. 'http://IP_second_box:8001'."
+msgstr "Укажите URL-адрес резервного удаленного ресивера, включая номер порта (:8001 - по умолчанию), "
+"например, 'http://IP_second_box:8001'."
 
 msgid "SSID:"
 msgstr "SSID:"
@@ -7282,6 +7442,9 @@ msgstr "Поиск/Веб"
 
 msgid "Searching"
 msgstr "Поиск"
+
+msgid "Searching..."
+msgstr "Поиск..."
 
 msgid "Searching east ..."
 msgstr "Поиск на востоке ..."
@@ -7728,7 +7891,7 @@ msgid "Settings"
 msgstr "Настройки"
 
 msgid "Settings..."
-msgstr "Настройки..."
+msgstr "Настройки"
 
 msgid "Settings Backup"
 msgstr "Резервная копия параметров"
@@ -7756,6 +7919,9 @@ msgstr "Настройки вашего позиционера"
 
 msgid "Setup your satellite equipment"
 msgstr "Настройка спутникового оборудованияt"
+
+msgid "Setup your timezone area."
+msgstr "Настройки региона часового пояса."
 
 msgid "Setup your timezone."
 msgstr "Настройки Вашего часового пояса."
@@ -7870,6 +8036,9 @@ msgstr "Показать список таймеров"
 
 msgid "Show Transponder Remaining/Elapsed as"
 msgstr "Показать оставшееся/истекшее время в"
+
+msgid "Show True/False as graphical switch"
+msgstr "Показывать графический переключатель"
 
 msgid "Show VCR scart on main menu"
 msgstr "Показать Scart в главном меню"
@@ -8168,6 +8337,9 @@ msgstr "Один"
 msgid "Single EPG"
 msgstr "Одиночный телегид"
 
+msgid "SingleEPG"
+msgstr "Одиночный телегид"
+
 msgid "Single satellite"
 msgstr "Один спутник"
 
@@ -8221,6 +8393,9 @@ msgstr "Таймер сна"
 
 msgid "Sleep delay"
 msgstr "Задержка перед выключением"
+
+msgid "Slim"
+msgstr "Компакт"
 
 msgid "Slide drop"
 msgstr "Слайд вниз"
@@ -8423,6 +8598,9 @@ msgstr "Выключение"
 msgid "Standby / restart"
 msgstr "Выключение"
 
+msgid "Standby and Restart"
+msgstr "Выключение"
+
 msgid "StandbyLED"
 msgstr "LED в режиме ожидания"
 
@@ -8580,6 +8758,9 @@ msgstr "Потоковое ТВ"
 
 msgid "Streaming"
 msgstr "Приём (передача) потока"
+
+msgid "Streaming clients"
+msgstr "Клиенты потока"
 
 msgid "Streaming clients info"
 msgstr "Информация о клиентах потока"
@@ -9420,6 +9601,9 @@ msgstr "Поддержка TiVo"
 msgid "Time"
 msgstr "Время"
 
+msgid "Time style"
+msgstr "Стиль времени"
+
 msgid "Time Update in Minutes:"
 msgstr "Время обновления в минутах"
 
@@ -9523,6 +9707,9 @@ msgstr "Таймшифт-сохранение при переключении к
 
 msgid "Timezone"
 msgstr "Часовой пояс"
+
+msgid "Timezone area"
+msgstr "Регион часового пояса"
 
 msgid "Title"
 msgstr "Название"
@@ -9659,6 +9846,9 @@ msgstr "Тюнер"
 msgid "Tuner :"
 msgstr "Тюнер :"
 
+msgid "Tuner Config"
+msgstr "Настройки тюнера"
+
 msgid "Tuner configuration"
 msgstr "Настройки тюнера"
 
@@ -9673,6 +9863,9 @@ msgstr "Реальные значения"
 
 msgid "Tuner not available."
 msgstr "Тюнер не доступен."
+
+msgid "Tuner setup"
+msgstr "Конфигурация тюнера"
 
 msgid "Tuner settings"
 msgstr "Настройки тюнера"
@@ -9926,18 +10119,26 @@ msgstr "Для пиконов используйте каталог 'picon_lcd'.
 msgid "Use slim screen"
 msgstr "Используйте мини-окно"
 
-msgid ""
-"Use the Left/Right buttons on your remote to adjust the size of the user interface. Left "
-"button decreases the size, Right increases the size."
+msgid "Use the LEFT/RIGHT buttons on your remote to adjust the height of "
+"the user interface. LEFT button decreases the size, RIGHT increases the size."
 msgstr ""
-"Используйте кнопки пульта влево/вправо для регулировки размера экрана, кнопка 'влево' "
-"уменьшает размер, 'вправо' увеличивает."
+"Используйте кнопки пульта влево/вправо для регулировки высоты пользовательского "
+"интерфейса, кнопка 'влево' уменьшает размер, 'вправо' увеличивает."
 
-msgid "Use the Left/Right buttons on your remote to move the user interface left/right"
-msgstr "Используйте кнопки пульта влево/вправо для перемещения экрана влево/вправо"
+msgid "Use the LEFT/RIGHT buttons on your remote to adjust the width of "
+"the user interface. LEFT button decreases the size, RIGHT increases the size."
+msgstr ""
+"Используйте кнопки пульта влево/вправо для регулировки ширины пользовательского "
+"интерфейса, кнопка 'влево' уменьшает размер, 'вправо' увеличивает."
 
-msgid "Use the Left/Right buttons on your remote to move the user interface up/down"
-msgstr "Используйте кнопки пульта влево/вправо для перемещения экрана вверх/вниз"
+msgid "Use the LEFT/RIGHT buttons on your remote to move the user interface left/"
+"right."
+msgstr ""
+"Используйте кнопки пульта влево/вправо для перемещения экрана влево/вправо."
+
+msgid "Use the LEFT/RIGHT buttons on your remote to move the user interface up/down."
+msgstr ""
+"Используйте кнопки пульта влево/вправо для перемещения экрана вверх/вниз."
 
 msgid "Use the alternative or the conventional radio mode."
 msgstr "Использование альтернативного или обычного режима радио."
@@ -10001,6 +10202,9 @@ msgstr "Определены пользователем"
 msgid "User defined transponder"
 msgstr "Транспондер вручную"
 
+msgid "User Interface"
+msgstr "Интерфейс пользователя"
+
 msgid "User interface"
 msgstr "Интерфейс пользователя"
 
@@ -10058,6 +10262,9 @@ msgstr "Вертикальная"
 
 msgid "Vertical turning speed"
 msgstr "Скорость вертикального поворота"
+
+msgid "Video enhancement"
+msgstr "Расширенные настройки"
 
 msgid "Video Enhancement Settings"
 msgstr "Расширенные настройки"
@@ -10190,6 +10397,9 @@ msgstr "Просмотр изображений..."
 
 msgid "View teletext..."
 msgstr "Просмотр телетекста..."
+
+msgid "View the changes"
+msgstr "Просмотр изменений"
 
 msgid "View video CD..."
 msgstr "Просмотр Video CD..."
@@ -10955,6 +11165,9 @@ msgstr "Ваш %s %s будет выключен"
 
 msgid "Your %s %s is shutting down. Please wait..."
 msgstr "Ваш %s %s выключается. Пожалуйста, подождите..."
+
+msgid "Your timezone in the area."
+msgstr "Ваш часовой пояс в этом регионе."
 
 msgid ""
 "Your %s %s might be unusable now. Please consult the manual for further assistance before "
@@ -11947,6 +12160,12 @@ msgstr "Научная фантастика/Фентези/Ужасы"
 
 msgid "se"
 msgstr "se"
+
+msgid "search EPG"
+msgstr "Поиск EPG"
+
+msgid "search EPG from history..."
+msgstr "Поиск EPG из истории..."
 
 msgid "second cable of motorized LNB"
 msgstr "Второй кабель мотоподвеса"
