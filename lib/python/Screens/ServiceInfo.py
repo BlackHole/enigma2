@@ -319,8 +319,10 @@ class ServiceInfo(Screen):
 				return (tuner,
 					(_("Frequency & Channel"), "%s - Ch. %s" % (frontendData.get("frequency", 0), getChannelNumber(frontendData["frequency"], frontendData["tuner_number"])), TYPE_TEXT),
 					(_("Inversion & Bandwidth"), "%s - %s" % (frontendData["inversion"], frontendData["bandwidth"]), TYPE_TEXT),
-					(_("Code R. LP-HP & Guard Int"), "%s - %s - %s" % (frontendData["code_rate_lp"], frontendData["code_rate_hp"], frontendData["guard_interval"]), TYPE_TEXT),
-					(_("Constellation & FFT mode"), "%s - %s" % (frontendData["constellation"], frontendData["transmission_mode"]), TYPE_TEXT),
+					(_("Code Rate LP-HP"), "%s - %s" % (frontendData["code_rate_lp"], frontendData["code_rate_hp"]), TYPE_TEXT),
+					(_("Guard interval"), frontendData["guard_interval"], TYPE_TEXT),
+					(_("Constellation"), frontendData["constellation"], TYPE_TEXT),
+					(_("Transmission mode"), frontendData["transmission_mode"], TYPE_TEXT),
 					(_("Hierarchy info"), "%s" % frontendData["hierarchy_information"], TYPE_TEXT))
 			elif frontendDataOrg["tuner_type"] == "ATSC":
 				return (tuner,
