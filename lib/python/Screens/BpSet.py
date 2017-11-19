@@ -970,10 +970,11 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		if machine != "vusolo" and not (machine.endswith("4k") or machine.endswith("4kse")):
 			self.pluglist.append(["Opera browser & HbbTV", "enigma2-plugin-extensions-hbbtv"])
 		elif machine.endswith("4k") or machine.endswith("4kse"):
-			self.pluglist.append(["Chromium Browser & HbbTV", "webkit-hbbtv-browser-"+ machine ])
+			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
+			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-webkithbbtv"])
 			
-		if machine not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero"): 
-			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])	
+		if machine not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero"):
+			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
 					
 		self.activityTimer = eTimer()
 		self.activityTimer.timeout.get().append(self.updateFeed2)
@@ -1044,12 +1045,13 @@ class BhSpeedUp(Screen, ConfigListScreen):
 				elif cmd == "opkg remove --force-depends --force-remove enigma2-plugin-extensions-kodi":
 					self.mycmdlist.append("rm -rf /usr/lib/enigma2/python/Plugins/Extensions/Kodi")
 					self.mycmdlist.append("opkg remove --force-depends --force-remove enigma2-plugin-extensions-subssupport")
-				elif cmd.startswith("opkg remove --force-depends --force-remove webkit-hbbtv-browser-"):	
-					self.mycmdlist.append("opkg remove --force-depends --force-remove enigma2-plugin-extensions-chromium vuplus-webkithbbtv-dumpait enigma2-plugin-extensions-webkithbbtv")
-					self.mycmdlist.append("rm -rf /usr/lib/enigma2/python/Plugins/Extensions/Chromium")
+				elif cmd == "opkg remove --force-depends --force-remove enigma2-plugin-extensions-webkithbbtv":
+					self.mycmdlist.append("opkg remove --force-depends --force-remove vuplus-webkithbbtv-dumpait enigma2-plugin-extensions-webkithbbtv")
 					self.mycmdlist.append("rm -rf /usr/lib/enigma2/python/Plugins/Extensions/WebkitHbbTV")
+				elif cmd == "opkg remove --force-depends --force-remove enigma2-plugin-extensions-chromium":
+					self.mycmdlist.append("rm -rf /usr/lib/enigma2/python/Plugins/Extensions/Chromium")
 				elif cmd.startswith("opkg install webkit-hbbtv-browser-"):
-					self.mycmdlist.append("opkg install enigma2-plugin-extensions-chromium")									
+					self.mycmdlist.append("opkg install enigma2-plugin-extensions-chromium")
 				elif cmd == "opkg install enigma2-plugin-extensions-hbbtv":
 					self.mycmdlist = []
 					self.mycmdlist.append("opkg install enigma2-plugin-extensions-hbbtv")
