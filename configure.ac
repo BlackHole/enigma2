@@ -84,17 +84,6 @@ if test "$with_libvugles2" = "yes"; then
 fi
 AM_CONDITIONAL(HAVE_LIBVUGLES2, test "$with_libvugles2" = "yes")
 
-AC_ARG_WITH(osdanimation,
-	AC_HELP_STRING([--with-osdanimation], [use osd animation, yes or no]),
-	[[withosdanimation=$withval]],
-	[[withosdanimation=no]]
-)
-if test x"$withosdanimation" != xno ; then
-
-	AC_DEFINE(HAVE_OSDANIMATION, 1,[Define if driver supports animation of osd])
-fi
-AM_CONDITIONAL(HAVE_OSDANIMATION, test x"$withosdanimation" != xno)
-
 
 AC_ARG_WITH(nolcd,
 	AC_HELP_STRING([--with-nolcd], [disable ascii based lcd, yes or no]),
@@ -234,9 +223,8 @@ if test `echo "$BOXTYPE" | cut -b 1-2` == "vu"; then
 fi
 
 if test "$BOXTYPE" == "gb7252" -o "$BOXTYPE" == "vusolo4k" -o "$BOXTYPE" == "vuuno4k" -o "$BOXTYPE" == "vuuno4kse" -o "$BOXTYPE" == "vuultimo4k" ; then
-    AC_DEFINE(TUNER_FBC, 1,[define HAVE FBC TUNER])
+	AC_DEFINE(TUNER_FBC, 1,[define HAVE FBC TUNER])
 fi
-
 
 AC_ARG_WITH(libsdl,
 	AS_HELP_STRING([--with-libsdl],[use libsdl, yes or no]),
