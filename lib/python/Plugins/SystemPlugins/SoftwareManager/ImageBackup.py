@@ -21,7 +21,7 @@ from boxbranding import getBoxType, getMachineBrand, getMachineName, getDriverDa
 VERSION = "OpenBH"
 
 HaveGZkernel = True
-if getMachineBuild() in ("vuuno4k", "vuultimo4k", "vusolo4k", "spark", "spark7162", "hd51", "hd52", "sf4008"):
+if getMachineBuild() in ("vuuno4k", "vuuno4kse", "vuzero4k", "vuultimo4k", "vusolo4k"):
 	HaveGZkernel = False
 
 def Freespace(dev):
