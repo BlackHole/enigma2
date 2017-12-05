@@ -45,9 +45,7 @@ class AVSwitch:
 					   "60Hz":  { 60: "2160p" },
 					   "multi": { 50: "2160p50", 60: "2160p" } }
 
-	rates["2160p30"] = { "25Hz":  { 50: "2160p25" },
-						 "30Hz":  { 60: "2160p30"} ,
-						 "multi": { 50: "2160p25", 60: "2160p30" } }
+	rates["2160p30"] = { "multi": { 50: "2160p25", 60: "2160p30" } }
 
 	rates["PC"] = {
 		"1024x768": { 60: "1024x768" }, # not possible on DM7025
@@ -80,7 +78,7 @@ class AVSwitch:
 
 	modes["YPbPr"] = modes["HDMI"]
 
-	if getBrandOEM() == 'vuplus' and getBoxType() not in ('vusolo4k', 'vuuno4k', 'vuuno4kse',  'vuzero4k', 'vuultimo4k'):
+	if getBrandOEM() == 'vuplus' and getBoxType() not in ('vuzero4k', 'vusolo4k', 'vuuno4k', 'vuuno4kse', 'vuultimo4k'):
 		modes["Scart-YPbPr"] = modes["HDMI"]
 
 	# if "DVI-PC" in modes and not getModeList("DVI-PC"):
@@ -89,101 +87,20 @@ class AVSwitch:
 
 	# Machines that do not have component video (red, green and blue RCA sockets).
 	no_YPbPr = (
-		'dm500hd',
-		'dm500hdv2',
-		'dm800',
-		'e3hd',
-		'ebox7358',
-		'eboxlumi',
-		'ebox5100',
-		'enfinity',
-		'et4x00',
-		'formuler4turbo',
-		'gbquad4k',
-		'gbx1',
-		'gbx3',
-		'iqonios300hd',
-		'ixusszero',
-		'mbmicro',
-		'mbmicrov2',
-		'mbtwinplus',
-		'mutant11',
-		'mutant51',
-		'mutant500c',
-		'mutant1200',
-		'mutant1500',
-		'odimm7',
-		'optimussos1',
-		'osmega',
-		'osmini',
-		'osminiplus',
-		'sf128',
-		'sf138',
-		'sf4008',
-		'tm2t',
-		'tmnano',
-		'tmnano2super',
-		'tmnano3t',
-		'tmnanose',
-		'tmnanosecombo',
-		'tmnanoseplus',
-		'tmnanosem2',
-		'tmnanosem2plus',
-		'tmnanom3',
-		'tmsingle',
-		'tmtwin4k',
-		'uniboxhd1',
 		'vusolo2',
 		'vuzero4k',
 		'vusolo4k',
 		'vuuno4k',
 		'vuuno4kse',
-		'vuultimo4k',
-		'xp1000'
+		'vuultimo4k'
 	)
 
 	# Machines that have composite video (yellow RCA socket) but do not have Scart.
 	yellow_RCA_no_scart = (
-		'formuler1',
-		'formuler1tc',
-		'formuler4turbo',
-		'gb800ueplus',		
-		'gbultraue',
-		'mbmicro',
-		'mbmicrov2',
-		'mbtwinplus',
-		'mutant11',
-		'mutant500c',
-		'osmega',
-		'osmini',
-		'osminiplus',
-		'sf138',
-		'tmnano',
-		'tmnanose',
-		'tmnanosecombo',
-		'tmnanosem2',
-		'tmnanoseplus',
-		'tmnanosem2plus',
-		'tmnano2super',
-		'tmnano3t',
-		'xpeedlx3'
 	)
 
 	# Machines that have neither yellow RCA nor Scart sockets
 	no_yellow_RCA__no_scart = (
-		'et5x00',
-		'et6x00',
-		'gbquad',
-		'gbquad4k',
-		'gbx1',
-		'gbx3',
-		'ixussone',
-		'mutant51',
-		'mutant1500',
-		'sf4008',
-		'tmnano2t',
-		'tmnanom3',
-		'tmtwin4k',
 		'vuzero4k',
 		'vusolo4k',
 		'vuuno4k',
@@ -264,11 +181,11 @@ class AVSwitch:
 		if mode_60 is None or force == 50:
 			mode_60 = mode_50
 
-		if os.path.exists('/proc/stb/video/videomode_50hz') and getBoxType() not in ('gbquadplus', 'gb800solo', 'gb800se', 'gb800ue', 'gb800ueplus'):
+		if os.path.exists('/proc/stb/video/videomode_50hz') and getBoxType() not in (''):
 			f = open("/proc/stb/video/videomode_50hz", "w")
 			f.write(mode_50)
 			f.close()
-		if os.path.exists('/proc/stb/video/videomode_60hz') and getBoxType() not in ('gbquadplus', 'gb800solo', 'gb800se', 'gb800ue', 'gb800ueplus'):
+		if os.path.exists('/proc/stb/video/videomode_60hz') and getBoxType() not in (''):
 			f = open("/proc/stb/video/videomode_60hz", "w")
 			f.write(mode_60)
 			f.close()
