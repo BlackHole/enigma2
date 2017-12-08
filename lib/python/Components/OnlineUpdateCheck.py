@@ -136,11 +136,11 @@ class FeedsStatusCheck:
 		elif self.feedstatus == -3:
 			return _("Your %s %s has no network access, please check your network settings and make sure you have network cable connected and try again.") % (getMachineBrand(), getMachineName())
 		elif self.feedstatus == 404:
-			return _("Your %s %s is not able to connect to the feeds, please try again later. If this persists please report on the OpenViX forum at world-of-satellite.com.") % (getMachineBrand(), getMachineName())
+			return _("Your %s %s is not able to connect to the feeds, please try again later. If this persists please report on the BH forum at www.vuplus-community.net") % (getMachineBrand(), getMachineName())
 		elif self.feedstatus in ('updating', 403):
-			return _("Sorry feeds are down for maintenance, please try again later. If this issue persists please check openvix.co.uk or world-of-satellite.com.")
+			return _("Sorry feeds are down for maintenance, please try again later. If this issue persists please check www.vuplus-community.net")
 		elif error:
-			return _("There has been an error, please try again later. If this issue persists, please check vuplus-community.net")
+			return _("There has been an error, please try again later. If this issue persists, please check www.vuplus-community.net")
 
 	def startCheck(self):
 		global error
