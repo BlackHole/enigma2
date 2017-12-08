@@ -64,3 +64,4 @@ SystemInfo["CanDoTranscodeAndPIP"] = getBoxType() in ('vusolo4k', 'vuuno4k', 'vu
 SystemInfo["hasXcoreVFD"] = fileCheck("/sys/module/brcmstb_%s/parameters/pt6302_cgram" % getBoxType())
 SystemInfo["HasHDMIin"] = getMachineBuild() in ('vuuno4kse', 'vuultimo4k')
 SystemInfo["HasHDMI-CEC"] = fileExists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HdmiCEC/plugin.pyo")
+SystemInfo["HasInfoButton"] = getBrandOEM() not in ('vuplus')
