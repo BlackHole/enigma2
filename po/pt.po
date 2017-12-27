@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: enigma2 pt translation for Open BlackHole 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-24 18:23+0100\n"
-"PO-Revision-Date: 2017-10-05 23:00+0100\n"
+"PO-Revision-Date: 2017-12-27 00:42+0000\n"
 "Last-Translator: nunigaia\n"
 "Language-Team: BH Team\n"
 "Language: pt_PT\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.5\n"
 
 msgid ""
 "\n"
@@ -1988,6 +1988,13 @@ msgstr ""
 "Deseja mesmo iniciar o dispositivo?\n"
 "Todo a informação no disco será perdida!"
 
+msgid ""
+"Do you really want to initialise the device?\n"
+"All data on the disk will be lost!"
+msgstr ""
+"Deseja mesmo iniciar o dispositivo?\n"
+"Todo a informação no disco será perdida!"
+
 #, python-format
 msgid "Do you really want to permamently remove '%s' from trash can ?"
 msgstr "Deseja mesmo remover permanentemente a pasta %s da reciclagem?"
@@ -2875,10 +2882,19 @@ msgstr "Qualidade do sinal inicial:"
 msgid "Initialization"
 msgstr "Inicialização"
 
+msgid "Initialisation"
+msgstr "Inicialização"
+
 msgid "Initialize"
 msgstr "Inicializar"
 
+msgid "Initialise"
+msgstr "Inicializar"
+
 msgid "Initializing storage device..."
+msgstr "A iniciar dispositivo de armazenamento..."
+
+msgid "Initialising storage device..."
 msgstr "A iniciar dispositivo de armazenamento..."
 
 msgid "Inotify Monitoring"
@@ -3556,6 +3572,9 @@ msgid "No Connection"
 msgstr "Sem Ligação"
 
 msgid "No HDD found or HDD not initialized!"
+msgstr "Disco Rígido inexistente ou não inicializado!"
+
+msgid "No HDD found or HDD not initialised!"
 msgstr "Disco Rígido inexistente ou não inicializado!"
 
 msgid "No Timeshift found to save as recording!"
@@ -8976,10 +8995,10 @@ msgid "Configure whether (and for how long) a second infobar will be shown when 
 msgstr "Configurar se (e por quanto tempo) uma segunda barra de informações aparece quando OK é pressionado duas vezes. A segunda barra de informações contém informações adicionais sobre o canal atual."
 
 msgid "Configure which tuner type will be preferred, when the same service is available on different types of tuners."
-msgstr "Configure que tipo de sintonizador será preferencial, quando o mesmo serviço está disponível em diferentes tipos de tuners."
+msgstr "Configure que tipo de Tuner será preferencial, quando o mesmo serviço está disponível em diferentes tipos de tuners."
 
 msgid "Configure which tuner will be preferred, when more than one tuner is available. If set to 'auto' the system will give priority to the tuner having the lowest number of channels/satellites."
-msgstr "Configure o tuner preferencial, quando mais de um tuner está disponível. Se definido como 'auto', o sistema dará prioridade para o sintonizador tendo o menor número de canais/satélites."
+msgstr "Configure o tuner preferencial, quando mais de um tuner está disponível. Se definido como 'auto', o sistema dará prioridade para o Tuner tendo o menor número de canais/satélites."
 
 msgid "Configure your NTP server."
 msgstr "Configure o seu NTP server."
@@ -9291,19 +9310,22 @@ msgid "Position of finished Timers in the Timer list"
 msgstr "Posição de TIMERS terminados na lista de Timers"
 
 msgid "Prefer AC3 track"
-msgstr "Prefiro a trilha AC3"
+msgstr "Preferir a trilha AC3"
+
+msgid "Prefer AC3+ track"
+msgstr "Preferir a trilha AC3+"
 
 msgid "Prefer audio track stored by service"
-msgstr "Prefiro a trilha de áudio emitida pelo serviço"
+msgstr "Preferir a trilha de áudio emitida pelo serviço"
 
 msgid "Prefer graphical DVB subtitles"
-msgstr "Prefiro legendas gráficas DVB"
+msgstr "Preferir legendas gráficas DVB"
 
 msgid "Prefer subtitles for hearing impaired"
 msgstr "Permitir legendas para deficientes auditivos"
 
 msgid "Prefer subtitles stored by service"
-msgstr "Prefiro legendas emitidas pelo serviço"
+msgstr "Preferir legendas emitidas pelo serviço"
 
 msgid "Preferred tuner"
 msgstr "Tuner preferido"
@@ -9441,7 +9463,7 @@ msgid "Set to the desired primetime (minutes)."
 msgstr "Definir a PRIMETIME desejada (minutos)"
 
 msgid "Set to what you want the button to do."
-msgstr "Escolha o que a tecla tem de fazer"
+msgstr "Escolha o que a tecla tem de fazer."
 
 msgid "Setup how to control the channel changing."
 msgstr "Configure como controlar a mudança de canal."
@@ -9558,7 +9580,7 @@ msgid "Show service type icons"
 msgstr "Mostrar icons do tipo de serviço"
 
 msgid "Show source packages"
-msgstr "Mostrar fonte dos pacotes."
+msgstr "Mostrar a fonte dos pacotes."
 
 msgid "Show status icons in movie list"
 msgstr "Mostrar ícones de status em lista de filmes"
@@ -9777,7 +9799,7 @@ msgid "Use original teletext position"
 msgstr "Usar a posição original do teletexto"
 
 msgid "Use the alternative or the conventional radio mode."
-msgstr "Usa o alternativo ou convencional modo de rádio"
+msgstr "Usa o alternativo ou convencional modo de rádio."
 
 msgid "Use timeshift seekbar while timeshifting?"
 msgstr "Usar o timeshift seekbar enquanto timeshifting?"
@@ -10603,13 +10625,13 @@ msgid "Enable the use of the tuners of a remote enigma2 receiver when no local t
 msgstr "Habilite o uso dos tuners de um receptor remoto enigma2 quando nenhum Tuner local estiver disponível (por exemplo, quando o Tuner estiver ocupado ou o tipo de serviço não estiver disponível no Tuner local)."
 
 msgid "This can be either the IP or name of the fallback receiver, not including the scheme or port number (e.g. either 'xxx.xxx.xxx.xxx' or 'name_second_box')."
-msgstr "Isto pode ser o IP ou nome do receptor fallback, não incluindo o número de porta ou esquema (por exemplo, 'xxx.xxx. xxx.xxx' ou 'nome_segunda_STB')."
+msgstr "Isto pode ser o IP ou nome do receptor alternativo, não incluindo o número de porta ou esquema (por exemplo, 'xxx.xxx. xxx.xxx' ou 'nome_segunda_STB')."
 
 msgid "Streaming port of the fallback remote receiver. By default this is '8001'"
-msgstr "Porta do receptor remoto fallback de streaming. Por padrão, é '8001'"
+msgstr "Porta do receptor remoto alternativo de streaming. Por padrão, é '8001'"
 
 msgid "When you use the remote fallback tuner for recording, the timer conflict detection can't properly detect conflicts. This option allows you to turn off the timer confict detection. This setting is only for advanced users; the default is 'yes'."
-msgstr "Quando usar o Tuner remoto de fallback para gravação, a deteção de conflitos do Tuner não pode corretamente detetar conflitos. Esta opção permite que desligue a deteção de conflitos de Timer. Esta configuração é somente para usuários avançados; o padrão é 'Sim'."
+msgstr "Quando usar o Tuner remoto alternativo para gravação, a deteção de conflitos do Timer não pode detetar corretamente conflitos. Esta opção permite que desligue a deteção de conflitos de Timer. Esta configuração é só para usuários avançados; o padrão é 'Sim'."
 
 msgid "When enabled, this setting has more weight than 'Preferred tuner'."
 msgstr "Quando ativo, essa configuração tem mais peso do que 'Tuner preferencial'."
@@ -11628,16 +11650,16 @@ msgid "Setup your timezone area."
 msgstr "Configuração da sua área de fuso horário."
 
 msgid "Fallback configuration"
-msgstr "Configuração Fallback"
+msgstr "Configuração alternativa de Tuners"
 
 msgid "Timer conflict detection when fallback is enabled"
-msgstr "Detecção de conflitos de Timer quando fallback é habilitado"
+msgstr "Deteção de conflitos de Timer quando a alternativa está ativa."
 
 msgid "Specify the URL/IP of the fallback remote receiver, e.g. '192.168.0.1'. The other details such as http:// and the port number will be filled in automatically when you select save"
-msgstr "Especifica o URL/IP do recetor remoto fallback, i.e. '192.168.0.1' Os outros detalhes, http:// e o número da porta, serão preenchidos automaticamente, quando selecionar <salvar>."
+msgstr "Especifica o URL/IP do recetor remoto alternativo, i.e. '192.168.0.1' Os outros detalhes, http:// e o número da porta, serão preenchidos automaticamente, quando selecionar <salvar>."
 
 msgid "When using the remote fallback tuner for recordings, it is impossible to correctly detect timer conflicts. This option allows you to skip timer confict detection when remote fallback is enabled, but can lead to timer conflicts. This setting is only for advanced users; the default is 'yes'."
-msgstr "Ao utilizar o sintonizador fallback remoto para gravações, é impossível de detetar corretamente os conflitos do temporizador. Esta opção permite que ignore a deteção de conflitos de Timers quando fallback remoto está ativado, mas pode levar a conflitos de Timers. Essa configuração é apenas para usuários avançados; o padrão é 'Sim'."
+msgstr "Ao utilizar o Tuner remoto alternativo para gravações, é impossível de detetar corretamente os conflitos do Timer. Esta opção permite que ignore a deteção de conflitos de Timers quando o tuner remoto alternativo está ativo, mas pode levar a conflitos de Timers. Essa configuração é apenas para usuários avançados; o padrão é 'Sim'."
 
 msgid "Bluetooth Setup"
 msgstr "Configuração Bluetooth"
@@ -11677,6 +11699,9 @@ msgstr "Permite exibir as definições verdadeiro/falso, sim/não, on/off e ativ
 
 msgid "Shows live tv or informations on LCD."
 msgstr "Exibe TV ao vivo ou informações no LCD."
+
+msgid "Initialize devices"
+msgstr "Inicializar dispositivos"
 
 msgid "Initialise devices"
 msgstr "Inicializar dispositivos"
@@ -11860,3 +11885,57 @@ msgstr "Agendar backups"
 
 msgid "Allows you schedule your image backups."
 msgstr "Permite-lhe agendar os Backups da imagem. "
+
+msgid "Client mode"
+msgstr "Modo cliente"
+
+msgid "FBC automatic"
+msgstr "FBC automático"
+
+msgid "inactive"
+msgstr "inativo"
+
+msgid "Advanced"
+msgstr "Avançado"
+
+msgid "Fallback tuner setup"
+msgstr "Definições dos Tuners de Rede"
+
+msgid "Fallback address type"
+msgstr "Tipo de endereço alternativo"
+
+msgid "Fallback receiver IP address"
+msgstr "Endereço IP do recetor alternativo"
+
+msgid "Fallback receiver streaming port"
+msgstr "Porta de transmissão do recetor alternativo"
+
+msgid "Enable usage of tuners from another Enigma2 receiver on the local network. Remote tuners will be used when tuners are not available on this receiver. (No free tuner or service type is not available.)"
+msgstr "Permitir o uso de Tuners de outro receptor Enigma2 na rede local. Os Tuners remotos serão usados quando não existirem tuners disponíveis neste recetor. (Sem Tuner livre ou tipo de serviço não disponível.)"
+
+msgid "'Network peer' automatically detects other Enigma2 receivers on the local network. You can also manually enter the URL or IP address."
+msgstr "'Peer de rede' deteta automaticamente outros recetores Enigma2 na rede local. Também pode inserir manualmente o URL ou endereço IP."
+
+msgid "Enter the IP address of the host receiver."
+msgstr "Digite o endereço IP do receptor anfitrião."
+
+msgid "Default port is '%d'. Change if required."
+msgstr "Porta padrão é '%d'. Altere se necessário."
+
+msgid "Enter the IP address of the receiver to use for fallback tuners."
+msgstr "Introduza o endereço IP do recetor para uso de tuners alternativos."
+
+msgid "3D Surround Speaker Position"
+msgstr "Posição dos altifalantes Surround 3D"
+
+msgid "wide"
+msgstr "largo"
+
+msgid "extra wide"
+msgstr "extra largo"
+
+msgid "This option allows you to change the virtual loudspeaker position."
+msgstr "Esta opção permite que altere a posição virtual dos altifalantes."
+
+msgid "Auto volume level"
+msgstr "Nível do volume automático"
