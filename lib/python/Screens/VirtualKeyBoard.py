@@ -110,6 +110,10 @@ class VirtualKeyBoard(Screen):
 		self.onLayoutFinish.append(self.buildVirtualKeyBoard)
 		self.onClose.append(self.__onClose)
 
+		self["key_red"] = Label(_("Exit"))
+		self["key_green"] = Label(_("Save"))
+		self["key_yellow"] = Label(_(""))
+	
 	def __onClose(self):
 		self.sms.timer.stop()
 

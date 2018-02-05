@@ -1,5 +1,5 @@
 from enigma import eDVBResourceManager, Misc_Options
-from Tools.Directories import fileExists, fileCheck
+from Tools.Directories import fileExists, fileCheck, pathExists
 from Tools.HardwareInfo import HardwareInfo
 
 from boxbranding import getMachineBuild, getBoxType, getBrandOEM
@@ -60,7 +60,9 @@ SystemInfo["HasForceLNBOn"] = fileCheck("/proc/stb/frontend/fbc/force_lnbon")
 SystemInfo["HasForceToneburst"] = fileCheck("/proc/stb/frontend/fbc/force_toneburst")
 SystemInfo["HasMMC"] = getBoxType() in ('vuzero4k', 'vusolo4k', 'vuuno4k', 'vuuno4kse', 'vuultimo4k')
 SystemInfo["CommonInterfaceCIDelay"] = fileCheck("/proc/stb/tsmux/rmx_delay")
-SystemInfo["CanDoTranscodeAndPIP"] = getBoxType() in ('vusolo4k', 'vuuno4k', 'vuuno4kse', 'vuultimo4k')
+SystemInfo["HasTranscoding"] = pathExists("/proc/stb/encoder/0") or fileCheck("/dev/bcm_enc0")
+SystemInfo["HasH265Encoder"] = fileExists("/proc/stb/encoder/0/vcodec_choices") and "h265" in open("/proc/stb/encoder/0/vcodec_choices", "r").read()
+SystemInfo["CanNotDoSimultaneousTranscodeAndPIP"] = getBoxType() in ('vusolo4k','gbquad4k')
 SystemInfo["hasXcoreVFD"] = fileCheck("/sys/module/brcmstb_%s/parameters/pt6302_cgram" % getBoxType())
 SystemInfo["HasHDMIin"] = getMachineBuild() in ('vuuno4kse', 'vuultimo4k')
 SystemInfo["HasHDMI-CEC"] = fileExists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HdmiCEC/plugin.pyo")
