@@ -74,7 +74,6 @@ l_moviesort = [
 	(str(MovieList.SORT_ALPHANUMERIC_REVERSE), _("alphabetic reverse"), 'Z-A'),
 	(str(MovieList.SORT_ALPHAREV_DATE_NEWEST_FIRST), _("alpharev then newest"),  'Z1 A2 A1')]
 
-#GML:1
 # 4th item is the textual value set in UsageConfig.py
 l_trashsort = [
 	(str(MovieList.TRASHSORT_SHOWRECORD), _("delete time - show record time (Trash ONLY)"), '03/02/01', "show record time"),
@@ -181,6 +180,32 @@ def moveServiceFiles(serviceref, dest, name=None, allowCopy=True):
 		# rethrow exception
 		raise
 
+# dest is not used here, but this needs to have the same calling
+# sequence as moveServiceFiles()
+# allowCopy isn't even used in moveServiceFiles, but....
+#
+def deleteServiceFiles(serviceref, dest, name=None, allowCopy=True):
+
+# Send a dummy_pathname to createMoveList - we just want the list...
+#
+	moveList = createMoveList(serviceref, "dummy_pathname")
+
+# This list is pairs of from/to names. We only want the froms.
+# And Tools.CopyFiles.deleteFiles() is a bit of a misnomer, as it only
+# expects to be given one pathname to delete, and that has to be a
+# directory!  >>Sigh<<
+#
+	for x in moveList:
+		f2delete = x[0]
+		try:
+			# print "[MovieSelection] Deleting in background..."
+			from enigma import eBackgroundFileEraser
+			eBackgroundFileEraser.getInstance().erase(f2delete)
+		except Exception, e:
+			print "[MovieSelection] Failed delete:", e
+			# rethrow exception
+			raise
+
 def copyServiceFiles(serviceref, dest, name=None):
 	# current should be 'ref' type, dest a simple path string
 	moveList = createMoveList(serviceref, dest)
@@ -239,8 +264,6 @@ class MovieBrowserConfiguration(ConfigListScreen,Screen):
 		self.cfg = cfg
 		cfg.moviesort = ConfigSelection(default=str(config.movielist.moviesort.value), choices = l_moviesort)
 		cfg.description = ConfigYesNo(default=(config.movielist.description.value != MovieList.HIDE_DESCRIPTION))
-#GML:2 - movielist_trashcan_days
-#GML:1 - trashsort_deltime
 		configList = [getConfigListEntry(_("Use trash can in movie list"), config.usage.movielist_trashcan, _("When enabled, deleted recordings are moved to the trash can, instead of being deleted immediately.")),
 					  getConfigListEntry(_("Remove items from trash can after (days)"), config.usage.movielist_trashcan_days, _("Configure the number of days after which items are automatically removed from the trash can.\nA setting of 0 disables this.")),
 					  getConfigListEntry(_("Clean network trash cans"), config.usage.movielist_trashcan_network_clean, _("When enabled, network trash cans are probed for cleaning.")),
@@ -1362,7 +1385,6 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 			action()
 
 	def saveLocalSettings(self):
-#GML:4
 		if not config.movielist.settings_per_directory.value:
 			return
 		try:
@@ -1425,7 +1447,6 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 		return needUpdate
 
 	def sortBy(self, newType):
-#GML:1
 		print '[MovieSelection] SORTBY:',newType
 		if newType < MovieList.TRASHSORT_SHOWRECORD:
 			self.settings["moviesort"] = newType
@@ -1507,7 +1528,6 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 				used = index
 			menu.append((_(x[1]), x[0], "%d" % index))
 			index += 1
-#GML:1
 		if MovieList.InTrashFolder:
 			for x in l_trashsort:
 				if x[3] == config.usage.trashsort_deltime.value:
@@ -1522,7 +1542,6 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 			index = MovieList.SORT_ALPHANUMERIC
 		elif index == MovieList.SORT_ALPHAREV_DATE_NEWEST_FIRST:
 			index = MovieList.SORT_ALPHANUMERIC_REVERSE
-#GML:1
 		elif (index == MovieList.TRASHSORT_SHOWRECORD) or (index == MovieList.TRASHSORT_SHOWDELETE):
 			index = MovieList.SORT_RECORDED
 		return index - 1
@@ -2334,15 +2353,20 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 		for index, item in enumerate(self["list"]):
 			if item:
 				item = item[0]
-				path = item.getPath()
 				if not item.flags & eServiceReference.mustDescent:
-					ext = os.path.splitext(path)[1].lower()
-					if ext in IMAGE_EXTENSIONS:
-						continue
-					else:
+					ext = os.path.splitext(item.getPath())[1].lower()
+					if ext not in IMAGE_EXTENSIONS:
 						items.append(item)
 
 playlist = []
+
+# There seems to be no way to pass information on to the callback 
+# function of openWithCallback. So given that we will only ever have one
+# active at once well stuff it into a static, global location...
+#
+msfml_data = None
+msfml_path = None
+msfml_really_remove = False
 
 class MovieSelectionFileManagerList(Screen):
 	def __init__(self, session, list):
@@ -2354,44 +2378,72 @@ class MovieSelectionFileManagerList(Screen):
 		self.original_selectionpng = None
 		self.changePng()
 
-		data = SelectionList([])
+		self.list = SelectionList([])
 		index = 0
 		for i, record in enumerate(list):
 			if record:
 				item = record[0]
-				info = record[1]
-				path = item.getPath()
-				name = info and info.getName(item)
 				if not item.flags & eServiceReference.mustDescent:
-					ext = os.path.splitext(path)[1].lower()
-					if ext in IMAGE_EXTENSIONS:
-						continue
-					else:
-						data.addSelection(name, item, index, False)
-						index += 1
-		self.list = data
+					info = record[1]
+					name = info and info.getName(item)
+					size = 0
+					if info:
+						if isinstance(info, Components.MovieList.StubInfo): # picture
+							size = info.getInfo(item, iServiceInformation.sFileSize)
+						else:
+							size = info.getInfoObject(item, iServiceInformation.sFileSize)
+					self.list.addSelection(name, (item, size), index, False) # movie
+					index += 1
 
 		self["config"] = self.list
 		self["description"] = Label()
+		self.size = 0
+		self["size"] = Label()
 
 		self["actions"] = ActionMap(["OkCancelActions", "ColorActions", "MovieSelectionActions"],
 			{
 				"cancel": self.exit,
-				"ok": self.list.toggleSelection,
+				"ok": self.toggleSelection,
 				"red": self.exit,
 				"green": self.selectAction,
 				"yellow": self.sortList,
-				"blue": self.list.toggleAllSelection,
+				"blue": self.toggleAllSelection,
 				"contextMenu": self.selectAction,
 			})
 
 		self["key_red"] = StaticText(_("Cancel"))
 		self["key_green"] = StaticText(_("Do"))
 		self["key_yellow"] = StaticText(_("Sort"))
-		self["key_blue"] = StaticText(_("Inversion"))
+		self["key_blue"] = StaticText(_("Invert"))
 
 		self.sort = 0
 		self["description"].setText(_("Select files with 'OK' and then use 'Green' to choose desired operation"))
+
+		self["Service"] = ServiceEvent()
+		self["config"].onSelectionChanged.append(self.setService)
+		self.onShown.append(self.setService)
+
+	def toggleAllSelection(self):
+		self.list.toggleAllSelection()
+		self["size"].setText(self.countSize())
+
+	def toggleSelection(self):
+		self.list.toggleSelection()
+		self["size"].setText(self.countSize())
+
+	def countSize(self):
+		data = self.list.getSelectionsList()
+		if len(data):
+			self.size = 0
+			for item in data:
+				self.size += item[1][1]
+			return "%s" % self.convertSize(self.size)
+		return ""
+
+	def setService(self):
+		item = self["config"].getCurrent()
+		if item:
+			self["Service"].newService(item[0][1][0])
 
 	def changePng(self):
 		from Tools.Directories import SCOPE_CURRENT_SKIN
@@ -2415,74 +2467,133 @@ class MovieSelectionFileManagerList(Screen):
 			self.sort = 0
 
 	def selectAction(self):
-		menu = []
-		buttons = []
-		menu.append((_("Copy to..."),5))
-		menu.append((_("Move to..."),6))
-		buttons += ["5","6"]
+		menu = [(_("Delete"), 3),
+		        (_("Copy to..."), 5),
+		        (_("Move to..."), 6),]
+		buttons = ["3", "5", "6"]
 		text = _("Select operation:")
 		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=buttons)
 
 	def menuCallback(self, choice):
 		if choice is None:
 			return
-		if choice[1] == 5:
+		if choice[1] == 3:
+			self.deleteSelected()
+		elif choice[1] == 5:
 			self.copySelected()
 		elif choice[1] == 6:
 			self.moveSelected()
-		elif choice[1] == 8:
-			return
 		else:
 			return
 
+	def deleteSelected(self):
+		global msfml_data, msfml_path, msfml_really_remove
+		msfml_data = self.list.getSelectionsList()
+		if len(msfml_data) == 0:
+			return
+		msfml_path = os.path.realpath(msfml_data[0][1].getPath())   # All are in the same location
+		if '.Trash' in msfml_path:                                  # Already in Trash...
+			query = _("Do you really want to permanently remove from the trash can ?")
+			msfml_really_remove = True
+		elif config.usage.movielist_trashcan.value:                 # Can move to Trash...
+			query = _("Do you really want to move to the trash can ?")
+			msfml_really_remove = False
+		else:
+                        query = _("Do you really want to delete ?")
+			msfml_really_remove = True
+		mbox=self.session.openWithCallback(self.doDeleteSelected, MessageBox, query);
+
+	def doDeleteSelected(self, confirmed):
+		global msfml_data, msfml_path, msfml_really_remove
+		if not confirmed:
+			return
+		try:
+			trash = Tools.Trashcan.createTrashFolder(msfml_path)
+			if msfml_really_remove: # Really delete everything....
+				func_call = deleteServiceFiles
+				func_text = "deleteServiceFiles"
+			else:                   # Just move to .Trash
+				func_call = moveServiceFiles
+				func_text = "moveServiceFiles"
+			for item in msfml_data:       # item ... (name, item, index, False)
+				func_call(item[1], trash, item[0])
+				self.list.removeSelection(item)
+				self.mainList.removeService(item[1])
+		except Exception, e:
+			self.session.open(MessageBox, str(e), MessageBox.TYPE_ERROR)
+
 	def copySelected(self):
-		self.selectMovieLocation(title=_("Select destination for copy selected files..."), callback=self.gotCopyMovieDest)
+		if self["config"].getCurrent():
+			self.selectMovieLocation(title=_("Select destination for copy selected files..."), callback=self.gotCopyMovieDest)
 
 	def gotCopyMovieDest(self, choice):
 		if not choice:
 			return
 		dest = os.path.normpath(choice)
 		data = self.list.getSelectionsList()
+		toggle = True
+		if len(data) == 0:
+			data = [self["config"].getCurrent()[0]]
+			self.size = data[0][1][1]
+			toggle = False
+		if not self.isFreeSpace(dest):
+			return
 		if len(data):
 			try:
 				for item in data:
-					# item ... (name, item, index, False)
-					copyServiceFiles(item[1], dest, item[0])
-					self.list.toggleItemSelection(item)
+					# item ... (name, (service, size), index, False)
+					copyServiceFiles(item[1][0], dest, item[0])
+					if toggle:
+						self.list.toggleItemSelection(item)
 			except Exception, e:
 				self.session.open(MessageBox, str(e), MessageBox.TYPE_ERROR)
-		else:
-			item = self["config"].getCurrent()[0]
-			try:
-				copyServiceFiles(item[1], dest, item[0])
-			except Exception, e:
-				self.session.open(MessageBox, str(e), MessageBox.TYPE_ERROR)
+			else:
+				self["size"].setText("")
 
 	def moveSelected(self):
-		self.selectMovieLocation(title=_("Select destination for move selected files..."), callback=self.gotMoveMovieDest)
+		if self["config"].getCurrent():
+			self.selectMovieLocation(title=_("Select destination for move selected files..."), callback=self.gotMoveMovieDest)
 
 	def gotMoveMovieDest(self, choice):
 		if not choice:
 			return
 		dest = os.path.normpath(choice)
+		src = config.movielist.last_videodir.value
+
 		data = self.list.getSelectionsList()
+		if len(data) == 0:
+			data = [self["config"].getCurrent()[0]]
+			self.size = data[0][1][1]
+		if not self.isSameDevice(src, dest):
+			if not self.isFreeSpace(dest):
+				return
 		if len(data):
 			try:
 				for item in data:
-					# item ... (name, service, index, False)
-					moveServiceFiles(item[1], dest, item[0])
+					# item ... (name, (service, size), index, False)
+					moveServiceFiles(item[1][0], dest, item[0])
 					self.list.removeSelection(item)
-					self.mainList.removeService(item[1])
+					self.mainList.removeService(item[1][0])
 			except Exception, e:
 				self.session.open(MessageBox, str(e), MessageBox.TYPE_ERROR)
-		else:
-			item = self["config"].getCurrent()[0]
-			try:
-				moveServiceFiles(item[1], dest, item[0])
-				self.list.removeSelection(item)
-				self.mainList.removeService(item[1])
-			except Exception, e:
-				self.session.open(MessageBox, str(e), MessageBox.TYPE_ERROR)
+			else:
+				self["size"].setText("")
+
+	def isSameDevice(self, src, dest):
+		if os.stat(src).st_dev != os.stat(dest).st_dev:
+			return False
+		return True
+
+	def freeSpace(self, path):
+		dev = os.statvfs(path)
+		return dev.f_bfree * dev.f_bsize
+
+	def isFreeSpace(self, dest):
+		free_space = self.freeSpace(dest)
+		if free_space <= self.size:
+			self.session.open(MessageBox, "On destination '%s' is %s free space only!" % (dest, self.convertSize(free_space)), MessageBox.TYPE_ERROR)
+			return False
+		return True
 
 	def exit(self):
 		if self.original_selectionpng:
@@ -2494,7 +2605,7 @@ class MovieSelectionFileManagerList(Screen):
 		buildMovieLocationList(bookmarks)
 		self.onMovieSelected = callback
 		self.movieSelectTitle = title
-		self.session.openWithCallback(self.gotMovieLocation, ChoiceBox, title=title, list = bookmarks)
+		self.session.openWithCallback(self.gotMovieLocation, ChoiceBox, title=title, list=bookmarks)
 
 	def gotMovieLocation(self, choice):
 		if not choice:
@@ -2524,3 +2635,16 @@ class MovieSelectionFileManagerList(Screen):
 		last_selected_dest.insert(0, where)
 		if len(last_selected_dest) > 5:
 			del last_selected_dest[-1]
+
+	def convertSize(self, filesize):
+		if filesize:
+			if filesize >= 104857600000:
+				return _("%.0f GB") % (filesize / 1073741824.0)
+			elif filesize >= 1073741824:
+				return _("%.2f GB") % (filesize / 1073741824.0)
+			elif filesize >= 1048576:
+				return _("%.0f MB") % (filesize / 1048576.0)
+			elif filesize >= 1024:
+				return _("%.0f kB") % (filesize / 1024.0)
+			return _("%d B") % filesize
+		return ""
