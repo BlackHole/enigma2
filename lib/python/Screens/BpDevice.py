@@ -135,14 +135,14 @@ class DeliteSetupDevicePanelConf(Screen, ConfigListScreen):
 		
 		self.list = []
 		ConfigListScreen.__init__(self, self.list)
-		self["key_red"] = Label(_("Save"))
-		self["key_green"] = Label(_("Cancel"))
+		self["key_red"] = Label(_("Cancel"))
+		self["key_green"] = Label(_("Save"))
 		self["Linconn"] = Label(_("Wait please while scanning your box devices..."))
 		
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
-			"red": self.savePoints,
-			"green": self.close,
+			"red": self.close,
+			"green": self.savePoints,
 			"back": self.close
 
 		})
