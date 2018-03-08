@@ -539,14 +539,14 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 		
 		self.list = []
 		ConfigListScreen.__init__(self, self.list)
-		self["key_red"] = Label(_("Save"))
+		self["key_green"] = Label(_("Save"))
 		
 		
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
-			"red": self.saveIna,
+			"red": self.vkeyb,
 			"back": self.close,
-			"green": self.vkeyb
+			"green": self.saveIna
 
 		})
 			
@@ -950,13 +950,13 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		self.list = []
 		ConfigListScreen.__init__(self, self.list)
 		self["lab1"] = Label(_("Retrieving data ..."))
-		self["key_red"] = Label(_("Save"))
-		self["key_green"] = Label(_("Cancel"))
+		self["key_red"] = Label(_("Cancel"))
+		self["key_green"] = Label(_("Save"))
 		
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
-			"red": self.saveMypoints,
-			"green": self.close,
+			"red": self.close,
+			"green": self.saveMypoints,
 			"back": self.close
 
 		})
