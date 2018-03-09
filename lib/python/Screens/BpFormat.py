@@ -26,19 +26,19 @@ class Bp_UsbFormat(Screen):
 		Screen.__init__(self, session)
 		
 		msg = _("This wizard will help you to format Usb mass storage devices for Linux.\n")
-		msg += _("Please be sure that your usb drive is NOT CONNECTED to your Vu+ box before you continue.\n")
-		msg += _("If your usb drive is connected and mounted you have to poweroff your box, remove the usb device and reboot.\n")
-		msg += _("Press Red button to continue, when you are ready and your usb is disconnected.\n")
+		msg += _("Please make sure your usb drive is NOT CONNECTED to your Vu+ box before you continue.\n")
+		msg += _("If your usb drive is connected and mounted you must poweroff your box, remove the usb device and reboot.\n")
+		msg += _("Press Green button to continue, when you are ready if your usb is disconnected.\n")
 
-		self["key_red"] = Label(_("Continue ->"))
-		self["key_green"] = Label(_("Cancel"))
+		self["key_red"] = Label(_("Cancel"))
+		self["key_green"] = Label(_("Continue ->"))
 		self["lab1"] = Label(msg)
 
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"back": self.checkClose,
-			"red": self.step_Bump,
-			"green": self.checkClose
+			"red": self.checkClose,
+			"green": self.step_Bump
 		})
 		self.step = 1
 		self.devices = []
@@ -50,10 +50,10 @@ class Bp_UsbFormat(Screen):
 	
 	def stepOne(self):
 		msg = _("Connect your usb storage to your Vu+ box\n")
-		msg += _("Press Red button to continue when ready.\n\n")
+		msg += _("Press Green button to continue when ready.\n\n")
 		msg += _("Warning: If your usb is already connected\n")
 		msg += _("to the box you have to unplug it, press\n")
-		msg += _("the Green button and restart the wizard.\n")
+		msg += _("the Red button and restart the wizard.\n")
 
 		rc = system("/etc/init.d/autofs stop")
 		self.devices = self.get_Devicelist()
@@ -61,8 +61,8 @@ class Bp_UsbFormat(Screen):
 		self.step = 2
 		
 	def stepTwo(self):
-		msg = _("The wizard will now try to identify your connected usb device.")
-		msg += _("Press Red button to continue.")
+		msg = _("The wizard will now try to identify your connected usb device. ")
+		msg += _("Press Green button to continue.")
 				
 		self["lab1"].setText(msg)
 		self.step = 3
@@ -86,7 +86,7 @@ class Bp_UsbFormat(Screen):
 	def partSize1(self, total):
 		self.totalpartitions = int(total[1])
 		if self.totalpartitions > 1:
-			self.session.openWithCallback(self.partSize2,InputBox, title=_("Enter the size in Megabyte of the first partition:"), windowTitle = _("Partition size"), text="1", useableChars = "1234567890" )
+			self.session.openWithCallback(self.partSize2,InputBox, title=_("Enter the size in Megabytes of the first partition:"), windowTitle = _("Partition size"), text="1", useableChars = "1234567890" )
 		else:
 			self.writePartFile()
 			
@@ -95,7 +95,7 @@ class Bp_UsbFormat(Screen):
 			psize = "100"
 		self.p1size = psize
 		if self.totalpartitions > 2:
-			self.session.openWithCallback(self.partSize3,InputBox, title=_("Enter the size in Megabyte of the second partition:"), windowTitle = _("Partition size"), text="1", useableChars = "1234567890" )
+			self.session.openWithCallback(self.partSize3,InputBox, title=_("Enter the size in Megabytes of the second partition:"), windowTitle = _("Partition size"), text="1", useableChars = "1234567890" )
 		else:
 			self.writePartFile()
 			
@@ -104,7 +104,7 @@ class Bp_UsbFormat(Screen):
 			psize = "100"
 		self.p2size = psize
 		if self.totalpartitions > 3:
-			self.session.openWithCallback(self.partSize4,InputBox, title=_("Enter the size in Megabyte of the third partition:"), windowTitle = _("Partition size"), text="1", useableChars = "1234567890" )
+			self.session.openWithCallback(self.partSize4,InputBox, title=_("Enter the size in Megabytes of the third partition:"), windowTitle = _("Partition size"), text="1", useableChars = "1234567890" )
 		else:
 			self.writePartFile()
 		
@@ -119,7 +119,7 @@ class Bp_UsbFormat(Screen):
 		device = "/dev/" + self.device
 		out0 = "#!/bin/sh\n\nsfdisk %s << EOF\n" % (device)
 		
-		msg = _("Total Megabyte Available: \t") + str(self.totalsize)
+		msg = _("Total Megabytes Available: \t") + str(self.totalsize)
 		msg += _("\nPartition scheme:\n")
 		p1 = self.p1size
 		out1 = ",%sM\n" % (self.p1size)
@@ -170,7 +170,7 @@ class Bp_UsbFormat(Screen):
 	def do_Part(self):
 		self.do_umount()
 		self.canclose = False
-		self["key_green"].hide()
+		self["key_red"].hide()
 		
 		device = "/dev/%s" % (self.device)
 		cmd = "umount -l " + device + "1"
@@ -186,10 +186,10 @@ class Bp_UsbFormat(Screen):
 		
 	def choiceBoxFstype(self):
 		menu = []
-		menu.append((_("ext2 - recommended for USB flash memory"), "ext2"))
-		menu.append((_("ext3 - recommended for harddrives"), "ext3"))
-		menu.append((_("ext4 - recommended for meoboot"), "ext4"))
-		menu.append((_("vfat - use only for media-files"), "vfat"))
+#		menu.append((_("ext2 - recommended for USB flash memory"), "ext2"))
+#		menu.append((_("ext3 - recommended for harddrives"), "ext3"))
+		menu.append((_("ext4 - Recommended"), "ext4"))
+		menu.append((_("fat32 - Only use for Media Files"), "vfat"))
 		self.session.openWithCallback(self.choiceBoxFstypeCB, ChoiceBox, title=_("Choice filesystem."), list=menu)
 
 	def choiceBoxFstypeCB(self, choice):
