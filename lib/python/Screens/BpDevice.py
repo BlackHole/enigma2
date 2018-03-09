@@ -19,8 +19,8 @@ import stat
 class DeliteDevicesPanel(Screen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		self["key_red"] = Label(_("Mountpoints"))
-		self["key_yellow"] = Label(_("Cancel"))
+		self["key_red"] = Label(_("Cancel"))
+		self["key_yellow"] = Label(_("Mountpoints"))
 		self["lab1"] = Label(_("Wait please while scanning your devices..."))
 		
 		self.list = []
@@ -29,8 +29,8 @@ class DeliteDevicesPanel(Screen):
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"back": self.close,
-			"red": self.mapSetup,
-			"yellow": self.close
+			"red": self.close,
+			"yellow": self.mapSetup
 		})
 		
 		self.activityTimer = eTimer()
@@ -230,16 +230,16 @@ class BlackPoleSwap(Screen):
 		Screen.__init__(self, session)
 		
 		self["lab1"] = Label(_("Swap status: disabled"))
-		self["key_red"] = Label(_("Create"))
-		self["key_green"] = Label(_("Remove"))
-		self["key_yellow"] = Label(_("Close"))
+		self["key_red"] = Label(_("Close"))
+		self["key_green"] = Label(_("Create"))
+		self["key_yellow"] = Label(_("Remove"))
 		
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"back": self.close,
-			"red": self.keyRed,
+			"red": self.close,
 			"green": self.keyGreen,
-			"yellow": self.close
+			"yellow": self.keyYellow
 		})
 
 		self.onLayoutFinish.append(self.updateSwap)
@@ -260,7 +260,7 @@ class BlackPoleSwap(Screen):
 		self["lab1"].setText(swapinfo)
 		
 		
-	def keyGreen(self):
+	def keyYellow(self):
 		if self.swap_file:
 			cmd = "swapoff %s" % self.swap_file
 			rc = system(cmd)
@@ -276,7 +276,7 @@ class BlackPoleSwap(Screen):
 		else:
 			self.session.open(MessageBox, _("Swap already disabled."), MessageBox.TYPE_INFO)	
 	
-	def keyRed(self):
+	def keyGreen(self):
 		if self.swap_file:
 			self.session.open(MessageBox, _("Swap file is active.\nRemove it before to create a new swap space."), MessageBox.TYPE_INFO)
 		else:
@@ -299,7 +299,7 @@ class BlackPoleSwap(Screen):
 	def selectSize(self, device):
 		if device:
 			self.new_swap = device[1] + "/swapfile"
-			options = [['16 Mega', '16384'], ['32 Mega', '32768'], ['64 Mega', '65536'], ['128 Mega', '131072'], ['256 Mega', '262144'], ['512 MB', '524288'], ['1 GB', '1048576'], ['2 GB', '2097152']]		
+			options = [['16 MB', '16384'], ['32 MB', '32768'], ['64 MB', '65536'], ['128 MB', '131072'], ['256 MB', '262144'], ['512 MB', '524288'], ['1 GB', '1048576'], ['2 GB', '2097152']]		
 			self.session.openWithCallback(self.swapOn,ChoiceBox, title=_("Select the Swap File Size:"), list=options)
 			
 		
