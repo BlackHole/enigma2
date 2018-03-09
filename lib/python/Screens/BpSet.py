@@ -257,16 +257,16 @@ class BhNetBrowser(Screen):
 			<convert type="StringList" />
 		</widget>
     		<ePixmap pixmap="skin_default/buttons/red.png" position="200,480" size="140,40" alphatest="on" />
-		<ePixmap pixmap="skin_default/buttons/yellow.png" position="440,480" size="140,40" alphatest="on" />
+		<ePixmap pixmap="skin_default/buttons/green.png" position="440,480" size="140,40" alphatest="on" />
 		<widget name="key_red" position="200,480" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
-		<widget name="key_yellow" position="440,480" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
+		<widget name="key_green" position="440,480" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
     	</screen>"""
 	
 	def __init__(self, session, menu_path=""):
 		Screen.__init__(self, session)
 		
-		self["key_red"] = Label(_("Select"))
-		self["key_yellow"] = Label(_("Close"))
+		self["key_red"] = Label(_("Close"))
+		self["key_green"] = Label(_("Select"))
 		
 		self.list = []
 		self["list"] = List(self.list)
@@ -275,8 +275,8 @@ class BhNetBrowser(Screen):
 		{
 			"ok": self.selectInte,
 			"back": self.close,
-			"red": self.selectInte,
-			"yellow": self.close
+			"red": self.close,
+			"green": self.selectInte
 		})
 		
 		self.list = [ ]
@@ -315,16 +315,16 @@ class BhMinidlna(Screen):
 		self["lab2"] = Label(_("Current Status:"))
 		self["labstop"] = Label(_("Stopped"))
 		self["labrun"] = Label(_("Running"))
-		self["key_red"] = Label(_("Enable"))
-		self["key_green"] = Label(_("Disable"))
+		self["key_red"] = Label(_("Disable"))
+		self["key_green"] = Label(_("Enable"))
 		self.my_serv_active = False
 				
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"ok": self.close,
 			"back": self.close,
-			"red": self.ServStart,
-			"green": self.ServStop
+			"red": self.ServStop,
+			"green": self.ServStart
 		})
 		
 		self.onLayoutFinish.append(self.updateServ)
@@ -396,12 +396,12 @@ class DeliteInadyn(Screen):
 		<widget name="lab7" position="10,300" size="150,30" font="Regular;20" valign="center" transparent="1"/>
 		<widget name="labstop" position="160,300" size="100,30" font="Regular;20" valign="center"  halign="center" backgroundColor="red"/>
 		<widget name="labrun" position="160,300" size="100,30" zPosition="1" font="Regular;20" valign="center"  halign="center" backgroundColor="green"/>
-		<ePixmap pixmap="skin_default/buttons/red.png" position="20,360" size="140,40" alphatest="on" />
-		<ePixmap pixmap="skin_default/buttons/green.png" position="170,360" size="140,40" alphatest="on" />
-		<ePixmap pixmap="skin_default/buttons/yellow.png" position="320,360" size="140,40" alphatest="on" />
-		<widget name="key_red" position="20,360" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
-		<widget name="key_green" position="170,360" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
-		<widget name="key_yellow" position="320,360" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
+		<ePixmap pixmap="skin_default/buttons/green.png" position="20,360" size="140,40" alphatest="on" />
+		<ePixmap pixmap="skin_default/buttons/yellow.png" position="170,360" size="140,40" alphatest="on" />
+		<ePixmap pixmap="skin_default/buttons/blue.png" position="320,360" size="140,40" alphatest="on" />
+		<widget name="key_green" position="20,360" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
+		<widget name="key_yellow" position="170,360" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
+		<widget name="key_blue" position="320,360" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
 	</screen>"""
 	
 	def __init__(self, session, menu_path=""):
@@ -425,9 +425,9 @@ class DeliteInadyn(Screen):
 		self["lab7"] = Label(_("Status:"))
 		self["labstop"] = Label(_("Stopped"))
 		self["labrun"] = Label(_("Running !"))
-		self["key_red"] = Label(_("Start"))
-		self["key_green"] = Label(_("Show Log"))
+		self["key_green"] = Label(_("Start"))
 		self["key_yellow"] = Label(_("Setup"))
+		self["key_blue"] = Label(_("Show Log"))
 		
 		self["lactive"].hide()
 		self["sactive"].hide()
@@ -437,9 +437,9 @@ class DeliteInadyn(Screen):
 		{
 			"ok": self.KeyOk,
 			"back": self.close,
-			"red": self.restartIna,
-			"green": self.inaLog,
-			"yellow": self.setupin
+			"green": self.restartIna,
+			"yellow": self.setupin,
+			"blue": self.inaLog
 		})
 
 		self.onLayoutFinish.append(self.updateIna)
@@ -507,11 +507,11 @@ class DeliteInadyn(Screen):
 		if check == True:
 			self["labstop"].hide()
 			self["labrun"].show()
-			self["key_red"].setText(_("Restart"))
+			self["key_green"].setText(_("Restart"))
 		else:
 			self["labstop"].show()
 			self["labrun"].hide()
-			self["key_red"].setText(_("Start"))	
+			self["key_green"].setText(_("Start"))	
 			
 
 
@@ -530,8 +530,8 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 	skin = """
 	<screen position="140,120" size="440,300" title="Black Hole E2 Inadyn Setup">
 		<widget name="config" position="10,10" size="420,240" scrollbarMode="showOnDemand" />
-		<ePixmap pixmap="skin_default/buttons/red.png" position="150,250" size="140,40" alphatest="on" />
-		<widget name="key_red" position="150,250" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
+		<ePixmap pixmap="skin_default/buttons/yellow.png" position="150,250" size="140,40" alphatest="on" />
+		<widget name="key_yellow" position="150,250" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 	</screen>"""
 	
 	def __init__(self, session, menu_path=""):
@@ -544,9 +544,9 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 		
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
-			"red": self.vkeyb,
+			"green": self.saveIna,
 			"back": self.close,
-			"green": self.saveIna
+			"yellow": self.vkeyb
 
 		})
 			
@@ -783,8 +783,8 @@ class DeliteOpenvpn(Screen):
 		self["lab3"] = Label(_("Current Status:"))
 		self["labstop"] = Label(_("Stopped"))
 		self["labrun"] = Label(_("Running"))
-		self["key_red"] = Label(_("Start"))
-		self["key_green"] = Label(_("Stop"))
+		self["key_red"] = Label(_("Stop"))
+		self["key_green"] = Label(_("Start"))
 		self["key_yellow"] = Label(_("Set Active"))
 		self["key_blue"] = Label(_("Show Log"))
 		self.my_vpn_active = False
@@ -794,8 +794,8 @@ class DeliteOpenvpn(Screen):
 		{
 			"ok": self.close,
 			"back": self.close,
-			"red": self.restartVpn,
-			"green": self.stopVpnstop,
+			"red": self.stopVpnstop,
+			"green": self.restartVpn,
 			"yellow": self.activateVpn,
 			"blue": self.Vpnshowlog
 
@@ -867,11 +867,11 @@ class DeliteOpenvpn(Screen):
 		if self.my_vpn_run == True:
 			self["labstop"].hide()
 			self["labrun"].show()
-			self["key_red"].setText(_("Restart"))
+			self["key_green"].setText(_("Restart"))
 		else:
 			self["labstop"].show()
 			self["labrun"].hide()
-			self["key_red"].setText(_("Start"))
+			self["key_green"].setText(_("Start"))
 			
 	
 class DeliteVpnLog(Screen):
