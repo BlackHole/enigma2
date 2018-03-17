@@ -425,6 +425,9 @@ msgstr "23.976"
 msgid "24"
 msgstr "24"
 
+msgid "24Hz"
+msgstr "24Гц"
+
 msgid "25"
 msgstr "25"
 
@@ -466,6 +469,12 @@ msgstr "4:3 Панорама"
 
 msgid "4X"
 msgstr "4X"
+
+msgid "50Hz"
+msgstr "50Гц"
+
+msgid "60Hz"
+msgstr "60Гц"
 
 msgid "720p"
 msgstr "720p"
@@ -677,7 +686,7 @@ msgid "About"
 msgstr "Информация"
 
 msgid "About..."
-msgstr "О ресивере..."
+msgstr "О ресивере"
 
 msgid "Accesspoint:"
 msgstr "Точка доступа:"
@@ -725,6 +734,9 @@ msgid "Add"
 msgstr "Добавить"
 
 msgid "Add AutoTimer"
+msgstr "Автотаймер"
+
+msgid "Add Autotimer"
 msgstr "Автотаймер"
 
 msgid "Add Timer"
@@ -821,7 +833,7 @@ msgid "Add/Remove timer for current event"
 msgstr "Добавить/Удалить таймер для текущего события"
 
 msgid "Adding schedule..."
-msgstr "Добавление задания..."
+msgstr "Добавление задания"
 
 msgid "Additional Info"
 msgstr "Дополнительная информация"
@@ -1989,7 +2001,7 @@ msgid "Configfile %s saved."
 msgstr "Файл конфигуарции %s сохранён!"
 
 msgid "Configuration..."
-msgstr "Конфигурация..."
+msgstr "Конфигурация"
 
 msgid "Configuration mode"
 msgstr "Режим конфигурации"
@@ -2582,7 +2594,7 @@ msgid "Cutlist editor"
 msgstr "Видео редактор"
 
 msgid "Cutlist editor..."
-msgstr "Видео редактор..."
+msgstr "Видео редактор"
 
 msgid "Czech"
 msgstr "Чешский"
@@ -3177,7 +3189,7 @@ msgid "Dream-Explorer : Install..."
 msgstr "Установка..."
 
 msgid "Dream-Explorer..."
-msgstr "Проводник файлов..."
+msgstr "Проводник файлов"
 
 msgid "Drivers:\t%s\n"
 msgstr "Драйверы:\t%s\n"
@@ -3228,6 +3240,9 @@ msgid "Epg Panel"
 msgstr "Панель EPG"
 
 msgid "EPG Search"
+msgstr "Поиск телегида"
+
+msgid "EPG search"
 msgstr "Поиск телегида"
 
 msgid "EPG Selection"
@@ -3353,7 +3368,7 @@ msgid "Enable auto fast scan"
 msgstr "Быстрый поиск автоматическ"
 
 msgid "Enable bouquet edit"
-msgstr "включить редактирование пакета пользователя"
+msgstr "Включить редактирование пакета пользователя"
 
 msgid "Enable debug logs *"
 msgstr "Включить журнал отладки *"
@@ -3447,7 +3462,7 @@ msgid "Enter a new password"
 msgstr "Введите новый пароль"
 
 msgid "Enter main menu..."
-msgstr "Войти в главное меню..."
+msgstr "Войти в главное меню"
 
 msgid "Enter pin code"
 msgstr "Введите PIN-код"
@@ -3566,7 +3581,7 @@ msgid "Exit movie list"
 msgstr "Закрыть список фильмов"
 
 msgid "Exit movie player..."
-msgstr "Закрыть видеопроигрыватель..."
+msgstr "Закрыть видеопроигрыватель"
 
 msgid "Exit movie player?"
 msgstr "Выйти из видеопроигрывателя?"
@@ -3602,10 +3617,10 @@ msgid "Extended"
 msgstr "Расширенный"
 
 msgid "Extended Networksetup Plugin..."
-msgstr "Расширенный плагин настроек сети..."
+msgstr "Расширенный плагин настроек сети"
 
 msgid "Extended Setup..."
-msgstr "Расширенные настройки..."
+msgstr "Расширенные настройки"
 
 msgid "Extended Shares"
 msgstr "Расширенные сетевые диски"
@@ -3617,10 +3632,10 @@ msgid "Extended Software Plugin"
 msgstr "Плагин расширенного ПО"
 
 msgid "Extended network setup plugin..."
-msgstr "Плагин для расширенных настроек сети..."
+msgstr "Плагин для расширенных настроек сети"
 
 msgid "Extended setup..."
-msgstr "Расширенные настройки..."
+msgstr "Расширенные настройки"
 
 msgid "Extensions management"
 msgstr "Управление расширениями"
@@ -4180,7 +4195,7 @@ msgid "History next"
 msgstr "Вперед по истории"
 
 msgid "History zap..."
-msgstr "История переключений..."
+msgstr "История переключений"
 
 msgid "Hold screen"
 msgstr "Сохранять экран"
@@ -4234,6 +4249,9 @@ msgid "IMDB search for current event"
 msgstr "IMDB поиск для текущего события"
 
 msgid "IMDb Search"
+msgstr "IMDb поиск"
+
+msgid "IMDb search"
 msgstr "IMDb поиск"
 
 msgid "IP address"
@@ -4560,7 +4578,7 @@ msgid "Instant recording location"
 msgstr "Расположение немедленной записи"
 
 msgid "Instant recording..."
-msgstr "Немедленная запись..."
+msgstr "Немедленная запись"
 
 msgid "Instant recordings location"
 msgstr "Расположение немедленных записей"
@@ -4832,7 +4850,7 @@ msgid "Linked titles with a DVD menu"
 msgstr "Заголовки связанные с DVD меню"
 
 msgid "List EPG functions..."
-msgstr "Список функций телегида..."
+msgstr "Список функций телегида"
 
 msgid "List available networks"
 msgstr "Список доступных сетей"
@@ -4853,7 +4871,7 @@ msgid "List/Fav/PVR"
 msgstr "List/Fav/PVR"
 
 msgid "Listen to the radio..."
-msgstr "Слушаем радио..."
+msgstr "Слушать радио"
 
 msgid "Lists reloaded!"
 msgstr "Списки перезагружены!"
@@ -5027,7 +5045,7 @@ msgid "Margin before recording (minutes)"
 msgstr "Объединить перед записью (в минутах)"
 
 msgid "Mark service as a dedicated 3D service"
-msgstr "Включить канал в список 3D сервисов"
+msgstr "Добавить в список 3D сервисов"
 
 msgid "Mark/Portal/Playlist"
 msgstr "Отметить/Портал/Плейлист"
@@ -5067,7 +5085,7 @@ msgid "Media player"
 msgstr "Медиаплеер"
 
 msgid "Media scanner"
-msgstr "Медиа сканнер"
+msgstr "Медиа-сканер"
 
 msgid "Medium is not a writeable DVD!"
 msgstr "Запись на данный DVD носитель невозможна!"
@@ -5281,7 +5299,7 @@ msgid "Moving west ..."
 msgstr "Перемещение на запад ..."
 
 msgid "Multi EPG"
-msgstr "Мультителегид"
+msgstr "Мульти"
 
 msgid "MultiEPG"
 msgstr "Мультителегид"
@@ -5943,6 +5961,9 @@ msgstr "Настройки OpenVPN"
 msgid "Orbital position"
 msgstr "Позиция на орбите"
 
+msgid "Options"
+msgstr "Опции"
+
 msgid "Original"
 msgstr "Оригинал"
 
@@ -6133,13 +6154,13 @@ msgid "Play"
 msgstr "Проигрывание"
 
 msgid "Play Audio-CD..."
-msgstr "Воспроизвести Аудио-CD..."
+msgstr "Воспроизвести Аудио-CD"
 
 msgid "Play DVD"
 msgstr "Воспроизведение DVD"
 
 msgid "Play Music..."
-msgstr "Воспроизвести музыку..."
+msgstr "Воспроизвести музыку"
 
 msgid "Play as picture in picture"
 msgstr "Воспроизвести как PiP"
@@ -6148,7 +6169,7 @@ msgid "Play audio in background"
 msgstr "Воспр. аудио в фоновом режиме"
 
 msgid "Play audio-CD..."
-msgstr "Воспроизвести Аудио-CD..."
+msgstr "Воспроизвести Аудио-CD"
 
 msgid "Play back media files"
 msgstr "Проигрыватель медиа файлов"
@@ -6163,7 +6184,7 @@ msgid "Play from previous mark or playlist entry"
 msgstr "Воспроизвести начиная с предыдущей метки или записи в плейлисте"
 
 msgid "Play music..."
-msgstr "Воспроизвести музыку..."
+msgstr "Воспроизвести музыку"
 
 msgid "Play next"
 msgstr "Играть следующий"
@@ -6178,7 +6199,7 @@ msgid "Play previous"
 msgstr "Играть предыдущий"
 
 msgid "Play recorded movies..."
-msgstr "Воспроиз. записанное видео..."
+msgstr "Воспроизвести записанное видео"
 
 msgid ""
 "Playback information missing\n"
@@ -6205,7 +6226,7 @@ msgid "Please choose CCcam reader"
 msgstr "Пожалуйста, выберите CCcam-ридер"
 
 msgid "Please choose an extension..."
-msgstr "Выберите дополнение..."
+msgstr "Выберите дополнение"
 
 msgid "Please choose reader"
 msgstr "Пожалуйста, выберите ридер"
@@ -6421,7 +6442,7 @@ msgid "Please wait"
 msgstr "Пожалуйста, подождите"
 
 msgid "Please wait... Loading list..."
-msgstr "Пожалуйста ждите...Загружается список..."
+msgstr "Пожалуйста ждите... Загружается список..."
 
 msgid "Plugin Browser"
 msgstr "Список плагинов"
@@ -6580,7 +6601,7 @@ msgid "Preferred tuner for recordings"
 msgstr "Приоритетный тюнер для записи"
 
 msgid "Preparing... Please wait"
-msgstr "Подготовка ... Пожалуйста подождите"
+msgstr "Подготовка... Пожалуйста подождите"
 
 msgid "Press '0' to toggle PiP mode"
 msgstr "Нажмите '0', для смены режима PiP"
@@ -6904,7 +6925,7 @@ msgid "Red"
 msgstr "Красный"
 
 msgid "Red button..."
-msgstr "Красная кнопка..."
+msgstr "Красная кнопка"
 
 msgid "Red colored"
 msgstr "Название канала красным цветом"
@@ -6952,7 +6973,7 @@ msgid "Reload blacklists"
 msgstr "Обновить чёрные списки"
 
 msgid "Reloading EPG Cache..."
-msgstr "Перезагрузить кэш телегида..."
+msgstr "Перезагрузить кэш телегида"
 
 msgid "Reloading bouquets and services..."
 msgstr "Обновление пакетов и сервисов..."
@@ -7102,10 +7123,10 @@ msgid "Repeat type"
 msgstr "Повторить тип"
 
 msgid "Repeating event currently recording... What do you want to do?"
-msgstr "Повторяющееся событие записывается...Что вы хотите сделать?"
+msgstr "Повторяющееся событие записывается... Что вы хотите сделать?"
 
 msgid "Repeating the event currently recording... What do you want to do?"
-msgstr "Повторяющееся событие записывается...Что вы хотите сделать?"
+msgstr "Повторяющееся событие записывается... Что вы хотите сделать?"
 
 msgid "Repeats"
 msgstr "Повторы"
@@ -7114,7 +7135,7 @@ msgid ""
 "Replace `- ` in dialogs with colored text per speaker (like teletext subtitles for the hearing "
 "impaired)"
 msgstr ""
-"Заменить `- ` в диалогах с цветным текстом на бегущей строке (например телетекст длясубтитров для "
+"Заменить `- ` в диалогах с цветным текстом на бегущей строке (например, телетекст субтитров для "
 "людей с нарушениями слуха)"
 
 msgid "Require authentication for http streams"
@@ -7402,7 +7423,7 @@ msgid "Scan additional SR"
 msgstr "Сканировать доп. SR"
 
 msgid "Scan files..."
-msgstr "Сканируются файлы..."
+msgstr "Сканирование файлов"
 
 msgid "Scan options"
 msgstr "Параметры поиска"
@@ -7512,6 +7533,9 @@ msgstr "Перемотка вперед"
 msgid "Seek forward (enter time)"
 msgstr "Перемотать вперед (введите время)"
 
+msgid "Seekbar"
+msgstr "Ползунок"
+
 msgid "Seekbar activation"
 msgstr "Активация ползунка"
 
@@ -7525,7 +7549,7 @@ msgid "Select CAId"
 msgstr "Выбрать CAID"
 
 msgid "Select Copy/Move location..."
-msgstr "Выберите местоположение..."
+msgstr "Выберите местоположение"
 
 msgid "Select a wireless network"
 msgstr "Выберите беспроводную сеть"
@@ -7595,7 +7619,7 @@ msgid "Select Network Interface"
 msgstr "Выбор сетевого интерфейса"
 
 msgid "Select provider to add..."
-msgstr "Выберите провайдер для добавления..."
+msgstr "Выберите провайдер для добавления"
 
 msgid "Select refresh rate"
 msgstr "Выберите частоту обновления"
@@ -7607,7 +7631,7 @@ msgid "Select seekbar to be activated by arrow L/R (long) or << >> (long)."
 msgstr "Выберите кнопку активации ползунка кнопками вправо/влево или << >> (Долгое нажатие)."
 
 msgid "Select service to add..."
-msgstr "Выберите канал для добавления..."
+msgstr "Выберите канал для добавления"
 
 msgid "Select slot"
 msgstr "Выбор слота"
@@ -8012,13 +8036,13 @@ msgid "Show EIT now/next in infobar"
 msgstr "Показать EIT сейчас/след. в инфобаре"
 
 msgid "Show EPG for current channel..."
-msgstr "Показать телегид текущего канала..."
+msgstr "Показать телегид текущего канала"
 
 msgid "Show EPG for current service"
 msgstr "Показать телегид текущего сервиса"
 
 msgid "Show EPG..."
-msgstr "Показать телегид..."
+msgstr "Показать телегид"
 
 msgid "Show Games show"
 msgstr "Телешоу"
@@ -8048,7 +8072,7 @@ msgid "Show PVR status in Movie Player infobar"
 msgstr "Показать статус записи в инфобаре видеопроигрывателя"
 
 msgid "Show RFmod setup..."
-msgstr "Показать настройки RFmod..."
+msgstr "Показать настройки RFmod"
 
 msgid "Show Readers/Proxies"
 msgstr "Показать Ридеры/Прокси"
@@ -8135,7 +8159,7 @@ msgid "Show extension selection"
 msgstr "Показать выбор расширений"
 
 msgid "Show extensions..."
-msgstr "Показать дополнения..."
+msgstr "Показать дополнения"
 
 msgid "Show favourites list"
 msgstr "Показать список избранного"
@@ -8195,7 +8219,7 @@ msgid "Show multi EPG"
 msgstr "Показать мультителегид"
 
 msgid "Show network mounts ..."
-msgstr "Показать точки монтирования сети ..."
+msgstr "Показать точки монтирования сети"
 
 msgid "Show or hide the extended description, (skin dependant)."
 msgstr "Показать или спрятать расширенное описание, если скин поддерживает"
@@ -8213,7 +8237,7 @@ msgid "Show positioner position"
 msgstr "Показать позицию мотоподвеса"
 
 msgid "Show program information..."
-msgstr "Show program information..."
+msgstr "Показать информацию о передаче"
 
 msgid "Show record indicator"
 msgstr "Показать индикатор записи"
@@ -8258,7 +8282,7 @@ msgid "Show subtitle selection"
 msgstr "Показать выбор субтитров"
 
 msgid "Show the DreamPlex player..."
-msgstr "Показать DreamPlex плеер..."
+msgstr "Показать DreamPlex плеер"
 
 msgid "Show the list of autotimers."
 msgstr "Показать список автотаймеров."
@@ -8267,13 +8291,13 @@ msgid "Show the list of timers."
 msgstr "Показать список таймеров."
 
 msgid "Show the plugin browser.."
-msgstr "Показать обозреватель плагинов.."
+msgstr "Показать обозреватель плагинов"
 
 msgid "Show the radio player..."
-msgstr "Включить режим радио..."
+msgstr "Включить режим радио"
 
 msgid "Show the tv player..."
-msgstr "Включить режим ТВ..."
+msgstr "Включить режим ТВ"
 
 msgid "Show time elapsed as positive"
 msgstr "Показать истекшее время с положительным знаком"
@@ -8366,7 +8390,7 @@ msgid "Single"
 msgstr "Один"
 
 msgid "Single EPG"
-msgstr "Одиночный телегид"
+msgstr "Одиночный"
 
 msgid "SingleEPG"
 msgstr "Одиночный телегид"
@@ -8486,7 +8510,7 @@ msgid "Software"
 msgstr "Программное обеспечение"
 
 msgid "Software Update"
-msgstr "Обновление ПО"
+msgstr "Обновление"
 
 msgid "Software management"
 msgstr "Управление ПО"
@@ -8495,7 +8519,7 @@ msgid "Software manager setup"
 msgstr "Настройки менеджера ПО"
 
 msgid "Software update"
-msgstr "Обновление ПО"
+msgstr "Обновление"
 
 msgid "Software update settings"
 msgstr "Настройки обновления"
@@ -8854,7 +8878,7 @@ msgid "Subtitle selection"
 msgstr "Выбор субтитров"
 
 msgid "Subtitle selection..."
-msgstr "Выбор субтитров..."
+msgstr "Выбор субтитров"
 
 msgid "Subtitle settings"
 msgstr "Настройки субтитров"
@@ -9678,7 +9702,7 @@ msgid "Timer selection"
 msgstr "Выбор таймера"
 
 msgid "Timer selection..."
-msgstr "Выбор таймера..."
+msgstr "Выбор таймера"
 
 msgid "Timer type"
 msgstr "Тип таймера"
@@ -9741,7 +9765,7 @@ msgid "Today"
 msgstr "Сегодня"
 
 msgid "Toggle Digital downmix..."
-msgstr "Переключение цифрового микширования..."
+msgstr "Переключение цифрового микширования"
 
 msgid "Toggle HDMI-In PiP"
 msgstr "Переключение HDMI входа"
@@ -10360,19 +10384,19 @@ msgid "View"
 msgstr "Просмотр"
 
 msgid "View Movies..."
-msgstr "Просмотр записей..."
+msgstr "Просмотр записей"
 
 msgid "View Rass interactive..."
-msgstr "Интерактивный просмотр RASS..."
+msgstr "Интерактивный просмотр RASS"
 
 msgid "View Video CD..."
-msgstr "Смотреть Video CD..."
+msgstr "Смотреть Video CD"
 
 msgid "View details"
 msgstr "Просмотр деталей"
 
 msgid "View extensions..."
-msgstr "Просмотр дополнений..."
+msgstr "Просмотр дополнений"
 
 msgid "View list of available "
 msgstr "Просмотр списка доступных "
@@ -10417,16 +10441,16 @@ msgid "View mode"
 msgstr "Режим просмотра"
 
 msgid "View photos..."
-msgstr "Просмотр изображений..."
+msgstr "Просмотр изображений"
 
 msgid "View teletext..."
-msgstr "Просмотр телетекста..."
+msgstr "Просмотр телетекста"
 
 msgid "View the changes"
 msgstr "Просмотр изменений"
 
 msgid "View video CD..."
-msgstr "Просмотр Video CD..."
+msgstr "Просмотр Video CD"
 
 msgid "Visual impaired commentary"
 msgstr "Отключение комментариев"
@@ -10497,11 +10521,14 @@ msgstr "Предупреждение"
 msgid "Warning: no LNB; using factory defaults."
 msgstr "Предупреждение: нет LNB; используются заводские настройки."
 
+msgid "Watch blu-ray discs in folder or iso"
+msgstr "Просмотр Blu-ray из папки или ISO"
+
 msgid "Watch movies..."
-msgstr "Просмотр фильмов..."
+msgstr "Просмотр фильмов"
 
 msgid "Watch recordings..."
-msgstr "Просмотр записей..."
+msgstr "Просмотр записей"
 
 msgid "Web Interface"
 msgstr "Веб-интерфейс"
@@ -10864,7 +10891,7 @@ msgid "Wireless network"
 msgstr "Беспроводная сеть"
 
 msgid "Wireless network configuration..."
-msgstr "Конфигурация беспроводной сети..."
+msgstr "Конфигурация беспроводной сети"
 
 msgid "Wireless network connection setup"
 msgstr "Настройка беспроводной сети"
@@ -11295,10 +11322,10 @@ msgid "Zap up"
 msgstr "Переключить вверх"
 
 msgid "Zoom In/Out TV..."
-msgstr "Увеличение/уменьшение..."
+msgstr "Увеличение/уменьшение"
 
 msgid "Zoom Off..."
-msgstr "Увеличение отключено..."
+msgstr "Увеличение отключено"
 
 msgid "Zoom from left"
 msgstr "Увеличение слева"
@@ -11877,6 +11904,9 @@ msgstr "Кино/Драма (Общие)"
 msgid "ms"
 msgstr "мс"
 
+msgid "multi"
+msgstr "Мульти"
+
 msgid "multinorm"
 msgstr "Мультинорм"
 
@@ -12034,7 +12064,7 @@ msgid "please press OK when ready"
 msgstr "Пожалуйста, нажмите OK когда будете готовы"
 
 msgid "please wait, loading picture..."
-msgstr "Ждите. Загрузка изображения.."
+msgstr "Ждите. Загрузка изображения..."
 
 msgid "please wait..."
 msgstr "Ожидайте..."
@@ -12142,7 +12172,7 @@ msgid "search EPG"
 msgstr "Поиск EPG"
 
 msgid "search EPG from history..."
-msgstr "Поиск EPG из истории..."
+msgstr "Поиск EPG из истории"
 
 msgid "second cable of motorized LNB"
 msgstr "Второй кабель мотоподвеса"
