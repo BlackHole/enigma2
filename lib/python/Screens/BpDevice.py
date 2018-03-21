@@ -20,7 +20,7 @@ class DeliteDevicesPanel(Screen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		self["key_red"] = Label(_("Cancel"))
-		self["key_yellow"] = Label(_("Mountpoints"))
+		self["key_green"] = Label(_("Mountpoints"))
 		self["lab1"] = Label(_("Wait please while scanning your devices..."))
 		
 		self.list = []
@@ -30,7 +30,7 @@ class DeliteDevicesPanel(Screen):
 		{
 			"back": self.close,
 			"red": self.close,
-			"yellow": self.mapSetup
+			"green": self.mapSetup
 		})
 		
 		self.activityTimer = eTimer()
