@@ -152,18 +152,21 @@ class Setup(ConfigListScreen, Screen):
 					continue
 
 				requires = x.get("requires")
-				if requires and requires.startswith('config.'):
-					item = eval(requires or "")
-					if item.value and not item.value == "0":
-						SystemInfo[requires] = True
-					else:
-						SystemInfo[requires] = False
-
-				if requires and not SystemInfo.get(requires, False):
+				if requires and not requires.startswith('config.'):
+					if requires[0] == '!':
+						if SystemInfo.get(requires[1:], False):
+							continue
+					elif not SystemInfo.get(requires, False):
+						continue
+				conditional = x.get("conditional")
+				if conditional and not eval(conditional):
 					continue
-				configCondition = x.get("configcondition")
-				if configCondition and not eval(configCondition):
- 					continue
+
+				# this block is just for backwards compatibility
+				if requires and requires.startswith('config.'):
+					item = eval(requires)
+					if not (item.value and not item.value == "0"):
+						continue
 
 				if self.PluginLanguageDomain:
 					item_text = dgettext(self.PluginLanguageDomain, x.get("text", "??").encode("UTF-8"))
