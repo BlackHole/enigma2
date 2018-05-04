@@ -3,7 +3,6 @@ noinst_LIBRARIES += gui/libenigma_gui.a
 gui_libenigma_gui_a_SOURCES = \
 	gui/ebutton.cpp \
 	gui/ecanvas.cpp \
-	gui/egauge.cpp \
 	gui/einput.cpp \
 	gui/egauge.cpp \
 	gui/einputnumber.cpp \
@@ -27,7 +26,6 @@ guiincludedir = $(pkgincludedir)/lib/gui
 guiinclude_HEADERS = \
 	gui/ebutton.h \
 	gui/ecanvas.h \
-	gui/egauge.h \
 	gui/einput.h \
 	gui/egauge.h \
 	gui/einputnumber.h \
