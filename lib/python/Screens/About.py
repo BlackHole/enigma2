@@ -66,7 +66,7 @@ class About(Screen):
 		self["lab2"] = StaticText(_("Mod By Ghani"))
 		model = None
 		AboutText = ""
-		self["lab3"] = StaticText(_("Support at") + " www.satbox4u.org")
+		self["lab3"] = StaticText(_("Support at") + " www.vuplus-community.net")
 
 		AboutText += _("Model:\t%s %s\n") % (getMachineBrand(), getMachineName())
 
