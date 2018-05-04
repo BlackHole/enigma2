@@ -67,7 +67,7 @@ class AVSwitch:
 	if about.getChipSetString() in ('5272s', '7251', '7251s', '7252', '7252s', '7366', '7376', '7444s', '72604'):
 		modes["HDMI"] = ["720p", "1080p", "2160p", "1080i", "576p", "576i", "480p", "480i"]
 		widescreen_modes = {"720p", "1080p", "2160p", "1080i"}
-	elif about.getChipSetString() in ('7241', '7356', '73565', '7358', '7362', '73625', '7424', '7425', '7552'):
+	elif about.getChipSetString() in ('7241', '7356', '73565', '7358', '7362', '73625', '7424', '7435', '7425', '7552'):
 		modes["HDMI"] = ["720p", "1080p", "1080i", "576p", "576i", "480p", "480i"]
 		widescreen_modes = {"720p", "1080p", "1080i"}
 	else:
@@ -88,6 +88,11 @@ class AVSwitch:
 		'dm500hd',
 		'dm500hdv2',
 		'dm800',
+		'dm520',
+		'dm525',
+		'dm7080',
+		'dm820',
+		'dm900',
 		'e3hd',
 		'ebox7358',
 		'eboxlumi',
@@ -99,7 +104,6 @@ class AVSwitch:
 		'gbue4k',		
 		'gbx1',
 		'gbx3',
-		'gbx3h',		
 		'iqonios300hd',
 		'ixusszero',
 		'mbmicro',
@@ -170,6 +174,7 @@ class AVSwitch:
 
 	# Machines that have neither yellow RCA nor Scart sockets
 	no_yellow_RCA__no_scart = (
+		'dm900',
 		'et5x00',
 		'et6x00',
 		'gbquad',
@@ -177,7 +182,6 @@ class AVSwitch:
 		'gbue4k',		
 		'gbx1',
 		'gbx3',
-		'gbx3h',		
 		'ixussone',
 		'mutant51',
 		'mutant1500',
@@ -384,10 +388,11 @@ class AVSwitch:
 			wss = "auto(4:3_off)"
 		else:
 			wss = "auto"
-		print "[VideoHardware] setting wss: %s" % wss
-		f = open("/proc/stb/denc/0/wss", "w")
-		f.write(wss)
-		f.close()
+		if os.path.exists("/proc/stb/denc/0/wss"):
+			print "[VideoHardware] setting wss: %s" % wss
+			f = open("/proc/stb/denc/0/wss", "w")
+			f.write(wss)
+			f.close()
 
 	def setPolicy43(self, cfgelement):
 		print "[VideoHardware] setting policy: %s" % cfgelement.value
@@ -475,7 +480,7 @@ def InitAVSwitch():
 	config.av.autores_1080p24 = ConfigSelection(choices={"1080p24": _("1080p 24Hz"), "1080p25": _("1080p 25Hz")}, default="1080p24")
 	config.av.autores_1080p25 = ConfigSelection(choices={"1080p25": _("1080p 25Hz"), "1080p50": _("1080p 50Hz")}, default="1080p25")
 	config.av.autores_1080p30 = ConfigSelection(choices={"1080p30": _("1080p 30Hz"), "1080p60": _("1080p 60Hz")}, default="1080p30")
-	config.av.autores_2160p24 = ConfigSelection(choices={"2160p24": _("2160p 24Hz"), "2160p25": _("2160p 25Hz"), "2160p30": _("2160p 30Hz")}, default="2160p24")
+	config.av.autores_2160p24 = ConfigSelection(choices={"2160p24": _("2160p 24Hz"), "2160p25": _("2160p 25Hz")}, default="2160p24")
 	config.av.autores_2160p25 = ConfigSelection(choices={"2160p25": _("2160p 25Hz"), "2160p50": _("2160p 50Hz")}, default="2160p25")
 	config.av.autores_2160p30 = ConfigSelection(choices={"2160p30": _("2160p 30Hz"), "2160p60": _("2160p 60Hz")}, default="2160p30")
 	config.av.colorformat = ConfigSelection(choices=colorformat_choices, default="rgb")
@@ -602,6 +607,21 @@ def InitAVSwitch():
 					"444": _("YCbCr444"),
 					"422": _("YCbCr422"),
 					"420": _("YCbCr420")},
+					default = "Edid(Auto)")
+		elif getBoxType() in ('dm900'):
+			config.av.hdmicolorspace = ConfigSelection(choices={
+					"Edid(Auto)": _("Auto"),
+					"Hdmi_Rgb": _("RGB"),
+					"Itu_R_BT_709": _("BT709"),
+					"DVI_Full_Range_RGB": _("Full Range RGB"),
+					"FCC": _("FCC 1953"),
+					"Itu_R_BT_470_2_BG": _("BT470 BG"),
+					"Smpte_170M": _("Smpte 170M"),
+					"Smpte_240M": _("Smpte 240M"),
+					"Itu_R_BT_2020_NCL": _("BT2020 NCL"),
+					"Itu_R_BT_2020_CL": _("BT2020 CL"),
+					"XvYCC_709": _("BT709 XvYCC"),
+					"XvYCC_601": _("BT601 XvYCC")},
 					default = "Edid(Auto)")
 		else:
 			config.av.hdmicolorspace = ConfigSelection(choices={
@@ -813,6 +833,24 @@ def InitAVSwitch():
 					config.av.pcm_multichannel.setValue(False)
 		config.av.downmix_ac3 = ConfigYesNo(default = True)
 		config.av.downmix_ac3.addNotifier(setAC3Downmix)
+	
+	if os.path.exists("/proc/stb/audio/ac3plus_choices"):
+		f = open("/proc/stb/audio/ac3plus_choices", "r")
+		can_ac3plustranscode = f.read().strip().split(" ")
+		f.close()
+	else:
+		can_ac3plustranscode = False
+
+	SystemInfo["CanAC3plusTranscode"] = can_ac3plustranscode
+
+	if can_ac3plustranscode:
+		def setAC3plusTranscode(configElement):
+			f = open("/proc/stb/audio/ac3plus", "w")
+			f.write(configElement.value)
+			f.close()
+		choice_list = [("use_hdmi_caps", _("Controlled by HDMI")), ("force_ac3", _("Always"))]
+		config.av.transcodeac3plus = ConfigSelection(choices = choice_list, default = "use_hdmi_caps")
+		config.av.transcodeac3plus.addNotifier(setAC3plusTranscode)
 
 	try:
 		f = open("/proc/stb/audio/dts_choices", "r")
@@ -830,6 +868,24 @@ def InitAVSwitch():
 			f.close()
 		config.av.downmix_dts = ConfigYesNo(default = True)
 		config.av.downmix_dts.addNotifier(setDTSDownmix)
+	
+	if os.path.exists("/proc/stb/audio/dtshd_choices"):
+		f = open("/proc/stb/audio/dtshd_choices", "r")
+		can_dtshdtranscode = f.read().strip().split(" ")
+		f.close()
+	else:
+		can_dtshdtranscode = False
+
+	SystemInfo["CanDTSHDTranscode"] = can_dtshdtranscode
+
+	if can_dtshdtranscode:
+		def setDTSHDTranscode(configElement):
+			f = open("/proc/stb/audio/dtshd", "w")
+			f.write(configElement.value)
+			f.close()
+		choice_list = [("use_hdmi_caps", _("Controlled by HDMI")), ("force_dts", _("Always"))]
+		config.av.transcodedtshd = ConfigSelection(choices = choice_list, default = "use_hdmi_caps")
+		config.av.transcodedtshd.addNotifier(setDTSHDTranscode)
 
 	try:
 		f = open("/proc/stb/audio/aac_choices", "r")
