@@ -6,8 +6,11 @@ from Components.config import config
 def getFPVersion():
 	ret = None
 	try:
-		ret = long(open("/proc/stb/fp/version", "r").read())
-	except IOError:
+		if getBoxType() in ('dm7080','dm820','dm520','dm525','dm900'):
+ 			ret = open("/proc/stb/fp/version", "r").read()
+ 		else:
+ 			ret = long(open("/proc/stb/fp/version", "r").read())
+        except IOError:
 		try:
 			fp = open("/dev/dbox/fp0")
 			ret = ioctl(fp.fileno(),0)
