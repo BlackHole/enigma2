@@ -542,27 +542,60 @@ class Partition:
 		return ''
 
 DEVICEDB =  \
-	{"dm8000":
+	{"dm520":
 		{
-			# dm8000:
-			"/devices/platform/brcm-ehci.0/usb1/1-1/1-1.1/1-1.1:1.0": "Front USB Slot",
-			"/devices/platform/brcm-ehci.0/usb1/1-1/1-1.2/1-1.2:1.0": "Back, upper USB Slot",
-			"/devices/platform/brcm-ehci.0/usb1/1-1/1-1.3/1-1.3:1.0": "Back, lower USB Slot",
-			"/devices/platform/brcm-ehci-1.1/usb2/2-1/2-1:1.0/host1/target1:0:0/1:0:0:0": "DVD Drive",
+			"/devices/platform/ehci-brcm.0/usb1/1-2/": _("Back, outer USB"),
+			"/devices/platform/ohci-brcm.0/usb2/2-2/": _("Back, outer USB"),
+			"/devices/platform/ehci-brcm.0/usb1/1-1/": _("Back, inner USB"),
+			"/devices/platform/ohci-brcm.0/usb2/2-1/": _("Back, inner USB"),
 		},
-	"dm800":
-	{
-		# dm800:
-		"/devices/platform/brcm-ehci.0/usb1/1-2/1-2:1.0": "Upper USB Slot",
-		"/devices/platform/brcm-ehci.0/usb1/1-1/1-1:1.0": "Lower USB Slot",
-	},
-	"dm7025":
-	{
-		# dm7025:
-		"/devices/pci0000:00/0000:00:14.1/ide1/1.0": "CF Card Slot", #hdc
-		"/devices/pci0000:00/0000:00:14.1/ide0/0.0": "Internal Harddisk"
-	}
-	}
+	"dm7080":
+ 		{
+ 			"/devices/pci0000:00/0000:00:00.0/usb9/9-1/": _("Back USB 3.0"),
+ 			"/devices/pci0000:00/0000:00:00.0/usb9/9-2/": _("Front USB 3.0"),
+ 			"/devices/platform/ehci-brcm.0/": _("Back, lower USB"),
+ 			"/devices/platform/ehci-brcm.1/": _("Back, upper USB"),
+ 			"/devices/platform/ehci-brcm.2/": _("Internal USB"),
+ 			"/devices/platform/ehci-brcm.3/": _("Internal USB"),
+ 			"/devices/platform/ohci-brcm.0/": _("Back, lower USB"),
+ 			"/devices/platform/ohci-brcm.1/": _("Back, upper USB"),
+ 			"/devices/platform/ohci-brcm.2/": _("Internal USB"),
+ 			"/devices/platform/ohci-brcm.3/": _("Internal USB"),
+ 			"/devices/platform/sdhci-brcmstb.0/": _("eMMC"),
+ 			"/devices/platform/sdhci-brcmstb.1/": _("SD"),
+ 			"/devices/platform/strict-ahci.0/ata1/": _("SATA"),	# front
+ 			"/devices/platform/strict-ahci.0/ata2/": _("SATA"),	# back
+ 		},
+ 	"dm820":
+ 		{
+ 			"/devices/platform/ehci-brcm.0/": _("Back, lower USB"),
+ 			"/devices/platform/ehci-brcm.1/": _("Back, upper USB"),
+ 			"/devices/platform/ehci-brcm.2/": _("Internal USB"),
+ 			"/devices/platform/ehci-brcm.3/": _("Internal USB"),
+ 			"/devices/platform/ohci-brcm.0/": _("Back, lower USB"),
+ 			"/devices/platform/ohci-brcm.1/": _("Back, upper USB"),
+ 			"/devices/platform/ohci-brcm.2/": _("Internal USB"),
+ 			"/devices/platform/ohci-brcm.3/": _("Internal USB"),
+ 			"/devices/platform/sdhci-brcmstb.0/": _("eMMC"),
+ 			"/devices/platform/sdhci-brcmstb.1/": _("SD"),
+ 			"/devices/platform/strict-ahci.0/ata1/": _("SATA"),     # front
+ 			"/devices/platform/strict-ahci.0/ata2/": _("SATA"),     # back
+		},
+	"dm900":
+		{
+			"/devices/platform/brcmstb-ahci.0/ata1/": _("SATA"),
+			"/devices/rdb.4/f03e0000.sdhci/mmc_host/mmc0/": _("eMMC"),
+			"/devices/rdb.4/f03e0200.sdhci/mmc_host/mmc1/": _("SD"),
+			"/devices/rdb.4/f0470600.ohci_v2/usb6/6-0:1.0/port1/": _("Front USB"),
+			"/devices/rdb.4/f0470300.ehci_v2/usb3/3-0:1.0/port1/": _("Front USB"),
+			"/devices/rdb.4/f0471000.xhci_v2/usb2/2-0:1.0/port1/": _("Front USB"),
+			"/devices/rdb.4/f0470400.ohci_v2/usb5/5-0:1.0/port1/": _("Back USB"),
+			"/devices/rdb.4/f0470500.ehci_v2/usb4/4-0:1.0/port1/": _("Back USB"),
+			"/devices/rdb.4/f0471000.xhci_v2/usb2/2-0:1.0/port2/": _("Back USB"),
+ 		}
+ 	}
+	
++DEVICEDB["dm525"] = DEVICEDB["dm520"]
 
 def addInstallTask(job, package):
 	task = Task.LoggingTask(job, "update packages")
