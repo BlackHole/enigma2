@@ -132,7 +132,16 @@ eDVBResourceManager::eDVBResourceManager()
  	}
  	else {
  		eDebug("[eDVBResourceManager] cannot open /proc/stb/info. Use fallback via demux count!");
-	}
+ 	}
+ 
+ 	if (m_boxtype == -1) {
+ 		if (m_demux.size() == 3)
+ 			m_boxtype = DM800;
+ 		else if (m_demux.size() < 5)
+ 			m_boxtype = DM7025;
+ 		else
+ 			m_boxtype = DM8000;
+        }
 		
 	eDebug("[eDVBResourceManager] found %zd adapter, %zd frontends(%zd sim) and %zd demux",
 		m_adapter.size(), m_frontend.size(), m_simulate_frontend.size(), m_demux.size());
