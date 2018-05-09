@@ -154,10 +154,14 @@ public:
 #endif // SWIG
 
 SWIG_IGNORE(eDVBResourceManager);
-class eDVBResourceManager: public iObject, public sigc::trackable
+class eDVBResourceManager: public iObject, public Object
 {
 	DECLARE_REF(eDVBResourceManager);
 	int avail, busy;
+
+	enum { DM7025, DM800, DM500HD, DM800SE, DM8000, DM7020HD, DM520, DM525, DM7080, DM820, DM900 };
+
+ 	int m_boxtype;
 
 	eSmartPtrList<iDVBAdapter> m_adapter;
 	eSmartPtrList<eDVBRegisteredDemux> m_demux;
