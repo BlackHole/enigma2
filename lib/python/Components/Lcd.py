@@ -349,34 +349,37 @@ def InitLcd():
 			config.lcd.contrast.addNotifier(setLCDcontrast)
 		else:
 			config.lcd.contrast = ConfigNothing()
-			standby_default = 1
+			if getBoxType() in ('dm900'):
+				standby_default = 4
+			else:
+				standby_default = 1
+ 
+ 		config.lcd.standby = ConfigSlider(default=standby_default, limits=(0, 10))
+ 		config.lcd.standby.addNotifier(setLCDbright)
+ 		config.lcd.standby.apply = lambda : setLCDbright(config.lcd.standby)
 
-		config.lcd.standby = ConfigSlider(default=standby_default, limits=(0, 10))
-		config.lcd.standby.addNotifier(setLCDbright)
-		config.lcd.standby.apply = lambda : setLCDbright(config.lcd.standby)
-
-		config.lcd.bright = ConfigSlider(default=5, limits=(0, 10))
-		config.lcd.bright.addNotifier(setLCDbright)
-		config.lcd.bright.apply = lambda : setLCDbright(config.lcd.bright)
-		config.lcd.bright.callNotifiersOnSaveAndCancel = True
-
-		config.lcd.dimbright = ConfigSlider(default=standby_default, limits=(0, 10))
-		config.lcd.dimbright.addNotifier(setLCDdimbright);
-		config.lcd.dimbright.apply = lambda : setLCDdimbright(config.lcd.dimbright)
-		config.lcd.dimdelay = ConfigSelection(default = "0", choices = [
-			("5", "5 " + _("seconds")),
-			("10", "10 " + _("seconds")),
-			("15", "15 " + _("seconds")),
-			("20", "20 " + _("seconds")),
-			("30", "30 " + _("seconds")),
-			("60", "1 " + _("minute")),
-			("120", "2 " + _("minutes")),
-			("300", "5 " + _("minutes")),
-			("0", _("off"))])
-		config.lcd.dimdelay.addNotifier(setLCDdimdelay);
-
-		config.lcd.invert = ConfigYesNo(default=False)
-		config.lcd.invert.addNotifier(setLCDinverted)
+		config.lcd.bright = ConfigSlider(default=SystemInfo["DefaultDisplayBrightness"], limits=(0, 10))
+ 		config.lcd.bright.addNotifier(setLCDbright)
+ 		config.lcd.bright.apply = lambda : setLCDbright(config.lcd.bright)
+ 		config.lcd.bright.callNotifiersOnSaveAndCancel = True
+ 
+ 		config.lcd.dimbright = ConfigSlider(default=standby_default, limits=(0, 10))
+ 		config.lcd.dimbright.addNotifier(setLCDdimbright);
+ 		config.lcd.dimbright.apply = lambda : setLCDdimbright(config.lcd.dimbright)
+ 		config.lcd.dimdelay = ConfigSelection(default = "0", choices = [
+ 			("5", "5 " + _("seconds")),
+ 			("10", "10 " + _("seconds")),
+ 			("15", "15 " + _("seconds")),
+ 			("20", "20 " + _("seconds")),
+ 			("30", "30 " + _("seconds")),
+ 			("60", "1 " + _("minute")),
+ 			("120", "2 " + _("minutes")),
+ 			("300", "5 " + _("minutes")),
+ 			("0", _("off"))])
+ 		config.lcd.dimdelay.addNotifier(setLCDdimdelay);
+ 
+ 		config.lcd.invert = ConfigYesNo(default=False)
+                config.lcd.invert.addNotifier(setLCDinverted)
 
 		def PiconPackChanged(configElement):
 			configElement.save()
