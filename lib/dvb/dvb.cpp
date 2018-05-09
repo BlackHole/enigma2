@@ -108,6 +108,32 @@ eDVBResourceManager::eDVBResourceManager()
 		addAdapter(adapter, true);
 	}
 
+	 	m_boxtype = -1;
+ 	int fd = open("/proc/stb/info/model", O_RDONLY);
+ 	if (fd >= 0) {
+ 		char tmp[16];
+ 		int rd = read(fd, tmp, sizeof(tmp));
+ 		close(fd);
+ 
+ 		if (rd == 0)
+ 			eDebug("[eDVBResourceManager] /proc/stb/info empty. Use fallback via demux count!");
+ 		else if (!strncmp(tmp, "dm520\n", rd))
+ 			m_boxtype = DM520;
+		else if (!strncmp(tmp, "dm525\n", rd))
+			m_boxtype = DM525;
+ 		else if (!strncmp(tmp, "dm7080\n", rd))
+ 			m_boxtype = DM7080;
+ 		else if (!strncmp(tmp, "dm820\n", rd))
+ 			m_boxtype = DM820;
+		else if (!strncmp(tmp, "dm900\n", rd))
+			m_boxtype = DM900;
+ 		else
+ 			eDebug("[eDVBResourceManager] boxtype detection via /proc/stb/info not possible. Use fallback via demux count!");
+ 	}
+ 	else {
+ 		eDebug("[eDVBResourceManager] cannot open /proc/stb/info. Use fallback via demux count!");
+	}
+		
 	eDebug("[eDVBResourceManager] found %zd adapter, %zd frontends(%zd sim) and %zd demux",
 		m_adapter.size(), m_frontend.size(), m_simulate_frontend.size(), m_demux.size());
 
