@@ -8,7 +8,7 @@ SUBDIRS = PositionerSetup Satfinder \
 	SABnzbdSetup FastScan SatelliteEquipmentControl DiseqcTester
 
 if DREAMBOX
-SUBDIRS += FrontprocessorUpgrade NFIFlash
+SUBDIRS += FrontprocessorUpgrade
 endif
 
 if DM900
