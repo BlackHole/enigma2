@@ -51,10 +51,6 @@ if HAVE_COLORLCD400DM
 SUBDIRS += display400dm
 endif
 
-if HAVE_COLORLCD480
-SUBDIRS += display480
-endif
-
 if HAVE_COLORLCD720
 SUBDIRS += display720
 endif
