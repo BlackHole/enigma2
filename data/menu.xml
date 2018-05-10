@@ -272,5 +272,6 @@ self.session.open(VIXBackupManager)
 			<item text="Shut down" requires="!DeepstandbySupport" entryID="deep_standby"><screen module="Standby" screen="TryQuitMainloop">1</screen></item>
 			<item text="Restart" entryID="restart"><screen module="Standby" screen="TryQuitMainloop">2</screen></item>
 			<item text="Restart Gui" entryID="restart_enigma"><screen module="Standby" screen="TryQuitMainloop">3</screen></item>
-		</menu>
+	                <item text="Recovery Mode" level="0" requires="RecoveryMode" entryID="maintenance_mode"><screen module="Standby" screen="TryQuitMainloop">16</screen></item>
+	</menu>
 </menu>
