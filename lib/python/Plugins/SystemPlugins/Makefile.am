@@ -7,6 +7,10 @@ SUBDIRS = PositionerSetup Satfinder \
 	VideoEnhancement WirelessLan NetworkWizard \
 	SABnzbdSetup FastScan SatelliteEquipmentControl DiseqcTester
 
+if DREAMBOX
+SUBDIRS += FrontprocessorUpgrade NFIFlash
+endif
+
 if DM900
 SUBDIRS += FSBLUpdater
 endif
@@ -44,10 +48,6 @@ SUBDIRS += CableScan
 endif
 
 if HAVE_LIBVUGLES2
-SUBDIRS += AnimationSetup
-endif
-
-if HAVE_OSDANIMATION
 SUBDIRS += AnimationSetup
 endif
 
