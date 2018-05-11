@@ -154,7 +154,7 @@ public:
 #endif // SWIG
 
 SWIG_IGNORE(eDVBResourceManager);
-class eDVBResourceManager: public iObject, public Object
+class eDVBResourceManager: public iObject, public sigc::trackable
 {
 	DECLARE_REF(eDVBResourceManager);
 	int avail, busy;
