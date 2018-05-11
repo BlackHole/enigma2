@@ -75,7 +75,6 @@ AM_CONDITIONAL(VUDUO, test "$BOXTYPE" == vuduo)
 AM_CONDITIONAL(VUSOLO2, test "$BOXTYPE" == vusolo2)
 AM_CONDITIONAL(VUDUO2, test "$BOXTYPE" == vuduo2)
 AM_CONDITIONAL(VUZERO, test "$BOXTYPE" == vuzero)
-AM_CONDITIONAL(DM7080, test "$BOXTYPE" == "dm7080")
 AM_CONDITIONAL(DM900, test "$BOXTYPE" == dm900)
 
 AC_ARG_WITH(libvugles2,
@@ -261,11 +260,11 @@ if test `echo "$BOXTYPE" | cut -b 1-2` == "vu"; then
 	AC_DEFINE(FORCE_ADVANCED_REMOTE, 1,[define to fixup the input device identification when the remote control is actually an 'advanced' remote (with play/forward/rewind keys)])
 fi
 
-if test "$BOXTYPE" == "dm7080" -o "$BOXTYPE" == "dm900" -o "; then
+if test "$BOXTYPE" == "dm900"; then
 	AC_DEFINE(CONFIG_ION, 1,[define BOX use ION Allocator])
 fi
 
-if test "$BOXTYPE" == "dm7080" -o "$BOXTYPE" == "dm900"; then
+if test "$BOXTYPE" == "dm900"; then
 	AC_DEFINE(TUNER_DM7080, 1,[define BOXTYPE DM7080])
 fi
 
