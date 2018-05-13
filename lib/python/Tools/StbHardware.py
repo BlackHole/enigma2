@@ -1,5 +1,6 @@
 from fcntl import ioctl
 from struct import pack, unpack
+from boxbranding import getBoxType
 from os import path
 from Components.config import config
 
