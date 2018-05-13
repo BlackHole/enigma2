@@ -62,7 +62,6 @@ def getChipSetString():
 		return "73625"
 	elif getBoxType() == 'dm900':
 		return "7252s"
-	else:
 		try:
 			f = open('/proc/stb/info/chipset', 'r')
 			chipset = f.read()
