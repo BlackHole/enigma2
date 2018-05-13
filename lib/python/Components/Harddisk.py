@@ -595,7 +595,7 @@ DEVICEDB =  \
  		}
  	}
 	
-+DEVICEDB["dm525"] = DEVICEDB["dm520"]
+DEVICEDB["dm525"] = DEVICEDB["dm520"]
 
 def addInstallTask(job, package):
 	task = Task.LoggingTask(job, "update packages")
