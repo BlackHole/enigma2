@@ -56,13 +56,6 @@ def getIsBroadcom():
 		return False
 
 def getChipSetString():
-	if getBoxType() in ('dm7080','dm820'):
-		return "7435"
-	elif getBoxType() == 'dm525':
-		return "73625"
-	elif getBoxType() == 'dm900':
-		return "7252s"
-		else:
 		try:
 			f = open('/proc/stb/info/chipset', 'r')
 			chipset = f.read()
