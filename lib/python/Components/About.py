@@ -21,7 +21,7 @@ def getGStreamerVersionString():
 	try:
 		from glob import glob
  		gst = [x.split("Version: ") for x in open(glob("/var/lib/opkg/info/gstreamer[0-9].[0-9].control")[0], "r") if x.startswith("Version:")][0]
-               return "%s" % gst[1].split("+")[0].replace("\n","")
+                return "%s" % gst[1].split("+")[0].replace("\n","")
 	except:
 		return _("unknown")
 
@@ -62,7 +62,8 @@ def getChipSetString():
 		return "73625"
 	elif getBoxType() == 'dm900':
 		return "7252s"
-	try:
+	else:
+		try:
 			f = open('/proc/stb/info/chipset', 'r')
 			chipset = f.read()
 			f.close()
