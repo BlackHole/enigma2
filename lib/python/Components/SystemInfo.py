@@ -72,3 +72,6 @@ SystemInfo["hasXcoreVFD"] = fileCheck("/sys/module/brcmstb_%s/parameters/pt6302_
 SystemInfo["HasHDMIin"] = getMachineBuild() in ('vuuno4kse', 'vuultimo4k')
 SystemInfo["HasHDMI-CEC"] = fileExists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HdmiCEC/plugin.pyo")
 SystemInfo["HasInfoButton"] = getBrandOEM() not in ('vuplus')
+SystemInfo["Has24hz"] = fileCheck("/proc/stb/video/videomode_24hz")
+SystemInfo["canMultiBoot"] = getMachineBuild() in ('hd51') and (1, 4) or getBoxType() in ('gbue4k', 'gbquad4k') and (3, 3)
+SystemInfo["canMode12"] = getMachineBuild() in ('hd51') and ('440M@328M brcm_cma=192M@768M', '520M@248M brcm_cma=200M@768M')

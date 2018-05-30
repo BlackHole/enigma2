@@ -30,8 +30,8 @@
 				<item weight="1" text="Tuner setup" entryID="tuner_setup" requires="ClientModeDisabled"><screen module="Satconfig" screen="NimSelection"/></item>
 				<item weight="2" text="Tuner setup" entryID="client_mode" requires="ClientModeEnabled"><screen module="ClientMode" screen="ClientModeScreen"/></item>
 				<item weight="3" entryID="tunermisc_setup"><setup id="tunermisc"/></item>
-				<item weight="20" text="Automatic scan" entryID="auto_scan" requires="ClientModeDisabled"><screen module="ScanSetup" screen="ScanSimple"/></item>
-				<item weight="30" text="Manual scan" entryID="manual_scan" requires="ClientModeDisabled"><screen module="ScanSetup"/></item>
+				<item weight="20" text="Automatic scan" entryID="auto_scan" conditional="nimmanager.somethingConnected()" requires="ClientModeDisabled"><screen module="ScanSetup" screen="ScanSimple"/></item>
+				<item weight="30" text="Manual scan" entryID="manual_scan" conditional="nimmanager.somethingConnected()" requires="ClientModeDisabled"><screen module="ScanSetup"/></item>
 				<item weight="100" text="Fallback configuration" entryID="fallback_mode" requires="ClientModeDisabled"><screen  module="FallbackTunerSetup" screen="FallbackTunerSetup"/></item>
 			</menu>
 			<!-- Menu / Setup / EPG -->
@@ -248,8 +248,6 @@ self.session.open(VIXBackupManager)
 	<!-- Menu / Plugins -->
 		<item weight="5" text="Plugins" entryID="plugin_selection"><screen module="PluginBrowser" screen="PluginBrowser"/></item>
 
-
-
 	<!-- Menu / Information -->
 		<menu weight="6" text="Information" entryID="info_screen">
 			<id val="information"/>
@@ -262,7 +260,7 @@ self.session.open(VIXBackupManager)
 		</menu>
 
 	<!-- Menu / VCR Scart -->
-		<item weight="7" text="VCR scart" entryID="scart_switch" configcondition="config.usage.show_vcr_scart" requires="ScartSwitch"><code>self.session.scart.VCRSbChanged(3)</code></item>
+		<item weight="7" text="VCR scart" entryID="scart_switch" conditional="config.usage.show_vcr_scart.value" requires="ScartSwitch"><code>self.session.scart.VCRSbChanged(3)</code></item>
 
 	<!-- Menu / Standby and Restart -->
 		<menu weight="99" text="Standby and Restart" entryID="standby_restart_list">
@@ -272,5 +270,6 @@ self.session.open(VIXBackupManager)
 			<item text="Shut down" requires="!DeepstandbySupport" entryID="deep_standby"><screen module="Standby" screen="TryQuitMainloop">1</screen></item>
 			<item text="Restart" entryID="restart"><screen module="Standby" screen="TryQuitMainloop">2</screen></item>
 			<item text="Restart Gui" entryID="restart_enigma"><screen module="Standby" screen="TryQuitMainloop">3</screen></item>
+			<item text="Multiboot" entryID="multiboot" requires="canMultiBoot"><screen module="Multiboot" screen="MultiBoot">1</screen></item>
 		</menu>
 </menu>
