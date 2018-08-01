@@ -205,11 +205,13 @@ class ServiceInfo(Screen):
 			videocodec = "-"
 			resolution = "-"
 			if self.info:
-				videocodec =  ("MPEG2", "MPEG4 H.264", "MPEG1", "MPEG4-VC", "VC1", "VC1-SM", "HEVC H.265", "N/A")[self.info.getInfo(iServiceInformation.sVideoType)]
+				from Components.Converter.PliExtraInfo import codec_data
+				videocodec = codec_data.get(self.info.getInfo(iServiceInformation.sVideoType), "N/A")
 				width = self.info.getInfo(iServiceInformation.sVideoWidth)
 				height = self.info.getInfo(iServiceInformation.sVideoHeight)
 				if width > 0 and height > 0:
-					resolution = "%dx%d - " % (width,height)
+					resolution = videocodec + " - "
+					resolution += "%dx%d - " % (width,height)
 					resolution += str((self.info.getInfo(iServiceInformation.sFrameRate) + 500) / 1000)
 					resolution += ("i", "p", "")[self.info.getInfo(iServiceInformation.sProgressive)]
 					aspect = self.getServiceInfoValue(iServiceInformation.sAspect)
@@ -217,22 +219,19 @@ class ServiceInfo(Screen):
 					resolution += " - "+aspect+""
 			if "%3a//" in refstr and reftype not in (1,257,4098,4114):
 				fillList = [(_("Service name"), name, TYPE_TEXT),
-					(_("Videocodec"), videocodec, TYPE_TEXT),
-					(_("Resolution & format"), resolution, TYPE_TEXT),
+					(_("Videocodec, size & format"), resolution, TYPE_TEXT),
 					(_("Service reference"), ":".join(refstr.split(":")[:9]), TYPE_TEXT),
 					(_("URL"), refstr.split(":")[10].replace("%3a", ":"), TYPE_TEXT)]
 			else:
 				if ":/" in refstr:
 					fillList = [(_("Service name"), name, TYPE_TEXT),
-						(_("Videocodec"), videocodec, TYPE_TEXT),
-						(_("Resolution & format"), resolution, TYPE_TEXT),
+						(_("Videocodec, size & format"), resolution, TYPE_TEXT),
 						(_("Service reference"), ":".join(refstr.split(":")[:9]), TYPE_TEXT),
 						(_("Filename"), refstr.split(":")[10], TYPE_TEXT)]
 				else:
 					fillList = [(_("Service name"), name, TYPE_TEXT),
 						(_("Provider"), self.getServiceInfoValue(iServiceInformation.sProvider), TYPE_TEXT),
-						(_("Videocodec"), videocodec, TYPE_TEXT),
-						(_("Resolution & format"), resolution, TYPE_TEXT)]
+						(_("Videocodec, size & format"), resolution, TYPE_TEXT)]
 					if "%3a//" in refstr:
 						fillList = fillList + [(_("Service reference"), ":".join(refstr.split(":")[:9]), TYPE_TEXT),
 							(_("URL"), refstr.split(":")[10].replace("%3a", ":"), TYPE_TEXT)]
@@ -292,13 +291,14 @@ class ServiceInfo(Screen):
 				tuner = (_("NIM & Type"), chr(ord('A') + frontendData["tuner_number"]) + " - " + frontendData["tuner_type"], TYPE_TEXT)
 			if frontendDataOrg["tuner_type"] == "DVB-S":
 				if frontendData.get("is_id", -1) > -1: # multistream
+					issy = lambda x: x > 0 and x or 0
 					return (tuner,
 						(_("System & Modulation"), "%s %s" % (frontendData["system"], frontendData["modulation"]), TYPE_TEXT),
 						(_("Orbital position"), "%s" % frontendData["orbital_position"], TYPE_TEXT),
 						(_("Frequency & Polarization"), "%s - %s" % (frontendData.get("frequency", 0), frontendData["polarization"]), TYPE_TEXT),
 						(_("Symbol rate & FEC"), "%s - %s" % (frontendData.get("symbol_rate", 0), frontendData["fec_inner"]), TYPE_TEXT),
-						(_("Input Stream ID"), "%s" % (frontendData.get("is_id", -1)), TYPE_TEXT),
-						(_("PLS Mode & PLS Code"), "%s - %s" % (frontendData["pls_mode"], frontendData["pls_code"]), TYPE_TEXT),
+						(_("Input Stream ID"), "%s" % (issy(frontendData.get("is_id", 0))), TYPE_TEXT),
+						(_("Gold PLS Code"), "%s" % (frontendData["pls_code"]), TYPE_TEXT),
 						(_("Inversion, Pilot & Roll-off"), "%s - %s - %s" % (frontendData["inversion"], frontendData.get("pilot", None), str(frontendData.get("rolloff", None))), TYPE_TEXT))
 				else: # not multistream
 					return (tuner,
@@ -317,10 +317,8 @@ class ServiceInfo(Screen):
 				return (tuner,
 					(_("Frequency & Channel"), "%s - Ch. %s" % (frontendData.get("frequency", 0), getChannelNumber(frontendData["frequency"], frontendData["tuner_number"])), TYPE_TEXT),
 					(_("Inversion & Bandwidth"), "%s - %s" % (frontendData["inversion"], frontendData["bandwidth"]), TYPE_TEXT),
-					(_("Code Rate LP-HP"), "%s - %s" % (frontendData["code_rate_lp"], frontendData["code_rate_hp"]), TYPE_TEXT),
-					(_("Guard interval"), frontendData["guard_interval"], TYPE_TEXT),
-					(_("Constellation"), frontendData["constellation"], TYPE_TEXT),
-					(_("Transmission mode"), frontendData["transmission_mode"], TYPE_TEXT),
+					(_("Code R. LP-HP & Guard Int"), "%s - %s - %s" % (frontendData["code_rate_lp"], frontendData["code_rate_hp"], frontendData["guard_interval"]), TYPE_TEXT),
+					(_("Constellation & FFT mode"), "%s - %s" % (frontendData["constellation"], frontendData["transmission_mode"]), TYPE_TEXT),
 					(_("Hierarchy info"), "%s" % frontendData["hierarchy_information"], TYPE_TEXT))
 			elif frontendDataOrg["tuner_type"] == "ATSC":
 				return (tuner,
