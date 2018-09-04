@@ -1,6 +1,7 @@
 from enigma import eDVBResourceManager, Misc_Options, eDVBCIInterfaces
 from Tools.Directories import fileExists, fileCheck, pathExists, fileHas
 from Tools.HardwareInfo import HardwareInfo
+from Components.About import getChipSetString
 
 from boxbranding import getMachineBuild, getBoxType, getBrandOEM
 
@@ -13,6 +14,14 @@ def getNumVideoDecoders():
 		idx += 1
 	return idx
 
+def countFrontpanelLEDs():
+	leds = 0
+	if fileExists("/proc/stb/fp/led_set_pattern"):
+		leds += 1
+	while fileExists("/proc/stb/fp/led%d_pattern" % leds):
+		leds += 1
+	return leds
+
 SystemInfo["CommonInterface"] = eDVBCIInterfaces.getInstance().getNumOfSlots()
 SystemInfo["CommonInterfaceCIDelay"] = fileCheck("/proc/stb/tsmux/rmx_delay")
 for cislot in range (0, SystemInfo["CommonInterface"]):
@@ -22,22 +31,13 @@ for cislot in range (0, SystemInfo["CommonInterface"]):
 SystemInfo["NumVideoDecoders"] = getNumVideoDecoders()
 SystemInfo["PIPAvailable"] = SystemInfo["NumVideoDecoders"] > 1
 SystemInfo["CanMeasureFrontendInputPower"] = eDVBResourceManager.getInstance().canMeasureFrontendInputPower()
-
-
-def countFrontpanelLEDs():
-	leds = 0
-	if fileExists("/proc/stb/fp/led_set_pattern"):
-		leds += 1
-	while fileExists("/proc/stb/fp/led%d_pattern" % leds):
-		leds += 1
-	return leds
-
 SystemInfo["12V_Output"] = Misc_Options.getInstance().detected_12V_output()
 SystemInfo["ZapMode"] = fileCheck("/proc/stb/video/zapmode") or fileCheck("/proc/stb/video/zapping_mode")
 SystemInfo["NumFrontpanelLEDs"] = countFrontpanelLEDs()
 SystemInfo["FrontpanelDisplay"] = fileExists("/dev/dbox/oled0") or fileExists("/dev/dbox/lcd0")
 SystemInfo["OledDisplay"] = fileExists("/dev/dbox/oled0")
 SystemInfo["LcdDisplay"] = fileExists("/dev/dbox/lcd0")
+SystemInfo["DisplayLED"] = getBoxType() not in ('vuplus')
 SystemInfo["LEDButtons"] = getBoxType() == 'vuultimo'
 SystemInfo["DeepstandbySupport"] = HardwareInfo().has_deepstandby()
 SystemInfo["Fan"] = fileCheck("/proc/stb/fp/fan")
@@ -89,3 +89,27 @@ SystemInfo["havecolorimetry"] = fileCheck("/proc/stb/video/hdmi_colorimetry")
 SystemInfo["havehdmicolordepth"] = fileCheck("/proc/stb/video/hdmi_colordepth")
 SystemInfo["Canedidchecking"] = fileCheck("/proc/stb/hdmi/bypass_edid_checking")
 SystemInfo["haveboxmode"] = fileExists("/proc/stb/info/boxmode")
+SystemInfo["HasScaler_sharpness"] = pathExists("/proc/stb/vmpeg/0/pep_scaler_sharpness")
+# Machines that do not have component video (red, green and blue RCA sockets).
+SystemInfo["no_YPbPr"] = getBoxType() in (
+		'vusolo2',
+		'vuzero4k',
+		'vusolo4k',
+		'vuuno4k',
+		'vuuno4kse',
+		'vuultimo4k',
+	)
+# Machines that have composite video (yellow RCA socket) but do not have Scart.
+SystemInfo["yellow_RCA_no_scart"] = getBoxType() not in ('vuplus')
+# Machines that have neither yellow RCA nor Scart sockets
+SystemInfo["no_yellow_RCA__no_scart"] = getBoxType() in (
+		'vuzero4k',
+		'vusolo4k',
+		'vuuno4k',
+		'vuuno4kse',
+		'vuultimo4k'
+	)
+SystemInfo["Chipstring"] = getChipSetString() in ('5272s', '7251', '7251s', '7252', '7252s', '7366', '7376', '7444s', '72604') and (
+	["720p", "1080p", "2160p", "1080i", "576p", "576i", "480p", "480i"], {"720p", "1080p", "2160p", "1080i"}) or getChipSetString() in (
+	'7241', '7356', '73565', '7358', '7362', '73625', '7424', '7425', '7552') and (
+	["720p", "1080p", "1080i", "576p", "576i", "480p", "480i"], {"720p", "1080p", "1080i"})

@@ -66,56 +66,30 @@ class AVSwitch:
 	modes["Scart"] = ["PAL", "NTSC", "Multi"]
 	# modes["DVI-PC"] = ["PC"]
 
-	if about.getChipSetString() in ('5272s', '7251', '7251s', '7252', '7252s', '7366', '7376', '7444s', '72604'):
-		modes["HDMI"] = ["720p", "1080p", "2160p", "2160p30", "1080i", "576p", "576i", "480p", "480i"]
-		widescreen_modes = {"720p", "1080p", "2160p", "2160p30", "1080i"}
-	elif about.getChipSetString() in ('7241', '7356', '73565', '7358', '7362', '73625', '7424', '7425', '7552'):
-		modes["HDMI"] = ["720p", "1080p", "1080i", "576p", "576i", "480p", "480i"]
-		widescreen_modes = {"720p", "1080p", "1080i"}
+	if SystemInfo["Chipstring"] :
+		modes["HDMI"] = SystemInfo["Chipstring"][0] 
+		widescreen_modes = SystemInfo["Chipstring"][1]
 	else:
 		modes["HDMI"] = ["720p", "1080i", "576p", "576i", "480p", "480i"]
 		widescreen_modes = {"720p", "1080i"}
 
 	modes["YPbPr"] = modes["HDMI"]
 
-	if getBrandOEM() == 'vuplus' and getBoxType() not in ('vuzero4k', 'vusolo4k', 'vuuno4k', 'vuuno4kse', 'vuultimo4k'):
+	if getBrandOEM() == 'vuplus' and getBoxType() not in ('vusolo4k', 'vuuno4k', 'vuuno4kse',  'vuzero4k', 'vuultimo4k'):
 		modes["Scart-YPbPr"] = modes["HDMI"]
 
 	# if "DVI-PC" in modes and not getModeList("DVI-PC"):
 	# 	print "[VideoHardware] remove DVI-PC because of not existing modes"
 	# 	del modes["DVI-PC"]
 
-	# Machines that do not have component video (red, green and blue RCA sockets).
-	no_YPbPr = (
-		'vusolo2',
-		'vuzero4k',
-		'vusolo4k',
-		'vuuno4k',
-		'vuuno4kse',
-		'vuultimo4k'
-	)
-
-	# Machines that have composite video (yellow RCA socket) but do not have Scart.
-	yellow_RCA_no_scart = (
-	)
-
-	# Machines that have neither yellow RCA nor Scart sockets
-	no_yellow_RCA__no_scart = (
-		'vuzero4k',
-		'vusolo4k',
-		'vuuno4k',
-		'vuuno4kse',
-		'vuultimo4k'
-	)
-
-	if "YPbPr" in modes and getBoxType() in no_YPbPr:
+	if "YPbPr" in modes and SystemInfo["no_YPbPr"]:
 		del modes["YPbPr"]
 
-	if "Scart" in modes and getBoxType() in yellow_RCA_no_scart:
+	if "Scart" in modes and SystemInfo["yellow_RCA_no_scart"]:
 		modes["RCA"] = modes["Scart"]
 		del modes["Scart"]
 
-	if "Scart" in modes and getBoxType() in no_yellow_RCA__no_scart:
+	if "Scart" in modes and SystemInfo["no_yellow_RCA__no_scart"]:
 		del modes["Scart"]
 
 	def __init__(self):
@@ -652,7 +626,7 @@ def InitAVSwitch():
 	else:
 		config.av.transcodeaac = ConfigNothing()
 
-	if os.path.exists("/proc/stb/vmpeg/0/pep_scaler_sharpness"):
+	if SystemInfo["HasScaler_sharpness"]:
 		def setScaler_sharpness(config):
 			myval = int(config.value)
 			try:
