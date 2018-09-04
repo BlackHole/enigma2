@@ -100,7 +100,7 @@ SystemInfo["no_YPbPr"] = getBoxType() in (
 		'vuultimo4k',
 	)
 # Machines that have composite video (yellow RCA socket) but do not have Scart.
-SystemInfo["yellow_RCA_no_scart"] = getBoxType() not in ('vuplus')
+SystemInfo["yellow_RCA_no_scart"] = getBoxType() in ()
 # Machines that have neither yellow RCA nor Scart sockets
 SystemInfo["no_yellow_RCA__no_scart"] = getBoxType() in (
 		'vuzero4k',
