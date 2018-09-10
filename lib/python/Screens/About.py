@@ -64,8 +64,8 @@ class About(Screen):
 									})
 
 	def populate(self):
-		self["lab1"] = StaticText(_("Open Black Hole Image"))
-		self["lab2"] = StaticText(_("By Bh Team"))
+		self["lab1"] = StaticText(_("Open Black Hole"))
+		self["lab2"] = StaticText(_("From the BH Team"))
 		model = None
 		AboutText = ""
 		self["lab3"] = StaticText(_("Support at") + " www.vuplus-community.net")
@@ -84,12 +84,12 @@ class About(Screen):
 		if getImageType() != 'release':
 			imageSubBuild = ".%s" % getImageDevBuild()
 		AboutText += _("Image:\t%s.%s%s (%s)\n") % (getImageVersion(), getImageBuild(), imageSubBuild, getImageType().title())
-		if SystemInfo["canMultiBoot"]:
-			image = GetCurrentImage()
-			bootmode = ""
-			if SystemInfo["canMode12"]:
-				bootmode = "bootmode = %s" %GetCurrentImageMode()
-			AboutText += _("Image Slot:\t%s") % "STARTUP_" + str(image) + " " + bootmode + "\n"
+#		if SystemInfo["canMultiBoot"]:
+#			image = GetCurrentImage()
+#			bootmode = ""
+#			if SystemInfo["canMode12"]:
+#				bootmode = "bootmode = %s" %GetCurrentImageMode()
+#			AboutText += _("Image Slot:\t%s") % "STARTUP_" + str(image) + " " + bootmode + "\n"
 		skinWidth = getDesktop(0).size().width()
 		skinHeight = getDesktop(0).size().height()
 
