@@ -37,7 +37,7 @@ SystemInfo["NumFrontpanelLEDs"] = countFrontpanelLEDs()
 SystemInfo["FrontpanelDisplay"] = fileExists("/dev/dbox/oled0") or fileExists("/dev/dbox/lcd0")
 SystemInfo["OledDisplay"] = fileExists("/dev/dbox/oled0")
 SystemInfo["LcdDisplay"] = fileExists("/dev/dbox/lcd0")
-#SystemInfo["DisplayLED"] = getBoxType() in ()
+SystemInfo["DisplayLED"] = False
 SystemInfo["LEDButtons"] = getBoxType() == 'vuultimo'
 SystemInfo["DeepstandbySupport"] = HardwareInfo().has_deepstandby()
 SystemInfo["Fan"] = fileCheck("/proc/stb/fp/fan")
@@ -71,10 +71,10 @@ SystemInfo["CanNotDoSimultaneousTranscodeAndPIP"] = getBoxType() in ('vusolo4k')
 SystemInfo["hasXcoreVFD"] = fileCheck("/sys/module/brcmstb_%s/parameters/pt6302_cgram" % getBoxType())
 SystemInfo["HasHDMIin"] = getMachineBuild() in ('vuuno4kse', 'vuultimo4k')
 SystemInfo["HasHDMI-CEC"] = fileExists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HdmiCEC/plugin.pyo")
-SystemInfo["HasInfoButton"] = getBrandOEM() not in ('vuplus')
+SystemInfo["HasInfoButton"] = False
 SystemInfo["Has24hz"] = fileCheck("/proc/stb/video/videomode_24hz")
-#SystemInfo["canMultiBoot"] = getMachineBuild() in ('hd51') and (1, 4) or getBoxType() in ('gbue4k', 'gbquad4k') and (3, 3)
-#SystemInfo["canMode12"] = getMachineBuild() in ('hd51') and ('440M@328M brcm_cma=192M@768M', '520M@248M brcm_cma=200M@768M')
+SystemInfo["canMultiBoot"] = False
+SystemInfo["canMode12"] = False
 SystemInfo["supportPcmMultichannel"] = fileCheck("/proc/stb/audio/multichannel_pcm")
 SystemInfo["CanAACTranscode"] = fileExists("/proc/stb/audio/aac_transcode_choices") and fileCheck("/proc/stb/audio/aac_transcode")
 SystemInfo["CanDownmixAC3"] = fileHas("/proc/stb/audio/ac3_choices", "downmix")
@@ -100,7 +100,7 @@ SystemInfo["no_YPbPr"] = getBoxType() in (
 		'vuultimo4k',
 	)
 # Machines that have composite video (yellow RCA socket) but do not have Scart.
-SystemInfo["yellow_RCA_no_scart"] = getBoxType() in ()
+SystemInfo["yellow_RCA_no_scart"] = False
 # Machines that have neither yellow RCA nor Scart sockets
 SystemInfo["no_yellow_RCA__no_scart"] = getBoxType() in (
 		'vuzero4k',
