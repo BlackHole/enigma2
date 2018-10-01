@@ -31,7 +31,7 @@ projects = [
 	("https://api.github.com/repos/BlackHole/enigma2-obh10/commits?sha=%s" % E2Branches[getImageType()], "Enigma2"),
 	("https://api.github.com/repos/BlackHole/obh-core/commits", "OBH Core"),
 	("https://api.github.com/repos/BlackHole/skins/commits", "OBH Skins"),
-	("https://api.github.com/repos/oe-alliance/oe-alliance-plugins/commits?sha=2.3", "OE-A Plugins"),
+	("https://api.github.com/repos/oe-alliance/oe-alliance-plugins/commits?sha=master", "OE-A Plugins"),
 	("https://api.github.com/repos/oe-alliance/AutoBouquetsMaker/commits", "AutoBouquetsMaker"),
 	("https://api.github.com/repos/oe-alliance/branding-module/commits", "Branding Module"),
 ]
