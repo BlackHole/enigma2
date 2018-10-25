@@ -323,7 +323,7 @@ class BhEpgPanel(Screen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		
-		flist = [("EPGSettings"),("EPGImport"),("EPGImportFilter"),("CrossEPG"),("EPGSearch")]
+		flist = [("EPGSettings"),("CrossEPG"),("EPGImport"),("EPGSearch")]
 		self["list"] = List(flist)
 
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
@@ -346,9 +346,6 @@ class BhEpgPanel(Screen):
 			elif sel == "EPGImport":
 				from Plugins.Extensions.EPGImport.plugin import main as xmltv
 				xmltv(self.session)
-			elif sel == "EPGImportFilter":
-				from Plugins.Extensions.EPGImportFilter.plugin import main as epgimportfilter
-				epgimportfilter(self.session)
 			elif sel == "EPGSearch":
 				#from Plugins.Extensions.EPGSearch.plugin import main as epgsearch
 				#epgsearch(self.session)
