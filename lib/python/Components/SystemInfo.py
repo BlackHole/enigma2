@@ -3,7 +3,7 @@ from Tools.Directories import fileExists, fileCheck, pathExists, fileHas
 from Tools.HardwareInfo import HardwareInfo
 from Components.About import getChipSetString
 
-from boxbranding import getMachineBuild, getBoxType, getBrandOEM, getDisplayType
+from boxbranding import getMachineBuild, getBoxType, getBrandOEM, getDisplayType, getMachineMtdRoot
 
 SystemInfo = { }
 
@@ -80,6 +80,7 @@ SystemInfo["canMultiBoot"] = False
 SystemInfo["HasHiSi"] = False
 SystemInfo["canMode12"] = False
 SystemInfo["HasMMC"] = fileHas("/proc/cmdline", "root=/dev/mmcblk") or SystemInfo["canMultiBoot"] and fileHas("/proc/cmdline", "root=/dev/sda")
+SystemInfo["HasSDmmc"] = SystemInfo["canMultiBoot"] and "sd" in SystemInfo["canMultiBoot"][2] and "mmcblk" in getMachineMtdRoot() 
 SystemInfo["supportPcmMultichannel"] = fileCheck("/proc/stb/audio/multichannel_pcm")
 SystemInfo["CanAACTranscode"] = fileExists("/proc/stb/audio/aac_transcode_choices") and fileCheck("/proc/stb/audio/aac_transcode")
 SystemInfo["CanDownmixAC3"] = fileHas("/proc/stb/audio/ac3_choices", "downmix")
