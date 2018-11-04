@@ -18,8 +18,10 @@ from boxbranding import getMachineBrand, getMachineName, getImageType
 class CronTimers(Screen):
 	def __init__(self, session, menu_path=""):
 		Screen.__init__(self, session)
-		if not path.exists('/usr/scripts'):
-			mkdir('/usr/scripts', 0755)
+		if path.exists('/usr/scripts'):
+			rename('/usr/scripts', '/usr/script')
+		if not path.exists('/usr/script'):
+			mkdir('/usr/script', 0755)
 		screentitle = _("Cron manager")
 		menu_path += screentitle
 		if config.usage.show_menupath.value == 'large':
