@@ -322,7 +322,8 @@ class InfoBarTimeshift:
 		return ts and ts.isTimeshiftEnabled()
 
 	def startTimeshift(self):
-		if self.session.nav.getCurrentlyPlayingServiceReference() and 'http' in self.session.nav.getCurrentlyPlayingServiceReference().toString():
+		#if self.session.nav.getCurrentlyPlayingServiceReference() and 'http' in self.session.nav.getCurrentlyPlayingServiceReference().toString():
+                if False:
 			if config.timeshift.stream_warning.value:
 				self.session.open(MessageBox, _("Timeshift on a stream is not supported!"), MessageBox.TYPE_ERROR, timeout=5)
 			print '[Timeshift] unable to activate, due being on a stream.'
@@ -477,7 +478,8 @@ class InfoBarTimeshift:
 
 	def autostartPermanentTimeshift(self):
 		self["TimeshiftActions"].setEnabled(True)
-		if self.session.nav.getCurrentlyPlayingServiceReference() and 'http' in self.session.nav.getCurrentlyPlayingServiceReference().toString() and int(config.timeshift.startdelay.value):
+		#if self.session.nav.getCurrentlyPlayingServiceReference() and 'http' in self.session.nav.getCurrentlyPlayingServiceReference().toString() and int(config.timeshift.startdelay.value):
+                if False:
 			if config.timeshift.stream_warning.value:
 				self.session.open(MessageBox, _("Timeshift on a stream is not supported!"), MessageBox.TYPE_ERROR, timeout=5)
 			print '[Timeshift] unable to activate, due being on a stream.'
