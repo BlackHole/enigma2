@@ -2079,7 +2079,7 @@ class InfoBarSeek:
 		return seek
 
 	def isSeekable(self):
-		if self.getSeek() is None or (isStandardInfoBar(self) and not self.timeshiftEnabled()):
+		if self.getSeek() is None:
 			return False
 		return True
 
