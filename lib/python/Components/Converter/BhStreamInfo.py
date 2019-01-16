@@ -52,9 +52,13 @@ class BhStreamInfo(Poll, Converter, object):
 		playref = NavigationInstance.instance.getCurrentlyPlayingServiceReference()
 		if playref:
 			refstr = playref.toString()
-			if '%3a/' in refstr or ':/' in refstr:
+			if '@' in refstr:
 				strurl = refstr.split(':')
-				streamurl = strurl[10].replace('%3a', ':').replace('http://', '').split("/stream")[0].split("/play")[0].split("/live")[0].split("/movie")[0].split("/1:0:")[0]
+				streamurl = strurl[10].replace('%3a', ':').replace('http://', '').split("/1:0:")[0].split("@")[1].split("/")[0]
+				return streamurl
+			elif '%3a' in refstr or ':' in refstr:
+				strurl = refstr.split(':')
+				streamurl = strurl[10].replace('%3a', ':').replace('http://', '').split("/")[0].split("/1:0:")[0]
 				return streamurl
 			else:
 				return ''
