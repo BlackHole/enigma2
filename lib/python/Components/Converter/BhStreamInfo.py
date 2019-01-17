@@ -1,4 +1,3 @@
-# Embedded file name: /usr/lib/enigma2/python/Components/Converter/BhStreamInfo.py
 from Components.Converter.Converter import Converter
 from Components.Element import cached
 from Poll import Poll
@@ -8,7 +7,6 @@ from enigma import iServiceInformation, iPlayableService
 from string import upper
 from Tools.Transponder import ConvertToHumanReadable
 from os import rename, system
-from Components.config import config
 
 class BhStreamInfo(Poll, Converter, object):
 	DUMMY = 0
@@ -35,13 +33,13 @@ class BhStreamInfo(Poll, Converter, object):
 			strtype = refstr.replace('%3a', ':')
 			if '0.0.0.0:' in strtype and strtype.startswith('1:0:') or '127.0.0.1:' in strtype and strtype.startswith('1:0:') or 'localhost:' in strtype and strtype.startswith('1:0:'):
 				return 'Internal Ts Relay'
-			elif '%3a/' in refstr and strtype.startswith('4097:0:'):
+			elif '%3a' in refstr and strtype.startswith('4097:0:'):
 				return 'Non Ts Stream'
-			elif '%3a/' in refstr and strtype.startswith('1:0:'):
+			elif '%3a' in refstr and strtype.startswith('1:0:'):
 				return 'GStreamer'
-			elif '%3a/' in refstr and strtype.startswith('5001:0:'):
+			elif '%3a' in refstr and strtype.startswith('5001:0:'):
 				return 'GstPlayer'
-			elif '%3a/' in refstr and strtype.startswith('5002:0:'):
+			elif '%3a' in refstr and strtype.startswith('5002:0:'):
 				return 'ExtePlayer3'
 			elif strtype.startswith('1:134:'):
 				return 'Alternative'
@@ -49,16 +47,12 @@ class BhStreamInfo(Poll, Converter, object):
 				return ''
 
 	def streamurl(self):
-		playref = NavigationInstance.instance.getCurrentlyPlayingServiceReference()
+		playref = NavigationInstance.instance.getCurrentlyPlayingServiceReference()		
 		if playref:
 			refstr = playref.toString()
-			if '@' in refstr:
+			if '%3a' in refstr:
 				strurl = refstr.split(':')
-				streamurl = strurl[10].replace('%3a', ':').replace('http://', '').split("/1:0:")[0].split("@")[1].split("/")[0]
-				return streamurl
-			elif '%3a' in refstr or ':' in refstr:
-				strurl = refstr.split(':')
-				streamurl = strurl[10].replace('%3a', ':').replace('http://', '').split("/")[0].split("/1:0:")[0]
+				streamurl = strurl[10].replace('%3a', ':').replace('http://', '').replace('https://', '').split('/1:0:')[0].split('//')[0].split('/')[0].split('@')[-1]
 				return streamurl
 			else:
 				return ''
@@ -77,9 +71,8 @@ class BhStreamInfo(Poll, Converter, object):
 				tpinfo = ConvertToHumanReadable(tp)
 		if self.type == self.DUMMY:
 			refstr = str(self.reference())
-			if '%3a/' in refstr or ':/' in refstr:
+			if '%3a' in refstrr:
 				return self.streamurl()
-
 				return ''
 		else:
 			if self.type == self.STREAMURL:
