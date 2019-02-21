@@ -47,12 +47,12 @@ class HardwareInfo:
 		return HardwareInfo.device_version
 
 	def has_hdmi(self):
-		return getBrandOEM() in ('xtrend', 'gigablue', 'dags', 'ixuss', 'odin', 'vuplus', 'ini', 'ebox', 'ceryon') or (getBoxType() in ('dm7020hd', 'dm800se', 'dm500hd', 'dm8000') and HardwareInfo.device_version is not None)
+		return getBrandOEM() in ('vuplus') and HardwareInfo.device_version is not None
 
 	def has_deepstandby(self):
 		return getBoxType() != 'dm800'
 
 	def is_nextgen(self):
-		if about.getCPUString() in ('BCM7346B2', 'BCM7425B2', 'BCM7429B0', 'ARMv7'):
-			return True
-		return False
+		if about.getCpuCoresInt() < 2 or about.getCPUSpeedMHzInt() < 750:
+			return False
+		return True
