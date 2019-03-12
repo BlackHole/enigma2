@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: enigma2 pt translation for Open BlackHole 4.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-24 18:23+0100\n"
-"PO-Revision-Date: 2018-10-30 22:40+0000\n"
+"PO-Revision-Date: 2019-03-12 20:56+0000\n"
 "Last-Translator: nunigaia\n"
 "Language-Team: BH Team\n"
 "Language: pt_PT\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.2.1\n"
 
 msgid ""
 "\n"
@@ -4525,6 +4525,9 @@ msgstr "Gravação e Reprodução"
 msgid "Recording and playback settings"
 msgstr "Definições gravação/reprodução"
 
+msgid "Recording and playback"
+msgstr "Gravação e reprodução"
+
 msgid "Recording in progress"
 msgstr "Gravação em progresso"
 
@@ -4696,7 +4699,7 @@ msgstr "Resolução"
 msgid "Resolution & format"
 msgstr "Resolução & formato"
 
-msgid "Restart GUI"
+msgid "Restart Enigma2"
 msgstr "Reiniciar Enigma2"
 
 msgid "Restart GUI now?"
@@ -6849,6 +6852,15 @@ msgstr "Ver Vídeo CD's..."
 
 msgid "Virtuosso Image Xtreme"
 msgstr "OpenBH Image"
+
+msgid "Enable VOD skip buttons"
+msgstr "Ativar botões Skip VOD"
+
+msgid "Task warning on shutdown"
+msgstr "Aviso de tarefa ao desligar"
+
+msgid "On shutdown/restart warn about any pending jobs being carried out in the background."
+msgstr "Ao desligar/reiniciar, avisar sobre quaisquer tarefas pendentes que estão em execução em segundo plano."
 
 msgid "Voltage mode"
 msgstr "Modo de tensão"
@@ -10524,8 +10536,8 @@ msgstr "Esta opção permite que escolha o que pressionar a tecla salta no écra
 msgid "HDMI Colorspace"
 msgstr "Espaço de cor HDMI"
 
-msgid "This option allows you to change the Colorspace from Auto ro Rgb"
-msgstr "Esta opção permite-lhe mudar o Espaço de cor de Auto para Rgb"
+msgid "Change the Colorspace from Auto to RGB"
+msgstr "Mudar o Espaço de cor de Auto para RGB"
 
 msgid "Auto Volume Level"
 msgstr "Nível de volume automático"
@@ -11663,8 +11675,8 @@ msgstr "Esta opção permite usar teclas numéricas de atalhos nos menus."
 msgid "HDMI Colordepth"
 msgstr "HDMI Profundidade de Cor"
 
-msgid "This option allows you to change the Colordepth for UHD"
-msgstr "Esta opção permite que altere a Profundidade de Cor em UHD"
+msgid "Change the Colordepth for UHD"
+msgstr "Altera a Profundidade de Cor em UHD"
 
 msgid "AC3 downmix"
 msgstr "Mistura áudio AC3"
@@ -11713,6 +11725,16 @@ msgstr "Definir Password"
 
 msgid "Enter a new password"
 msgstr "Entre a nova Password"
+
+msgid "New password"
+msgstr "Nova password"
+
+msgid ""
+"Setting a password is strongly advised if your STB is open to the internet.\n"
+"This is the case if you have in your router a port forwarded to the STB."
+msgstr ""
+"Definir uma password é altamente recomendado se o receptor estiver ligado à Internet.\n"
+"É o caso se tiver definida uma porta reencaminhada ao seu receptor."
 
 msgid "Random Password"
 msgstr "Password aleatória"
@@ -11999,6 +12021,12 @@ msgstr "Porta de transmissão do recetor alternativo"
 msgid "Enable usage of tuners from another Enigma2 receiver on the local network. Remote tuners will be used when tuners are not available on this receiver. (No free tuner or service type is not available.)"
 msgstr "Permitir o uso de Tuners de outro recetor Enigma2 na rede local. Os Tuners remotos serão usados quando não existirem tuners disponíveis neste recetor. (Sem Tuner livre ou tipo de serviço não disponível.)"
 
+msgid "Network peers"
+msgstr "Peers de Rede"
+
+msgid "Select a receiver to use for fallback tuners. If the host receiver is not listed, manually enter the URL or IP address"
+msgstr "Selecione um receptor a ser usado como tuner de rede. Se o receptor do host não estiver listado, insira manualmente o URL ou o endereço IP"
+
 msgid "'Network peer' automatically detects other Enigma2 receivers on the local network. You can also manually enter the URL or IP address."
 msgstr "'Peer de rede' deteta automaticamente outros recetores Enigma2 na rede local. Também pode inserir manualmente o URL ou endereço IP."
 
@@ -12254,3 +12282,6 @@ msgstr "Permite agendar os seus backups de imagem."
 
 msgid "Allows you to schedule your backups."
 msgstr "Permite agendar os seus backups."
+
+msgid "Testscreens"
+msgstr "Testar ecrãs"
