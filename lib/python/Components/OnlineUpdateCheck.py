@@ -86,6 +86,9 @@ class FeedsStatusCheck:
 						trafficLight = -2
 				else:
 					trafficLight = 'unknown'
+#BH
+				trafficLight = 'stable'
+
 				if trafficLight == 'stable':
 					status = '0'
 				config.softwareupdate.updateisunstable.setValue(status)
