@@ -77,6 +77,7 @@ SystemInfo["Has24hz"] = fileCheck("/proc/stb/video/videomode_24hz")
 SystemInfo["HasRootSubdir"] = False
 SystemInfo["RecoveryMode"] = False
 SystemInfo["canMultiBoot"] = False
+SystemInfo["canBackupEMC"] = False
 SystemInfo["HasHiSi"] = False
 SystemInfo["canMode12"] = False
 SystemInfo["HasMMC"] = False
