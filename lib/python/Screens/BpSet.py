@@ -256,8 +256,8 @@ class BhNetBrowser(Screen):
 		<widget source="list" render="Listbox" position="10,10" size="780,460" scrollbarMode="showOnDemand" >
 			<convert type="StringList" />
 		</widget>
-    		<ePixmap pixmap="skin_default/buttons/red.png" position="200,480" size="140,40" alphatest="on" />
-		<ePixmap pixmap="skin_default/buttons/green.png" position="440,480" size="140,40" alphatest="on" />
+    		<ePixmap pixmap="buttons/red.png" position="200,480" size="140,40" alphatest="on" />
+		<ePixmap pixmap="buttons/green.png" position="440,480" size="140,40" alphatest="on" />
 		<widget name="key_red" position="200,480" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 		<widget name="key_green" position="440,480" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
     	</screen>"""
@@ -301,8 +301,8 @@ class BhMinidlna(Screen):
 		<widget name="lab2" position="20,300" size="300,30" font="Regular;20" valign="center" transparent="1"/>
 		<widget name="labstop" position="320,300" size="150,30" font="Regular;20" valign="center" halign="center" backgroundColor="red"/>
 		<widget name="labrun" position="320,300" size="150,30" zPosition="1" font="Regular;20" valign="center" halign="center" backgroundColor="green"/>
-		<ePixmap pixmap="skin_default/buttons/red.png" position="125,360" size="150,30" alphatest="on"/>
-		<ePixmap pixmap="skin_default/buttons/green.png" position="325,360" size="150,30" alphatest="on"/>
+		<ePixmap pixmap="buttons/red.png" position="125,360" size="150,30" alphatest="on"/>
+		<ePixmap pixmap="buttons/green.png" position="325,360" size="150,30" alphatest="on"/>
 		<widget name="key_red" position="125,362" zPosition="1" size="150,25" font="Regular;20" halign="center" backgroundColor="transpBlack" transparent="1"/>
 		<widget name="key_green" position="325,362" zPosition="1" size="150,25" font="Regular;20" halign="center" backgroundColor="transpBlack" transparent="1"/>
 	</screen>"""
@@ -378,8 +378,8 @@ class BhMinidlna(Screen):
 class DeliteInadyn(Screen):
 	skin = """
 	<screen position="120,70" size="480,410" title="Black Hole E2 Inadyn Manager">
-		<widget name="linactive" position="10,10" zPosition="1" pixmap="skin_default/icons/ninactive.png" size="32,32"  alphatest="on" />
-		<widget name="lactive" position="10,10" zPosition="2" pixmap="skin_default/icons/nactive.png" size="32,32"  alphatest="on" />
+		<widget name="linactive" position="10,10" zPosition="1" pixmap="icons/ninactive.png" size="32,32"  alphatest="on" />
+		<widget name="lactive" position="10,10" zPosition="2" pixmap="icons/nactive.png" size="32,32"  alphatest="on" />
 		<widget name="lab1" position="50,10" size="350,30" font="Regular;20" valign="center"  transparent="1"/>
 		<widget name="lab2" position="10,50" size="230,30" font="Regular;20" valign="center" transparent="1"/>
 		<widget name="labtime" position="240,50" size="100,30" font="Regular;20" valign="center" backgroundColor="#4D5375"/>
@@ -389,16 +389,16 @@ class DeliteInadyn(Screen):
 		<widget name="labpass" position="160,150" size="310,30" font="Regular;20" valign="center" backgroundColor="#4D5375"/>
 		<widget name="lab5" position="10,200" size="150,30" font="Regular;20" valign="center" transparent="1"/>
 		<widget name="labalias" position="160,200" size="310,30" font="Regular;20" valign="center" backgroundColor="#4D5375"/>
-		<widget name="sinactive" position="10,250" zPosition="1" pixmap="skin_default/icons/ninactive.png" size="32,32"  alphatest="on" />
-		<widget name="sactive" position="10,250" zPosition="2" pixmap="skin_default/icons/nactive.png" size="32,32"  alphatest="on" />
+		<widget name="sinactive" position="10,250" zPosition="1" pixmap="icons/ninactive.png" size="32,32"  alphatest="on" />
+		<widget name="sactive" position="10,250" zPosition="2" pixmap="icons/nactive.png" size="32,32"  alphatest="on" />
 		<widget name="lab6" position="50,250" size="100,30" font="Regular;20" valign="center" transparent="1"/>
 		<widget name="labsys" position="160,250" size="310,30" font="Regular;20" valign="center" backgroundColor="#4D5375"/>
 		<widget name="lab7" position="10,300" size="150,30" font="Regular;20" valign="center" transparent="1"/>
 		<widget name="labstop" position="160,300" size="100,30" font="Regular;20" valign="center"  halign="center" backgroundColor="red"/>
 		<widget name="labrun" position="160,300" size="100,30" zPosition="1" font="Regular;20" valign="center"  halign="center" backgroundColor="green"/>
-		<ePixmap pixmap="skin_default/buttons/green.png" position="20,360" size="140,40" alphatest="on" />
-		<ePixmap pixmap="skin_default/buttons/yellow.png" position="170,360" size="140,40" alphatest="on" />
-		<ePixmap pixmap="skin_default/buttons/blue.png" position="320,360" size="140,40" alphatest="on" />
+		<ePixmap pixmap="buttons/green.png" position="20,360" size="140,40" alphatest="on" />
+		<ePixmap pixmap="buttons/yellow.png" position="170,360" size="140,40" alphatest="on" />
+		<ePixmap pixmap="buttons/blue.png" position="320,360" size="140,40" alphatest="on" />
 		<widget name="key_green" position="20,360" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 		<widget name="key_yellow" position="170,360" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
 		<widget name="key_blue" position="320,360" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
@@ -530,7 +530,7 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 	skin = """
 	<screen position="140,120" size="440,300" title="Black Hole E2 Inadyn Setup">
 		<widget name="config" position="10,10" size="420,240" scrollbarMode="showOnDemand" />
-		<ePixmap pixmap="skin_default/buttons/yellow.png" position="150,250" size="140,40" alphatest="on" />
+		<ePixmap pixmap="buttons/yellow.png" position="150,250" size="140,40" alphatest="on" />
 		<widget name="key_yellow" position="150,250" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 	</screen>"""
 	
@@ -763,10 +763,10 @@ class DeliteOpenvpn(Screen):
 		<widget name="lab3" position="20,160" size="150,30" font="Regular;20" valign="center" transparent="1"/>
 		<widget name="labstop" position="170,160" size="100,30" font="Regular;20" valign="center"  halign="center" backgroundColor="red"/>
 		<widget name="labrun" position="170,160" size="100,30" zPosition="1" font="Regular;20" valign="center"  halign="center" backgroundColor="green"/>
-		<ePixmap pixmap="skin_default/buttons/red.png" position="0,260" size="140,40" alphatest="on" />
-		<ePixmap pixmap="skin_default/buttons/green.png" position="140,260" size="140,40" alphatest="on" />
-		<ePixmap pixmap="skin_default/buttons/yellow.png" position="280,260" size="140,40" alphatest="on" />
-		<ePixmap pixmap="skin_default/buttons/blue.png" position="420,260" size="140,40" alphatest="on" />
+		<ePixmap pixmap="buttons/red.png" position="0,260" size="140,40" alphatest="on" />
+		<ePixmap pixmap="buttons/green.png" position="140,260" size="140,40" alphatest="on" />
+		<ePixmap pixmap="buttons/yellow.png" position="280,260" size="140,40" alphatest="on" />
+		<ePixmap pixmap="buttons/blue.png" position="420,260" size="140,40" alphatest="on" />
 		<widget name="key_red" position="0,260" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 		<widget name="key_green" position="140,260" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
 		<widget name="key_yellow" position="280,260" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
@@ -910,7 +910,7 @@ class BhBackupSettings(Screen):
 	skin = """
 	<screen position="center,center,100" size="800,300" title="Backup your settings">
 		<widget name="infotext" position="10,10" size="780,240" font="Regular;26" />
-		<ePixmap pixmap="skin_default/buttons/red.png" position="330,250" size="140,40" alphatest="on" />
+		<ePixmap pixmap="buttons/red.png" position="330,250" size="140,40" alphatest="on" />
 		<widget name="key_red" position="330,250" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 	</screen>"""
 	
@@ -937,8 +937,8 @@ class BhSpeedUp(Screen, ConfigListScreen):
 	<screen position="center,center" size="902,570" title="Black Hole Speed Up">
 		<widget name="lab1" position="10,10" size="882,60" font="Regular;20" valign="top" transparent="1"/>
 		<widget name="config" position="30,70" size="840,450" scrollbarMode="showOnDemand"/>
-		<ePixmap pixmap="skin_default/buttons/red.png" position="200,530" size="140,40" alphatest="on"/>
-		<ePixmap pixmap="skin_default/buttons/green.png" position="550,530" size="140,40" alphatest="on"/>
+		<ePixmap pixmap="buttons/red.png" position="200,530" size="140,40" alphatest="on"/>
+		<ePixmap pixmap="buttons/green.png" position="550,530" size="140,40" alphatest="on"/>
 		<widget name="key_red" position="200,530" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1"/>
 		<widget name="key_green" position="550,530" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1"/>
 	</screen>"""

@@ -454,9 +454,9 @@ class Nab_ShowDownFile(Screen):
 	skin = """
 	<screen position="80,95" size="560,405" title="Black Hole E2 Package Details">
 		<widget name="infotext" position="10,15" size="540,315" font="Regular;20" />
-		<ePixmap pixmap="skin_default/buttons/green.png" position="210,365" size="140,40" alphatest="on" />
+		<ePixmap pixmap="buttons/green.png" position="210,365" size="140,40" alphatest="on" />
 		<widget name="key_green" position="210,365" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
-		<ePixmap pixmap="skin_default/buttons/yellow.png" position="400,365" size="140,40" alphatest="on" />
+		<ePixmap pixmap="buttons/yellow.png" position="400,365" size="140,40" alphatest="on" />
 		<widget name="key_yellow" position="400,365" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
 	</screen>"""
 	
@@ -860,9 +860,9 @@ class addonsParentalConfig(Screen, ConfigListScreen):
 	skin = """
 	<screen position="center,center" size="700,340" title="Addons parental control setup">
 		<widget name="config" position="10,100" size="680,110" scrollbarMode="showOnDemand" transparent="1" />
-		<ePixmap pixmap="skin_default/buttons/red.png" position="140,270" size="140,40" alphatest="on" />
+		<ePixmap pixmap="buttons/red.png" position="140,270" size="140,40" alphatest="on" />
 		<widget name="key_red" position="140,270" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="red" transparent="1" />
-		<ePixmap position="420,270" size="140,40" pixmap="skin_default/buttons/green.png" alphatest="on" zPosition="1" />
+		<ePixmap position="420,270" size="140,40" pixmap="buttons/green.png" alphatest="on" zPosition="1" />
 		<widget name="key_green" position="420,270" zPosition="2" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="green" transparent="1" />
 	</screen>"""
 	
@@ -907,7 +907,7 @@ class addonsParentalConfig(Screen, ConfigListScreen):
 class Nab_ConnectPop(Screen):
 	skin = """
 	<screen position="390,100" size="484,220" title="Black Hole E2" flags="wfNoBorder">
-		<widget name="connect" position="0,0" size="484,250" zPosition="-1" pixmaps="skin_default/connection_1.png,skin_default/connection_2.png,skin_default/connection_3.png,skin_default/connection_4.png,skin_default/connection_5.png" transparent="1" />
+		<widget name="connect" position="0,0" size="484,250" zPosition="-1" pixmaps="connection_1.png,skin_default/connection_2.png,skin_default/connection_3.png,skin_default/connection_4.png,skin_default/connection_5.png" transparent="1" />
 		<widget name="lab1" position="10,180" halign="center" size="460,60" zPosition="1" font="Regular;20" valign="top" transparent="1" />
 	</screen>"""
 	
