@@ -3,6 +3,12 @@
 #
 
 LANG_TEXT = {
+"de_DE": {
+	 "T1": "Für Sprachauswahl Hoch/Runter-Tasten nutzen. Danach OK drücken.",
+	 "T2": "Sprachauswahl",
+	 "T3": "Abbrechen",
+	 "T4": "Speichern",
+},
 "ar_AE": {
 	 "T1": "من فضلك أستخدم ذر السهم العلوى أو السفلى لإختيار اللغه. ثم أضغط موافق .",
 	 "T2": "إختيار اللغـه",
@@ -14,6 +20,12 @@ LANG_TEXT = {
 	 "T2": "Избор Език",
 	 "T3": "Отказ",
 	 "T4": "Запази",
+},
+"nb_NO": {
+	 "T1": "Please use the UP and DOWN keys to select your language. Afterwards press the OK button.",
+	 "T2": "Language selection",
+	 "T3": "Cancel",
+	 "T4": "Save",
 },
 "ca_AD": {
 	 "T1": "Please use the UP and DOWN keys to select your language. Afterwards press the OK button.",
@@ -33,12 +45,6 @@ LANG_TEXT = {
 	 "T3": "Fortryd",
 	 "T4": "Gem",
 },
-"de_DE": {
-	 "T1": "Für Sprachauswahl Hoch/Runter-Tasten nutzen. Danach OK drücken.",
-	 "T2": "Sprachauswahl",
-	 "T3": "Abbrechen",
-	 "T4": "Speichern",
-},
 "el_GR": {
 	 "T1": "Χρησιμοποιήστε τα πλήκτρα ΠΑΝΩ και ΚΑΤΩ για επιλογή γλώσσας. Μετά πιέστε το ΟΚ.",
 	 "T2": "Επιλογή γλώσσας",
@@ -46,13 +52,13 @@ LANG_TEXT = {
 	 "T4": "Αποθήκευση",
 },
 "en_GB": {
-	 "T1": "Please use the UP and DOWN keys to select your language. Afterwards press the OK button.",
+	 "T1": "Use UP and DOWN keys to select or Menu to install your language.. Afterwards press the OK button.",
 	 "T2": "Language selection",
 	 "T3": "Cancel",
 	 "T4": "Save",
 },
 "en_US": {
-	 "T1": "Please use the UP and DOWN keys to select your language. Afterwards press the OK button.",
+	 "T1": "Use UP and DOWN keys to select or Menu to install your language. Afterwards press the OK button.",
 	 "T2": "Language selection",
 	 "T3": "Cancel",
 	 "T4": "Save",
@@ -98,6 +104,12 @@ LANG_TEXT = {
 	 "T2": "בחירת שפה",
 	 "T3": "בטל",
 	 "T4": "שמור",
+},
+"hk_HK": {
+	 "T1": "按 上/下 鍵選擇語言, 選定後按 OK.",
+	 "T2": "語言選擇",
+	 "T3": "取消",
+	 "T4": "保存",
 },
 "hr_HR": {
 	 "T1": "Please use the UP and DOWN keys to select your language. Afterwards press the OK button.",
@@ -230,5 +242,11 @@ LANG_TEXT = {
 	 "T2": "Вибір мови",
 	 "T3": "Відмінити",
 	 "T4": "Зберегти",
+},
+"zh_CN": {
+	 "T1": "按 上/下 键选择语言, 选定后按 OK.",
+	 "T2": "语言选择",
+	 "T3": "取消",
+	 "T4": "保存",
 },
 }
