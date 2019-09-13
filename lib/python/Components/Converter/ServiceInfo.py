@@ -194,19 +194,19 @@ class ServiceInfo(Converter, object):
 		elif self.type == self.IS_STREAM:
 			return service.streamed() is not None
 		elif self.type == self.IS_SD:
-			return video_height < 720
+			return video_height <= 650
 		elif self.type == self.IS_HD:
-			return video_height >= 720 and video_height < 2160
+			return video_height >= 651 and video_height < 1440
 		elif self.type == self.IS_1080:
-			return video_height > 1000 and video_height <= 1080
+			return video_height >= 721 and video_height <= 1440
 		elif self.type == self.IS_720:
-			return video_height > 700 and video_height <= 720
+			return video_height >= 579 and video_height <= 720
 		elif self.type == self.IS_576:
-			return video_height > 500 and video_height <= 576
+			return video_height >= 481 and video_height <= 578
 		elif self.type == self.IS_480:
-			return video_height > 0 and video_height <= 480
+			return video_height >= 0 and video_height <= 480
 		elif self.type == self.IS_4K:
-			return video_height >= 1200
+			return video_height >= 1460
 		elif self.PROGRESSIVE:
 			return bool(self._getProgressive(info))
 		return False
