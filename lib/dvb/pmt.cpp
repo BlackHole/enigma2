@@ -398,7 +398,7 @@ int eDVBServicePMTHandler::getProgramInfo(program &program)
 		{
 			eDVBService::cacheID cTag = eDVBService::audioCacheTags[m];
 			cached_apid[cTag] = m_service->getCacheEntry(cTag);
-		}AAPID);
+		}
 		cached_tpid = m_service->getCacheEntry(eDVBService::cTPID);
 	}
 
