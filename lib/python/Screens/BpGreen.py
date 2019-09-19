@@ -31,10 +31,10 @@ class DeliteGreenPanel(Screen):
 				}
 			</convert>
 		</widget>
-		<ePixmap position="88,650" size="140,40" pixmap="buttons/red.png" alphatest="on" zPosition="1" />
-		<ePixmap position="316,650" size="140,40" pixmap="buttons/green.png" alphatest="on" zPosition="1" />
-		<ePixmap position="544,650" size="140,40" pixmap="buttons/yellow.png" alphatest="on" zPosition="1" />
-		<ePixmap position="772,650" size="140,40" pixmap="buttons/blue.png" alphatest="on" zPosition="1" />
+		<ePixmap position="88,650" size="140,40" pixmap="skin_default/buttons/red.png" alphatest="on" zPosition="1" />
+		<ePixmap position="316,650" size="140,40" pixmap="skin_default/buttons/green.png" alphatest="on" zPosition="1" />
+		<ePixmap position="544,650" size="140,40" pixmap="skin_default/buttons/yellow.png" alphatest="on" zPosition="1" />
+		<ePixmap position="772,650" size="140,40" pixmap="skin_default/buttons/blue.png" alphatest="on" zPosition="1" />
 		<widget name="key_red" position="88,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="red" transparent="1" />
 		<widget name="key_green" position="316,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="green" transparent="1" />
 		<widget name="key_yellow" position="544,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="yellow" transparent="1" />
@@ -73,7 +73,7 @@ class DeliteGreenPanel(Screen):
 		self.pluginlist = plugins.getPlugins(PluginDescriptor.WHERE_PLUGINMENU)
 		for plugin in self.pluginlist:
 			if plugin.icon is None:
-				png = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/plugin.png"))
+				png = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/icons/plugin.png"))
 			else:
 				png = plugin.icon
 			res = (plugin.name, plugin.description, png, plugin)
@@ -109,7 +109,7 @@ class DeliteSetupFp(Screen):
 		<widget source="list" render="Listbox" position="10,10" size="370,300" scrollbarMode="showOnDemand" >
 			<convert type="StringList" />
 		</widget>
-		<ePixmap pixmap="buttons/red.png" position="115,320" size="140,40" alphatest="on" />
+		<ePixmap pixmap="skin_default/buttons/red.png" position="115,320" size="140,40" alphatest="on" />
 		<widget name="key_red" position="115,320" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 	</screen>"""
 
@@ -133,7 +133,7 @@ class DeliteSetupFp(Screen):
 		self.pluginlist = plugins.getPlugins(PluginDescriptor.WHERE_PLUGINMENU)
 		for plugin in self.pluginlist:
 			if plugin.icon is None:
-				png = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/plugin.png"))
+				png = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/icons/plugin.png"))
 			else:
 				png = plugin.icon
 			res = (plugin.name, plugin.description, png)
@@ -158,7 +158,7 @@ class DeliteScript(Screen):
 			<convert type="StringList" />
 		</widget>
 		<widget name="statuslab" position="10,320" size="540,30" font="Regular;16" valign="center" noWrap="1" backgroundColor="#333f3f3f" foregroundColor="#FFC000" shadowOffset="-2,-2" shadowColor="black" />
-		<ePixmap pixmap="buttons/red.png" position="210,360" size="140,40" alphatest="on" />
+		<ePixmap pixmap="skin_default/buttons/red.png" position="210,360" size="140,40" alphatest="on" />
 		<widget name="key_red" position="210,360" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 	</screen>"""
 

@@ -17,7 +17,7 @@ import socket
 class DeliteBluePanel(Screen):
 	skin = """
 	<screen name="DeliteBluePanel" position="center,center" size="1000,720"  title="Black Hole Blue Panel" flags="wfNoBorder">
-        <ePixmap position="339,170" zPosition="3" size="60,40" pixmap="buttons/key_ok.png" alphatest="blend" transparent="1" />
+        <ePixmap position="339,170" zPosition="3" size="60,40" pixmap="skin_default/buttons/key_ok.png" alphatest="blend" transparent="1" />
         <eLabel text="Black Hole Blue Panel" position="80,30" size="800,38" font="Regular;34" halign="left" transparent="1"/> 
         <widget name="lab1" position="129,90" size="230,25" font="Regular;24" zPosition="2"  transparent="1"/>
         <widget name="list" position="75,126" size="340,38" zPosition="2"  transparent="1"/> 
@@ -29,9 +29,9 @@ class DeliteBluePanel(Screen):
         <widget name="Ilab3" position="79,315" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
         <widget name="Ilab4" position="79,345" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
         <widget name="Ecmtext" position="79,380" size="440,300" font="Regular;20" zPosition="2" transparent="1"/>
-        <ePixmap position="145,650" size="140,40" pixmap="buttons/red.png" alphatest="on" zPosition="1" />
-        <ePixmap position="430,650" size="140,40" pixmap="buttons/yellow.png" alphatest="on" zPosition="1" />
-        <ePixmap position="715,650" size="140,40" pixmap="buttons/blue.png" alphatest="on" zPosition="1" />
+        <ePixmap position="145,650" size="140,40" pixmap="skin_default/buttons/red.png" alphatest="on" zPosition="1" />
+        <ePixmap position="430,650" size="140,40" pixmap="skin_default/buttons/yellow.png" alphatest="on" zPosition="1" />
+        <ePixmap position="715,650" size="140,40" pixmap="skin_default/buttons/blue.png" alphatest="on" zPosition="1" />
 		<widget name="key_red" position="145,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="red" transparent="1" />		
 		<widget name="key_yellow" position="430,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="yellow" transparent="1" />
 		<widget name="key_blue" position="715,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="blue" transparent="1" />
@@ -194,7 +194,7 @@ class DeliteBluePanel(Screen):
 class Nab_DoStartCam(Screen):
 	skin = """
 	<screen position="390,100" size="484,250" title="Black Hole" flags="wfNoBorder">
-		<widget name="connect" position="0,0" size="484,250" zPosition="-1" pixmaps="startcam_1.png,skin_default/startcam_2.png,skin_default/startcam_3.png,skin_default/startcam_4.png" transparent="1" />
+		<widget name="connect" position="0,0" size="484,250" zPosition="-1" pixmaps="skin_default/startcam_1.png,skin_default/startcam_2.png,skin_default/startcam_3.png,skin_default/startcam_4.png" transparent="1" />
 		<widget name="lab1" position="10,180" halign="center" size="460,60" zPosition="1" font="Regular;20" valign="top" transparent="1" />
 	</screen>"""
 	

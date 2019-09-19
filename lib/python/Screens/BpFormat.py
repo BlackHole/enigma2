@@ -17,8 +17,8 @@ class Bp_UsbFormat(Screen):
 	skin = """
 	<screen position="center,center" size="580,350" title="Black Hole Usb Format Wizard">
 		<widget name="lab1" position="10,10" size="560,280" font="Regular;20" valign="top" transparent="1"/>
-		<ePixmap pixmap="buttons/red.png" position="100,300" size="140,40" alphatest="on" />
-		<ePixmap pixmap="buttons/green.png" position="340,300" size="140,40" alphatest="on" />
+		<ePixmap pixmap="skin_default/buttons/red.png" position="100,300" size="140,40" alphatest="on" />
+		<ePixmap pixmap="skin_default/buttons/green.png" position="340,300" size="140,40" alphatest="on" />
 		<widget name="key_red" position="100,300" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 		<widget name="key_green" position="340,300" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
 	</screen>"""
