@@ -314,29 +314,29 @@ def InitUsageConfig():
 	#standby
 	if getDisplayType() in ('textlcd7segment'):
 		config.usage.blinking_display_clock_during_recording = ConfigSelection(default = "Rec", choices = [
-						("Rec", _("REC")), 
-						("RecBlink", _("Blinking REC")), 
+						("Rec", _("REC")),
+						("RecBlink", _("Blinking REC")),
 						("Nothing", _("Nothing"))])
 	else:
 		config.usage.blinking_display_clock_during_recording = ConfigYesNo(default = False)
-		
+
 	#in use
 	if getDisplayType() in ('textlcd'):
 		config.usage.blinking_rec_symbol_during_recording = ConfigSelection(default = "Channel", choices = [
-						("Rec", _("REC Symbol")), 
-						("RecBlink", _("Blinking REC Symbol")), 
+						("Rec", _("REC Symbol")),
+						("RecBlink", _("Blinking REC Symbol")),
 						("Channel", _("Channelname"))])
 	if getDisplayType() in ('textlcd7segment'):
 		config.usage.blinking_rec_symbol_during_recording = ConfigSelection(default = "Rec", choices = [
-						("Rec", _("REC")), 
-						("RecBlink", _("Blinking REC")), 
+						("Rec", _("REC")),
+						("RecBlink", _("Blinking REC")),
 						("Time", _("Time"))])
 	else:
 		config.usage.blinking_rec_symbol_during_recording = ConfigYesNo(default = True)
-		
+
 	if getDisplayType() in ('textlcd7segment'):
 		config.usage.show_in_standby = ConfigSelection(default = "time", choices = [
-						("time", _("Time")), 
+						("time", _("Time")),
 						("nothing", _("Nothing"))])
 
 	config.usage.show_message_when_recording_starts = ConfigYesNo(default = True)
@@ -350,7 +350,7 @@ def InitUsageConfig():
 	])
 	config.usage.movielist_unseen = ConfigYesNo(default = True)
 	config.usage.movielist_servicename_mode = ConfigSelection(default = "", choices = [
-		("", _("None")), 
+		("", _("None")),
 		("picon", _("Picon"))
 	])
 	config.usage.movielist_piconwidth = ConfigSelectionNumber(default = 100, stepwidth = 1, min = 50, max = 500, wraparound = True)
@@ -683,7 +683,7 @@ def InitUsageConfig():
 		config.usage.time.enabled_display.value = False
 		config.usage.time.display.value = config.usage.time.display.default
 
-	config.usage.boolean_graphic = ConfigSelection(default="true", choices={"false": _("no"), "true": _("yes"), "only_bool": _("yes, but not in multi selections")})
+	config.usage.boolean_graphic = ConfigSelection(default="false", choices={"false": _("no"), "true": _("yes"), "only_bool": _("yes, but not in multi selections")})
 
 	if SystemInfo["hasXcoreVFD"]:
 		def set12to8characterVFD(configElement):
@@ -1089,11 +1089,11 @@ def InitUsageConfig():
 	config.epgselection.graph_primetimehour = ConfigSelectionNumber(default = 20, stepwidth = 1, min = 00, max = 23, wraparound = True)
 	config.epgselection.graph_primetimemins = ConfigSelectionNumber(default = 00, stepwidth = 1, min = 00, max = 59, wraparound = True)
 	config.epgselection.graph_servicetitle_mode = ConfigSelection(default = "servicename", choices = [
-		("servicename", _("Service Name")), 
+		("servicename", _("Service Name")),
 		("picon", _("Picon")),
-		("picon+servicename", _("Picon and Service Name")), 
-		("servicenumber+picon", _("Service Number and Picon")), 
-		("servicenumber+servicename", _("Service Number and Service Name")), 
+		("picon+servicename", _("Picon and Service Name")),
+		("servicenumber+picon", _("Service Number and Picon")),
+		("servicenumber+servicename", _("Service Number and Service Name")),
 		("servicenumber+picon+servicename", _("Service Number, Picon and Service Name"))])
 	config.epgselection.graph_channel1 = ConfigYesNo(default = False)
 	possibleAlignmentChoices = [
