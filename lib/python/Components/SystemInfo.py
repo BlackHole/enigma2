@@ -89,7 +89,7 @@ SystemInfo["canMultiBoot"] = False
 SystemInfo["canBackupEMC"] = False
 SystemInfo["HasHiSi"] = False
 SystemInfo["canMode12"] = False
-SystemInfo["HasMMC"] = False
+SystemInfo["HasMMC"] = fileHas("/proc/cmdline", "root=/dev/mmcblk")
 SystemInfo["HasSDmmc"] = False
 SystemInfo["HasH9SD"] = False
 SystemInfo["HasSDnomount"] = False
