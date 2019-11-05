@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenBH 4.1 enigma2 Russian translation\n"
+"Project-Id-Version: OpenBH 4.3 enigma2 Russian translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n"
 "%100>=20) ? 1 : 2);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.2.4\n"
 
 msgid ""
 "\n"
@@ -12528,3 +12528,74 @@ msgstr "Переключить и записать"
 
 msgid "zapped"
 msgstr "Переключено"
+
+msgid "Tuners & Scanning"
+msgstr "Тюнер и Сканирование"
+
+msgid "Restart Enigma2"
+msgstr "Перезагрузка GUI"
+
+msgid "Enable OpenTV EPG"
+msgstr "Включить OpenTV EPG"
+
+msgid "Use OpenTV EPG information when it is available. For reading OpenTV EPG data tuning "
+"to a dedicated transponder is required"
+msgstr "Использовать информацию OpenTV телегида, когда она существует."
+
+msgid "Choose the layout view mode (Text or Graphics)."
+msgstr "Выберите режим просмотра (Текстовий или Графический)."
+
+msgid "Choose the layout view mode (Text / Graphics Multi channel EPG or Single channel EPG)."
+msgstr "Выберите режим просмотра (Текстовий/Графический (Мультителегид) или Одиночный."
+
+msgid "Graphics Multi EPG"
+msgstr "Графический"
+
+msgid "Text Multi EPG"
+msgstr "Текстовий"
+
+msgid "Include CI assignment"
+msgstr "Включить назначение модуля доступа"
+
+msgid "Set CI assignment for detection of available services."
+msgstr "Включить назначение модуля доступа для обнаружения доступных сервисов."
+
+msgid "Hide number markers"
+msgstr "Скрыть числовые метки"
+
+msgid "When enabled, number markers will be hidden."
+msgstr "Если включено, числовые метки будут скрыты."
+
+msgid "Zap key delay for channel number input"
+msgstr "Задержка для ввода номера канала"
+
+msgid ""
+"In live view wait this many seconds after a numeric key press before assuming the required channel "
+"number has been entered. Default: 5 seconds. Setting zero will require confirmation with 'OK'. "
+msgstr ""
+"Время ожидание для переход на введенный канал. По умолчанию: 5 секунд. 0 потребует подтверждения "
+"нажатием кнопки 'OK'."
+
+msgid "REC Symbol in use"
+msgstr "Запись"
+
+msgid "REC Symbol in Standby"
+msgstr "Запись в режиме ожидания"
+
+msgid "Enable blinking rec symbol on the LCD Display"
+msgstr "Включить символ записи на дисплее"
+
+msgid "In the Standby Record on the LCD Display"
+msgstr "Включить символ записи в режиме ожидания на дисплее"
+
+msgid "Enable VOD skip buttons"
+msgstr "Включить кнопки пропуска VOD"
+
+msgid "When enabled the set top box is able to wakeup on LAN"
+msgstr "Если включено, ресивер можно включать из локальной сети"
+
+msgid "You seem to be in timeshift, Do you want to leave timeshift? Streams & IPTV not fully supported!"
+msgstr "Сначала завершите таймшифт, хотите отключить таймшифт? Потоки и IPTV не полностью поддерживаются!"
+
+msgid "Do you really want to stop the current recording and delete timer %s?"
+msgstr "Действительно хотите остановить текущую запись и удалить таймер %s?"
