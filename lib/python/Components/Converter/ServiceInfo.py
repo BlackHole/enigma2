@@ -217,11 +217,11 @@ class ServiceInfo(Poll, Converter, object):
 			if info.getInfo(iServiceInformation.sGamma) > 0:
 				return False
 			else:
-				return video_width > 1024 and video_width <= 1920 and video_height >= 481 and video_height < 1440
+				return video_width > 900 and video_width <= 1920 and video_height >= 481 and video_height < 1440
 		elif self.type == self.IS_1080:
-			return video_width >= 1920 and video_width <= 1920 and video_height >= 769 and video_height <= 1440
+			return video_width >= 1366 and video_width <= 1920 and video_height >= 769 and video_height <= 1440
 		elif self.type == self.IS_720:
-			return video_width >= 1024 and video_width <= 1366 and video_height >= 481 and video_height <= 768
+			return video_width >= 900 and video_width <= 1366 and video_height >= 481 and video_height <= 768
 		elif self.type == self.IS_576:
 			return video_width > 1 and video_width <= 1024 and video_height > 481 and video_height <= 578
 		elif self.type == self.IS_480:
