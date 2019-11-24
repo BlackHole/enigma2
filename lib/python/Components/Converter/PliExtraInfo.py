@@ -10,21 +10,22 @@ from Tools.GetEcmInfo import GetEcmInfo
 from Poll import Poll
 
 caid_data = (
-	("0x1700", "0x17ff", "BetaCrypt",      "B",  True ),
-	( "0x600",  "0x6ff", "Irdeto",         "I",  True ),
-	("0x1800", "0x18ff", "Nagravision",    "N",  True ),
-	( "0x100",  "0x1ff", "Seca Mediaguard","S",  True ),
-	("0x1000", "0x10FF", "Tandberg",       "T",  True ),
-	( "0x500",  "0x5ff", "Viaccess",       "V",  True ),
-	("0x2600", "0x2600", "Biss",           "BI", True ),
-	("0x4aee", "0x4aee", "BulCrypt",       "BU", True ),
-	("0x5581", "0x5581", "BulCrypt",       "BU", False),
-	( "0xb00",  "0xbff", "Conax",          "CO", True ),
-	( "0xd00",  "0xdff", "CryptoWorks",    "CW", True ),
-	("0x2700", "0x2710", "DRE-Crypt3",     "DC", False),
-	("0x4ae0", "0x4ae1", "DRE-Crypt",      "DC", True ),
-	( "0x900",  "0x9ff", "NDS Videoguard", "ND", True ),
-	( "0xe00",  "0xeff", "PowerVu",        "PV", True )
+	("0x1700", "0x17ff", "BetaCrypt",        "B",     True ),
+	( "0x600",  "0x6ff", "Irdeto",           "I",     True ),
+	("0x1800", "0x18ff", "Nagravision",      "N",     True ),
+	( "0x100",  "0x1ff", "Seca Mediaguard",  "S",     True ),
+	("0x1000", "0x10FF", "Tandberg",         "T",     True ),
+	( "0x500",  "0x5ff", "Viaccess",         "V",     True ),
+	("0x2600", "0x2600", "Biss",             "BI",    True ),
+	("0x4aee", "0x4aee", "BulCrypt",         "BU",    True ),
+	("0x5581", "0x5581", "BulCrypt",         "BU",    False),
+	( "0xb00",  "0xbff", "Conax",            "CO",    True ),
+	( "0xd00",  "0xdff", "CryptoWorks",      "CW",    True ),
+	("0x2700", "0x2710", "DRE-Crypt3",       "DC",    False),
+	("0x4ae0", "0x4ae1", "DRE-Crypt",        "DC",    True ),
+	( "0x900",  "0x9ff", "NDS Videoguard",   "ND",    True ),
+	( "0xe00",  "0xeff", "PowerVu",          "PV",    True ),
+	("0x5601", "0x5604", "Verimatrix",       "VM",    True )
 )
 
 # stream type to codec map
@@ -67,36 +68,38 @@ class PliExtraInfo(Poll, Converter, object):
 		self.poll_interval = 1000
 		self.poll_enabled = True
 		self.ca_table = (
-			("CryptoCaidBetatAvailable",    "B",	False),
-			("CryptoCaidIrdetoAvailable"    "I",	False),
-			("CryptoCaidNagraAvailable",    "N",	False),
-			("CryptoCaidSecaAvailable",     "S",	False),
-			("CryptoCaidTandbergAvailable", "T",	False),
-			("CryptoCaidViaAvailable",      "V",	False),
-			("CryptoCaidBissAvailable",     "BI",	False),
-			("CryptoCaidBulCrypt1Available","BU",	False),
-			("CryptoCaidBulCrypt2Available","BU",	False),
-			("CryptoCaidConaxAvailable",    "CO",	False),
-			("CryptoCaidCryptoWAvailable",  "CW",	False),
-			("CryptoCaidDre3Available",     "DC",	False),
-			("CryptoCaidDreAvailable",      "DC",	False),
-			("CryptoCaidNDSAvailable",      "ND",	False),
-			("CryptoCaidPowerVuAvailable",  "PV",	False),
-			("CryptoCaidBetaSelected",      "B",	True ),
-			("CryptoCaidIrdetoSelected",    "I",	True ),
-			("CryptoCaidNagraSelected",     "N",	True ),
-			("CryptoCaidSecaSelected",      "S",	True ),
-			("CryptoCaidTandbergSelected",  "T",	True ),
-			("CryptoCaidViaSelected",       "V",	True ),
-			("CryptoCaidBissSelected",      "BI",	True ),
-			("CryptoCaidBulCrypt1Selected", "BU",	True ),
-			("CryptoCaidBulCrypt2Selected", "BU",	True ),
-			("CryptoCaidConaxSelected",     "CO",	True ),
-			("CryptoCaidCryptoWSelected",   "CW",	True ),
-			("CryptoCaidDre3Selected",      "DC",	True ),
-			("CryptoCaidDreSelected",       "DC",	True ),
-			("CryptoCaidNDSSelected",       "ND",	True ),
-			("CryptoCaidPowerVuSelected",   "PV",	True ),
+			("CryptoCaidBetatAvailable",      "B",    False),
+			("CryptoCaidIrdetoAvailable",     "I",    False),
+			("CryptoCaidNagraAvailable",      "N",    False),
+			("CryptoCaidSecaAvailable",       "S",    False),
+			("CryptoCaidTandbergAvailable",   "T",    False),
+			("CryptoCaidViaAvailable",        "V",    False),
+			("CryptoCaidBissAvailable",       "BI",   False),
+			("CryptoCaidBulCrypt1Available",  "BU",   False),
+			("CryptoCaidBulCrypt2Available",  "BU",   False),
+			("CryptoCaidConaxAvailable",      "CO",   False),
+			("CryptoCaidCryptoWAvailable",    "CW",   False),
+			("CryptoCaidDre3Available",       "DC",   False),
+			("CryptoCaidDreAvailable",        "DC",   False),
+			("CryptoCaidNDSAvailable",        "ND",   False),
+			("CryptoCaidPowerVuAvailable",    "PV",   False),
+			("CryptoCaidVerimatrixAvailable", "VM",   False),
+			("CryptoCaidBetaSelected",        "B",    True ),
+			("CryptoCaidIrdetoSelected",      "I",    True ),
+			("CryptoCaidNagraSelected",       "N",    True ),
+			("CryptoCaidSecaSelected",        "S",    True ),
+			("CryptoCaidTandbergSelected",    "T",    True ),
+			("CryptoCaidViaSelected",         "V",    True ),
+			("CryptoCaidBissSelected",        "BI",   True ),
+			("CryptoCaidBulCrypt1Selected",   "BU",   True ),
+			("CryptoCaidBulCrypt2Selected",   "BU",   True ),
+			("CryptoCaidConaxSelected",       "CO",   True ),
+			("CryptoCaidCryptoWSelected",     "CW",   True ),
+			("CryptoCaidDre3Selected",        "DC",   True ),
+			("CryptoCaidDreSelected",         "DC",   True ),
+			("CryptoCaidNDSSelected",         "ND",   True ),
+			("CryptoCaidPowerVuSelected",     "PV",   True ),
+			("CryptoCaidVerimatrixSelected",  "VM",   True ),
 		)
 		self.ecmdata = GetEcmInfo()
 		self.feraw = self.fedata = self.updateFEdata = None
@@ -315,13 +318,13 @@ class PliExtraInfo(Poll, Converter, object):
 				orbpos += 1
 			else:
 				orbpos -= 1
-				
+
 		sat_names = {
 			30:   'Rascom/Eutelsat 3E',
 			48:   'SES 5',
 			70:   'Eutelsat 7E',
 			90:   'Eutelsat 9E',
-			100:  'Eutelsat 10E',  
+			100:  'Eutelsat 10E',
 			130:  'Hot Bird',
 			160:  'Eutelsat 16E',
 			192:  'Astra 1KR/1L/1M/1N',
@@ -407,7 +410,7 @@ class PliExtraInfo(Poll, Converter, object):
 			3560: 'Amos',
 			3592: 'Thor/Intelsat'
 		}
-		
+
 		if orbpos in sat_names:
 			return sat_names[orbpos]
 		elif orbpos > 1800:
