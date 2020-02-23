@@ -4,10 +4,14 @@ from Tools.HardwareInfo import HardwareInfo
 from Components.About import getChipSetString
 
 from boxbranding import getMachineBuild, getBoxType, getBrandOEM, getDisplayType, getHaveRCA, getHaveYUV, getHaveSCART, getHaveAVJACK, getHaveHDMIinHD, getHaveHDMIinFHD, getMachineMtdRoot
+import os, re
 
 SystemInfo = { }
 
 #FIXMEE...
+
+from Tools.Multiboot import getMBbootdevice, getMultibootslots
+
 def getNumVideoDecoders():
 	idx = 0
 	while fileExists("/dev/dvb/adapter0/video%d"% idx, 'f'):
@@ -86,6 +90,7 @@ SystemInfo["Has24hz"] = fileCheck("/proc/stb/video/videomode_24hz")
 SystemInfo["HasRootSubdir"] = False
 SystemInfo["RecoveryMode"] = False
 SystemInfo["AndroidMode"] = False
+SystemInfo["MBbootdevice"] = False
 SystemInfo["canMultiBoot"] = False
 SystemInfo["canBackupEMC"] = False
 SystemInfo["HasHiSi"] = False
@@ -141,3 +146,4 @@ SystemInfo["VideoModes"] = getChipSetString() in ( # 2160p and 1080p capable har
 		["720p", "1080i", "576p", "576i", "480p", "480i"], # normal modes
 		{"720p", "1080i"} # widescreen modes
 	)
+SystemInfo["LnbPowerAlwaysOn"] = getBoxType() in ('vusolo4k', 'vuduo4k', 'vuultimo4k', 'vuuno4k')
