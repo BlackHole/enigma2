@@ -96,7 +96,6 @@ SystemInfo["canBackupEMC"] = False
 SystemInfo["HasHiSi"] = False
 SystemInfo["canMode12"] = False
 SystemInfo["HasMMC"] = fileHas("/proc/cmdline", "root=/dev/mmcblk")
-SystemInfo["HasSDmmc"] = False
 SystemInfo["HasH9SD"] = False
 SystemInfo["HasSDnomount"] = False
 SystemInfo["CanProc"] = False
