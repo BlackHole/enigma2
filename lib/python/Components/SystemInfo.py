@@ -124,10 +124,10 @@ SystemInfo["yellow_RCA_no_scart"] = getHaveSCART() in ("False",) and (getHaveRCA
 # Machines that have neither yellow RCA nor Scart sockets.
 SystemInfo["no_yellow_RCA__no_scart"] = getHaveRCA() in ("False",) and (getHaveSCART() in ("False",) and getHaveAVJACK() in ("False",))
 SystemInfo["VideoModes"] = getChipSetString() in (  # 2160p and 1080p capable hardware...
-	"5272s", "7251", "7251s", "7252", "7252s", "7278", "7366", "7376", "7444s", "72604", "3798mv200", "3798cv200", "hi3798mv200", "hi3798cv200"
+	"5272s", "7251", "7251s", "7252", "7252s", "7278", "7366", "7376", "7444s", "72604"
 ) and (
-	["720p", "1080p", "2160p", "1080i", "576p", "576i", "480p", "480i"],  # Normal modes.
-	{"720p", "1080p", "2160p", "1080i"}  # Widescreen modes.
+	["720p", "1080p", "2160p", "2160p30", "1080i", "576p", "576i", "480p", "480i"],  # Normal modes.
+	{"720p", "1080p", "2160p", "2160p30", "1080i"}  # Widescreen modes.
 ) or getChipSetString() in (  # 1080p capable hardware...
 	"7241", "7356", "73565", "7358", "7362", "73625", "7424", "7425", "7552"
 ) and (
