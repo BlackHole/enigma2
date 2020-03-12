@@ -1,48 +1,43 @@
-from enigma import eDVBResourceManager, Misc_Options, eDVBCIInterfaces
-from Tools.Directories import fileExists, fileCheck, pathExists, fileHas
-from Tools.HardwareInfo import HardwareInfo
+from boxbranding import getBoxType, getBrandOEM, getDisplayType, getHaveAVJACK, getHaveHDMIinFHD, getHaveHDMIinHD, getHaveRCA, getHaveSCART, getHaveYUV, getMachineBuild
+from enigma import Misc_Options, eDVBCIInterfaces, eDVBResourceManager
+
 from Components.About import getChipSetString
+from Tools.Directories import fileCheck, fileExists, fileHas, pathExists
+from Tools.HardwareInfo import HardwareInfo
 
-from boxbranding import getMachineBuild, getBoxType, getBrandOEM, getDisplayType, getHaveRCA, getHaveYUV, getHaveSCART, getHaveAVJACK, getHaveHDMIinHD, getHaveHDMIinFHD, getMachineMtdRoot
-import os, re
+SystemInfo = {}
 
-SystemInfo = { }
-
-#FIXMEE...
-
-from Tools.Multiboot import getMBbootdevice, getMultibootslots
+from Tools.Multiboot import getMBbootdevice, getMultibootslots  # This import needs to be here to avoid a SystemInfo load loop!
 
 def getNumVideoDecoders():
-	idx = 0
-	while fileExists("/dev/dvb/adapter0/video%d"% idx, 'f'):
-		idx += 1
-	return idx
+	numVideoDecoders = 0
+	while fileExists("/dev/dvb/adapter0/video%d" % numVideoDecoders, "f"):
+		numVideoDecoders += 1
+	return numVideoDecoders
 
 def countFrontpanelLEDs():
-	leds = 0
-	if fileExists("/proc/stb/fp/led_set_pattern"):
-		leds += 1
-	while fileExists("/proc/stb/fp/led%d_pattern" % leds):
-		leds += 1
-	return leds
+	numLeds = fileExists("/proc/stb/fp/led_set_pattern") and 1 or 0
+	while fileExists("/proc/stb/fp/led%d_pattern" % numLeds):
+		numLeds += 1
+	return numLeds
+
 
 SystemInfo["CommonInterface"] = eDVBCIInterfaces.getInstance().getNumOfSlots()
 SystemInfo["CommonInterfaceCIDelay"] = fileCheck("/proc/stb/tsmux/rmx_delay")
-for cislot in range (0, SystemInfo["CommonInterface"]):
-	SystemInfo["CI%dSupportsHighBitrates" % cislot] = fileCheck("/proc/stb/tsmux/ci%d_tsclk"  % cislot)
-	SystemInfo["CI%dRelevantPidsRoutingSupport" % cislot] = fileCheck("/proc/stb/tsmux/ci%d_relevant_pids_routing"  % cislot)
-
+for cislot in range(0, SystemInfo["CommonInterface"]):
+	SystemInfo["CI%dSupportsHighBitrates" % cislot] = fileCheck("/proc/stb/tsmux/ci%d_tsclk" % cislot)
+	SystemInfo["CI%dRelevantPidsRoutingSupport" % cislot] = fileCheck("/proc/stb/tsmux/ci%d_relevant_pids_routing" % cislot)
 SystemInfo["NumVideoDecoders"] = getNumVideoDecoders()
 SystemInfo["Udev"] = not fileExists("/dev/.devfsd")
 SystemInfo["PIPAvailable"] = SystemInfo["NumVideoDecoders"] > 1
 SystemInfo["CanMeasureFrontendInputPower"] = eDVBResourceManager.getInstance().canMeasureFrontendInputPower()
 SystemInfo["12V_Output"] = Misc_Options.getInstance().detected_12V_output()
-SystemInfo["FrontpanelDisplay"] = fileExists("/dev/dbox/oled0") or fileExists("/dev/dbox/lcd0")
-SystemInfo["7segment"] = getDisplayType() in ('7segment')
-SystemInfo["ConfigDisplay"] = SystemInfo["FrontpanelDisplay"] and getDisplayType() not in ('7segment')
-SystemInfo["LCDSKINSetup"] = pathExists("/usr/share/enigma2/display") and not SystemInfo["7segment"]
 SystemInfo["ZapMode"] = fileCheck("/proc/stb/video/zapmode") or fileCheck("/proc/stb/video/zapping_mode")
 SystemInfo["NumFrontpanelLEDs"] = countFrontpanelLEDs()
+SystemInfo["FrontpanelDisplay"] = fileExists("/dev/dbox/oled0") or fileExists("/dev/dbox/lcd0")
+SystemInfo["7segment"] = getDisplayType() in ("7segment")
+SystemInfo["ConfigDisplay"] = SystemInfo["FrontpanelDisplay"] and getDisplayType() not in ("7segment")
+SystemInfo["LCDSKINSetup"] = pathExists("/usr/share/enigma2/display") and not SystemInfo["7segment"]
 SystemInfo["OledDisplay"] = fileExists("/dev/dbox/oled0")
 SystemInfo["LcdDisplay"] = fileExists("/dev/dbox/lcd0")
 SystemInfo["DisplayLED"] = False
@@ -61,9 +56,6 @@ SystemInfo["Power24x7Standby"] = False
 SystemInfo["Power24x7Suspend"] = False
 SystemInfo["WakeOnLAN"] = fileCheck("/proc/stb/power/wol") or fileCheck("/proc/stb/fp/wol")
 SystemInfo["HDMICEC"] = (fileExists("/dev/hdmi_cec") or fileExists("/dev/misc/hdmi_cec0")) and fileExists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HdmiCEC/plugin.pyo")
-SystemInfo["SABSetup"] = fileExists("/usr/lib/enigma2/python/Plugins/SystemPlugins/SABnzbd/plugin.pyo")
-SystemInfo["Blindscan"] = fileExists("/usr/lib/enigma2/python/Plugins/SystemPlugins/Blindscan/plugin.pyo")
-SystemInfo["Satfinder"] = fileExists("/usr/lib/enigma2/python/Plugins/SystemPlugins/Satfinder/plugin.pyo")
 SystemInfo["HasExternalPIP"] = fileCheck("/proc/stb/vmpeg/1/external")
 SystemInfo["VideoDestinationConfigurable"] = fileExists("/proc/stb/vmpeg/0/dst_left")
 SystemInfo["hasPIPVisibleProc"] = fileCheck("/proc/stb/vmpeg/1/visible")
@@ -126,23 +118,23 @@ SystemInfo["HasScaler_sharpness"] = pathExists("/proc/stb/vmpeg/0/pep_scaler_sha
 # Machines that do have SCART component video (red, green and blue RCA sockets).
 SystemInfo["Scart-YPbPr"] = getBrandOEM() == "vuplus" and not "4k" in getBoxType()
 # Machines that do not have component video (red, green and blue RCA sockets).
-SystemInfo["no_YPbPr"] = getHaveYUV() in ('False',)
+SystemInfo["no_YPbPr"] = getHaveYUV() in ("False",)
 # Machines that have composite video (yellow RCA socket) but do not have Scart.
-SystemInfo["yellow_RCA_no_scart"] = getHaveSCART() in ('False',) and (getHaveRCA() in ('True',) or getHaveAVJACK() in ('True',))
-# Machines that have neither yellow RCA nor Scart sockets
-SystemInfo["no_yellow_RCA__no_scart"] = getHaveRCA() in ('False',) and (getHaveSCART() in ('False',) and getHaveAVJACK() in ('False',))
-SystemInfo["VideoModes"] = getChipSetString() in ( # 2160p and 1080p capable hardware
-		'5272s', '7251', '7251s', '7252', '7252s', '72604', '7278', '7366', '7376', '7444s'
-	) and (
-		["720p", "1080p", "2160p", "2160p30", "1080i", "576p", "576i", "480p", "480i"], # normal modes
-		{"720p", "1080p", "2160p", "2160p30", "1080i"} # widescreen modes
-	) or getChipSetString() in ( # 1080p capable hardware
-		'7241', '7356', '73565', '7358', '7362', '73625', '7424', '7425', '7552'
-	) and (
-		["720p", "1080p", "1080i", "576p", "576i", "480p", "480i"], # normal modes
-		{"720p", "1080p", "1080i"} # widescreen modes
-	) or ( # default modes (neither 2160p nor 1080p capable hardware)
-		["720p", "1080i", "576p", "576i", "480p", "480i"], # normal modes
-		{"720p", "1080i"} # widescreen modes
-	)
-SystemInfo["LnbPowerAlwaysOn"] = getBoxType() in ('vusolo4k', 'vuduo4k', 'vuultimo4k', 'vuuno4kse', 'vuuno4k')
+SystemInfo["yellow_RCA_no_scart"] = getHaveSCART() in ("False",) and (getHaveRCA() in ("True",) or getHaveAVJACK() in ("True",))
+# Machines that have neither yellow RCA nor Scart sockets.
+SystemInfo["no_yellow_RCA__no_scart"] = getHaveRCA() in ("False",) and (getHaveSCART() in ("False",) and getHaveAVJACK() in ("False",))
+SystemInfo["VideoModes"] = getChipSetString() in (  # 2160p and 1080p capable hardware...
+	"5272s", "7251", "7251s", "7252", "7252s", "7278", "7366", "7376", "7444s", "72604", "3798mv200", "3798cv200", "hi3798mv200", "hi3798cv200"
+) and (
+	["720p", "1080p", "2160p", "1080i", "576p", "576i", "480p", "480i"],  # Normal modes.
+	{"720p", "1080p", "2160p", "1080i"}  # Widescreen modes.
+) or getChipSetString() in (  # 1080p capable hardware...
+	"7241", "7356", "73565", "7358", "7362", "73625", "7424", "7425", "7552"
+) and (
+	["720p", "1080p", "1080i", "576p", "576i", "480p", "480i"],  # Normal modes.
+	{"720p", "1080p", "1080i"}  # Widescreen modes.
+) or (  # Default modes (neither 2160p nor 1080p capable hardware)...
+	["720p", "1080i", "576p", "576i", "480p", "480i"],  # Normal modes.
+	{"720p", "1080i"}  # Widescreen modes.
+)
+SystemInfo["LnbPowerAlwaysOn"] = getBoxType() in ("vusolo4k", "vuduo4k", "vuultimo4k", "vuuno4k", "vuuno4kse")
