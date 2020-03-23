@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: enigma2 pt translation for Open BlackHole 4.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-24 18:23+0100\n"
-"PO-Revision-Date: 2020-03-17 12:57+0000\n"
+"PO-Revision-Date: 2020-03-23 00:56+0000\n"
 "Last-Translator: nunigaia\n"
 "Language-Team: BH Team - para a imagem OpenBlackhole 4.3.0.19 e posteriores\n"
 "Language: pt_PT\n"
@@ -12226,3 +12226,15 @@ msgstr "Para salvar e aplicar a skin '%s' selecionada, a GUI precisa reiniciar. 
 
 msgid "Please wait"
 msgstr "Por favor, espere!... "
+
+msgid "Use the UP and DOWN keys to select language, Menu key to install new language. Afterwards press the OK button."
+msgstr "Use as teclas CIMA e BAIXO para selecionar o idioma, a tecla MENU para instalar um novo. Depois prima a tecla OK."
+
+msgid "Add Language"
+msgstr "Adicionar Idioma"
+
+msgid "Delete Language(s)"
+msgstr "Apagar Idioma(s)"
+
+msgid "Start Wizard - Screen Alignment"
+msgstr "Assistente Inicial - Alinhamento do Ecrã"
