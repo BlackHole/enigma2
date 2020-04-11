@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: enigma2 pt translation for Open BlackHole 4.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-24 18:23+0100\n"
-"PO-Revision-Date: 2020-03-23 00:56+0000\n"
+"PO-Revision-Date: 2020-04-11 18:09+0100\n"
 "Last-Translator: nunigaia\n"
-"Language-Team: BH Team - para a imagem OpenBlackhole 4.3.0.19 e posteriores\n"
+"Language-Team: BH Team - Imagem Open Blackhole 4.3 e posteriores\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -531,7 +531,7 @@ msgstr ""
 "a sua %s %s. Quer desligar agora?"
 
 msgid "A small overview of the available icon states and actions."
-msgstr "Uma pequena amostra dos disponíveis estados de ícones e acções."
+msgstr "Uma pequena amostra dos disponíveis estados de ícones e ações."
 
 msgid ""
 "A timer failed to record!\n"
@@ -2455,6 +2455,12 @@ msgstr "De :"
 msgid "Front panel display"
 msgstr "Visor Lcd Frontal"
 
+msgid "Display Skin"
+msgstr "Tema no Visor LCD"
+
+msgid "Front panel settings"
+msgstr "Definições do Painel Frontal"
+
 msgid "Frontprocessor version: %d"
 msgstr "Versão do Processador: %d"
 
@@ -2476,12 +2482,21 @@ msgstr "Todas as resoluções"
 msgid "GB"
 msgstr "GB"
 
+msgid "GUI settings"
+msgstr "Definições do Utilizador"
+
 msgid ""
 "GUI needs a restart to apply a new skin\n"
 "Do you want to restart the GUI now?"
 msgstr ""
 "GUI tem de reiniciar para aplicar a nova skin\n"
 "Pretende reiniciar o GUI agora?"
+
+msgid "skin_default"
+msgstr "Tema padrão"
+
+msgid "< Default + Picon >"
+msgstr "< Padrão + Picon >"
 
 msgid ""
 "GUI needs a restart to apply a new language\n"
@@ -4120,10 +4135,10 @@ msgid "Please wait... Loading list..."
 msgstr "Por favor espere...a carregar a lista..."
 
 msgid "Plugin Browser"
-msgstr "Lista de Plugins"
+msgstr "Explorador de Plugins"
 
 msgid "Plugins Browser"
-msgstr "Lista de Plugins"
+msgstr "Gestão de Plugins"
 
 msgid "Plugin details"
 msgstr "Detalhes do Plugin"
@@ -5102,7 +5117,7 @@ msgid "Setup your satellite equipment"
 msgstr "Instalação do equipamento de Satélite"
 
 msgid "Shall the USB stick wizard proceed and program the image file %s into flash memory?"
-msgstr "Deverá o Assistente de PEN Drive proceder e programar o Arquivo de imagem %s na memoria flash?"
+msgstr "Deverá o Assistente de PEN Drive proceder e programar o Arquivo de imagem %s na memória flash?"
 
 msgid "Share Folder's"
 msgstr "Pastas partilhadas"
@@ -5646,7 +5661,7 @@ msgstr ""
 "\n"
 "*** B L A C K H O L E    T E A M ***\n"
 "\n"
-"Revisão:        16 de Março de 2020.\n"
+"Revisão:        11 de Abril de 2020.\n"
 "\n"
 "Suporte em: https://www.vuplus-community.net"
 
@@ -5860,7 +5875,7 @@ msgid "There are at least %s updates available."
 msgstr "Existem pelo menos %s atualizações disponíveis."
 
 msgid "There are currently no outstanding actions."
-msgstr "Atualmente não existem acções pendentes."
+msgstr "Atualmente não existem ações pendentes."
 
 msgid "There are no updates available."
 msgstr "Não existem plugins disponíveis."
@@ -6136,7 +6151,7 @@ msgid "Timer type"
 msgstr "Tipo de Timer"
 
 msgid "Timers"
-msgstr "Timers"
+msgstr "Gestão de Timers"
 
 msgid "Timeshift"
 msgstr "Timeshift"
@@ -8407,7 +8422,7 @@ msgid "OpenVPN setup"
 msgstr "OpenVPN Rede Privada Virtual"
 
 msgid "Plugins"
-msgstr "Lista de Plugins"
+msgstr "Gestão de Plugins"
 
 msgid "Position setup"
 msgstr "Ajustar tamanho do Ecrã"
@@ -9003,7 +9018,7 @@ msgid "Fast forward speeds"
 msgstr "Velocidade de avanço rápido"
 
 msgid "Finetune"
-msgstr "Sintonizar fino"
+msgstr "Sintonia fina"
 
 msgid "Graphical Infobar EPG settings"
 msgstr "EPG Configuração Gráfica Infobar"
@@ -10663,8 +10678,8 @@ msgstr "Alinhamento de eventos"
 msgid "Alignment of timeline date"
 msgstr "Alinhamento da data na linha de tempo"
 
-msgid "Use separate Picon pack for Front Display *"
-msgstr "Usar pacote de picons separado para o Painel Frontal *"
+msgid "Use separate Picon pack for Front Display"
+msgstr "Usar pacote de picons separado para o Painel Frontal"
 
 msgid "Brightness (Dimmed)"
 msgstr "Brilho ( esmaecido )"
@@ -10672,8 +10687,8 @@ msgstr "Brilho ( esmaecido )"
 msgid "Dim delay"
 msgstr "Atraso não ofuscante"
 
-msgid "Use picon_lcd directory for picons on color LCD"
-msgstr "Usar o diretório picon_lcd para picons no LCD colorido."
+msgid "Use piconlcd directory for picons on color LCD"
+msgstr "Usar o diretório piconlcd para picons no LCD colorido."
 
 msgid "Configure the brightness level of the front panel display for dimmed operation."
 msgstr "Configura o nível de brilho do visor do painel frontal para operação esmaecida."
@@ -11401,6 +11416,9 @@ msgstr "Sistema de Ficheiros"
 msgid "TunerConf"
 msgstr "Tuners"
 
+msgid "Tuners & Scanning"
+msgstr "Tuners e Sintonização"
+
 msgid "CI"
 msgstr "Int.Comum"
 
@@ -11620,11 +11638,14 @@ msgstr "Definir Password"
 msgid "Hard disk settings"
 msgstr "Definições de Disco Rígido"
 
-msgid "Timezone area"
-msgstr "Área de fuso horário"
+msgid "Time zone"
+msgstr "Zona Horária"
 
-msgid "Setup your timezone area."
-msgstr "Configuração da sua área de fuso horário."
+msgid "Time zone area"
+msgstr "Área da Zona Horária"
+
+msgid "Select your time zone area or region."
+msgstr "Selecione a sua zona horária ou região."
 
 msgid "Fallback configuration"
 msgstr "Configurar Tuners de Rede"
@@ -11703,7 +11724,7 @@ msgid "OSD position"
 msgstr "OSD ajuste da posição"
 
 msgid "Audio & Video"
-msgstr "Áudio & Vídeo"
+msgstr "Áudio e Vídeo"
 
 msgid "Video enhancement"
 msgstr "Otimização de Vídeo"
@@ -12238,3 +12259,9 @@ msgstr "Apagar Idioma(s)"
 
 msgid "Start Wizard - Screen Alignment"
 msgstr "Assistente Inicial - Alinhamento do Ecrã"
+
+msgid "Warning"
+msgstr "Aviso"
+
+msgid "Message"
+msgstr "Mensagem"
