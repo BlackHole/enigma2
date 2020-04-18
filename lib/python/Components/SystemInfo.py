@@ -6,7 +6,8 @@ from Tools.Directories import fileCheck, fileExists, fileHas, pathExists
 from Tools.HardwareInfo import HardwareInfo
 
 SystemInfo = {}
-
+SystemInfo["HasRootSubdir"] = False	# This needs to be here so it can be reset by getMultibootslots!
+SystemInfo["RecoveryMode"] = False	# This needs to be here so it can be reset by getMultibootslots!
 from Tools.Multiboot import getMBbootdevice, getMultibootslots  # This import needs to be here to avoid a SystemInfo load loop!
 
 def getNumVideoDecoders():
