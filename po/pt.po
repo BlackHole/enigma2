@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: enigma2 pt translation for Open BlackHole 4.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-24 18:23+0100\n"
-"PO-Revision-Date: 2020-04-14 21:11+0100\n"
+"PO-Revision-Date: 2020-04-18 21:40+0100\n"
 "Last-Translator: BH Team <nunigaia@gmail.com>\n"
 "Language-Team: BH Team - Imagem Open Blackhole 4.3 e posteriores\n"
 "Language: pt_PT\n"
@@ -5096,7 +5096,7 @@ msgid "Sets the root folder of movie list, to remove the '..' from benign shown 
 msgstr "Define a pasta raiz da lista de filmes, para remover  '..' do princípio mostrado nessa pasta."
 
 msgid "Settings"
-msgstr "Definições"
+msgstr "Personalização"
 
 msgid "Settings Backup"
 msgstr "Backup das definições"
@@ -5661,7 +5661,7 @@ msgstr ""
 "\n"
 "*** B L A C K H O L E    T E A M ***\n"
 "\n"
-"Revisão:        14 de Abril de 2020.\n"
+"Revisão:        18 de Abril de 2020.\n"
 "\n"
 "Suporte em: https://www.vuplus-community.net"
 
@@ -10271,11 +10271,20 @@ msgstr "Explorador e Montagens de Rede"
 msgid "Extended"
 msgstr "Estendido"
 
-msgid "Open Black Hole Blue Panel"
-msgstr "Open Black Hole Painel Azul"
-
 msgid "Open Black Hole Green Panel"
-msgstr "Open Black Hole Painel Verde"
+msgstr "Open BlackHole Painel Verde"
+
+msgid "Black Hole Green Panel"
+msgstr "Open BlackHole Painel Verde"
+
+msgid "Open Black Hole Blue Panel"
+msgstr "Open BlackHole Painel Azul"
+
+msgid "Black Hole Blue Panel"
+msgstr "Open BlackHole Painel Azul"
+
+msgid "Black Hole E2 Addons Manager"
+msgstr "Gestor de Addons E2 Black Hole"
 
 msgid "Addons Manager"
 msgstr "Gestor de Addons"
@@ -10384,6 +10393,15 @@ msgstr "Escreva outro nome:"
 
 msgid "Remove entry"
 msgstr "Remover entrada"
+
+msgid "and never ask again this session"
+msgstr "e nunca perguntar novamente nesta sessão"
+
+msgid "Yes, allways"
+msgstr "Sim, sempre"
+
+msgid "Allways ask"
+msgstr "Perguntar sempre"
 
 msgid "Are you sure you want to remove this entry?"
 msgstr "Tem a certeza, que quer remover esta entrada?"
@@ -12305,3 +12323,9 @@ msgstr "%d  CAMs Instaladas"
 
 msgid "Common Interface..."
 msgstr "Interface Comum.."
+
+msgid "Execute"
+msgstr "Executar"
+
+msgid "Script Panel"
+msgstr "Painel de Scripts"
