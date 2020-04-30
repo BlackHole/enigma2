@@ -230,7 +230,7 @@ class InfoBarUnhandledKey:
 		except:
 			print '[InfoBarGenerics] KEY: %s' % key
 		self.unhandledKeyDialog.hide()
-		if self.closeSIB(key) and self.secondInfoBarScreen and self.secondInfoBarScreen.shown: 
+		if self.closeSIB(key) and self.secondInfoBarScreen and self.secondInfoBarScreen.shown:
 			if not config.usage.fix_second_infobar.value or mkey not in ("LEFT", "RIGHT", "BOUQUET+", "BOUQUET-"):
 				self.secondInfoBarScreen.hide()
 				self.secondInfoBarWasShown = False
@@ -703,7 +703,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 			self.hide()
 			self.secondInfoBarScreen.show()
 			self.secondInfoBarWasShown = True
-		else: 
+		else:
 			self.show()
 		self.startHideTimer()
 
@@ -769,7 +769,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 				else:
 					self.secondInfoBarScreen.hide()
 					self.secondInfoBarWasShown = False
-					
+
 			elif isStandardInfoBar(self) and config.usage.show_second_infobar.value == "EPG":
 				self.showDefaultEPG()
 			elif isStandardInfoBar(self) and config.usage.show_second_infobar.value == "INFOBAREPG":
@@ -942,7 +942,7 @@ class NumberZap(Screen):
 
 		self.handleServiceName()
 
-		if len(self.numberString) >= 5:
+		if len(self.numberString) >= int(config.usage.maxchannelnumlen.value):
 			self.keyOK()
 
 	def __init__(self, session, number, searchNumberFunction = None):

@@ -47,6 +47,7 @@ SystemInfo["DeepstandbySupport"] = HardwareInfo().has_deepstandby()
 SystemInfo["Fan"] = fileCheck("/proc/stb/fp/fan")
 SystemInfo["FanPWM"] = SystemInfo["Fan"] and fileCheck("/proc/stb/fp/fan_pwm")
 SystemInfo["PowerLED"] = False
+SystemInfo["PowerLED2"] = False
 SystemInfo["StandbyLED"] = False
 SystemInfo["SuspendLED"] = False
 SystemInfo["LedPowerColor"] = False
