@@ -38,9 +38,12 @@
 			<menu weight="3" text="EPG" entryID="epg_menu">
 				<id val="epg"/>
 				<item weight="1" level="0" entryID="epg_setup"><setup id="epgsettings"/></item>
-				<item weight="4" level="2" entryID="setup_epggraphical"><setup id="epggraphical"/></item>
-				<item weight="5" level="2" entryID="setup_epginfobargraphical"><setup id="epginfobargraphical"/></item>
-				<menu weight="6" level="2" text="Load-save-delete" entryID="epgloadsave_menu">
+				<item level="2" entryID="setup_epgsingle"><setup id="epgsingle"/></item>
+				<item level="2" entryID="setup_epggrid"><setup id="epggrid"/></item>
+				<item level="2" entryID="setup_epginfobarsingle"><setup id="epginfobarsingle"/></item>
+				<item level="2" entryID="setup_epginfobargrid"><setup id="epginfobargrid"/></item>
+				<item level="2" entryID="setup_epgmulti"><setup id="epgmulti"/></item>
+				<menu weight="100" level="7" text="Load-save-delete" entryID="epgloadsave_menu">
 					<id val="epgloadsave_menu"/>
 					<item level="0" entryID="saveepgcache" text="Save EPG">
 <code>
@@ -79,10 +82,7 @@ def msgClosed(ret):
 self.session.openWithCallback(msgClosed, EpgDeleteMsg)
 </code>
 					</item>
-				</menu>				
-				<item weight="7" level="2" entryID="setup_epginfobar"><setup id="epginfobar"/></item>
-				<item weight="8" level="2" entryID="setup_epgmulti"><setup id="epgmulti"/></item>
-				<item weight="9" level="2" entryID="setup_epgenhanced"><setup id="epgenhanced"/></item>
+				</menu>
 			</menu>
 			<!-- Menu / Setup / User Interface -->
 			<menu weight="4" text="User Interface" entryID="osd_setup" requires="OsdMenu">
@@ -159,7 +159,7 @@ self.session.open(SABnzbdSetupScreen)
 					<item weight="10" level="0" text="Recording &amp; playback" entryID="recording_setup"><screen module="Recordings" screen="RecordingSettings" /></item>
 					<item weight="15" level="0" text="Timeshift" entryID="timshift_setup"><screen module="Timeshift" screen="TimeshiftSettings" /></item>
 			</menu>
-		
+
 			<!-- Menu / Setup / Storage -->
 			<menu weight="9" level="0" text="Storage" entryID="hardisk_selection" requires="Harddisk">
 				<id val="harddisk"/>
