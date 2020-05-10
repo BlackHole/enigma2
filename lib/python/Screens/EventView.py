@@ -50,7 +50,7 @@ class EventViewBase:
 		self.similarEPGCB = similarEPGCB
 		self.cbFunc = callback
 		self.currentService = ref
-		self.isRecording = (not ref.ref.flags & eServiceReference.isGroup) and ref.ref.getPath()
+		self.isRecording = (not ref.ref.flags & eServiceReference.isGroup) and ref.ref.getPath() and ref.ref.getPath()[0] == '/'
 		self.event = event
 		self["Service"] = ServiceEvent()
 		self["Event"] = Event()
@@ -102,7 +102,7 @@ class EventViewBase:
 		self.session.nav.RecordTimer.removeEntry(timer)
 		self["key_green"].setText(_("Add timer"))
 		self.key_green_choice = self.ADD_TIMER
-	
+
 	def timerAdd(self):
 		if self.isRecording:
 			return
@@ -342,7 +342,7 @@ class EventViewEPGSelect(Screen, EventViewBase):
 		else:
 			self["key_yellow"] = Button("")
 			self["yellow"].hide()
-			
+
 		if multiEPGCB:
 			self["key_blue"] = Button(_("Multi EPG"))
 			self["epgactions3"] = ActionMap(["EventViewEPGActions"],
