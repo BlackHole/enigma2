@@ -1092,7 +1092,7 @@ def InitUsageConfig():
 	config.epgselection.infobar.piconwidth = ConfigSelectionNumber(default = 100, stepwidth = 1, min = 50, max = 500, wraparound = True)
 	config.epgselection.infobar.infowidth = ConfigSelectionNumber(default = 50, stepwidth = 25, min = 0, max = 150, wraparound = True)
 	config.epgselection.single = ConfigSubsection()
-	config.epgselection.single.browse_mode = ConfigSelection(default = "lastepgservice", choices = [
+	config.epgselection.single.browse_mode = ConfigSelection(default = "currentservice", choices = [
 		("currentservice", _("Select current service")),
 		("lastepgservice", _("Select last browsed service"))])
 	config.epgselection.single.preview_mode = ConfigYesNo(default = True)
