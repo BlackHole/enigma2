@@ -14,6 +14,39 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3\n"
 
+msgid "alphabetic"
+msgstr "Alfabetico"
+
+msgid "alpha then oldest"
+msgstr "Alfabetico - poi più datato"
+
+msgid "flat alphabetic reverse"
+msgstr "Alfabetico decrescente (assoluto)"
+
+msgid "longest"
+msgstr "Maggior durata"
+
+msgid "shortest"
+msgstr "Minor durata"
+
+msgid "shuffle"
+msgstr "Casuale"
+
+msgid "flat alphabetic"
+msgstr "Alfabetico (assoluto)"
+
+msgid "reverse by date"
+msgstr "Meno recenti"
+
+msgid "alphabetic reverse"
+msgstr "Alfabetico decrescente"
+
+msgid "alpharev then newest"
+msgstr "Alfabetico decrescente, poi più recenti"
+
+msgid "by date"
+msgstr "Più recenti (metodo standard)"
+
 msgid "Accept the current selection"
 msgstr "Accetta la selezione corente"
 
@@ -2286,7 +2319,7 @@ msgid "Circular right"
 msgstr "Circolare destra"
 
 msgid "Clean network trash cans"
-msgstr "Cancellare prima di cercare"
+msgstr "Cancella i cestini di unità di rete"
 
 msgid "Cleaning Trashes"
 msgstr "Pulizia del cestino"
@@ -4386,7 +4419,7 @@ msgid "Following tasks will be done after you press OK!"
 msgstr "Premere OK per eseguire i processi seguenti!"
 
 msgid "Font size"
-msgstr "Dimensioni caratteri"
+msgstr "Dimensione caratteri"
 
 msgid "Force de-interlace"
 msgstr "Forzare deinterlacciamento"
@@ -4737,7 +4770,7 @@ msgid "Hide error messages from the Common Interface module."
 msgstr "Nascondere i messaggi di errore del modulo Common Interface."
 
 msgid "Hide known extensions"
-msgstr "Nascondere le estensioni conosciute"
+msgstr "Nascondi le estensioni conosciute"
 
 msgid "Hide number markers"
 msgstr "Nascondi gli indicatori numerici"
@@ -5387,7 +5420,7 @@ msgid "Keep service"
 msgstr "Mantenere il canale"
 
 msgid "Keeps the movie list open whilst playing audio files."
-msgstr "Mantenere la lista film aperta durante la riproduzione file audio."
+msgstr "Mantiene la lista registrazioni aperta durante la riproduzione di file audio."
 
 msgid "Kernel:\t%s\n"
 msgstr "Kernel:\t%s\n"
@@ -6976,7 +7009,7 @@ msgid "Play as picture in picture"
 msgstr "Riprodurre come PiP"
 
 msgid "Play audio in background"
-msgstr "Riprodurre musica in background"
+msgstr "Riproduci la musica in sottofondo"
 
 msgid "Play audio-CD..."
 msgstr "Riprodurre CD-audio..."
@@ -7574,7 +7607,7 @@ msgid "Profile: Local box"
 msgstr "Profilo: decoder locale"
 
 msgid "Progress"
-msgstr "Avanzamento"
+msgstr "Icona avanzamento grande"
 
 msgid "Progress bar left"
 msgstr "Barra avanzamento a sinistra"
@@ -8868,7 +8901,7 @@ msgid "Service Number, Picon and Service Name"
 msgstr "Numero del canale + Picon + Nome del canale"
 
 msgid "Service Title mode"
-msgstr "Modalità nome canali"
+msgstr "Visualizza le picon del canale di registrazione"
 
 msgid "Service font size"
 msgstr "Dimensione carattere canale"
@@ -9029,7 +9062,10 @@ msgstr ""
 "Selezionare con sinistra/destra una posizione esistente."
 
 msgid "Set the default sorting method."
-msgstr "Impostare metodo predefinito di ordinamento."
+msgstr ""
+"Imposta il metodo predefinito di ordinamento.\n"
+"NOTA: le opzioni con la dicitura '(assoluto)' applicano l'ordinamento anche a eventuali sottocartelle,\n"
+"altrimenti queste vengono ordinate ma sono comunque mantenute in cima alla lista."
 
 msgid "Set the delay time between repeated loops, this uses a software render in some skins."
 msgstr "Impostare il ritardo tra le ripetizioni. Questa funzione può essere usata solo con alcune skin."
@@ -9337,7 +9373,7 @@ msgid "Show help"
 msgstr "Mostra l'aiuto"
 
 msgid "Show icon for new/unseen items"
-msgstr "Mostra icona elementi per nuovi/non visti"
+msgstr "Mostra icona elementi per nuovi o non visti"
 
 msgid "Show in Standby"
 msgstr "Mostra in Standby"
@@ -9397,7 +9433,7 @@ msgid "Show picons in service list"
 msgstr "Mostra picon nell'elenco canali"
 
 msgid "Show picons in the movie list."
-msgstr "Visualizza picons nell'elenco film."
+msgstr "Visualizza le picons nell'elenco delle registrazioni."
 
 msgid "Show positioner movement"
 msgstr "Mostra movimento motore"
@@ -9442,7 +9478,7 @@ msgid "Show spinning logo when the system is busy."
 msgstr "Mostra spinner se il sistema è impegnato"
 
 msgid "Show status icons in movie list"
-msgstr "Mostra stato icone nella lista registrazioni"
+msgstr "Stato e tipo di icone per le registrazioni"
 
 msgid "Show stream clients"
 msgstr "Mostra client in streaming"
@@ -9502,10 +9538,10 @@ msgid "Shows live tv or informations on LCD."
 msgstr "Mostra sull’LCD la LiveTV o informazioni."
 
 msgid "Shows the icons when new/unseen, otherwise it will not show an icon."
-msgstr "Mostra le icone quando è nuovo/non visto, altrimenti non mostrare nulla."
+msgstr "Mostra le icone quando è nuovo o non visto, altrimenti non mostrare nulla."
 
 msgid "Shows the state of your wireless LAN connection.\n"
-msgstr "Mostra lo stato della connessione di rete wireless.\n"
+msgstr "Mostra lo stato della connessione della rete wireless.\n"
 
 msgid "Shows the watched status of the movie."
 msgstr "Mostra lo stato di visione del film"
@@ -9664,7 +9700,7 @@ msgid "Small"
 msgstr "Piccolo"
 
 msgid "Small progress"
-msgstr "Piccolo avanzamento"
+msgstr "Icona avanzamento piccola"
 
 msgid "Smartcard PIN"
 msgstr "PIN Smartcard"
@@ -9796,13 +9832,13 @@ msgid "Sorry, your partition(s) sizes are bigger than total device size."
 msgstr "La partizione è maggiore della dimensione totale del dispositivo."
 
 msgid "Sort"
-msgstr "Ordino"
+msgstr "Ordinamento lista registrazioni"
 
 msgid "Sort EPG list"
 msgstr "Ordino elenco EPG"
 
 msgid "Sort Trash by deletion time"
-msgstr "Ordino cestino per data cancellazione"
+msgstr "Ordina i file nel cestino per data di cancellazione"
 
 msgid "Sort by"
 msgstr "Ordino per"
@@ -9997,7 +10033,7 @@ msgid "Stop recordings:"
 msgstr "Arrestare le registrazioni:"
 
 msgid "Stop service on return to movie list"
-msgstr "Arrestare e tornare all'elenco registrazioni"
+msgstr "All'arresto, torna all'elenco delle registrazioni"
 
 msgid "Stop test"
 msgstr "Arrestare il test"
@@ -10630,7 +10666,7 @@ msgid ""
 "This allows you change the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases "
 "by 1 point size"
 msgstr ""
-"Configurare le dimensioni del carattere relative alla dimensione della skin.\n"
+"Configurare la dimensione del carattere relativamente alla dimensione della skin:\n"
 "+1 aumenta di 1 punto le dimensioni, -1 le diminuisce di 1 punto."
 
 msgid ""
@@ -12109,7 +12145,7 @@ msgstr ""
 "Tuner)."
 
 msgid "When enabled, network trash cans are probed for cleaning."
-msgstr "Abilitato: il cestino di rete sarà controllato per procedere alla pulizia."
+msgstr "Se abilitato, verrà controllato il cestino di rete per procedere al suo svuotamento."
 
 msgid "When enabled, number markers will be hidden."
 msgstr "Se attivata abilita la scomparsa degli indicatori numerici."
@@ -12783,18 +12819,6 @@ msgstr "avventura/western/guerra"
 msgid "advertisement/shopping"
 msgstr "pubblicità/shopping"
 
-msgid "alpha then oldest"
-msgstr "alfabetico (più datato)"
-
-msgid "alphabetic"
-msgstr "alfabetico"
-
-msgid "alphabetic reverse"
-msgstr "alfabetico inverso"
-
-msgid "alpharev then newest"
-msgstr "alfabetico inverso (più recente)"
-
 msgid "alternative"
 msgstr "alternativo"
 
@@ -12881,9 +12905,6 @@ msgstr "in fondo"
 
 msgid "broadcasting/press"
 msgstr "trasmissione/stampa"
-
-msgid "by date"
-msgstr "per data"
 
 msgid "caid:"
 msgstr "CAId:"
@@ -13138,12 +13159,6 @@ msgstr "belle arti"
 msgid "fitness & health"
 msgstr "fitness & salute"
 
-msgid "flat alphabetic"
-msgstr "rigorosamente alfabetico"
-
-msgid "flat alphabetic reverse"
-msgstr "rigorosamente invertito in ordine alfabetico"
-
 msgid "folk/traditional music"
 msgstr "folk/musica tradizionale"
 
@@ -13269,9 +13284,6 @@ msgstr "Bloccato"
 
 msgid "long"
 msgstr "lungo"
-
-msgid "longest"
-msgstr "più lungo"
 
 msgid "magazines/reports/documentary"
 msgstr "riviste / servizi / documentari"
@@ -13536,9 +13548,6 @@ msgstr "ripetuto"
 msgid "restart GUI"
 msgstr "riavviare il sistema (GUI)"
 
-msgid "reverse by date"
-msgstr "inverso (per data)"
-
 msgid "rewind to the previous chapter"
 msgstr "indietro al capitolo precedente"
 
@@ -13593,9 +13602,6 @@ msgstr "Impegnata/Classica/Religiosa/Film storici/Teatro"
 msgid "share:"
 msgstr "condividi:"
 
-msgid "shortest"
-msgstr "più breve"
-
 msgid "show DVD main menu"
 msgstr "Mostra il menu DVD principale"
 
@@ -13649,9 +13655,6 @@ msgstr "mostra gestione software con tasto blu"
 
 msgid "show/game show (general)"
 msgstr "Show/Telequiz (generico)"
-
-msgid "shuffle"
-msgstr "ordine casuale"
 
 msgid "shut down"
 msgstr "spegnimento"
