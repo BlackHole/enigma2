@@ -13,7 +13,139 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n"
 "%100>=20) ? 1 : 2);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3.1\n"
+
+msgid "Accept the current selection"
+msgstr "Принять текущий выбор"
+
+msgid "Always select OK"
+msgstr "Всегда выбирать ОК"
+
+msgid "Cancel the selection"
+msgstr "Отменить выбор"
+
+msgid "Move up a line"
+msgstr "Перейти к верхней строке"
+
+msgid "Move down a line"
+msgstr "Перейти к нижней строке"
+
+msgid "Infobar EPG activation"
+msgstr "Включение графичес. телегида (инфобар)"
+
+msgid "Select how to activate the Infobar Single EPG. This will affect Infobar behaviour"
+msgstr "Способ просмотра одиночного телегида: выбор изменит поведение инфобара"
+
+msgid "Select how to activate the Infobar Grid EPG. This will affect Infobar behaviour"
+msgstr "Способ просмотра таблицы телегида: выбор изменит поведение инфобара"
+
+msgid "Select how to activate the Infobar EPG. This will affect Infobar behaviour"
+msgstr "Способ просмотра графичес. телегида: выбор изменит поведение инфобара"
+
+msgid "Grid EPG"
+msgstr "Таблица телегида"
+
+msgid "Infobar Single EPG"
+msgstr "Одиночный телегид (инфобар)"
+
+msgid "Infobar Grid EPG"
+msgstr "Таблица телегида (инфобар)"
+
+msgid "Select current service"
+msgstr "Текущий сервис"
+
+msgid "Select last browsed service"
+msgstr "Последний просмотренный сервис"
+
+msgid "Select first service in bouquet"
+msgstr "Первый сервис в пакете"
+
+msgid "Service Number and Picon"
+msgstr "Номер канала и пикон"
+
+msgid "Picon and Service Number"
+msgstr "Пикон и номер канала"
+
+msgid "Picon, Service Number and Service Name"
+msgstr "Пикон, номер и имя канала"
+
+msgid "Primetime"
+msgstr "Прайм-тайм"
+
+msgid "Set to the desired primetime."
+msgstr "Установите время прайм-тайма."
+
+msgid "Select the desired primetime"
+msgstr "Установите время прайм-тайма"
+
+msgid "Timeline"
+msgstr "Временная шкала"
+
+msgid "Number of digits in channel number"
+msgstr "Количество цифр в номере канала"
+
+msgid "This allows you to set the number of digits you can input when selecting channels using number input."
+msgstr "Позволяет установить количество цифр, которое можно ввести при выборе каналов."
+
+msgid "yes, but not in multi selections"
+msgstr "Да, но не в нескольких выборках"
+
+msgid "Move to the next page"
+msgstr "Перейти на следующую страницу"
+
+msgid "Save and activate the currently selected skin"
+msgstr "Сохранить и активировать выбранный скин"
+
+msgid "Cancel any changes to the currently active skin"
+msgstr "Отмените изменения в текущем активном скине"
+
+msgid "Move to the previous page"
+msgstr "Перейти на предыдущую страницу"
+
+msgid "Move to the next skin"
+msgstr "Перейти к следующему скину"
+
+msgid "Move to the previous skin"
+msgstr "Перейти к предыдущему скину"
+
+msgid "Time zone"
+msgstr "Часовой пояс"
+
+msgid "Time zone area"
+msgstr "Часовой пояс"
+
+msgid "Select your time zone area or region."
+msgstr "Выберите часовой пояс или регион."
+
+msgid "Select the time zone within the area or region."
+msgstr "Выберите часовой пояс в пределах области или региона."
+
+msgid "Change the Colorspace from Auto to RGB"
+msgstr "Опция позволяет установить режим цветовой модели HDMI от Авто до RGB."
+
+msgid "Choose what channel to select when the EPG opens."
+msgstr "Выберите, какой канал выбрать при открытии телегида."
+
+msgid "Choose the layout. Single channel, Graphics Grid EPG or Text Grid EPG."
+msgstr "Выберите режим просмотра (Текстовий, Графический (Мультителегид) или Одиночный)."
+
+msgid "Graphics Grid EPG"
+msgstr "Графический (Мультителегид)"
+
+msgid "Text Grid EPG"
+msgstr "Текстовий"
+
+msgid "Use separate Picon pack for Front Display"
+msgstr "Использовать отдельный пакет пиконов для дисплея"
+
+msgid "Use piconlcd directory for picons on color LCD"
+msgstr "Использовать каталог 'piconlcd' для дисплея"
+
+msgid "Add Language"
+msgstr "Добавить язык"
+
+msgid "Delete Language(s)"
+msgstr "Удалить язык(и)"
 
 msgid ""
 "\n"
