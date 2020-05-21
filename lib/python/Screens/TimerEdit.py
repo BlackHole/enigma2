@@ -14,6 +14,7 @@ from Screens.ParentalControlSetup import ProtectedScreen
 from Screens.InputBox import PinInput
 from ServiceReference import ServiceReference
 from Screens.TimerEntry import TimerEntry, TimerLog
+from Screens.Setup import Setup
 from Tools.BoundFunction import boundFunction
 from Tools.FuzzyDate import FuzzyTime
 from time import time
@@ -27,10 +28,11 @@ class TimerEditList(Screen, ProtectedScreen):
 	DELETE = 4
 	STOP = 5
 
-	def __init__(self, session, menu_path = ""):
+	def __init__(self, session, menu_path = "", selectItem = None):
 		Screen.__init__(self, session)
 		screentitle = _("Timer List")
 		self.menu_path = menu_path
+		self.selectItem = selectItem
 		ProtectedScreen.__init__(self)
 		if config.usage.show_menupath.value == 'large':
 			self.menu_path += screentitle
@@ -52,11 +54,8 @@ class TimerEditList(Screen, ProtectedScreen):
 		Screen.setTitle(self, title)
 		
 		self.onChangedEntry = [ ]
-		list = [ ]
-		self.list = list
-		self.fillTimerList()
-
-		self["timerlist"] = TimerList(list)
+		self.list = []
+		self["timerlist"] = TimerList(self.list)
 
 		self.key_red_choice = self.EMPTY
 		self.key_yellow_choice = self.EMPTY
@@ -78,10 +77,37 @@ class TimerEditList(Screen, ProtectedScreen):
 				"left": self.left,
 				"right": self.right,
 				"up": self.up,
-				"down": self.down
+				"down": self.down,
+				"moveTop": self.moveTop,
+				"moveEnd": self.moveEnd,
+				"menu": self.createSetup
 			}, -1)
 		self.session.nav.RecordTimer.on_state_change.append(self.onStateChange)
-		self.onShown.append(self.updateState)
+		self.onLayoutFinish.append(self.onCreate)
+
+	def onCreate(self):
+		self.fillTimerList()
+		self["timerlist"].l.setList(self.list)
+
+		if self.selectItem is not None:
+			(event, service) = self.selectItem
+			if event is not None:
+				eventid = event.getEventId()
+				refstr = ':'.join(service.ref.toString().split(':')[:11])
+				idx = 0
+				for (timer, processed) in self.list:
+					if timer.eit == eventid and ':'.join(timer.service_ref.ref.toString().split(':')[:11]) == refstr:
+						self["timerlist"].moveToIndex(idx)
+						break
+					idx += 1
+		self.updateState()
+
+	def createSetup(self):
+		def onSetupClose(test = None):
+			self.refill()
+			pass
+
+		self.session.openWithCallback(onSetupClose, Setup, 'recording')
 
 	def isProtected(self):
 		return config.ParentalControl.setuppinactive.value and (not config.ParentalControl.config_sections.main_menu.value or hasattr(self.session, 'infobar') and self.session.infobar is None) and config.ParentalControl.config_sections.timer_menu.value and config.ParentalControl.servicepin[0].value
@@ -105,12 +131,19 @@ class TimerEditList(Screen, ProtectedScreen):
 		self["timerlist"].instance.moveSelection(self["timerlist"].instance.pageDown)
 		self.updateState()
 
+	def moveTop(self):
+		self["timerlist"].instance.moveSelection(self["timerlist"].instance.moveTop)
+		self.updateState()
+
+	def moveEnd(self):
+		self["timerlist"].instance.moveSelection(self["timerlist"].instance.moveEnd)
+		self.updateState()
+
 	def toggleDisabledState(self):
 		cur = self["timerlist"].getCurrent()
 		if cur:
 			t = cur
 			if t.disabled:
-# 				print "[TimerEdit] try to ENABLE timer"
 				t.enable()
 				timersanitycheck = TimerSanityCheck(self.session.nav.RecordTimer.timer_list, cur)
 				if not timersanitycheck.check():
@@ -254,8 +287,14 @@ class TimerEditList(Screen, ProtectedScreen):
 		list = self.list
 		del list[:]
 		list.extend([(timer, False) for timer in self.session.nav.RecordTimer.timer_list])
-		list.extend([(timer, True) for timer in self.session.nav.RecordTimer.processed_timers])
-		if config.usage.timerlist_finished_timer_position.index: #end of list
+		now = time()
+		if config.usage.timerlist_finished_timer_position.index == 2:
+			# if the "hide" option is set, continue to add disabled timers so
+			# timer conflicts remain visible
+			list.extend([(timer, True) for timer in self.session.nav.RecordTimer.processed_timers if timer.disabled and timer.end > now])
+		else:
+			list.extend([(timer, True) for timer in self.session.nav.RecordTimer.processed_timers])
+		if config.usage.timerlist_finished_timer_position.index == 1: #end of list
 			list.sort(cmp = eol_compare)
 		else:
 			list.sort(key = lambda x: x[0].begin)
@@ -336,10 +375,7 @@ class TimerEditList(Screen, ProtectedScreen):
 
 
 	def finishedEdit(self, answer):
-# 		print "[TimerEdit] finished edit"
-
 		if answer[0]:
-# 			print "[TimerEdit] Edited timer"
 			entry = answer[1]
 			timersanitycheck = TimerSanityCheck(self.session.nav.RecordTimer.timer_list, entry)
 			success = False
@@ -363,11 +399,8 @@ class TimerEditList(Screen, ProtectedScreen):
 
 			self.fillTimerList()
 			self.updateState()
-# 		else:
-# 			print "[TimerEdit] Timeredit aborted"
 
 	def finishedAdd(self, answer):
-# 		print "[TimerEdit] finished add"
 		if answer[0]:
 			entry = answer[1]
 			simulTimerList = self.session.nav.RecordTimer.record(entry)
@@ -380,8 +413,6 @@ class TimerEditList(Screen, ProtectedScreen):
 					self.session.openWithCallback(self.finishSanityCorrection, TimerSanityConflict, simulTimerList, self.menu_path)
 			self.fillTimerList()
 			self.updateState()
-# 		else:
-# 			print "[TimerEdit] Timeredit aborted"
 
 	def finishSanityCorrection(self, answer):
 		self.finishedAdd(answer)

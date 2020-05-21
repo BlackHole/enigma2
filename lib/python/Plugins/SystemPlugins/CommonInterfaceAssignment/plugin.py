@@ -25,8 +25,8 @@ import os
 class CIselectMainMenu(Screen):
 	skin = """
 		<screen name="CIselectMainMenu" position="center,center" size="500,250" title="CI assignment" >
-			<ePixmap pixmap="buttons/red.png" position="0,0" size="140,40" alphatest="on" />
-			<ePixmap pixmap="buttons/green.png" position="140,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" alphatest="on" />
 			<widget source="key_red" render="Label" position="0,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 			<widget source="key_green" render="Label" position="140,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
 			<widget name="CiList" position="5,50" size="490,200" scrollbarMode="showOnDemand" />
@@ -92,17 +92,17 @@ class CIselectMainMenu(Screen):
 class CIconfigMenu(Screen):
 	skin = """
 		<screen name="CIconfigMenu" position="center,center" size="560,440" title="CI assignment" >
-			<ePixmap pixmap="buttons/red.png" position="0,0" size="140,40" alphatest="on" />
-			<ePixmap pixmap="buttons/green.png" position="140,0" size="140,40" alphatest="on" />
-			<ePixmap pixmap="buttons/yellow.png" position="280,0" size="140,40" alphatest="on" />
-			<ePixmap pixmap="buttons/blue.png" position="420,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/blue.png" position="420,0" size="140,40" alphatest="on" />
 			<widget source="key_red" render="Label" position="0,0" zPosition="1" size="140,40" font="Regular;18" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 			<widget source="key_green" render="Label" position="140,0" zPosition="1" size="140,40" font="Regular;18" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
 			<widget source="key_yellow" render="Label" position="280,0" zPosition="1" size="140,40" font="Regular;18" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
 			<widget source="key_blue" render="Label" position="420,0" zPosition="1" size="140,40" font="Regular;18" halign="center" valign="center" backgroundColor="#18188b" transparent="1" />
 			<widget source="CAidList_desc" render="Label" position="5,50" size="550,22" font="Regular;20"  backgroundColor="#25062748" transparent="1" />
 			<widget source="CAidList" render="Label" position="5,80" size="550,45" font="Regular;20"  backgroundColor="#25062748" transparent="1" />
-			<ePixmap pixmap="div-h.png" position="0,125" zPosition="1" size="560,2" />
+			<ePixmap pixmap="skin_default/div-h.png" position="0,125" zPosition="1" size="560,2" />
 			<widget source="ServiceList_desc" render="Label" position="5,130" size="550,22" font="Regular;20" backgroundColor="#25062748" transparent="1"  />
 			<widget name="ServiceList" position="5,160" size="550,250" zPosition="1" scrollbarMode="showOnDemand" />
 			<widget source="ServiceList_info" render="Label" position="5,160" size="550,250" zPosition="2" font="Regular;20" backgroundColor="#25062748" transparent="1"  />
@@ -210,17 +210,31 @@ class CIconfigMenu(Screen):
 		self.setServiceListInfo()
 
 	def finishedChannelSelection(self, *args):
-		if len(args):
-			ref = args[0]
-			service_ref = ServiceReference(ref)
-			service_name = service_ref.getServiceName()
-			if find_in_list(self.servicelist, service_name, 0) == False:
-				str_service = service_ref.ref.toString()
-				split_ref = str_service.split(":")
-				if split_ref[0] == "1" and not str_service.startswith("1:134:") and "%3a//" not in str_service:
-					self.servicelist.append((service_name, ConfigNothing(), 0, str_service))
-					self["ServiceList"].l.setList(self.servicelist)
-					self.setServiceListInfo()
+		item = len(args)
+		if item > 0:
+			if item > 2 and args[2] is True:
+				for ref in args[0]:
+					service_ref = ServiceReference(ref)
+					service_name = service_ref.getServiceName()
+					if len(service_name) and find_in_list(self.servicelist, service_name, 0) == False:
+						str_service = service_ref.ref.toString()
+						split_ref = str_service.split(":")
+						if split_ref[0] == "1" and not str_service.startswith("1:134:") and "%3a//" not in str_service:
+							self.servicelist.append((service_name, ConfigNothing(), 0, str_service))
+				self["ServiceList"].l.setList(self.servicelist)
+				self.setServiceListInfo()
+			else:
+				ref = args[0]
+				if ref:
+					service_ref = ServiceReference(ref)
+					service_name = service_ref.getServiceName()
+					if find_in_list(self.servicelist, service_name, 0) == False:
+						str_service = service_ref.ref.toString()
+						split_ref = str_service.split(":")
+						if split_ref[0] == "1" and not str_service.startswith("1:134:") and "%3a//" not in str_service:
+							self.servicelist.append((service_name, ConfigNothing(), 0, str_service))
+							self["ServiceList"].l.setList(self.servicelist)
+							self.setServiceListInfo()
 
 	def finishedProviderSelection(self, *args):
 		item = len(args)
@@ -345,9 +359,9 @@ class CIconfigMenu(Screen):
 class easyCIconfigMenu(CIconfigMenu):
 	skin = """
 		<screen name="easyCIconfigMenu" position="center,center" size="560,440" title="CI assignment" >
-			<ePixmap pixmap="buttons/red.png" position="0,0" size="140,40" alphatest="on" />
-			<ePixmap pixmap="buttons/green.png" position="140,0" size="140,40" alphatest="on" />
-			<ePixmap pixmap="buttons/yellow.png" position="280,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" alphatest="on" />
 			<widget source="key_red" render="Label" position="0,0" zPosition="1" size="140,40" font="Regular;19" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 			<widget source="key_green" render="Label" position="140,0" zPosition="1" size="140,40" font="Regular;19" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
 			<widget source="key_yellow" render="Label" position="280,0" zPosition="1" size="140,40" font="Regular;19" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
@@ -370,12 +384,12 @@ class easyCIconfigMenu(CIconfigMenu):
 class CAidSelect(Screen):
 	skin = """
 		<screen name="CAidSelect" position="center,center" size="450,440" title="Select CAId's" >
-			<ePixmap pixmap="buttons/red.png" position="0,0" size="140,40" alphatest="on" />
-			<ePixmap pixmap="buttons/green.png" position="140,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" alphatest="on" />
 			<widget source="key_red" render="Label" position="0,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 			<widget source="key_green" render="Label" position="140,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
 			<widget name="list" position="5,50" size="440,330" scrollbarMode="showOnDemand" />
-			<ePixmap pixmap="div-h.png" position="0,390" zPosition="1" size="450,2" />
+			<ePixmap pixmap="skin_default/div-h.png" position="0,390" zPosition="1" size="450,2" />
 			<widget source="introduction" render="Label" position="0,400" size="450,40" zPosition="10" font="Regular;21" halign="center" valign="center" backgroundColor="#25062748" transparent="1" />
 		</screen>"""
 
@@ -418,13 +432,13 @@ class CAidSelect(Screen):
 class myProviderSelection(ChannelSelectionBase):
 	skin = """
 		<screen name="myProviderSelection" position="center,center" size="560,440" title="Select provider to add...">
-			<ePixmap pixmap="buttons/red.png" position="0,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on" />
 			<widget source="key_red" render="Label" position="0,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 			<widget source="key_green" render="Label" position="140,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
 			<widget source="key_yellow" render="Label" position="280,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
 			<widget source="key_blue" render="Label" position="420,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" transparent="1" />
 			<widget name="list" position="5,50" size="550,330" scrollbarMode="showOnDemand" />
-			<ePixmap pixmap="div-h.png" position="0,390" zPosition="1" size="560,2" />
+			<ePixmap pixmap="skin_default/div-h.png" position="0,390" zPosition="1" size="560,2" />
 			<widget source="introduction" render="Label" position="0,400" size="560,40" zPosition="10" font="Regular;21" halign="center" valign="center" backgroundColor="#25062748" transparent="1" />
 		</screen>"""
 
@@ -553,15 +567,15 @@ class myProviderSelection(ChannelSelectionBase):
 class myChannelSelection(ChannelSelectionBase):
 	skin = """
 		<screen name="myChannelSelection" position="center,center" size="560,440" title="Select service to add...">
-			<ePixmap pixmap="buttons/red.png" position="0,0" size="140,40" alphatest="on" />
-			<ePixmap pixmap="buttons/green.png" position="140,0" size="140,40" alphatest="on" />
-			<ePixmap pixmap="buttons/blue.png" position="420,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/blue.png" position="420,0" size="140,40" alphatest="on" />
 			<widget source="key_red" render="Label" position="0,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 			<widget source="key_green" render="Label" position="140,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
 			<widget source="key_yellow" render="Label" position="280,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
 			<widget source="key_blue" render="Label" position="420,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" transparent="1" />
 			<widget name="list" position="5,50" size="550,330" scrollbarMode="showOnDemand" />
-			<ePixmap pixmap="div-h.png" position="0,390" zPosition="1" size="560,2" />
+			<ePixmap pixmap="skin_default/div-h.png" position="0,390" zPosition="1" size="560,2" />
 			<widget source="introduction" render="Label" position="0,400" size="560,40" zPosition="10" font="Regular;21" halign="center" valign="center" backgroundColor="#25062748" transparent="1" />
 		</screen>"""
 
@@ -590,9 +604,46 @@ class myChannelSelection(ChannelSelectionBase):
 	def __onExecCallback(self):
 		self.setModeTv()
 		self.setTitle(_("Select service to add..."))
+		self.isFavourites()
+
+	def isFavourites(self):
+		ref = self.getCurrentSelection()
+		if ref:
+			if (ref.flags & 7) == 7 and "FROM BOUQUET" in ref.toString():
+				self["key_yellow"].setText(_("Add bouquet"))
+				return True
+			else:
+				self["key_yellow"].setText("")
+		return False
+
+	def showFavourites(self):
+		ChannelSelectionBase.showFavourites(self)
+		self.isFavourites()
 
 	def showProviders(self):
-		pass
+		if self.isFavourites():
+			self.session.openWithCallback(self.addAllBouquet, MessageBox, _("Add services to this bouquet?"), MessageBox.TYPE_YESNO)
+
+	def addAllBouquet(self, answer):
+		ref = self.getCurrentSelection()
+		if answer and ref:
+			serviceHandler = eServiceCenter.getInstance()
+			servicelist = serviceHandler.list(ref)
+			if not servicelist is None:
+				providerlist = []
+				while True:
+					service = servicelist.getNext()
+					if not service.valid():
+						break
+					providerlist.append((service))
+				if providerlist:
+					self.close(providerlist, None, True)
+				else:
+					self.close(None)
+
+	def showAllServices(self):
+		ChannelSelectionBase.showAllServices(self)
+		self.isFavourites()
 
 	def showSatellites(self, changeMode=False):
 		if changeMode:
@@ -602,6 +653,7 @@ class myChannelSelection(ChannelSelectionBase):
 		ref = self.getCurrentSelection()
 		if (ref.flags & 7) == 7:
 			self.enterPath(ref)
+			self.isFavourites()
 		elif not (ref.flags & eServiceReference.isMarker):
 			ref = self.getCurrentSelection()
 			self.close(ref)

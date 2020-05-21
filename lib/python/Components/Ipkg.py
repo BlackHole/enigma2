@@ -1,6 +1,7 @@
 import os
 from enigma import eConsoleAppContainer
 from Components.Harddisk import harddiskmanager
+from Tools.Directories import resolveFilename, SCOPE_LIBDIR
 from boxbranding import getImageDistro
 
 opkgDestinations = []
@@ -27,7 +28,7 @@ def onPartitionChange(why, part):
 				opkgStatusPath = 'var/lib/opkg/status'
 				if not os.path.exists(os.path.join('/', opkgStatusPath)):
 					# older opkg versions
-					opkgStatusPath = 'usr/lib/opkg/status'
+					opkgStatusPath = resolveFilename(SCOPE_LIBDIR, 'opkg/status')
 			if os.path.exists(os.path.join(mountpoint, opkgStatusPath)):
 				opkgAddDestination(mountpoint)
 		elif why == 'remove':
@@ -71,13 +72,13 @@ class IpkgComponent:
 		self.currentCommand = command
 
 	def runCmdEx(self, cmd):
-		self.runCmd(opkgExtraDestinations() + ' ' + cmd)
+		self.runCmd("%s %s" % (opkgExtraDestinations(), cmd))
 
 	def runCmd(self, cmd):
 		print "[IPKG] executing", self.ipkg, cmd
 		self.cmd.appClosed.append(self.cmdFinished)
 		self.cmd.dataAvail.append(self.cmdData)
-		if self.cmd.execute(self.ipkg + " " + cmd):
+		if self.cmd.execute("%s %s" % (self.ipkg, cmd)):
 			self.cmdFinished(-1)
 
 	def startCmd(self, cmd, args = None):
@@ -90,7 +91,7 @@ class IpkgComponent:
 			append = ""
 			if args["test_only"]:
 				append = " -test"
-			self.runCmdEx("upgrade" + append)
+			self.runCmdEx("upgrade %s >/home/root/ipkgupgrade.log" % append)
 		elif cmd == self.CMD_LIST:
 			self.fetchedList = []
 			if args['installed_only']:
@@ -98,9 +99,9 @@ class IpkgComponent:
 			else:
 				self.runCmd("list")
 		elif cmd == self.CMD_INSTALL:
-			self.runCmd("install " + args['package'])
+			self.runCmd("install %s" % args['package'])
 		elif cmd == self.CMD_REMOVE:
-			self.runCmd("remove " + args['package'])
+			self.runCmd("remove %s" % args['package'])
 		elif cmd == self.CMD_UPGRADE_LIST:
 			self.fetchedList = []
 			self.runCmdEx("list-upgradable")

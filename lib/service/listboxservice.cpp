@@ -793,10 +793,10 @@ void eListboxServiceContent::paint(gPainter &painter, eWindowStyle &style, const
 				{
 					if ( isPlayable && service_info && !service_info->getEvent(*m_cursor, evt) )
 					{
-						std::string name = evt->getEventName();
-						if (name.empty())
-							continue;
 						text = evt->getEventName();
+						if (text.empty())
+							continue;
+						std::replace(text.begin(), text.end(), '\n', ' ');
 						if (serviceAvail)
 						{
 							if (!selected && m_color_set[eventForeground])
@@ -1019,7 +1019,7 @@ void eListboxServiceContent::paint(gPainter &painter, eWindowStyle &style, const
 						area = m_element_position[celServiceName];
 						if (m_element_position[celServiceEventProgressbar].left() == 0)
 							area.setLeft(0);
-						xoffset = pixmap_size.width() + m_items_distances;			
+						xoffset = pixmap_size.width() + m_items_distances;
 					}
 					else
 						area = m_element_position[celServiceNumber];

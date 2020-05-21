@@ -23,7 +23,7 @@ msgid ""
 "Advanced options and settings."
 msgstr ""
 "\n"
-"Előrehaladott beállítási lehetőségek."
+"Speciális beállítási lehetőségek."
 
 #
 msgid ""
@@ -46,7 +46,7 @@ msgid ""
 "Edit the upgrade source address."
 msgstr ""
 "\n"
-"A szoftver-frissítési forrás címének módosítása."
+"A frissítés forráscímének módosítása."
 
 #
 #, fuzzy, python-format
@@ -281,7 +281,7 @@ msgstr "%s %s formátumú adat DVD (HDTV kompatibilis)"
 
 #, python-format
 msgid "%s %s front panel"
-msgstr ""
+msgstr "előlap"
 
 #
 #, fuzzy, python-format
@@ -314,8 +314,8 @@ msgstr ""
 #, python-format
 msgid "%s updated package available"
 msgid_plural "%s updated packages available"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "elérhető frissített csomag"
+msgstr[1] "elérhető frissített csomagok"
 
 #
 #, fuzzy, python-format
@@ -349,7 +349,7 @@ msgid "(show optional DVD audio menu)"
 msgstr "(DVD audió menü megjelenítése, ha van)"
 
 msgid "* = Restart Required"
-msgstr ""
+msgstr "Újraindítás szükséges"
 
 #
 msgid "* Only available if more than one interface is active."
@@ -554,8 +554,8 @@ msgid ""
 "A finished powertimer wants to reboot your %s %s.\n"
 "Do that now?"
 msgstr ""
-"Egy befejezett időzítés le akarja kapcsolni\n"
-"a készüléket készenléti módba. Engedélyezi?"
+"Egy befejezett időzítés újra akarja indítani\n"
+"a készüléket. Engedélyezi?"
 
 #
 #, fuzzy
@@ -563,9 +563,8 @@ msgid ""
 "A finished powertimer wants to restart the user interface.\n"
 "Do that now?"
 msgstr ""
-"A készülék most már használható állapotban van.\n"
-"\n"
-"Az internetkapcsolata működőképes.\n"
+"Egy befejezett időzítés újra akarja indítani\n"
+"a kezelőfelületet. Engedélyezi?\n"
 "\n"
 
 #
@@ -620,17 +619,17 @@ msgstr ""
 
 #
 msgid "A recording is currently running. Please stop the recording before trying to configure the positioner."
-msgstr "Egy felvétel éppen fut. Ha a forgatórendszert be akarja állítani, akkor elötte állítsa meg a felvételt."
+msgstr "Egy felvétel éppen fut. Ha a forgatórendszert be akarja állítani, akkor előtte állítsa meg a felvételt."
 
 msgid "A recording is currently running. Please stop the recording before trying to scan."
-msgstr ""
+msgstr "Egy felvétel éppen fut. Kérem állítsa meg a felvételt, mielőtt elindítja a keresést."
 
 #
 msgid "A recording is currently running. Please stop the recording before trying to start the satfinder."
 msgstr "Egy felvétel éppen fut. Ha futtani kívánja a Műholdkeresőt, akkor elötte állítsa meg a felvételt."
 
 msgid "A repeating timer or just once?"
-msgstr ""
+msgstr "Ismétlődő időzítés vagy csak egyszer?"
 
 #
 #, python-format
@@ -725,13 +724,13 @@ msgid "Accesspoint:"
 msgstr "Hozzáférési pont:"
 
 msgid "Action on long power button press"
-msgstr ""
+msgstr "Művelet a hosszan lenyomott bekapcsológombbal"
 
 msgid "Action on short power button press"
-msgstr ""
+msgstr "Művelet a röviden lenyomott bekapcsológombbal"
 
 msgid "Activate"
-msgstr ""
+msgstr "Aktiválás"
 
 #
 #, fuzzy
@@ -739,7 +738,7 @@ msgid "Activate MAC-address configuration"
 msgstr "Aktuális konfiguráció aktiválása"
 
 msgid "Activate PiP"
-msgstr ""
+msgstr "PiP Aktiválása"
 
 #
 msgid "Activate Picture in Picture"
@@ -758,10 +757,10 @@ msgid "Activate the configured network settings."
 msgstr ""
 
 msgid "Active"
-msgstr ""
+msgstr "Aktív"
 
 msgid "Active clients"
-msgstr ""
+msgstr "Aktív kliensek"
 
 #
 msgid "Adapter settings"
@@ -812,7 +811,7 @@ msgstr "ugrás a következő tételhez"
 #
 #, fuzzy
 msgid "Add bookmark"
-msgstr "bookmark hozzáadása"
+msgstr "könyvjelző hozzáadása"
 
 #
 #, fuzzy
@@ -835,16 +834,16 @@ msgid "Add provider"
 msgstr "Szolgáltató hozzáadása"
 
 msgid "Add recording (enter recording duration)"
-msgstr ""
+msgstr "Felvétel hozzáadása (a felvétel időtartamának megadásával)"
 
 msgid "Add recording (enter recording endtime)"
-msgstr ""
+msgstr "Felvétel hozzáadása (a felvétel végidejének megadásával)"
 
 msgid "Add recording (indefinitely)"
-msgstr ""
+msgstr "Felvétel hozzáadása (határozatlan ideig rögzít)"
 
 msgid "Add recording (stop after current event)"
-msgstr ""
+msgstr "Felvétel hozzáadása (leállítás az aktuális esemény után)"
 
 #
 #, fuzzy
@@ -868,19 +867,19 @@ msgid "Add to favourites"
 msgstr "Hozzáadás a kedvencekhez"
 
 msgid "Add/Remove timer for current event"
-msgstr ""
+msgstr "Időzítő hozzáadása/eltávolítása az aktuális eseményhez"
 
 msgid "Adding schedule..."
-msgstr ""
+msgstr "Ütemezés hozzáadása..."
 
 msgid "Additional Info"
-msgstr ""
+msgstr "További információ"
 
 msgid "Address"
-msgstr ""
+msgstr "Cím"
 
 msgid "Adjust 3D settings"
-msgstr ""
+msgstr "Állítsa be a 3D beállításokat"
 
 #
 msgid "Adjust the color settings so that all the color shades are distinguishable, but appear as saturated as possible. If you are happy with the result, press OK to close the video fine-tuning, or use the number keys to select other test screens."
@@ -908,10 +907,10 @@ msgstr "Haladó szoftver plugin"
 #
 #, fuzzy
 msgid "Advanced video enhancement setup"
-msgstr "Haladó képjavító beállítása "
+msgstr "Speciális videójavítási beállítások "
 
 msgid "Advanced video setup"
-msgstr ""
+msgstr "Speciális videobeállítás"
 
 #
 msgid "After event"
@@ -922,22 +921,22 @@ msgid "Album"
 msgstr "Album"
 
 msgid "Alias"
-msgstr ""
+msgstr "Álnév"
 
 #
 msgid "All"
 msgstr "Összes"
 
 msgid "All ages"
-msgstr ""
+msgstr "Minden kor"
 
 #
 #, fuzzy
 msgid "All resolutions"
-msgstr "Felbontás"
+msgstr "Minden felbontás"
 
 msgid "All satellites"
-msgstr ""
+msgstr "Minden Műhold"
 
 msgid "Allocate"
 msgstr ""
@@ -995,10 +994,10 @@ msgstr ""
 
 #
 msgid "Alpha"
-msgstr "Alfa"
+msgstr "Betű"
 
 msgid "Alphanumeric"
-msgstr ""
+msgstr "BetűSzám"
 
 #
 #, fuzzy
@@ -1006,30 +1005,30 @@ msgid "Alternative"
 msgstr "alternatívák hozzáadása"
 
 msgid "Alternative numbering mode"
-msgstr ""
+msgstr "Alternatív számozási mód"
 
 msgid "Alternative radio mode"
-msgstr ""
+msgstr "Alternatív rádió mód"
 
 #
 msgid "Alternative services tuner priority"
-msgstr "Tuner alternatív szolgáltatások prioritása"
+msgstr "Alternatív szolgáltatások tuner prioritása"
 
 msgid "Always ask"
 msgstr "Mindig rákérdez"
 
 msgid "Always hide infobar"
-msgstr ""
+msgstr "Mindig elrejtse az infobárt"
 
 msgid "Always show bouquets"
-msgstr ""
+msgstr "Mindig mutass bouqueteket"
 
 #
 msgid "An empty filename is illegal."
 msgstr "Egy üres fájlnév érvénytelen."
 
 msgid "An error occurred while downloading the packetlist. Please try again."
-msgstr ""
+msgstr "Hiba történt a csomaglista letöltése közben. Kérlek próbáld újra."
 
 #
 #, fuzzy
@@ -1037,7 +1036,7 @@ msgid "An unknown error occurred!"
 msgstr "Ismeretlen hiba keletkezett!"
 
 msgid "Any activity"
-msgstr ""
+msgstr "Bármely tevékenység"
 
 #
 msgid "Arabic"
@@ -1045,7 +1044,7 @@ msgstr "Arab"
 
 #, fuzzy
 msgid "Are you sure to remove this entry?"
-msgstr "Biztos benne, hogy kilép a Varázslóból?"
+msgstr "Biztosan eltávolítja ezt a bejegyzést?"
 
 #
 msgid ""
@@ -1061,22 +1060,22 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to delete all selected logs:\n"
-msgstr ""
+msgstr "Biztos, hogy törli az összes kiválasztott naplót?:\n"
 
 msgid "Are you sure you want to delete this log:\n"
-msgstr ""
+msgstr "Biztosan törli ezt a naplót?:\n"
 
 #, fuzzy
 msgid ""
 "Are you sure you want to delete this:\n"
 " "
-msgstr "Biztos benne, hogy kilép a Varázslóból?"
+msgstr "Biztosan törli ezt?:\n"
 
 msgid "Are you sure you want to exit this wizard?"
 msgstr "Biztos benne, hogy kilép a Varázslóból?"
 
 msgid "Are you sure you want to reload the EPG data from:\n"
-msgstr ""
+msgstr "Biztos, hogy újra szeretné tölteni az EPG-adatait innen?:"
 
 #
 msgid ""
@@ -1100,28 +1099,28 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to save the EPG Cache to:\n"
-msgstr ""
+msgstr "Biztosan el akarja menteni az EPG-gyorsítótárat ide:\n"
 
 msgid "Are you sure you want to send this log:\n"
-msgstr ""
+msgstr "Biztosan el akarja küldeni ezt a naplót:\n"
 
 #, fuzzy, python-format
 msgid "Are you sure you want to update your %s %s ?"
-msgstr "Biztos benne, hogy kilép a Varázslóból?"
+msgstr "Biztos benne, hogy frissíteni szeretné? "
 
 #
 msgid "Artist"
 msgstr "Előadó"
 
 msgid "Arts/Culture"
-msgstr ""
+msgstr "Művész/Kultúra"
 
 #
 msgid "Ask user"
 msgstr "Felhasználó kérdezése"
 
 msgid "Aspect ratio"
-msgstr ""
+msgstr "Oldalarány"
 
 #
 #, fuzzy
@@ -1134,10 +1133,10 @@ msgid "Assigned services/provider:"
 msgstr "hozzárendelt szolgáltató:"
 
 msgid "At End:"
-msgstr ""
+msgstr "A végén:"
 
 msgid "Attach a file"
-msgstr ""
+msgstr "Fájl csatolása"
 
 msgid "Audio PID"
 msgstr ""
@@ -1155,7 +1154,7 @@ msgid "Audio language selection 4"
 msgstr "Negyedleges előnyben részesített hangsáv"
 
 msgid "Audio options..."
-msgstr ""
+msgstr "Hangbeállítások..."
 
 #
 #, fuzzy, python-format
@@ -1207,7 +1206,7 @@ msgid "Auto focus commencing ..."
 msgstr ""
 
 msgid "Auto language selection"
-msgstr ""
+msgstr "Automatikus nyelvválasztás"
 
 #
 msgid "Auto scart switching"
@@ -1222,10 +1221,10 @@ msgid "Automatic Scan"
 msgstr "Automatikus keresés"
 
 msgid "Automatic image backup"
-msgstr ""
+msgstr "Automatikus image mentés"
 
 msgid "Automatic refresh"
-msgstr ""
+msgstr "Automatikus frissítés"
 
 #
 #, fuzzy
@@ -1235,13 +1234,13 @@ msgstr "Automatikus keresés"
 #
 #, fuzzy
 msgid "Automatic resolution label"
-msgstr "Automatikus keresés"
+msgstr "Automatikus felbontás"
 
 msgid "Automatic save"
-msgstr ""
+msgstr "Automatikus mentés"
 
 msgid "Automatic scan"
-msgstr ""
+msgstr "Automatikus keresés"
 
 msgid "Automatic settings backup"
 msgstr ""
@@ -1257,10 +1256,10 @@ msgid "Automatically update Client/Server View?"
 msgstr ""
 
 msgid "Autostart"
-msgstr ""
+msgstr "Automatikus indítás"
 
 msgid "Autostart:"
-msgstr ""
+msgstr "Automatikus indítás:"
 
 #
 msgid "Available format variables"
@@ -1290,7 +1289,7 @@ msgid "Background"
 msgstr "Háttér"
 
 msgid "Background check"
-msgstr ""
+msgstr "Háttér ellenőrzés"
 
 #
 #, fuzzy
@@ -1304,10 +1303,10 @@ msgid "Background delete speed"
 msgstr "Törlés sebessége"
 
 msgid "Backup Manager"
-msgstr ""
+msgstr "Mentés kezelő"
 
 msgid "Backup completed."
-msgstr ""
+msgstr "Mentés befejezve."
 
 #
 msgid "Backup failed."

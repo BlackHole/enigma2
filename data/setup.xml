@@ -2,8 +2,8 @@
 <!-- "titleshort" attribute is optional. If present it will be used as the item title in the menu. It will also be used as the header in setup screens when menu path is enabled. -->
 <setupxml>
 	<setup key="time" title="Time">
-		<item level="0" text="Timezone area" description="Setup your timezone area.">config.timezone.area</item>
-		<item level="0" text="Timezone" description="Your timezone in the area.">config.timezone.val</item>
+		<item level="0" text="Time zone area" description="Select your time zone area or region.">config.timezone.area</item>
+		<item level="0" text="Time zone" description="Select the time zone within the area or region.">config.timezone.val</item>
 		<item level="0" text="Sync time using" description="Synchronize system time using transponder or internet.">config.misc.SyncTimeUsing</item>
 		<item level="0" text="NTP server" description="Configure your NTP server.">config.misc.NTPserver</item>
 		<item level="0" text="Sync NTP every (minutes)" description="Setup network time synchronization interval." requires="config.misc.SyncTimeUsing" >config.misc.useNTPminutes</item>
@@ -47,14 +47,13 @@
 		<item level="0" text="Always use second infobar" description="Always show second infobar instead of standard infobar.">config.usage.fix_second_infobar</item>
 		<item level="0" text="Enable infobar fade-out" description="Fade the infobar when hiding">config.usage.show_infobar_do_dimming</item>
 		<item level="0" text="Infobar fade-out speed" description="Configure the infobar fading speed">config.usage.show_infobar_dimming_speed</item>
-		<item level="0" text="InfoBar EPG mode" description="Select how to activate the Quick EPG mode:" requires="InfoBarEpg">config.vixsettings.InfoBarEpg_mode</item>
+		<item level="0" text="Infobar EPG activation" description="Select how to activate the Infobar EPG. This will affect Infobar behaviour" requires="InfoBarEpg">config.obhsettings.InfoBarEpg_mode</item>
 		<item level="0" text="Show animation while busy" description="Show spinning logo when the system is busy.">config.usage.show_spinner</item>
 		<item level="1" text="Show job tasks in extensions" description="With this option you can hide Job Tasks from the extension screen (short blue button press).">config.usage.jobtaskextensions</item>
 		<item level="1" text="Show positioner movement" description="Choose whether or not to show an icon when a motorised dish is moving.">config.usage.showdish</item>
 		<item level="1" text="Show positioner position" description="Configure whether or not an rotor position will be displayed on infobar">config.misc.showrotorposition</item>
 		<item level="0" text="Include CI assignment" description="Set CI assignment for detection of available services." >config.misc.use_ci_assignment</item>
 		<item level="1" text="Alternative radio mode" description="Use the alternative or the conventional radio mode.">config.usage.e1like_radio_mode</item>
-		<item level="1" text="Position of finished Timers in the Timer list" description="Control of the position how finished timers are shown in the Timer List.">config.usage.timerlist_finished_timer_position</item>
 		<item level="2" text="Show infobar on channel change" description="If set to 'yes' the infobar will be displayed when changing channels.">config.usage.show_infobar_on_zap</item>
 		<item level="1" text="Show infobar on skip forward/backward" description="If set to 'yes', the infobar will be displayed when Fast Forwarding or Rewinding during media playback.">config.usage.show_infobar_on_skip</item>
 		<item level="1" text="Show infobar on event change" description="If set to 'yes' the infobar will be displayed when a new event starts.">config.usage.show_infobar_on_event_change</item>
@@ -75,7 +74,7 @@
 		<item level="1" text="Show full menu path" description="This option allows you to show the full menu path">config.usage.show_menupath</item>
 		<item level="1" text="Sort setting screens alphabetically" description="This option allows you to disable sorting of the option in setting screens">config.usage.sort_settings</item>
 		<item level="1" text="Sort menu screens alphabetically" description="This option allows you to disable sorting of the menus">config.usage.sort_menus</item>
-		<item level="0" text="Show menu numbers" description="This option allows you to show menu number quick links.">config.usage.menu_show_numbers</item>		
+		<item level="0" text="Show menu numbers" description="This option allows you to show menu number quick links.">config.usage.menu_show_numbers</item>
 		<item level="1" text="Sort plug-in browser alphabetically" description="This option allows you to disable sorting of the plugin browser.">config.usage.sort_pluginlist</item>
 		<item level="1" text="Show PVR status in Movie Player infobar" description="This option moves the PVR status from the separate window into the Movie Player infobar.">config.usage.movieplayer_pvrstate</item>
 		<item level="2" text="Close PiP on exit" description="When enabled, the PiP can be closed by the EXIT button.">config.usage.pip_hideOnExit</item>
@@ -109,7 +108,9 @@
 		<item level="1" text="Service info font size" description="This allows you to change the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size">config.usage.serviceinfo_fontsize</item>
 		<item level="2" text="Load unlinked userbouquets" description="When enabled enigma2 will load unlinked userbouquets. This means that userbouquets that are available, but not included in the bouquets.tv or bouquets.radio files, will still be loaded. This allows you for example to keep your own user bouquet while installed settings are upgraded">config.misc.load_unlinked_userbouquets</item>
 		<item level="1" text="Zap key delay for channel number input" description="In live view wait this many seconds after a numeric key press before assuming the required channel number has been entered. Default: 5 seconds. Setting zero will require confirmation with 'OK'. ">config.misc.zapkey_delay</item>
+		<item level="2" text="Show picons during channel number input" description="Configure whether service picons will be shown in number zap.">config.misc.numzap_picon</item>
 		<item level="1" text="Zap mode" requires="ZapMode" description="Setup how to control the channel changing.">config.misc.zapmode</item>
+		<item level="2" text="Number of digits in channel number" description="This allows you to set the number of digits you can input when selecting channels using number input.">config.usage.maxchannelnumlen</item>
 	</setup>
 	<setup key="epgsettings" title="EPG settings" titleshort="Settings">
 		<item level="2" text="EPG location" description="Choose the location where the EPG data will be stored when the %s %s is shut down. The location must be available at boot time.">config.misc.epgcachepath</item>
@@ -178,6 +179,7 @@
 		<item level="1" text="Recordings always have priority" description="When enabled, a recording is allowed to interrupt live TV, when there are no free tuners.">config.recording.asktozap</item>
 		<item level="0" text="Margin before recording (minutes)" description="When nonzero, a recording will start earlier than the starting time indicated by the EPG.">config.recording.margin_before</item>
 		<item level="0" text="Margin after recording (minutes)" description="When nonzero, a recording will stop later than the ending time indicated by the EPG.">config.recording.margin_after</item>
+		<item level="0" text="Split event detection (minutes)" description="Detect programs split by news bulletins. Choose the maximum duration in minutes to consider as a bulletin, or 0 to disable.">config.recording.split_programme_minutes</item>
 		<item level="2" text="Show message when recording starts" description="When enabled, a popup message will be shown when a recording starts.">config.usage.show_message_when_recording_starts</item>
 		<item level="2" text="Quit Movie Player with EXIT button" description="When enabled, it is possible to leave the Movie Player with exit.">config.usage.leave_movieplayer_onExit</item>
 		<item level="2" text="Behavior when a movie is started" description="Configure the behavior when movie playback is started.">config.usage.on_movie_start</item>
@@ -186,7 +188,7 @@
 		<item level="2" text="Display message before playing next movie" description="When enabled, a popup message will be shown when a movie has finished and the next one will start.">config.usage.next_movie_msg</item>
 		<item level="2" text="Behavior of 'pause' when paused" description="Configure the behavior of the 'pause' key when movie playback is already paused.">config.seek.on_pause</item>
 		<item level="1" text="Enable VOD skip buttons">config.seek.vod_buttons</item>
-		<item level="2" text="Custom skip time for '1''3' buttons" description="Configure the skip time interval for the 1 and 3 buttons.">config.seek.selfdefined_13</item>
+		<item level="2" text="Custom skip time for '1'/'3' buttons" description="Configure the skip time interval for the 1 and 3 buttons.">config.seek.selfdefined_13</item>
 		<item level="2" text="Custom skip time for '4'/'6' buttons" description="Configure the skip time interval for the 4 and 6 buttons.">config.seek.selfdefined_46</item>
 		<item level="2" text="Custom skip time for '7'/'9' buttons" description="Configure the skip time interval for the 7 and 9 buttons.">config.seek.selfdefined_79</item>
 		<item level="2" text="Seekbar activation" description="Select seekbar to be activated by arrow L/R (long) or &lt;&lt; &gt;&gt; (long).">config.seek.baractivation</item>
@@ -198,7 +200,9 @@
 		<item level="2" text="Initial rewind speed" description="Configure the initial rewind speed. When you press the rewind button, rewinding will start at this speed.">config.seek.enter_backward</item>
 		<item level="2" text="Limit character set for recording filenames" description="Limit the characters that can be used in recording filenames to (7 bit) ascii. This ensures compatibility with operating systems or file systems with limited character sets.">config.recording.ascii_filenames</item>
 		<item level="2" text="Composition of the recording filenames" description="Configure how recording filenames are constructed.">config.recording.filename_composition</item>
-		<item level="2" text="Remove completed timers after (days)" description="Configure the number of days old timers are kept before they are automatically removed from the timer list.">config.recording.keep_timers</item>
+		<item level="1" text="Show picons in timer list" description="Configure if picons will be shown in the timer list.">config.usage.timerlist_showpicons</item>
+		<item level="1" text="Position of finished timers in timer list" description="Control how finished timers are shown in the timer list. If set to hide, disabled timers will still be shown">config.usage.timerlist_finished_timer_position</item>
+		<item level="2" text="Remove finished timers after (days)" description="Configure the number of days old timers are kept before they are automatically removed from the timer list.">config.recording.keep_timers</item>
 		<item level="2" text="Offline decode delay (ms)" description="Configure the offline decoding delay (in milliseconds). The configured delay is observed at each control word parity change.">config.recording.offline_decode_delay</item>
 		<item level="2" text="Default recording type" description="Descramble &amp; record ECM' gives the option to descramble afterwards if descrambling on recording failed. 'Don't descramble, record ECM' save a scramble recording that can be descrambled on playback. 'Normal' means descramble the recording and don't record ECM.">config.recording.ecm_data</item>
 	</setup>
@@ -225,29 +229,30 @@
 		<item level="0" text="Keyboard map">config.keyboard.keymap</item>
 	</setup>
 	<setup key="display" title="Front panel settings" titleshort="Settings" requires="FrontpanelDisplay">
-		<item level="0" text="Use separate Picon pack for Front Display *" description="Use picon_lcd directory for picons on color LCD">config.lcd.picon_pack</item>
+		<item level="0" text="Use separate Picon pack for Front Display" description="Use piconlcd directory for picons on color LCD">config.lcd.picon_pack</item>
 		<item level="0" text="Show MiniTV in the Front Display" description="You can Display MiniTV with or without OSD Menu" requires="LCDMiniTV">config.lcd.minitvmode</item>
 		<item level="0" text="Show PIP in the Front Display" description="You can Display PIP with or without OSD Menu" requires="LCDMiniTVPiP">config.lcd.minitvpipmode</item>
 		<item level="0" text="Set Framerate for MiniTV" description="Lower Framerate save CPU Time" requires="LCDMiniTV">config.lcd.minitvfps</item>
-		<item level="0" text="Power LCD Display" description="This option allows you to power on or off the display.">config.lcd.power</item>
+		<item level="0" text="Power LCD Display" description="This option allows you to power on or off the display." requires="LcdPowerOn">config.lcd.power</item>
 		<item level="0" text="Clone TV screen to LCD" description="Shows live tv or informations on LCD." requires="LcdLiveTV">config.lcd.showTv</item>
 		<item level="0" text="Brightness (Normal)" description="Configure the brightness level of the front panel display for normal operation.">config.lcd.bright</item>
 		<item level="0" text="Brightness (Dimmed)" description="Configure the brightness level of the front panel display for dimmed operation.">config.lcd.dimbright</item>
 		<item level="0" text="Dim delay" description="Dim the LCD after specified time.">config.lcd.dimdelay</item>
 		<item level="0" text="Brightness (Standby)" description="Configure the brightness level of the front panel display for standby.">config.lcd.standby</item>
-		<item level="0" requires="ConfigDisplay" text="Contrast" description="Configure the contrast level of the front panel display.">config.lcd.contrast</item>
+		<item level="0" text="Contrast" description="Configure the contrast level of the front panel display." requires="ConfigDisplay">config.lcd.contrast</item>
 		<item level="0" text="LED Normal" description="LED brightness during normal operations." requires="LEDButtons">config.lcd.ledbrightness</item>
 		<item level="0" text="LED Standby" description="LED brightness during standby." requires="LEDButtons">config.lcd.ledbrightnessstandby</item>
 		<item level="0" text="LED Deep Standby" description="LED brightness during deep standby." requires="LEDButtons">config.lcd.ledbrightnessdeepstandby</item>
-		<item level="0" text="Turn on the power LED." description="Power LED can be turned on or off here." requires="PowerLed">config.lcd.powerled</item>
+		<item level="0" text="Turn on the power LED." description="Power LED can be turned on or off here." requires="PowerLED">config.lcd.powerled</item>
+		<item level="0" text="Turn on the control LED." description="Control LED can be turned on or off here." requires="PowerLED2">config.lcd.powerled2</item>
 		<item level="0" text="Standby LED" description="Turn on the power LED during standby." requires="StandbyLED">config.lcd.standbyLED</item>
 		<item level="0" text="Deep Standby LED" description="Turn on the power LED during deep standby." requires="SuspendLED">config.lcd.suspendLED</item>
-		<item level="0" text="Power LED State when Running." description="Set LED Color or disable the LED." requires="LedPowerColor">config.lcd.ledpowercolor</item>
-		<item level="0" text="Power LED State in Standby" description="Set LED Color or disable the LED." requires="LedStandbyColor">config.lcd.ledstandbycolor</item>
-		<item level="0" text="Power LED State in Deep-Standby" description="Set LED Color or disable the LED." requires="LedSuspendColor">config.lcd.ledsuspendcolor</item>
-		<item level="0" text="PowerControl FrontDisplay Normal Mode" description="This option allows you to Power Off the display." requires="Power4x7On">config.lcd.power4x7on</item>
-		<item level="0" text="PowerControl FrontDisplay Standby Mode" description="This option allows you to Power Off the display." requires="Power4x7Standby">config.lcd.power4x7standby</item>
-		<item level="0" text="PowerControl FrontDisplay Suspend Mode" description="This option allows you to Power Off the display." requires="Power4x7Suspend">config.lcd.power4x7suspend</item>
+		<item level="0" text="Power LED Colour State when Running." description="Set LED Color or disable the LED." requires="LedPowerColor">config.lcd.ledpowercolor</item>
+		<item level="0" text="Power LED Colour State in Standby" description="Set LED Color or disable the LED." requires="LedStandbyColor">config.lcd.ledstandbycolor</item>
+		<item level="0" text="Power LED Colour State in Deep-Standby" description="Set LED Color or disable the LED." requires="LedSuspendColor">config.lcd.ledsuspendcolor</item>
+		<item level="0" text="PowerControl FrontDisplay Normal Mode" description="Power On/Off display Normal Mode." requires="Power24x7On">config.lcd.power24x7on</item>
+		<item level="0" text="PowerControl FrontDisplay Standby Mode" description="Power On/Off display Standby Mode." requires="Power24x7Standby">config.lcd.power24x7standby</item>
+		<item level="0" text="PowerControl FrontDisplay Suspend Mode" description="Power On/Off display Suspend Mode." requires="Power24x7Suspend">config.lcd.power24x7suspend</item>
 		<item level="0" text="Show in Standby" description="This option allows you choose how to display the Time or nothing in Standby" requires="7segment">config.usage.show_in_standby</item>
 		<item level="2" text="Initial scroll delay" description="Delay in milliseconds before start of scrolling text on display." requires="VFD_initial_scroll_delay">config.usage.vfd_initial_scroll_delay</item>
 		<item level="2" text="Final scroll delay" description="Delay in milliseconds after finish scrolling text on display." requires="VFD_final_scroll_delay">config.usage.vfd_final_scroll_delay</item>
@@ -258,12 +263,12 @@
 		<item level="0" text="Date style" description="Choose the front panel display formatting style for dates. 'D' / 'DD' is the date and 'M' / 'MM' is the month in digits.  ('DD' and 'MM' have leading zeros for single digit values.) The screen display will be based on your choice but can be influenced by the skin." requires="config.usage.date.enabled_display">config.usage.date.display</item>
 		<item level="0" text="Time style" description="Choose the front panel display formatting style for times. 'H' / 'HH' is the hour for a 24 hour clock, 'h' / 'hh' is the hour for a 12 hour clock, 'mm' is the minutes.  ('HH' and 'hh' have leading zeros for single digit values.) The front panel display will be based on your choice but can be influenced any applicable skin." requires="config.usage.time.enabled_display">config.usage.time.display</item>
 		<item level="1" text="Show Display Icons" description="Allows you to enable/disable displaying icons on the front panel.">config.lcd.mode</item>
-		<item level="1" requires="ConfigDisplay" text="Show Time Remaining/Elapsed" description="This option allows you choose how to display remaining time, or elapsed time, or both.">config.usage.swap_time_remaining_on_vfd</item>
-		<item level="1" requires="ConfigDisplay" text="Show Transponder Remaining/Elapsed as" description="This option allows you choose how to display the remaining/elapsed time for live TV.">config.usage.swap_time_display_on_vfd</item>
-		<item level="1" requires="ConfigDisplay" text="Show Media playback Remaining/Elapsed as" description="This option allows you to choose how to display the remaining/elapsed time for Media playback.">config.usage.swap_media_time_display_on_vfd</item>
-		<item level="0" requires="ConfigDisplay" text="Show time elapsed as positive" description="This option allows you to choose how to display elapsed time. As + or -">config.usage.elapsed_time_positive_vfd</item>
-		<item level="1" requires="ConfigDisplay" text="Scrolling Speed (software render)" description="Set the scrolling speed of text on the front display, this uses a software render in some skins.">config.lcd.scroll_speed</item>
-		<item level="1" requires="ConfigDisplay" text="Scrolling delay (software render)" description="Set the delay time between repeated loops, this uses a software render in some skins.">config.lcd.scroll_delay</item>		
+		<item level="1" text="Show Time Remaining/Elapsed" description="This option allows you choose how to display remaining time, or elapsed time, or both." requires="ConfigDisplay">config.usage.swap_time_remaining_on_vfd</item>
+		<item level="1" text="Show Transponder Remaining/Elapsed as" description="This option allows you choose how to display the remaining/elapsed time for live TV." requires="ConfigDisplay">config.usage.swap_time_display_on_vfd</item>
+		<item level="1" text="Show Media playback Remaining/Elapsed as" description="This option allows you to choose how to display the remaining/elapsed time for Media playback." requires="ConfigDisplay">config.usage.swap_media_time_display_on_vfd</item>
+		<item level="0" text="Show time elapsed as positive" description="This option allows you to choose how to display elapsed time. As + or -" requires="ConfigDisplay">config.usage.elapsed_time_positive_vfd</item>
+		<item level="1" text="Scrolling Speed (software render)" description="Set the scrolling speed of text on the front display, this uses a software render in some skins." requires="ConfigDisplay">config.lcd.scroll_speed</item>
+		<item level="1" text="Scrolling delay (software render)" description="Set the delay time between repeated loops, this uses a software render in some skins." requires="ConfigDisplay">config.lcd.scroll_delay</item>
 		<item level="2" text="Use 12 characters display mode" description="If enabled, display shows 12 chars instead 8, but in latin-1/translit only." requires="hasXcoreVFD">config.usage.toggle12to8characterVFD</item>
 	</setup>
 	<setup key="satconfig" title="Satellite dish settings">
@@ -288,10 +293,11 @@
 	<setup key="logs" title="Logs settings" titleshort="Settings">
 		<item level="2" text="Logs folder location" description="Choose the location for crash and debug logs folder.">config.crash.debug_path</item>
 		<item level="2" text="Enable debug logs *" description="Allows you to enable the debug logs. They contain very detailed information about everything the system does. Reboot required to enable this!">config.crash.enabledebug</item>
-		<item level="2" text="Limit debug log size (MB)" description="Allows you to set the maximum size (MB) of the individual debug logs. When that size is reached, a new file will be created.">config.crash.debugloglimit</item>
+		<item level="2" text="Limit debug log size (MB)" description="Allows you to set the maximum size (MB) of the individual debug logs. When that size is reached, the log file will be truncated to the maximum size every 60 minutes.">config.crash.debugloglimit</item>
 		<item level="2" text="Show Log Manager in extensions list ?" description="Allows you to show/hide Log Manager in extensions (blue button).">config.logmanager.showinextensions</item>
 		<item level="2" text="Maximum number of days" description="Logs older than the specified number of days will be deleted.">config.crash.daysloglimit</item>
 		<item level="2" text="Maximum total space used (MB)" description="When maximum space for all logs is reached, the oldest logs will be deleted.">config.crash.sizeloglimit</item>
+		<item level="2" text="Debug log time format *" description="This is the prefix of each entry in the debug log. 'boot time' is the number of seconds since the receiver was last booted.">config.crash.logtimeformat</item>
 	</setup>
 	<setup key="timeshift" title="Timeshift">
 		<item level="1" text="Automatically start timeshift after" description="When enabled, timeshift starts automatically in background after the specified time.">config.timeshift.startdelay</item>
@@ -300,92 +306,101 @@
 		<item level="2" text="Stop timeshift while recording?" description="Stops timeshift being used if a recording is in progress. (Advisable for USB sticks)">config.timeshift.stopwhilerecording</item>
 		<item level="2" text="Use timeshift seekbar while timeshifting?" description="If set to 'yes', allows you to use the seekbar to jump to a point within the event.">config.timeshift.showinfobar</item>
 	</setup>
-	<setup key="epgsingle" title="ChannelEPG">
+	<setup key="epgchannel" title="Channel EPG">
 		<item level="2" text="Sort list by" description="You can have the list sorted by time or alphanumerical.">config.epgselection.sort</item>
-		<item level="2" text="Number of rows" description="Configure the number of rows shown.">config.epgselection.enhanced_itemsperpage</item>
-		<item level="2" text="Event font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.enhanced_eventfs</item>
+		<item level="2" text="Number of rows" description="Configure the number of rows shown.">config.epgselection.single.itemsperpage</item>
+		<item level="2" text="Event font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.single.eventfs</item>
 	</setup>
-	<setup key="epgmulti" title="MultiEPG">
-		<item level="2" text="Channel preview mode" description="If set to 'yes' you can preview channels in the EPG list.">config.epgselection.multi_preview_mode</item>
-		<item level="2" text="Show bouquet on launch" description="If set to 'yes' the bouquets will be shown each time you open the EPG.">config.epgselection.multi_showbouquet</item>
+	<setup key="epgmulti" title="Multi EPG">
+		<item level="2" text="Show bouquet on launch" description="If set to 'yes' the bouquets will be shown each time you open the EPG.">config.epgselection.multi.showbouquet</item>
+		<item level="2" text="Channel selection" description="Choose what channel to select when the EPG opens.">config.epgselection.multi.browse_mode</item>
+		<item level="2" text="Channel preview mode" description="If set to 'yes' you can preview channels in the EPG list.">config.epgselection.multi.preview_mode</item>
 		<item level="2" text="Skip empty services" description="If set to 'yes' channels without EPG will not be shown.">config.epgselection.overjump</item>
-		<item level="2" text="OK button (short)" description="Set to what you want the button to do.">config.epgselection.multi_ok</item>
-		<item level="2" text="OK button (long)" description="Set to what you want the button to do.">config.epgselection.multi_oklong</item>
-		<item level="2" text="Number of rows" description="Configure the number of rows shown.">config.epgselection.multi_itemsperpage</item>
-		<item level="2" text="Event font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.multi_eventfs</item>
+		<item level="2" text="OK button (short)" description="Set to what you want the button to do.">config.epgselection.multi.btn_ok</item>
+		<item level="2" text="OK button (long)" description="Set to what you want the button to do.">config.epgselection.multi.btn_oklong</item>
+		<item level="2" text="Number of rows" description="Configure the number of rows shown.">config.epgselection.multi.itemsperpage</item>
+		<item level="2" text="Event font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.multi.eventfs</item>
+		<item level="2" text="Service width" description="Configure the width allocated to the service name.">config.epgselection.multi.servicewidth</item>
 	</setup>
-	<setup key="epgenhanced" title="SingleEPG">
-		<item level="2" text="Channel preview mode" description="If set to 'yes' you can preview channels in the EPG list.">config.epgselection.enhanced_preview_mode</item>
-		<item level="2" text="Skip empty services" description="If set to 'yes' channels without EPG will not be shown.">config.epgselection.overjump</item>
-		<item level="2" text="Sort list by" description="You can have the list sorted by time or alphanumerical.">config.epgselection.sort</item>
-		<item level="2" text="OK button (short)" description="Set to what you want the button to do.">config.epgselection.enhanced_ok</item>
-		<item level="2" text="OK button (long)" description="Set to what you want the button to do.">config.epgselection.enhanced_oklong</item>
-		<item level="2" text="Number of rows" description="Configure the number of rows shown.">config.epgselection.enhanced_itemsperpage</item>
-		<item level="2" text="Event font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.enhanced_eventfs</item>
-	</setup>
-	<setup key="epginfobar" title="InfobarEPG">
-		<item level="2" text="View mode" description="Choose the layout view mode (Text or Graphics).">config.epgselection.infobar_type_mode</item>
-		<item level="2" text="Channel preview mode" description="If set to 'yes' you can preview channels in the EPG list.">config.epgselection.infobar_preview_mode</item>
+	<setup key="epgsingle" title="Single EPG">
+		<item level="2" text="Channel selection" description="Choose what channel to select when the EPG opens.">config.epgselection.single.browse_mode</item>
+		<item level="2" text="Channel preview mode" description="If set to 'yes' you can preview channels in the EPG list.">config.epgselection.single.preview_mode</item>
 		<item level="2" text="Skip empty services" description="If set to 'yes' channels without EPG will not be shown.">config.epgselection.overjump</item>
 		<item level="2" text="Sort list by" description="You can have the list sorted by time or alphanumerical.">config.epgselection.sort</item>
-		<item level="2" text="OK button (short)" description="Set to what you want the button to do.">config.epgselection.infobar_ok</item>
-		<item level="2" text="OK button (long)" description="Set to what you want the button to do.">config.epgselection.infobar_oklong</item>
-		<item level="2" text="Number of rows" description="Configure the number of rows shown.">config.epgselection.infobar_itemsperpage</item>
-		<item level="2" text="Event font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.infobar_eventfs</item>
+		<item level="2" text="OK button (short)" description="Set to what you want the button to do.">config.epgselection.single.btn_ok</item>
+		<item level="2" text="OK button (long)" description="Set to what you want the button to do.">config.epgselection.single.btn_oklong</item>
+		<item level="2" text="Number of rows" description="Configure the number of rows shown.">config.epgselection.single.itemsperpage</item>
+		<item level="2" text="Event font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.single.eventfs</item>
 	</setup>
-	<setup key="epginfobargraphical" title="Graphical InfobarEPG">
-		<item level="2" text="View mode" description="Choose the layout view mode (Text / Graphics Multi channel EPG or Single channel EPG).">config.epgselection.infobar_type_mode</item>
-		<item level="2" text="Channel preview mode" description="If set to 'yes' you can preview channels in the EPG list.">config.epgselection.infobar_preview_mode</item>
-		<item level="2" text="Service Title mode" description="Configure to show the channel names, picons, or both in the EPG.">config.epgselection.infobar_servicetitle_mode</item>
-		<item level="2" text="OK button (short)" description="Set to what you want the button to do.">config.epgselection.infobar_ok</item>
-		<item level="2" text="OK button (long)" description="Set to what you want the button to do.">config.epgselection.infobar_oklong</item>
+	<setup key="epginfobarsingle" title="Infobar Single EPG">
+		<item level="2" text="View mode" description="Choose the layout. Single channel, Graphics Grid EPG or Text Grid EPG.">config.epgselection.infobar.type_mode</item>
+		<item level="2" text="Channel selection" description="Choose what channel to select when the EPG opens.">config.epgselection.infobar.browse_mode</item>
+		<item level="2" text="Infobar EPG activation" description="Select how to activate the Infobar Single EPG. This will affect Infobar behaviour" requires="InfoBarEpg">config.obhsettings.InfoBarEpg_mode</item>
+		<item level="2" text="Channel preview mode" description="If set to 'yes' you can preview channels in the EPG list.">config.epgselection.infobar.preview_mode</item>
 		<item level="2" text="Skip empty services" description="If set to 'yes' channels without EPG will not be shown.">config.epgselection.overjump</item>
-		<item level="2" text="Base time" description="Choose time interval to which the graphics will be rounded off.">config.epgselection.infobar_roundto</item>
-		<item level="2" text="Primetime hour" description="Set to the desired primetime (hour).">config.epgselection.infobar_primetimehour</item>
-		<item level="2" text="Primetime minute" description="Set to the desired primetime (minutes).">config.epgselection.infobar_primetimemins</item>
-		<item level="2" text="Number of rows" description="Configure the number of rows shown.">config.epgselection.infobar_itemsperpage</item>
-		<item level="2" text="Event font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.infobar_eventfs</item>
-		<item level="2" text="Service font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.infobar_servfs</item>
-		<item level="2" text="Service width" description="Configure the width allocated to the service name.">config.epgselection.infobar_servicewidth</item>
-		<item level="2" text="Picon width" description="Configure the width allocated to the picon.">config.epgselection.infobar_piconwidth</item>
-		<item level="2" text="Info icon width" description="Configure the minimum width before showing the 'i' icon, '0' is equal to not showing the icon at all.">config.epgselection.infobar_infowidth</item>
-		<item level="2" text="Timeline font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.infobar_timelinefs</item>
-		<item level="2" text="Timeline 24 Hour" description="Show time in 24 hour clock format." requires="config.usage.time.disabled">config.epgselection.infobar_timeline24h</item>
-		<item level="2" text="Time scale" description="Configure the amount of time that will be presented.">config.epgselection.infobar_prevtimeperiod</item>
+		<item level="2" text="Sort list by" description="You can have the list sorted by time or alphanumerical.">config.epgselection.sort</item>
+		<item level="2" text="OK button (short)" description="Set to what you want the button to do.">config.epgselection.infobar.btn_ok</item>
+		<item level="2" text="OK button (long)" description="Set to what you want the button to do.">config.epgselection.infobar.btn_oklong</item>
+		<item level="2" text="Number of rows" description="Configure the number of rows shown.">config.epgselection.infobar.itemsperpage</item>
+		<item level="2" text="Event font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.infobar.eventfs</item>
 	</setup>
-	<setup key="epggraphical" title="GraphicalEPG">
-		<item level="2" text="View mode" description="This option allows you to set the layout view (Text or Graphics).">config.epgselection.graph_type_mode</item>
-		<item level="2" text="Channel preview mode" description="If set to 'yes' you can preview channels in the EPG list.">config.epgselection.graph_preview_mode</item>
-		<item level="2" text="Show bouquet on launch" description="If set to 'yes' the bouquets will be shown each time you open the EPG.">config.epgselection.graph_showbouquet</item>
-		<item level="2" text="Picture in graphics" description="If set to 'yes' shows a small TV-screen in the EPG.">config.epgselection.graph_pig</item>
-		<item level="1" text="Highlight current events" description="Enable to highlight events that are currently in progress.">config.epgselection.graph_highlight_current_events</item>
-		<item level="2" text="Service Title mode" description="Configure to show the channel names, picons, or both in the EPG.">config.epgselection.graph_servicetitle_mode</item>
-		<item level="2" text="Info button (short)" description="Set to what you want the button to do.">config.epgselection.graph_info</item>
-		<item level="2" text="Info button (long)" description="Set to what you want the button to do.">config.epgselection.graph_infolong</item>
-		<item level="2" text="OK button (short)" description="Set to what you want the button to do.">config.epgselection.graph_ok</item>
-		<item level="2" text="OK button (long)" description="Set to what you want the button to do.">config.epgselection.graph_oklong</item>
-		<item level="2" text="Channel 1 at start" description="If set to 'yes' the EPG will always open at the first channel of bouquet. If set to 'no' the EPG will open on the current channel.">config.epgselection.graph_channel1</item>
+	<setup key="epginfobargrid" title="Infobar Grid EPG">
+		<item level="2" text="View mode" description="Choose the layout. Single channel, Graphics Grid EPG or Text Grid EPG.">config.epgselection.infobar.type_mode</item>
+		<item level="2" text="Channel selection" description="Choose what channel to select when the EPG opens.">config.epgselection.infobar.browse_mode</item>
+		<item level="2" text="Infobar EPG activation" description="Select how to activate the Infobar Grid EPG. This will affect Infobar behaviour" requires="InfoBarEpg">config.obhsettings.InfoBarEpg_mode</item>
+		<item level="2" text="Channel preview mode" description="If set to 'yes' you can preview channels in the EPG list.">config.epgselection.infobar.preview_mode</item>
+		<item level="2" text="Service Title mode" description="Configure to show the channel names, picons, or both in the EPG.">config.epgselection.infobar.servicetitle_mode</item>
+		<item level="2" text="OK button (short)" description="Set to what you want the button to do.">config.epgselection.infobar.btn_ok</item>
+		<item level="2" text="OK button (long)" description="Set to what you want the button to do.">config.epgselection.infobar.btn_oklong</item>
 		<item level="2" text="Skip empty services" description="If set to 'yes' channels without EPG will not be shown.">config.epgselection.overjump</item>
-		<item level="2" text="Base time" description="Choose time interval to which the graphics will be rounded off.">config.epgselection.graph_roundto</item>
-		<item level="2" text="Primetime hour" description="Set the desired primetime (hour).">config.epgselection.graph_primetimehour</item>
-		<item level="2" text="Primetime minute" description="Set the desired primetime (minutes).">config.epgselection.graph_primetimemins</item>
-		<item level="2" text="Number of rows" description="Configure the number of rows shown.">config.epgselection.graph_itemsperpage</item>
-		<item level="2" text="Event font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.graph_eventfs</item>
-		<item level="2" text="Service font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.graph_servfs</item>
-		<item level="2" text="Alignment of service names" description="Configure alignment of the service names.">config.epgselection.graph_servicename_alignment</item>
-		<item level="2" text="Alignment of service numbers" description="Configure alignment of the service numbers.">config.epgselection.graph_servicenumber_alignment</item>
-		<item level="2" text="Alignment of events" description="Configure alignment of service events.">config.epgselection.graph_event_alignment</item>
-		<item level="2" text="Alignment of timeline date" description="Configure alignment of the timeline date.">config.epgselection.graph_timelinedate_alignment</item>
-		<item level="2" text="Service width" description="Configure the width allocated to the service name.">config.epgselection.graph_servicewidth</item>
-		<item level="2" text="Picon width" description="Configure the width allocated to the picon.">config.epgselection.graph_piconwidth</item>
-		<item level="2" text="Info icon width" description="Configure the minimum width before showing the 'i' icon, '0' is equal to not showing the icon at all.">config.epgselection.graph_infowidth</item>
-		<item level="2" text="Position of recording icons" description="Set the position of the recording icons">config.epgselection.graph_rec_icon_height</item>
-		<item level="2" text="Timeline font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.graph_timelinefs</item>
-		<item level="2" text="Timeline 24 Hour" description="Show time in 24 hour clock format." requires="config.usage.time.disabled">config.epgselection.graph_timeline24h</item>
-		<item level="2" text="Time scale" description="Configure the amount of time that will be presented.">config.epgselection.graph_prevtimeperiod</item>
+		<item level="2" text="Base time" description="Choose time interval to which the graphics will be rounded off.">config.epgselection.infobar.roundto</item>
+		<item level="2" text="Primetime" description="Set to the desired primetime.">config.epgselection.infobar.primetime</item>
+		<item level="2" text="Number of rows" description="Configure the number of rows shown.">config.epgselection.infobar.itemsperpage</item>
+		<item level="2" text="Event font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.infobar.eventfs</item>
+		<item level="2" text="Service font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.infobar.servfs</item>
+		<item level="2" text="Service width" description="Configure the width allocated to the service name.">config.epgselection.infobar.servicewidth</item>
+		<item level="2" text="Picon width" description="Configure the width allocated to the picon.">config.epgselection.infobar.piconwidth</item>
+		<item level="2" text="Info icon width" description="Configure the minimum width before showing the 'i' icon, '0' is equal to not showing the icon at all.">config.epgselection.infobar.infowidth</item>
+		<item level="2" text="Timeline font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.infobar.timelinefs</item>
+		<item level="2" text="Timeline 24 Hour" description="Show time in 24 hour clock format." requires="config.usage.time.disabled">config.epgselection.infobar.timeline24h</item>
+		<item level="2" text="Time scale" description="Configure the amount of time that will be presented.">config.epgselection.infobar.prevtimeperiod</item>
+	</setup>
+	<setup key="epggrid" title="Grid EPG">
+		<item level="2" text="View mode" description="This option allows you to set the layout view (Text or Graphics).">config.epgselection.grid.type_mode</item>
+		<item level="2" text="Show bouquet on launch" description="If set to 'yes' the bouquets will be shown each time you open the EPG.">config.epgselection.grid.showbouquet</item>
+		<item level="2" text="Channel selection" description="Choose what channel to select when the EPG opens.">config.epgselection.grid.browse_mode</item>
+		<item level="2" text="Channel preview mode" description="If set to 'yes' you can preview channels in the EPG list.">config.epgselection.grid.preview_mode</item>
+		<item level="2" text="Picture in graphics" description="If set to 'yes' shows a small TV-screen in the EPG.">config.epgselection.grid.pig</item>
+		<item level="1" text="Highlight current events" description="Enable to highlight events that are currently in progress.">config.epgselection.grid.highlight_current_events</item>
+		<item level="2" text="Service Title mode" description="Configure to show the channel names, picons, or both in the EPG.">config.epgselection.grid.servicetitle_mode</item>
+		<item level="2" text="Info button (short)" description="Set to what you want the button to do.">config.epgselection.grid.btn_info</item>
+		<item level="2" text="Info button (long)" description="Set to what you want the button to do.">config.epgselection.grid.btn_infolong</item>
+		<item level="2" text="OK button (short)" description="Set to what you want the button to do.">config.epgselection.grid.btn_ok</item>
+		<item level="2" text="OK button (long)" description="Set to what you want the button to do.">config.epgselection.grid.btn_oklong</item>
+		<item level="2" text="Skip empty services" description="If set to 'yes' channels without EPG will not be shown.">config.epgselection.overjump</item>
+		<item level="2" text="Base time" description="Choose time interval to which the graphics will be rounded off.">config.epgselection.grid.roundto</item>
+		<item level="2" text="Primetime" description="Set the desired primetime.">config.epgselection.grid.primetime</item>
+		<item level="2" text="Number of rows" description="Configure the number of rows shown.">config.epgselection.grid.itemsperpage</item>
+		<item level="2" text="Event font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.grid.eventfs</item>
+		<item level="2" text="Service font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.grid.servfs</item>
+		<item level="2" text="Alignment of service names" description="Configure alignment of the service names.">config.epgselection.grid.servicename_alignment</item>
+		<item level="2" text="Alignment of service numbers" description="Configure alignment of the service numbers.">config.epgselection.grid.servicenumber_alignment</item>
+		<item level="2" text="Alignment of events" description="Configure alignment of service events.">config.epgselection.grid.event_alignment</item>
+		<item level="2" text="Alignment of timeline date" description="Configure alignment of the timeline date.">config.epgselection.grid.timelinedate_alignment</item>
+		<item level="2" text="Service width" description="Configure the width allocated to the service name.">config.epgselection.grid.servicewidth</item>
+		<item level="2" text="Picon width" description="Configure the width allocated to the picon.">config.epgselection.grid.piconwidth</item>
+		<item level="2" text="Info icon width" description="Configure the minimum width before showing the 'i' icon, '0' is equal to not showing the icon at all.">config.epgselection.grid.infowidth</item>
+		<item level="2" text="Position of recording icons" description="Set the position of the recording icons">config.epgselection.grid.rec_icon_height</item>
+		<item level="2" text="Timeline font size" description="Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size.">config.epgselection.grid.timelinefs</item>
+		<item level="2" text="Timeline 24 Hour" description="Show time in 24 hour clock format." requires="config.usage.time.disabled">config.epgselection.grid.timeline24h</item>
+		<item level="2" text="Time scale" description="Configure the amount of time that will be presented.">config.epgselection.grid.prevtimeperiod</item>
 	</setup>
 	<setup key="pluginbrowsersetup" title="Plugin browser settings" titleshort="Settings">
 		<item level="2" text="Show translation packages" description="If set to 'yes' it will show the 'PO' packages in browser.">config.pluginbrowser.po</item>
 		<item level="2" text="Show source packages" description="If set to 'yes' it will show the 'SRC' packages in browser.">config.pluginbrowser.src</item>
 	</setup>
+	<setup key="wizardoptions" title="Common options">
+		<item level="0" text="Picons: Show in channel list" description="Configure if service picons will be shown in the channel selection list.">config.usage.service_icon_enable</item>
+	</setup>
+
 </setupxml>

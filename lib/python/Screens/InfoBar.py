@@ -1,3 +1,4 @@
+import os
 from Tools.Profile import profile
 
 # workaround for required config entry dependencies.
@@ -96,7 +97,7 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 		self.mainMenu()
 
 	def doButtonsCheck(self):
-		if config.vixsettings.ColouredButtons.value:
+		if config.obhsettings.ColouredButtons.value:
 			self["key_yellow"].setText(_("Audio Panel"))
 
 			if config.usage.defaultEPGType.value == "Graphical EPG..." or config.usage.defaultEPGType.value == "None":
@@ -104,7 +105,7 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 			else:
 				self["key_red"].setText(_("EPG"))
 
-			if not config.vixsettings.Subservice.value:
+			if not config.obhsettings.Subservice.value:
 				self["key_green"].setText(_("Green Panel"))
 			else:
 				self["key_green"].setText(_("Subservices"))
@@ -152,13 +153,13 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 		else:
 			self.showTv()
 
-	def toogleTvRadio(self): 
+	def toogleTvRadio(self):
 		if self.radioTV == 1:
 			self.radioTV = 0
-			self.showTv() 
-		else: 
+			self.showTv()
+		else:
 			self.radioTV = 1
-			self.showRadio() 
+			self.showRadio()
 
 	def showTv(self):
 		if config.usage.tvradiobutton_mode.value == "MovieList":
@@ -188,11 +189,19 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 		self.rds_display.show()  # in InfoBarRdsDecoder
 		self.servicelist.correctChannelNumber()
 
+	def restartLastMovie(self):
+		service = enigma.eServiceReference(config.usage.last_movie_played.value)
+		if service:
+			if os.path.exists(service.getPath()):
+				from Components.ParentalControl import parentalControl
+				if parentalControl.isServicePlayable(service, self.openMoviePlayer):
+					self.openMoviePlayer(service)
+
 	def showMovies(self, defaultRef=None):
 		self.lastservice = self.session.nav.getCurrentlyPlayingServiceOrGroup()
 		if self.lastservice and ':0:/' in self.lastservice.toString():
 			self.lastservice = enigma.eServiceReference(config.movielist.curentlyplayingservice.value)
-		self.session.openWithCallback(self.movieSelected, Screens.MovieSelection.MovieSelection, defaultRef, timeshiftEnabled = self.timeshiftEnabled())
+		self.session.openWithCallback(self.movieSelected, Screens.MovieSelection.MovieSelection, defaultRef or enigma.eServiceReference(config.usage.last_movie_played.value), timeshiftEnabled = self.timeshiftEnabled())
 
 	def movieSelected(self, service):
 		ref = self.lastservice
@@ -263,7 +272,7 @@ class MoviePlayer(InfoBarBase, InfoBarShowHide, InfoBarLongKeyDetection, InfoBar
 		MoviePlayer.instance = self
 
 	def doButtonsCheck(self):
-		if config.vixsettings.ColouredButtons.value:
+		if config.obhsettings.ColouredButtons.value:
 			self["key_yellow"].setText(_("Audio Panel"))
 #			self["key_green"].setText(_("Green Panel"))
 		self["key_blue"].setText(_("Blue Panel"))
@@ -428,7 +437,6 @@ class MoviePlayer(InfoBarBase, InfoBarShowHide, InfoBarLongKeyDetection, InfoBar
 		ref = self.session.nav.getCurrentlyPlayingServiceOrGroup()
 		if ref:
 			delResumePoint(ref)
-		self.session.nav.stopService()
 		self.handleLeave(config.usage.on_movie_eof.value)
 
 	def up(self):
@@ -562,4 +570,4 @@ class MoviePlayer(InfoBarBase, InfoBarShowHide, InfoBarLongKeyDetection, InfoBar
 		Notifications.AddPopup(text = _("%s/%s: %s") % (index, n, self.ref2HumanName(ref)), type = MessageBox.TYPE_INFO, timeout = 5)
 
 	def ref2HumanName(self, ref):
-		return enigma.eServiceCenter.getInstance().info(ref).getName(ref)		
+		return enigma.eServiceCenter.getInstance().info(ref).getName(ref)

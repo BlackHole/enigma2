@@ -1,4 +1,11 @@
 <!--suppress XmlUnboundNsPrefix -->
+	<!-- Flag meanings in <key/> elements:
+		"m": action active on key "make"
+		"b": action active on key "break"
+		"r": action active on key repeats
+		"l": action on long keypress
+	-->
+
 <keymap>
 	<map context="ListboxActions">
 		<device name="keyboard">
@@ -84,6 +91,10 @@
 		<key id="KEY_STOP" mapto="backspace" flags="mr" />
 		<key id="KEY_PLAYPAUSE" mapto="delete" flags="mr" />
 		<key id="KEY_PLAY" mapto="delete" flags="mr" />
+		<key id="KEY_VIDEO" mapto="erase" flags="m" />
+		<key id="KEY_MEDIA" mapto="erase" flags="m" />
+		<key id="KEY_LIST" mapto="erase" flags="m" />
+		<key id="KEY_PVR" mapto="erase" flags="m" />
 		<key id="KEY_INFO" mapto="toggleOverwrite" flags="m" />
 		<key id="KEY_0" mapto="0" flags="m" />
 		<key id="KEY_1" mapto="1" flags="m" />
@@ -301,7 +312,8 @@
 	</map>
 
 	<map context="InfobarSubtitleSelectionActions">
-		<key id="KEY_SUBTITLE" mapto="subtitleSelection" flags="m"/>
+		<key id="KEY_SUBTITLE" mapto="subtitleSelection" flags="b"/>
+		<key id="KEY_SUBTITLE" mapto="toggleDefaultSubtitles" flags="l"/>
 	</map>
 
 	<map context="InfobarSubserviceSelectionActions">
@@ -315,11 +327,12 @@
 	</map>
 
 	<map context="InfobarTimerButtonActions">
-			<key id="KEY_PROGRAM" mapto="timerSelection" flags="m"/>
+		<key id="KEY_PROGRAM" mapto="timerSelection" flags="b"/>
+		<key id="KEY_EDIT" mapto="timerSelection" flags="b"/>
 	</map>
 
 	<map context="InfobarVmodeButtonActions">
-			<key id="KEY_VMODE" mapto="vmodeSelection" flags="m"/>
+		<key id="KEY_VMODE" mapto="vmodeSelection" flags="m"/>
 	</map>
 
 	<map context="InfobarPiPActions">
@@ -641,7 +654,7 @@
 		<key id="KEY_GREEN" mapto="showSatellites" flags="m"/>
 		<key id="KEY_YELLOW" mapto="showProviders" flags="m"/>
 		<key id="KEY_BLUE" mapto="showFavourites" flags="m"/>
-		<key id="KEY_FAVORITES" mapto="showFavourites" flags="m"/>		
+		<key id="KEY_FAVORITES" mapto="showFavourites" flags="m"/>
 		<key id="KEY_CHANNELUP" mapto="nextBouquet" flags="m"/>
 		<key id="KEY_CHANNELDOWN" mapto="prevBouquet" flags="m"/>
 		<key id="KEY_NEXT" mapto="nextMarker" flags="m"/>
@@ -673,6 +686,8 @@
 	<map context="TimerEditActions">
 		<key id="KEY_INFO" mapto="log" flags="m"/>
 		<key id="KEY_I" mapto="log" flags="m"/>
+		<key id="KEY_CHANNELUP" mapto="moveTop" flags="m"/>
+		<key id="KEY_CHANNELDOWN" mapto="moveEnd" flags="m"/>
 	</map>
 
 	<map context="EPGSelectActions">
@@ -687,12 +702,15 @@
 		<key id="KEY_INFO" mapto="info" flags="b"/>
 		<key id="KEY_INFO" mapto="infolong" flags="l"/>
 		<key id="KEY_EPG" mapto="epg" flags="b"/>
+		<key id="KEY_EDIT" mapto="timerAdd" flags="m"/>
 		<key id="KEY_TV" mapto="tv" flags="b"/>
 		<key id="KEY_TV" mapto="tvlong" flags="l"/>
 		<key id="KEY_TV2" mapto="tv" flags="b"/>
 		<key id="KEY_TV2" mapto="tvlong" flags="l"/>
 		<key id="KEY_FAVORITES" mapto="tv" flags="b"/>
 		<key id="KEY_FAVORITES" mapto="tvlong" flags="l"/>
+		<key id="KEY_PROGRAM" mapto="timer" flags="b"/>
+		<key id="KEY_PROGRAM" mapto="timerlong" flags="l"/>
 	</map>
 
 	<map context="EventViewActions">
@@ -705,6 +723,7 @@
 		<key id="KEY_INFO" mapto="contextMenu" flags="m"/>
 		<key id="KEY_MENU" mapto="contextMenu" flags="m"/>
 		<key id="KEY_PROGRAM" mapto="timerAdd" flags="m"/>
+		<key id="KEY_EDIT" mapto="timerAdd" flags="m"/>
 	</map>
 
 	<map context="EventViewEPGActions">
@@ -763,7 +782,6 @@
 	</map>
 
 	<map context="WindowActions">
-
 	</map>
 
 	<map context="HelpActions">
@@ -933,7 +951,7 @@
 			<key id="KEY_NEXTSONG" mapto="next" flags="m"/>
 		</device-->
 	</map>
-	
+
 	<map context="ButtonSetupActions">
 		<key id="KEY_RED" mapto="red" flags="b"/>
 		<key id="KEY_RED" mapto="red_long" flags="l"/>
@@ -952,6 +970,7 @@
 		<key id="KEY_HELP" mapto="displayHelp" flags="b"/>
 		<key id="KEY_HELP" mapto="displayHelp_long" flags="l"/>
 		<key id="KEY_SUBTITLE" mapto="subtitle" flags="b"/>
+		<key id="KEY_SUBTITLE" mapto="subtitle_long" flags="l"/>
 		<key id="KEY_MENU" mapto="mainMenu" flags="b"/>
 		<key id="KEY_INFO" mapto="info" flags="b"/>
 		<key id="KEY_INFO" mapto="info_long" flags="l"/>
@@ -981,7 +1000,10 @@
 		<key id="KEY_PREVIOUSSONG" mapto="rewind" flags="b"/>
 		<key id="KEY_NEXTSONG" mapto="fastforward" flags="b"/>
 		<key id="KEY_SCREEN" mapto="activatePiP" flags="b"/>
+		<key id="KEY_SCREEN" mapto="activatePiP_long" flags="l"/>
 		<key id="KEY_PROGRAM" mapto="timer" flags="b"/>
+		<key id="KEY_EDIT" mapto="timer" flags="b"/>
+		<key id="KEY_EDIT" mapto="timer_long" flags="l"/>
 		<key id="KEY_PLAYPAUSE" mapto="playpause" flags="m"/>
 		<key id="KEY_LIST" mapto="playlist" flags="b"/>
 		<key id="KEY_TIME" mapto="timeshift" flags="b"/>
@@ -1001,5 +1023,7 @@
 		<key id="KEY_F3" mapto="f3_long" flags="l"/>
 		<key id="KEY_AUX" mapto="HDMIin" flags="b"/>
 		<key id="KEY_AUX" mapto="HDMIin_long" flags="l"/>
+		<key id="KEY_FILE" mapto="file" flags="b"/>
+		<key id="KEY_FILE" mapto="file_long" flags="l"/>
 	</map>
 </keymap>

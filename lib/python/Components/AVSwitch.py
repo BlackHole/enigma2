@@ -93,7 +93,7 @@ class AVSwitch:
 	modes["Scart"] = ["PAL", "NTSC", "Multi"]
 	# modes["DVI-PC"] = ["PC"]
 
-	modes["HDMI"] = SystemInfo["VideoModes"][0] 
+	modes["HDMI"] = SystemInfo["VideoModes"][0]
 	widescreen_modes = SystemInfo["VideoModes"][1]
 
 	modes["YPbPr"] = modes["HDMI"]
@@ -178,14 +178,19 @@ class AVSwitch:
 		if mode_60 is None or force == 50:
 			mode_60 = mode_50
 
-		if os.path.exists('/proc/stb/video/videomode_50hz') and getBoxType() not in (''):
+		try:
 			f = open("/proc/stb/video/videomode_50hz", "w")
 			f.write(mode_50)
 			f.close()
-		if os.path.exists('/proc/stb/video/videomode_60hz') and getBoxType() not in (''):
+		except IOError:
+			print "[AVSwitch] cannot open /proc/stb/video/videomode_50hz"
+		try:
 			f = open("/proc/stb/video/videomode_60hz", "w")
 			f.write(mode_60)
 			f.close()
+		except IOError:
+			print "[AVSwitch] cannot open /proc/stb/video/videomode_60hz"
+
 		try:
 			set_mode = modes.get(int(rate[:2]))
 		except: # not support 50Hz, 60Hz for 1080p
@@ -613,7 +618,7 @@ def InitAVSwitch():
 						("420", _("YCbCr420"))]
 			default = "Edid(Auto)"
 		else:
-				
+
 			choices = [("auto", _("auto")),
 						("rgb", _("rgb")),
 						("420", _("420")),
@@ -623,7 +628,7 @@ def InitAVSwitch():
 
 		if SystemInfo["havecolorspacechoices"] and SystemInfo["CanProc"]:
 			f = "/proc/stb/video/hdmi_colorspace_choices"
-			(choices, default) = read_choices(f, default) 
+			(choices, default) = read_choices(f, default)
 
 		config.av.hdmicolorspace = ConfigSelection(choices=choices, default=default)
 		config.av.hdmicolorspace.addNotifier(setHDMIColorspace)
@@ -652,7 +657,7 @@ def InitAVSwitch():
 		choices = [("auto", _("auto")),
 					("8bit", _("8bit")),
 					("10bit", _("10bit")),
-					("12bit", _("12bit"))]	
+					("12bit", _("12bit"))]
 		default = "auto"
 
 		if SystemInfo["havehdmicolordepthchoices"] and SystemInfo["CanProc"]:
@@ -686,13 +691,13 @@ def InitAVSwitch():
 	if SystemInfo["HDRSupport"]:
 		def setHlgSupport(configElement):
 			open("/proc/stb/hdmi/hlg_support", "w").write(configElement.value)
-		config.av.hlg_support = ConfigSelection(default = "auto(EDID)", 
+		config.av.hlg_support = ConfigSelection(default = "auto(EDID)",
 			choices = [ ("auto(EDID)", _("controlled by HDMI")), ("yes", _("force enabled")), ("no", _("force disabled")) ])
 		config.av.hlg_support.addNotifier(setHlgSupport)
 
 		def setHdr10Support(configElement):
 			open("/proc/stb/hdmi/hdr10_support", "w").write(configElement.value)
-		config.av.hdr10_support = ConfigSelection(default = "auto(EDID)", 
+		config.av.hdr10_support = ConfigSelection(default = "auto(EDID)",
 			choices = [ ("auto(EDID)", _("controlled by HDMI")), ("yes", _("force enabled")), ("no", _("force disabled")) ])
 		config.av.hdr10_support.addNotifier(setHdr10Support)
 
@@ -727,7 +732,7 @@ def InitAVSwitch():
 
 		choices = [("none", _("off")), ("hdmi", _("HDMI")), ("spdif", _("SPDIF")), ("dac", _("DAC"))]
 		default = "none"
-		
+
 		if SystemInfo["CanProc"]:
 			f = "/proc/stb/audio/3d_surround_choices"
 			(choices, default) = read_choices(f, default)

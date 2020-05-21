@@ -119,7 +119,7 @@ void eSubtitleWidget::setPage(const eDVBTeletextSubtitlePage &p)
 
 void eSubtitleWidget::setPage(const eDVBSubtitlePage &p)
 {
-	eDebug("[eSubtitleWidget] setPage");
+	//eDebug("[eSubtitleWidget] setPage");
 	m_dvb_page = p;
 	invalidate(m_visible_region); // invalidate old visible regions
 	m_visible_region.rects.clear();
@@ -141,7 +141,7 @@ void eSubtitleWidget::setPage(const eDVBSubtitlePage &p)
 			line++;
 		}
 		eDebug("[eSubtitleWidget] add %d %d %d %d", it->m_position.x(), it->m_position.y(), it->m_pixmap->size().width(), it->m_pixmap->size().height());
-		eDebug("[eSubtitleWidget] disp width %d, disp height %d", p.m_display_size.width(), p.m_display_size.height());
+		//eDebug("[eSubtitleWidget] disp width %d, disp height %d", p.m_display_size.width(), p.m_display_size.height());
 		eRect r = eRect(it->m_position, it->m_pixmap->size());
 		r.scale(size().width(), p.m_display_size.width(), size().height(), p.m_display_size.height());
 		m_visible_region |= r;
@@ -355,8 +355,8 @@ int eSubtitleWidget::event(int event, void *data, void *data2)
 				text = replace_all(text, "&apos;", "'");
 				text = replace_all(text, "&quot;", "\"");
 				text = replace_all(text, "&amp;", "&");
-				text = replace_all(text, "&lt", "<");
-				text = replace_all(text, "&gt", ">");
+				text = replace_all(text, "&lt;", "<");
+				text = replace_all(text, "&gt;", ">");
 
 				if (eConfigManager::getConfigBoolValue("config.subtitles.pango_subtitle_fontswitch"))
 				{
@@ -388,6 +388,13 @@ int eSubtitleWidget::event(int event, void *data, void *data2)
 					text = replace_all(text, "<u>", "");
 					text = replace_all(text, "<i>", "");
 					text = replace_all(text, "<b>", "");
+				}
+				text = replace_all(text, "</font>", "");
+				size_t subtitleFont = 0;
+				while ((subtitleFont = text.find("<font ", subtitleFont)) != std::string::npos)
+				{
+					size_t end = text.find('>', subtitleFont);
+					text.erase(subtitleFont, end - subtitleFont + 1);
 				}
 				subtitleStyles[face].font->pointSize=fontsize;
 				painter.setFont(subtitleStyles[face].font);
