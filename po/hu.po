@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: tuxbox-enigma 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-01-30 22:11+0100\n"
-"PO-Revision-Date: 2014-01-22 23:31+0100\n"
+"PO-Revision-Date: 2020-05-27 13:17+0100\n"
 "Last-Translator: Andy Blackburn <andyblac@icloud.com>\n"
 "Language-Team: Mediavox, robertut <info@mediavox.hu, robertut@yahoo.com>\n"
 "Language: hu_HU\n"
@@ -16,6 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.3\n"
 
 #
 msgid ""
@@ -281,7 +282,7 @@ msgstr "%s %s formátumú adat DVD (HDTV kompatibilis)"
 
 #, python-format
 msgid "%s %s front panel"
-msgstr "előlap"
+msgstr ""
 
 #
 #, fuzzy, python-format
@@ -314,8 +315,8 @@ msgstr ""
 #, python-format
 msgid "%s updated package available"
 msgid_plural "%s updated packages available"
-msgstr[0] "elérhető frissített csomag"
-msgstr[1] "elérhető frissített csomagok"
+msgstr[0] ""
+msgstr[1] ""
 
 #
 #, fuzzy, python-format
@@ -1075,7 +1076,7 @@ msgid "Are you sure you want to exit this wizard?"
 msgstr "Biztos benne, hogy kilép a Varázslóból?"
 
 msgid "Are you sure you want to reload the EPG data from:\n"
-msgstr "Biztos, hogy újra szeretné tölteni az EPG-adatait innen?:"
+msgstr "Biztos, hogy újra szeretné tölteni az EPG-adatait innen?:\n"
 
 #
 msgid ""
@@ -11834,4 +11835,3 @@ msgstr "felvétel"
 #
 msgid "zapped"
 msgstr "ugrott"
-
