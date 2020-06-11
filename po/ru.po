@@ -15,6 +15,54 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 2.3.1\n"
 
+msgid "Split event detection (minutes)"
+msgstr "Обнаружить разделы событий (в минутах)"
+
+msgid "Custom skip time for '1'/'3' buttons"
+msgstr "Время пропуска для кнопок '1'/'3'"
+
+msgid "Show picons in timer list"
+msgstr "Показать пиконы в списке таймеров"
+
+msgid "Position of finished timers in timer list"
+msgstr "Положение завершённых таймеров в списке таймеров"
+
+msgid "Remove finished timers after (days)"
+msgstr "Удалять завершённые таймеры после (дней)"
+
+msgid "Front panel settings"
+msgstr "Дисплей ресивера"
+
+msgid "Display Skin"
+msgstr "Скин"
+
+msgid "GUI Skin"
+msgstr "Скин"
+
+msgid "< Emergency >"
+msgstr "< Запасной >"
+
+msgid "< Current >"
+msgstr "< Текущий >"
+
+msgid "Press OK to keep the currently selected%s skin."
+msgstr "Нажмите OK, чтобы оставить текущий%s скин."
+
+msgid "Press OK to activate the selected%s skin."
+msgstr "Нажмите OK, чтобы активировать выбранный%s скин."
+
+msgid "Show picons during channel number input"
+msgstr "Показывать пиконы при вводе номера канала"
+
+msgid "Configure whether service picons will be shown in number zap."
+msgstr "Укажите, будут ли отображаться пиконы при вводе номера канала."
+
+msgid "Downmix"
+msgstr "Микширование"
+
+msgid "Passthrough"
+msgstr "Сквозная передача"
+
 msgid "Accept the current selection"
 msgstr "Принять текущий выбор"
 
@@ -1915,11 +1963,23 @@ msgstr ""
 msgid "Children/Youth"
 msgstr "Дети/Юноши"
 
+msgid "Chipset:\t"
+msgstr "Чипсет:\t"
+
+msgid "Chipset:\t%s\n"
+msgstr "Чипсет:\t%s\n"
+
 msgid "Chipset:\tBCM%s\n"
 msgstr "Чипсет:\tBCM%s\n"
 
 msgid "Chipset: BCM%s"
 msgstr "Чипсет: BCM%s"
+
+msgid "Chipset:\tBroadcom %s\n"
+msgstr "Чипсет:\tBroadcom %s\n"
+
+msgid "Chipset:\tHiSilicon %s\n"
+msgstr "Чипсет:\tHiSilicon%s\n"
 
 msgid "Choose a country scheme for decoding rating information in EPG events."
 msgstr "Выберите схему страны для декодирования информации рейтинга в событиях EPG."
@@ -2757,6 +2817,9 @@ msgstr "DMM стандарт"
 
 msgid "DTS"
 msgstr "DTS"
+
+msgid "DTS downmix"
+msgstr "DTS микширование"
 
 msgid "DUAL LAYER DVD"
 msgstr "Двухслойный DVD"
@@ -6932,6 +6995,9 @@ msgstr "Оперативная память"
 
 msgid "RF output"
 msgstr "ВЧ выход"
+
+msgid "rgb"
+msgstr "RGB"
 
 msgid "RGB"
 msgstr "RGB"
