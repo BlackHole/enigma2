@@ -14,6 +14,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3.1\n"
 
+msgid "SkinSelector: Restart GUI"
+msgstr "Selettore skin: riavvio della GUI"
+
+msgid "To save and apply the selected '%s' skin the GUI needs to restart. Would you like to save the selection and restart the GUI now?"
+msgstr "Per applicare la skin %s prescelta devo riavviare la GUI.\n"
+"Vuoi salvare la scelta e riavviare la GUI adesso?"
+
 msgid "alphabetic"
 msgstr "Alfabetico"
 
@@ -10360,7 +10367,7 @@ msgid ""
 "The user interface of your %s %s is restarting\n"
 "due to an error in mytest.py"
 msgstr ""
-"Il sistema (GUI) del %s %s è stata riavviato\n"
+"Il sistema (GUI) del %s %s è stato riavviato\n"
 "causa errore in mytest.py"
 
 msgid ""
