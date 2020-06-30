@@ -7390,10 +7390,10 @@ msgid "Restart"
 msgstr "Перезагрузить"
 
 msgid "Restart Enigma2"
-msgstr "Перезагрузка GUI"
+msgstr "Перезагрузить GUI"
 
 msgid "Restart Gui"
-msgstr "Перезагрузка GUI"
+msgstr "Перезагрузить GUI"
 
 msgid "Restart GUI"
 msgstr "Перезагрузить GUI"
