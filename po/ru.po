@@ -5690,7 +5690,7 @@ msgid "NEXT"
 msgstr "ДАЛЕЕ"
 
 msgid "No"
-msgstr "No"
+msgstr "Нет"
 
 msgid "No (supported) DVDROM found!"
 msgstr "Не найден (поддерживаемый) DVD-диск!"
@@ -6037,7 +6037,7 @@ msgid "Offline decode delay (ms)"
 msgstr "Задержка оффлайн декодирования (мс)"
 
 msgid "On"
-msgstr "On"
+msgstr "Вкл"
 
 msgid "On end of movie"
 msgstr "В конце фильма"
