@@ -12150,7 +12150,7 @@ msgid "nnw"
 msgstr "nnw"
 
 msgid "no"
-msgstr "no"
+msgstr "Нет"
 
 msgid "no CAId selected"
 msgstr "Не выбран CAID"
