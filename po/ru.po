@@ -4769,7 +4769,7 @@ msgid "Installation finished."
 msgstr "Установка завершена."
 
 msgid "Installed:\t%s\n"
-msgstr "Установлено:\t%s\n"
+msgstr "Установлен:\t%s\n"
 
 msgid "Installing"
 msgstr "Установка"
@@ -4973,13 +4973,13 @@ msgid "Last speed"
 msgstr "Последняя скорость"
 
 msgid "Last update:\t%s\n"
-msgstr "Обновлено:\t%s\n"
+msgstr "Обновлен:\t%s\n"
 
 msgid ""
 "Last update:\t%s\n"
 "\n"
 msgstr ""
-"Обновлено:\t%s\n"
+"Обновлен:\t%s\n"
 "\n"
 
 msgid "Last update: %s"
