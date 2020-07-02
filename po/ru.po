@@ -15,6 +15,15 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 2.3.1\n"
 
+msgid "Detect programs split by news bulletins. Choose the maximum duration in minutes to consider as a bulletin, or 0 to disable."
+msgstr "Обнаружение программ, разделенных сводкой новостей. Выберите максимальную продолжительность в минутах, которую следует рассматривать как сводку, или 0, чтобы отключить."
+
+msgid "Configure if picons will be shown in the timer list."
+msgstr "Укажите, нужно ли показывать пиконы в списке таймеров."
+
+msgid "Control how finished timers are shown in the timer list. If set to hide, disabled timers will still be shown"
+msgstr "Настройка способа отображения законченных таймеров в списке таймеров. Если выбрано 'Скрыть', отключенные таймеры все равно будут отображаться."
+
 msgid "Split event detection (minutes)"
 msgstr "Обнаружить разделы событий (в минутах)"
 
@@ -4682,6 +4691,9 @@ msgid "Information"
 msgstr "Информация"
 
 msgid "Init"
+msgstr "Инициализация"
+
+msgid "Initialise"
 msgstr "Инициализация"
 
 msgid "Initialise Devices"
