@@ -14,6 +14,12 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 2.3.1\n"
 
+msgid "Cover dashed flickering line for this service"
+msgstr "Скрыть служебную информацию для данного сервиса"
+
+msgid "Uncover dashed flickering line for this service"
+msgstr "Отменить скрытие служебной информации для данного сервиса"
+
 msgid "Detect programs split by news bulletins. Choose the maximum duration in minutes to consider as a bulletin, or 0 to disable."
 msgstr "Обнаружение программ, разделенных сводкой новостей. Выберите максимальную продолжительность в минутах, которую следует рассматривать как сводку, или 0, чтобы отключить."
 
