@@ -14,6 +14,15 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 2.3.1\n"
 
+msgid "SkinSelector: Restart GUI"
+msgstr "SkinSelector: Перезапуск GUI"
+
+msgid "To apply the selected '%s' skin the GUI needs to restart. Would you like to restart the GUI now?"
+msgstr "Чтобы применить выбранный скин '%s', необходимо перезапустить графический интерфейс. Хотите перезагрузить графический интерфейс сейчас?"
+
+msgid "To save and apply the selected '%s' skin the GUI needs to restart. Would you like to save the selection and restart the GUI now?"
+msgstr "Чтобы сохранить и применить выбранный скин '%s', необходимо перезапустить графический интерфейс. Хотите перезагрузить графический интерфейс сейчас?"
+
 msgid "Cover dashed flickering line for this service"
 msgstr "Скрыть служебную информацию для данного сервиса"
 
