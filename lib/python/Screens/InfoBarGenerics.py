@@ -55,6 +55,7 @@ import NavigationInstance
 
 from enigma import eTimer, eServiceCenter, eDVBServicePMTHandler, iServiceInformation, iPlayableService, iRecordableService, eServiceReference, eEPGCache, eActionMap, getDesktop, eDVBDB
 from boxbranding import getBrandOEM, getMachineBuild
+from keyids import KEYFLAGS, KEYIDS, invertKeyIds
 
 from time import time, localtime, strftime
 from bisect import insort
@@ -202,11 +203,10 @@ class InfoBarDish:
 
 class InfoBarLongKeyDetection:
 	def __init__(self):
-		eActionMap.getInstance().bindAction('', -maxint -1, self.detection) #highest prio
+		eActionMap.getInstance().bindAction("", -maxint - 1, self.detection)  # Highest priority.
 		self.LongButtonPressed = False
 
-	#this function is called on every keypress!
-	def detection(self, key, flag):
+	def detection(self, key, flag):  # This function is called on every keypress!
 		if flag == 3:
 			self.LongButtonPressed = True
 		elif flag == 0:
@@ -221,13 +221,12 @@ class InfoBarUnhandledKey:
 		self.checkUnusedTimer = eTimer()
 		self.checkUnusedTimer.callback.append(self.checkUnused)
 		self.onLayoutFinish.append(self.unhandledKeyDialog.hide)
-		eActionMap.getInstance().bindAction('', -maxint -1, self.actionA) #highest prio
-		eActionMap.getInstance().bindAction('', maxint, self.actionB) #lowest prio
-		self.flags = (1<<1)
+		eActionMap.getInstance().bindAction("", -maxint - 1, self.actionA)  # Highest priority.
+		eActionMap.getInstance().bindAction("", maxint, self.actionB)  # Lowest priority.
+		self.flags = (1 << 1)
 		self.uflags = 0
 
-	#this function is called on every keypress!
-	def actionA(self, key, flag):
+	def actionA(self, key, flag):  # This function is called on every keypress!
 		mkey = "unset"
 		try:
 			mkey = getKeyDescription(key)[0]
@@ -241,23 +240,19 @@ class InfoBarUnhandledKey:
 				self.secondInfoBarWasShown = False
 
 		if flag != 4:
-			if self.flags & (1<<1):
+			if self.flags & (1 << 1):
 				self.flags = self.uflags = 0
-			self.flags |= (1<<flag)
-			if flag == 1: # break
+			self.flags |= (1 << flag)
+			if flag == 1:  # Break
 				self.checkUnusedTimer.start(0, True)
 		return 0
 
 	def closeSIB(self, key):
-		if key >= 12 and key not in (114, 115, 352, 103, 108, 402, 403, 407, 412):
-			return True
-		else:
-			return False
+		return True if key >= 12 and key not in self.sibIgnoreKeys else False  # (114, 115, 352, 103, 108, 402, 403, 407, 412)
 
-	#this function is only called when no other action has handled this key
-	def actionB(self, key, flag):
+	def actionB(self, key, flag):  # This function is only called when no other action has handled this key.
 		if flag != 4:
-			self.uflags |= (1<<flag)
+			self.uflags |= (1 << flag)
 
 	def checkUnused(self):
 		if self.flags == self.uflags:
@@ -1054,7 +1049,6 @@ class InfoBarNumberZap:
 					bqrootstr = '1:7:1:0:0:0:0:0:0:0:FROM BOUQUET "bouquets.tv" ORDER BY bouquet'
 				else:
 					bqrootstr = '%s FROM BOUQUET "userbouquet.favourites.tv" ORDER BY bouquet'% service_types_tv
-					
 				serviceHandler = eServiceCenter.getInstance()
 				rootbouquet = eServiceReference(bqrootstr)
 				bouquet = eServiceReference(bqrootstr)
@@ -2627,9 +2621,6 @@ class InfoBarExtensions:
 			answer[1][1]()
 
 	def showPluginBrowser(self):
-# In Bh image blue press = blue panel
-#		from Screens.PluginBrowser import PluginBrowser
-#		self.session.open(PluginBrowser)
 		from Screens.BpBlue import DeliteBluePanel
 		self.session.open(DeliteBluePanel)
 
@@ -2697,7 +2688,7 @@ class InfoBarExtensions:
 			self.session.open(EPGSearch)
 
 	def showIMDB(self):
-		if os.path.exists("/usr/lib/enigma2/python/Plugins/Extensions/IMDb/plugin.pyo"):
+		try:
 			from Plugins.Extensions.IMDb.plugin import IMDB
 			s = self.session.nav.getCurrentService()
 			if s:
@@ -2705,14 +2696,14 @@ class InfoBarExtensions:
 				event = info.getEvent(0) # 0 = now, 1 = next
 				name = event and event.getEventName() or ''
 				self.session.open(IMDB, name)
-		else:
+		except ImportError:
 			self.session.open(MessageBox, _("The IMDb plugin is not installed!\nPlease install it."), type = MessageBox.TYPE_INFO,timeout = 10 )
 
 	def showDreamPlex(self):
-		if os.path.exists("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/plugin.pyo"):
+		try:
 			from Plugins.Extensions.DreamPlex.plugin import DPS_MainMenu
 			self.session.open(DPS_MainMenu)
-		else:
+		except ImportError:
 			self.session.open(MessageBox, _("The DreamPlex plugin is not installed!\nPlease install it."), type = MessageBox.TYPE_INFO,timeout = 10 )
 
 from Tools.BoundFunction import boundFunction

@@ -86,8 +86,8 @@ SystemInfo["RecoveryMode"] = False
 SystemInfo["AndroidMode"] = False
 SystemInfo["MBbootdevice"] = False
 SystemInfo["canMultiBoot"] = False
-SystemInfo["canBackupEMC"] = False
 SystemInfo["HasHiSi"] = False
+SystemInfo["canBackupEMC"] = False
 SystemInfo["canMode12"] = False
 SystemInfo["HasMMC"] = fileHas("/proc/cmdline", "root=/dev/mmcblk") or "mmcblk" in getMachineMtdRoot()
 SystemInfo["HasH9SD"] = False
