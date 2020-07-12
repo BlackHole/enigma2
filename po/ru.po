@@ -14,6 +14,192 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 2.3.1\n"
 
+msgid "<Current>"
+msgstr "<Текущий>"
+
+msgid "<Default + Picon>"
+msgstr "<По умолчанию+Пикон>"
+
+msgid "<Default>"
+msgstr "<По умолчанию>"
+
+msgid "<Emergency>"
+msgstr "<Запасной>"
+
+msgid "<Pending restart>"
+msgstr "<В ожидании перезагрузки>"
+
+msgid "Adapter Settings"
+msgstr "Настройки адаптера"
+
+msgid "Audio & Video Setting"
+msgstr "Аудио и Видео"
+
+msgid "Button Setup"
+msgstr "Настройки кнопок"
+
+msgid "Channel List Context Menu"
+msgstr "Меню списка каналов"
+
+msgid "Client Mode"
+msgstr "Режим клиента"
+
+msgid "Delete all the text"
+msgstr "Удалить весь текст"
+
+msgid "Enter PIN Code"
+msgstr "Введите PIN-код"
+
+msgid "Factory Reset"
+msgstr "Заводские установки"
+
+msgid "Fallback Tuner Setup"
+msgstr "Настройка резервного тюнера"
+
+msgid "Full factory reset"
+msgstr "Полный сброс настроек"
+
+msgid "History Zap"
+msgstr "История переключений"
+
+msgid "Input Device Setup"
+msgstr "Настройки устройства ввода"
+
+msgid "Input Devices"
+msgstr "Настройки пульта"
+
+msgid "Install Plugins"
+msgstr "Установка плагинов"
+
+msgid "MAC Address Settings"
+msgstr "Настройки MAC-адреса"
+
+msgid "Nameserver Settings"
+msgstr "Настройка DNS"
+
+msgid "Network Test:"
+msgstr "Тестирование сети:"
+
+msgid "Parental Control"
+msgstr "Родительский контроль"
+
+msgid "Password Setup"
+msgstr "Настройки пароля"
+
+msgid "Power Timer Edit"
+msgstr "Изменить таймер питания"
+
+msgid "Power Timer List"
+msgstr "Список таймеров питания"
+
+msgid "Remove Plugins"
+msgstr "Удалить плагин"
+
+msgid "Remove all bouquet/tuning data"
+msgstr "Удалить избранное/данные тюнера"
+
+msgid "Remove all keymap data"
+msgstr "Удалить все данные раскладки"
+
+msgid "Remove all network data"
+msgstr "Удалить все данные сети"
+
+msgid "Remove all new found flags"
+msgstr "Удалить все найденные новые флаги"
+
+msgid "Remove all other data"
+msgstr "Удалить все остальные данные"
+
+msgid "Remove all plugin setting data"
+msgstr "Удалить все настройки плагина"
+
+msgid "Remove all resume point data"
+msgstr "Удалить все маркеры"
+
+msgid "Remove all settings data"
+msgstr "Удалить все настройки"
+
+msgid "Remove all skin data"
+msgstr "Удалить все данные скина"
+
+msgid "Remove all timer data"
+msgstr "Удалить все данные таймера"
+
+msgid "Select 'Yes' to remove all keymap data. Selecting this option will remove all keymap override data and restore the default keymap definitions."
+msgstr "Выберите 'Да', чтобы удалить все данные раскладки клавиатуры. Это удалит все личные настройки раскладки клавиатуры и восстановит значения по умолчанию."
+
+msgid "Select 'Yes' to remove all main settings configuration data. Selecting this option will set all Enigma2 settings back to their default values.  This will also cause Enigma2 to run the Welcome Wizard on restart."
+msgstr "Выберите 'Да', чтобы удалить все данные настроек. Это удалит все личные настройки и восстановит значения по умолчанию, следующий перезапуск будет выполнен с первым мастером настройки."
+
+msgid "Select 'Yes' to remove all media player resume data. Selecting this option will remove the data used to allow playback of media files to resume from the position where playback was last stopped. Playback position of recordings is not affected."
+msgstr "Выберите 'Да', чтобы удалить все данные воспроизведения медиаплеера. Это приведет к удалению данных, использованных для воспроизведения мультимедийных файлов в том месте, где воспроизведение закончилось."
+
+msgid "Select 'Yes' to remove all network data. Selecting this option will remove all network data including automounts and network connection data including connection accounts and passwords. This could cause some Enigma2 functions to fail if they are configured to use these network resources."
+msgstr "Выберите 'Да', чтобы удалить все данные сети. Это удалит все сетевые настройки, включая подключения, сетевые подключения и пароли. Это может привести к сбою некоторых функций Enigma2, если они настроены на использование сетевых ресурсов."
+
+msgid "Select 'Yes' to remove all other files and directories not covered by the options above."
+msgstr "Выберите 'Да', чтобы удалить все другие файлы и папки, которых нет в указанных выше параметрах."
+
+msgid "Select 'Yes' to remove all plugin configuration data. Selecting this option will remove all plugin configuration data that is stored in the Enigma2 configuration folder. This will cause all affected plugins to return to their default settings. This could cause some plugins to not function until configured."
+msgstr "Выберите 'Да', чтобы удалить все данные плагина. Это удалит все настройки плагина, которые находятся в папке конфигурации Enigma2. В результате, плагины будут сброшены до значений по умолчанию. Это может привести к тому, что некоторые плагины не будут работать, пока не настроены."
+
+msgid "Select 'Yes' to remove all settings, tuning data, timers, resume pointers etc. Selecting this option will restore the configuration to the initial settings before any configuration settings were applied. This is the most reliable form of Factory Reset."
+msgstr "Выберите 'Да', чтобы удалить все настройки, данные тюнера, маркеры и т.д. Это удалит все личные настройки и восстановит значения по умолчанию. Это самая надежная форма сброса настроек."
+
+msgid "Select 'Yes' to remove all timer configuration data. Selecting this option will clear all timers, autotimers and power timers."
+msgstr "Выберите 'Да', чтобы удалить все данные настройки таймера. Это удалит все таймеры, автотаймеры и таймеры питания."
+
+msgid "Select 'Yes' to remove all tuning data. Selecting this option will remove all tuning and bouquet data and will make timers non functional until the receiver is retuned."
+msgstr "Выберите 'Да', чтобы удалить все данные тюнера. Это удалит все настройки, избранное и отключит таймеры."
+
+msgid "Select 'Yes' to remove all user customisations of skin data. Selecting this option will remove all user based skin customisations. All affected skins will return to their standard settings. This will also clear any customied boot logos and backdrops."
+msgstr "Выберите 'Да', чтобы удалить все пользовательские настройки скинов. Это удалит все личные изменения скина и восстановит значения по умолчанию. Пользовательские логотипы загрузки и фоновые изображения также будут удалены."
+
+msgid "Select Folders"
+msgstr "Выбор каталогов"
+
+msgid "Select Satellites"
+msgstr "Выбор спутников"
+
+msgid "Select to configure remote control type"
+msgstr "Настроить тип дистанционного управления"
+
+msgid "Service Info: ECM Info"
+msgstr "Информация: ECM инфо"
+
+msgid "Show service name and event description above and below each other instead of side by side."
+msgstr "Если включено, показывает название канала и описание программы один над другим, а не рядом."
+
+msgid "Show two lines per entry"
+msgstr "Показать две строки на запись"
+
+msgid "Streaming Clients Info"
+msgstr "Информация о клиентах потока"
+
+msgid "Timer Edit"
+msgstr "Изменить таймер"
+
+msgid "Timer Sanity Error"
+msgstr "Ошибка состояния таймера"
+
+msgid "Tuner Settings"
+msgstr "Настройки тюнера"
+
+msgid "Tuner Setup"
+msgstr "Конфигурация тюнера"
+
+msgid "Tuning Info: Live Values"
+msgstr "Информация: реальные значения"
+
+msgid "Tuning Info: Settings Values"
+msgstr "Информация: значения настроек"
+
+msgid "Updating Cache"
+msgstr "Обновить кэш"
+
+msgid "Video & Audio Settings"
+msgstr "Аудио и Видео"
+
 msgid "SkinSelector: Restart GUI"
 msgstr "SkinSelector: Перезапуск GUI"
 
