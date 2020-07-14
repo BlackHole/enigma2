@@ -7676,7 +7676,7 @@ msgid "Name: "
 msgstr "Имя: "
 
 msgid "Nameserver"
-msgstr "DNS сервер"
+msgstr "DNS-сервер"
 
 msgid ""
 "Nameserver\n"
@@ -12015,7 +12015,7 @@ msgid "Sun"
 msgstr "Вс"
 
 msgid "Sunday"
-msgstr "Воскресение"
+msgstr "Воскресенье"
 
 msgid "Support at"
 msgstr "Поддержка"
