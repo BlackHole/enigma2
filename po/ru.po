@@ -11402,7 +11402,7 @@ msgid "Simple fade"
 msgstr "Простое затухание"
 
 msgid "Simple titleset (compatibility for legacy players)"
-msgstr "Простой заголовок (совместимость с DVD плеерами)"
+msgstr "Простой заголовок (совместимость с DVD-плеерами)"
 
 msgid "Simple zoom"
 msgstr "Простое масштабирование"
