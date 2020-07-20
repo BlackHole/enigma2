@@ -3722,7 +3722,7 @@ msgid "Control how finished timers are shown in the timer list. If set to hide, 
 msgstr "Настройка способа отображения законченных таймеров в списке таймеров. Если выбрано 'Скрыть', отключенные таймеры все равно будут отображаться."
 
 msgid "Converting ext3 to ext4..."
-msgstr "Преобразование ext3 в ext4..."
+msgstr "Преобразование EXT3 в EXT4..."
 
 msgid "Cook Islands"
 msgstr "Острова Кука"
@@ -3896,10 +3896,10 @@ msgid "Cut"
 msgstr "Редактировать"
 
 msgid "Cutlist editor"
-msgstr "Видео редактор"
+msgstr "Видеоредактор"
 
 msgid "Cutlist editor..."
-msgstr "Видео редактор"
+msgstr "Видеоредактор"
 
 msgid "Cyprus"
 msgstr "Кипр"
@@ -3999,7 +3999,7 @@ msgid "DVD media toolbox"
 msgstr "DVD медиа инструменты"
 
 msgid "DVD player"
-msgstr "DVD плеер"
+msgstr "DVD-плеер"
 
 msgid "DVD titlelist"
 msgstr "Список фильмов DVD"
@@ -6888,7 +6888,7 @@ msgid "Latvian"
 msgstr "Латвийский"
 
 msgid "Leave DVD player?"
-msgstr "Выйти из DVD плеера?"
+msgstr "Выйти из DVD-плеера?"
 
 msgid "Leave this set to 'yes' unless you fully understand why you are adjusting it."
 msgstr "Оставьте этот параметр 'Да', если Вы не полностью понимаете, почему его меняете."
@@ -8925,6 +8925,9 @@ msgstr "Пожалуйста, подождите пока идет сканир�
 
 msgid "Please wait while scanning is in progress..."
 msgstr "Пожалуйста, подождите пока идет сканирование..."
+
+msgid "Please wait while starting\n"
+msgstr "Пожалуйста, подождите, идет запуск\n"
 
 msgid "Please wait while we configure your network..."
 msgstr "Пожалуйста подождите, идет настройка сети..."
@@ -11399,7 +11402,7 @@ msgid "Simple fade"
 msgstr "Простое затухание"
 
 msgid "Simple titleset (compatibility for legacy players)"
-msgstr "Простой заголовок (совместимость с DVD плеерами)"
+msgstr "Простой заголовок (совместимость с DVD-плеерами)"
 
 msgid "Simple zoom"
 msgstr "Простое масштабирование"
@@ -15145,7 +15148,7 @@ msgid "et9200/9500/6500"
 msgstr "et9200/9500/6500"
 
 msgid "exit DVD player or return to file browser"
-msgstr "Закрыть DVD плеер и вернуться в проводник"
+msgstr "Закрыть DVD-плеер и вернуться в проводник"
 
 msgid "experimental film/video"
 msgstr "Экспериментальный Фильм/Видео"
