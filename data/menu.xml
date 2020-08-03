@@ -18,20 +18,20 @@
 		<menu weight="1" text="Setup" flushConfigOnClose="1" entryID="setup_selection" >
 			<id val="setup"/>
 			<!-- Menu / Setup / AV -->
-			<menu weight="1" level="0" text="Audio &amp; Video" entryID="av_setup">
+			<menu weight="1" level="0" text="Audio &amp; video" entryID="av_setup">
 				<id val="av"/>
 				<item weight="1" text="Settings" entryID="av_setup"><screen module="VideoMode" screen="VideoSetup"/></item>
 				<item level="1" entryID="autolanguage_setup"><setup id="autolanguagesetup"/></item>
 			</menu>
 			<!-- Menu / Setup / Tuners -->
-            <menu weight="2" level="0" text="Tuners &amp; Scanning" entryID="service_searching_selection">
+			<menu weight="2" level="0" text="Tuners &amp; scanning" entryID="service_searching_selection">
 				<id val="scan"/>
 				<!-- Menu / Setup / Tuners / Settings -->
 				<item weight="1" text="Tuner setup" entryID="tuner_setup" requires="ClientModeDisabled"><screen module="Satconfig" screen="NimSelection"/></item>
 				<item weight="2" text="Tuner setup" entryID="client_mode" requires="ClientModeEnabled"><screen module="ClientMode" screen="ClientModeScreen"/></item>
 				<item weight="3" entryID="tunermisc_setup"><setup id="tunermisc"/></item>
-				<item weight="20" text="Automatic Scan" entryID="auto_scan" conditional="nimmanager.somethingConnected()" requires="ClientModeDisabled"><screen module="ScanSetup" screen="ScanSimple"/></item>
-				<item weight="30" text="Manual Scan" entryID="manual_scan" conditional="nimmanager.somethingConnected()" requires="ClientModeDisabled"><screen module="ScanSetup"/></item>
+				<item weight="20" text="Automatic scan" entryID="auto_scan" conditional="nimmanager.somethingConnected()" requires="ClientModeDisabled"><screen module="ScanSetup" screen="ScanSimple"/></item>
+				<item weight="30" text="Manual scan" entryID="manual_scan" conditional="nimmanager.somethingConnected()" requires="ClientModeDisabled"><screen module="ScanSetup"/></item>
 				<item weight="100" text="Fallback configuration" entryID="fallback_mode" requires="ClientModeDisabled"><screen  module="FallbackTunerSetup" screen="FallbackTunerSetup"/></item>
 			</menu>
 			<!-- Menu / Setup / EPG -->
@@ -85,7 +85,7 @@ self.session.openWithCallback(msgClosed, EpgDeleteMsg)
 				</menu>
 			</menu>
 			<!-- Menu / Setup / User Interface -->
-			<menu weight="4" text="User Interface" entryID="osd_setup" requires="OsdMenu">
+			<menu weight="4" text="User interface" entryID="osd_setup" requires="OsdMenu">
 				<id val="osd_menu"/>
 				<!-- Menu / Setup / User Interface / Settings -->
 				<item weight="1" entryID="user_interface"><setup id="userinterface"/></item>
@@ -110,10 +110,10 @@ self.session.openWithCallback(msgClosed, EpgDeleteMsg)
 				</menu>
 				<!-- Menu / Setup / User Interface / Button Setup -->
 				<item weight="6" level="2" text="Button setup" entryID="buttonsetup_setup"><screen module="ButtonSetup" screen="ButtonSetup"/></item>
-				<!-- Menu / Setup / User Interface / Language Selection -->
-				<item weight="7" level="0" text="Language" entryID="language_setup"><screen module="LanguageSelection"/></item>
 				<!-- Menu / Setup / User Interface / Subtitles -->
-				<item weight="8" level="2" entryID="subtitle_setup"><setup id="subtitlesetup"/></item>
+				<item weight="7" level="2" entryID="subtitle_setup"><setup id="subtitlesetup"/></item>
+				<!-- Menu / Setup / User Interface / Language Selection -->
+				<item weight="8" level="0" text="Language" entryID="language_setup"><screen module="LanguageSelection"/></item>
 				<!-- Menu / Setup / User Interface / Parental Control -->
 				<item weight="9" level="0" text="Parental control" entryID="parental_setup"><screen module="ParentalControlSetup" screen="ParentalControlSetup"/></item>
 			</menu>
@@ -146,20 +146,11 @@ self.session.open(SABnzbdSetupScreen)
 				<!-- Menu / Setup / Network / Password -->
 				<item level="2" text="Password" entryID="password_setup"><screen module="NetworkSetup" screen="NetworkPassword"/></item>
 			</menu>
-
 			<!-- Menu / Setup / Common Interface -->
-			<menu weight="7" text="Common Interface" entryID="cicam_setup">
+			<menu weight="7" text="Common interface" entryID="cicam_setup">
 				<id val="cicam"/>
 				<item weight="10" level="1" text="Common interface" entryID="ci_setup" requires="CommonInterface"><screen module="Ci" screen="CiSelection"/></item>
 			</menu>
-
-			<!-- Menu / Setup / Recording, Playback & Timeshift -->
-			<menu weight="8" level="1" text="Recording, Playback &amp; Timeshift" entryID="rec_setup">
-			 	<id val="rec" />
-					<item weight="10" level="0" text="Recording &amp; playback" entryID="recording_setup"><screen module="Recordings" screen="RecordingSettings" /></item>
-					<item weight="15" level="0" text="Timeshift" entryID="timshift_setup"><screen module="Timeshift" screen="TimeshiftSettings" /></item>
-			</menu>
-
 			<!-- Menu / Setup / Storage -->
 			<menu weight="9" level="0" text="Storage" entryID="hardisk_selection" requires="Harddisk">
 				<id val="harddisk"/>
@@ -167,48 +158,34 @@ self.session.open(SABnzbdSetupScreen)
 				<item level="0" text="Initialise devices" entryID="harddisk_init"><screen module="HarddiskSetup" screen="HarddiskSelection"/></item>
 				<item level="0" text="Filesystem check" entryID="harddisk_check"><screen module="HarddiskSetup" screen="HarddiskFsckSelection"/></item>
 			</menu>
-
-			<!-- Menu / Setup / Software Update -->
-				<item weight="10" level="0" text="Software update" entryID="software_update"><screen module="SoftwareUpdate" screen="UpdatePlugin"/></item>
-
-
+			<!-- Menu / Setup / Time Settings -->
+			<item level="0" text="Time" entryID="time_setup"><screen module="Time" screen="Time" /></item>
+			<!-- Menu / Setup / Recordings, Playback & Timeshift -->
+			<menu weight="11" level="1" text="Recordings, playback &amp; timeshift" entryID="rec_setup">
+			 	<id val="rec" />
+					<item weight="10" level="0" text="Timeshift" entryID="timshift_setup"><screen module="Timeshift" screen="TimeshiftSettings" /></item>
+					<item weight="15" level="0" text="Recording &amp; playback" entryID="recording_setup"><screen module="Recordings" screen="RecordingSettings" /></item>
+			</menu>
 			<!-- Menu / Setup / System (OLD SYSTEM ENTRY FOR COMPATIBILITY) -->
-			<menu weight="40" level="0" text="System" entryID="system_selection">
+			<menu weight="98" level="0" text="System" entryID="system_selection">
 				<id val="system"/>
-			<!-- Menu / Setup / System / Input Devices -->
+				<!-- Menu / Setup / System / Logs -->
+				<item weight="1" entryID="usage_setup"><setup id="usage"/></item>
+				<menu weight="2" level="2" text="Logs" entryID="logs_setup">
+					<id val="logs_menu"/>
+					<item level="2" text="Settings" entryID="logs_setup"><setup id="logs"/></item>
+					<item level="2" text="Log manager" entryID="logs_man"><screen module="LogManager" screen="LogManager"/></item>
+				</menu>
+				<!-- Menu / Setup / System / Input Devices -->
 				<item weight="3" level="1" text="Input devices" entryID="input_device_setup"><screen module="InputDeviceSetup" screen="InputDeviceSelection"/></item>
 				<!-- Menu / Setup / System / Keyboard Setup -->
 				<item weight="4" entryID="keyboard_setup" text="Keyboard"><setup id="keyboard"/></item>
 				<!-- Menu / Setup / System / RF Setup -->
 				<item weight="5" level="1" entryID="rfmod_setup" requires="RfModulator"><setup id="RFmod"/></item>
-			<!-- Menu / Setup / System / Logs -->
-				<item weight="1" entryID="usage_setup"><setup id="usage"/></item>
-				<menu weight="2" level="2" text="Logs" entryID="logs_setup">
-				<id val="logs_menu"/>
-				<item level="2" text="Settings" entryID="logs_setup"><setup id="logs"/></item>
-				<item level="2" text="Log manager" entryID="logs_man"><screen module="LogManager" screen="LogManager"/></item>
+				<!-- Menu / Setup / System / Factory Reset -->
+				<item weight="99" level="0" text="Factory reset" entryID="factory_reset"><screen module="FactoryReset" screen="FactoryReset"/></item>
+				<item weight="2" level="0" text="Software update" entryID="software_update"><screen module="SoftwareUpdate" screen="UpdatePlugin"/></item>
 			</menu>
-			<!-- Menu / Setup / System / RF Setup -->
-			<item level="1" entryID="rfmod_setup" requires="RfModulator"><setup id="RFmod"/></item>
-			<!-- Menu / Setup / System / Factory Reset -->
-				<item weight="99" level="0" text="Factory reset" entryID="factory_reset">
-<code>
-from Screens.FactoryReset import FactoryReset
-def msgClosed(ret):
-	if ret:
-		from os import system, _exit
-		system("rm -R /etc/enigma2")
-		system("cp -R /usr/share/enigma2/defaults /etc/enigma2")
-		system("/usr/bin/showiframe /usr/share/backdrop.mvi")
-		_exit(0)
-self.session.openWithCallback(msgClosed, FactoryReset)
-</code>
-				</item>
-			</menu>
-
-			<!-- Menu / Setup / Time Settings -->
-			<item weight="50" level="0" entryID="time_setup"><setup id="time"/></item>
-
 			<!-- Menu / Setup / HDMI-CEC -->
 			<item weight="99" text="HDMI CEC" entryID="hdmicec" requires="HDMICEC">
 <code>
@@ -218,14 +195,14 @@ self.session.open(HdmiCECSetupScreen)
 			</item>
 		</menu>
 
-	<!-- Menu / Timers -->
-		<menu weight="2" text="Timers" entryID="timer_menu">
+<!-- Menu / Timers -->
+		<menu weight="5" text="Timers" entryID="timer_menu">
 			<id val="timermenu"/>
 			<item weight="1" level="0" text="Timers" entryID="timer_edit"><screen module="TimerEdit" screen="TimerEditList"/></item>
-			<item weight="100" level="0" text="CronTimers" entryID="crontimer_edit"><screen module="CronTimer" screen="CronTimers"/></item>
-			<item weight="100" level="0" text="PowerTimers" entryID="powertimer_edit"><screen module="PowerTimerEdit" screen="PowerTimerEditList"/></item>
+			<item weight="100" level="0" text="Cron timers" entryID="crontimer_edit"><screen module="CronTimer" screen="CronTimers"/></item>
+			<item weight="100" level="0" text="Power timers" entryID="powertimer_edit"><screen module="PowerTimerEdit" screen="PowerTimerEditList"/></item>
 		</menu>
-	<!-- Menu / Backup Menu -->
+<!-- Menu / Backup Menu -->
 		<menu weight="3" text="Backup Menu" entryID="backup_screen">
 			<id val="bhbackup" />
 			<item weight="5" level="1" text="Full Backup">
@@ -242,13 +219,13 @@ self.session.open(VIXBackupManager)
 			</item>
 		</menu>
 
-	<!-- Menu / BH Apps -->
+<!-- Menu / BH Apps -->
 		<item weight="4" text="Black Hole Apps" entryID="blackhole_extra"><screen module="BpSet" screen="DeliteSettings"/></item>
 
-	<!-- Menu / Plugins -->
+<!-- Menu / Plugins -->
 		<item weight="5" text="Plugins" entryID="plugin_selection"><screen module="PluginBrowser" screen="PluginBrowser"/></item>
 
-	<!-- Menu / Information -->
+<!-- Menu / Information -->
 		<menu weight="6" text="Information" entryID="info_screen">
 			<id val="information"/>
 			<item level="0" text="About" entryID="about_screen"><screen module="About" screen="About"/></item>
@@ -259,10 +236,10 @@ self.session.open(VIXBackupManager)
 			<item level="2" text="Streaming clients" entryID="streaming_clients_info_screen"><screen module="StreamingClientsInfo"/></item>
 		</menu>
 
-	<!-- Menu / VCR Scart -->
+<!-- Menu / VCR Scart -->
 		<item weight="7" text="VCR scart" entryID="scart_switch" conditional="config.usage.show_vcr_scart.value" requires="ScartSwitch"><code>self.session.scart.VCRSbChanged(3)</code></item>
 
-	<!-- Menu / Standby and Restart -->
+<!-- Menu / Standby and Restart -->
 		<menu weight="99" text="Standby and Restart" entryID="standby_restart_list">
 			<id val="shutdown"/>
 			<item text="Standby" entryID="standby"><screen module="Standby" screen="Standby"/></item>
