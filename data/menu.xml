@@ -196,12 +196,13 @@ self.session.open(HdmiCECSetupScreen)
 		</menu>
 
 <!-- Menu / Timers -->
-		<menu weight="5" text="Timers" entryID="timer_menu">
+		<menu weight="2" text="Timers" entryID="timer_menu">
 			<id val="timermenu"/>
 			<item weight="1" level="0" text="Timers" entryID="timer_edit"><screen module="TimerEdit" screen="TimerEditList"/></item>
 			<item weight="100" level="0" text="Cron timers" entryID="crontimer_edit"><screen module="CronTimer" screen="CronTimers"/></item>
 			<item weight="100" level="0" text="Power timers" entryID="powertimer_edit"><screen module="PowerTimerEdit" screen="PowerTimerEditList"/></item>
 		</menu>
+
 <!-- Menu / Backup Menu -->
 		<menu weight="3" text="Backup Menu" entryID="backup_screen">
 			<id val="bhbackup" />
