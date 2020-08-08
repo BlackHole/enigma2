@@ -117,7 +117,7 @@
 		<!-- Also uses NumberActions -->
 		<!-- Also uses TextEditActions -->
 		<key id="KEY_RED" mapto="cancel" flags="m" />
-		<key id="KEY_GREEN" mapto="save" flags="m" />
+		<key id="KEY_GREEN" mapto="save" flags="b" />
 		<key id="KEY_EXIT" mapto="cancel" flags="b" />
 		<key id="KEY_EXIT" mapto="close" flags="l" />
 		<key id="KEY_OK" mapto="select" flags="m" />
