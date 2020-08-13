@@ -10,7 +10,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: it\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.1\n"
+
+msgid "Show two lines per entry"
+msgstr "Mostra due linee per ogni elemento"
+
+msgid "Show service name and event description above and below each other instead of side by side."
+msgstr "Mostra il nome del canale e la descrizione dell'evento su due righe anziché affiancati."
+
+msgid "Debug - Display Tracebacks in browser"
+msgstr "Visualizza le chiamate recenti nel browser (debug)"
 
 msgid "Subtitle Long"
 msgstr "Sottotitoli (a lungo)"
@@ -44,7 +53,6 @@ msgid ""
 msgstr ""
 "Vuoi davvero eliminare il linguaggio selezionato?\n"
 "\n"
-
 
 msgid "Delete Language(s)"
 msgstr "Cancella lingue"
@@ -1053,7 +1061,7 @@ msgstr ""
 "per le registrazioni dell’anno corrente.\n"
 "Nasconde il giorno della settimana per le registrazioni fatte negli anni precedenti."
 
-#ex Agg. e +Agg.
+# ex Agg. e +Agg.
 msgid "Add"
 msgstr "Crea"
 
@@ -8834,7 +8842,7 @@ msgid "Set Default CAM"
 msgstr "Imposta CAM predefinita"
 
 msgid "Set Favourite"
-msgstr "Imposta preferiti"
+msgstr "Imposta preferito"
 
 msgid "Set Framerate for MiniTV"
 msgstr "Imposta Framerate per MiniTV"
@@ -9136,7 +9144,12 @@ msgid "Show Time Remaining/Elapsed"
 msgstr "Mostra tempo rimanente/trascorso"
 
 msgid "Show Transponder Remaining/Elapsed as"
-msgstr "Mostra transponder rimanente/trascorso come"
+msgstr "Mostra evento rimanente/trascorso come"
+
+msgid "This option allows you choose how to display the remaining/elapsed time for live TV."
+msgstr ""
+"Consente di scegliere come visualizzare il tempo\n"
+"rimanente/trascorso per le trasmissioni TV in diretta."
 
 msgid "Show True/False as graphical switch"
 msgstr "Mostra Vero/Falso come interruttore grafico"
@@ -9376,7 +9389,7 @@ msgid "Show transponder info"
 msgstr "Mostra informazioni transponder"
 
 msgid "Show transponder remaining/elapsed as"
-msgstr "Mostra transponder rimanente/trascorso come"
+msgstr "Mostra evento rimanente/trascorso come"
 
 msgid "Show warning when timeshift is stopped"
 msgstr "Mostra avviso su arresto timeshift"
@@ -10533,11 +10546,6 @@ msgstr ""
 msgid "This option allows you choose how to display the Time or nothing in Standby"
 msgstr "Questa opzione permette di scegliere come visualizzare l'orario o nulla in Standby"
 
-msgid "This option allows you choose how to display the remaining/elapsed time for live TV."
-msgstr ""
-"Consente di scegliere come visualizzare il tempo\n"
-"rimanente/trascorso per le trasmissioni TV in diretta."
-
 msgid "This option allows you choose the background color of transparent picons."
 msgstr "Consente di scegliere il colore di background delle picon trasparenti."
 
@@ -11420,7 +11428,7 @@ msgid "User defined"
 msgstr "Definito dall'utente"
 
 msgid "User defined transponder"
-msgstr "Transponder predefinito utente"
+msgstr "Transponder definito dall'utente"
 
 msgid "User interface settings"
 msgstr "Configurazione Interfaccia Utente"
