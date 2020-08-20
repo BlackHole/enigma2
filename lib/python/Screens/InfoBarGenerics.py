@@ -201,6 +201,7 @@ class InfoBarDish:
 		self.dishDialog = self.session.instantiateDialog(Dish)
 		self.dishDialog.setAnimationMode(0)
 
+
 class InfoBarLongKeyDetection:
 	def __init__(self):
 		eActionMap.getInstance().bindAction("", -maxint - 1, self.detection)  # Highest priority.
@@ -211,6 +212,7 @@ class InfoBarLongKeyDetection:
 			self.LongButtonPressed = True
 		elif flag == 0:
 			self.LongButtonPressed = False
+
 
 class InfoBarUnhandledKey:
 	def __init__(self):
@@ -266,6 +268,7 @@ class InfoBarUnhandledKey:
 		if self.flags == self.uflags:
 			self.unhandledKeyDialog.show()
 			self.hideUnhandledKeySymbolTimer.start(2000, True)
+
 
 class InfoBarScreenSaver:
 	def __init__(self):
@@ -1514,6 +1517,8 @@ class InfoBarEPG:
 
 	def __init__(self):
 		self.is_now_next = False
+		self.dlg_stack = []
+		self.bouquetSel = None
 		self.eventView = None
 		self.epglist = []
 		self.defaultEPGType = self.getDefaultEPGtype()
@@ -1640,6 +1645,20 @@ class InfoBarEPG:
 				services.append(ServiceReference(service))
 		return services
 
+	def closed(self, ret=False):
+		if not self.dlg_stack:
+			return
+		closedScreen = self.dlg_stack.pop()
+		if self.bouquetSel and closedScreen == self.bouquetSel:
+			self.bouquetSel = None
+		elif self.eventView and closedScreen == self.eventView:
+			self.eventView = None
+		if ret == True or ret == 'close':
+			dlgs=len(self.dlg_stack)
+			if dlgs > 0:
+				self.dlg_stack[dlgs-1].close(dlgs > 1)
+		self.reopen(ret)
+
 	def multiServiceEPG(self, type, showBouquet):
 		def openEPG(open, bouquet, bouquets):
 			if open:
@@ -1690,7 +1709,7 @@ class InfoBarEPG:
 				print "[UserDefinedButtons] Missing action method", actionName
 		if len(args) == 6 and args[0] == "open":
 			# open another EPG screen
-			self.session.openWithCallback(self.epgClosed, args[1], self.zapToService, 
+			self.session.openWithCallback(self.epgClosed, args[1], self.zapToService,
 				args[2], args[3], args[4], args[5])
 		elif len(args) == 1:
 			if args[0] == 'reopengrid':
