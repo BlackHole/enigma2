@@ -10,7 +10,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: it\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4\n"
+
+msgid "Debug - Display Tracebacks in browser"
+msgstr "Visualizza le chiamate recenti nel browser (debug)"
 
 msgid "Subtitle Long"
 msgstr "Sottotitoli (a lungo)"
@@ -44,7 +47,6 @@ msgid ""
 msgstr ""
 "Vuoi davvero eliminare il linguaggio selezionato?\n"
 "\n"
-
 
 msgid "Delete Language(s)"
 msgstr "Cancella lingue"
@@ -1053,7 +1055,7 @@ msgstr ""
 "per le registrazioni dell’anno corrente.\n"
 "Nasconde il giorno della settimana per le registrazioni fatte negli anni precedenti."
 
-#ex Agg. e +Agg.
+# ex Agg. e +Agg.
 msgid "Add"
 msgstr "Crea"
 
@@ -8834,7 +8836,7 @@ msgid "Set Default CAM"
 msgstr "Imposta CAM predefinita"
 
 msgid "Set Favourite"
-msgstr "Imposta preferiti"
+msgstr "Imposta preferito"
 
 msgid "Set Framerate for MiniTV"
 msgstr "Imposta Framerate per MiniTV"
