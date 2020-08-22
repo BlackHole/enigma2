@@ -10,7 +10,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: it\n"
-"X-Generator: Poedit 2.4\n"
+"X-Generator: Poedit 2.4.1\n"
+
+msgid "Show two lines per entry"
+msgstr "Mostra due linee per ogni elemento"
+
+msgid "Show service name and event description above and below each other instead of side by side."
+msgstr "Mostra il nome del canale e la descrizione dell'evento su due righe anziché affiancati."
 
 msgid "Debug - Display Tracebacks in browser"
 msgstr "Visualizza le chiamate recenti nel browser (debug)"
@@ -1355,7 +1361,7 @@ msgid "Alternative radio mode"
 msgstr "Modalità radio alternativa"
 
 msgid "Alternative services tuner priority"
-msgstr "Priorità tuner per canali alternativi"
+msgstr "Priorità tuner per canali alternativi"
 
 msgid "Always ask"
 msgstr "Chiedere sempre"
@@ -1766,7 +1772,7 @@ msgid "Behavior of 'pause' when paused"
 msgstr "Comportamento 'pausa' quando in pausa"
 
 msgid "Behavior of 0 key in PiP-mode"
-msgstr "Comportamento tasto 0 in modalità  PiP"
+msgstr "Comportamento tasto 0 in modalità  PiP"
 
 msgid "Behavior when a movie is started"
 msgstr "Comportamento all’avvio di un video"
@@ -2667,7 +2673,7 @@ msgstr ""
 "Il ritardo configurato viene osservato a ogni modifica di parità."
 
 msgid "Configure the possible fast forward speeds."
-msgstr "Configurare le velocità Avanti Veloce (FFW) (>>) disponibili."
+msgstr "Configurare le velocità Avanti Veloce (FFW) (?>>) disponibili."
 
 msgid "Configure the possible rewind speeds."
 msgstr "Configurare le velocità riavvolgimento (REW) (<<) disponibili."
@@ -4309,7 +4315,7 @@ msgid "Fast epoch"
 msgstr "Momento iniziale veloce"
 
 msgid "Fast forward speeds"
-msgstr "Velocità Avanti Veloce (FFW)"
+msgstr "Velocità Avanti Veloce (FFW)"
 
 msgid "Fast plugin set to: "
 msgstr "Plugin rapido impostato su: "
@@ -6464,7 +6470,7 @@ msgid ""
 "Free Space: %sMB\n"
 "Path: %s"
 msgstr ""
-"NON c’è abbastanza spazio sull'HDD!\n"
+"NON c’è abbastanza spazio sull'?HDD!\n"
 "\n"
 "Dimensione File: %sMB\n"
 "Spazio disponibile: %sMB\n"
@@ -6527,7 +6533,7 @@ msgid ""
 "Now, use the contrast setting to turn up the brightness of the background as much as possible, but make sure that you can still see the difference between the two brightest levels of shades.If you have "
 "done that, press OK."
 msgstr ""
-"Utilizzare ora il controllo del contrasto per aumentare la luminosità del background il più possibile, assicurandosi di poter distinguere la differenza tra le due sfumature più chiare. Alla fine premere "
+"Utilizzare ora il controllo del contrasto per aumentare la luminosità del background il più possibile, assicurandosi di poter distinguere la differenza tra le due sfumature più chiare. Alla fine premere "
 "OK."
 
 msgid "Number"
@@ -7076,7 +7082,7 @@ msgstr ""
 "\n"
 
 msgid "Please note that the previously selected media could not be accessed and therefore the default directory is being used instead."
-msgstr "Il supporto selezionato precedentemente non è più accessibile: sarà utilizzata la cartella predefinita."
+msgstr "Il supporto selezionato precedentemente non è più accessibile: sarà utilizzata la cartella predefinita."
 
 msgid "Please open Picture in Picture first"
 msgstr "Prima apri PiP (Picture in Picture)"
@@ -9138,7 +9144,12 @@ msgid "Show Time Remaining/Elapsed"
 msgstr "Mostra tempo rimanente/trascorso"
 
 msgid "Show Transponder Remaining/Elapsed as"
-msgstr "Mostra transponder rimanente/trascorso come"
+msgstr "Mostra evento rimanente/trascorso come"
+
+msgid "This option allows you choose how to display the remaining/elapsed time for live TV."
+msgstr ""
+"Consente di scegliere come visualizzare il tempo\n"
+"rimanente/trascorso per le trasmissioni TV in diretta."
 
 msgid "Show True/False as graphical switch"
 msgstr "Mostra Vero/Falso come interruttore grafico"
@@ -9378,7 +9389,7 @@ msgid "Show transponder info"
 msgstr "Mostra informazioni transponder"
 
 msgid "Show transponder remaining/elapsed as"
-msgstr "Mostra transponder rimanente/trascorso come"
+msgstr "Mostra evento rimanente/trascorso come"
 
 msgid "Show warning when timeshift is stopped"
 msgstr "Mostra avviso su arresto timeshift"
@@ -10535,11 +10546,6 @@ msgstr ""
 msgid "This option allows you choose how to display the Time or nothing in Standby"
 msgstr "Questa opzione permette di scegliere come visualizzare l'orario o nulla in Standby"
 
-msgid "This option allows you choose how to display the remaining/elapsed time for live TV."
-msgstr ""
-"Consente di scegliere come visualizzare il tempo\n"
-"rimanente/trascorso per le trasmissioni TV in diretta."
-
 msgid "This option allows you choose the background color of transparent picons."
 msgstr "Consente di scegliere il colore di background delle picon trasparenti."
 
@@ -10553,7 +10559,7 @@ msgid "This option allows you to boost the blue tones in the picture."
 msgstr "Consente di esaltare le tonalità del blu nell'immagine."
 
 msgid "This option allows you to boost the green tones in the picture."
-msgstr "Consente di esaltare le tonalità del verde nell'immagine."
+msgstr "Consente di esaltare le tonalità del verde nell'immagine."
 
 msgid "This option allows you to bypass HDMI EDID check"
 msgstr "Consente di ignorare il controllo HDMI EDID"
@@ -10695,7 +10701,7 @@ msgid "This option sets the picture flesh tones."
 msgstr "Consente di impostare le tonalità di colore dei visi."
 
 msgid "This option sets the picture hue."
-msgstr "Consente di impostare la tonalità del colore."
+msgstr "Consente di impostare la tonalità del colore."
 
 msgid "This option sets the picture saturation."
 msgstr "Consente di impostare la saturazione dell'immagine."
@@ -11422,7 +11428,7 @@ msgid "User defined"
 msgstr "Definito dall'utente"
 
 msgid "User defined transponder"
-msgstr "Transponder predefinito utente"
+msgstr "Transponder definito dall'utente"
 
 msgid "User interface settings"
 msgstr "Configurazione Interfaccia Utente"
