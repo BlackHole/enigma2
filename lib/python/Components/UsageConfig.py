@@ -45,9 +45,9 @@ def InitUsageConfig():
 	config.usage.hide_number_markers = ConfigYesNo(default = True)
 	config.usage.hide_number_markers.addNotifier(refreshServiceList)
 
-	config.usage.servicetype_icon_mode = ConfigSelection(default = "0", choices = [("0", _("None")), ("1", _("Left from servicename")), ("2", _("Right from servicename"))])
+	config.usage.servicetype_icon_mode = ConfigSelection(default = "1", choices = [("0", _("None")), ("1", _("Left from servicename")), ("2", _("Right from servicename"))])
 	config.usage.servicetype_icon_mode.addNotifier(refreshServiceList)
-	config.usage.crypto_icon_mode = ConfigSelection(default = "0", choices = [("0", _("None")), ("1", _("Left from servicename")), ("2", _("Right from servicename"))])
+	config.usage.crypto_icon_mode = ConfigSelection(default = "1", choices = [("0", _("None")), ("1", _("Left from servicename")), ("2", _("Right from servicename"))])
 	config.usage.crypto_icon_mode.addNotifier(refreshServiceList)
 	config.usage.record_indicator_mode = ConfigSelection(default = "3", choices = [("0", _("None")), ("1", _("Left from servicename")), ("2", _("Right from servicename")), ("3", _("Red colored"))])
 	config.usage.record_indicator_mode.addNotifier(refreshServiceList)
@@ -58,7 +58,7 @@ def InitUsageConfig():
 	config.usage.servicelist_column = ConfigSelection(default="-1", choices=choicelist)
 	config.usage.servicelist_column.addNotifier(refreshServiceList)
 
-	config.usage.service_icon_enable = ConfigYesNo(default = False)
+	config.usage.service_icon_enable = ConfigYesNo(default = True)
 	config.usage.service_icon_enable.addNotifier(refreshServiceList)
 	config.usage.servicelist_cursor_behavior = ConfigSelection(default = "keep", choices = [
 		("standard", _("Standard")),
@@ -84,7 +84,6 @@ def InitUsageConfig():
 	config.usage.show_infobar_channel_number = ConfigYesNo(default = False)
 	config.usage.show_second_infobar = ConfigSelection(default = "5", choices = [("none", _("None"))] + choicelist + [("EPG",_("EPG")),("INFOBAREPG",_("InfoBar EPG"))])
 	config.usage.fix_second_infobar = ConfigYesNo(default = False)
-
 	def showsecondinfobarChanged(configElement):
 		if config.usage.show_second_infobar.value != "INFOBAREPG":
 			SystemInfo["InfoBarEpg"] = True
@@ -96,7 +95,19 @@ def InitUsageConfig():
 	config.usage.show_picon_bkgrn = ConfigSelection(default = "transparent", choices = [("none", _("Disabled")), ("transparent", _("Transparent")), ("blue", _("Blue")), ("red", _("Red")), ("black", _("Black")), ("white", _("White")), ("lightgrey", _("Light Grey")), ("grey", _("Grey"))])
 	config.usage.show_genre_info = ConfigYesNo(default=False)
 	config.usage.menu_show_numbers = ConfigYesNo(default = False)
-	config.usage.show_menupath = ConfigSelection(default = "off", choices = [("off", _("None")), ("small", _("Small")), ("large", _("Large"))])
+	config.usage.showScreenPath = ConfigSelection(default="small", choices=[("off", _("None")), ("small", _("Small")), ("large", _("Large"))])
+	# The following code is to be short lived and exists to transition
+	# settings from the old config.usage.show_menupath to the new
+	# config.usage.showScreenPath as this is the value to now shared
+	# by all images.  Thise code will transition the setting and then
+	# remove the old entry from user's settings files.
+	config.usage.show_menupath = ConfigSelection(default="small", choices=[("off", _("None")), ("small", _("Small")), ("large", _("Large"))])
+	if config.usage.show_menupath.value != config.usage.show_menupath.default:
+		config.usage.showScreenPath.value = config.usage.show_menupath.value
+		config.usage.show_menupath.value = config.usage.show_menupath.default
+		config.usage.save()
+		print("[UserConfig] DEBUG: The 'show_menupath' setting of '%s' has been transferred to 'showScreenPath'." % config.usage.showScreenPath.value)
+	# End of temporary code.
 	config.usage.show_spinner = ConfigYesNo(default = True)
 	config.usage.enable_tt_caching = ConfigYesNo(default = True)
 	config.usage.sort_settings = ConfigYesNo(default = False)
@@ -913,7 +924,7 @@ def InitUsageConfig():
 	config.misc.erase_flags.addNotifier(updateEraseFlags, immediate_feedback = False)
 
 	config.misc.zapkey_delay = ConfigSelectionNumber(default = 5, stepwidth = 1, min = 0, max = 20, wraparound = True)
-	config.misc.numzap_picon = ConfigYesNo(default = False)
+	config.misc.numzap_picon = ConfigYesNo(default = True)
 	if SystemInfo["ZapMode"]:
 		def setZapmode(el):
 			file = open(SystemInfo["ZapMode"], "w")
