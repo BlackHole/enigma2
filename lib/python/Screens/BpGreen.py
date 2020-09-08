@@ -115,7 +115,7 @@ class DeliteSetupFp(Screen):
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		
+
 		self["key_red"] = Label(_("Set Favourite"))
 		self.list = []
 		self["list"] = List(self.list)
@@ -158,15 +158,15 @@ class DeliteScript(Screen):
 			<convert type="StringList" />
 		</widget>
 		<widget name="statuslab" position="10,320" size="540,30" font="Regular;16" valign="center" noWrap="1" backgroundColor="#333f3f3f" foregroundColor="#FFC000" shadowOffset="-2,-2" shadowColor="black" />
-		<ePixmap pixmap="skin_default/buttons/red.png" position="210,360" size="140,40" alphatest="on" />
-		<widget name="key_red" position="210,360" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
+		<ePixmap pixmap="skin_default/buttons/green.png" position="210,360" size="140,40" alphatest="on" />
+		<widget name="key_green" position="210,360" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 	</screen>"""
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
 
 		self["statuslab"] = Label("N/A")
-		self["key_red"] = Label(_("Execute"))
+		self["key_green"] = Label(_("Execute"))
 		self.mlist = []
 		self.populateSL()
 		self["list"] = List(self.mlist)
@@ -176,7 +176,7 @@ class DeliteScript(Screen):
 		{
 			"ok": self.myGo,
 			"back": self.close,
-			"red": self.myGo
+			"green": self.myGo
 		})
 		self.onLayoutFinish.append(self.refr_sel)
 
