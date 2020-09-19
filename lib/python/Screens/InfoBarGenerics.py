@@ -201,6 +201,7 @@ class InfoBarDish:
 		self.dishDialog = self.session.instantiateDialog(Dish)
 		self.dishDialog.setAnimationMode(0)
 
+
 class InfoBarLongKeyDetection:
 	def __init__(self):
 		eActionMap.getInstance().bindAction("", -maxint - 1, self.detection)  # Highest priority.
@@ -211,6 +212,7 @@ class InfoBarLongKeyDetection:
 			self.LongButtonPressed = True
 		elif flag == 0:
 			self.LongButtonPressed = False
+
 
 class InfoBarUnhandledKey:
 	def __init__(self):
@@ -266,6 +268,7 @@ class InfoBarUnhandledKey:
 		if self.flags == self.uflags:
 			self.unhandledKeyDialog.show()
 			self.hideUnhandledKeySymbolTimer.start(2000, True)
+
 
 class InfoBarScreenSaver:
 	def __init__(self):
@@ -1547,8 +1550,12 @@ class InfoBarEPG:
 
 	def getDefaultEPGtype(self):
 		pluginlist = self.getEPGPluginList()
-		config.usage.defaultEPGType = ConfigSelection(default = "None", choices = [(self.getNonLocalisedPluginName(p[0]), p[0]) for p in pluginlist])
-		self.lastDefaultEPGType = config.usage.defaultEPGType.value
+		default = "Event Info"
+		choices = [(self.getNonLocalisedPluginName(p[0]), p[0]) for p in pluginlist]
+		if not hasattr(config.usage, "defaultEPGType"): # first run
+			self.defaultEPGtypeChangedByThisModule = False # initialise this variable
+			config.usage.defaultEPGType = ConfigSelection(default=default, choices=choices)
+			config.usage.defaultEPGType.addNotifier(self.defaultEPGtypeNotifier, initial_call=False)
 		for plugin in pluginlist:
 			if plugin[0] == self.plugintexts.get(config.usage.defaultEPGType.value, config.usage.defaultEPGType.value):
 				return plugin[1]
@@ -1557,6 +1564,12 @@ class InfoBarEPG:
 	def getNonLocalisedPluginName(self, val):
 		return {v:k for k, v in self.plugintexts.items()}.get(val, val)
 
+	def defaultEPGtypeNotifier(self, configElement):
+		self.defaultEPGType = self.getDefaultEPGtype()
+		if self.defaultEPGtypeChangedByThisModule: # if this is false the selection was changed from the setup menu
+			configElement.save()
+			configfile.save()
+			self.defaultEPGtypeChangedByThisModule = False
 
 	def showEventInfoPlugins(self):
 		if isStandardInfoBar(self):
@@ -1577,10 +1590,8 @@ class InfoBarEPG:
 
 	def defaultEpgPluginChosen(self, answer):
 		if answer is not None:
-			self.defaultEPGType = answer[1]
-			self.lastDefaultEPGType = config.usage.defaultEPGType.value = self.getNonLocalisedPluginName(answer[0])
-			config.usage.defaultEPGType.save()
-			configfile.save()
+			self.defaultEPGtypeChangedByThisModule = True
+			config.usage.defaultEPGType.value = self.getNonLocalisedPluginName(answer[0])
 
 	def showEventGuidePlugins(self):
 		if isMoviePlayerInfoBar(self):
@@ -1742,8 +1753,6 @@ class InfoBarEPG:
 				self.eventView.setEvent(self.epglist[0])
 
 	def showDefaultEPG(self):
-		if self.lastDefaultEPGType != config.usage.defaultEPGType.value: # if something outside this module has changed the value of config.usage.defaultEPGType, e.g. EPG settings
-			self.defaultEPGType = self.getDefaultEPGtype()
 		if self.defaultEPGType is not None:
 			self.defaultEPGType()
 			return
@@ -2680,7 +2689,11 @@ class InfoBarExtensions:
 			self.session.open(MessageBox, _("The AutoTimer plugin is not installed!\nPlease install it."), type = MessageBox.TYPE_INFO,timeout = 10 )
 
 	def showEPGSearch(self):
-		from Plugins.Extensions.EPGSearch.EPGSearch import EPGSearch
+		try:
+			from Plugins.Extensions.EPGSearch.EPGSearch import EPGSearch
+		except ImportError:
+			self.session.open(MessageBox, _("The EPGSearch plugin is not installed!\nPlease install it."), type = MessageBox.TYPE_INFO,timeout = 10 )
+			return
 		s = self.session.nav.getCurrentService()
 		if s:
 			info = s.info()
