@@ -343,11 +343,11 @@
 		</device>
 		<key id="KEY_REWIND" mapto="moveTop" flags="m" />
 		<key id="KEY_LEFT" mapto="pageUp" flags="mr" /><!-- DEBUG: This creates an inconsistent UI and should be deprecated! -->
-		<!-- <key id="KEY_CHANNELUP" mapto="pageUp" flags="mr" /> --> <!-- Breaks Switching Bouquets in Channel Selection -->
+		<key id="KEY_CHANNELUP" mapto="pageUp" flags="mr" />
 		<key id="KEY_UP" mapto="moveUp" flags="mr" />
 		<key id="KEY_DOWN" mapto="moveDown" flags="mr" />
 		<key id="KEY_RIGHT" mapto="pageDown" flags="mr" /><!-- DEBUG: This creates an inconsistent UI and should be deprecated! -->
-		<!-- <key id="KEY_CHANNELDOWN" mapto="pageDown" flags="mr" /> --> <!-- Breaks Switching Bouquets in Channel Selection -->
+		<key id="KEY_CHANNELDOWN" mapto="pageDown" flags="mr" />
 		<key id="KEY_FASTFORWARD" mapto="moveEnd" flags="m" />
 		<!-- Keyboard specific buttons -->
 		<key id="KEY_HOME" mapto="moveTop" flags="m" />
@@ -1144,7 +1144,7 @@
 			<key id="KEY_TEXT" mapto="nextSubtitleTrack" flags="m" />
 			<key id="KEY_VIDEO" mapto="nextAngle" flags="m" />
 		</device>
-		<!--device name="dreambox ir keyboard">
+		<!-- device name="dreambox ir keyboard">
 			<key id="KEY_PAUSE" mapto="pause" flags="m" />
 			<key id="KEY_PLAY" mapto="play" flags="m" />
 			<key id="KEY_STOP" mapto="stop" flags="b" />
@@ -1152,7 +1152,7 @@
 			<key id="KEY_RECORD" mapto="shift_record" flags="l" />
 			<key id="KEY_PREVIOUSSONG" mapto="previous" flags="m" />
 			<key id="KEY_NEXTSONG" mapto="next" flags="m" />
-		</device-->
+		</device -->
 	</map>
 
 	<map context="ButtonSetupActions">
