@@ -21,7 +21,7 @@ from boxbranding import getBoxType, getMachineBrand, getMachineName, getDriverDa
 VERSION = "OpenBH"
 
 HaveGZkernel = True
-if getMachineBuild() in ("vuuno4k", "vuuno4kse", "vuzero4k", "vuultimo4k", "vusolo4k", "vuduo4k"):
+if getMachineBuild() in ("vuuno4k", "vuuno4kse", "vuzero4k", "vuultimo4k", "vusolo4k", "vuduo4k", "vuduo4kse"):
 	HaveGZkernel = False
 
 def Freespace(dev):
@@ -44,7 +44,7 @@ class ImageBackup(Screen):
 		<widget name="info-hdd" position="10,30" zPosition="1" size="450,100" font="Regular;20" halign="left" valign="top" transparent="1" />
 		<widget name="info-usb" position="10,150" zPosition="1" size="450,200" font="Regular;20" halign="left" valign="top" transparent="1" />
 	</screen>"""
-		
+
 	def __init__(self, session, args = 0):
 		Screen.__init__(self, session)
 		self.session = session
@@ -70,14 +70,14 @@ class ImageBackup(Screen):
 		print "[FULL BACKUP] MKUBIFS = >%s<" %self.MKUBIFS_ARGS
 		print "[FULL BACKUP] MTDKERNEL = >%s<" %self.MTDKERNEL
 		print "[FULL BACKUP] ROOTFSTYPE = >%s<" %self.ROOTFSTYPE
-		
+
 		self["key_green"] = Button("USB")
 		self["key_red"] = Button("HDD")
 		self["key_blue"] = Button(_("Exit"))
 		self["key_yellow"] = Button(_("Exit"))
 		self["info-usb"] = Label(_("USB = Do you want to make a USB backup ?\nThis will take between 4 and 15 minutes depending on the filesystem used and is fully automatic.\nMake sure you insert a USB flash drive before you select USB."))
 		self["info-hdd"] = Label(_("HDD = Do you want to make a backup image on your HDD ? \nThis will take between 2 and 10 minutes, and is fully automatic."))
-		self["actions"] = ActionMap(["OkCancelActions", "ColorActions"], 
+		self["actions"] = ActionMap(["OkCancelActions", "ColorActions"],
 		{
 			"blue": self.quit,
 			"yellow": self.quit,
@@ -100,10 +100,10 @@ class ImageBackup(Screen):
 			self.session.open(MessageBox, _("Not enough free space on %s !!\nYou need at least 300Mb free space.\n" % dev), type = MessageBox.TYPE_ERROR)
 			return False
 		return True
-		
+
 	def quit(self):
 		self.close()
-		
+
 	def red(self):
 		if self.check_hdd():
 			self.doFullBackup("/hdd")
@@ -122,7 +122,7 @@ class ImageBackup(Screen):
 
 	def yellow(self):
 		#// Not used
-		pass	
+		pass
 
 	def SearchUSBcanidate(self):
 		for paths, subdirs, files in walk("/media"):
@@ -236,7 +236,7 @@ class ImageBackup(Screen):
 		else:
 			cmdlist.append("nanddump -a -f %s/vmlinux.gz /dev/%s" % (self.WORKDIR, self.MTDKERNEL))
 		cmdlist.append('echo " "')
-		
+
 		if HaveGZkernel:
 			cmdlist.append('echo "Check: kerneldump"')
 		cmdlist.append("sync")
@@ -363,7 +363,7 @@ class ImageBackup(Screen):
 
 				cmdlist.append("sync")
 				cmdlist.append('echo "Backup finished and copied to your USB flash drive"')
-			
+
 		cmdlist.append("umount /tmp/bi/root")
 		cmdlist.append("rmdir /tmp/bi/root")
 		cmdlist.append("rmdir /tmp/bi")
@@ -421,7 +421,7 @@ class ImageBackup(Screen):
 						f.close()
 		except:
 			AboutText += "Error reading bouquets.tv"
-			
+
 		AboutText += _("\n[User - bouquets (RADIO)]\n")
 		try:
 			f = open("/etc/enigma2/bouquets.radio","r")
