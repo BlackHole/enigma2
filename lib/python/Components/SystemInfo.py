@@ -120,7 +120,7 @@ SystemInfo["Canedidchecking"] = fileCheck("/proc/stb/hdmi/bypass_edid_checking")
 SystemInfo["haveboxmode"] = fileExists("/proc/stb/info/boxmode")
 SystemInfo["HasScaler_sharpness"] = pathExists("/proc/stb/vmpeg/0/pep_scaler_sharpness")
 # Machines that do have SCART component video (red, green and blue RCA sockets).
-SystemInfo["Scart-YPbPr"] = getBrandOEM() == "vuplus" and not "4k" in getBoxType()
+SystemInfo["Scart-YPbPr"] = getBrandOEM() == "vuplus" and "4k" not in getBoxType()
 # Machines that do not have component video (red, green and blue RCA sockets).
 SystemInfo["no_YPbPr"] = not getHaveYUV()
 # Machines that have composite video (yellow RCA socket) but do not have Scart.
