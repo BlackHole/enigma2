@@ -59,9 +59,6 @@ def readGithubCommitLogsSoftwareUpdate():
 				elif getImageType() != 'release' and c['commit']['message'].startswith('openbh: release'):
 					print '[GitCommitLog] Skipping release line'
 					continue
-				elif c['commit']['message'].startswith('openbh: 4.4'):
-					print '[GitCommitLog] Skipping broken release line'
-					continue
 				tmp = c['commit']['message'].split(' ')[2].split('.')
 				if len(tmp) > 2:
 					if getImageType() == 'release':
@@ -123,9 +120,6 @@ def readGithubCommitLogs():
 					continue
 				elif getImageType() == 'developer' and c['commit']['message'].startswith('openbh: release'):
 					print '[GitCommitLog] Skipping release line'
-					continue
-				elif c['commit']['message'].startswith('openbh: 4.4'):
-					print '[GitCommitLog] Skipping broken release line', c['commit']['message']
 					continue
 				tmp = c['commit']['message'].split(' ')[2].split('.')
 				if len(tmp) > 2:
