@@ -100,10 +100,10 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 		if config.obhsettings.ColouredButtons.value:
 			self["key_yellow"].setText(_("Audio Panel"))
 
-			if config.usage.defaultEPGType.value == "Graphical EPG..." or config.usage.defaultEPGType.value == "None":
-				self["key_red"].setText(_(" "))
+			if config.usage.defaultEPGType.value == "Grid EPG":
+				self["key_red"].setText(_("Single EPG"))
 			else:
-				self["key_red"].setText(_("EPG"))
+				self["key_red"].setText(_("Grid EPG"))
 
 			if not config.obhsettings.Subservice.value:
 				self["key_green"].setText(_("Green Panel"))
