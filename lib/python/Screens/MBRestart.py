@@ -16,7 +16,7 @@ from Tools.Directories import copyfile, pathExists
 from Tools.Multiboot import emptySlot, GetCurrentImage, GetImagelist, GetCurrentImageMode, restoreSlots
 
 
-class MultiBootSelector(Screen, HelpableScreen):
+class MultiBoot(Screen, HelpableScreen):
 	skinTemplate = """
 	<screen title="MultiBoot Image Selector" position="center,center" size="%d,%d">
 		<widget name="config" position="%d,%d" size="%d,%d" font="Regular;%d" itemHeight="%d" scrollbarMode="showOnDemand" />
@@ -40,9 +40,9 @@ class MultiBootSelector(Screen, HelpableScreen):
 	def __init__(self, session, *args):
 		Screen.__init__(self, session)
 		HelpableScreen.__init__(self)
-		if MultiBootSelector.skin is None:
+		if MultiBoot.skin is None:
 			# The skin template is designed for a HD screen so the scaling factor is 720.
-			MultiBootSelector.skin = MultiBootSelector.skinTemplate % tuple([x * getDesktop(0).size().height() / 720 for x in MultiBootSelector.scaleData])
+			MultiBoot.skin = MultiBoot.skinTemplate % tuple([x * getDesktop(0).size().height() / 720 for x in MultiBoot.scaleData])
 		Screen.setTitle(self, _("MultiBoot Image Selector"))
 		self.tmp_dir = None
 		self["config"] = ChoiceList(list=[ChoiceEntryComponent("", ((_("Retrieving image slots - Please wait...")), "Queued"))])
@@ -138,10 +138,7 @@ class MultiBootSelector(Screen, HelpableScreen):
 	def deleteImageCallback(self, answer):
 		if answer:
 			self.currentSelected = self["config"].l.getCurrentSelection()
-			self.slot = self.currentSelected[0][1]
-			if self.slot >= 12:
-				self.slot -= 12 
-			emptySlot(self.slot)
+			emptySlot(self.currentSelected[0][1])
 		self.getImagelist()
 
 	def restoreImages(self):
