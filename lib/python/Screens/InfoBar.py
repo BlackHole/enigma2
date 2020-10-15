@@ -8,6 +8,7 @@ from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 from Components.Label import Label
 from Components.Pixmap import MultiPixmap
+from Components.SystemInfo import SystemInfo
 
 profile("LOAD:enigma")
 import enigma
@@ -51,8 +52,8 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 		self["actions"] = HelpableActionMap(self, "InfobarActions",
 			{
 				"showMovies": (self.showMovies, _("Play recorded movies...")),
-				"showRadio": (self.showRadio, _("Show the radio player...")),
-				"showTv": (self.TvRadioToggle, _("Show the tv player...")),
+				"showRadio": (self.keyRadio, _("Show the radio player...")),
+				"showTv": (self.keyTV, _("Show the tv player...")),
 				"openBouquetList": (self.openBouquetList, _("Open bouquet list")),
 			}, prio=2, description=_("Basic functions"))
 
@@ -147,19 +148,24 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 			self.showTvChannelList(True)
 			self.servicelist.showFavourites()
 
-	def TvRadioToggle(self):
-		if getBrandOEM() == 'gigablue':
+	def keyTV(self):
+		if SystemInfo["toggleTvRadioButtonEvents"]:
 			self.toogleTvRadio()
 		else:
 			self.showTv()
 
-	def toogleTvRadio(self):
-		if self.radioTV == 1:
-			self.radioTV = 0
-			self.showTv()
+	def keyRadio(self):
+		if SystemInfo["toggleTvRadioButtonEvents"]:
+			self.toogleTvRadio()
 		else:
-			self.radioTV = 1
 			self.showRadio()
+
+	def toogleTvRadio(self):
+		if self.radioTV:
+			self.showTv() 
+		else:
+			self.showRadio()
+		self.radioTV ^= 1
 
 	def showTv(self):
 		if config.usage.tvradiobutton_mode.value == "MovieList":
@@ -232,6 +238,7 @@ class MoviePlayer(InfoBarBase, InfoBarShowHide, InfoBarLongKeyDetection, InfoBar
 
 	def __init__(self, session, service, slist = None, lastservice = None):
 		Screen.__init__(self, session)
+
 		self["key_yellow"] = Label()
 		self["key_blue"] = Label()
 		self["key_green"] = Label()
@@ -570,4 +577,4 @@ class MoviePlayer(InfoBarBase, InfoBarShowHide, InfoBarLongKeyDetection, InfoBar
 		Notifications.AddPopup(text = _("%s/%s: %s") % (index, n, self.ref2HumanName(ref)), type = MessageBox.TYPE_INFO, timeout = 5)
 
 	def ref2HumanName(self, ref):
-		return enigma.eServiceCenter.getInstance().info(ref).getName(ref)
+		return enigma.eServiceCenter.getInstance().info(ref).getName(ref)		

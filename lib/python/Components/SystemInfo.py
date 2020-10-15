@@ -2,6 +2,7 @@ from boxbranding import getBoxType, getBrandOEM, getDisplayType, getHaveAVJACK, 
 from enigma import Misc_Options, eDVBCIInterfaces, eDVBResourceManager
 
 from Components.About import getChipSetString
+from Components.RcModel import rc_model
 from Tools.Directories import fileCheck, fileExists, fileHas, pathExists
 from Tools.HardwareInfo import HardwareInfo
 
@@ -81,10 +82,7 @@ SystemInfo["CanNotDoSimultaneousTranscodeAndPIP"] = getBoxType() in ('vusolo4k')
 SystemInfo["hasXcoreVFD"] = fileCheck("/sys/module/brcmstb_%s/parameters/pt6302_cgram" % getBoxType())
 SystemInfo["HasHDMIin"] = getHaveHDMIinHD() in ('True',) or getHaveHDMIinFHD() in ('True',)
 SystemInfo["HasHDMI-CEC"] = fileExists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HdmiCEC/plugin.pyo")
-SystemInfo["HasInfoButton"] = False
 SystemInfo["Has24hz"] = fileCheck("/proc/stb/video/videomode_24hz")
-SystemInfo["HasRootSubdir"] = False
-SystemInfo["RecoveryMode"] = False
 SystemInfo["AndroidMode"] = False
 SystemInfo["MBbootdevice"] = False
 SystemInfo["canMultiBoot"] = False
@@ -142,3 +140,5 @@ SystemInfo["VideoModes"] = getChipSetString() in (  # 2160p and 1080p capable ha
 	{"720p", "1080i"}  # Widescreen modes.
 )
 SystemInfo["LnbPowerAlwaysOn"] = getBoxType() in ("vusolo4k", "vuduo4k", "vuduo4kse", "vuultimo4k", "vuuno4k", "vuuno4kse")
+SystemInfo["rc_model"] = rc_model.getRcFolder()
+SystemInfo["mapKeyInfoToEpgFunctions"] = SystemInfo["rc_model"] in ("vu", "vu2", "vu3", "vu4") # due to button limitations of the remote control
