@@ -3968,7 +3968,7 @@ msgstr "Настройки"
 msgid "Customise"
 msgstr "Опции"
 
-msgid "Customize settings"
+msgid "Customise settings"
 msgstr "Настройки параметров"
 
 msgid "Cut"
@@ -4433,7 +4433,7 @@ msgid "Depth"
 msgstr "Глубина"
 
 msgid "Descramble & record ECM' gives the option to descramble afterwards if descrambling on recording failed. 'Don't descramble, record ECM' save a scramble recording that can be descrambled on playback. 'Normal' means descramble the recording and don't record ECM."
-msgstr "'Раскодировать и записать ECM' позволяет записать и раскод. при воспр., когда при записи этого сделать не удается. 'Не раскодировать ЕСМ и записать' хранит зашифр. записи, которые могут быть раскод. во время воспр. 'Обычный' расшифровывает записи без записи ЕСМ."
+msgstr "'Декодирование и запись ECM' позволяет записать и раскод. при воспр., когда при записи этого сделать не удается. 'Не раскодировать, запись ECM' хранит зашифр. записи, которые могут быть раскод. во время воспр. 'Нормально' расшифровывает записи без записи ЕСМ."
 
 msgid "Descramble receiving http streams"
 msgstr "Декодировать полученные http потоки"
