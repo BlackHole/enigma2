@@ -12024,6 +12024,9 @@ msgstr "Социальные/Политические/Экономика"
 msgid "Softcam"
 msgstr "Эмуляторы"
 
+msgid "Softcam manager settings"
+msgstr "Настройки эмуляторов"
+
 msgid "Softcam settings"
 msgstr "Настройки эмуляторов"
 
@@ -12723,7 +12726,7 @@ msgid "TRANSLATOR_INFO"
 msgstr ""
 "Перевод Open Black Hole 4.4\n"
 "litvcom\n"
-"Ноябрь 2020\n"
+"Декабрь 2020\n"
 "Поддержка: vuplus-community.net"
 
 msgid "TS file is too large for ISO9660 level 1!"
@@ -13579,6 +13582,9 @@ msgstr "Дорожка"
 
 msgid "Transcoding: "
 msgstr "Транскодирование: "
+
+msgid "Transcoding Setup"
+msgstr "Настройка транскодирования"
 
 msgid "Translations"
 msgstr "Перевод"
