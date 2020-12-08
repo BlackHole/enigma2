@@ -9526,17 +9526,20 @@ msgstr "Нажмите ОК, чтобы получить подробную ин
 msgid "Press OK to keep the currently selected%s skin."
 msgstr "Нажмите OK, чтобы оставить текущий%s скин."
 
+msgid "Press OK to save and exit."
+msgstr "Нажмите ОК, чтобы сохранить и выйти."
+
 msgid "Press OK to scan"
 msgstr "Нажмите OK для поиска"
 
 msgid "Press OK to select a group of satellites to configure in one block."
-msgstr "Нажмите OK, для выбора группы спутников для их одновременной настройки"
+msgstr "Нажмите ОК, чтобы выбрать группу спутников для их одновременной настройки."
 
 msgid "Press OK to select a provider."
 msgstr "Нажмите ОК для выбора провайдера."
 
 msgid "Press OK to select a service."
-msgstr "Нажмите OK, для выбора канала."
+msgstr "Нажмите OK для выбора канала."
 
 msgid "Press OK to select satellites"
 msgstr "Нажмите ОК для выбора спутников"
@@ -13791,7 +13794,7 @@ msgid "Uncover dashed flickering line for this service"
 msgstr "Отменить скрытие служебной информации для данного сервиса"
 
 msgid "Undefined"
-msgstr "Неопределено"
+msgstr "Не определено"
 
 msgid "Undetermined"
 msgstr "Не определено"
