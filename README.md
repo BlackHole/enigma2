@@ -1,4 +1,4 @@
 enigma2
 =======
 
-OpenViX Enigma2 
+OpenBH Enigma2
