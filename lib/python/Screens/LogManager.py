@@ -172,7 +172,6 @@ class LogManager(Screen):
 				'red': self.changelogtype,
 				'green': self.showLog,
 				'yellow': self.deletelog,
-				'blue': self.sendlog_bh,
 				"left": self.left,
 				"right": self.right,
 				"down": self.down,
@@ -319,9 +318,6 @@ class LogManager(Screen):
 				remove(self.defaultDir + self.sel[0])
 			self["list"].changeDir(self.defaultDir)
 			self["LogsSize"].update(config.crash.debug_path.value)
-			
-	def sendlog_bh(self, addtionalinfo = None):
-		self.session.open(MessageBox, _("Sorry due to spamming, log sending has been disabled.\nPlease post your log @ www.vuplus-community.net."), MessageBox.TYPE_INFO)
 
 class LogManagerViewLog(Screen):
 	def __init__(self, session, selected):
