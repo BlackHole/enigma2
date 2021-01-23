@@ -1587,7 +1587,7 @@ class InfoBarEPG:
 	def _helpRedPressed(self):
 		if isStandardInfoBar(self) or isMoviePlayerInfoBar(self):
 			if config.usage.defaultEPGType.value != "Grid EPG":
-				return _("Show detailed event info")
+				return _("Show single channel EPG...")
 			else:
 				return _("Show single channel EPG...")
 		return None
@@ -1595,7 +1595,7 @@ class InfoBarEPG:
 	def RedPressed(self):
 		if isStandardInfoBar(self) or isMoviePlayerInfoBar(self):
 			if config.usage.defaultEPGType.value != "Grid EPG":
-				self.openEventView()
+				self.openSingleServiceEPG()
 			else:
 				self.openSingleServiceEPG()
 
