@@ -48,7 +48,7 @@ class BhStreamInfo(Poll, Converter, object):
 				return ''
 
 	def streamurl(self):
-		playref = NavigationInstance.instance.getCurrentlyPlayingServiceReference()		
+		playref = NavigationInstance.instance.getCurrentlyPlayingServiceReference()
 		if playref:
 			refstr = playref.toString()
 			if '%3a' in refstr:

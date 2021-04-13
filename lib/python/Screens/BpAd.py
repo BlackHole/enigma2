@@ -39,37 +39,37 @@ class DeliteAddons(Screen):
             		</convert>
 		</widget>
 	</screen>"""
-	
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
-				
+
 		self.list = []
 		self["list"] = List(self.list)
 		self.updateList()
-		
+
 		if (not pathExists("/var/uninstall")):
 			createDir("/var/uninstall")
-		
+
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"ok": self.checkAcceSS,
 			"back": self.close,
 
 		})
-		
+
 	def updateList(self):
 		self.list = []
 		mypath = resolveFilename(SCOPE_CURRENT_SKIN, "")
 		if mypath == "/usr/share/enigma2/" or mypath == "/usr/share/enigma2/./":
 			mypath = "/usr/share/enigma2/skin_default/"
-		
+
 		mypixmap = mypath + "icons/addons_manager.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Addons Download Manager")
 		idx = 0
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		mypixmap = mypath + "icons/nabpackpanel.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Open Black Hole online update")
@@ -83,44 +83,44 @@ class DeliteAddons(Screen):
 		idx = 2
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		mypixmap = mypath + "icons/ipkpackpanel.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Manual Install Ipk packages")
 		idx = 3
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		mypixmap = mypath + "icons/uninstpanel.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Addons Uninstall Panel")
 		idx = 4
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		mypixmap = mypath + "icons/statpanel.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Black Hole Statistics")
 		idx = 5
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		mypixmap = mypath + "icons/nabpackpanel.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Addons Parental Control")
 		idx = 6
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		self["list"].list = self.list
-		
+
 	def checkAcceSS(self):
 		if config.bhaddons.lock.value == True:
 			msg = _("Enter the pin")
 			self.session.openWithCallback(self.checkAcceSS2, InputBox, title=msg, windowTitle=_("Insert Pin"), text="0000", useableChars="1234567890")
 		else:
 			self.KeyOk()
-			
+
 	def checkAcceSS2(self, pin):
 		if pin is None:
 			pin = 0
@@ -128,13 +128,13 @@ class DeliteAddons(Screen):
 			self.KeyOk()
 		else:
 			self.session.open(MessageBox, _("Sorry, wrong pin."), MessageBox.TYPE_ERROR)
-		
+
 	def KeyOk(self):
-		
+
 		self.sel = self["list"].getCurrent()
 		if self.sel:
 			self.sel = self.sel[2]
-	
+
 		if self.sel == 0:
 			self.session.open(Nab_downArea)
 		elif self.sel == 1:
@@ -156,19 +156,19 @@ class DeliteAddons(Screen):
 		else:
 			nobox = self.session.open(MessageBox, _("Function Not Yet Available"), MessageBox.TYPE_INFO)
 			nobox.setTitle(_("Info"))
-			
+
 	def StatsDone(self):
-		downfile = "/tmp/cpanel.tmp"	
+		downfile = "/tmp/cpanel.tmp"
 		if fileExists(downfile):
 			self.session.open(Nab_Stats)
 		else:
 			nobox = self.session.open(MessageBox, _("Sorry, Connection Failed."), MessageBox.TYPE_INFO)
-			
+
 	def runUpgrade(self, result):
 		if result:
 			from Screens.SoftwareUpdate import UpdatePlugin
 			self.session.open(UpdatePlugin, "Open Black Hole ")
-	
+
 	def checkPanel(self):
 		check = 0
 		pkgs = listdir("/tmp")
@@ -180,7 +180,7 @@ class DeliteAddons(Screen):
 		else:
 			mybox = self.session.open(MessageBox, _("Nothing to install.\nYou have to Upload a bh.tgz package in the /tmp directory before you can install Addons"), MessageBox.TYPE_INFO)
 			mybox.setTitle(_("Info"))
-			
+
 	def checkPanel2(self):
 		check = 0
 		pkgs = listdir("/tmp")
@@ -192,7 +192,7 @@ class DeliteAddons(Screen):
 		else:
 			mybox = self.session.open(MessageBox, _("Nothing to install.\nYou have to Upload an ipk package in the /tmp directory before you can install Addons"), MessageBox.TYPE_INFO)
 			mybox.setTitle(_("Info"))
-		
+
 
 class Nab_downArea(Screen):
 	skin = """
@@ -209,101 +209,101 @@ class Nab_downArea(Screen):
             		</convert>
 		</widget>
 	</screen>"""
-	
+
 	def __init__(self, session):
-		
+
 		Screen.__init__(self, session)
 
 		self.list = []
 		self["list"] = List(self.list)
 		self.updateList()
-		
+
 		if (not pathExists("/var/uninstall")):
 			createDir("/var/uninstall")
-		
+
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"ok": self.KeyOk,
 			"back": self.close
 
 		})
-		
+
 	def updateList(self):
-		
+
 		self.list = []
 		mypath = resolveFilename(SCOPE_CURRENT_SKIN, "")
 		if mypath == "/usr/share/enigma2/" or mypath == "/usr/share/enigma2/./":
 			mypath = "/usr/share/enigma2/skin_default/"
-		
+
 		mypixmap = mypath + "icons/nabplugins.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Open Black Hole Addons Plugins")
 		idx = 1
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		mypixmap = mypath + "icons/nabplugins.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Black Hole Feeds Plugins")
 		idx = 2
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		mypixmap = mypath + "icons/nabskins.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Open Black Hole Image Skins")
 		idx = 3
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		mypixmap = mypath + "icons/nabscript.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Black Hole Image Script")
 		idx = 4
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		mypixmap = mypath + "icons/nablangs.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Black Hole Image Boot Logo")
 		idx = 5
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		mypixmap = mypath + "icons/nabsettings.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Black Hole Settings")
 		idx = 6
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		mypixmap = mypath + "icons/nabpicons.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Picons Packages")
 		idx = 7
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		mypixmap = mypath + "icons/nabuploads.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Latest 10 Uploads")
 		idx = 8
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		self["list"].list = self.list
-	
+
 	def KeyOk(self):
 		pluginver = "OpenBlackHole-Plugins"
 		catver = "outcat10_3"
-		
+
 		self.sel = self["list"].getCurrent()
 		if self.sel:
 			self.sel = self.sel[2]
-		
+
 		self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=Cams"
 		self.title = "Buuuuu"
-		
+
 		if self.sel == 1:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=" + pluginver
 			self.title = "Open Black Hole Addons Plugins"
@@ -327,12 +327,12 @@ class Nab_downArea(Screen):
 			self.title = "Black Hole Picons Packages"
 		elif self.sel == 8:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=" + catver
-			self.title = "Latest 10 Uploads"	
-			
-		downfile = "/tmp/cpanel.tmp"	
+			self.title = "Latest 10 Uploads"
+
+		downfile = "/tmp/cpanel.tmp"
 		if fileExists(downfile):
 			os_remove(downfile)
-		
+
 		if self.url == "feeds":
 #			from Plugins.SystemPlugins.SoftwareManager.plugin import PluginManager
 #			self.session.open(PluginManager, "/usr/lib/enigma2/python/Plugins/SystemPlugins/SoftwareManager")
@@ -340,14 +340,14 @@ class Nab_downArea(Screen):
 			self.session.open(PluginDownloadBrowser)
 		else:
 			self.session.openWithCallback(self.connectionDone, Nab_ConnectPop, self.url, downfile)
-			
+
 	def connectionDone(self):
-		downfile = "/tmp/cpanel.tmp"	
+		downfile = "/tmp/cpanel.tmp"
 		if fileExists(downfile):
 			self.session.open(Nab_downCat, self.title)
 		else:
 			nobox = self.session.open(MessageBox, _("Sorry, Connection Failed."), MessageBox.TYPE_INFO)
-		
+
 
 class Nab_downCat(Screen):
 	skin = """
@@ -356,7 +356,7 @@ class Nab_downCat(Screen):
 			<convert type="StringList" />
 		</widget>
 	</screen>"""
-	
+
 	def __init__(self, session, title):
 		Screen.__init__(self, session)
 
@@ -376,10 +376,10 @@ class Nab_downCat(Screen):
 					res = (line, ivalue)
 					self.flist.append(res)
 					step = 0
-		
+
  			f.close()
 			os_remove("/tmp/cpanel.tmp")
-		
+
 		self["list"] = List(self.flist)
 		self.onShown.append(self.setWindowTitle)
 
@@ -398,14 +398,14 @@ class Nab_downCat(Screen):
 		if self.sel:
 			self.myidf = self.sel[1]
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outfile&idf=" + self.myidf
-				
-			downfile = "/tmp/cpanel.tmp"	
+
+			downfile = "/tmp/cpanel.tmp"
 			if fileExists(downfile):
 				os_remove(downfile)
 			self.session.openWithCallback(self.connectionDone, Nab_ConnectPop, self.url, downfile)
-			
+
 	def connectionDone(self):
-		downfile = "/tmp/cpanel.tmp"	
+		downfile = "/tmp/cpanel.tmp"
 		if fileExists(downfile):
 			self.session.open(Nab_ShowDownFile, self.myidf)
 		else:
@@ -418,7 +418,7 @@ class Nab_ShowPreviewFile(Screen):
 		<widget name="lab1" position="0,0" size="1280,720" zPosition="1" />
 		<widget name="lab2" position="0,30" size="1280,30" zPosition="2" font="Regular;26" halign="center" valign="center" backgroundColor="red" foregroundColor="white" />
 	</screen>"""
-	
+
 	def __init__(self, session, myprev):
 		Screen.__init__(self, session)
 
@@ -439,7 +439,7 @@ class Nab_ShowPreviewFile(Screen):
 		self["lab1"].instance.setPixmap(png)
 		os_remove(myicon)
 
-	
+
 class Nab_ShowDownFile(Screen):
 	skin = """
 	<screen position="80,95" size="560,405" title="Black Hole E2 Package Details">
@@ -449,7 +449,7 @@ class Nab_ShowDownFile(Screen):
 		<ePixmap pixmap="skin_default/buttons/yellow.png" position="400,365" size="140,40" alphatest="on" />
 		<widget name="key_yellow" position="400,365" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
 	</screen>"""
-	
+
 	def __init__(self, session, myidf):
 		Screen.__init__(self, session)
 
@@ -457,7 +457,7 @@ class Nab_ShowDownFile(Screen):
 		self["key_yellow"] = Label(_('Preview'))
 		self["infotext"] = ScrollLabel()
 		self.tcat = ""
-		
+
 		step = 0
 		strview = "TITLE: "
 		if fileExists("/tmp/cpanel.tmp"):
@@ -486,7 +486,7 @@ class Nab_ShowDownFile(Screen):
 				elif step == 5:
 					strview += "                                Downloads: " + line + "\n"
 					step = 6
-				elif step == 6:	
+				elif step == 6:
 					self.tcat = line
 					step = 7
 				elif step == 7:
@@ -494,7 +494,7 @@ class Nab_ShowDownFile(Screen):
 					step = 8
 				else:
 					strview += line + "\n"
-		
+
  			f.close()
 			os_remove("/tmp/cpanel.tmp")
 		self["infotext"].setText(strview)
@@ -509,12 +509,12 @@ class Nab_ShowDownFile(Screen):
 			"down": self["infotext"].pageDown
 
 		})
-			
+
 	def cleanhtml(self, raw_html):
 		cleanr = re_compile('<.*?>')
 		cleantext = re_sub(cleanr, '', raw_html)
 		return cleantext
-			
+
 	def KeyYellowd(self):
 		if (self.tcat != "OpenBlackHole-Skins" and self.tcat != "Logos"):
 			nobox = self.session.open(MessageBox, _("Sorry, the preview is available only for Skins and Bootlogo."), MessageBox.TYPE_INFO)
@@ -523,26 +523,26 @@ class Nab_ShowDownFile(Screen):
 			self.url = '"http://www.vuplus-community.net/bhaddons/files/' + self.fileP + '"'
 			cmd = "wget -O /tmp/" + self.fileP + " " + self.url
 			self.session.openWithCallback(self.addonsconn2, Nab_ConnectPop, cmd, "N/A")
-			
+
 	def addonsconn2(self):
 		self.session.open(Nab_ShowPreviewFile, self.fileP)
-		
+
 	def KeyGreend(self):
 		self.url = '"http://www.vuplus-community.net/bhaddons/files/' + self.fileN + '"'
 		cmd = "wget -O /tmp/" + self.fileN + " " + self.url
 		self.session.openWithCallback(self.addonsconn, Nab_ConnectPop, cmd, "N/A")
-		
+
 	def addonsconn(self):
 		message = _("Do you want to install the Addon:\n ") + self.fileN + _(" ?")
 		ybox = self.session.openWithCallback(self.installadd, MessageBox, message, MessageBox.TYPE_YESNO)
 		ybox.setTitle(_("Download Complete"))
-		
+
 	def installadd(self, answer):
 		if answer is True:
 			mytype = 1
 			if self.fileN.find('.ipk') != -1:
 				mytype = 2
-			
+
 			if mytype == 1:
 				dest = "/tmp/" + self.fileN
 				mydir = getcwd()
@@ -560,7 +560,7 @@ class Nab_ShowDownFile(Screen):
 					mybox = self.session.open(MessageBox, _("Addon Succesfully Installed."), MessageBox.TYPE_INFO)
 					mybox.setTitle(_("Info"))
 					self.close()
-			
+
 			elif mytype == 2:
 				dest = "/tmp/" + self.fileN
 				mydir = getcwd()
@@ -573,7 +573,7 @@ class Nab_ShowDownFile(Screen):
 				cmd2 = "rm -f " + dest
 				self.session.open(Console, title="Ipk Package Installation", cmdlist=[cmd, cmd0, cmd1, cmd2, "sleep 5"], finishedCallback=self.installipkDone)
 				chdir(mydir)
-				
+
 	def installipkDone(self):
 		if fileExists("/tmp/package.info"):
 			f = open("/tmp/package.info", 'r')
@@ -591,7 +591,7 @@ class Nab_ShowDownFile(Screen):
 			rc = system("rm -f /tmp/package.info")
 		mybox = self.session.openWithCallback(self.hrestEn, MessageBox, _("Gui will now restart to complete the package installation.\nPress ok to continue"), MessageBox.TYPE_INFO)
 		mybox.setTitle(_("Info"))
-				
+
 	def hrestEn(self, answer):
 		self.eDVBDB = eDVBDB.getInstance()
 		self.eDVBDB.reloadServicelist()
@@ -606,7 +606,7 @@ class Nab_downPanel(Screen):
 			<convert type="StringList" />
 		</widget>
 	</screen>"""
-	
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
 
@@ -618,9 +618,9 @@ class Nab_downPanel(Screen):
 				res = (fil, idx)
 				self.flist.append(res)
 				idx = idx + 1
-		
+
 		self["list"] = List(self.flist)
-		
+
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"ok": self.KeyOk,
@@ -670,9 +670,9 @@ class Nab_downPanelIPK(Screen):
 		</widget>
 		<widget name="warntext" position="0,305" size="560,100" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" />
 	</screen>"""
-	
+
 	def __init__(self, session):
-		Screen.__init__(self, session)			
+		Screen.__init__(self, session)
 
 		self.flist = []
 		idx = 0
@@ -682,10 +682,10 @@ class Nab_downPanelIPK(Screen):
 				res = (fil, idx)
 				self.flist.append(res)
 				idx = idx + 1
-		
+
 		self["warntext"] = Label(_("Here you can install any ipk packages."))
 		self["list"] = List(self.flist)
-		
+
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"ok": self.KeyOk,
@@ -714,7 +714,7 @@ class Nab_downPanelIPK(Screen):
 			cmd2 = "rm -f " + dest
 			self.session.open(Console, title="Ipk Package Installation", cmdlist=[cmd, cmd0, cmd1, cmd2, "sleep 5"], finishedCallback=self.installipkDone)
 			chdir(mydir)
-			
+
 	def installipkDone(self):
 		if fileExists("/tmp/package.info"):
 			f = open("/tmp/package.info", 'r')
@@ -732,7 +732,7 @@ class Nab_downPanelIPK(Screen):
 			rc = system("rm -f /tmp/package.info")
 		mybox = self.session.openWithCallback(self.hrestEn, MessageBox, _("Gui will now restart to complete the package installation.\nPress ok to continue"), MessageBox.TYPE_INFO)
 		mybox.setTitle(_("Info"))
-				
+
 	def hrestEn(self, answer):
 		self.eDVBDB = eDVBDB.getInstance()
 		self.eDVBDB.reloadServicelist()
@@ -747,9 +747,9 @@ class Nab_uninstPanel(Screen):
 			<convert type="StringList" />
 		</widget>
 	</screen>"""
-	
+
 	def __init__(self, session):
-		Screen.__init__(self, session)			
+		Screen.__init__(self, session)
 
 		self.flist = []
 		idx = 0
@@ -759,16 +759,16 @@ class Nab_uninstPanel(Screen):
 				res = (fil, idx)
 				self.flist.append(res)
 				idx = idx + 1
-		
+
 		self["list"] = List(self.flist)
-		
+
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"ok": self.KeyOk,
 			"back": self.close
 
 		})
-		
+
 	def KeyOk(self):
 		self.sel = self["list"].getCurrent()
 		if self.sel:
@@ -776,7 +776,7 @@ class Nab_uninstPanel(Screen):
 			message = _("Are you sure you want to Remove Package:\n ") + self.sel + _("?")
 			ybox = self.session.openWithCallback(self.uninstPack, MessageBox, message, MessageBox.TYPE_YESNO)
 			ybox.setTitle(_("Uninstall Confirmation"))
-		
+
 	def uninstPack(self, answer):
 		if answer is True:
 			orig = "/usr/uninstall/" + self.sel
@@ -784,36 +784,36 @@ class Nab_uninstPanel(Screen):
 			rc = system(cmd)
 			mybox = self.session.openWithCallback(self.hrestEn, MessageBox, _("Addon Succesfully Removed. Gui will now restart for the changes to take effect.\nPress ok to continue"), MessageBox.TYPE_INFO)
 			mybox.setTitle(_("Info"))
-			
+
 	def hrestEn(self, answer):
 		self.session.open(TryQuitMainloop, 3)
-			
-		
+
+
 class Nab_Stats(Screen):
 	skin = """
 	<screen position="80,95" size="560,405" title="Black Hole E2 Statistics">
 		<widget name="infotext" position="10,15" size="540,315" font="Regular;20" />
 	</screen>"""
-	
+
 	def __init__(self, session):
-		Screen.__init__(self, session)	
+		Screen.__init__(self, session)
 
 		self["infotext"] = ScrollLabel()
-		
+
 		self["actions"] = ActionMap(["WizardActions"],
 		{
 			"ok": self.close,
 			"back": self.close
 
-		})		
+		})
 		self.statshow()
-		
+
 	def statshow(self):
 		if fileExists("/tmp/cpanel.tmp"):
 			strview = _("Black Hole Image Statistics:\n\n_____________________________________\n")
 			step = 0
 			f = open("/tmp/cpanel.tmp", 'r')
-		
+
  			for line in f.readlines():
 				if step == 0:
 					strview += _("Total Connections:   \t")
@@ -836,13 +836,13 @@ class Nab_Stats(Screen):
 					strview += _("Top downloaded File:\t")
 				elif step == 8:
 					strview += _("Total Downloads:     \t")
-					
+
 				strview += line
 				step = step + 1
 			f.close()
 			os_remove("/tmp/cpanel.tmp")
 			self["infotext"].setText(strview)
-				
+
 
 class addonsParentalConfig(Screen, ConfigListScreen):
 	skin = """
@@ -853,15 +853,15 @@ class addonsParentalConfig(Screen, ConfigListScreen):
 		<ePixmap position="420,270" size="140,40" pixmap="skin_default/buttons/green.png" alphatest="on" zPosition="1" />
 		<widget name="key_green" position="420,270" zPosition="2" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="green" transparent="1" />
 	</screen>"""
-	
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		
+
 		self.list = []
 		ConfigListScreen.__init__(self, self.list)
 		self["key_red"] = Label(_("Cancel"))
 		self["key_green"] = Label(_("Save"))
-		
+
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"red": self.keyCancel,
@@ -869,15 +869,15 @@ class addonsParentalConfig(Screen, ConfigListScreen):
 			"green": self.keySave,
 
 		}, -2)
-		
+
 		self.updateList()
-	
+
 	def updateList(self):
 		item = getConfigListEntry(_("Addons access protected"), config.bhaddons.lock)
 		self.list.append(item)
 		item = getConfigListEntry(_("Addons access pin"), config.bhaddons.pin)
-		self.list.append(item)	
-		
+		self.list.append(item)
+
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
 
@@ -898,10 +898,10 @@ class Nab_ConnectPop(Screen):
 		<widget name="connect" position="0,0" size="484,250" zPosition="-1" pixmaps="skin_default/connection_1.png,skin_default/connection_2.png,skin_default/connection_3.png,skin_default/connection_4.png,skin_default/connection_5.png" transparent="1" />
 		<widget name="lab1" position="10,180" halign="center" size="460,60" zPosition="1" font="Regular;20" valign="top" transparent="1" />
 	</screen>"""
-	
+
 	def __init__(self, session, myurl, downfile):
 		Screen.__init__(self, session)
-		
+
 		self["connect"] = MultiPixmap()
 		self["connect"].setPixmapNum(0)
 		self["lab1"] = Label(_("Wait please connection in progress ..."))
@@ -912,19 +912,19 @@ class Nab_ConnectPop(Screen):
 			self.activityTimer.timeout.get().append(self.updatepixWget)
 		else:
 			self.activityTimer.timeout.get().append(self.updatepix)
-		
+
 		self.onShow.append(self.startShow)
 		self.onClose.append(self.delTimer)
-		
+
 	def startShow(self):
 		self.curpix = 0
 		self.count = 0
 		self.activityTimer.start(300)
-		
+
 	def updatepixWget(self):
 		self.activityTimer.stop()
 		if self.curpix > 3:
-			self.curpix = 0	
+			self.curpix = 0
 		if self.count > 8:
 			self.curpix = 4
 			self["lab1"].setText(_("Wait please, download in progress..."))
@@ -933,7 +933,7 @@ class Nab_ConnectPop(Screen):
 			rc = system(self.myurl)
 		if self.count == 11:
 			self.close()
-		
+
 		self.activityTimer.start(120)
 		self.curpix += 1
 		self.count += 1
@@ -942,7 +942,7 @@ class Nab_ConnectPop(Screen):
 		self.activityTimer.stop()
 		if self.curpix > 3:
 			self.curpix = 0
-			
+
 		if self.count > 8:
 			self.curpix = 4
 			req = Request(self.myurl)
@@ -962,15 +962,10 @@ class Nab_ConnectPop(Screen):
 		self["connect"].setPixmapNum(self.curpix)
 		if self.count == 10:
 			self.close()
-		
+
 		self.activityTimer.start(120)
 		self.curpix += 1
 		self.count += 1
-		
+
 	def delTimer(self):
 		del self.activityTimer
-		
-
-
-		
-		

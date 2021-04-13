@@ -1951,9 +1951,9 @@ class Seekbar(Screen):
 
 		self["actions"] = ActionMap(["WizardActions", "DirectionActions"],
 		{
-			"back": self.exit, 
-			"ok": self.keyOK, 
-			"left": self.keyLeft, 
+			"back": self.exit,
+			"ok": self.keyOK,
+			"left": self.keyLeft,
 			"right": self.keyRight
 		}, prio=-1)
 
