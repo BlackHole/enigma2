@@ -21,8 +21,8 @@ else:
 	ImageVer = float(ImageVer)
 
 E2Branches = {
-	'developer' : 'Dev',
-	'release' : 'master'
+	'developer': 'Dev',
+	'release': 'master'
 	}
 
 project = 0
@@ -93,7 +93,7 @@ def readGithubCommitLogsSoftwareUpdate():
 	except urllib2, err:
 		print '[GitCommitLog] The commit log cannot be retrieved at the moment - please try again later.', err
 		commitlog += _("The commit log cannot be retrieved at the moment - please try again later.\n")
-	except Exception , err:
+	except Exception, err:
 		print '[GitCommitLog] The commit log cannot be retrieved at the moment - please try again later.', err
 		commitlog += _("The commit log cannot be retrieved at the moment - please try again later.")
 	return commitlog
@@ -161,7 +161,7 @@ def readGithubCommitLogs():
 	except urllib2, err:
 		print '[GitCommitLog] The commit log cannot be retrieved at the moment - please try again later.', err
 		commitlog += _("The commit log cannot be retrieved at the moment - please try again later.\n")
-	except Exception , err:
+	except Exception, err:
 		print '[GitCommitLog] The commit log cannot be retrieved at the moment - please try again later.', err
 		commitlog += _("The commit log cannot be retrieved at the moment - please try again later.")
 	return commitlog

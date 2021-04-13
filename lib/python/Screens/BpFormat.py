@@ -86,7 +86,7 @@ class Bp_UsbFormat(Screen):
 	def partSize1(self, total):
 		self.totalpartitions = int(total[1])
 		if self.totalpartitions > 1:
-			self.session.openWithCallback(self.partSize2,InputBox, title=_("Enter the size in Megabytes of the first partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890" )
+			self.session.openWithCallback(self.partSize2,InputBox, title=_("Enter the size in Megabytes of the first partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
 		else:
 			self.writePartFile()
 			
@@ -95,7 +95,7 @@ class Bp_UsbFormat(Screen):
 			psize = "100"
 		self.p1size = psize
 		if self.totalpartitions > 2:
-			self.session.openWithCallback(self.partSize3,InputBox, title=_("Enter the size in Megabytes of the second partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890" )
+			self.session.openWithCallback(self.partSize3,InputBox, title=_("Enter the size in Megabytes of the second partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
 		else:
 			self.writePartFile()
 			
@@ -104,7 +104,7 @@ class Bp_UsbFormat(Screen):
 			psize = "100"
 		self.p2size = psize
 		if self.totalpartitions > 3:
-			self.session.openWithCallback(self.partSize4,InputBox, title=_("Enter the size in Megabytes of the third partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890" )
+			self.session.openWithCallback(self.partSize4,InputBox, title=_("Enter the size in Megabytes of the third partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
 		else:
 			self.writePartFile()
 		

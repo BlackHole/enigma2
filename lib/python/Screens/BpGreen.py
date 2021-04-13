@@ -69,7 +69,7 @@ class DeliteGreenPanel(Screen):
 			plugin(session=self.session)
 
 	def updateList(self):
-		self.list = [ ]
+		self.list = []
 		self.pluginlist = plugins.getPlugins(PluginDescriptor.WHERE_PLUGINMENU)
 		for plugin in self.pluginlist:
 			if plugin.icon is None:
@@ -129,7 +129,7 @@ class DeliteSetupFp(Screen):
 		}, -1)
 
 	def updateList(self):
-		self.list = [ ]
+		self.list = []
 		self.pluginlist = plugins.getPlugins(PluginDescriptor.WHERE_PLUGINMENU)
 		for plugin in self.pluginlist:
 			if plugin.icon is None:

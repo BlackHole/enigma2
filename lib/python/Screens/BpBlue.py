@@ -94,7 +94,7 @@ class DeliteBluePanel(Screen):
 			height = sinfo and sinfo.getInfo(iServiceInformation.sVideoHeight) or -1	
 			videosize = "%dx%d" %(width, height)
 			aspect = "16:9" 
-			if aspect in ( 1, 2, 5, 6, 9, 0xA, 0xD, 0xE ):
+			if aspect in (1, 2, 5, 6, 9, 0xA, 0xD, 0xE):
 				aspect = "4:3"
 		except:
 			name = "N/A"
@@ -161,7 +161,7 @@ class DeliteBluePanel(Screen):
 		out.write(self.sel)
 		out.close()
 		cmd = "cp -f " + self.newcam + " /usr/bin/StartBhCam"
-		system (cmd)
+		system(cmd)
 		cmd = "STOP_CAMD," + self.defaultcam
 		self.sendtoBh_sock(cmd)
 		
@@ -361,7 +361,7 @@ class BhEpgPanel(Screen):
 
 class DeliteBp:
 	def __init__(self):
-		self["DeliteBp"] = ActionMap( [ "InfobarExtensions" ],
+		self["DeliteBp"] = ActionMap(["InfobarExtensions"],
 			{
 				"DeliteBpshow": (self.showDeliteBp),
 			})

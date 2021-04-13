@@ -114,7 +114,7 @@ class DeliteSettings(Screen):
 	
 		
 	def updateList(self):
-		self.list = [ ]
+		self.list = []
 		mypath = resolveFilename(SCOPE_CURRENT_SKIN, "")
 		if mypath == "/usr/share/enigma2/" or mypath == "/usr/share/enigma2/./":
 			mypath = "/usr/share/enigma2/skin_default/"
@@ -279,7 +279,7 @@ class BhNetBrowser(Screen):
 			"green": self.selectInte
 		})
 		
-		self.list = [ ]
+		self.list = []
 		self.adapters = [(iNetwork.getFriendlyAdapterName(x),x) for x in iNetwork.getAdapterList()]
 		for x in self.adapters:
 			res = (x[0], x[1])
@@ -637,7 +637,7 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 				self.session.open(MessageBox, _("Please use Virtual Keyboard for text rows only:\n-Username\n-Password\n-Alias\n-System"), MessageBox.TYPE_INFO)
 	
 	def UpdateAgain(self, newt):
-		self.list = [ ]
+		self.list = []
 		if newt is None:
 			newt = ""
 		if newt.strip() != "":
@@ -703,7 +703,7 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 			out.close()
 			inme.close()
 		
-		else :
+		else:
 			self.session.open(MessageBox, _("Sorry Inadyn Script is Missing"), MessageBox.TYPE_INFO)
 			self.close()
 

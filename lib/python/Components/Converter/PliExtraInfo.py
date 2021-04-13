@@ -12,22 +12,22 @@ from Poll import Poll
 from skin import parameters
 
 caid_data = (
-	("0x1700", "0x17ff", "BetaCrypt",        "B",     True ),
-	( "0x600",  "0x6ff", "Irdeto",           "I",     True ),
-	("0x1800", "0x18ff", "Nagravision",      "N",     True ),
-	( "0x100",  "0x1ff", "Seca Mediaguard",  "S",     True ),
-	("0x1000", "0x10FF", "Tandberg",         "T",     True ),
-	( "0x500",  "0x5ff", "Viaccess",         "V",     True ),
-	("0x2600", "0x2600", "Biss",             "BI",    True ),
-	("0x4aee", "0x4aee", "BulCrypt",         "BU",    True ),
+	("0x1700", "0x17ff", "BetaCrypt",        "B",     True),
+	("0x600",  "0x6ff", "Irdeto",           "I",     True),
+	("0x1800", "0x18ff", "Nagravision",      "N",     True),
+	("0x100",  "0x1ff", "Seca Mediaguard",  "S",     True),
+	("0x1000", "0x10FF", "Tandberg",         "T",     True),
+	("0x500",  "0x5ff", "Viaccess",         "V",     True),
+	("0x2600", "0x2600", "Biss",             "BI",    True),
+	("0x4aee", "0x4aee", "BulCrypt",         "BU",    True),
 	("0x5581", "0x5581", "BulCrypt",         "BU",    False),
-	( "0xb00",  "0xbff", "Conax",            "CO",    True ),
-	( "0xd00",  "0xdff", "CryptoWorks",      "CW",    True ),
+	("0xb00",  "0xbff", "Conax",            "CO",    True),
+	("0xd00",  "0xdff", "CryptoWorks",      "CW",    True),
 	("0x2700", "0x2710", "DRE-Crypt3",       "DC",    False),
-	("0x4ae0", "0x4ae1", "DRE-Crypt",        "DC",    True ),
-	( "0x900",  "0x9ff", "NDS Videoguard",   "ND",    True ),
-	( "0xe00",  "0xeff", "PowerVu",          "PV",    True ),
-	("0x5601", "0x5604", "Verimatrix",       "VM",    True )
+	("0x4ae0", "0x4ae1", "DRE-Crypt",        "DC",    True),
+	("0x900",  "0x9ff", "NDS Videoguard",   "ND",    True),
+	("0xe00",  "0xeff", "PowerVu",          "PV",    True),
+	("0x5601", "0x5604", "Verimatrix",       "VM",    True)
 )
 
 # stream type to codec map
@@ -86,22 +86,22 @@ class PliExtraInfo(Poll, Converter, object):
 			("CryptoCaidNDSAvailable",        "ND",   False),
 			("CryptoCaidPowerVuAvailable",    "PV",   False),
 			("CryptoCaidVerimatrixAvailable", "VM",   False),
-			("CryptoCaidBetaSelected",        "B",    True ),
-			("CryptoCaidIrdetoSelected",      "I",    True ),
-			("CryptoCaidNagraSelected",       "N",    True ),
-			("CryptoCaidSecaSelected",        "S",    True ),
-			("CryptoCaidTandbergSelected",    "T",    True ),
-			("CryptoCaidViaSelected",         "V",    True ),
-			("CryptoCaidBissSelected",        "BI",   True ),
-			("CryptoCaidBulCrypt1Selected",   "BU",   True ),
-			("CryptoCaidBulCrypt2Selected",   "BU",   True ),
-			("CryptoCaidConaxSelected",       "CO",   True ),
-			("CryptoCaidCryptoWSelected",     "CW",   True ),
-			("CryptoCaidDre3Selected",        "DC",   True ),
-			("CryptoCaidDreSelected",         "DC",   True ),
-			("CryptoCaidNDSSelected",         "ND",   True ),
-			("CryptoCaidPowerVuSelected",     "PV",   True ),
-			("CryptoCaidVerimatrixSelected",  "VM",   True ),
+			("CryptoCaidBetaSelected",        "B",    True),
+			("CryptoCaidIrdetoSelected",      "I",    True),
+			("CryptoCaidNagraSelected",       "N",    True),
+			("CryptoCaidSecaSelected",        "S",    True),
+			("CryptoCaidTandbergSelected",    "T",    True),
+			("CryptoCaidViaSelected",         "V",    True),
+			("CryptoCaidBissSelected",        "BI",   True),
+			("CryptoCaidBulCrypt1Selected",   "BU",   True),
+			("CryptoCaidBulCrypt2Selected",   "BU",   True),
+			("CryptoCaidConaxSelected",       "CO",   True),
+			("CryptoCaidCryptoWSelected",     "CW",   True),
+			("CryptoCaidDre3Selected",        "DC",   True),
+			("CryptoCaidDreSelected",         "DC",   True),
+			("CryptoCaidNDSSelected",         "ND",   True),
+			("CryptoCaidPowerVuSelected",     "PV",   True),
+			("CryptoCaidVerimatrixSelected",  "VM",   True),
 		)
 		self.ecmdata = GetEcmInfo()
 		self.feraw = self.fedata = self.updateFEdata = None
@@ -223,17 +223,17 @@ class PliExtraInfo(Poll, Converter, object):
 		sidpid = info.getInfo(iServiceInformation.sSID)
 		tsid = info.getInfo(iServiceInformation.sTSID)
 		onid = info.getInfo(iServiceInformation.sONID)
-		if vpid < 0 :
+		if vpid < 0:
 			vpid = 0
-		if apid < 0 :
+		if apid < 0:
 			apid = 0
-		if pcrpid < 0 :
+		if pcrpid < 0:
 			pcrpid = 0
-		if sidpid < 0 :
+		if sidpid < 0:
 			sidpid = 0
-		if tsid < 0 :
+		if tsid < 0:
 			tsid = 0
-		if onid < 0 :
+		if onid < 0:
 			onid = 0
 		return "%d-%d:%05d:%04d:%04d:%04d" % (onid, tsid, sidpid, vpid, apid, pcrpid)
 

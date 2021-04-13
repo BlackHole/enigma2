@@ -262,7 +262,7 @@ class Menu(Screen, HelpableScreen, ProtectedScreen):
 					list.append((l[0], boundFunction(l[1], self.session), l[2], weight or 50))
 
 		# for the skin: first try a menu_<menuID>, then Menu
-		self.skinName = [ ]
+		self.skinName = []
 		if menuID is not None:
 			self.skinName.append("menu_" + menuID)
 		self.skinName.append("Menu")
