@@ -27,7 +27,7 @@ if getMachineBuild() in ("vuuno4k", "vuuno4kse", "vuzero4k", "vuultimo4k", "vuso
 def Freespace(dev):
 	statdev = statvfs(dev)
 	space = (statdev.f_bavail * statdev.f_frsize) / 1024
-	print "[FULL BACKUP] Free space on %s = %i kilobytes" %(dev, space)
+	print "[FULL BACKUP] Free space on %s = %i kilobytes" % (dev, space)
 	return space
 
 class ImageBackup(Screen):
@@ -60,16 +60,16 @@ class ImageBackup(Screen):
 		self.ROOTFSBIN = getMachineRootFile()
 		self.KERNELBIN = getMachineKernelFile()
 		self.ROOTFSTYPE = getImageFileSystem()
-		print "[FULL BACKUP] BOX MACHINEBUILD = >%s<" %self.MACHINEBUILD
-		print "[FULL BACKUP] BOX MACHINENAME = >%s<" %self.MACHINENAME
-		print "[FULL BACKUP] BOX MACHINEBRAND = >%s<" %self.MACHINEBRAND
-		print "[FULL BACKUP] BOX MODEL = >%s<" %self.MODEL
-		print "[FULL BACKUP] OEM MODEL = >%s<" %self.OEM
-		print "[FULL BACKUP] IMAGEFOLDER = >%s<" %self.IMAGEFOLDER
-		print "[FULL BACKUP] UBINIZE = >%s<" %self.UBINIZE_ARGS
-		print "[FULL BACKUP] MKUBIFS = >%s<" %self.MKUBIFS_ARGS
-		print "[FULL BACKUP] MTDKERNEL = >%s<" %self.MTDKERNEL
-		print "[FULL BACKUP] ROOTFSTYPE = >%s<" %self.ROOTFSTYPE
+		print "[FULL BACKUP] BOX MACHINEBUILD = >%s<" % self.MACHINEBUILD
+		print "[FULL BACKUP] BOX MACHINENAME = >%s<" % self.MACHINENAME
+		print "[FULL BACKUP] BOX MACHINEBRAND = >%s<" % self.MACHINEBRAND
+		print "[FULL BACKUP] BOX MODEL = >%s<" % self.MODEL
+		print "[FULL BACKUP] OEM MODEL = >%s<" % self.OEM
+		print "[FULL BACKUP] IMAGEFOLDER = >%s<" % self.IMAGEFOLDER
+		print "[FULL BACKUP] UBINIZE = >%s<" % self.UBINIZE_ARGS
+		print "[FULL BACKUP] MKUBIFS = >%s<" % self.MKUBIFS_ARGS
+		print "[FULL BACKUP] MTDKERNEL = >%s<" % self.MTDKERNEL
+		print "[FULL BACKUP] ROOTFSTYPE = >%s<" % self.ROOTFSTYPE
 
 		self["key_green"] = Button("USB")
 		self["key_red"] = Button("HDD")
@@ -150,28 +150,28 @@ class ImageBackup(Screen):
 			self.MKFS = "/usr/sbin/mkfs.jffs2"
 		self.UBINIZE = "/usr/sbin/ubinize"
 		self.NANDDUMP = "/usr/sbin/nanddump"
-		self.WORKDIR= "%s/bi" %self.DIRECTORY
-		self.TARGET="XX"
+		self.WORKDIR = "%s/bi" % self.DIRECTORY
+		self.TARGET = "XX"
 
 		## TESTING IF ALL THE TOOLS FOR THE BUILDING PROCESS ARE PRESENT
 		if not path.exists(self.MKFS):
-			text = "%s not found !!" %self.MKFS
+			text = "%s not found !!" % self.MKFS
 			self.session.open(MessageBox, _(text), type=MessageBox.TYPE_ERROR)
 			return
 		if not path.exists(self.NANDDUMP):
-			text = "%s not found !!" %self.NANDDUMP
+			text = "%s not found !!" % self.NANDDUMP
 			self.session.open(MessageBox, _(text), type=MessageBox.TYPE_ERROR)
 			return
 
-		self.SHOWNAME = "%s %s" %(self.MACHINEBRAND, self.MODEL)
-		self.MAINDESTOLD = "%s/%s" %(self.DIRECTORY, self.MODEL)
-		self.MAINDEST = "%s/%s" %(self.DIRECTORY,self.IMAGEFOLDER)
+		self.SHOWNAME = "%s %s" % (self.MACHINEBRAND, self.MODEL)
+		self.MAINDESTOLD = "%s/%s" % (self.DIRECTORY, self.MODEL)
+		self.MAINDEST = "%s/%s" % (self.DIRECTORY,self.IMAGEFOLDER)
 		self.EXTRA = "%s/fullbackup_%s/%s/%s" % (self.DIRECTORY, self.MODEL, self.DATE, self.IMAGEFOLDER)
 		self.EXTRAOLD = "%s/fullbackup_%s/%s/%s" % (self.DIRECTORY, self.MODEL, self.DATE, self.MODEL)
 
 
 		self.message = "echo -e '\n"
-		self.message += (_("Backup Tool for a %s\n" %self.SHOWNAME)).upper()
+		self.message += (_("Backup Tool for a %s\n" % self.SHOWNAME)).upper()
 		self.message += VERSION + '\n'
 		self.message += "_________________________________________________\n\n"
 		self.message += _("Please be patient, a backup will now be made,\n")
@@ -187,7 +187,7 @@ class ImageBackup(Screen):
 		self.message += "'"
 
 		## PREPARING THE BUILDING ENVIRONMENT
-		system("rm -rf %s" %self.WORKDIR)
+		system("rm -rf %s" % self.WORKDIR)
 		if not path.exists(self.WORKDIR):
 			makedirs(self.WORKDIR)
 		if not path.exists("/tmp/bi/root"):
@@ -204,30 +204,30 @@ class ImageBackup(Screen):
 			cmd2 = "%s %s/rootfs.tar" % (self.BZIP2, self.WORKDIR)
 			cmd3 = None
 		else:
-			f = open("%s/ubinize.cfg" %self.WORKDIR, "w")
+			f = open("%s/ubinize.cfg" % self.WORKDIR, "w")
 			f.write("[ubifs]\n")
 			f.write("mode=ubi\n")
-			f.write("image=%s/root.ubi\n" %self.WORKDIR)
+			f.write("image=%s/root.ubi\n" % self.WORKDIR)
 			f.write("vol_id=0\n")
 			f.write("vol_type=dynamic\n")
 			f.write("vol_name=rootfs\n")
 			f.write("vol_flags=autoresize\n")
 			f.close()
-			ff = open("%s/root.ubi" %self.WORKDIR, "w")
+			ff = open("%s/root.ubi" % self.WORKDIR, "w")
 			ff.close()
 			cmd1 = "%s -r /tmp/bi/root -o %s/root.ubi %s" % (self.MKFS, self.WORKDIR, self.MKUBIFS_ARGS)
 			cmd2 = "%s -o %s/root.ubifs %s %s/ubinize.cfg" % (self.UBINIZE, self.WORKDIR, self.UBINIZE_ARGS, self.WORKDIR)
-			cmd3 = "mv %s/root.ubifs %s/root.%s" %(self.WORKDIR, self.WORKDIR, self.ROOTFSTYPE)
+			cmd3 = "mv %s/root.ubifs %s/root.%s" % (self.WORKDIR, self.WORKDIR, self.ROOTFSTYPE)
 
 		cmdlist = []
 		cmdlist.append(self.message)
-		cmdlist.append('echo "Create: root.%s\n"' %self.ROOTFSTYPE)
+		cmdlist.append('echo "Create: root.%s\n"' % self.ROOTFSTYPE)
 		cmdlist.append(cmd1)
 		if cmd2:
 			cmdlist.append(cmd2)
 		if cmd3:
 			cmdlist.append(cmd3)
-		cmdlist.append("chmod 644 %s/root.%s" %(self.WORKDIR, self.ROOTFSTYPE))
+		cmdlist.append("chmod 644 %s/root.%s" % (self.WORKDIR, self.ROOTFSTYPE))
 		cmdlist.append('echo " "')
 		cmdlist.append('echo "Create: kerneldump"')
 		cmdlist.append('echo " "')
@@ -262,38 +262,38 @@ class ImageBackup(Screen):
 		cmdlist.append('echo "Almost there... "')
 		cmdlist.append('echo "Now building your backup image"')
 
-		system('rm -rf %s' %self.MAINDEST)
+		system('rm -rf %s' % self.MAINDEST)
 		if not path.exists(self.MAINDEST):
 			makedirs(self.MAINDEST)
 		if not path.exists(self.EXTRA):
 			makedirs(self.EXTRA)
 
-		f = open("%s/imageversion" %self.MAINDEST, "w")
+		f = open("%s/imageversion" % self.MAINDEST, "w")
 		f.write(self.IMAGEVERSION)
 		f.close()
 
 		if self.ROOTFSBIN == "rootfs.tar.bz2":
-			system('mv %s/rootfs.tar.bz2 %s/rootfs.tar.bz2' %(self.WORKDIR, self.MAINDEST))
+			system('mv %s/rootfs.tar.bz2 %s/rootfs.tar.bz2' % (self.WORKDIR, self.MAINDEST))
 		else:
-			system('mv %s/root.%s %s/%s' %(self.WORKDIR, self.ROOTFSTYPE, self.MAINDEST, self.ROOTFSBIN))
+			system('mv %s/root.%s %s/%s' % (self.WORKDIR, self.ROOTFSTYPE, self.MAINDEST, self.ROOTFSBIN))
 		if self.KERNELBIN == "kernel_auto.bin":
-			system('mv %s/kernel_auto.bin %s/kernel_auto.bin' %(self.WORKDIR, self.MAINDEST))
+			system('mv %s/kernel_auto.bin %s/kernel_auto.bin' % (self.WORKDIR, self.MAINDEST))
 		else:
-			system('mv %s/vmlinux.gz %s/%s' %(self.WORKDIR, self.MAINDEST, self.KERNELBIN))
+			system('mv %s/vmlinux.gz %s/%s' % (self.WORKDIR, self.MAINDEST, self.KERNELBIN))
 		if self.MODEL in ("vuduo4k", "vuultimo4k", "vusolo4k", "vuduo2", "vusolo2", "vusolo", "vuduo", "vuultimo", "vuuno"):
-			cmdlist.append('echo "This file forces a reboot after the update." > %s/reboot.update' %self.MAINDEST)
+			cmdlist.append('echo "This file forces a reboot after the update." > %s/reboot.update' % self.MAINDEST)
 		elif self.MODEL in ("vuzero", "vusolose", "vuuno4k"):
-			cmdlist.append('echo "This file forces the update." > %s/force.update' %self.MAINDEST)
+			cmdlist.append('echo "This file forces the update." > %s/force.update' % self.MAINDEST)
 		else:
-			cmdlist.append('echo "rename this file to "force" to force an update without confirmation" > %s/noforce' %self.MAINDEST)
+			cmdlist.append('echo "rename this file to "force" to force an update without confirmation" > %s/noforce' % self.MAINDEST)
 
 		if self.MODEL in ("gbquad", "gbquadplus", "gb800ue", "gb800ueplus", "gbultraue", "twinboxlcd"):
 			lcdwaitkey = '/usr/share/lcdwaitkey.bin'
 			lcdwarning = '/usr/share/lcdwarning.bin'
 			if path.exists(lcdwaitkey):
-				system('cp %s %s/lcdwaitkey.bin' %(lcdwaitkey, self.MAINDEST))
+				system('cp %s %s/lcdwaitkey.bin' % (lcdwaitkey, self.MAINDEST))
 			if path.exists(lcdwarning):
-				system('cp %s %s/lcdwarning.bin' %(lcdwarning, self.MAINDEST))
+				system('cp %s %s/lcdwarning.bin' % (lcdwarning, self.MAINDEST))
 		if self.MODEL == "gb800solo":
 			burnbat = "%s/fullbackup_%s/%s" % (self.DIRECTORY, self.MODEL, self.DATE)
 			f = open("%s/burn.bat" % (burnbat), "w")
@@ -323,9 +323,9 @@ class ImageBackup(Screen):
 
 		if file_found:
 			cmdlist.append('echo "_________________________________________________\n"')
-			cmdlist.append('echo "Backup created in:" %s' %self.MAINDEST)
+			cmdlist.append('echo "Backup created in:" %s' % self.MAINDEST)
 			cmdlist.append('echo "and an extra copy was created in:"')
-			cmdlist.append('echo %s' %self.EXTRA)
+			cmdlist.append('echo %s' % self.EXTRA)
 			cmdlist.append('echo "_________________________________________________\n"')
 			cmdlist.append('echo " "')
 			cmdlist.append('echo "\nPlease wait...almost ready! "')
@@ -372,7 +372,7 @@ class ImageBackup(Screen):
 		END = time()
 		DIFF = int(END - self.START)
 		TIMELAP = str(datetime.timedelta(seconds=DIFF))
-		cmdlist.append('echo " Time required for this process: %s"' %TIMELAP)
+		cmdlist.append('echo " Time required for this process: %s"' % TIMELAP)
 
 		self.session.open(Console, title=self.TITLE, cmdlist=cmdlist, closeOnSuccess=False)
 

@@ -145,7 +145,7 @@ class Bp_UsbFormat(Screen):
 			p4 = self.totalsize - (int(self.p1size) + int(self.p2size) + int(self.p3size))
 			out4 = ";\n"
 			msg += "%s4 \t size:%s M\n" % (device, p4)
-		msg +=_("\nWarning: all the data will be lost.\nAre you sure you want to format this device?\n")
+		msg += _("\nWarning: all the data will be lost.\nAre you sure you want to format this device?\n")
 		
 		
 		out = open("/tmp/sfdisk.tmp",'w')
@@ -262,9 +262,9 @@ class Bp_UsbFormat(Screen):
 			filename = "/sys/block/%s/size" % (device)
 			size = int(file(filename).read().strip())
 			cap = size / 1000 * 512 / 1024
-			size = "%d.%03d GB" % (cap/1000, cap%1000)
+			size = "%d.%03d GB" % (cap / 1000, cap % 1000)
 			self.totalsize = cap
-		info = _("Model: ") + vendor + " " + model +  "\n" + _("Size: ") + size + "\n" + _("Device: ") + "/dev/" + device
+		info = _("Model: ") + vendor + " " + model + "\n" + _("Size: ") + size + "\n" + _("Device: ") + "/dev/" + device
 		return info
 	
 	def do_umount(self):

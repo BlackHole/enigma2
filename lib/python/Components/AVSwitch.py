@@ -538,7 +538,7 @@ def InitAVSwitch():
 			choicesx = [(item, _("%s") % item) for item in choiceslist]
 			defaultx = choiceslist[0]
 			for item in choiceslist:
-				if "%s" %defchoice.upper in item.upper():
+				if "%s" % defchoice.upper in item.upper():
 					defaultx = item
 					break
 		return (choicesx, defaultx)
@@ -765,7 +765,7 @@ def InitAVSwitch():
 
 	if SystemInfo["CanDTSHD"]:
 
-		choices = [("downmix",  _("Downmix")), ("force_dts", _("convert to DTS")), ("use_hdmi_caps",  _("controlled by HDMI")), ("multichannel",  _("convert to multi-channel PCM")), ("hdmi_best",  _("use best / controlled by HDMI"))]
+		choices = [("downmix", _("Downmix")), ("force_dts", _("convert to DTS")), ("use_hdmi_caps", _("controlled by HDMI")), ("multichannel", _("convert to multi-channel PCM")), ("hdmi_best", _("use best / controlled by HDMI"))]
 		default = "downmix"
 
 		if SystemInfo["CanProc"]:
@@ -777,7 +777,7 @@ def InitAVSwitch():
 
 	if SystemInfo["CanDownmixAAC"]:
 
-		choices = [("downmix",  _("Downmix")), ("passthrough", _("Passthrough"))]
+		choices = [("downmix", _("Downmix")), ("passthrough", _("Passthrough"))]
 		default = "downmix"
 
 		if SystemInfo["CanProc"]:
@@ -789,7 +789,7 @@ def InitAVSwitch():
 
 	if SystemInfo["CanDownmixAACPlus"]:
 
-		choices = [("downmix",  _("Downmix")), ("passthrough", _("Passthrough")), ("multichannel",  _("convert to multi-channel PCM")), ("force_ac3", _("convert to AC3")), ("force_dts",  _("convert to DTS")), ("use_hdmi_cacenter",  _("use_hdmi_cacenter")), ("wide",  _("wide")), ("extrawide",  _("extrawide"))]
+		choices = [("downmix", _("Downmix")), ("passthrough", _("Passthrough")), ("multichannel", _("convert to multi-channel PCM")), ("force_ac3", _("convert to AC3")), ("force_dts", _("convert to DTS")), ("use_hdmi_cacenter", _("use_hdmi_cacenter")), ("wide", _("wide")), ("extrawide", _("extrawide"))]
 		default = "downmix"
 
 		if SystemInfo["CanProc"]:
@@ -814,7 +814,7 @@ def InitAVSwitch():
 		config.av.transcodeaac = ConfigNothing()
 
 	if SystemInfo["CanWMAPRO"]:
-		choices = [("downmix",  _("Downmix")), ("passthrough", _("Passthrough")), ("multichannel",  _("convert to multi-channel PCM")), ("hdmi_best",  _("use best / controlled by HDMI"))]
+		choices = [("downmix", _("Downmix")), ("passthrough", _("Passthrough")), ("multichannel", _("convert to multi-channel PCM")), ("hdmi_best", _("use best / controlled by HDMI"))]
 		default = "downmix"
 
 		if SystemInfo["CanProc"]:
