@@ -75,7 +75,7 @@ class DeliteBluePanel(Screen):
 		cams = listdir("/usr/camscript")
 		for fil in cams:
 			if fil.find('Ncam_') != -1:
-				f = open("/usr/camscript/" + fil,'r')
+				f = open("/usr/camscript/" + fil, 'r')
 				for line in f.readlines():
 					line = line.strip()
 					if line.find('CAMNAME=') != -1:
@@ -109,7 +109,7 @@ class DeliteBluePanel(Screen):
 	
 		self.defaultcam = "/usr/camscript/Ncam_Ci.sh"
 		if fileExists("/etc/BhCamConf"):
-			f = open("/etc/BhCamConf",'r')
+			f = open("/etc/BhCamConf", 'r')
 			for line in f.readlines():
    				parts = line.strip().split("|")
 				if parts[0] == "deldefault":
@@ -129,7 +129,7 @@ class DeliteBluePanel(Screen):
 
 		mytext = ""
 		if fileExists("/tmp/ecm.info"):
-			f = open("/tmp/ecm.info",'r')
+			f = open("/tmp/ecm.info", 'r')
  			for line in f.readlines():
 				mytext = mytext + line.strip() + "\n"
  			f.close()
@@ -153,7 +153,7 @@ class DeliteBluePanel(Screen):
 		self.sel = self["list"].getCurrent()
 		self.newcam = self.camnames[self.sel]
 		
-		out = open("/etc/BhCamConf",'w')
+		out = open("/etc/BhCamConf", 'w')
 		out.write("deldefault|" + self.newcam + "\n")
 		out.close()
 		
@@ -265,21 +265,21 @@ class BhsysInfo(Screen):
 	def updateInfo(self):
 		rc = system("df -h > /tmp/syinfo.tmp")
 		text = _("BOX\n") + _("Brand:") + "\tVuplus\n"
-		f = open("/proc/stb/info/vumodel",'r')
+		f = open("/proc/stb/info/vumodel", 'r')
  		text += _("Model:\t") + f.readline()
  		f.close()
-		f = open("/proc/stb/info/chipset",'r')
+		f = open("/proc/stb/info/chipset", 'r')
  		text += _("Chipset:\t") + f.readline() + "\n"
  		f.close()
 		text += _("MEMORY\n")
 		memTotal = memFree = swapTotal = swapFree = 0
-		for line in open("/proc/meminfo",'r'):
+		for line in open("/proc/meminfo", 'r'):
 			parts = line.split(':')
 			key = parts[0].strip()
 			if key == "MemTotal":
 				memTotal = parts[1].strip()
 			elif key in ("MemFree", "Buffers", "Cached"):
-				memFree += int(parts[1].strip().split(' ',1)[0])
+				memFree += int(parts[1].strip().split(' ', 1)[0])
 			elif key == "SwapTotal":
 				swapTotal = parts[1].strip()
 			elif key == "SwapFree":
@@ -289,7 +289,7 @@ class BhsysInfo(Screen):
 		text += _("Swap total:") + "\t%s \n" % swapTotal
 		text += _("Swap free:") + "\t%s \n" % swapFree
 		text += "\n" + _("STORAGE") + "\n"
-		f = open("/tmp/syinfo.tmp",'r')
+		f = open("/tmp/syinfo.tmp", 'r')
 		line = f.readline()
 		parts = line.split()
 		text += parts[0] + "\t" + parts[1].strip() + "      " + parts[2].strip() + "    " + parts[3].strip() + "    " + parts[4] + "\n"
@@ -306,7 +306,7 @@ class BhsysInfo(Screen):
 		os_remove("/tmp/syinfo.tmp")
 		
 		text += "\n" + _("SOFTWARE") + "\n"
-		f = open("/etc/bpversion",'r')
+		f = open("/etc/bpversion", 'r')
 		text += "Firmware v.:\t" + f.readline()
 		f.close()
 		text += "Enigma2 v.: \t" + about.getEnigmaVersionString() + "\n"
@@ -326,7 +326,7 @@ class BhEpgPanel(Screen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		
-		flist = [("EPGSettings"),("CrossEPG"),("EPGImport"),("EPGSearch")]
+		flist = [("EPGSettings"), ("CrossEPG"), ("EPGImport"), ("EPGSearch")]
 		self["list"] = List(flist)
 
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],

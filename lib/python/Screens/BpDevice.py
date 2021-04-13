@@ -38,7 +38,7 @@ class DeliteDevicesPanel(Screen):
 		self.gO()
 	
 	def gO(self):
-		paths = ["/media/hdd","/media/usb","/media/downloads","/media/music","/media/personal","/media/photo","/media/video"]
+		paths = ["/media/hdd", "/media/usb", "/media/downloads", "/media/music", "/media/personal", "/media/photo", "/media/video"]
 		for path in paths:
 			if not pathExists(path):
 				createDir(path)
@@ -51,7 +51,7 @@ class DeliteDevicesPanel(Screen):
 		self.conflist = []
 		rc = system("blkid > /tmp/blkid.log")
 		
-		f = open("/tmp/blkid.log",'r')
+		f = open("/tmp/blkid.log", 'r')
 		for line in f.readlines():
 			if line.find('/dev/sd') == -1:
 				continue
@@ -80,7 +80,7 @@ class DeliteDevicesPanel(Screen):
 		
 	def get_Dpoint(self, uuid):
 		point = "NOT MAPPED"
-		f = open("/etc/fstab",'r')
+		f = open("/etc/fstab", 'r')
 		for line in f.readlines():
 			if line.find(uuid) != -1:
 				parts = line.strip().split()
@@ -167,7 +167,7 @@ class DeliteSetupDevicePanelConf(Screen, ConfigListScreen):
 
 	def get_currentPoint(self, uuid):
 		point = "Not mapped"
-		f = open("/etc/fstab",'r')
+		f = open("/etc/fstab", 'r')
 		for line in f.readlines():
 			if line.find(uuid) != -1:
 				parts = line.strip().split()
@@ -183,13 +183,13 @@ class DeliteSetupDevicePanelConf(Screen, ConfigListScreen):
 			if f == "net":
 				continue
 			c = "/media/" + f
-			choices.append((c,c))
+			choices.append((c, c))
 		return choices
 			
 		
 
 	def savePoints(self):
-		f = open("/etc/fstab",'r')
+		f = open("/etc/fstab", 'r')
 		out = open("/etc/fstab.tmp", "w")
 		for line in f.readlines():
 			if line.find("UUID") != -1 or len(line) < 6:
@@ -248,7 +248,7 @@ class BlackPoleSwap(Screen):
 	def updateSwap(self):
 		self.swap_file = ""
 		swapinfo = _("Swap status: disabled")
-		f = open("/proc/swaps",'r')
+		f = open("/proc/swaps", 'r')
  		for line in f.readlines():
 			if line.find('swapfile') != -1:
 				parts = line.split()
@@ -281,7 +281,7 @@ class BlackPoleSwap(Screen):
 			self.session.open(MessageBox, _("Swap file is active.\nRemove it before to create a new swap space."), MessageBox.TYPE_INFO)
 		else:
 			options = []
-			f = open("/proc/mounts",'r')
+			f = open("/proc/mounts", 'r')
 			for line in f.readlines():
 				if line.find('/media/sd') != -1:
 					continue
@@ -293,14 +293,14 @@ class BlackPoleSwap(Screen):
 			if len(options) == 0:
 				self.session.open(MessageBox, _("Sorry no valid device found.\nBe sure your device is Linux formatted and mapped.\nPlease use Black Hole format wizard and Black Hole device manager to prepare and map your usb stick."), MessageBox.TYPE_INFO)
 			else:
-				self.session.openWithCallback(self.selectSize,ChoiceBox, title="Select the Swap File device:", list=options)
+				self.session.openWithCallback(self.selectSize, ChoiceBox, title="Select the Swap File device:", list=options)
 	
 
 	def selectSize(self, device):
 		if device:
 			self.new_swap = device[1] + "/swapfile"
 			options = [['16 MB', '16384'], ['32 MB', '32768'], ['64 MB', '65536'], ['128 MB', '131072'], ['256 MB', '262144'], ['512 MB', '524288'], ['1 GB', '1048576'], ['2 GB', '2097152']]		
-			self.session.openWithCallback(self.swapOn,ChoiceBox, title=_("Select the Swap File Size:"), list=options)
+			self.session.openWithCallback(self.swapOn, ChoiceBox, title=_("Select the Swap File Size:"), list=options)
 			
 		
 	def swapOn(self, size):

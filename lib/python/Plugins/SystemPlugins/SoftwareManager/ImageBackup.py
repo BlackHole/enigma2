@@ -165,7 +165,7 @@ class ImageBackup(Screen):
 
 		self.SHOWNAME = "%s %s" % (self.MACHINEBRAND, self.MODEL)
 		self.MAINDESTOLD = "%s/%s" % (self.DIRECTORY, self.MODEL)
-		self.MAINDEST = "%s/%s" % (self.DIRECTORY,self.IMAGEFOLDER)
+		self.MAINDEST = "%s/%s" % (self.DIRECTORY, self.IMAGEFOLDER)
 		self.EXTRA = "%s/fullbackup_%s/%s/%s" % (self.DIRECTORY, self.MODEL, self.DATE, self.IMAGEFOLDER)
 		self.EXTRAOLD = "%s/fullbackup_%s/%s/%s" % (self.DIRECTORY, self.MODEL, self.DATE, self.MODEL)
 
@@ -232,7 +232,7 @@ class ImageBackup(Screen):
 		cmdlist.append('echo "Create: kerneldump"')
 		cmdlist.append('echo " "')
 		if self.MTDKERNEL == "mmcblk0p1":
-			cmdlist.append("dd if=/dev/%s of=%s/kernel_auto.bin" % (self.MTDKERNEL,self.WORKDIR))
+			cmdlist.append("dd if=/dev/%s of=%s/kernel_auto.bin" % (self.MTDKERNEL, self.WORKDIR))
 		else:
 			cmdlist.append("nanddump -a -f %s/vmlinux.gz /dev/%s" % (self.WORKDIR, self.MTDKERNEL))
 		cmdlist.append('echo " "')
@@ -385,7 +385,7 @@ class ImageBackup(Screen):
 		AboutText += _("Backup Date: %s\n") % strftime("%Y-%m-%d", localtime(self.START))
 
 		if path.exists('/proc/stb/info/chipset'):
-			AboutText += _("Chipset: BCM%s") % about.getChipSetString().lower().replace('\n','').replace('bcm','') + "\n"
+			AboutText += _("Chipset: BCM%s") % about.getChipSetString().lower().replace('\n', '').replace('bcm', '') + "\n"
 
 		AboutText += _("CPU: %s") % about.getCPUString() + "\n"
 		AboutText += _("Cores: %s") % about.getCpuCoresString() + "\n"
@@ -407,34 +407,34 @@ class ImageBackup(Screen):
 		AboutText += commands.getoutput("cat /etc/enigma2/settings")
 		AboutText += _("\n\n[User - bouquets (TV)]\n")
 		try:
-			f = open("/etc/enigma2/bouquets.tv","r")
+			f = open("/etc/enigma2/bouquets.tv", "r")
 			lines = f.readlines()
 			f.close()
 			for line in lines:
 				if line.startswith("#SERVICE:"):
 					bouqet = line.split()
 					if len(bouqet) > 3:
-						bouqet[3] = bouqet[3].replace('"','')
-						f = open("/etc/enigma2/" + bouqet[3],"r")
+						bouqet[3] = bouqet[3].replace('"', '')
+						f = open("/etc/enigma2/" + bouqet[3], "r")
 						userbouqet = f.readline()
-						AboutText += userbouqet.replace('#NAME ','')
+						AboutText += userbouqet.replace('#NAME ', '')
 						f.close()
 		except:
 			AboutText += "Error reading bouquets.tv"
 
 		AboutText += _("\n[User - bouquets (RADIO)]\n")
 		try:
-			f = open("/etc/enigma2/bouquets.radio","r")
+			f = open("/etc/enigma2/bouquets.radio", "r")
 			lines = f.readlines()
 			f.close()
 			for line in lines:
 				if line.startswith("#SERVICE:"):
 					bouqet = line.split()
 					if len(bouqet) > 3:
-						bouqet[3] = bouqet[3].replace('"','')
-						f = open("/etc/enigma2/" + bouqet[3],"r")
+						bouqet[3] = bouqet[3].replace('"', '')
+						f = open("/etc/enigma2/" + bouqet[3], "r")
 						userbouqet = f.readline()
-						AboutText += userbouqet.replace('#NAME ','')
+						AboutText += userbouqet.replace('#NAME ', '')
 						f.close()
 		except:
 			AboutText += "Error reading bouquets.radio"
