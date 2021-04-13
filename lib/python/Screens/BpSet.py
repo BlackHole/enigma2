@@ -556,12 +556,12 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 	def updateList(self):
 	
 		self.ina_active = NoSave(ConfigYesNo(default="False"))
-		self.ina_user = NoSave(ConfigText(fixed_size = False))
-		self.ina_pass = NoSave(ConfigText(fixed_size = False))
-		self.ina_alias = NoSave(ConfigText(fixed_size = False))
+		self.ina_user = NoSave(ConfigText(fixed_size=False))
+		self.ina_pass = NoSave(ConfigText(fixed_size=False))
+		self.ina_alias = NoSave(ConfigText(fixed_size=False))
 		self.ina_period = NoSave(ConfigNumber())
 		self.ina_sysactive = NoSave(ConfigYesNo(default="False"))
-		self.ina_system = NoSave(ConfigText(fixed_size = False))
+		self.ina_system = NoSave(ConfigText(fixed_size=False))
 		
 		if fileExists("/etc/rc3.d/S20inadyn-mt"):
 			self.ina_active.value = True
@@ -929,7 +929,7 @@ class BhBackupSettings(Screen):
 
 		})
 	def doIt(self):
-		self.session.open(BackupScreen, runBackup = True)
+		self.session.open(BackupScreen, runBackup=True)
 		self["infotext"].setText(_("Backup Complete"))
 
 class BhSpeedUp(Screen, ConfigListScreen):
@@ -943,7 +943,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		<widget name="key_green" position="550,530" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1"/>
 	</screen>"""
 
-	def __init__(self, session, firstrun = False, menu_path=""):
+	def __init__(self, session, firstrun=False, menu_path=""):
 		Screen.__init__(self, session)
 		
 		self.firstrun = firstrun
@@ -1009,7 +1009,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 			system(cmd)
 		
 		for plug in self.pluglist:
-			item = NoSave(ConfigSelection(default = "Enabled", choices = [("Enabled", _("Enabled")), ("Disabled", _("Disabled"))]))
+			item = NoSave(ConfigSelection(default="Enabled", choices=[("Enabled", _("Enabled")), ("Disabled", _("Disabled"))]))
 			installed = self.checkInst(plug[1])
 			if installed == True:
 				item.value = "Enabled"
@@ -1060,7 +1060,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 									
 											
 		if len(self.mycmdlist) > 0:
-			self.session.open(Console, title=_("Black Hole Speed Up"), cmdlist=self.mycmdlist, finishedCallback = self.allDone)
+			self.session.open(Console, title=_("Black Hole Speed Up"), cmdlist=self.mycmdlist, finishedCallback=self.allDone)
 		else:
 			self.close()
 		

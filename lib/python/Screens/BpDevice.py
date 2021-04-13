@@ -154,7 +154,7 @@ class DeliteSetupDevicePanelConf(Screen, ConfigListScreen):
 	def updateList(self):
 		self.list = []
 		for device in self.devices:
-			item = NoSave(ConfigSelection(default = "Not mapped", choices = self.get_Choices()))
+			item = NoSave(ConfigSelection(default="Not mapped", choices=self.get_Choices()))
 			item.value = self.get_currentPoint(device[1])
 			res = getConfigListEntry(device[0], item, device[1])
 			self.list.append(res)
