@@ -8,6 +8,7 @@ from string import upper
 from Tools.Transponder import ConvertToHumanReadable
 from os import rename, system
 
+
 class BhStreamInfo(Poll, Converter, object):
 	DUMMY = 0
 	STREAMURL = 1

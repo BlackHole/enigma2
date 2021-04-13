@@ -254,9 +254,11 @@ class ConfigElement(object):
 			if extra_arg[0] == notifier:
 				return extra_arg[1]
 
+
 def getKeyNumber(key):
 	assert key in KEYA_NUMBERS
 	return key - KEYA_0
+
 
 class choicesList(object):  # XXX: we might want a better name for this
 	LIST_TYPE_LIST = 1
@@ -335,6 +337,7 @@ class choicesList(object):  # XXX: we might want a better name for this
 			default = choices.keys()[0]
 		return default
 
+
 class descriptionList(choicesList):  # XXX: we might want a better name for this
 	def __list__(self):
 		if self.type == choicesList.LIST_TYPE_LIST:
@@ -402,6 +405,8 @@ class descriptionList(choicesList):  # XXX: we might want a better name for this
 # This replaces the former requirement that all ids MUST be plain
 # strings, but is compatible with that requirement.
 #
+
+
 class ConfigSelection(ConfigElement):
 	def __init__(self, choices, default=None, graphic=True):
 		ConfigElement.__init__(self)
@@ -623,6 +628,8 @@ class ConfigDateTime(ConfigElement):
 # can be used for IP-addresses, dates, plain integers, ...
 # several helper exist to ease this up a bit.
 #
+
+
 class ConfigSequence(ConfigElement):
 	def __init__(self, seperator, limits, default, censor_char=""):
 		ConfigElement.__init__(self)
@@ -783,6 +790,8 @@ class ConfigSequence(ConfigElement):
 
 
 ip_limits = [(0, 255), (0, 255), (0, 255), (0, 255)]
+
+
 class ConfigIP(ConfigSequence):
 	def __init__(self, default, auto_jump=False):
 		ConfigSequence.__init__(self, seperator=".", limits=ip_limits, default=default)
@@ -866,9 +875,12 @@ class ConfigIP(ConfigSequence):
 
 
 mac_limits = [(1, 255), (1, 255), (1, 255), (1, 255), (1, 255), (1, 255)]
+
+
 class ConfigMAC(ConfigSequence):
 	def __init__(self, default):
 		ConfigSequence.__init__(self, seperator=":", limits=mac_limits, default=default)
+
 
 class ConfigMacText(ConfigElement, NumericalTextInput):
 	def __init__(self, default="", visible_width=False):
@@ -1002,12 +1014,15 @@ class ConfigMacText(ConfigElement, NumericalTextInput):
 	def unsafeAssign(self, value):
 		self.value = str(value)
 
+
 class ConfigPosition(ConfigSequence):
 	def __init__(self, default, args):
 		ConfigSequence.__init__(self, seperator=",", limits=[(0, args[0]), (0, args[1]), (0, args[2]), (0, args[3])], default=default)
 
 
 clock_limits = [(0, 23), (0, 59)]
+
+
 class ConfigClock(ConfigSequence):
 	def __init__(self, default):
 		self.t = localtime(default)
@@ -1123,13 +1138,19 @@ class ConfigClock(ConfigSequence):
 		value = self.toDisplayString(self._value)
 		return value, mPos
 
+
 date_limits = [(1, 31), (1, 12), (1970, 2050)]
+
+
 class ConfigDate(ConfigSequence):
 	def __init__(self, default):
 		d = localtime(default)
 		ConfigSequence.__init__(self, seperator=".", limits=date_limits, default=[d.tm_mday, d.tm_mon, d.tm_year])
 
+
 integer_limits = (0, 9999999999)
+
+
 class ConfigInteger(ConfigSequence):
 	def __init__(self, default, limits=integer_limits):
 		ConfigSequence.__init__(self, seperator=":", limits=[limits], default=default)
@@ -1150,6 +1171,7 @@ class ConfigInteger(ConfigSequence):
 	def tostring(self, value):
 		return str(value)
 
+
 class ConfigPIN(ConfigInteger):
 	def __init__(self, default, len=4, censor=""):
 		assert isinstance(default, int), "ConfigPIN default must be an integer"
@@ -1158,6 +1180,7 @@ class ConfigPIN(ConfigInteger):
 
 	def getLength(self):
 		return self.len
+
 
 class ConfigFloat(ConfigSequence):
 	def __init__(self, default, limits):
@@ -1179,6 +1202,8 @@ class ConfigFloat(ConfigSequence):
 
 # An editable text item.
 #
+
+
 class ConfigText(ConfigElement, NumericalTextInput):
 	def __init__(self, default="", fixed_size=True, visible_width=False):
 		ConfigElement.__init__(self)
@@ -1407,6 +1432,8 @@ class ConfigPassword(ConfigText):
 # on the stepwidth
 # min, max, stepwidth, default are int values
 # wraparound: pressing RIGHT key at max value brings you to min value and vice versa if set to True
+
+
 class ConfigSelectionNumber(ConfigSelection):
 	def __init__(self, min, max, stepwidth, default=None, wraparound=False):
 		self.wraparound = wraparound
@@ -1453,6 +1480,7 @@ class ConfigSelectionNumber(ConfigSelection):
 				self.value = self.choices[0]
 			elif key == KEYA_LAST:
 				self.value = self.choices[nchoices - 1]
+
 
 class ConfigNumber(ConfigText):
 	def __init__(self, default=0):
@@ -1502,10 +1530,12 @@ class ConfigNumber(ConfigText):
 		self.marked_pos = 0
 		self.offset = 0
 
+
 class ConfigSearchText(ConfigText):
 	def __init__(self, default="", fixed_size=False, visible_width=False):
 		ConfigText.__init__(self, default=default, fixed_size=fixed_size, visible_width=visible_width)
 		NumericalTextInput.__init__(self, nextFunc=self.nextFunc, handleTimeout=False, search=True)
+
 
 class ConfigDirectory(ConfigText):
 	def __init__(self, default="", visible_width=60):
@@ -1535,6 +1565,8 @@ class ConfigDirectory(ConfigText):
 		self.allmarked = (self.value != "")
 
 # a slider.
+
+
 class ConfigSlider(ConfigElement):
 	def __init__(self, default=0, increment=1, limits=(0, 100)):
 		ConfigElement.__init__(self)
@@ -1575,6 +1607,8 @@ class ConfigSlider(ConfigElement):
 		return int(value)
 
 # a satlist. in fact, it's a ConfigSelection.
+
+
 class ConfigSatlist(ConfigSelection):
 	def __init__(self, list, default=None):
 		if default is not None:
@@ -1828,6 +1862,8 @@ class ConfigLocations(ConfigElement):
 		self.pos = -1
 
 # nothing.
+
+
 class ConfigNothing(ConfigSelection):
 	def __init__(self):
 		ConfigSelection.__init__(self, choices=[("", "")])
@@ -1843,6 +1879,7 @@ class ConfigNothing(ConfigSelection):
 # config.saved_value == {"foo": {"bar": "True"}, "foobar": "False"}
 #
 
+
 class ConfigSubsectionContent(object):
 	pass
 
@@ -1856,6 +1893,8 @@ class ConfigSubsectionContent(object):
 # config.dipswitches.append(ConfigYesNo())
 # config.dipswitches.append(ConfigYesNo())
 # config.dipswitches.append(ConfigYesNo())
+
+
 class ConfigSubList(list, object):
 	def __init__(self):
 		list.__init__(self)
@@ -1899,6 +1938,8 @@ class ConfigSubList(list, object):
 # care must be taken that the 'key' has a proper
 # str() method, because it will be used in the config
 # file.
+
+
 class ConfigSubDict(dict, object):
 	def __init__(self):
 		dict.__init__(self)
@@ -1948,6 +1989,8 @@ class ConfigSubDict(dict, object):
 # __setattr__.
 # If you don't understand this, try adding
 # __setattr__ to a usual exisiting class and you will.
+
+
 class ConfigSubsection(object):
 	def __init__(self):
 		self.__dict__["content"] = ConfigSubsectionContent()
@@ -2009,6 +2052,8 @@ class ConfigSubsection(object):
 # a new config entry is added to a subsection
 # also, non-existing config entries will be saved, so they won't be
 # lost when a config entry disappears.
+
+
 class Config(ConfigSubsection):
 	def __init__(self):
 		ConfigSubsection.__init__(self)
@@ -2083,6 +2128,7 @@ class Config(ConfigSubsection):
 config = Config()
 config.misc = ConfigSubsection()
 
+
 class ConfigFile:
 	def __init__(self):
 		pass
@@ -2119,6 +2165,7 @@ class ConfigFile:
 		print "[Config] getResolvedKey", key, "empty variable."
 		return ""
 
+
 def NoSave(element):
 	element.disableSave()
 	return element
@@ -2128,9 +2175,11 @@ configfile = ConfigFile()
 
 configfile.load()
 
+
 def getConfigListEntry(*args):
 	assert len(args) > 1, "getConfigListEntry needs a minimum of two arguments (descr, configElement)"
 	return args
+
 
 def updateConfigElement(element, newelement):
 	newelement.value = element.value
@@ -2161,6 +2210,8 @@ def updateConfigElement(element, newelement):
 
 
 cec_limits = [(0, 15), (0, 15), (0, 15), (0, 15)]
+
+
 class ConfigCECAddress(ConfigSequence):
 	def __init__(self, default, auto_jump=False):
 		ConfigSequence.__init__(self, seperator=".", limits=cec_limits, default=default)

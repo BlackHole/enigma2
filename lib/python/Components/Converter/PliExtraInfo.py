@@ -57,10 +57,12 @@ codec_data = {
 	21: "SPARK",
 }
 
+
 def addspace(text):
 	if text:
 		text += "  "
 	return text
+
 
 class PliExtraInfo(Poll, Converter, object):
 	def __init__(self, type):
@@ -143,8 +145,6 @@ class PliExtraInfo(Poll, Converter, object):
 
 		res += Hex2strColor(colors[3]) # white (this acts like a color "reset" for following strings
 		return res
-
-
 
 	def createCryptoSpecial(self, info):
 		caid_name = "Free to Air"

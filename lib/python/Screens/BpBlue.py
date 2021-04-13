@@ -36,6 +36,7 @@ class DeliteBluePanel(Screen):
 		<widget name="key_yellow" position="430,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="yellow" transparent="1" />
 		<widget name="key_blue" position="715,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="blue" transparent="1" />
     </screen>"""
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		
@@ -139,7 +140,6 @@ class DeliteBluePanel(Screen):
 		self["activecam"].setText(self.defCamname)
 		self["Ecmtext"].setText(mytext)
 
-
 	def getServiceInfoValue(self, what, myserviceinfo):
 		v = myserviceinfo.getInfo(what)
 		if v == -2:
@@ -147,7 +147,6 @@ class DeliteBluePanel(Screen):
 		elif v == -1:
 			v = "N/A"
 		return v
-
 
 	def keyOk(self):
 		self.sel = self["list"].getCurrent()
@@ -169,7 +168,6 @@ class DeliteBluePanel(Screen):
 		self.sendtoBh_sock(cmd)
 		oldcam = self.camnames[self.sel]
 		self.session.openWithCallback(self.myclose, Nab_DoStartCam, self.sel)
-		
 		
 	def sendtoBh_sock(self, data):
 		client_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -241,6 +239,7 @@ class Nab_DoStartCam(Screen):
 		
 	def delTimer(self):
 		del self.activityTimer
+
 
 class BhsysInfo(Screen):
 	skin = """
@@ -336,7 +335,6 @@ class BhEpgPanel(Screen):
 
 		})
 
-
 	def KeyOk(self):
 		sel = self["list"].getCurrent()
 		if sel:
@@ -356,9 +354,6 @@ class BhEpgPanel(Screen):
 				self.session.open(epgsearch)
 			
 			
-	
-
-
 class DeliteBp:
 	def __init__(self):
 		self["DeliteBp"] = ActionMap(["InfobarExtensions"],

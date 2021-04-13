@@ -2,6 +2,7 @@ from Components.Converter.Converter import Converter
 from Components.Element import cached
 from time import localtime, strftime
 
+
 class BhAnalogic(Converter, object):
 
 	def __init__(self, type):
@@ -30,5 +31,4 @@ class BhAnalogic(Converter, object):
 		elif self.type == 3:
 			return int(((t.tm_hour * 100) / 12) + (t.tm_min / 8))
 		
-
 	value = property(getValue)

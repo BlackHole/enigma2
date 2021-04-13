@@ -18,15 +18,18 @@ class dummyScreen(Screen):
 	skin = """<screen position="0,0" size="0,0" transparent="1">
 	<widget source="session.VideoPicture" render="Pig" position="0,0" size="0,0" backgroundColor="transparent" zPosition="1"/>
 	</screen>"""
+
 	def __init__(self, session, args=None):
 		Screen.__init__(self, session)
 		self.close()
+
 
 def IconCheck(session=None, **kwargs):
 	if fileExists("/proc/stb/lcd/symbol_network") or fileExists("/proc/stb/lcd/symbol_usb"):
 		global networklinkpoller
 		networklinkpoller = IconCheckPoller()
 		networklinkpoller.start()
+
 
 class IconCheckPoller:
 	def __init__(self):
@@ -88,6 +91,7 @@ class IconCheckPoller:
 			f.close()
 
 		self.timer.startLongTimer(30)
+
 
 class LCD:
 	def __init__(self):
@@ -226,11 +230,13 @@ class LCD:
 		f.write("%d \n" % value)
 		f.close()
 
+
 def leaveStandby():
 	config.lcd.bright.apply()
 	if SystemInfo["LEDButtons"]:
 		config.lcd.ledbrightness.apply()
 		config.lcd.ledbrightnessdeepstandby.apply()
+
 
 def standbyCounterChanged(dummy):
 	from Screens.Standby import inStandby
@@ -239,6 +245,7 @@ def standbyCounterChanged(dummy):
 	if SystemInfo["LEDButtons"]:
 		config.lcd.ledbrightnessstandby.apply()
 		config.lcd.ledbrightnessdeepstandby.apply()
+
 
 def InitLcd():
 	if getBoxType() in ('vusolo'):
@@ -545,7 +552,6 @@ def InitLcd():
 		else:
 			config.lcd.mode = ConfigNothing()
 
-
 	else:
 		def doNothing():
 			pass
@@ -567,6 +573,7 @@ def InitLcd():
 
 	config.misc.standbyCounter.addNotifier(standbyCounterChanged, initial_call=False)
 
+
 def setLCDLiveTv(value):
 	if "live_enable" in SystemInfo["LcdLiveTV"]:
 		open(SystemInfo["LcdLiveTV"], "w").write(value and "enable" or "disable")
@@ -578,9 +585,11 @@ def setLCDLiveTv(value):
 	except:
 		pass
 
+
 def leaveStandbyLCDLiveTV():
 	if config.lcd.showTv.value:
 		setLCDLiveTv(True)
+
 
 def standbyCounterChangedLCDLiveTV(dummy):
 	if config.lcd.showTv.value:

@@ -22,6 +22,7 @@ from Tools.Multiboot import GetCurrentImage, GetCurrentImageMode
 from Tools.StbHardware import getFPVersion
 import skin
 
+
 class About(Screen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
@@ -184,6 +185,7 @@ class About(Screen):
 
 	def createSummary(self):
 		return AboutSummary
+
 
 class Devices(Screen):
 	def __init__(self, session):

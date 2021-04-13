@@ -77,7 +77,6 @@ class DeliteDevicesPanel(Screen):
 		self["lab1"].hide()
 		os_remove("/tmp/blkid.log")
 		
-		
 	def get_Dpoint(self, uuid):
 		point = "NOT MAPPED"
 		f = open("/etc/fstab", 'r')
@@ -108,7 +107,6 @@ class DeliteDevicesPanel(Screen):
 			size = "%d.%03d GB" % (cap / 1000, cap % 1000)
 		return size
 		
-		
 	def get_Dtype(self, device):
 		pixpath = resolveFilename(SCOPE_CURRENT_SKIN, "")
 		if pixpath == "/usr/share/enigma2/" or pixpath == "/usr/share/enigma2/./":
@@ -123,7 +121,6 @@ class DeliteDevicesPanel(Screen):
 				pix = pixpath + "icons/dev_hdd.png"
 				
 		return name, pix
-		
 		
 	def mapSetup(self):
 		self.session.openWithCallback(self.close, DeliteSetupDevicePanelConf, self.conflist)
@@ -150,7 +147,6 @@ class DeliteSetupDevicePanelConf(Screen, ConfigListScreen):
 		self.devices = devices
 		self.updateList()
 	
-	
 	def updateList(self):
 		self.list = []
 		for device in self.devices:
@@ -162,8 +158,6 @@ class DeliteSetupDevicePanelConf(Screen, ConfigListScreen):
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
 		self["Linconn"].hide()
-
-
 
 	def get_currentPoint(self, uuid):
 		point = "Not mapped"
@@ -186,8 +180,6 @@ class DeliteSetupDevicePanelConf(Screen, ConfigListScreen):
 			choices.append((c, c))
 		return choices
 			
-		
-
 	def savePoints(self):
 		f = open("/etc/fstab", 'r')
 		out = open("/etc/fstab.tmp", "w")
@@ -244,7 +236,6 @@ class BlackPoleSwap(Screen):
 
 		self.onLayoutFinish.append(self.updateSwap)
 		
-	
 	def updateSwap(self):
 		self.swap_file = ""
 		swapinfo = _("Swap status: disabled")
@@ -258,7 +249,6 @@ class BlackPoleSwap(Screen):
 
 		f.close()
 		self["lab1"].setText(swapinfo)
-		
 		
 	def keyYellow(self):
 		if self.swap_file:
@@ -295,14 +285,12 @@ class BlackPoleSwap(Screen):
 			else:
 				self.session.openWithCallback(self.selectSize, ChoiceBox, title="Select the Swap File device:", list=options)
 	
-
 	def selectSize(self, device):
 		if device:
 			self.new_swap = device[1] + "/swapfile"
 			options = [['16 MB', '16384'], ['32 MB', '32768'], ['64 MB', '65536'], ['128 MB', '131072'], ['256 MB', '262144'], ['512 MB', '524288'], ['1 GB', '1048576'], ['2 GB', '2097152']]		
 			self.session.openWithCallback(self.swapOn, ChoiceBox, title=_("Select the Swap File Size:"), list=options)
 			
-		
 	def swapOn(self, size):
 		if size:
 			cmd = "dd if=/dev/zero of=%s bs=1024 count=%s 2>/dev/null" % (self.new_swap, size[1])
