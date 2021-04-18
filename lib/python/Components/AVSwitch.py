@@ -156,7 +156,7 @@ class AVSwitch:
 		except IOError:
 			print "[VideoHardware] cannot open /proc/stb/video/videomode_24hz"
 		try:
-			set_mode = modes.get(int(rate[:2]))
+			set_mode = modes.get(int(rate))
 		except: # not support 50Hz, 60Hz for 1080p
 			set_mode = mode_50
 		f = open("/proc/stb/video/videomode", "w")
