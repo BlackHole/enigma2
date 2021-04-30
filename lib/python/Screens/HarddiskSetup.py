@@ -24,7 +24,7 @@ class HarddiskSetup(Screen):
 		self["capacity"] = Label(_("Capacity: ") + hdd.capacity())
 		self["bus"] = Label(_("Bus: ") + hdd.bus())
 		self["key_red"] = Label(_("Cancel"))
-		self["key_green"] = Label(text) # text can be either "Initialise" or "Check"
+		self["key_green"] = Label(text) # text can be either "Initialize" or "Check"
 		self["actions"] = ActionMap(["OkCancelActions"],
 		{
 			"ok": self.hddQuestion,
@@ -37,7 +37,7 @@ class HarddiskSetup(Screen):
 		})
 
 	def hddQuestion(self, answer=False):
-		print '[HarddiskSetup] answer:',answer
+		print '[HarddiskSetup] answer:', answer
 		if Screens.InfoBar.InfoBar.instance.timeshiftEnabled():
 			message = self.question + "\n\n" + _("You seem to be in timeshft, the service will briefly stop as timeshift stops.")
 			message += '\n' + _("Do you want to continue?")
@@ -59,7 +59,7 @@ class HarddiskSetup(Screen):
 		try:
 			job_manager.AddJob(self.action())
 			for job in job_manager.getPendingJobs():
-				if job.name in (_("Initialising storage device..."), _("Checking filesystem..."),_("Converting ext3 to ext4...")):
+				if job.name in (_("Initializing storage device..."), _("Checking filesystem..."), _("Converting ext3 to ext4...")):
 					self.showJobView(job)
 					break
 		except Exception, ex:
@@ -81,7 +81,7 @@ class HarddiskSetup(Screen):
 class HarddiskSelection(Screen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		self.setTitle(_("Initialise Devices"))
+		self.setTitle(_("Initialize Devices"))
 
 		self.skinName = "HarddiskSelection" # For derived classes
 		if harddiskmanager.HDDCount() == 0:
@@ -99,8 +99,8 @@ class HarddiskSelection(Screen):
 	def doIt(self, selection):
 		self.session.openWithCallback(self.close, HarddiskSetup, selection,
 			 action=selection.createInitializeJob,
-			 text=_("Initialise"),
-			 question=_("Do you really want to initialise this device?\nAll the data on the device will be lost!"))
+			 text=_("Initialize"),
+			 question=_("Do you really want to initialize this device?\nAll the data on the device will be lost!"))
 
 	def okbuttonClick(self):
 		selection = self["hddlist"].getCurrent()
@@ -109,6 +109,8 @@ class HarddiskSelection(Screen):
 			self.close(True)
 
 # This is actually just HarddiskSelection but with correct type
+
+
 class HarddiskFsckSelection(HarddiskSelection):
 	def __init__(self, session):
 		HarddiskSelection.__init__(self, session)

@@ -7,9 +7,10 @@ from Components.Sources.List import List
 from Components.config import config, ConfigYesNo, getConfigListEntry, ConfigSelection
 from Components.ConfigList import ConfigListScreen
 from Components.ActionMap import ActionMap, HelpableActionMap
-from Tools.Directories import resolveFilename, SCOPE_ACTIVE_SKIN
+from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
 from Tools.LoadPixmap import LoadPixmap
 from boxbranding import getBoxType, getMachineBrand, getMachineName, getMachineBuild
+
 
 class InputDeviceSelection(Screen, HelpableScreen):
 	def __init__(self, session):
@@ -23,8 +24,8 @@ class InputDeviceSelection(Screen, HelpableScreen):
 		self["key_green"] = StaticText(_("Select"))
 		self["introduction"] = StaticText(self.edittext)
 
-		self.devices = [(iInputDevices.getDeviceName(x),x) for x in iInputDevices.getDeviceList()]
-		print("[InputDeviceSetup] found devices :->", len(self.devices),self.devices)
+		self.devices = [(iInputDevices.getDeviceName(x), x) for x in iInputDevices.getDeviceList()]
+		print("[InputDeviceSetup] found devices :->", len(self.devices), self.devices)
 
 		self["OkCancelActions"] = HelpableActionMap(self, "OkCancelActions",
 			{
@@ -47,37 +48,37 @@ class InputDeviceSelection(Screen, HelpableScreen):
 	def cleanup(self):
 		self.currentIndex = 0
 
-	def buildInterfaceList(self, device, description, type, isinputdevice = True):
-		divpng = LoadPixmap(cached=True, path=resolveFilename(SCOPE_ACTIVE_SKIN, "div-h.png"))
+	def buildInterfaceList(self, device, description, type, isinputdevice=True):
+		divpng = LoadPixmap(cached=True, path=resolveFilename(SCOPE_CURRENT_SKIN, "div-h.png"))
 		activepng = None
 		devicepng = None
 		enabled = iInputDevices.getDeviceAttribute(device, 'enabled')
 		# print("[InputDevice] device = %s, description = %s, type = %s, isinputdevice = %s, enabled = %s" % (device, description, type, isinputdevice, enabled))
 		if type == None:
-			devicepng = LoadPixmap(resolveFilename(SCOPE_ACTIVE_SKIN, "icons/input_rcold-configured.png"))
+			devicepng = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/input_rcold-configured.png"))
 		elif type == 'remote':
 			if config.misc.rcused.value == 0:
 				if enabled:
-					devicepng = LoadPixmap(resolveFilename(SCOPE_ACTIVE_SKIN, "icons/input_rcnew-configured.png"))
+					devicepng = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/input_rcnew-configured.png"))
 				else:
-					devicepng = LoadPixmap(resolveFilename(SCOPE_ACTIVE_SKIN, "icons/input_rcnew.png"))
+					devicepng = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/input_rcnew.png"))
 			else:
 				if enabled:
-					devicepng = LoadPixmap(resolveFilename(SCOPE_ACTIVE_SKIN, "icons/input_rcold-configured.png"))
+					devicepng = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/input_rcold-configured.png"))
 				else:
-					devicepng = LoadPixmap(resolveFilename(SCOPE_ACTIVE_SKIN, "icons/input_rcold.png"))
+					devicepng = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/input_rcold.png"))
 		elif type == 'keyboard':
 			if enabled:
-				devicepng = LoadPixmap(resolveFilename(SCOPE_ACTIVE_SKIN, "icons/input_keyboard-configured.png"))
+				devicepng = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/input_keyboard-configured.png"))
 			else:
-				devicepng = LoadPixmap(resolveFilename(SCOPE_ACTIVE_SKIN, "icons/input_keyboard.png"))
+				devicepng = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/input_keyboard.png"))
 		elif type == 'mouse':
 			if enabled:
-				devicepng = LoadPixmap(resolveFilename(SCOPE_ACTIVE_SKIN, "icons/input_mouse-configured.png"))
+				devicepng = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/input_mouse-configured.png"))
 			else:
-				devicepng = LoadPixmap(resolveFilename(SCOPE_ACTIVE_SKIN, "icons/input_mouse.png"))
+				devicepng = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/input_mouse.png"))
 		elif isinputdevice:
-			devicepng = LoadPixmap(resolveFilename(SCOPE_ACTIVE_SKIN, "icons/input_rcnew.png"))
+			devicepng = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/input_rcnew.png"))
 		return device, description, devicepng, divpng
 
 	def updateList(self):
@@ -87,7 +88,7 @@ class InputDeviceSelection(Screen, HelpableScreen):
 
 		for x in self.devices:
 			dev_type = iInputDevices.getDeviceAttribute(x[1], 'type')
-			self.list.append(self.buildInterfaceList(x[1],_(x[0]), dev_type))
+			self.list.append(self.buildInterfaceList(x[1], _(x[0]), dev_type))
 		self["list"].setList(self.list)
 		self["list"].setIndex(self.currentIndex)
 
@@ -117,13 +118,13 @@ class InputDeviceSetup(ConfigListScreen, Screen):
 		self.nameEntry = None
 		self.enableConfigEntry = None
 
-		self.list = [ ]
-		ConfigListScreen.__init__(self, self.list, session = session, on_change = self.changedEntry, fullUI = True)
+		self.list = []
+		ConfigListScreen.__init__(self, self.list, session=session, on_change=self.changedEntry, fullUI=True)
 
 		self["introduction"] = StaticText()
 
 		# for generating strings into .po only
-		devicenames = [_("%s %s front panel") % (getMachineBrand(), getMachineName()),_("%s %s front panel") % (getMachineBrand(), getMachineName()),_("%s %s remote control (native)") % (getMachineBrand(), getMachineName()),_("%s %s advanced remote control (native)") % (getMachineBrand(), getMachineName()),_("%s %s ir keyboard") % (getMachineBrand(), getMachineName()),_("%s %s ir mouse") % (getMachineBrand(), getMachineName())]
+		devicenames = [_("%s %s front panel") % (getMachineBrand(), getMachineName()), _("%s %s front panel") % (getMachineBrand(), getMachineName()), _("%s %s remote control (native)") % (getMachineBrand(), getMachineName()), _("%s %s advanced remote control (native)") % (getMachineBrand(), getMachineName()), _("%s %s ir keyboard") % (getMachineBrand(), getMachineName()), _("%s %s ir mouse") % (getMachineBrand(), getMachineName())]
 
 		self.createSetup()
 		self.onLayoutFinish.append(self.layoutFinished)
@@ -132,13 +133,13 @@ class InputDeviceSetup(ConfigListScreen, Screen):
 	def layoutFinished(self):
 		listWidth = self["config"].l.getItemSize().width()
 		# use 20% of list width for sliders
-		self["config"].l.setSeperation(int(listWidth*.8))
+		self["config"].l.setSeperation(int(listWidth * .8))
 
 	def cleanup(self):
 		iInputDevices.currentDevice = ""
 
 	def createSetup(self):
-		self.list = [ ]
+		self.list = []
 		self.enableEntry = getConfigListEntry(_("Change repeat and delay settings?"), getattr(config.inputDevices, self.inputDevice).enabled)
 		self.repeatEntry = getConfigListEntry(_("Interval between keys when repeating:"), getattr(config.inputDevices, self.inputDevice).repeat)
 		self.delayEntry = getConfigListEntry(_("Delay before key repeat starts:"), getattr(config.inputDevices, self.inputDevice).delay)
@@ -168,7 +169,7 @@ class InputDeviceSetup(ConfigListScreen, Screen):
 
 	def selectionChanged(self):
 		if self["config"].getCurrent() == self.enableEntry:
-			self["introduction"].setText(_("Current device: ") + str(iInputDevices.getDeviceAttribute(self.inputDevice, 'name')) )
+			self["introduction"].setText(_("Current device: ") + str(iInputDevices.getDeviceAttribute(self.inputDevice, 'name')))
 		else:
 			self["introduction"].setText(_("Current value: ") + self.getCurrentValue() + ' ' + _("ms"))
 
@@ -208,82 +209,19 @@ class InputDeviceSetup(ConfigListScreen, Screen):
 
 
 class RemoteControlType(Screen, ConfigListScreen):
-	odinRemote = "OdinM9"
-	if getBoxType() == "maram9":
-		odinRemote = "MaraM9"
 
 	rcList = [
 			("0", _("Default")),
-			("3", _(odinRemote)),
-			("4", _("DMM normal")),
-			("5", _("et9000/et9100")),
-			("6", _("DMM advanced")),
-			("7", _("et5000/6000")),
 			("8", _("VU+")),
-			("9", _("et8000/et10000")),
-			("11", _("et9200/9500/6500")),
-			("13", _("et4000")),
-			("14", _("XP1000")),
-			("16", _("HD11/HD51/HD1100/HD1200/HD1265/HD1500/HD500C/HD530C/et7x00/et8500")),
-			("17", _("XP3000")),
-			("18", _("F1/F3/F4/F4-TURBO/TRIPLEX")),
-			("19", _("HD2400")),
-			("20", _("Zgemma Star S/2S/H1/H2")),
-			("21", _("Zgemma H.S/H.2S/H.2H/H5")),
-			("22", _("Zgemma i55")),
-			("23", _("WWIO 4K")),
-			("24", _("Axas E4HD Ultra")),
-			("25", _("Zgemma H9/I55Plus old Model")),
-			("26", _("Protek 4K UHD/HD61")),
-			("27", _("HD60")),
-			("28", _("H7/H9/H9COMBO/H10 new Model"))
 			]
 
 	defaultRcList = [
 			("default", 0),
-			("et4000", 13),
-			("et5000", 7),
-			("et6000", 7),
-			("et6500", 11),
-			("et7x00",16),
-			("et8000", 9),
-			("et8500", 16),
-			("et9000", 5),
-			("et9100", 5),
-			("et9200", 11),
-			("et9500", 11),
-			("et10000", 9),
-			("formuler1", 18),
-			("formuler3", 18),
-			("hd11",16),
-			("hd51",16),
-			("hd52",16),
-			("hd1100",16),
-			("hd1200",16),
-			("hd1265",16),
-			("hd500c",16),
-			("hd530c",16),
-			("hd2400", 19),
-			("h3", 21),
-			("h5", 21),
-			#("h7", 21),# old model
-			("i55", 22),
-			("bre2ze4k", 23),
-			("e4hd", 24),
-			#("h9", 25),# old model
-			("i55plus", 25),
-			("protek4k", 26),
-			("hd61", 26),
-			("hd60", 27),
-			("h7", 28), # new model
-			("h9", 28), # new model
-			("h9combo", 28),
-			("h10", 28)
 		]
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		self.skinName = ["RemoteControlType", "Setup" ]
+		self.skinName = ["RemoteControlType", "Setup"]
 
 		self["actions"] = ActionMap(["SetupActions"],
 		{
@@ -295,10 +233,10 @@ class RemoteControlType(Screen, ConfigListScreen):
 		self["key_red"] = StaticText(_("Cancel"))
 
 		self.list = []
-		ConfigListScreen.__init__(self, self.list, session = self.session)
+		ConfigListScreen.__init__(self, self.list, session=self.session)
 
 		rctype = config.plugins.remotecontroltype.rctype.value
-		self.rctype = ConfigSelection(choices = self.rcList, default = str(rctype))
+		self.rctype = ConfigSelection(choices=self.rcList, default=str(rctype))
 		self.list.append(getConfigListEntry(_("Remote control type"), self.rctype))
 		self["config"].list = self.list
 
