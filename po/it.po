@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: obh 4.4  it_IT\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-02 16:50+0000\n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2021-04-11\n"
 "Last-Translator: Alexwilmac\n"
 "Language-Team: @Alexwilmac-@insanity\n"
 "Language: it\n"
@@ -13,8 +13,122 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.2\n"
 
+# msgid "<Current>"
+# msgstr "<Corrente>"
+# 
+# msgid "<Emergency>"
+# msgstr "<D'emergenza>"
+# 
+# msgid "<Default>"
+# msgstr "<Standard>"
+
+# msgid "On"
+# msgstr "On"
+
+# Need be verified in every context: should apply only to GUI Configuration submenu
+msgid "Large"
+msgstr "Completo"
+
+# Need be verified in every context: should apply only to GUI Configuration submenu
+msgid "Small"
+msgstr "Breve"
+
+msgid ""
+"Couldn't move %d items to the trash can. Do you want to delete them instead?"
+msgstr ""
+"Non ho potuto spostare %d elementi nel cestino."
+"Vuoi eliminarli definitivamente?"
+
+msgid ""
+"Couldn't move %d items.\n"
+"%s"
+msgstr ""
+"Non ho potuto spostare %d file.\n"
+"%s"
+
+msgid ""
+"Couldn't move '%s'.\n"
+"%s"
+msgstr ""
+"Non ho potuto spostare '%s'.\n"
+"%s"
+
+msgid "Do you really want to permanently delete '%s' from the trash can?"
+msgstr ""
+"Vuoi davvero eliminare definitivamente '%s' dal cestino?"
+
+msgid "%d Recording"
+msgid_plural "%d Recordings"
+msgstr[0] "%d registrazione"
+msgstr[1] "%d registrazioni"
+
+msgid "Deleted '%s'"
+msgstr "Eliminato '%s'"
+
+msgid "two lines"
+msgstr "Sì: in due linee"
+
+#experimental, not sure it suits every instances...
+msgid "Off"
+msgstr "Disattivato/a"
+
+#experimental, not sure it suits every instances...
+msgid "On"
+msgstr "Attivato/a"
+
+msgid "Flashing"
+msgstr "Lampeggiante"
+
+msgid "Enable automatic collections"
+msgstr "Abilita raggruppamento titoli uguali"
+
+msgid "Collection"
+msgstr "Raccolta"
+
+msgid "On except in same named directory"
+msgstr "Sì, eccetto quelli in cartelle con nome=titolo"
+
+msgid "recordings by date then other media by name"
+msgstr "Registrazioni per data, poi altri file per nome"
+
+msgid "Show setup default values"
+msgstr "Mostra il valore di default nella descrizione"
+
+msgid ""
+"In Setup screens choose whether to show the default value of the "
+"selected item in the description field."
+msgstr ""
+"Permette di scegliere se mostrare o no il valore di default nel campo descrizione"
+" dell'opzione selezionata."
+
+msgid "Show default after description"
+msgstr "Mostra il valore standard a fine descrizione"
+
+msgid "Show default on new line"
+msgstr "Mostra valore standard a capo"
+
+msgid "Don't show default"
+msgstr "Non mostrare"
+
+msgid "Blindscan terrestrial (if possible)"
+msgstr "Blindscan digitale terrestre (se possibile)"
+
+#Try to fix a CrossEPG typo
+msgid "Move up"
+msgstr "Spostare su"
+
+msgid "Stop this recording"
+msgid_plural "Stop these recordings"
+msgstr[0] "Ferma questa registrazione"
+msgstr[1] "Ferma queste registrazioni"
+
+msgid "Stop this recording and delete it"
+msgid_plural "Stop these recordings and delete them"
+msgstr[0] "Ferma questa registrazione e cancellala"
+msgstr[1] "Ferma queste registrazioni e cancellale"
+
 msgid "Ask whether to stop movie"
-msgstr "Chiedi se il filmato dev'essere fermata"
+msgstr "Chiedi se il filmato dev'essere fermato"
 
 msgid "Open infobar EPG..."
 msgstr "Apri la Infobar della EPG..."
@@ -102,16 +216,6 @@ msgstr ""
 msgid "Couldn't move '%s' to the trash can. Do you want to delete it instead?"
 msgstr "Non ho potuto cestinare '%s': vuoi eliminarlo definitivamente?"
 
-msgid "Stop this recording"
-msgid_plural "Stop these recordings"
-msgstr[0] "Ferma questa registrazione"
-msgstr[1] "Ferma queste registrazioni"
-
-msgid "Stop this recording and delete it"
-msgid_plural "Stop these recordings and delete them"
-msgstr[0] "Ferma questa registrazione e cancellala"
-msgstr[1] "Ferma queste registrazioni e cancellale"
-
 msgid "Remove finished timer logs after (days)"
 msgstr "Rimuovi il registro dei timer dopo (giorni)"
 
@@ -125,10 +229,14 @@ msgid "This is a multitype tuner. Available options depend on the hardware."
 msgstr "Questo è un tuner ibrido. Le opzioni disponibili dipendono dalle sue caratteristiche."
 
 msgid "<Pending restart>"
-msgstr "<Riavvio in sospeso>"
+msgstr "<Da riavviare>"
 
-# msgid "To apply the selected %s skin the GUI needs to restart. Would you like to restart the GUI now?"
-# msgstr "Per applicare la skin %s prescelta devi riavviare la GUI: vuoi farlo ora?"
+#under test
+msgid ""
+"To apply the selected '%s' skin the GUI needs to restart. Would you like to "
+"restart the GUI now?"
+msgstr "Per applicare la skin '%s' prescelta devi riavviare la GUI: vuoi farlo ora?"
+
 msgid ""
 "\n"
 "\n"
@@ -954,67 +1062,67 @@ msgid "Add an autotimer for current event"
 msgstr "Aggiungi un autotimer per l'evento corrente"
 
 msgid "Add bookmark"
-msgstr "Aggiungere segnalibro"
+msgstr "Aggiungi segnalibro"
 
 msgid "Add bouquet"
-msgstr "Aggiungere bouquet"
+msgstr "Aggiungi bouquet"
 
 msgid "Add bouquet to parental protection"
-msgstr "Aggiungere bouquet al controllo parentale"
+msgstr "Aggiunge bouquet al controllo parentale"
 
 msgid "Add directory to playlist"
-msgstr "Aggiungere cartella alla playlist"
+msgstr "Aggiunge cartella alla playlist"
 
 msgid "Add file to playlist"
-msgstr "Aggiungere file alla playlist"
+msgstr "Aggiunge file alla playlist"
 
 msgid "Add files to playlist"
-msgstr "Aggiungere file alla playlist"
+msgstr "Aggiunge file alla playlist"
 
 msgid "Add marker"
-msgstr "Aggiungere contrassegno"
+msgstr "Aggiunge contrassegno"
 
 msgid "Add provider"
-msgstr "Aggiungere provider"
+msgstr "Aggiunge provider"
 
 msgid "Add recording (enter recording duration)"
-msgstr "Aggiungere registrazione (inserire durata)"
+msgstr "Inizia registrazione (inserire durata)"
 
 msgid "Add recording (enter recording endtime)"
-msgstr "Aggiungere registrazione (inserire ora termine)"
+msgstr "Inizia registrazione (inserire ora termine)"
 
 msgid "Add recording (indefinitely)"
-msgstr "Aggiungere registrazione (illimitata)"
+msgstr "Inizia registrazione (illimitata)"
 
 msgid "Add recording (stop after current event)"
 msgstr "Registra SOLO evento corrente (+ margine fine reg.)"
 
 msgid "Add service"
-msgstr "Aggiungere canale"
+msgstr "Aggiunge canale"
 
 msgid "Add service to bouquet"
 msgstr "Aggiungi canale al bouquet"
 
 msgid "Add service to favourites"
-msgstr "Aggiungere canale a preferiti"
+msgstr "Aggiunge canale a preferiti"
 
 msgid "Add title"
 msgstr "Agg. titolo"
 
 msgid "Add to bouquet"
-msgstr "Aggiungere al bouquet"
+msgstr "Aggiunge al bouquet"
 
 msgid "Add to favourites"
-msgstr "Aggiungere a preferiti"
+msgstr "Aggiunge a preferiti"
 
 msgid "Add to parental protection"
-msgstr "Aggiungere al controllo parentale"
+msgstr "Aggiungi al controllo parentale"
 
 msgid "Add/Remove timer for current event"
 msgstr "Crea/Elim. timer per evento corrente"
 
 msgid "Adding schedule..."
-msgstr "Aggiungere pianificazione..."
+msgstr "Aggiunge pianificazione..."
 
 msgid ""
 "Additional motor options allow you to enter details from your motor's spec sheet so enigma can work out "
@@ -3767,7 +3875,7 @@ msgid ""
 "Enable usage of tuners from another Enigma2 receiver on the local network. Remote tuners will be used "
 "when tuners are not available on this receiver. (No free tuner or service type is not available.)"
 msgstr ""
-"Permette a un altro ricevitore Enigma2 nella rete locale di utilizzare i tuner di questo box. I tuner "
+"Permette di utilizzare i tuner di un altro ricevitore Enigma2 nella rete locale. I tuner "
 "remoti verranno utilizzati quando non ve ne sono disponibili a sufficienza in questo ricevitore.\n"
 "(Evita l’errore: “Nessun tuner libero o servizio non disponibile”.)"
 
@@ -4315,9 +4423,6 @@ msgstr "Finlandese"
 
 msgid "Fixed"
 msgstr "Fissato"
-
-msgid "Flashing"
-msgstr "Flashing"
 
 msgid "Following tasks will be done after you press OK!"
 msgstr "Premere OK per eseguire i processi seguenti!"
@@ -5371,9 +5476,6 @@ msgstr "Lingua"
 
 msgid "Language selection"
 msgstr "Selezione lingua"
-
-msgid "Large"
-msgstr "Grande"
 
 msgid "Last Req."
 msgstr "Ultima richiesta"
@@ -6468,14 +6570,8 @@ msgstr "Richiesta nome OSD"
 msgid "OScam Info"
 msgstr "Info OSCAM"
 
-msgid "Off"
-msgstr "Spento"
-
 msgid "Offline decode delay (ms)"
 msgstr "Ritardo decodifica offline (ms)"
-
-msgid "On"
-msgstr "On"
 
 msgid "On end of movie"
 msgstr "Alla fine del film"
@@ -6813,7 +6909,7 @@ msgid "Picon width"
 msgstr "Larghezza picon"
 
 msgid "Picon, Service Number and Service Name"
-msgstr "Picon + Numero del canale + Nome del canale"
+msgstr "Picon + Numero canale + Nome canale"
 
 msgid "Picons Packages"
 msgstr "Pacchetti di picon"
@@ -7799,7 +7895,7 @@ msgid "Remove all timer data"
 msgstr "Rimuovere tutti i timer"
 
 msgid "Remove bookmark"
-msgstr "Rimuovere segnalibro"
+msgstr "Elim.segnalibro"
 
 msgid "Remove bouquet from parental protection"
 msgstr "Rimuovere bouquet dalla protezione parentale"
@@ -8807,10 +8903,10 @@ msgid "Service Number and Service Name"
 msgstr "Numero + Nome del canale"
 
 msgid "Service Number, Picon and Service Name"
-msgstr "Numero del canale + Picon + Nome del canale"
+msgstr "Numero canale + Picon + Nome canale"
 
 msgid "Service Title mode"
-msgstr "Visualizza le picon del canale di registrazione"
+msgstr "Dettagli da mostrare per il canale"
 
 msgid "Service font size"
 msgstr "Dimensione carattere canale"
@@ -9582,9 +9678,6 @@ msgstr "Lento"
 
 msgid "Slow motion speeds"
 msgstr "Velocità del rallentatore"
-
-msgid "Small"
-msgstr "Piccolo"
 
 msgid "Small progress"
 msgstr "Icona avanzamento piccola"
@@ -11081,7 +11174,7 @@ msgid "Tuner :"
 msgstr "Tuner:"
 
 msgid "Tuner Setup"
-msgstr "Configurazioni Tuner"
+msgstr "Configurazioni tuner"
 
 msgid "Tuner is not supported"
 msgstr "Tuner non supportato"
@@ -12581,7 +12674,7 @@ msgid "activatePiP"
 msgstr "attivare PiP"
 
 msgid "add bookmark"
-msgstr "aggiungere segnalibro"
+msgstr "aggiungi segnalibro"
 
 msgid "address:"
 msgstr "indirizzo:"
@@ -12659,7 +12752,7 @@ msgid "automatic"
 msgstr "automatico"
 
 msgid "back"
-msgstr "indietro"
+msgstr "Elenco dei contrassegni"
 
 msgid "background image"
 msgstr "immagine nello sfondo"
@@ -12792,7 +12885,7 @@ msgid "delete"
 msgstr "elimina"
 
 msgid "delete cut"
-msgstr "Eliminare taglio"
+msgstr "Rimuovi il taglio"
 
 msgid "delete time - show delete time (Trash ONLY)"
 msgstr "elimina orario: mostra l'ora di eliminazione (SOLO Cestino)"
@@ -12867,7 +12960,7 @@ msgid "enabled"
 msgstr "attivato"
 
 msgid "end cut here"
-msgstr "Qui FINE taglio"
+msgstr "Punto di FINE taglio"
 
 msgid "ene"
 msgstr "Est/NordEst"
@@ -13005,7 +13098,7 @@ msgid "go to standby"
 msgstr "vai in Standby"
 
 msgid "grab this frame as bitmap"
-msgstr "Grab (cattura) l'immagine"
+msgstr "Cattura l'immagine"
 
 msgid "green"
 msgstr "verde"
@@ -13331,10 +13424,10 @@ msgid "remarkable people"
 msgstr "gente importante"
 
 msgid "remove after this position"
-msgstr "Rimuovere DOPO questa posizione"
+msgstr "Taglia DOPO questa posizione"
 
 msgid "remove before this position"
-msgstr "Rimuovere PRIMA di questa posizione"
+msgstr "Taglia PRIMA di questa posizione"
 
 msgid "remove bookmark"
 msgstr "rimuovere il segnalibro"
@@ -13343,7 +13436,7 @@ msgid "remove directory"
 msgstr "rimuovere la cartella"
 
 msgid "remove this mark"
-msgstr "Rimuovere il contrassegno"
+msgstr "Rimuovi il contrassegno"
 
 msgid "rename"
 msgstr "rinominare"
@@ -13520,7 +13613,7 @@ msgid "ssw"
 msgstr "Sud/Sud-Ovest"
 
 msgid "start cut here"
-msgstr "Qui INIZIO taglio"
+msgstr "Punto d'INIZIO taglio"
 
 msgid "start directory"
 msgstr "Cartella di avvio"
