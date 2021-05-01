@@ -47,8 +47,8 @@ class DeliteDevicesPanel(Screen):
 		
 	def updateList(self):
 		self.activityTimer.stop()
-		self.list = [ ]
-		self.conflist = [ ]
+		self.list = []
+		self.conflist = []
 		rc = system("blkid > /tmp/blkid.log")
 		
 		f = open("/tmp/blkid.log",'r')

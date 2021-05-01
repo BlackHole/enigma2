@@ -57,7 +57,7 @@ class DeliteAddons(Screen):
 		})
 		
 	def updateList(self):
-		self.list = [ ]
+		self.list = []
 		mypath = resolveFilename(SCOPE_CURRENT_SKIN, "")
 		if mypath == "/usr/share/enigma2/" or mypath == "/usr/share/enigma2/./":
 			mypath = "/usr/share/enigma2/skin_default/"
@@ -117,7 +117,7 @@ class DeliteAddons(Screen):
 	def checkAcceSS(self):
 		if config.bhaddons.lock.value == True:
 			msg = _("Enter the pin")
-			self.session.openWithCallback(self.checkAcceSS2, InputBox, title=msg, windowTitle=_("Insert Pin"), text="0000", useableChars="1234567890" )
+			self.session.openWithCallback(self.checkAcceSS2, InputBox, title=msg, windowTitle=_("Insert Pin"), text="0000", useableChars="1234567890")
 		else:
 			self.KeyOk()
 			
@@ -230,7 +230,7 @@ class Nab_downArea(Screen):
 		
 	def updateList(self):
 		
-		self.list = [ ]
+		self.list = []
 		mypath = resolveFilename(SCOPE_CURRENT_SKIN, "")
 		if mypath == "/usr/share/enigma2/" or mypath == "/usr/share/enigma2/./":
 			mypath = "/usr/share/enigma2/skin_default/"
