@@ -81,12 +81,12 @@ class Bp_UsbFormat(Screen):
 			
 	def stepFour(self):
 		myoptions = [['1', '1'], ['2', '2'], ['3', '3'], ['4', '4']]
-		self.session.openWithCallback(self.partSize1,ChoiceBox, title=_("Select number of partitions:"), list=myoptions)
+		self.session.openWithCallback(self.partSize1, ChoiceBox, title=_("Select number of partitions:"), list=myoptions)
 		
 	def partSize1(self, total):
 		self.totalpartitions = int(total[1])
 		if self.totalpartitions > 1:
-			self.session.openWithCallback(self.partSize2,InputBox, title=_("Enter the size in Megabytes of the first partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
+			self.session.openWithCallback(self.partSize2, InputBox, title=_("Enter the size in Megabytes of the first partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
 		else:
 			self.writePartFile()
 			
@@ -95,7 +95,7 @@ class Bp_UsbFormat(Screen):
 			psize = "100"
 		self.p1size = psize
 		if self.totalpartitions > 2:
-			self.session.openWithCallback(self.partSize3,InputBox, title=_("Enter the size in Megabytes of the second partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
+			self.session.openWithCallback(self.partSize3, InputBox, title=_("Enter the size in Megabytes of the second partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
 		else:
 			self.writePartFile()
 			
@@ -104,7 +104,7 @@ class Bp_UsbFormat(Screen):
 			psize = "100"
 		self.p2size = psize
 		if self.totalpartitions > 3:
-			self.session.openWithCallback(self.partSize4,InputBox, title=_("Enter the size in Megabytes of the third partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
+			self.session.openWithCallback(self.partSize4, InputBox, title=_("Enter the size in Megabytes of the third partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
 		else:
 			self.writePartFile()
 		
@@ -148,7 +148,7 @@ class Bp_UsbFormat(Screen):
 		msg += _("\nWarning: all the data will be lost.\nAre you sure you want to format this device?\n")
 		
 		
-		out = open("/tmp/sfdisk.tmp",'w')
+		out = open("/tmp/sfdisk.tmp", 'w')
 		out.write(out0)
 		out.write(out1)
 		if self.totalpartitions > 1:
@@ -268,7 +268,7 @@ class Bp_UsbFormat(Screen):
 		return info
 	
 	def do_umount(self):
-		f = open("/proc/mounts",'r')
+		f = open("/proc/mounts", 'r')
 		for line in f.readlines():
 			if line.find("/dev/sd") != -1:					
 				parts = line.split()

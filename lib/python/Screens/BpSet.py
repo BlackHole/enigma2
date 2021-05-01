@@ -280,7 +280,7 @@ class BhNetBrowser(Screen):
 		})
 		
 		self.list = []
-		self.adapters = [(iNetwork.getFriendlyAdapterName(x),x) for x in iNetwork.getAdapterList()]
+		self.adapters = [(iNetwork.getFriendlyAdapterName(x), x) for x in iNetwork.getAdapterList()]
 		for x in self.adapters:
 			res = (x[0], x[1])
 			self.list.append(res)
@@ -359,7 +359,7 @@ class BhMinidlna(Screen):
 		self.my_serv_active = False
 		
 		if fileExists("/tmp/nvpn.tmp"):
-			f = open("/tmp/nvpn.tmp",'r')
+			f = open("/tmp/nvpn.tmp", 'r')
  			for line in f.readlines():
 				if line.find('minidlna') != -1:
 					self.my_serv_active = True
@@ -471,7 +471,7 @@ class DeliteInadyn(Screen):
 			self["linactive"].show()
 		
 		if fileExists("/etc/inadyn.conf"):
-			f = open("/etc/inadyn.conf",'r')
+			f = open("/etc/inadyn.conf", 'r')
  			for line in f.readlines():
 				line = line.strip()
 				if line.startswith('username '):
@@ -571,7 +571,7 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 		self.list.append(ina_active1)
 
 		if fileExists("/etc/inadyn.conf"):
-			f = open("/etc/inadyn.conf",'r')
+			f = open("/etc/inadyn.conf", 'r')
  			for line in f.readlines():
 				line = line.strip()
 				if line.startswith('username '):
@@ -672,8 +672,8 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 	def saveIna(self):
 		
 		if fileExists("/etc/inadyn.conf"):
-			inme = open("/etc/inadyn.conf",'r')
-			out = open("/tmp/inadyn.conf",'w')
+			inme = open("/etc/inadyn.conf", 'r')
+			out = open("/tmp/inadyn.conf", 'w')
 			for line in inme.readlines():
 				line = line.replace('\n', '')
 				if line.startswith('username '):
@@ -745,7 +745,7 @@ class DeliteInaLog(Screen):
 		
 		strview = ""
 		if fileExists("/var/log/inadyn.log"):
-			f = open("/var/log/inadyn.log",'r')
+			f = open("/var/log/inadyn.log", 'r')
  			for line in f.readlines():
 				strview += line
 				
@@ -897,7 +897,7 @@ class DeliteVpnLog(Screen):
 		rc = system("tail /etc/openvpn/openvpn.log > /etc/openvpn/tmp.log")
 		#tail /etc/openvpn/openvpn.log
 		if fileExists("/etc/openvpn/tmp.log"):
-			f = open("/etc/openvpn/tmp.log",'r')
+			f = open("/etc/openvpn/tmp.log", 'r')
  			for line in f.readlines():
 				strview += line
 				
@@ -984,7 +984,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 	def nab_Detect_Machine(self):
 		machine = "dm8000"
 		if fileExists("/etc/bpmachine"):
-			f = open("/etc/bpmachine",'r')
+			f = open("/etc/bpmachine", 'r')
 			machine = f.readline().strip()
 			f.close()
 		return machine
@@ -1026,7 +1026,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		
 	def checkInst(self, name):
 		ret = False
-		f = open("/tmp/bhspeed.tmp",'r')
+		f = open("/tmp/bhspeed.tmp", 'r')
 		for line in f.readlines():
 			if line.find(name) != -1:
 				ret = True

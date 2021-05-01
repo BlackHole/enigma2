@@ -190,7 +190,7 @@ class DeliteScript(Screen):
 			if fil.find('.sh') != -1:
 				fil2 = fil[:-3]
 				desc = "N/A"
-				f = open("/usr/script/" + fil,'r')
+				f = open("/usr/script/" + fil, 'r')
 				for line in f.readlines():
 					if line.find('#DESCRIPTION=') != -1:
 						line = line.strip()

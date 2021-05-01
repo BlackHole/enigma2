@@ -277,7 +277,7 @@ class InfoBarUnhandledKey:
 		mkey = "unset"
 		try:
 			mkey = getKeyDescription(key)[0]
-			print '[InfoBarGenerics] KEY: %s %s' % (key,mkey)
+			print '[InfoBarGenerics] KEY: %s %s' % (key, mkey)
 		except:
 			print '[InfoBarGenerics] KEY: %s' % key
 		self.unhandledKeyDialog.hide()

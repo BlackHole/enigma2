@@ -371,7 +371,7 @@ class Nab_downCat(Screen):
 		ivalue = ""
 		step = 0
 		if fileExists("/tmp/cpanel.tmp"):
-			f = open("/tmp/cpanel.tmp",'r')
+			f = open("/tmp/cpanel.tmp", 'r')
  			for line in f.readlines():
      				line = line.replace('\n', '')
 				line = line.strip()
@@ -471,7 +471,7 @@ class Nab_ShowDownFile(Screen):
 		step = 0
 		strview = "TITLE: "
 		if fileExists("/tmp/cpanel.tmp"):
-			f = open("/tmp/cpanel.tmp",'r')
+			f = open("/tmp/cpanel.tmp", 'r')
  			for line in f.readlines():
 				line = self.cleanhtml(line)
 				line = line.replace('\n', '')
@@ -522,7 +522,7 @@ class Nab_ShowDownFile(Screen):
 			
 	def cleanhtml(self, raw_html):
 		cleanr = re_compile('<.*?>')
-		cleantext = re_sub(cleanr,'', raw_html)
+		cleantext = re_sub(cleanr, '', raw_html)
 		return cleantext
 			
 	def KeyYellowd(self):
@@ -587,12 +587,12 @@ class Nab_ShowDownFile(Screen):
 	
 	def installipkDone(self):
 		if fileExists("/tmp/package.info"):
-			f = open("/tmp/package.info",'r')
+			f = open("/tmp/package.info", 'r')
 			for line in f.readlines():
 				if line.find('Installing') != -1:
 					parts = line.strip().split()
 					pname = "/usr/uninstall/" + parts[1] + ".del"
-					out = open(pname,'w')
+					out = open(pname, 'w')
 					line = "#!/bin/sh\n\nopkg remove --force-depends --force-remove %s\nrm -f %s\n\nexit 0\n" % (parts[1], pname)
 					out.write(line)
 					out.close()
@@ -728,12 +728,12 @@ class Nab_downPanelIPK(Screen):
 			
 	def installipkDone(self):
 		if fileExists("/tmp/package.info"):
-			f = open("/tmp/package.info",'r')
+			f = open("/tmp/package.info", 'r')
 			for line in f.readlines():
 				if line.find('Installing') != -1:
 					parts = line.strip().split()
 					pname = "/usr/uninstall/" + parts[1] + ".del"
-					out = open(pname,'w')
+					out = open(pname, 'w')
 					line = "#!/bin/sh\n\nopkg remove --force-depends --force-remove %s\nrm -f %s\n\nexit 0\n" % (parts[1], pname)
 					out.write(line)
 					out.close()
@@ -825,7 +825,7 @@ class Nab_Stats(Screen):
 		if fileExists("/tmp/cpanel.tmp"):
 			strview = _("Black Hole Image Statistics:\n\n_____________________________________\n")
 			step = 0
-			f = open("/tmp/cpanel.tmp",'r')
+			f = open("/tmp/cpanel.tmp", 'r')
 		
  			for line in f.readlines():
 				if step == 0:
