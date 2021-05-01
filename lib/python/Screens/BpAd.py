@@ -138,7 +138,7 @@ class DeliteAddons(Screen):
 		if self.sel == 0:
 			self.session.open(Nab_downArea)
 		elif self.sel == 1:
-			self.session.openWithCallback(self.runUpgrade, MessageBox, _("Do you want to update Black Hole image?")+"\n"+_("\nAfter pressing OK, please wait!"))
+			self.session.openWithCallback(self.runUpgrade, MessageBox, _("Do you want to update Black Hole image?") + "\n" + _("\nAfter pressing OK, please wait!"))
 		elif self.sel == 2:
 			self.checkPanel()
 		elif self.sel == 3:
@@ -310,25 +310,25 @@ class Nab_downArea(Screen):
 		if self.sel == 1:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=" + pluginver
 			self.title = "Open Black Hole Addons Plugins"
-		elif  self.sel == 2:
+		elif self.sel == 2:
 			self.url = "feeds"
 			self.title = "Open Black Hole Feeds Plugins"
-		elif  self.sel == 3:
+		elif self.sel == 3:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=OpenBlackHole-Skins"
 			self.title = "Open Black Hole Skins"
-		elif  self.sel == 4:
+		elif self.sel == 4:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=Scripts"
 			self.title = "Black Hole Scripts"
-		elif  self.sel == 5:
+		elif self.sel == 5:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=Logos"
 			self.title = "Black Hole Boot Logo"
-		elif  self.sel == 6:
+		elif self.sel == 6:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=Settings"
 			self.title = "Black Hole Settings"
-		elif  self.sel == 7:
+		elif self.sel == 7:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=Picons"
 			self.title = "Black Hole Picons Packages"
-		elif  self.sel == 8:
+		elif self.sel == 8:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=" + catver
 			self.title = "Latest 10 Uploads"	
 			

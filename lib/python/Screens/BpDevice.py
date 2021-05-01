@@ -105,7 +105,7 @@ class DeliteDevicesPanel(Screen):
 		if fileExists(filename):
 			size = int(file(filename).read().strip())
 			cap = size / 1000 * 512 / 1000
-			size = "%d.%03d GB" % (cap/1000, cap%1000)
+			size = "%d.%03d GB" % (cap / 1000, cap % 1000)
 		return size
 		
 		
@@ -280,7 +280,7 @@ class BlackPoleSwap(Screen):
 		if self.swap_file:
 			self.session.open(MessageBox, _("Swap file is active.\nRemove it before to create a new swap space."), MessageBox.TYPE_INFO)
 		else:
-			options =[]
+			options = []
 			f = open("/proc/mounts",'r')
 			for line in f.readlines():
 				if line.find('/media/sd') != -1:

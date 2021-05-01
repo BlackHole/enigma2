@@ -92,7 +92,7 @@ class DeliteBluePanel(Screen):
 			wide = self.getServiceInfoValue(iServiceInformation.sAspect, sinfo)
 			width = sinfo and sinfo.getInfo(iServiceInformation.sVideoWidth) or -1
 			height = sinfo and sinfo.getInfo(iServiceInformation.sVideoHeight) or -1	
-			videosize = "%dx%d" %(width, height)
+			videosize = "%dx%d" % (width, height)
 			aspect = "16:9" 
 			if aspect in (1, 2, 5, 6, 9, 0xA, 0xD, 0xE):
 				aspect = "4:3"
@@ -100,7 +100,7 @@ class DeliteBluePanel(Screen):
 			name = "N/A"
 			provider = "N/A"
 			aspect = "N/A"
-			videosize  = "N/A"	
+			videosize = "N/A"	
 		
 		self["Ilab1"].setText(_("Name: ") + name)
 		self["Ilab2"].setText(_("Provider: ") + provider)
@@ -116,7 +116,7 @@ class DeliteBluePanel(Screen):
 					self.defaultcam = parts[1]
 			f.close()
 			
-		self.defCamname =  "Common Interface"	
+		self.defCamname = "Common Interface"	
 		for c in self.camnames.keys():
 			if self.camnames[c] == self.defaultcam:
 				self.defCamname = c
@@ -250,7 +250,7 @@ class BhsysInfo(Screen):
 	
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		self["lab1"] =  ScrollLabel()
+		self["lab1"] = ScrollLabel()
 
 		self.onShow.append(self.updateInfo)
 		
@@ -269,7 +269,7 @@ class BhsysInfo(Screen):
  		text += _("Model:\t") + f.readline()
  		f.close()
 		f = open("/proc/stb/info/chipset",'r')
- 		text += _("Chipset:\t") + f.readline() +"\n"
+ 		text += _("Chipset:\t") + f.readline() + "\n"
  		f.close()
 		text += _("MEMORY\n")
 		memTotal = memFree = swapTotal = swapFree = 0
@@ -285,9 +285,9 @@ class BhsysInfo(Screen):
 			elif key == "SwapFree":
 				swapFree = parts[1].strip()
 		text += _("Total memory:") + "\t%s\n" % memTotal
-		text += _("Free memory:") + "\t%s kB\n"  % memFree
-		text += _("Swap total:") + "\t%s \n"  % swapTotal
-		text += _("Swap free:") + "\t%s \n"  % swapFree
+		text += _("Free memory:") + "\t%s kB\n" % memFree
+		text += _("Swap total:") + "\t%s \n" % swapTotal
+		text += _("Swap free:") + "\t%s \n" % swapFree
 		text += "\n" + _("STORAGE") + "\n"
 		f = open("/tmp/syinfo.tmp",'r')
 		line = f.readline()
@@ -295,7 +295,7 @@ class BhsysInfo(Screen):
 		text += parts[0] + "\t" + parts[1].strip() + "      " + parts[2].strip() + "    " + parts[3].strip() + "    " + parts[4] + "\n"
 		line = f.readline()
 		parts = line.split()
-		text += _("Flash") + "\t" + parts[1].strip() + "  " + parts[2].strip()  + "  " +  parts[3].strip()  + "  " +  parts[4] + "\n"
+		text += _("Flash") + "\t" + parts[1].strip() + "  " + parts[2].strip() + "  " + parts[3].strip() + "  " + parts[4] + "\n"
  		for line in f.readlines():
 			if line.find('/media/') != -1:
 				line = line.replace('/media/', '   ')
@@ -309,8 +309,8 @@ class BhsysInfo(Screen):
 		f = open("/etc/bpversion",'r')
 		text += "Firmware v.:\t" + f.readline()
 		f.close()
-		text += "Enigma2 v.: \t" +  about.getEnigmaVersionString() + "\n"
-		text += "Kernel v.: \t" +  about.getKernelVersionString() + "\n"
+		text += "Enigma2 v.: \t" + about.getEnigmaVersionString() + "\n"
+		text += "Kernel v.: \t" + about.getKernelVersionString() + "\n"
 		
 		self["lab1"].setText(text)
 		
@@ -352,7 +352,7 @@ class BhEpgPanel(Screen):
 			elif sel == "EPGSearch":
 				#from Plugins.Extensions.EPGSearch.plugin import main as epgsearch
 				#epgsearch(self.session)
-				from Plugins.Extensions.EPGSearch.EPGSearch import EPGSearch  as epgsearch
+				from Plugins.Extensions.EPGSearch.EPGSearch import EPGSearch as epgsearch
 				self.session.open(epgsearch)
 			
 			

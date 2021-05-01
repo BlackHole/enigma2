@@ -91,7 +91,7 @@ class DeliteGreenPanel(Screen):
 	def keyGreen(self):
 		runplug = None
 		for plugin in self.list:
-			if  plugin[3].name == config.misc.fast_plugin_button.value:
+			if plugin[3].name == config.misc.fast_plugin_button.value:
 				runplug = plugin[3]
 				break
 
