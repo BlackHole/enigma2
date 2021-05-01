@@ -86,7 +86,7 @@ class Bp_UsbFormat(Screen):
 	def partSize1(self, total):
 		self.totalpartitions = int(total[1])
 		if self.totalpartitions > 1:
-			self.session.openWithCallback(self.partSize2,InputBox, title=_("Enter the size in Megabytes of the first partition:"), windowTitle = _("Partition size"), text="1", useableChars = "1234567890" )
+			self.session.openWithCallback(self.partSize2,InputBox, title=_("Enter the size in Megabytes of the first partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890" )
 		else:
 			self.writePartFile()
 			
@@ -95,7 +95,7 @@ class Bp_UsbFormat(Screen):
 			psize = "100"
 		self.p1size = psize
 		if self.totalpartitions > 2:
-			self.session.openWithCallback(self.partSize3,InputBox, title=_("Enter the size in Megabytes of the second partition:"), windowTitle = _("Partition size"), text="1", useableChars = "1234567890" )
+			self.session.openWithCallback(self.partSize3,InputBox, title=_("Enter the size in Megabytes of the second partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890" )
 		else:
 			self.writePartFile()
 			
@@ -104,7 +104,7 @@ class Bp_UsbFormat(Screen):
 			psize = "100"
 		self.p2size = psize
 		if self.totalpartitions > 3:
-			self.session.openWithCallback(self.partSize4,InputBox, title=_("Enter the size in Megabytes of the third partition:"), windowTitle = _("Partition size"), text="1", useableChars = "1234567890" )
+			self.session.openWithCallback(self.partSize4,InputBox, title=_("Enter the size in Megabytes of the third partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890" )
 		else:
 			self.writePartFile()
 		
@@ -177,7 +177,7 @@ class Bp_UsbFormat(Screen):
 		system(cmd)
 		cmd = "echo -e 'Partitioning: %s \n\n'" % (device)
 		cmd2 = "/tmp/sfdisk.tmp"
-		self.session.open(Console, title=_("Partitioning..."), cmdlist=[cmd, cmd2], finishedCallback = self.partDone)
+		self.session.open(Console, title=_("Partitioning..."), cmdlist=[cmd, cmd2], finishedCallback=self.partDone)
 		
 	def partDone(self):
 		msg = _("The device has been partitioned.\nPartitions will be now formatted.")
@@ -228,7 +228,7 @@ class Bp_UsbFormat(Screen):
 			cmd = "%s %s" % (self.formatcmd, device)
 			cmds.append(cmd)
 		
-		self.session.open(Console, title=_("Formatting..."), cmdlist=cmds, finishedCallback = self.succesS)
+		self.session.open(Console, title=_("Formatting..."), cmdlist=cmds, finishedCallback=self.succesS)
 	
 	def step_Bump(self):
 		if self.step == 1:

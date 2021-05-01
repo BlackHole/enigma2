@@ -20,8 +20,8 @@ from operator import itemgetter
 from re import compile as re_compile, sub as re_sub
 
 config.bhaddons = ConfigSubsection()
-config.bhaddons.lock = ConfigYesNo(default = False)
-config.bhaddons.pin = ConfigInteger(limits = (0, 9999), default = 0)
+config.bhaddons.lock = ConfigYesNo(default=False)
+config.bhaddons.pin = ConfigInteger(limits=(0, 9999), default=0)
 
 class DeliteAddons(Screen):
 	skin = """
@@ -117,7 +117,7 @@ class DeliteAddons(Screen):
 	def checkAcceSS(self):
 		if config.bhaddons.lock.value == True:
 			msg = _("Enter the pin")
-			self.session.openWithCallback(self.checkAcceSS2, InputBox, title=msg, windowTitle = _("Insert Pin"), text="0000", useableChars = "1234567890" )
+			self.session.openWithCallback(self.checkAcceSS2, InputBox, title=msg, windowTitle=_("Insert Pin"), text="0000", useableChars="1234567890" )
 		else:
 			self.KeyOk()
 			
@@ -581,7 +581,7 @@ class Nab_ShowDownFile(Screen):
 				cmd0 = "opkg install --noaction %s > /tmp/package.info" % (dest)
 				cmd1 = "opkg install --force-overwrite " + dest
 				cmd2 = "rm -f " + dest
-				self.session.open(Console, title="Ipk Package Installation", cmdlist=[cmd, cmd0, cmd1, cmd2, "sleep 5"], finishedCallback = self.installipkDone)
+				self.session.open(Console, title="Ipk Package Installation", cmdlist=[cmd, cmd0, cmd1, cmd2, "sleep 5"], finishedCallback=self.installipkDone)
 				chdir(mydir)
 				
 	
@@ -723,7 +723,7 @@ class Nab_downPanelIPK(Screen):
 			cmd0 = "opkg install --noaction %s > /tmp/package.info" % (dest)
 			cmd1 = "opkg install --force-overwrite " + dest
 			cmd2 = "rm -f " + dest
-			self.session.open(Console, title="Ipk Package Installation", cmdlist=[cmd, cmd0, cmd1, cmd2, "sleep 5"], finishedCallback = self.installipkDone)
+			self.session.open(Console, title="Ipk Package Installation", cmdlist=[cmd, cmd0, cmd1, cmd2, "sleep 5"], finishedCallback=self.installipkDone)
 			chdir(mydir)
 			
 	def installipkDone(self):

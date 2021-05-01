@@ -165,7 +165,7 @@ class NimSetup(Screen, ConfigListScreen, ServiceStopScreen):
 						advanced_setchoices = True
 					if advanced_setchoices:
 						saved_value = self.nimConfig.advanced.sats.saved_value
-						self.nimConfig.advanced.sats.setChoices(advanced_satlist_choices, default = saved_value is not None and saved_value or self.nimConfig.advanced.sats.value)
+						self.nimConfig.advanced.sats.setChoices(advanced_satlist_choices, default=saved_value is not None and saved_value or self.nimConfig.advanced.sats.value)
 						if saved_value is not None:
 							self.nimConfig.advanced.sats.value = saved_value
 						self.nimConfig.advanced.sats.save_forced = True
