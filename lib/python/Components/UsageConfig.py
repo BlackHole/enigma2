@@ -87,7 +87,7 @@ def InitUsageConfig():
 		[(str(i), ngettext("%d second", "%d seconds", i) % i) for i in [3, 5, 7, 10, 15, 20, 30, 60]] + \
 		[("EPG", _("EPG")), ("INFOBAREPG", _("InfoBar EPG"))]
 	config.usage.show_second_infobar = ConfigSelection(default="5", choices=choicelist)
-	config.usage.fix_second_infobar = ConfigYesNo(default = False)
+	config.usage.fix_second_infobar = ConfigYesNo(default=False)
 
 	def showsecondinfobarChanged(configElement):
 		if config.usage.show_second_infobar.value != "INFOBAREPG":

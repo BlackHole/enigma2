@@ -15,6 +15,7 @@ from enigma import eDVBDB
 
 config.misc.fast_plugin_button = ConfigText(default="")
 
+
 class DeliteGreenPanel(Screen):
 	skin = """
 	<screen name="DeliteGreenPanel" position="center,center" size="1000,720" title="Black Hole Green Panel" flags="wfNoBorder">
@@ -40,6 +41,7 @@ class DeliteGreenPanel(Screen):
 		<widget name="key_yellow" position="544,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="yellow" transparent="1" />
 		<widget name="key_blue" position="772,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="blue" transparent="1" />
 	</screen>"""
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
 
@@ -69,7 +71,7 @@ class DeliteGreenPanel(Screen):
 			plugin(session=self.session)
 
 	def updateList(self):
-		self.list = [ ]
+		self.list = []
 		self.pluginlist = plugins.getPlugins(PluginDescriptor.WHERE_PLUGINMENU)
 		for plugin in self.pluginlist:
 			if plugin.icon is None:
@@ -91,7 +93,7 @@ class DeliteGreenPanel(Screen):
 	def keyGreen(self):
 		runplug = None
 		for plugin in self.list:
-			if  plugin[3].name == config.misc.fast_plugin_button.value:
+			if plugin[3].name == config.misc.fast_plugin_button.value:
 				runplug = plugin[3]
 				break
 
@@ -102,6 +104,7 @@ class DeliteGreenPanel(Screen):
 
 	def keyBlue(self):
 		self.session.open(DeliteScript)
+
 
 class DeliteSetupFp(Screen):
 	skin = """
@@ -129,7 +132,7 @@ class DeliteSetupFp(Screen):
 		}, -1)
 
 	def updateList(self):
-		self.list = [ ]
+		self.list = []
 		self.pluginlist = plugins.getPlugins(PluginDescriptor.WHERE_PLUGINMENU)
 		for plugin in self.pluginlist:
 			if plugin.icon is None:
@@ -150,6 +153,7 @@ class DeliteSetupFp(Screen):
 			config.misc.fast_plugin_button.value = mysel[0]
 			config.misc.fast_plugin_button.save()
 			configfile.save()
+
 
 class DeliteScript(Screen):
 	skin = """
@@ -190,7 +194,7 @@ class DeliteScript(Screen):
 			if fil.find('.sh') != -1:
 				fil2 = fil[:-3]
 				desc = "N/A"
-				f = open("/usr/script/" + fil,'r')
+				f = open("/usr/script/" + fil, 'r')
 				for line in f.readlines():
 					if line.find('#DESCRIPTION=') != -1:
 						line = line.strip()

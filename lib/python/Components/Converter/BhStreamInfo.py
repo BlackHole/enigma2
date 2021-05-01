@@ -8,6 +8,7 @@ from string import upper
 from Tools.Transponder import ConvertToHumanReadable
 from os import rename, system
 
+
 class BhStreamInfo(Poll, Converter, object):
 	DUMMY = 0
 	STREAMURL = 1
@@ -47,7 +48,7 @@ class BhStreamInfo(Poll, Converter, object):
 				return ''
 
 	def streamurl(self):
-		playref = NavigationInstance.instance.getCurrentlyPlayingServiceReference()		
+		playref = NavigationInstance.instance.getCurrentlyPlayingServiceReference()
 		if playref:
 			refstr = playref.toString()
 			if '%3a' in refstr:

@@ -18,11 +18,11 @@ class DeliteBluePanel(Screen):
 	skin = """
 	<screen name="DeliteBluePanel" position="center,center" size="1000,720"  title="Black Hole Blue Panel" flags="wfNoBorder">
         <ePixmap position="339,170" zPosition="3" size="60,40" pixmap="skin_default/buttons/key_ok.png" alphatest="blend" transparent="1" />
-        <eLabel text="Black Hole Blue Panel" position="80,30" size="800,38" font="Regular;34" halign="left" transparent="1"/> 
+        <eLabel text="Black Hole Blue Panel" position="80,30" size="800,38" font="Regular;34" halign="left" transparent="1"/>
         <widget name="lab1" position="129,90" size="230,25" font="Regular;24" zPosition="2"  transparent="1"/>
-        <widget name="list" position="75,126" size="340,38" zPosition="2"  transparent="1"/> 
+        <widget name="list" position="75,126" size="340,38" zPosition="2"  transparent="1"/>
         <widget name="lab2" position="139,172" size="190,24" font="Regular;20" halign="center" valign="center" zPosition="2" transparent="1"/>
-    	<widget name="lab3" position="79,201" size="120,28" font="Regular;24" halign="left" zPosition="2" transparent="1"/> 
+    	<widget name="lab3" position="79,201" size="120,28" font="Regular;24" halign="left" zPosition="2" transparent="1"/>
         <widget name="activecam" position="79,201" size="350,28" font="Regular;24" halign="left" zPosition="2" transparent="1"/>
         <widget name="Ilab1" position="79,257" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
         <widget name="Ilab2" position="79,290" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
@@ -32,13 +32,14 @@ class DeliteBluePanel(Screen):
         <ePixmap position="145,650" size="140,40" pixmap="skin_default/buttons/red.png" alphatest="on" zPosition="1" />
         <ePixmap position="430,650" size="140,40" pixmap="skin_default/buttons/yellow.png" alphatest="on" zPosition="1" />
         <ePixmap position="715,650" size="140,40" pixmap="skin_default/buttons/blue.png" alphatest="on" zPosition="1" />
-		<widget name="key_red" position="145,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="red" transparent="1" />		
+		<widget name="key_red" position="145,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="red" transparent="1" />
 		<widget name="key_yellow" position="430,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="yellow" transparent="1" />
 		<widget name="key_blue" position="715,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="blue" transparent="1" />
     </screen>"""
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		
+
 		self["lab1"] = Label()
 		self["lab2"] = Label(_("Set Default CAM"))
 		self["lab3"] = Label()
@@ -51,7 +52,7 @@ class DeliteBluePanel(Screen):
 		self["key_blue"] = Label(_("Extra Settings"))
 		self["activecam"] = Label()
 		self["Ecmtext"] = ScrollLabel()
-		
+
 		self["actions"] = ActionMap(["ColorActions", "OkCancelActions", "DirectionActions"],
 		{
 			"ok": self.keyOk,
@@ -63,7 +64,7 @@ class DeliteBluePanel(Screen):
 			"up": self["Ecmtext"].pageUp,
 			"down": self["Ecmtext"].pageDown
 		}, -1)
-		
+
 		self.emlist = []
 		self.populate_List()
 		self["list"] = MenuList(self.emlist)
@@ -75,7 +76,7 @@ class DeliteBluePanel(Screen):
 		cams = listdir("/usr/camscript")
 		for fil in cams:
 			if fil.find('Ncam_') != -1:
-				f = open("/usr/camscript/" + fil,'r')
+				f = open("/usr/camscript/" + fil, 'r')
 				for line in f.readlines():
 					line = line.strip()
 					if line.find('CAMNAME=') != -1:
@@ -91,29 +92,32 @@ class DeliteBluePanel(Screen):
 			provider = self.getServiceInfoValue(iServiceInformation.sProvider, sinfo)
 			wide = self.getServiceInfoValue(iServiceInformation.sAspect, sinfo)
 			width = sinfo and sinfo.getInfo(iServiceInformation.sVideoWidth) or -1
-			height = sinfo and sinfo.getInfo(iServiceInformation.sVideoHeight) or -1	
-			videosize = "%dx%d" %(width, height)
-			aspect = "16:9" 
-			if aspect in ( 1, 2, 5, 6, 9, 0xA, 0xD, 0xE ):
+			height = sinfo and sinfo.getInfo(iServiceInformation.sVideoHeight) or -1
+			videosize = "%dx%d" % (width, height)
+			aspect = "16:9"
+			if aspect in (1, 2, 5, 6, 9, 0xA, 0xD, 0xE):
 				aspect = "4:3"
 		except:
-			name = "N/A"; provider = "N/A"; aspect = "N/A"; videosize  = "N/A"	
-		
+			name = "N/A"
+			provider = "N/A"
+			aspect = "N/A"
+			videosize = "N/A"
+
 		self["Ilab1"].setText(_("Name: ") + name)
 		self["Ilab2"].setText(_("Provider: ") + provider)
 		self["Ilab3"].setText(_("Aspect Ratio: ") + aspect)
 		self["Ilab4"].setText(_("Videosize: ") + videosize)
-	
+
 		self.defaultcam = "/usr/camscript/Ncam_Ci.sh"
 		if fileExists("/etc/BhCamConf"):
-			f = open("/etc/BhCamConf",'r')
+			f = open("/etc/BhCamConf", 'r')
 			for line in f.readlines():
    				parts = line.strip().split("|")
 				if parts[0] == "deldefault":
 					self.defaultcam = parts[1]
 			f.close()
-			
-		self.defCamname =  "Common Interface"	
+
+		self.defCamname = "Common Interface"
 		for c in self.camnames.keys():
 			if self.camnames[c] == self.defaultcam:
 				self.defCamname = c
@@ -124,18 +128,17 @@ class DeliteBluePanel(Screen):
 				break
 			pos += 1
 
-		mytext = "";
+		mytext = ""
 		if fileExists("/tmp/ecm.info"):
-			f = open("/tmp/ecm.info",'r')
+			f = open("/tmp/ecm.info", 'r')
  			for line in f.readlines():
 				mytext = mytext + line.strip() + "\n"
  			f.close()
 		if len(mytext) < 5:
 			mytext = "\n\n    " + _("Ecm Info not available.")
-				
+
 		self["activecam"].setText(self.defCamname)
 		self["Ecmtext"].setText(mytext)
-
 
 	def getServiceInfoValue(self, what, myserviceinfo):
 		v = myserviceinfo.getInfo(what)
@@ -145,51 +148,49 @@ class DeliteBluePanel(Screen):
 			v = "N/A"
 		return v
 
-
 	def keyOk(self):
 		self.sel = self["list"].getCurrent()
 		self.newcam = self.camnames[self.sel]
-		
-		out = open("/etc/BhCamConf",'w')
+
+		out = open("/etc/BhCamConf", 'w')
 		out.write("deldefault|" + self.newcam + "\n")
 		out.close()
-		
+
 		out = open("/etc/CurrentBhCamName", "w")
 		out.write(self.sel)
 		out.close()
 		cmd = "cp -f " + self.newcam + " /usr/bin/StartBhCam"
-		system (cmd)
+		system(cmd)
 		cmd = "STOP_CAMD," + self.defaultcam
 		self.sendtoBh_sock(cmd)
-		
+
 		cmd = "NEW_CAMD," + self.newcam
 		self.sendtoBh_sock(cmd)
 		oldcam = self.camnames[self.sel]
 		self.session.openWithCallback(self.myclose, Nab_DoStartCam, self.sel)
-		
-		
+
 	def sendtoBh_sock(self, data):
 		client_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 		client_socket.connect("/tmp/Blackhole.socket")
 		client_socket.send(data)
             	client_socket.close()
-				
+
 	def keyYellow(self):
 		self.session.open(BhsysInfo)
 
 	def keyBlue(self):
 		from Screens.BpSet import DeliteSettings
 		self.session.open(DeliteSettings)
-		
+
 	def keyGreen(self):
 		self.session.open(MessageBox, _("Sorry, function not available"), MessageBox.TYPE_INFO)
-		
+
 	def keyRed(self):
 		self.session.open(BhEpgPanel)
 
 	def myclose(self):
 		self.close()
-	
+
 
 class Nab_DoStartCam(Screen):
 	skin = """
@@ -197,10 +198,10 @@ class Nab_DoStartCam(Screen):
 		<widget name="connect" position="0,0" size="484,250" zPosition="-1" pixmaps="skin_default/startcam_1.png,skin_default/startcam_2.png,skin_default/startcam_3.png,skin_default/startcam_4.png" transparent="1" />
 		<widget name="lab1" position="10,180" halign="center" size="460,60" zPosition="1" font="Regular;20" valign="top" transparent="1" />
 	</screen>"""
-	
+
 	def __init__(self, session, title):
 		Screen.__init__(self, session)
-		
+
 		msg = _("Please wait while starting\n") + title + "..."
 		self["connect"] = MultiPixmap()
 		self["lab1"] = Label(msg)
@@ -209,7 +210,7 @@ class Nab_DoStartCam(Screen):
 		self.activityTimer.timeout.get().append(self.updatepix)
 		self.onShow.append(self.startShow)
 		self.onClose.append(self.delTimer)
-		
+
 	def startShow(self):
 		self.curpix = 0
 		self.count = 0
@@ -221,36 +222,37 @@ class Nab_DoStartCam(Screen):
 		if self.curpix > 2:
 			self.curpix = 0
 		#if self.count == 0:
-			
+
 		if self.count > 7:
 			self.curpix = 3
 		self["connect"].setPixmapNum(self.curpix)
 		if self.count == 20:
 			self.hide()
-			
+
 			#ref = self.session.nav.getCurrentlyPlayingServiceReference()
 			#self.session.nav.playService(ref)
 			self.close()
-		
+
 		self.activityTimer.start(140)
 		self.curpix += 1
 		self.count += 1
-		
+
 	def delTimer(self):
 		del self.activityTimer
+
 
 class BhsysInfo(Screen):
 	skin = """
 	<screen position="center,center" size="800,600" title="Black Hole Info" flags="wfNoBorder">
 		<widget name="lab1" position="50,25" halign="left" size="700,550" zPosition="1" font="Regular;20" valign="top" transparent="1" />
 	</screen>"""
-	
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		self["lab1"] =  ScrollLabel()
+		self["lab1"] = ScrollLabel()
 
 		self.onShow.append(self.updateInfo)
-		
+
 		self["actions"] = ActionMap(["OkCancelActions", "DirectionActions"],
 		{
 			"ok": self.close,
@@ -258,41 +260,41 @@ class BhsysInfo(Screen):
 			"up": self["lab1"].pageUp,
 			"down": self["lab1"].pageDown
 		}, -1)
-		
+
 	def updateInfo(self):
 		rc = system("df -h > /tmp/syinfo.tmp")
 		text = _("BOX\n") + _("Brand:") + "\tVuplus\n"
-		f = open("/proc/stb/info/vumodel",'r')
+		f = open("/proc/stb/info/vumodel", 'r')
  		text += _("Model:\t") + f.readline()
  		f.close()
-		f = open("/proc/stb/info/chipset",'r')
- 		text += _("Chipset:\t") + f.readline() +"\n"
+		f = open("/proc/stb/info/chipset", 'r')
+ 		text += _("Chipset:\t") + f.readline() + "\n"
  		f.close()
 		text += _("MEMORY\n")
 		memTotal = memFree = swapTotal = swapFree = 0
-		for line in open("/proc/meminfo",'r'):
+		for line in open("/proc/meminfo", 'r'):
 			parts = line.split(':')
 			key = parts[0].strip()
 			if key == "MemTotal":
 				memTotal = parts[1].strip()
 			elif key in ("MemFree", "Buffers", "Cached"):
-				memFree += int(parts[1].strip().split(' ',1)[0])
+				memFree += int(parts[1].strip().split(' ', 1)[0])
 			elif key == "SwapTotal":
 				swapTotal = parts[1].strip()
 			elif key == "SwapFree":
 				swapFree = parts[1].strip()
 		text += _("Total memory:") + "\t%s\n" % memTotal
-		text += _("Free memory:") + "\t%s kB\n"  % memFree
-		text += _("Swap total:") + "\t%s \n"  % swapTotal
-		text += _("Swap free:") + "\t%s \n"  % swapFree
+		text += _("Free memory:") + "\t%s kB\n" % memFree
+		text += _("Swap total:") + "\t%s \n" % swapTotal
+		text += _("Swap free:") + "\t%s \n" % swapFree
 		text += "\n" + _("STORAGE") + "\n"
-		f = open("/tmp/syinfo.tmp",'r')
+		f = open("/tmp/syinfo.tmp", 'r')
 		line = f.readline()
 		parts = line.split()
 		text += parts[0] + "\t" + parts[1].strip() + "      " + parts[2].strip() + "    " + parts[3].strip() + "    " + parts[4] + "\n"
 		line = f.readline()
 		parts = line.split()
-		text += _("Flash") + "\t" + parts[1].strip() + "  " + parts[2].strip()  + "  " +  parts[3].strip()  + "  " +  parts[4] + "\n"
+		text += _("Flash") + "\t" + parts[1].strip() + "  " + parts[2].strip() + "  " + parts[3].strip() + "  " + parts[4] + "\n"
  		for line in f.readlines():
 			if line.find('/media/') != -1:
 				line = line.replace('/media/', '   ')
@@ -301,16 +303,16 @@ class BhsysInfo(Screen):
 					text += parts[5] + "\t" + parts[1].strip() + "  " + parts[2].strip() + "  " + parts[3].strip() + "  " + parts[4] + "\n"
 		f.close()
 		os_remove("/tmp/syinfo.tmp")
-		
+
 		text += "\n" + _("SOFTWARE") + "\n"
-		f = open("/etc/bpversion",'r')
+		f = open("/etc/bpversion", 'r')
 		text += "Firmware v.:\t" + f.readline()
 		f.close()
-		text += "Enigma2 v.: \t" +  about.getEnigmaVersionString() + "\n"
-		text += "Kernel v.: \t" +  about.getKernelVersionString() + "\n"
-		
+		text += "Enigma2 v.: \t" + about.getEnigmaVersionString() + "\n"
+		text += "Kernel v.: \t" + about.getKernelVersionString() + "\n"
+
 		self["lab1"].setText(text)
-		
+
 
 class BhEpgPanel(Screen):
 	skin = """
@@ -319,11 +321,11 @@ class BhEpgPanel(Screen):
 			<convert type="StringList" />
 		</widget>
 	</screen>"""
-	
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		
-		flist = [("EPGSettings"),("CrossEPG"),("EPGImport"),("EPGSearch")]
+
+		flist = [("EPGSettings"), ("CrossEPG"), ("EPGImport"), ("EPGSearch")]
 		self["list"] = List(flist)
 
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
@@ -332,7 +334,6 @@ class BhEpgPanel(Screen):
 			"back": self.close
 
 		})
-
 
 	def KeyOk(self):
 		sel = self["list"].getCurrent()
@@ -349,16 +350,13 @@ class BhEpgPanel(Screen):
 			elif sel == "EPGSearch":
 				#from Plugins.Extensions.EPGSearch.plugin import main as epgsearch
 				#epgsearch(self.session)
-				from Plugins.Extensions.EPGSearch.EPGSearch import EPGSearch  as epgsearch
+				from Plugins.Extensions.EPGSearch.EPGSearch import EPGSearch as epgsearch
 				self.session.open(epgsearch)
-			
-			
-	
 
 
 class DeliteBp:
 	def __init__(self):
-		self["DeliteBp"] = ActionMap( [ "InfobarExtensions" ],
+		self["DeliteBp"] = ActionMap(["InfobarExtensions"],
 			{
 				"DeliteBpshow": (self.showDeliteBp),
 			})

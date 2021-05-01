@@ -22,36 +22,36 @@ class DeliteDevicesPanel(Screen):
 		self["key_red"] = Label(_("Cancel"))
 		self["key_green"] = Label(_("Mountpoints"))
 		self["lab1"] = Label(_("Wait please while scanning your devices..."))
-		
+
 		self.list = []
 		self["list"] = List(self.list)
-		
+
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"back": self.close,
 			"red": self.close,
 			"green": self.mapSetup
 		})
-		
+
 		self.activityTimer = eTimer()
 		self.activityTimer.timeout.get().append(self.updateList)
 		self.gO()
-	
+
 	def gO(self):
-		paths = ["/media/hdd","/media/usb","/media/downloads","/media/music","/media/personal","/media/photo","/media/video"]
+		paths = ["/media/hdd", "/media/usb", "/media/downloads", "/media/music", "/media/personal", "/media/photo", "/media/video"]
 		for path in paths:
 			if not pathExists(path):
 				createDir(path)
 # hack !
 		self.activityTimer.start(1)
-		
+
 	def updateList(self):
 		self.activityTimer.stop()
-		self.list = [ ]
-		self.conflist = [ ]
+		self.list = []
+		self.conflist = []
 		rc = system("blkid > /tmp/blkid.log")
-		
-		f = open("/tmp/blkid.log",'r')
+
+		f = open("/tmp/blkid.log", 'r')
 		for line in f.readlines():
 			if line.find('/dev/sd') == -1:
 				continue
@@ -72,15 +72,14 @@ class DeliteDevicesPanel(Screen):
 			self.list.append((name, description, png))
 			description = "%s  %s  %s" % (name, size, partition)
 			self.conflist.append((description, uuid))
-			
+
 		self["list"].list = self.list
 		self["lab1"].hide()
 		os_remove("/tmp/blkid.log")
-		
-		
+
 	def get_Dpoint(self, uuid):
 		point = "NOT MAPPED"
-		f = open("/etc/fstab",'r')
+		f = open("/etc/fstab", 'r')
 		for line in f.readlines():
 			if line.find(uuid) != -1:
 				parts = line.strip().split()
@@ -88,7 +87,7 @@ class DeliteDevicesPanel(Screen):
 				break
 		f.close()
 		return point
-		
+
 	def get_Dmodel(self, device):
 		model = "Generic"
 		filename = "/sys/block/%s/device/vendor" % (device)
@@ -98,22 +97,21 @@ class DeliteDevicesPanel(Screen):
 			mod = file(filename).read().strip()
 			model = "%s %s" % (vendor, mod)
 		return model
-		
+
 	def get_Dsize(self, device, partition):
 		size = "0"
 		filename = "/sys/block/%s/%s/size" % (device, partition)
 		if fileExists(filename):
 			size = int(file(filename).read().strip())
 			cap = size / 1000 * 512 / 1000
-			size = "%d.%03d GB" % (cap/1000, cap%1000)
+			size = "%d.%03d GB" % (cap / 1000, cap % 1000)
 		return size
-		
-		
+
 	def get_Dtype(self, device):
 		pixpath = resolveFilename(SCOPE_CURRENT_SKIN, "")
 		if pixpath == "/usr/share/enigma2/" or pixpath == "/usr/share/enigma2/./":
 			pixpath = "/usr/share/enigma2/skin_default/"
-		
+
 		name = "USB"
 		pix = pixpath + "icons/dev_usb.png"
 		filename = "/sys/block/%s/removable" % (device)
@@ -121,24 +119,23 @@ class DeliteDevicesPanel(Screen):
 			if file(filename).read().strip() == "0":
 				name = "HARD DISK"
 				pix = pixpath + "icons/dev_hdd.png"
-				
+
 		return name, pix
-		
-		
+
 	def mapSetup(self):
 		self.session.openWithCallback(self.close, DeliteSetupDevicePanelConf, self.conflist)
-						
+
 
 class DeliteSetupDevicePanelConf(Screen, ConfigListScreen):
 	def __init__(self, session, devices):
 		Screen.__init__(self, session)
-		
+
 		self.list = []
 		ConfigListScreen.__init__(self, self.list)
 		self["key_red"] = Label(_("Cancel"))
 		self["key_green"] = Label(_("Save"))
 		self["Linconn"] = Label(_("Wait please while scanning your box devices..."))
-		
+
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"red": self.close,
@@ -146,28 +143,25 @@ class DeliteSetupDevicePanelConf(Screen, ConfigListScreen):
 			"back": self.close
 
 		})
-		
+
 		self.devices = devices
 		self.updateList()
-	
-	
+
 	def updateList(self):
 		self.list = []
 		for device in self.devices:
-			item = NoSave(ConfigSelection(default = "Not mapped", choices = self.get_Choices()))
+			item = NoSave(ConfigSelection(default="Not mapped", choices=self.get_Choices()))
 			item.value = self.get_currentPoint(device[1])
 			res = getConfigListEntry(device[0], item, device[1])
 			self.list.append(res)
-		
+
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
 		self["Linconn"].hide()
 
-
-
 	def get_currentPoint(self, uuid):
 		point = "Not mapped"
-		f = open("/etc/fstab",'r')
+		f = open("/etc/fstab", 'r')
 		for line in f.readlines():
 			if line.find(uuid) != -1:
 				parts = line.strip().split()
@@ -183,13 +177,11 @@ class DeliteSetupDevicePanelConf(Screen, ConfigListScreen):
 			if f == "net":
 				continue
 			c = "/media/" + f
-			choices.append((c,c))
+			choices.append((c, c))
 		return choices
-			
-		
 
 	def savePoints(self):
-		f = open("/etc/fstab",'r')
+		f = open("/etc/fstab", 'r')
 		out = open("/etc/fstab.tmp", "w")
 		for line in f.readlines():
 			if line.find("UUID") != -1 or len(line) < 6:
@@ -206,14 +198,14 @@ class DeliteSetupDevicePanelConf(Screen, ConfigListScreen):
 		os_rename("/etc/fstab.tmp", "/etc/fstab")
 		message = _("Devices changes need a system restart to take effects.\nRestart your Box now?")
 		self.session.openWithCallback(self.restBo, MessageBox, message, MessageBox.TYPE_YESNO)
-			
+
 	def restBo(self, answer):
 		if answer is True:
 			self.session.open(TryQuitMainloop, 2)
 		else:
 			self.close()
-	
-	
+
+
 class BlackPoleSwap(Screen):
 	skin = """
 	<screen position="center,center" size="420,240" title="Black Hole Swap File Manager">
@@ -225,15 +217,15 @@ class BlackPoleSwap(Screen):
 		<widget name="key_green" position="140,190" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
 		<widget name="key_yellow" position="280,190" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
 	</screen>"""
-	
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		
+
 		self["lab1"] = Label(_("Swap status: disabled"))
 		self["key_red"] = Label(_("Close"))
 		self["key_green"] = Label(_("Create"))
 		self["key_yellow"] = Label(_("Remove"))
-		
+
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"back": self.close,
@@ -243,12 +235,11 @@ class BlackPoleSwap(Screen):
 		})
 
 		self.onLayoutFinish.append(self.updateSwap)
-		
-	
+
 	def updateSwap(self):
 		self.swap_file = ""
 		swapinfo = _("Swap status: disabled")
-		f = open("/proc/swaps",'r')
+		f = open("/proc/swaps", 'r')
  		for line in f.readlines():
 			if line.find('swapfile') != -1:
 				parts = line.split()
@@ -258,8 +249,7 @@ class BlackPoleSwap(Screen):
 
 		f.close()
 		self["lab1"].setText(swapinfo)
-		
-		
+
 	def keyYellow(self):
 		if self.swap_file:
 			cmd = "swapoff %s" % self.swap_file
@@ -274,14 +264,14 @@ class BlackPoleSwap(Screen):
 				pass
 			self.updateSwap()
 		else:
-			self.session.open(MessageBox, _("Swap already disabled."), MessageBox.TYPE_INFO)	
-	
+			self.session.open(MessageBox, _("Swap already disabled."), MessageBox.TYPE_INFO)
+
 	def keyGreen(self):
 		if self.swap_file:
 			self.session.open(MessageBox, _("Swap file is active.\nRemove it before to create a new swap space."), MessageBox.TYPE_INFO)
 		else:
-			options =[]
-			f = open("/proc/mounts",'r')
+			options = []
+			f = open("/proc/mounts", 'r')
 			for line in f.readlines():
 				if line.find('/media/sd') != -1:
 					continue
@@ -293,16 +283,14 @@ class BlackPoleSwap(Screen):
 			if len(options) == 0:
 				self.session.open(MessageBox, _("Sorry no valid device found.\nBe sure your device is Linux formatted and mapped.\nPlease use Black Hole format wizard and Black Hole device manager to prepare and map your usb stick."), MessageBox.TYPE_INFO)
 			else:
-				self.session.openWithCallback(self.selectSize,ChoiceBox, title="Select the Swap File device:", list=options)
-	
+				self.session.openWithCallback(self.selectSize, ChoiceBox, title="Select the Swap File device:", list=options)
 
 	def selectSize(self, device):
 		if device:
 			self.new_swap = device[1] + "/swapfile"
-			options = [['16 MB', '16384'], ['32 MB', '32768'], ['64 MB', '65536'], ['128 MB', '131072'], ['256 MB', '262144'], ['512 MB', '524288'], ['1 GB', '1048576'], ['2 GB', '2097152']]		
-			self.session.openWithCallback(self.swapOn,ChoiceBox, title=_("Select the Swap File Size:"), list=options)
-			
-		
+			options = [['16 MB', '16384'], ['32 MB', '32768'], ['64 MB', '65536'], ['128 MB', '131072'], ['256 MB', '262144'], ['512 MB', '524288'], ['1 GB', '1048576'], ['2 GB', '2097152']]
+			self.session.openWithCallback(self.swapOn, ChoiceBox, title=_("Select the Swap File Size:"), list=options)
+
 	def swapOn(self, size):
 		if size:
 			cmd = "dd if=/dev/zero of=%s bs=1024 count=%s 2>/dev/null" % (self.new_swap, size[1])
@@ -321,6 +309,3 @@ class BlackPoleSwap(Screen):
 				self.updateSwap()
 			else:
 				self.session.open(MessageBox, _("Swap File creation Failed. Check for available space."), MessageBox.TYPE_INFO)
-			
-			
-

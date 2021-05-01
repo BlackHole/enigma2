@@ -246,7 +246,6 @@ class NetworkWizard(WizardLanguage, Rc):
 		plugins.readPluginList(resolveFilename(SCOPE_PLUGINS))
 		self.close()
 
-
 	def checkWlanStateCB(self, data, status):
 		if data is not None:
 			if data is True:
