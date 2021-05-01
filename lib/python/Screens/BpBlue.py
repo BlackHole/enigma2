@@ -97,7 +97,10 @@ class DeliteBluePanel(Screen):
 			if aspect in ( 1, 2, 5, 6, 9, 0xA, 0xD, 0xE ):
 				aspect = "4:3"
 		except:
-			name = "N/A"; provider = "N/A"; aspect = "N/A"; videosize  = "N/A"	
+			name = "N/A"
+			provider = "N/A"
+			aspect = "N/A"
+			videosize  = "N/A"	
 		
 		self["Ilab1"].setText(_("Name: ") + name)
 		self["Ilab2"].setText(_("Provider: ") + provider)
@@ -124,7 +127,7 @@ class DeliteBluePanel(Screen):
 				break
 			pos += 1
 
-		mytext = "";
+		mytext = ""
 		if fileExists("/tmp/ecm.info"):
 			f = open("/tmp/ecm.info",'r')
  			for line in f.readlines():
