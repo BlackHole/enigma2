@@ -15,6 +15,7 @@ from enigma import eDVBDB
 
 config.misc.fast_plugin_button = ConfigText(default="")
 
+
 class DeliteGreenPanel(Screen):
 	skin = """
 	<screen name="DeliteGreenPanel" position="center,center" size="1000,720" title="Black Hole Green Panel" flags="wfNoBorder">
@@ -40,6 +41,7 @@ class DeliteGreenPanel(Screen):
 		<widget name="key_yellow" position="544,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="yellow" transparent="1" />
 		<widget name="key_blue" position="772,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="blue" transparent="1" />
 	</screen>"""
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
 
@@ -103,6 +105,7 @@ class DeliteGreenPanel(Screen):
 	def keyBlue(self):
 		self.session.open(DeliteScript)
 
+
 class DeliteSetupFp(Screen):
 	skin = """
 	<screen position="160,115" size="390,370" title="Black Hole Fast Plugin Setup">
@@ -150,6 +153,7 @@ class DeliteSetupFp(Screen):
 			config.misc.fast_plugin_button.value = mysel[0]
 			config.misc.fast_plugin_button.save()
 			configfile.save()
+
 
 class DeliteScript(Screen):
 	skin = """

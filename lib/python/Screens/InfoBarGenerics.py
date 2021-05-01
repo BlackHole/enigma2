@@ -2177,7 +2177,6 @@ class InfoBarSeek:
 				return False
 			return True
 
-
 	def __seekableStatusChanged(self):
 		if isStandardInfoBar(self) and self.timeshiftEnabled():
 			pass

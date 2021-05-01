@@ -22,6 +22,7 @@ class Bp_UsbFormat(Screen):
 		<widget name="key_red" position="100,300" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 		<widget name="key_green" position="340,300" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
 	</screen>"""
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		
@@ -46,7 +47,6 @@ class Bp_UsbFormat(Screen):
 		self.totalpartitions = 1
 		self.totalsize = self.p1size = self.p2size = self.p3size = self.p4size = "0"
 		self.canclose = True
-	
 	
 	def stepOne(self):
 		msg = _("Connect your usb storage to your Vu+ box\n")
@@ -146,7 +146,6 @@ class Bp_UsbFormat(Screen):
 			out4 = ";\n"
 			msg += "%s4 \t size:%s M\n" % (device, p4)
 		msg += _("\nWarning: all the data will be lost.\nAre you sure you want to format this device?\n")
-		
 		
 		out = open("/tmp/sfdisk.tmp", 'w')
 		out.write(out0)

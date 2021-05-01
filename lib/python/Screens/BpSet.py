@@ -19,6 +19,7 @@ from enigma import eTimer
 from Screens.Console import Console
 import process
 
+
 class DeliteSettings(Screen):
 	skin = """
 	<screen position="160,110" size="390,360" title="Black Hole Extra Settings">
@@ -41,7 +42,6 @@ class DeliteSettings(Screen):
 		self.list = []
 		self["list"] = List(self.list)
 		self.updateList()
-		
 		
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
@@ -112,7 +112,6 @@ class DeliteSettings(Screen):
 		nobox = self.session.open(MessageBox, _("Function Not Yet Available"), MessageBox.TYPE_INFO)
 		nobox.setTitle(_("Info"))
 	
-		
 	def updateList(self):
 		self.list = []
 		mypath = resolveFilename(SCOPE_CURRENT_SKIN, "")
@@ -245,11 +244,9 @@ class DeliteSettings(Screen):
 		res = (name, png, idx)
 		self.list.append(res)
 		
-		
 		self["list"].list = self.list
 		
 		
-
 class BhNetBrowser(Screen):
 	skin = """
 	<screen position="center,center" size="800,520" title="Select Network Interface">
@@ -339,7 +336,6 @@ class BhMinidlna(Screen):
 			mybox.setTitle("Info")
 			self.updateServ()
 			
-		
 	def ServStop(self):
 		if self.my_serv_active == True:
 			rc = system("/etc/init.d/minidlna stop")
@@ -351,7 +347,6 @@ class BhMinidlna(Screen):
 			rc = system("sleep 1")
 			self.updateServ()
 		
-
 	def updateServ(self):
 		self["labrun"].hide()
 		self["labstop"].hide()
@@ -366,7 +361,6 @@ class BhMinidlna(Screen):
 			f.close()
 			os_remove("/tmp/nvpn.tmp")
 		
-			
 		if self.my_serv_active == True:
 			self["labstop"].hide()
 			self["labrun"].show()
@@ -513,11 +507,8 @@ class DeliteInadyn(Screen):
 			self["labrun"].hide()
 			self["key_green"].setText(_("Start"))	
 			
-
-
 	def KeyOk(self):
 		pass
-
 
 	def setupin(self):
 		self.session.openWithCallback(self.updateIna, DeliteInaSetup)
@@ -541,7 +532,6 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 		ConfigListScreen.__init__(self, self.list)
 		self["key_green"] = Label(_("Save"))
 		
-		
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"green": self.saveIna,
@@ -551,7 +541,6 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 		})
 			
 		self.updateList()
-	
 	
 	def updateList(self):
 	
@@ -611,7 +600,6 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 					self.list.append(ina_system1)
 					
  			f.close()
-		
 		
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
@@ -718,7 +706,6 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 		
 		self.myStop()
 
-		
 	def myStop(self):
 		self.close()
 		
@@ -852,8 +839,6 @@ class DeliteOpenvpn(Screen):
 		self.my_vpn_active = False
 		self.my_vpn_run = False
 
-		
-		
 		if fileExists("/etc/rc3.d/S20openvpn"):
 			self["labactive"].setText(_("Active/Autostart enabled"))
 			self["key_yellow"].setText(_("Deactivate"))
@@ -928,9 +913,11 @@ class BhBackupSettings(Screen):
 			"back": self.close
 
 		})
+
 	def doIt(self):
 		self.session.open(BackupScreen, runBackup=True)
 		self["infotext"].setText(_("Backup Complete"))
+
 
 class BhSpeedUp(Screen, ConfigListScreen):
 	skin = """
@@ -1058,7 +1045,6 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		if self.mycmdlist:
 			self.mycmdlist.append("sleep 1")
 									
-											
 		if len(self.mycmdlist) > 0:
 			self.session.open(Console, title=_("Black Hole Speed Up"), cmdlist=self.mycmdlist, finishedCallback=self.allDone)
 		else:
@@ -1075,7 +1061,6 @@ class BhSpeedUp(Screen, ConfigListScreen):
 					cmd = "opkg remove --force-depends --force-remove %s" % (plug[1])
 				break
 		return cmd
-		
 		
 	def allDone(self):
 		if self.firstrun == True:

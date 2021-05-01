@@ -24,11 +24,13 @@ HaveGZkernel = True
 if getMachineBuild() in ("vuuno4k", "vuuno4kse", "vuzero4k", "vuultimo4k", "vusolo4k", "vuduo4k", "vuduo4kse"):
 	HaveGZkernel = False
 
+
 def Freespace(dev):
 	statdev = statvfs(dev)
 	space = (statdev.f_bavail * statdev.f_frsize) / 1024
 	print "[FULL BACKUP] Free space on %s = %i kilobytes" % (dev, space)
 	return space
+
 
 class ImageBackup(Screen):
 	skin = """
@@ -168,7 +170,6 @@ class ImageBackup(Screen):
 		self.MAINDEST = "%s/%s" % (self.DIRECTORY, self.IMAGEFOLDER)
 		self.EXTRA = "%s/fullbackup_%s/%s/%s" % (self.DIRECTORY, self.MODEL, self.DATE, self.IMAGEFOLDER)
 		self.EXTRAOLD = "%s/fullbackup_%s/%s/%s" % (self.DIRECTORY, self.MODEL, self.DATE, self.MODEL)
-
 
 		self.message = "echo -e '\n"
 		self.message += (_("Backup Tool for a %s\n" % self.SHOWNAME)).upper()
@@ -359,7 +360,6 @@ class ImageBackup(Screen):
 
 				cmdlist.append('mkdir -p %s/%s' % (self.TARGET, self.IMAGEFOLDER))
 				cmdlist.append('cp -r %s %s/' % (self.MAINDEST, self.TARGET))
-
 
 				cmdlist.append("sync")
 				cmdlist.append('echo "Backup finished and copied to your USB flash drive"')

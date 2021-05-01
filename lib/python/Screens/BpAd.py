@@ -23,6 +23,7 @@ config.bhaddons = ConfigSubsection()
 config.bhaddons.lock = ConfigYesNo(default=False)
 config.bhaddons.pin = ConfigInteger(limits=(0, 9999), default=0)
 
+
 class DeliteAddons(Screen):
 	skin = """
 	<screen position="160,115" size="390,330" title="Black Hole E2 Addons Manager">
@@ -113,7 +114,6 @@ class DeliteAddons(Screen):
 		
 		self["list"].list = self.list
 		
-		
 	def checkAcceSS(self):
 		if config.bhaddons.lock.value == True:
 			msg = _("Enter the pin")
@@ -164,7 +164,6 @@ class DeliteAddons(Screen):
 		else:
 			nobox = self.session.open(MessageBox, _("Sorry, Connection Failed."), MessageBox.TYPE_INFO)
 			
-	
 	def runUpgrade(self, result):
 		if result:
 			from Screens.SoftwareUpdate import UpdatePlugin
@@ -194,6 +193,7 @@ class DeliteAddons(Screen):
 			mybox = self.session.open(MessageBox, _("Nothing to install.\nYou have to Upload an ipk package in the /tmp directory before you can install Addons"), MessageBox.TYPE_INFO)
 			mybox.setTitle(_("Info"))
 		
+
 class Nab_downArea(Screen):
 	skin = """
 	<screen position="160,115" size="390,330" title="Black Hole E2 Downloads Manager">
@@ -234,7 +234,6 @@ class Nab_downArea(Screen):
 		mypath = resolveFilename(SCOPE_CURRENT_SKIN, "")
 		if mypath == "/usr/share/enigma2/" or mypath == "/usr/share/enigma2/./":
 			mypath = "/usr/share/enigma2/skin_default/"
-		
 		
 		mypixmap = mypath + "icons/nabplugins.png"
 		png = LoadPixmap(mypixmap)
@@ -294,8 +293,6 @@ class Nab_downArea(Screen):
 		
 		self["list"].list = self.list
 	
-		
-		
 	def KeyOk(self):
 		pluginver = "OpenBlackHole-Plugins"
 		catver = "outcat10_3"
@@ -332,7 +329,6 @@ class Nab_downArea(Screen):
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=" + catver
 			self.title = "Latest 10 Uploads"	
 			
-			
 		downfile = "/tmp/cpanel.tmp"	
 		if fileExists(downfile):
 			os_remove(downfile)
@@ -345,7 +341,6 @@ class Nab_downArea(Screen):
 		else:
 			self.session.openWithCallback(self.connectionDone, Nab_ConnectPop, self.url, downfile)
 			
-			
 	def connectionDone(self):
 		downfile = "/tmp/cpanel.tmp"	
 		if fileExists(downfile):
@@ -353,7 +348,6 @@ class Nab_downArea(Screen):
 		else:
 			nobox = self.session.open(MessageBox, _("Sorry, Connection Failed."), MessageBox.TYPE_INFO)
 		
-
 
 class Nab_downCat(Screen):
 	skin = """
@@ -399,7 +393,6 @@ class Nab_downCat(Screen):
 	def setWindowTitle(self):
 		self.setTitle(self.mytitle)
 
-
 	def KeyOk(self):
 		self.sel = self["list"].getCurrent()
 		if self.sel:
@@ -411,14 +404,12 @@ class Nab_downCat(Screen):
 				os_remove(downfile)
 			self.session.openWithCallback(self.connectionDone, Nab_ConnectPop, self.url, downfile)
 			
-			
 	def connectionDone(self):
 		downfile = "/tmp/cpanel.tmp"	
 		if fileExists(downfile):
 			self.session.open(Nab_ShowDownFile, self.myidf)
 		else:
 			nobox = self.session.open(MessageBox, _("Sorry, Connection Failed."), MessageBox.TYPE_INFO)
-
 
 
 class Nab_ShowPreviewFile(Screen):
@@ -441,7 +432,6 @@ class Nab_ShowPreviewFile(Screen):
 
 		self.fileP = myprev.replace('.tgz', '.jpg')
 		self.onLayoutFinish.append(self.addonsconn)
-
 
 	def addonsconn(self):
 		myicon = "/tmp/" + self.fileP
@@ -584,7 +574,6 @@ class Nab_ShowDownFile(Screen):
 				self.session.open(Console, title="Ipk Package Installation", cmdlist=[cmd, cmd0, cmd1, cmd2, "sleep 5"], finishedCallback=self.installipkDone)
 				chdir(mydir)
 				
-	
 	def installipkDone(self):
 		if fileExists("/tmp/package.info"):
 			f = open("/tmp/package.info", 'r')
@@ -603,12 +592,12 @@ class Nab_ShowDownFile(Screen):
 		mybox = self.session.openWithCallback(self.hrestEn, MessageBox, _("Gui will now restart to complete the package installation.\nPress ok to continue"), MessageBox.TYPE_INFO)
 		mybox.setTitle(_("Info"))
 				
-
 	def hrestEn(self, answer):
 		self.eDVBDB = eDVBDB.getInstance()
 		self.eDVBDB.reloadServicelist()
 		self.eDVBDB.reloadBouquets()
 		self.session.open(TryQuitMainloop, 3)
+
 
 class Nab_downPanel(Screen):
 	skin = """
@@ -744,12 +733,12 @@ class Nab_downPanelIPK(Screen):
 		mybox = self.session.openWithCallback(self.hrestEn, MessageBox, _("Gui will now restart to complete the package installation.\nPress ok to continue"), MessageBox.TYPE_INFO)
 		mybox.setTitle(_("Info"))
 				
-
 	def hrestEn(self, answer):
 		self.eDVBDB = eDVBDB.getInstance()
 		self.eDVBDB.reloadServicelist()
 		self.eDVBDB.reloadBouquets()
 		self.session.open(TryQuitMainloop, 3)
+
 
 class Nab_uninstPanel(Screen):
 	skin = """
@@ -788,7 +777,6 @@ class Nab_uninstPanel(Screen):
 			ybox = self.session.openWithCallback(self.uninstPack, MessageBox, message, MessageBox.TYPE_YESNO)
 			ybox.setTitle(_("Uninstall Confirmation"))
 		
-	
 	def uninstPack(self, answer):
 		if answer is True:
 			orig = "/usr/uninstall/" + self.sel
@@ -819,7 +807,6 @@ class Nab_Stats(Screen):
 
 		})		
 		self.statshow()
-		
 		
 	def statshow(self):
 		if fileExists("/tmp/cpanel.tmp"):
@@ -856,6 +843,7 @@ class Nab_Stats(Screen):
 			os_remove("/tmp/cpanel.tmp")
 			self["infotext"].setText(strview)
 				
+
 class addonsParentalConfig(Screen, ConfigListScreen):
 	skin = """
 	<screen position="center,center" size="700,340" title="Addons parental control setup">
@@ -950,7 +938,6 @@ class Nab_ConnectPop(Screen):
 		self.curpix += 1
 		self.count += 1
 
-
 	def updatepix(self):
 		self.activityTimer.stop()
 		if self.curpix > 3:
@@ -972,7 +959,6 @@ class Nab_ConnectPop(Screen):
 				out.write(html)
 				out.close()
 
-				
 		self["connect"].setPixmapNum(self.curpix)
 		if self.count == 10:
 			self.close()
