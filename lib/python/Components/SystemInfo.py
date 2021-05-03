@@ -3,7 +3,8 @@ from enigma import Misc_Options, eDVBCIInterfaces, eDVBResourceManager
 
 from Components.About import getChipSetString
 from Components.RcModel import rc_model
-from Tools.Directories import fileCheck, fileExists, fileHas, pathExists
+
+from Tools.Directories import fileCheck, fileExists, fileHas, pathExists, isPluginInstalled
 from Tools.HardwareInfo import HardwareInfo
 
 SystemInfo = {}
@@ -63,7 +64,8 @@ SystemInfo["Power24x7On"] = False
 SystemInfo["Power24x7Standby"] = False
 SystemInfo["Power24x7Suspend"] = False
 SystemInfo["WakeOnLAN"] = fileCheck("/proc/stb/power/wol") or fileCheck("/proc/stb/fp/wol")
-SystemInfo["HDMICEC"] = (fileExists("/dev/hdmi_cec") or fileExists("/dev/misc/hdmi_cec0")) and fileExists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HdmiCEC/plugin.pyo")
+SystemInfo["HDMICEC"] = (fileExists("/dev/hdmi_cec") or fileExists("/dev/misc/hdmi_cec0")) and isPluginInstalled("HdmiCEC")
+SystemInfo["HasHDMI-CEC"] = isPluginInstalled("HdmiCEC")
 SystemInfo["HasExternalPIP"] = fileCheck("/proc/stb/vmpeg/1/external")
 SystemInfo["VideoDestinationConfigurable"] = fileExists("/proc/stb/vmpeg/0/dst_left")
 SystemInfo["hasPIPVisibleProc"] = fileCheck("/proc/stb/vmpeg/1/visible")
@@ -84,7 +86,6 @@ SystemInfo["HasH265Encoder"] = fileHas("/proc/stb/encoder/0/vcodec_choices", "h2
 SystemInfo["CanNotDoSimultaneousTranscodeAndPIP"] = getBoxType() in ('vusolo4k')
 SystemInfo["hasXcoreVFD"] = fileCheck("/sys/module/brcmstb_%s/parameters/pt6302_cgram" % getBoxType())
 SystemInfo["HasHDMIin"] = getHaveHDMIinHD() in ('True',) or getHaveHDMIinFHD() in ('True',)
-SystemInfo["HasHDMI-CEC"] = fileExists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HdmiCEC/plugin.pyo")
 SystemInfo["Has24hz"] = fileCheck("/proc/stb/video/videomode_24hz")
 SystemInfo["AndroidMode"] = False
 SystemInfo["MBbootdevice"] = False
