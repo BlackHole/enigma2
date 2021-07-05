@@ -102,8 +102,8 @@ def GetImagelist():
 	for slot in sorted(list(SystemInfo["canMultiBoot"].keys())):
 		Console().ePopen("mount %s %s" % (SystemInfo["canMultiBoot"][slot]["root"], tmp.dir))
 		BuildVersion = "  "
-		Build = " "  # ViX Build No.
-		Dev = " "  # ViX Dev No.
+		Build = " "  # OBH Build No.
+		Dev = " "  # OBH Dev No.
 		Creator = " "  # Openpli Openvix Openatv etc
 		Date = " "
 		BuildType = " "  # release etc
