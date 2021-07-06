@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from Components.Task import PythonTask, Task, Job, job_manager as JobManager, Condition
 from Tools.Directories import fileExists
 from enigma import eTimer
@@ -10,11 +12,11 @@ class DeleteFolderTask(PythonTask):
 		self.fileList = fileList
 
 	def work(self):
-		print "[DeleteFolderTask] files ", self.fileList
+		print("[DeleteFolderTask] files ", self.fileList)
 		errors = []
 		try:
 			rmtree(self.fileList)
-		except Exception, e:
+		except Exception as e:
 			errors.append(e)
 		if errors:
 			raise errors[0]
@@ -95,10 +97,10 @@ class DownloadTask(Task):
 		self.download = downloadWithProgress(self.url, self.path, **self.kwargs)
 		self.download.addProgress(self.download_progress)
 		self.download.start().addCallback(self.download_finished).addErrback(self.download_failed)
-		print "[DownloadTask] downloading", self.url, "to", self.path
+		print("[DownloadTask] downloading", self.url, "to", self.path)
 
 	def abort(self):
-		print "[DownloadTask] aborting", self.url
+		print("[DownloadTask] aborting", self.url)
 		if self.download:
 			self.download.stop()
 		self.aborted = True

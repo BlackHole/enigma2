@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
 import NavigationInstance
 from time import localtime, mktime, gmtime, time
 from enigma import iServiceInformation, eServiceCenter, eServiceReference, getBestPlayableServiceReference
@@ -24,7 +27,7 @@ class TimerSanityCheck:
 		self.simultimer = []
 		if self.newtimer:
 			if not self.newtimer.conflict_detection or (self.newtimer.service_ref and '%3a//' in self.newtimer.service_ref.ref.toString()):
-				print "[TimerSanityCheck] Exception - timer does not have to be checked!"
+				print("[TimerSanityCheck] Exception - timer does not have to be checked!")
 				return True
 			self.simultimer = [self.newtimer]
 		return self.checkTimerlist()
@@ -86,14 +89,14 @@ class TimerSanityCheck:
 			return True
 
 		if not self.newtimer or not self.newtimer.service_ref or not self.newtimer.service_ref.ref.valid():
-			print "[TimerSanityCheck] Error - timer not valid!"
+			print("[TimerSanityCheck] Error - timer not valid!")
 			return False
 		if self.newtimer.disabled or not self.newtimer.conflict_detection or '%3a//' in self.newtimer.service_ref.ref.toString():
-			print "[TimerSanityCheck] Exception - timer does not have to be checked!"
+			print("[TimerSanityCheck] Exception - timer does not have to be checked!")
 			return True
 		curtime = localtime(time())
 		if curtime.tm_year > 1970 and self.newtimer.end < time():
-			print "[TimerSanityCheck] timer is finished!"
+			print("[TimerSanityCheck] timer is finished!")
 			return True
 		rflags = self.newtimer.repeated
 		rflags = ((rflags & 0x7F) >> 3) | ((rflags & 0x07) << 4)
@@ -146,7 +149,7 @@ class TimerSanityCheck:
 			weeks = (interval_end - offset_0) / 604800
 			if (interval_end - offset_0) % 604800:
 				weeks += 1
-			for cnt in range(int(weeks)):
+			for cnt in list(range(int(weeks))):
 				for event in self.rep_eventlist:
 					if event[1] == -1: # -1 is the identifier of the changed timer
 						event_begin = self.newtimer.begin
@@ -268,7 +271,7 @@ class TimerSanityCheck:
 					if entry[1] == timer:
 						overlaplist.remove(entry)
 			else:
-				print "[TimerSanityCheck] bug: unknown flag!"
+				print("[TimerSanityCheck] bug: unknown flag!")
 
 			if ci_timer and timer != ci_timer and cihelper.ServiceIsAssigned(timer.service_ref.ref) and not (timer.record_ecm and not timer.descramble):
 				if event[1] == self.bflag:
@@ -293,7 +296,7 @@ class TimerSanityCheck:
 			idx += 1
 
 		if ConflictTimer is None:
-			print "[TimerSanityCheck] conflict not found!"
+			print("[TimerSanityCheck] conflict not found!")
 			return True
 
 ##################################################################################
@@ -330,8 +333,8 @@ class TimerSanityCheck:
 								break
 
 		if len(self.simultimer) < 2:
-			print "[TimerSanityCheck] possible bug: unknown conflict!"
+			print("[TimerSanityCheck] possible bug: unknown conflict!")
 			return True
 
-		print "[TimerSanityCheck] conflict detected!"
+		print("[TimerSanityCheck] conflict detected!")
 		return False

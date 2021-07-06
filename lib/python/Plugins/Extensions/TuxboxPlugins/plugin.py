@@ -1,10 +1,14 @@
-# must be fixed for the new plugin interface
-from Tools.BoundFunction import boundFunction
-from Tools.Directories import pathExists, resolveFilename, SCOPE_LIBDIR
-from Plugins.Plugin import PluginDescriptor
-from pluginrunner import PluginRunner
+from __future__ import print_function
+from __future__ import absolute_import
 
 from os import listdir
+# must be fixed for the new plugin interface
+
+from Plugins.Plugin import PluginDescriptor
+from .pluginrunner import PluginRunner
+from Tools.BoundFunction import boundFunction
+from Tools.Directories import pathExists, resolveFilename, SCOPE_LIBDIR
+
 
 TUXBOX_PLUGINS_PATH = resolveFilename(SCOPE_LIBDIR, "tuxbox/plugins/")
 
@@ -32,14 +36,14 @@ def getPluginParams(file):
 			params[split[0]] = split[1]
 		file.close()
 	except IOError:
-		print "[Tuxbox] no tuxbox plugins found"
+		print("[Tuxbox] no tuxbox plugins found")
 
 	return params
 
 
 def main(session, plugin, **kwargs):
-	print "[Tuxbox] Running plugin " + plugin[:-4] + ".so with config file", plugin
-	print getPluginParams(plugin)
+	print("[Tuxbox] Running plugin " + plugin[:-4] + ".so with config file", plugin)
+	print(getPluginParams(plugin))
 	session.open(PluginRunner, plugin[:-4].split(".so")[0])
 
 

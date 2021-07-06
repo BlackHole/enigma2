@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import division
+import six
+
 import os
 import unicodedata
 from Tools.Profile import profile
 
-from Screen import Screen
+from Screens.Screen import Screen
 from Screens.HelpMenu import HelpableScreen
 import Screens.InfoBar
 import Components.ParentalControl
@@ -18,7 +23,7 @@ from Components.SystemInfo import SystemInfo
 from Components.Renderer.Picon import getPiconName
 from Screens.TimerEntry import addTimerFromEventSilent
 profile("ChannelSelection.py 1")
-from EpgSelectionSingle import EPGSelectionSingle
+from Screens.EpgSelectionSingle import EPGSelectionSingle
 from enigma import eActionMap, eServiceReference, eEPGCache, eServiceCenter, eRCInput, eTimer, ePoint, eDVBDB, iPlayableService, iServiceInformation, getPrevAsciiCode, eEnv, eDVBLocalTimeHandler
 from Components.config import config, configfile, ConfigSubsection, ConfigText, ConfigYesNo
 from Tools.NumericalTextInput import NumericalTextInput
@@ -34,7 +39,7 @@ from Components.Input import Input
 profile("ChannelSelection.py 3")
 from Components.ChoiceList import ChoiceList, ChoiceEntryComponent
 from RecordTimer import AFTEREVENT
-from TimerEntry import TimerEntry
+from Screens.TimerEntry import TimerEntry
 from Screens.InputBox import PinInput
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Screens.ChoiceBox import ChoiceBox
@@ -54,6 +59,7 @@ from Plugins.Plugin import PluginDescriptor
 from Components.PluginComponent import plugins
 from time import localtime, time, strftime
 import re
+import sys
 try:
 	from Plugins.SystemPlugins.PiPServiceRelation.plugin import getRelationDict
 	plugin_PiPServiceRelation_installed = True
@@ -65,6 +71,8 @@ profile("ChannelSelection.py after imports")
 FLAG_SERVICE_NEW_FOUND = 64
 FLAG_IS_DEDICATED_3D = 128
 FLAG_CENTER_DVB_SUBS = 2048 #define in lib/dvb/idvb.h as dxNewFound = 64 and dxIsDedicated3D = 128
+
+SIGN = "°" if six.PY3 else str("\xc2\xb0")
 
 
 class BouquetSelector(Screen):
@@ -124,13 +132,13 @@ def _append_when_current_valid(current, menu, actions, args, level=0, key=""):
 			if key not in actions:
 				actions[key] = args[1]
 			else:
-				print "[ChannelContextMenu] attempt to redefine shortcut using", key, "ignored"
+				print("[ChannelContextMenu] attempt to redefine shortcut using", key, "ignored")
 				key = "bullet"
 		menu.append(ChoiceEntryComponent(key, args))
 
 
 def append_when_current_valid(current, menu, args, level=0, key=""):
-	print "[ChannelContextMenu] append_when_current_valid is deprecated - use _append_when_current_valid"
+	print("[ChannelContextMenu] append_when_current_valid is deprecated - use _append_when_current_valid")
 	_append_when_current_valid(current, menu, None, args, level=level, key=key)
 
 
@@ -418,7 +426,7 @@ class ChannelContextMenu(Screen):
 			for file in os.listdir("/etc/enigma2/"):
 				if file.startswith("userbouquet") and file.endswith(".del"):
 					file = "/etc/enigma2/" + file
-					print "[ChannelSelection] permantly remove file ", file
+					print("[ChannelSelection] permantly remove file ", file)
 					os.remove(file)
 			self.close()
 
@@ -426,7 +434,7 @@ class ChannelContextMenu(Screen):
 		for file in os.listdir("/etc/enigma2/"):
 			if file.startswith("userbouquet") and file.endswith(".del"):
 				file = "/etc/enigma2/" + file
-				print "[ChannelSelection] restore file ", file[:-4]
+				print("[ChannelSelection] restore file ", file[:-4])
 				os.rename(file, file[:-4])
 		eDVBDBInstance = eDVBDB.getInstance()
 		eDVBDBInstance.setLoadUnlinkedUserbouquets(True)
@@ -530,7 +538,7 @@ class ChannelContextMenu(Screen):
 		if self.session.pipshown:
 			del self.session.pip
 			if SystemInfo["LCDMiniTVPiP"] and int(config.lcd.minitvpipmode.value) >= 1:
-				print '[LCDMiniTV] disable PIP'
+				print("[LCDMiniTV] disable PIP")
 				f = open("/proc/stb/lcd/mode", "w")
 				f.write(config.lcd.minitvmode.value)
 				f.close()
@@ -545,7 +553,7 @@ class ChannelContextMenu(Screen):
 				self.session.pip.servicePath = self.csel.getCurrentServicePath()
 				self.session.pip.servicePath[1] = currentBouquet
 				if SystemInfo["LCDMiniTVPiP"] and int(config.lcd.minitvpipmode.value) >= 1:
-					print '[LCDMiniTV] enable PIP'
+					print("[LCDMiniTV] enable PIP")
 					f = open("/proc/stb/lcd/mode", "w")
 					f.write(config.lcd.minitvpipmode.value)
 					f.close()
@@ -563,7 +571,7 @@ class ChannelContextMenu(Screen):
 				self.session.pipshown = False
 				del self.session.pip
 				if SystemInfo["LCDMiniTVPiP"] and int(config.lcd.minitvpipmode.value) >= 1:
-						print '[LCDMiniTV] disable PIP'
+						print("[LCDMiniTV] disable PIP")
 						f = open("/proc/stb/lcd/mode", "w")
 						f.write(config.lcd.minitvmode.value)
 						f.close()
@@ -962,7 +970,10 @@ class ChannelSelectionEdit:
 		mutableBouquet = cur_root.list().startEdit()
 		if mutableBouquet:
 			servicename = cur_service.getServiceName()
-			name = unicodedata.normalize('NFKD', unicode(servicename, 'utf_8', errors='ignore')).encode('ASCII', 'ignore').translate(None, '<>:"/\\|?*() ')
+			if six.PY3:
+				name = unicodedata.normalize("NFKD", str(servicename, "utf_8", errors="ignore")).encode("ASCII", "ignore").translate(None, '<>:"/\\|?*() ')
+			else:
+				name = unicodedata.normalize("NFKD", unicode(servicename, "utf_8", errors="ignore")).encode("ASCII", "ignore").translate(None, '<>:"/\\|?*() ')
 			while os.path.isfile((self.mode == MODE_TV and '/etc/enigma2/alternatives.%s.tv' or '/etc/enigma2/alternatives.%s.radio') % name):
 				name = name.rsplit('_', 1)
 				name = ('_').join((name[0], len(name) == 2 and name[1].isdigit() and str(int(name[1]) + 1) or '1'))
@@ -975,7 +986,7 @@ class ChannelSelectionEdit:
 				if mutableAlternatives:
 					mutableAlternatives.setListName(servicename)
 					if mutableAlternatives.addService(cur_service.ref):
-						print "[ChannelSelection] add", cur_service.ref.toString(), "to new alternatives failed"
+						print("[ChannelSelection] add", cur_service.ref.toString(), "to new alternatives failed")
 					mutableAlternatives.flushChanges()
 					self.servicelist.addService(new_ref.ref, True)
 					self.servicelist.removeCurrent()
@@ -986,18 +997,21 @@ class ChannelSelectionEdit:
 					if self.startServiceRef and cur_service.ref == self.startServiceRef:
 						self.startServiceRef = new_ref.ref
 				else:
-					print "[ChannelSelection] get mutable list for new created alternatives failed"
+					print("[ChannelSelection] get mutable list for new created alternatives failed")
 			else:
-				print "[ChannelSelection] add", str, "to", cur_root.getServiceName(), "failed"
+				print("[ChannelSelection] add", str, "to", cur_root.getServiceName(), "failed")
 		else:
-			print "[ChannelSelection] bouquetlist is not editable"
+			print("[ChannelSelection] bouquetlist is not editable")
 
 	def addBouquet(self, bName, services):
 		serviceHandler = eServiceCenter.getInstance()
 		mutableBouquetList = serviceHandler.list(self.bouquet_root).startEdit()
 		if mutableBouquetList:
 			bName += ' ' + (_("(TV)") if self.mode == MODE_TV else _("(Radio)"))
-			name = unicodedata.normalize('NFKD', unicode(bName, 'utf_8', errors='ignore')).encode('ASCII', 'ignore').translate(None, '<>:"/\\|?*() ')
+			if six.PY3:
+				name = unicodedata.normalize("NFKD", str(servicename, "utf_8", errors="ignore")).encode("ASCII", "ignore").translate(None, '<>:"/\\|?*() ')
+			else:
+				name = unicodedata.normalize("NFKD", unicode(servicename, "utf_8", errors="ignore")).encode("ASCII", "ignore").translate(None, '<>:"/\\|?*() ')
 			while os.path.isfile((self.mode == MODE_TV and '/etc/enigma2/userbouquet.%s.tv' or '/etc/enigma2/userbouquet.%s.radio') % name):
 				name = name.rsplit('_', 1)
 				name = ('_').join((name[0], len(name) == 2 and name[1].isdigit() and str(int(name[1]) + 1) or '1'))
@@ -1011,10 +1025,10 @@ class ChannelSelectionEdit:
 					if services is not None:
 						for service in services:
 							if mutableBouquet.addService(service):
-								print "[ChannelSelection] add", service.toString(), "to new bouquet failed"
+								print("[ChannelSelection] add", service.toString(), "to new bouquet failed")
 					mutableBouquet.flushChanges()
 				else:
-					print "[ChannelSelection] get mutable list for new created bouquet failed"
+					print("[ChannelSelection] get mutable list for new created bouquet failed")
 				# do some voodoo to check if current_root is equal to bouquet_root
 				cur_root = self.getRoot()
 				str1 = cur_root and cur_root.toString()
@@ -1024,9 +1038,9 @@ class ChannelSelectionEdit:
 					self.servicelist.addService(new_bouquet_ref)
 					self.servicelist.resetRoot()
 			else:
-				print "[ChannelSelection] add", str, "to bouquets failed"
+				print("[ChannelSelection] add", str, "to bouquets failed")
 		else:
-			print "[ChannelSelection] bouquetlist is not editable"
+			print("[ChannelSelection] bouquetlist is not editable")
 
 	def copyCurrentToBouquetList(self):
 		provider = ServiceReference(self.getCurrentSelection())
@@ -1052,11 +1066,11 @@ class ChannelSelectionEdit:
 					if self.startServiceRef and cur_service.ref == self.startServiceRef:
 						self.startServiceRef = first_in_alternative
 				else:
-					print "[ChannelSelection] couldn't add first alternative service to current root"
+					print("[ChannelSelection] couldn't add first alternative service to current root")
 			else:
-				print "[ChannelSelection] couldn't edit current root!!"
+				print("[ChannelSelection] couldn't edit current root!!")
 		else:
-			print "[ChannelSelection] remove empty alternative list !!"
+			print("[ChannelSelection] remove empty alternative list !!")
 		self.removeBouquet()
 		if not end:
 			self.servicelist.moveUp()
@@ -1830,12 +1844,12 @@ class ChannelSelectionBase(Screen, HelpableScreen):
 						self.numberSelectionActions(number)
 				else:
 					unichar = self.numericalTextInput.getKey(number)
-					charstr = unichar.encode("utf-8")
+					charstr = six.ensure_str(unichar)
 					if len(charstr) == 1:
 						self.servicelist.moveToChar(charstr[0])
 		else:
 			unichar = self.numericalTextInput.getKey(number)
-			charstr = unichar.encode("utf-8")
+			charstr = six.ensure_str(unichar)
 			if len(charstr) == 1:
 				self.servicelist.moveToChar(charstr[0])
 
@@ -1859,7 +1873,7 @@ class ChannelSelectionBase(Screen, HelpableScreen):
 
 	def keyAsciiCode(self):
 		unichar = unichr(getPrevAsciiCode())
-		charstr = unichar.encode('utf-8')
+		charstr = six.ensure_str(unichar)
 		if len(charstr) == 1:
 			self.servicelist.moveToChar(charstr[0])
 
@@ -2140,7 +2154,7 @@ class ChannelSelection(ChannelSelectionEdit, ChannelSelectionBase, ChannelSelect
 		lastservice = eServiceReference(self.lastservice.value)
 		# If the time still needs to be set, try to make the startup service a DVB service
 		if not lastservice.valid() or (lastservice.type != eServiceReference.idDVB and time() < eDVBLocalTimeHandler.timeOK):  # 01.01.2004
-			print "[ChannelSelection] invalid service or time not set and not on a DVB service - try to use fallback DVB service"
+			print("[ChannelSelection] invalid service or time not set and not on a DVB service - try to use fallback DVB service")
 			lastservice, bouquet, rootbouquet = self.findFallbackService()
 			self.forceZap(lastservice, bouquet, rootbouquet)
 		if lastservice.valid():
@@ -2330,7 +2344,7 @@ class ChannelSelection(ChannelSelectionEdit, ChannelSelectionBase, ChannelSelect
 					self.mainScreenRoot = self.getRoot()
 				self.revertMode = None
 			else:
-				Notifications.RemovePopup("Parental control")
+				Tools.Notifications.RemovePopup("Parental control")
 				self.setCurrentSelection(nref)
 		else:
 			self.setStartRoot(self.curRoot)
@@ -2406,7 +2420,7 @@ class ChannelSelection(ChannelSelectionEdit, ChannelSelectionBase, ChannelSelect
 
 	def historyClear(self):
 		if self and self.servicelist:
-			for i in range(0, len(self.history) - 1):
+			for i in list(range(0, len(self.history) - 1)):
 				del self.history[0]
 			self.history_pos = len(self.history) - 1
 			return True
@@ -2673,7 +2687,7 @@ class PiPZapSelection(ChannelSelection):
 					self.saveChannel(ref)
 					self.setCurrentSelection(ref)
 					if SystemInfo["LCDMiniTVPiP"] and int(config.lcd.minitvpipmode.value) >= 1:
-						print '[LCDMiniTV] enable PIP'
+						print("[LCDMiniTV] enable PIP")
 						f = open("/proc/stb/lcd/mode", "w")
 						f.write(config.lcd.minitvpipmode.value)
 						f.close()
@@ -2692,7 +2706,7 @@ class PiPZapSelection(ChannelSelection):
 					self.session.pipshown = False
 					del self.session.pip
 					if SystemInfo["LCDMiniTVPiP"] and int(config.lcd.minitvpipmode.value) >= 1:
-							print '[LCDMiniTV] disable PIP'
+							print("[LCDMiniTV] disable PIP")
 							f = open("/proc/stb/lcd/mode", "w")
 							f.write(config.lcd.minitvmode.value)
 							f.close()
@@ -2704,7 +2718,7 @@ class PiPZapSelection(ChannelSelection):
 			self.session.pipshown = False
 			del self.session.pip
 			if SystemInfo["LCDMiniTVPiP"] and int(config.lcd.minitvpipmode.value) >= 1:
-					print '[LCDMiniTV] disable PIP'
+					print("[LCDMiniTV] disable PIP")
 					f = open("/proc/stb/lcd/mode", "w")
 					f.write(config.lcd.minitvmode.value)
 					f.close()
@@ -2997,7 +3011,7 @@ class HistoryZapSelector(Screen, HelpableScreen):
 					begin = event.getBeginTime()
 					if begin is not None:
 						end = begin + event.getDuration()
-						remaining = (end - int(time())) / 60
+						remaining = (end - int(time())) // 60
 						prefix = ""
 						if remaining > 0:
 							prefix = "+"
@@ -3055,16 +3069,16 @@ class HistoryZapSelector(Screen, HelpableScreen):
 		else:
 			refstr = str(ref)
 		refstr = refstr and GetWithAlternative(refstr)
-		print 'refstr:', refstr
-		if '%3a//' in refstr:
+		print("[ChannelSelection][getOrbitalPos]refstr:", refstr)
+		if "%3a//" in refstr:
 			return "%s" % _("Stream")
-		op = int(refstr.split(':', 10)[6][:-4] or "0", 16)
-		if op == 0xeeee:
+		orbpos = int(refstr.split(":", 10)[6][:-4] or "0", 16)
+		if orbpos == 0xeeee:
 			return "%s" % _("DVB-T")
-		if op == 0xffff:
+		if orbpos == 0xffff:
 			return "%s" % _("DVB-C")
-		direction = 'E'
-		if op > 1800:
-			op = 3600 - op
-			direction = 'W'
-		return ("%d.%d\xc2\xb0%s") % (op // 10, op % 10, direction)
+		direction = "E"
+		if orbpos > 1800:
+			orbpos = 3600 - orbpos
+			direction = "W"
+		return ("%d.%d%s %s") % (orbpos // 10, orbpos % 10, SIGN, direction)

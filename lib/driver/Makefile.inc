@@ -31,3 +31,9 @@ driver_libenigma_driver_a_SOURCES += \
 	driver/rcsdl.cpp \
 	driver/rcsdl.h
 endif
+
+if GIGABLUE
+driver_libenigma_driver_a_SOURCES += \
+	driver/vfd.cpp \
+	driver/vfd.h
+endif

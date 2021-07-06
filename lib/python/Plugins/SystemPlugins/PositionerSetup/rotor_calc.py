@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import division
+
 import math
 
 f = 1.00 / 298.257 # Earth flattning factor

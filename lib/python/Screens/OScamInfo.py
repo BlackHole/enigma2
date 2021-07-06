@@ -1,3 +1,7 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
+
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 from Screens.ChoiceBox import ChoiceBox
@@ -18,7 +22,12 @@ from xml.etree import ElementTree
 from operator import itemgetter
 import os
 import time
-import urllib2
+# required methods: Request, urlopen, HTTPError, URLError, HTTPHandler, HTTPPasswordMgrWithDefaultRealm, HTTPDigestAuthHandler, build_opener, install_opener
+try: # python 3
+	from urllib.request import urlopen, Request, HTTPHandler, HTTPPasswordMgrWithDefaultRealm, HTTPDigestAuthHandler, build_opener, install_opener # raises ImportError in Python 2
+	from urllib.error import HTTPError, URLError # raises ImportError in Python 2
+except ImportError: # Python 2
+	from urllib2 import Request, urlopen, HTTPError, URLError, HTTPHandler, HTTPPasswordMgrWithDefaultRealm, HTTPDigestAuthHandler, build_opener, install_opener
 import skin
 
 ###global
@@ -171,25 +180,25 @@ class OscamInfo:
 		if part is not None and reader is not None:
 			self.url = "%s://%s:%s/%sapi.html?part=%s&label=%s" % (self.proto, self.ip, self.port, NAMEBIN, part, reader)
 
-		opener = urllib2.build_opener(urllib2.HTTPHandler)
+		opener = build_opener(HTTPHandler)
 		if not self.username == "":
-			pwman = urllib2.HTTPPasswordMgrWithDefaultRealm()
+			pwman = HTTPPasswordMgrWithDefaultRealm()
 			pwman.add_password(None, self.url, self.username, self.password)
-			handlers = urllib2.HTTPDigestAuthHandler(pwman)
-			opener = urllib2.build_opener(urllib2.HTTPHandler, handlers)
-			urllib2.install_opener(opener)
-		request = urllib2.Request(self.url)
+			handlers = HTTPDigestAuthHandler(pwman)
+			opener = build_opener(HTTPHandler, handlers)
+			install_opener(opener)
+		request = Request(self.url)
 		err = False
 		try:
-			data = urllib2.urlopen(request).read()
+			data = urlopen(request).read()
 			# print data
-		except urllib2.URLError, e:
+		except URLError as e:
 			if hasattr(e, "reason"):
 				err = str(e.reason)
 			elif hasattr(e, "code"):
 				err = str(e.code)
 		if err is not False:
-			print "[openWebIF] error: %s" % err
+			print("[openWebIF] error: %s" % err)
 			return False, err
 		else:
 			return True, data
@@ -257,7 +266,7 @@ class OscamInfo:
 							tmp[cl.attrib["type"]] = []
 							tmp[cl.attrib["type"]].append((name, proto, "%s:%s" % (caid, srvid), srvname_short, ecmtime, ip, connstatus))
 			else:
-				if "<![CDATA" not in result[1]:
+				if b"<![CDATA" not in result[1]:
 					tmp = result[1].replace("<log>", "<log><![CDATA[").replace("</log>", "]]></log>")
 				else:
 					tmp = result[1]
@@ -503,7 +512,7 @@ class OscamInfoMenu(Screen):
 			self.session.open(OscamInfoConfigScreen)
 
 	def chooseReaderCallback(self, retval):
-		print retval
+		print(retval)
 		if retval is not None:
 			if self.callbackmode == "cccam":
 				self.session.open(oscEntitlements, retval[1])
@@ -511,7 +520,7 @@ class OscamInfoMenu(Screen):
 				self.session.open(oscReaderStats, retval[1])
 
 	def ErrMsgCallback(self, retval):
-		print retval
+		print(retval)
 		self.session.open(OscamInfoConfigScreen)
 
 	def buildMenu(self, mlist):
@@ -910,7 +919,7 @@ class oscEntitlements(Screen, OscamInfo):
 		self.close()
 
 	def buildList(self, data):
-		caids = data.keys()
+		caids = list(data.keys())
 		caids.sort()
 		outlist = []
 		res = [("CAID", _("System"), "1", "2", "3", "4", "5", "Total", _("Reshare"), "")]
@@ -1051,7 +1060,7 @@ class oscReaderStats(Screen, OscamInfo):
 		self.close()
 
 	def buildList(self, data):
-		caids = data.keys()
+		caids = list(data.keys())
 		caids.sort()
 		outlist = []
 		res = [("CAID", "System", "1", "2", "3", "4", "5", "Total", "Reshare", "")]

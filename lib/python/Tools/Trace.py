@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from time import localtime, time, strftime
 import functools
 import traceback
@@ -19,14 +21,14 @@ def trace(func):
 		global indent
 		cls = args[0].__class__ if len(args) > 0 else None
 		className = "[Trace:" + cls.__name__ + "]" if cls is not None else "[Trace]"
-		print "%s%s %s Starting" % (("| " * indent)[:indent], className, funcName)
+		print("%s%s %s Starting" % (("| " * indent)[:indent], className, funcName))
 		indent += 2
 		initTime = time()
 		try:
 			result = func(*args, **kwargs)
 		finally:
 			indent -= 2
-		print "%s%s %s Finished in %.2fms" % (("| " * indent)[:indent], className, funcName, (time() - initTime) * 1000.0)
+		print("%s%s %s Finished in %.2fms" % (("| " * indent)[:indent], className, funcName, (time() - initTime) * 1000.0))
 		return result
 
 	return func_wrapper
@@ -46,7 +48,7 @@ def profile(func):
 		className = "[Trace:" + cls.__name__ + "]" if cls is not None else "[Trace]"
 		initTime = time()
 		result = func(*args, **kwargs)
-		print "%s%s %s took %.2fms" % (("| " * indent)[:indent], className, funcName, (time() - initTime) * 1000.0)
+		print("%s%s %s took %.2fms" % (("| " * indent)[:indent], className, funcName, (time() - initTime) * 1000.0))
 		return result
 
 	return func_wrapper
@@ -61,7 +63,7 @@ def logcaller(func):
 		className = "[Trace:" + cls.__name__ + "]" if cls is not None else "[Trace]"
 		result = func(*args, **kwargs)
 		callstack = '\n'.join([("| " * indent)[:indent] + line.strip() for line in traceback.format_stack()][-3:-2])
-		print "%s%s %s called. %s" % (("| " * indent)[:indent], className, funcName, callstack)
+		print("%s%s %s called. %s" % (("| " * indent)[:indent], className, funcName, callstack))
 		return result
 
 	return func_wrapper

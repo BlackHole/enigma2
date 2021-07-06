@@ -1,21 +1,28 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import division
+import six
+from six.moves import reload_module
+
 import os
 import struct
 import random
 from time import localtime, strftime
 
-from GUIComponent import GUIComponent
-from Tools.FuzzyDate import FuzzyTime
-from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixmapAlphaBlend, MultiContentEntryProgress
+from enigma import eListboxPythonMultiContent, eListbox, gFont, iServiceInformation, eSize, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_VALIGN_CENTER, BT_SCALE, BT_KEEP_ASPECT_RATIO, BT_HALIGN_CENTER, BT_ALIGN_CENTER, BT_VALIGN_CENTER, eServiceReference, eServiceCenter, eTimer
+
 from Components.config import config
+from Components.GUIComponent import GUIComponent
+from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixmapAlphaBlend, MultiContentEntryProgress
 from Components.Renderer.Picon import getPiconName
 from Screens.LocationBox import defaultInhibitDirs
+from ServiceReference import ServiceReference
 from Tools.Directories import SCOPE_CURRENT_SKIN, resolveFilename
+from Tools.FuzzyDate import FuzzyTime
 from Tools.LoadPixmap import LoadPixmap
 from Tools.Trashcan import getTrashFolder, isTrashFolder
 import NavigationInstance
 from skin import parseColor, parseFont, parseScale
-
-from enigma import eListboxPythonMultiContent, eListbox, gFont, iServiceInformation, eSize, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_VALIGN_CENTER, BT_SCALE, BT_KEEP_ASPECT_RATIO, BT_HALIGN_CENTER, BT_ALIGN_CENTER, BT_VALIGN_CENTER, eServiceReference, eServiceCenter, eTimer
 
 AUDIO_EXTENSIONS = frozenset((".dts", ".mp3", ".wav", ".wave", ".wv", ".oga", ".ogg", ".flac", ".m4a", ".mp2", ".m2a", ".wma", ".ac3", ".mka", ".aac", ".ape", ".alac", ".amr", ".au", ".mid"))
 DVD_EXTENSIONS = frozenset((".iso", ".img", ".nrg"))
@@ -105,7 +112,7 @@ def moviePlayState(cutsFileName, ref, length):
 		# read the cuts file first
 		f = open(cutsFileName, 'rb')
 		lastPosition = None
-		while 1:
+		while True:
 			data = f.read(cutsParser.size)
 			if len(data) < cutsParser.size:
 				break
@@ -128,7 +135,7 @@ def moviePlayState(cutsFileName, ref, length):
 					return 50
 		if lastPosition is None:
 			# Unseen movie
-			return None
+			return 0
 		if lastPosition >= length:
 			return 100
 		return (100 * lastPosition) // length
@@ -145,7 +152,7 @@ def moviePlayState(cutsFileName, ref, length):
 			else:
 				if lastPosition:
 					return 50
-		return None
+		return 0
 
 
 def resetMoviePlayState(cutsFileName, ref=None):
@@ -155,7 +162,7 @@ def resetMoviePlayState(cutsFileName, ref=None):
 			delResumePoint(ref)
 		f = open(cutsFileName, 'rb')
 		cutlist = []
-		while 1:
+		while True:
 			data = f.read(cutsParser.size)
 			if len(data) < cutsParser.size:
 				break
@@ -240,7 +247,7 @@ class MovieList(GUIComponent):
 
 		self.onSelectionChanged = []
 		self.iconPart = []
-		for part in range(5):
+		for part in list(range(5)):
 			self.iconPart.append(LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/part_%d_4.png" % part)))
 		self.iconMovieRec = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/part_new.png"))
 		self.iconMoviePlay = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/movie_play.png"))
@@ -319,7 +326,7 @@ class MovieList(GUIComponent):
 
 	def applySkin(self, desktop, parent):
 		def warningWrongSkinParameter(string):
-			print "[MovieList] wrong '%s' skin parameters" % string
+			print("[MovieList] wrong '%s' skin parameters" % string)
 
 		def font(value):
 			font = parseFont(value, ((1, 1), (1, 1)))
@@ -384,7 +391,7 @@ class MovieList(GUIComponent):
 		itemHeight = (self.listHeight // numberOfRows if numberOfRows else self.skinItemHeight) or 25
 		self.itemHeight = itemHeight
 		self.l.setItemHeight(itemHeight)
-		self.instance.resize(eSize(self.listWidth, self.listHeight / itemHeight * itemHeight))
+		self.instance.resize(eSize(self.listWidth, self.listHeight // itemHeight * itemHeight))
 
 	def setFontsize(self):
 		self.l.setFont(0, gFont(self.fontName, self.fontSize + config.movielist.fontsize.value))
@@ -400,14 +407,12 @@ class MovieList(GUIComponent):
 		self.invalidateItem(self.getCurrentIndex())
 
 	def buildMovieListEntry(self, serviceref, info, begin, data):
-
 		showPicons = "picon" in config.usage.movielist_servicename_mode.value
 		switch = config.usage.show_icons_in_movielist.value
 		piconWidth = config.usage.movielist_piconwidth.value if showPicons else 0
 		durationWidth = self.durationWidth if config.usage.load_length_of_movies_in_moviellist.value else 0
 
 		width = self.l.getItemSize().width()
-
 		dateWidth = self.dateWidth
 		if not config.movielist.use_fuzzy_dates.value:
 			dateWidth += 30
@@ -417,7 +422,6 @@ class MovieList(GUIComponent):
 			iconSize = self.pbarLargeWidth
 		ih = self.itemHeight
 		col0iconSize = piconWidth if showPicons else iconSize
-
 		space = self.spaceIconeText
 		r = self.spaceRight
 		pathName = serviceref.getPath()
@@ -471,7 +475,7 @@ class MovieList(GUIComponent):
 					data.picon = LoadPixmap(picon)
 			data.txt = getItemDisplayName(serviceref, info)
 			data.icon = None
-			data.part = None
+			data.part = 0
 			if os.path.split(pathName)[1] in self.runningTimers:
 				if switch == 'i':
 					if (self.playInBackground or self.playInForeground) and serviceref == (self.playInBackground or self.playInForeground):
@@ -489,18 +493,16 @@ class MovieList(GUIComponent):
 			else:
 				data.part = moviePlayState(pathName + '.cuts', serviceref, data.len)
 				if switch == 'i':
-					if data.part is not None and data.part > 0:
+					if data.part > 0:
 						data.icon = self.iconPart[data.part // 25]
-					else:
-						if config.usage.movielist_unseen.value:
-							data.icon = self.iconUnwatched
+					elif config.usage.movielist_unseen.value:
+						data.icon = self.iconUnwatched
 				elif switch in ('p', 's'):
-					if data.part is not None and data.part > 0:
+					if data.part > 0:
 						data.partcol = self.pbarColourSeen
-					else:
-						if config.usage.movielist_unseen.value:
-							data.part = 100
-							data.partcol = self.pbarColour
+					elif config.usage.movielist_unseen.value:
+						data.part = 100
+						data.partcol = self.pbarColour
 
 		colX = 0
 		if switch == 'p':
@@ -510,16 +512,16 @@ class MovieList(GUIComponent):
 		def addProgress():
 			# icon/progress
 			if data:
-				if switch == 'i' and hasattr(data, 'icon') and data.icon is not None:
+				if switch == 'i' and data.icon is not None:
 					if self.partIconeShift is None:
 						res.append(MultiContentEntryPixmapAlphaBlend(pos=(colX, 0), size=(iconSize, ih), png=data.icon, flags=BT_ALIGN_CENTER))
 					else:
 						res.append(MultiContentEntryPixmapAlphaBlend(pos=(colX, self.partIconeShift), size=(iconSize, data.icon.size().height()), png=data.icon))
 				elif switch in ('p', 's'):
-					if hasattr(data, 'part') and data.part > 0:
+					if data.part > 0:
 						pbarY = (self.itemHeight - self.pbarHeight) // 2 if self.pbarShift is None else self.pbarShift
 						res.append(MultiContentEntryProgress(pos=(colX, pbarY), size=(iconSize, self.pbarHeight), percent=data.part, borderWidth=2, foreColor=data.partcol, foreColorSelected=None, backColor=None, backColorSelected=None))
-					elif hasattr(data, 'icon') and data.icon is not None:
+					elif data.icon is not None:
 						if self.pbarShift is None:
 							res.append(MultiContentEntryPixmapAlphaBlend(pos=(colX, 0), size=(iconSize, ih), png=data.icon, flags=BT_ALIGN_CENTER))
 						else:
@@ -554,7 +556,7 @@ class MovieList(GUIComponent):
 			if data:
 				len = data.len
 				if len > 0:
-					len = ngettext("%d Min", "%d Mins", (len / 60)) % (len / 60)
+					len = ngettext("%d Min", "%d Mins", (len // 60)) % (len // 60)
 					res.append(MultiContentEntryText(pos=(colX, 0), size=(durationWidth, ih), font=1, flags=RT_HALIGN_RIGHT | RT_VALIGN_CENTER, text=len))
 
 		# Date
@@ -690,7 +692,7 @@ class MovieList(GUIComponent):
 
 		reflist = root and serviceHandler.list(root)
 		if reflist is None:
-			print "listing of movies failed"
+			print("listing of movies failed")
 			return
 		realtags = set()
 		autotags = {}
@@ -710,6 +712,7 @@ class MovieList(GUIComponent):
 					parent += '/'
 				ref = eServiceReference.fromDirectory(parent)
 				self.list.append((ref, None, 0, MovieListData()))
+
 				numberOfDirs += 1
 		firstDir = numberOfDirs
 
@@ -718,14 +721,14 @@ class MovieList(GUIComponent):
 			MovieList.InTrashFolder = here.startswith(getTrashFolder(here))
 		else:
 	 		MovieList.InTrashFolder = False
- 		MovieList.UsingTrashSort = False
+		MovieList.UsingTrashSort = False
 		if MovieList.InTrashFolder:
 			if (config.usage.trashsort_deltime.value == "show record time"):
 		 		MovieList.UsingTrashSort = MovieList.TRASHSORT_SHOWRECORD
 			elif (config.usage.trashsort_deltime.value == "show delete time"):
 		 		MovieList.UsingTrashSort = MovieList.TRASHSORT_SHOWDELETE
 
-		while 1:
+		while True:
 			serviceref = reflist.getNext()
 			if not serviceref.valid():
 				break
@@ -821,7 +824,6 @@ class MovieList(GUIComponent):
 
 		self.firstFileEntry = numberOfDirs
 		self.parentDirectory = 0
-
 		self.list.sort(key=self.buildGroupwiseSortkey)
 
 		# Have we had a temporary sort method override set in MovieSelectiom.py?
@@ -842,7 +844,7 @@ class MovieList(GUIComponent):
 			# self.list is a list of tuples, so we can't just assign to elements...
 			#
 			if config.usage.trashsort_deltime.value == "show record time":
-				for i in range(len(self.list)):
+				for i in list(range(len(self.list))):
 					if len(self.list[i]) == 5:
 						x = self.list[i]
 						self.list[i] = (x[0], x[1], x[4], x[3])
@@ -903,7 +905,7 @@ class MovieList(GUIComponent):
 
 		# reverse the dictionary to see which unique movie each tag now references
 		rautotags = {}
-		for tag, movies in autotags.items():
+		for tag, movies in list(autotags.items()):
 			if (len(movies) > 1):
 				movies = tuple(movies) # a tuple can be hashed, but a list not
 				item = rautotags.get(movies, [])
@@ -911,7 +913,7 @@ class MovieList(GUIComponent):
 					rautotags[movies] = item
 				item.append(tag)
 		self.tags = {}
-		for movies, tags in rautotags.items():
+		for movies, tags in list(rautotags.items()):
 			movie = movies[0]
 			# format the tag lists so that they are in 'original' order
 			tags.sort(key=movie.find)
@@ -989,8 +991,8 @@ class MovieList(GUIComponent):
 	def buildBeginTimeSortKey(self, x):
 		ref = x[0]
 		if ref.flags & eServiceReference.mustDescent and os.path.exists(ref.getPath()):
-			return 0, x[1] and -os.stat(ref.getPath()).st_mtime
-		return 1, -x[2]
+			return (0, x[1] and x[1].getName(ref).lower() or "")
+		return 1, "", -x[2]
 
 	def buildGroupwiseSortkey(self, x):
 		# Sort recordings by date, sort MP3 and stuff by name

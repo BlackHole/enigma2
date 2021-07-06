@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 from Tools.BoundFunction import boundFunction
@@ -31,7 +34,7 @@ def InitCiConfig():
 	config.ci = ConfigSubList()
 	config.cimisc = ConfigSubsection()
 	if SystemInfo["CommonInterface"]:
-		for slot in range(SystemInfo["CommonInterface"]):
+		for slot in list(range(SystemInfo["CommonInterface"])):
 			config.ci.append(ConfigSubsection())
 			config.ci[slot].canDescrambleMultipleServices = ConfigSelection(choices=[("auto", _("auto")), ("no", _("no")), ("yes", _("yes"))], default="auto")
 			config.ci[slot].use_static_pin = ConfigYesNo(default=True)
@@ -54,7 +57,7 @@ class MMIDialog(Screen):
 	def __init__(self, session, slotid, action, handler=eDVBCI_UI.getInstance(), wait_text="", screen_data=None):
 		Screen.__init__(self, session)
 
-		print "[CI] MMIDialog with action" + str(action)
+		print("[CI] MMIDialog with action" + str(action))
 
 		self.mmiclosed = False
 		self.tag = None
@@ -130,9 +133,9 @@ class MMIDialog(Screen):
 		if not self.tag:
 			return
 		if self.tag == "WAIT":
-			print "[CI] do nothing - wait"
+			print("[CI] do nothing - wait")
 		elif self.tag == "MENU":
-			print "[CI] answer MENU"
+			print("[CI] answer MENU")
 			cur = self["entries"].getCurrent()
 			if cur:
 				self.handler.answerMenu(self.slotid, cur[2])
@@ -140,7 +143,7 @@ class MMIDialog(Screen):
 				self.handler.answerMenu(self.slotid, 0)
 			self.showWait()
 		elif self.tag == "LIST":
-			print "[CI] answer LIST"
+			print("[CI] answer LIST")
 			self.handler.answerMenu(self.slotid, 0)
 			self.showWait()
 		elif self.tag == "ENQ":
@@ -183,15 +186,15 @@ class MMIDialog(Screen):
 			self.handler.stopMMI(self.slotid)
 			self.closeMmi()
 		elif self.tag in ("MENU", "LIST"):
-			print "[CI] cancel list"
+			print("[CI] cancel list")
 			self.handler.answerMenu(self.slotid, 0)
 			self.showWait()
 		elif self.tag == "ENQ":
-			print "[CI] cancel enq"
+			print("[CI] cancel enq")
 			self.handler.cancelEnq(self.slotid)
 			self.showWait()
 		else:
-			print "[CI] give cancel action to ci"
+			print("[CI] give cancel action to ci")
 
 	def keyConfigEntry(self, key):
 		self.timer.stop()
@@ -383,7 +386,7 @@ class CiSelection(Screen):
 		self.state = {}
 		self.list = []
 		self.slot = 0
-		for slot in range(SystemInfo["CommonInterface"]):
+		for slot in list(range(SystemInfo["CommonInterface"])):
 			state = eDVBCI_UI.getInstance().getState(slot)
 			if state != -1:
 				self.slot += 1
@@ -506,7 +509,7 @@ class CiSelection(Screen):
 		pass
 
 	def cancel(self):
-		for slot in range(SystemInfo["CommonInterface"]):
+		for slot in list(range(SystemInfo["CommonInterface"])):
 			state = eDVBCI_UI.getInstance().getState(slot)
 			if state != -1:
 				CiHandler.unregisterCIMessageHandler(slot)

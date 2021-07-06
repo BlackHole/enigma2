@@ -1,15 +1,17 @@
-from boxbranding import getMachineBrand, getMachineName
+from __future__ import print_function
+
 from os import system
 
 from enigma import eTimer
-
-from Screens.WizardLanguage import WizardLanguage
-from Screens.Rc import Rc
-from Screens.MessageBox import MessageBox
+from boxbranding import getMachineBrand, getMachineName
+from Components.config import config
+from Components.Label import Label
+from Components.Network import iNetwork
 from Components.Pixmap import Pixmap
 from Components.Sources.Boolean import Boolean
-from Components.Network import iNetwork
-from Components.Label import Label
+from Screens.MessageBox import MessageBox
+from Screens.Rc import Rc
+from Screens.WizardLanguage import WizardLanguage
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 
 
@@ -72,6 +74,7 @@ class NetworkWizard(WizardLanguage, Rc):
 		self.getInstalledInterfaceCount()
 		self.isWlanPluginInstalled()
 
+
 	def exitWizardQuestion(self, ret=False):
 		if ret:
 			self.markDone()
@@ -101,7 +104,7 @@ class NetworkWizard(WizardLanguage, Rc):
 		self.InstalledInterfaceCount = len(self.Adapterlist)
 		if self.Adapterlist is not None:
 			if self.InstalledInterfaceCount == 1 and self.selectedInterface is None:
-					self.selectedInterface = self.Adapterlist[0]
+				self.selectedInterface = self.Adapterlist[0]
 		for interface in iNetwork.getAdapterList():
 			self.originalInterfaceState[interface] = {}
 			self.originalInterfaceState[interface]["up"] = iNetwork.getAdapterAttribute(interface, 'up')
@@ -129,7 +132,7 @@ class NetworkWizard(WizardLanguage, Rc):
 	def checkOldInterfaceState(self):
 		# disable up interface if it was originally down and config is unchanged.
 		if self.originalInterfaceStateChanged is False:
-			for interface in self.originalInterfaceState.keys():
+			for interface in list(self.originalInterfaceState.keys()):
 				if interface == self.selectedInterface:
 					if self.originalInterfaceState[interface]["up"] is False:
 						if iNetwork.checkforInterface(interface) is True:
@@ -162,7 +165,7 @@ class NetworkWizard(WizardLanguage, Rc):
 		self.stopScan()
 		if self.Adapterlist is None:
 			self.Adapterlist = iNetwork.getAdapterList()
-		if self.NextStep is not 'end':
+		if self.NextStep != 'end':
 			if len(self.Adapterlist) == 0:
 				#Reset Network to defaults if network broken
 				iNetwork.resetNetworkConfig('lan', self.resetNetworkConfigCB)
@@ -171,8 +174,11 @@ class NetworkWizard(WizardLanguage, Rc):
 				if iface in iNetwork.configuredNetworkAdapters and len(iNetwork.configuredNetworkAdapters) == 1:
 					if iNetwork.getAdapterAttribute(iface, 'up') is True:
 						self.isInterfaceUp = True
+						config.misc.networkenabled.value = True						
 					else:
 						self.isInterfaceUp = False
+						config.misc.networkenabled.value = False
+					print("[NetworkWizard] networkenabled value = %s" % config.misc.networkenabled.value )						
 					self.currStep = self.getStepWithID(self.NextStep)
 					self.afterAsyncCode()
 				else:
@@ -199,11 +205,14 @@ class NetworkWizard(WizardLanguage, Rc):
 		if data is True:
 			if iNetwork.getAdapterAttribute(self.selectedInterface, 'up') is True:
 				self.isInterfaceUp = True
+				config.misc.networkenabled.value = True
 			else:
 				self.isInterfaceUp = False
+				config.misc.networkenabled.value = False
+			print("[NetworkWizard] networkenabled value = %s" % config.misc.networkenabled.value )				
 			self.resetRef.close(True)
 		else:
-			print "we should never come here!"
+			print("we should never come here!")
 
 	def AdapterSetupEnd(self, iface):
 		self.originalInterfaceStateChanged = True
@@ -333,7 +342,7 @@ class NetworkWizard(WizardLanguage, Rc):
 			self.w = iWlan.getInterface()
 			aps = iWlan.getNetworkList()
 			if aps is not None:
-				print "[NetworkWizard.py] got Accespoints!"
+				print("[NetworkWizard.py] got Accespoints!")
 				tmplist = []
 				complist = []
 				for ap in aps:
