@@ -1,6 +1,4 @@
-from __future__ import absolute_import
-
-from Screens.Screen import Screen
+from Screen import Screen
 
 # a clock display dialog
 

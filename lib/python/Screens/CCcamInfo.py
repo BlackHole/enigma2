@@ -1,9 +1,5 @@
 # -*- coding: UTF-8 -*-
 # CCcam Info by AliAbdul
-from __future__ import print_function
-from __future__ import absolute_import
-import six
-
 from base64 import encodestring
 from os import listdir, remove, rename, system, path
 
@@ -29,13 +25,7 @@ from Tools.Directories import fileExists, SCOPE_CURRENT_SKIN, resolveFilename
 from Tools.LoadPixmap import LoadPixmap
 from twisted.internet import reactor
 from twisted.web.client import HTTPClientFactory
-
-# required methods: Request, urlopen, HTTPError, URLError, urlparse
-try: # python 3
-	from urllib.parse import urlparse, urlunparse # raises ImportError in Python 2
-except ImportError: # Python 2
-	from urlparse import urlparse, urlunparse
-
+from urlparse import urlparse, urlunparse
 
 #TOGGLE_SHOW = InfoBar.toggleShow
 
@@ -88,7 +78,7 @@ def getPage(url, contextFactory=None, *args, **kwargs):
 		else:
 			kwargs["headers"] = AuthHeaders
 
-	factory = HTTPClientFactory(six.ensure_binary(url), *args, **kwargs)
+	factory = HTTPClientFactory(url, *args, **kwargs)
 	reactor.connectTCP(host, port, factory)
 
 	return factory.deferred
@@ -100,7 +90,7 @@ class HelpableNumberActionMap(NumberActionMap):
 	def __init__(self, parent, context, actions, prio):
 		alist = []
 		adict = {}
-		for (action, funchelp) in six.iteritems(actions):
+		for (action, funchelp) in actions.iteritems():
 			alist.append((action, funchelp[1]))
 			adict[action] = funchelp[0]
 		NumberActionMap.__init__(self, [context], adict, prio)
@@ -595,7 +585,7 @@ class CCcamInfoMain(Screen):
 			self["menu"].pageDown()
 
 	def getWebpageError(self, error=""):
-		print(str(error))
+		print str(error)
 		self.session.openWithCallback(self.workingFinished, MessageBox, _("Error reading webpage!"), MessageBox.TYPE_ERROR)
 
 	def showFile(self, file):
@@ -729,7 +719,7 @@ class CCcamInfoMain(Screen):
 							while string.endswith(" "):
 								string = string[:-1]
 
-							idx = " ".index()
+							idx = string.index(" ")
 							uphops = string[:idx]
 							string = string[idx + 1:]
 
@@ -793,7 +783,6 @@ class CCcamInfoMain(Screen):
 
 	def showFreeMemory(self, result, retval, extra_args):
 		if retval == 0:
-			result = six.ensure_str(result)
 			if result.__contains__("Total:"):
 				idx = result.index("Total:")
 				result = result[idx + 6:]
@@ -947,7 +936,7 @@ class CCcamShareViewMenu(Screen, HelpableScreen):
 								while string.endswith(" "):
 									string = string[:-1]
 
-								idx = " ".index()
+								idx = string.index(" ")
 								maxdown = string[idx + 1:]
 
 								while maxdown.startswith(" "):
@@ -1495,7 +1484,7 @@ class CCcamInfoShareInfo(Screen):
 							while string.endswith(" "):
 								string = string[:-1]
 
-							idx = " ".index()
+							idx = string.index(" ")
 							uphops = string[:idx]
 							string = string[idx + 1:]
 

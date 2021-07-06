@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
-from enigma import eDVBSatelliteEquipmentControl
-
-from Components.Converter.Converter import Converter
-from Components.config import config
+from Converter import Converter
 from Components.Element import cached
+from Components.config import config
+from Tools.Transponder import orbpos
 from Components.NimManager import nimmanager
 from Components.SystemInfo import SystemInfo
-from Tools.Transponder import orbpos
+from enigma import eDVBSatelliteEquipmentControl
 
 
 class RotorPosition(Converter, object):
@@ -40,18 +37,18 @@ class RotorPosition(Converter, object):
 					saved_text = frontendRotorPosition(int(value))
 					if saved_text:
 						nim_text = saved_textt
-				return "%s:%s" % ("\c0000?0?0" + chr(ord("A")+ int(value)), "\c00?0?0?0" + nim_text)
+				return "%s:%s" % ("\c0000?0?0" + chr(ord("A") + int(value)), "\c00?0?0?0" + nim_text)
 			elif value == "all":
 				all_text = ""
 				for x in nimmanager.nim_slots:
-					print("[RotorPosition] slot is %s" % x.slot)
+					print x.slot
 					nim_text = nimmanager.rotorLastPositionForNim(x.slot, number=False)
 					if nim_text != _("rotor is not used"):
 						if nim_text == _("undefined"):
 							rotorposition = x.config.lastsatrotorposition.value
 							if rotorposition.isdigit():
 								nim_text = orbpos(int(rotorposition))
-						all_text += "%s:%s " % ("\c0000?0?0" + chr(ord("A")+ x.slot), "\c00?0?0?0" + nim_text) 
+						all_text += "%s:%s " % ("\c0000?0?0" + chr(ord("A") + x.slot), "\c00?0?0?0" + nim_text)
 				return all_text
 			self.LastRotorPos = config.misc.lastrotorposition.value
 			(rotor, tuner) = self.isMotorizedTuner()
@@ -62,7 +59,7 @@ class RotorPosition(Converter, object):
 				if value == "tunername":
 					active_tuner = self.getActiveTuner()
 					if tuner != active_tuner:
-						return "%s:%s" % ("\c0000?0?0" + chr(ord("A")+ tuner), "\c00?0?0?0" + orbpos(config.misc.lastrotorposition.value))
+						return "%s:%s" % ("\c0000?0?0" + chr(ord("A") + tuner), "\c00?0?0?0" + orbpos(config.misc.lastrotorposition.value))
 					return ""
 				return orbpos(config.misc.lastrotorposition.value)
 		return ""

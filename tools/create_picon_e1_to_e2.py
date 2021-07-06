@@ -1,11 +1,10 @@
-from __future__ import print_function
 #
 # create links for picon
 #   usage: create_picon_providers lamedb
 # run in picon directory.
 # It will read the servicenames from the lamedb and create symlinks
 # for the servicereference names.
-from builtins import range
+
 import os
 import sys
 
@@ -19,7 +18,7 @@ while len(f) > 2:
 	name = name.replace('\xc2\x87', '').replace('\xc2\x86', '')
 
 	fields = f[2].split(',')
-	if len(fields) and fields[0][0] == 'p':
+	if len(fields) and fields[0][0] is 'p':
 		provider = fields[0].split(':')[1]
 	else:
 		provider = 'unknown'
@@ -50,11 +49,11 @@ while len(f) > 2:
 	filename = filename.replace('\n', '')
 	provider = provider.replace('\n', '')
 
-	for i in list(range(len(filename))):
+	for i in range(len(filename)):
 		if ord(filename[i]) > 127:
 			filename = filename[0:i] + '_' + filename[i + 1:]
 
-	for i in list(range(len(provider))):
+	for i in range(len(provider)):
 		if ord(provider[i]) > 127:
 			provider = provider[0:i] + '_' + provider[i + 1:]
 
@@ -68,7 +67,7 @@ while len(f) > 2:
 	except:
 		pass
 
-	print(sat[0:2] + '.' + sat[-1:] + 'E' + '_' + "%X" % ref[0] + '.png')
+	print sat[0:2] + '.' + sat[-1:] + 'E' + '_' + "%X" % ref[0] + '.png'
 	try:
 		os.rename(sat[0:-1] + 'E' + '_' + "%X" % ref[0] + '.png', sat + '/' + servicetype + '/' + filename)
 	except:

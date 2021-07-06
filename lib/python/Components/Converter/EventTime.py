@@ -1,14 +1,9 @@
-from __future__ import absolute_import
-from __future__ import division
-
+from Converter import Converter
+from Poll import Poll
 from time import time
-
-from enigma import eEPGCache
-
-from Components.config import config
-from Components.Converter.Converter import Converter
-from Components.Converter.Poll import Poll
 from Components.Element import cached, ElementError
+from Components.config import config
+from enigma import eEPGCache
 
 
 class EventTime(Poll, Converter, object):
@@ -104,7 +99,7 @@ class EventTime(Poll, Converter, object):
 		if self.type == self.TIMES:
 			return (st, et)
 
-		if self.type in (self.REMAINING, self.REMAINING_VFD, self.ELAPSED, self.ELAPSED_VFD):
+		if self.type == self.REMAINING or self.type == self.REMAINING_VFD or self.type == self.ELAPSED or self.type == self.ELAPSED_VFD:
 			now = int(time())
 			remaining = et - now
 			if remaining < 0:
@@ -193,7 +188,7 @@ class EventTime(Poll, Converter, object):
 		if duration > 0 and progress >= 0:
 			if progress > duration:
 				progress = duration
-			return progress * 1000 // duration
+			return progress * 1000 / duration
 		else:
 			return None
 

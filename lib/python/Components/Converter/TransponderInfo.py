@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
 from Components.Converter.Converter import Converter
 from enigma import iServiceInformation, iPlayableService, iPlayableServicePtr, eServiceCenter
 from Components.Element import cached
@@ -54,11 +52,9 @@ class TransponderInfo(Converter, object):
  					transponderdata["fec_inner"], transponderdata["modulation"], tsid, onid, transponderdata["detailed_satpos" in self.type and "orbital_position" or "orb_pos"])
 			except:
 				return ""
-		if "@" in ref:
-			return _("Stream") + " " + ref.rsplit("@", 1)[1].split("/")[0]
-		elif "://" in ref:
-			return _("Stream") + " " + ref.rsplit("://", 1)[1].split("/")[0]
-		return ""
+		if "://" in ref:
+			return _("Stream") + " " + ref.rsplit("://", 1)[1].split('/1:0:')[0].split('//')[0].split('/')[0].split('@')[-1]
+ 		return ""
 
 	text = property(getText)
 

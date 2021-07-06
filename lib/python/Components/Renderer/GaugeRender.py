@@ -1,7 +1,5 @@
-from __future__ import absolute_import
-
 from Components.VariableValue import VariableValue
-from Components.Renderer.Renderer import Renderer
+from Renderer import Renderer
 
 from enigma import eGauge
 

@@ -1,7 +1,3 @@
-from __future__ import print_function
-from __future__ import absolute_import
-import six
-
 from Screens.HelpMenu import HelpableScreen
 from Screens.Screen import Screen, ScreenSummary
 from Screens.ParentalControlSetup import ProtectedScreen
@@ -15,7 +11,7 @@ from Components.NimManager import nimmanager
 from Components.SystemInfo import SystemInfo
 
 from Tools.BoundFunction import boundFunction
-from Tools.Directories import resolveFilename, SCOPE_SKIN
+from Tools.Directories import resolveFilename, SCOPE_SKIN, fileExists
 from enigma import eTimer
 
 import xml.etree.cElementTree
@@ -62,7 +58,7 @@ class MenuSummary(ScreenSummary):
 	def addWatcher(self):
 		if self.selectionChanged not in self.parent["menu"].onSelectionChanged:
 			self.parent["menu"].onSelectionChanged.append(self.selectionChanged)
-		self.selectionChanged()
+	 	self.selectionChanged()
 
 	def removeWatcher(self):
 		if self.selectionChanged in self.parent["menu"].onSelectionChanged:
@@ -86,7 +82,7 @@ class Menu(Screen, HelpableScreen, ProtectedScreen):
 			selection[1]()
 
 	def execText(self, text):
-		exec(text)
+		exec text
 
 	def runScreen(self, arg):
 		# arg[0] is the module (as string)
@@ -96,8 +92,8 @@ class Menu(Screen, HelpableScreen, ProtectedScreen):
 		#        stuff which is just imported)
 		# FIXME. somehow
 		if arg[0] != "":
-			exec("from %s import %s" % (arg[0], arg[1].split(",")[0]))
-			self.openDialog(*eval(arg[1]))
+			exec "from " + arg[0] + " import *"
+		self.openDialog(*eval(arg[1]))
 
 	def nothing(self): #dummy
 		pass
@@ -116,13 +112,7 @@ class Menu(Screen, HelpableScreen, ProtectedScreen):
 					return
 			elif not SystemInfo.get(requires, False):
 				return
-		if six.PY3:
-			MenuTitle = _(node.get("text", "??"))
-			# print("[MenuTiTle PY3] =%s" % (MenuTitle))
-		else:
-			MenuTitle = _(node.get("text", "??").encode("UTF-8"))
-			# print("[MenuTiTle PY2] =%s" % (MenuTitle))
-		MenuTitle = six.ensure_str(MenuTitle)
+		MenuTitle = _(node.get("text", "??").encode("UTF-8"))
 		entryID = node.get("entryID", "undefined")
 		weight = node.get("weight", 50)
 		x = node.get("flushConfigOnClose")
@@ -152,13 +142,7 @@ class Menu(Screen, HelpableScreen, ProtectedScreen):
 		conditional = node.get("conditional")
 		if conditional and not eval(conditional):
 			return
-		if six.PY3:
-			item_text = node.get("text", "* Undefined *")
-			# print("[Menu item_text PY3] =%s" % (item_text))
-		else:
-			item_text = node.get("text", "* Undefined *").encode("UTF-8")
-			# print("[Menu item_text PY2] =%s" % (item_text))
-		item_text = six.ensure_str(item_text)
+		item_text = node.get("text", "* Undefined *").encode("UTF-8")
 		if item_text:
 			item_text = _(item_text)
 		entryID = node.get("entryID", "undefined")
@@ -313,12 +297,9 @@ class Menu(Screen, HelpableScreen, ProtectedScreen):
 			"9": (self.keyNumberGlobal, _("Direct menu item selection")),
 			"0": (self.keyNumberGlobal, _("Direct menu item selection"))
 		}, prio=0, description=_("Common Menu Actions"))
-		if six.PY3:
-			a = parent.get("title", "") or None
-			a = a and _(a) or _(parent.get("text", ""))
-		else:
-			a = parent.get("title", "").encode("UTF-8") or None
-			a = a and _(a) or _(parent.get("text", "").encode("UTF-8"))
+
+		a = parent.get("title", "").encode("UTF-8") or None
+		a = a and _(a) or _(parent.get("text", "").encode("UTF-8"))
 		self.setTitle(a)
 
 		self.number = 0

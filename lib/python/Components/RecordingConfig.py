@@ -1,4 +1,4 @@
-from Components.config import ConfigSelectionNumber, ConfigYesNo, ConfigSubsection, ConfigSelection, config
+from config import ConfigSelectionNumber, ConfigYesNo, ConfigSubsection, ConfigSelection, config
 
 
 def InitRecordingConfig():

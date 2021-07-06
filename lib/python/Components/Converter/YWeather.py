@@ -1,23 +1,14 @@
 # YWeather by 2boom 2013 v.0.6
 # xml from http://weather.yahooapis.com/forecastrss
-from __future__ import print_function
-from __future__ import absolute_import
-
-import socket
-import time
-import os
 
 from Components.Converter.Converter import Converter
-from Components.Converter.Poll import Poll
 from Components.Element import cached
 from Tools.Directories import fileExists
-
-# required methods: Request, urlopen, HTTPError, URLError
-try: # python 3
-	from urllib.request import urlopen, Request # raises ImportError in Python 2
-	from urllib.error import HTTPError, URLError # raises ImportError in Python 2
-except ImportError: # Python 2
-	from urllib2 import Request, urlopen, HTTPError, URLError
+from Poll import Poll
+import time
+import os
+from urllib2 import Request, urlopen
+import socket
 
 
 class YWeather(Poll, Converter, object):
@@ -142,24 +133,24 @@ class YWeather(Poll, Converter, object):
 		req = Request(URL)
 		try:
 			response = urlopen(req)
-		except Exception as e:
+		except Exception, e:
 			if hasattr(e, 'code') and hasattr(e, 'reason'):
-				print("[YWeather][fetchXML] Failed to retrieve XML file. Error: %s %s" % (str(e.code), str(e.reason)))
+				print "[YWeather][fetchXML] Failed to retrieve XML file. Error: %s %s" % (str(e.code), str(e.reason))
 			else:
 				if hasattr(e, 'reason'):
-					print('[YWeather][fetchXML] Failed to retrieve XML file. Error: ', str(e.reason))
+					print '[YWeather][fetchXML] Failed to retrieve XML file. Error: ', str(e.reason)
 				else:
-					print('[YWeather][fetchXML] Failed to retrieve XML file.')
+					print '[YWeather][fetchXML] Failed to retrieve XML file.'
 			return
 
 		try:
 			with open(save_to, "w") as f:
 				f.write(response.read().replace("><", ">\n<"))
 				f.close
-			print('[YWeather][fetchXML] XML file retrieved and saved.')
+			print '[YWeather][fetchXML] XML file retrieved and saved.'
 			return True
 		except:
-			print('[YWeather][fetchXML] XML file retrieved and but could not be saved.')
+			print '[YWeather][fetchXML] XML file retrieved and but could not be saved.'
 			return
 
 	@cached
@@ -297,7 +288,7 @@ class YWeather(Poll, Converter, object):
 			info = xweather['ytext']
 		elif self.type == self.temp:
 			if info != "N/A":
-				info = xweather['ytemp'] + '%s' % chr(176).encode("latin-1")
+				info = xweather['ytemp'] + '%s' % unichr(176).encode("latin-1")
 			else:
 				info = xweather['ytemp']
 		elif self.type == self.picon:
@@ -306,12 +297,12 @@ class YWeather(Poll, Converter, object):
 			info = xweather['ytextday2']
 		elif self.type == self.templow2:
 			if info != "N/A":
-				info = xweather['ytemplowday2'] + '%s' % chr(176).encode("latin-1")
+				info = xweather['ytemplowday2'] + '%s' % unichr(176).encode("latin-1")
 			else:
 				info = xweather['ytemplowday2']
 		elif self.type == self.temphigh2:
 			if info != "N/A":
-				info = xweather['ytemphighday2'] + '%s' % chr(176).encode("latin-1")
+				info = xweather['ytemphighday2'] + '%s' % unichr(176).encode("latin-1")
 			else:
 				info = xweather['ytemphighday2']
 		elif self.type == self.picon2:
@@ -341,12 +332,12 @@ class YWeather(Poll, Converter, object):
 			info = xweather['ytextday3']
 		elif self.type == self.templow3:
 			if info != "N/A":
-				info = xweather['ytemplowday3'] + '%s' % chr(176).encode("latin-1")
+				info = xweather['ytemplowday3'] + '%s' % unichr(176).encode("latin-1")
 			else:
 				info = xweather['ytemplowday3']
 		elif self.type == self.temphigh3:
 			if info != "N/A":
-				info = xweather['ytemphighday3'] + '%s' % chr(176).encode("latin-1")
+				info = xweather['ytemphighday3'] + '%s' % unichr(176).encode("latin-1")
 			else:
 				info = xweather['ytemphighday3']
 		elif self.type == self.picon3:
@@ -376,12 +367,12 @@ class YWeather(Poll, Converter, object):
 			info = xweather['ytextday4']
 		elif self.type == self.templow4:
 			if info != "N/A":
-				info = xweather['ytemplowday4'] + '%s' % chr(176).encode("latin-1")
+				info = xweather['ytemplowday4'] + '%s' % unichr(176).encode("latin-1")
 			else:
 				info = xweather['ytemplowday4']
 		elif self.type == self.temphigh4:
 			if info != "N/A":
-				info = xweather['ytemphighday4'] + '%s' % chr(176).encode("latin-1")
+				info = xweather['ytemphighday4'] + '%s' % unichr(176).encode("latin-1")
 			else:
 				info = xweather['ytemphighday4']
 		elif self.type == self.picon4:
@@ -411,12 +402,12 @@ class YWeather(Poll, Converter, object):
 			info = xweather['ytextday5']
 		elif self.type == self.templow5:
 			if info != "N/A":
-				info = xweather['ytemplowday5'] + '%s' % chr(176).encode("latin-1")
+				info = xweather['ytemplowday5'] + '%s' % unichr(176).encode("latin-1")
 			else:
 				info = xweather['ytemplowday5']
 		elif self.type == self.temphigh5:
 			if info != "N/A":
-				info = xweather['ytemphighday5'] + '%s' % chr(176).encode("latin-1")
+				info = xweather['ytemphighday5'] + '%s' % unichr(176).encode("latin-1")
 			else:
 				info = xweather['ytemphighday5']
 		elif self.type == self.picon5:

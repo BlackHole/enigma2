@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-
 from enigma import eDVBDB, getLinkedSlotID, eDVBResourceManager
 from Screens.Screen import Screen
 from Components.SystemInfo import SystemInfo
@@ -190,7 +187,7 @@ class NimSetup(Screen, ConfigListScreen, ServiceStopScreen):
 						self.fillListWithAdvancedSatEntrys(self.nimConfig.advanced.sat[int(current_config_sats)])
 					else:
 						cur_orb_pos = self.nimConfig.advanced.sats.orbital_position
-						satlist = list(self.nimConfig.advanced.sat.keys())
+						satlist = self.nimConfig.advanced.sat.keys()
 						if cur_orb_pos is not None:
 							if cur_orb_pos not in satlist:
 								cur_orb_pos = satlist[0]
@@ -532,7 +529,7 @@ class NimSetup(Screen, ConfigListScreen, ServiceStopScreen):
 		self.list.append(self.configMode)
 		self.advancedSatsEntry = getConfigListEntry(self.indent % _("Satellite"), self.nimConfig.advanced.sats)
 		self.list.append(self.advancedSatsEntry)
-		for x in list(self.nimConfig.advanced.sat.keys()):
+		for x in self.nimConfig.advanced.sat.keys():
 			Sat = self.nimConfig.advanced.sat[x]
 			self.fillListWithAdvancedSatEntrys(Sat)
 		self["config"].list = self.list
@@ -620,7 +617,7 @@ class NimSetup(Screen, ConfigListScreen, ServiceStopScreen):
 					h = _("W")
 				else:
 					h = _("E")
-				sat_name = ("%d.%d" + h) % (orbpos // 10, orbpos % 10)
+				sat_name = ("%d.%d" + h) % (orbpos / 10, orbpos % 10)
 
 			if confirmed[1] == "yes" or confirmed[1] == "no":
 				# TRANSLATORS: The satellite with name '%s' is no longer used after a configuration change. The user is asked whether or not the satellite should be deleted.
@@ -804,8 +801,8 @@ class NimSelection(Screen):
 			return "??"
 		if orbpos > 1800:
 			orbpos = 3600 - orbpos
-			return "%d.%dW" % (orbpos // 10, orbpos % 10)
-		return "%d.%dE" % (orbpos // 10, orbpos % 10)
+			return "%d.%dW" % (orbpos / 10, orbpos % 10)
+		return "%d.%dE" % (orbpos / 10, orbpos % 10)
 
 	def extraInfo(self):
 		nim = self["nimlist"].getCurrent()

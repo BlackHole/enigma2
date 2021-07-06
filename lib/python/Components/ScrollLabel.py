@@ -1,9 +1,6 @@
-from __future__ import absolute_import
-from __future__ import division
-
-from enigma import eLabel, eWidget, eSlider, fontRenderClass, ePoint, eSize
-from Components.GUIComponent import GUIComponent
 import skin
+from GUIComponent import GUIComponent
+from enigma import eLabel, eWidget, eSlider, fontRenderClass, ePoint, eSize
 
 
 class ScrollLabel(GUIComponent):
@@ -29,7 +26,7 @@ class ScrollLabel(GUIComponent):
 			widget_attribs = []
 			scrollbar_attribs = []
 			scrollbarAttrib = ["borderColor", "borderWidth", "scrollbarSliderForegroundColor", "scrollbarSliderBorderColor"]
-			for (attrib, value) in list(self.skinAttributes[:]):
+			for (attrib, value) in self.skinAttributes[:]:
 				if attrib in scrollbarAttrib:
 					scrollbar_attribs.append((attrib, value))
 					self.skinAttributes.remove((attrib, value))
@@ -56,9 +53,6 @@ class ScrollLabel(GUIComponent):
 					self.column = skin.parseScale(value)
 				elif "dividechar" in attrib:
 					self.splitchar = value
-				elif "colposition" in attrib:
-					self.column = int(value)
-
 			if self.split:
 				skin.applyAllAttributes(self.long_text, desktop, self.skinAttributes + [("halign", "left")], parent.scale)
 				skin.applyAllAttributes(self.right_text, desktop, self.skinAttributes + [("transparent", "1"), ("halign", "left" if self.column else "right")], parent.scale)
@@ -69,12 +63,12 @@ class ScrollLabel(GUIComponent):
 			ret = True
 		self.pageWidth = self.long_text.size().width()
 		lineheight = fontRenderClass.getInstance().getLineHeight(self.long_text.getFont()) or 30 # assume a random lineheight if nothing is visible
-		lines = int(self.long_text.size().height() // lineheight)
+		lines = int(self.long_text.size().height() / lineheight)
 		self.pageHeight = int(lines * lineheight)
 		self.instance.move(self.long_text.position())
-		self.instance.resize(eSize(self.pageWidth, self.pageHeight + int(lineheight // 6)))
+		self.instance.resize(eSize(self.pageWidth, self.pageHeight + int(lineheight / 6)))
 		self.scrollbar.move(ePoint(self.pageWidth - scrollbarWidth, 0))
-		self.scrollbar.resize(eSize(scrollbarWidth, self.pageHeight + int(lineheight // 6)))
+		self.scrollbar.resize(eSize(scrollbarWidth, self.pageHeight + int(lineheight / 6)))
 		self.scrollbar.setOrientation(eSlider.orVertical)
 		self.scrollbar.setRange(0, 100)
 		self.setText(self.message)
@@ -133,8 +127,8 @@ class ScrollLabel(GUIComponent):
 		return self.TotalTextHeight <= self.pageHeight or self.curPos == self.TotalTextHeight - self.pageHeight
 
 	def updateScrollbar(self):
-		vis = max(100 * self.pageHeight // self.TotalTextHeight, 3)
-		start = (100 - vis) * self.curPos // (self.TotalTextHeight - self.pageHeight)
+		vis = max(100 * self.pageHeight / self.TotalTextHeight, 3)
+		start = (100 - vis) * self.curPos / (self.TotalTextHeight - self.pageHeight)
 		self.scrollbar.setStartEnd(start, start + vis)
 
 	def GUIcreate(self, parent):

@@ -1,11 +1,10 @@
-from __future__ import print_function
 from Components.config import ConfigSubsection, config
 import os
 
 config.plugins = ConfigSubsection()
 
 
-class PluginDescriptor(object):
+class PluginDescriptor:
 	"""An object to describe a plugin."""
 
 	# where to list the plugin. Note that there are different call arguments,
@@ -101,19 +100,7 @@ class PluginDescriptor(object):
 
 		self.wakeupfnc = wakeupfnc
 
-		self._fnc = fnc
-
-	def __call__(self, *args, **kwargs):
-		if callable(self._fnc):
-			return self._fnc(*args, **kwargs)
-		else:
-			print("PluginDescriptor called without a function!")
-			return []
-
-	def __getattribute__(self, name):
-		if name == '__call__':
-			return self._fnc is not None and self._fnc or {}
-		return object.__getattribute__(self, name)
+		self.__call__ = fnc
 
 	def updateIcon(self, path):
 		self.path = path
@@ -130,10 +117,10 @@ class PluginDescriptor(object):
 			return self._icon
 
 	def __eq__(self, other):
-		return self._fnc == other._fnc
+		return self.__call__ == other.__call__
 
 	def __ne__(self, other):
-		return self._fnc != other._fnc
+		return self.__call__ != other.__call__
 
 	def __lt__(self, other):
 		if self.weight < other.weight:

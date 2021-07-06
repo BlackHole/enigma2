@@ -16,10 +16,10 @@ eDVBCICAManagerSession::~eDVBCICAManagerSession()
 
 int eDVBCICAManagerSession::receivedAPDU(const unsigned char *tag, const void *data, int len)
 {
-	eTraceNoNewLine("[CI CA] SESSION(%d)/CA %02x %02x %02x: ", session_nb, tag[0], tag[1], tag[2]);
+	eDebugNoNewLine("[CI CA] SESSION(%d)/CA %02x %02x %02x: ", session_nb, tag[0], tag[1],tag[2]);
 	for (int i=0; i<len; i++)
-		eTraceNoNewLine("%02x ", ((const unsigned char*)data)[i]);
-	eTraceNoNewLine("\n");
+		eDebugNoNewLine("%02x ", ((const unsigned char*)data)[i]);
+	eDebugNoNewLine("\n");
 
 	if ((tag[0]==0x9f) && (tag[1]==0x80))
 	{
@@ -34,10 +34,10 @@ int eDVBCICAManagerSession::receivedAPDU(const unsigned char *tag, const void *d
 			}
 			std::sort(caids.begin(), caids.end());
 			eDebugNoNewLine("\n");
-			eDVBCIInterfaces::getInstance()->executeRecheckPMTHandlersInMainloop();
+			eDVBCIInterfaces::getInstance()->recheckPMTHandlers();
 			break;
 		default:
-			eWarning("[CI CA] unknown APDU tag 9F 80 %02x", tag[2]);
+			eDebug("[CI CA] unknown APDU tag 9F 80 %02x", tag[2]);
 			break;
 		}
 	}
@@ -56,7 +56,7 @@ int eDVBCICAManagerSession::doAction()
 		return 0;
 	}
 	case stateFinal:
-		eWarning("[CI CA] stateFinal and action should not happen");
+		eDebug("[CI CA] stateFinal and action should not happen");
 		[[fallthrough]];
 	default:
 		return 0;

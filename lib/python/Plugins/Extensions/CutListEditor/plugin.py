@@ -2,7 +2,7 @@ from Plugins.Plugin import PluginDescriptor
 
 
 def CutListEditor(session, service=None):
-	from . import ui
+	import ui
 	return ui.CutListEditor(session, service)
 
 

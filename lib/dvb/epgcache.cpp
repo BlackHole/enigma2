@@ -2045,7 +2045,7 @@ unsigned int eEPGCache::getEpgSources()
 
 static const char* getStringFromPython(ePyObject obj)
 {
-	const char *result = 0;
+	char *result = 0;
 	if (PyString_Check(obj))
 	{
 		result = PyString_AS_STRING(obj);
@@ -2072,7 +2072,7 @@ void eEPGCache::importEvents(ePyObject serviceReferences, ePyObject list)
 
 	if (PyString_Check(serviceReferences))
 	{
-		const char *refstr;
+		char *refstr;
 		refstr = PyString_AS_STRING(serviceReferences);
 	        if (!refstr)
 	        {
@@ -2087,7 +2087,7 @@ void eEPGCache::importEvents(ePyObject serviceReferences, ePyObject list)
 		for (int i = 0; i < nRefs; ++i)
 		{
 			PyObject* item = PyList_GET_ITEM(serviceReferences, i);
-			const char *refstr;
+			char *refstr;
 	                refstr = PyString_AS_STRING(item);
 	                if (!refstr)
         	        {
@@ -2187,7 +2187,7 @@ PyObject *eEPGCache::search(ePyObject arg)
 	int eventid = -1;
 	const char *argstring=0;
 	char *refstr=0;
-	ssize_t argcount=0;
+	int argcount=0;
 	int querytype=-1;
 	bool needServiceEvent=false;
 	int maxmatches=0;
@@ -2204,13 +2204,10 @@ PyObject *eEPGCache::search(ePyObject arg)
 			{
 #if PY_VERSION_HEX < 0x02060000
 				argcount = PyString_GET_SIZE(obj);
-				argstring = PyString_AS_STRING(obj);
-#elif PY_VERSION_HEX < 0x03000000
-				argcount = PyString_Size(obj);
-				argstring = PyString_AS_STRING(obj);
 #else
-				argstring = PyUnicode_AsUTF8AndSize(obj, &argcount);
+				argcount = PyString_Size(obj);
 #endif
+				argstring = PyString_AS_STRING(obj);
 				for (int i=0; i < argcount; ++i)
 					switch(argstring[i])
 					{
@@ -2252,7 +2249,7 @@ PyObject *eEPGCache::search(ePyObject arg)
 				ePyObject obj = PyTuple_GET_ITEM(arg, 3);
 				if (PyString_Check(obj))
 				{
-					const char *refstr = PyString_AS_STRING(obj);
+					refstr = PyString_AS_STRING(obj);
 					eServiceReferenceDVB ref(refstr);
 					if (ref.valid())
 					{
@@ -2305,15 +2302,11 @@ PyObject *eEPGCache::search(ePyObject arg)
 				if (PyString_Check(obj))
 				{
 					int casetype = PyLong_AsLong(PyTuple_GET_ITEM(arg, 4));
+					const char *str = PyString_AS_STRING(obj);
 #if PY_VERSION_HEX < 0x02060000
-					ssize_t strlen = PyString_GET_SIZE(obj);
-					const char *str = PyString_AS_STRING(obj);
-#elif PY_VERSION_HEX < 0x03000000
-					ssize_t strlen = PyString_Size(obj);
-					const char *str = PyString_AS_STRING(obj);
+					int strlen = PyString_GET_SIZE(obj);
 #else
-					ssize_t strlen;
-					const char *str = PyUnicode_AsUTF8AndSize(obj, &strlen);
+					int strlen = PyString_Size(obj);
 #endif
 					switch (querytype)
 					{

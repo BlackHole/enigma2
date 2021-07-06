@@ -1,11 +1,8 @@
-from __future__ import absolute_import
-
 from enigma import iPlayableService, eDVBResourceManager, eDVBSatelliteEquipmentControl
-
-from Components.config import config
-from Components.NimManager import nimmanager
+from Source import Source
 from Components.PerServiceDisplay import PerServiceBase
-from Components.Sources.Source import Source
+from Components.NimManager import nimmanager
+from Components.config import config
 
 
 class FrontendInfo(Source, PerServiceBase):

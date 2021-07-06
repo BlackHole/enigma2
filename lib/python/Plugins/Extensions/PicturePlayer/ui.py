@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 from boxbranding import getMachineBrand
 
 from enigma import ePicLoad, eTimer, getDesktop, gMainDC, eSize
@@ -246,7 +244,7 @@ class Pic_Exif(Screen):
 		exifdesc = [_("filename") + ':', "EXIF-Version:", "Make:", "Camera:", "Date/Time:", "Width / Height:", "Flash used:", "Orientation:", "User Comments:", "Metering Mode:", "Exposure Program:", "Light Source:", "CompressedBitsPerPixel:", "ISO Speed Rating:", "X-Resolution:", "Y-Resolution:", "Resolution Unit:", "Brightness:", "Exposure Time:", "Exposure Bias:", "Distance:", "CCD-Width:", "ApertureFNumber:"]
 		list = []
 
-		for x in list(range(len(exiflist))):
+		for x in range(len(exiflist)):
 			if x > 0:
 				list.append((exifdesc[x], exiflist[x]))
 			else:
@@ -287,7 +285,7 @@ class Pic_Thumb(Screen):
 		skincontent = ""
 
 		posX = -1
-		for x in list(range(self.thumbsC)):
+		for x in range(self.thumbsC):
 			posY = x / self.thumbsX
 			posX += 1
 			if posX >= self.thumbsX:
@@ -320,7 +318,7 @@ class Pic_Thumb(Screen):
 		}, -1)
 
 		self["frame"] = MovingPixmap()
-		for x in list(range(self.thumbsC)):
+		for x in range(self.thumbsC):
 			self["label" + str(x)] = StaticText()
 			self["thumb" + str(x)] = Pixmap()
 
@@ -378,7 +376,7 @@ class Pic_Thumb(Screen):
 	def newPage(self):
 		self.Thumbnaillist = []
 		#clear Labels and Thumbnail
-		for x in list(range(self.thumbsC)):
+		for x in range(self.thumbsC):
 			self["label" + str(x)].setText("")
 			self["thumb" + str(x)].hide()
 		#paint Labels and fill Thumbnail-List
@@ -391,7 +389,7 @@ class Pic_Thumb(Screen):
 		self.showPic()
 
 	def showPic(self, picInfo=""):
-		for x in list(range(len(self.Thumbnaillist))):
+		for x in range(len(self.Thumbnaillist)):
 			if self.Thumbnaillist[x][0] == 0:
 				if self.picload.getThumbnail(self.Thumbnaillist[x][2]) == 1: #zu tun probier noch mal
 					self.ThumbTimer.start(500, True)
@@ -578,7 +576,7 @@ class Pic_Full_View(Screen):
 		self.picload.startDecode(self.filelist[self.index])
 		self["point"].show()
 
-	def __next__(self):
+	def next(self):
 		self.index += 1
 		if self.index > self.maxentry:
 			self.index = 0
@@ -589,7 +587,7 @@ class Pic_Full_View(Screen):
 			self.index = self.maxentry
 
 	def slidePic(self):
-		print("slide to next Picture index=" + str(self.lastindex))
+		print "slide to next Picture index=" + str(self.lastindex)
 		if config.pic.loop.value == False and self.lastindex == self.maxentry:
 			self.PlayPause()
 		self.shownow = True

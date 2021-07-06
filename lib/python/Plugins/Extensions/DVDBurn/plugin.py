@@ -1,9 +1,8 @@
-from __future__ import absolute_import
 from Plugins.Plugin import PluginDescriptor
 
 
 def main(session, **kwargs):
-	from . import TitleList
+	import TitleList
 	#project = DVDProject.DVDProject()
 	#project.addService(service)
 	return session.open(TitleList.TitleList)

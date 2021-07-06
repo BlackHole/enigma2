@@ -1,9 +1,7 @@
-from __future__ import absolute_import
-
-from Components.Sources.Source import Source
 from Components.PerServiceDisplay import PerServiceBase
 from Components.Element import cached
 from enigma import iPlayableService
+from Source import Source
 
 
 class RdsDecoder(PerServiceBase, Source, object):

@@ -1,23 +1,17 @@
-from __future__ import absolute_import
-from __future__ import division
-import six
+from GUIComponent import GUIComponent
+from config import config
+from skin import parseFont, parseScale
 
-from timer import TimerEntry
+from Tools.FuzzyDate import FuzzyTime
 
 from enigma import eListboxPythonMultiContent, eListbox, gFont, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_VALIGN_TOP, RT_VALIGN_BOTTOM, BT_SCALE, BT_KEEP_ASPECT_RATIO, BT_ALIGN_CENTER
-
-from Components.config import config
-from Components.GUIComponent import GUIComponent
 from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixmapAlphaBlend
 from Components.Renderer.Picon import getPiconName
-from skin import parseFont, parseScale
 from Tools.Alternatives import GetWithAlternative
-from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
-from Tools.FuzzyDate import FuzzyTime
 from Tools.LoadPixmap import LoadPixmap
 from Tools.TextBoundary import getTextBoundarySize
-
-SIGN = '°' if six.PY3 else str('\xc2\xb0')
+from timer import TimerEntry
+from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
 
 
 class TimerList(GUIComponent, object):
@@ -80,7 +74,7 @@ class TimerList(GUIComponent, object):
 			else:
 				repeatedtext = ", ".join(repeatedtext)
 			if self.iconRepeat:
-				res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, colX + self.iconMargin, self.rowSplit + (self.itemHeight - self.rowSplit - self.iconHeight) // 2, self.iconWidth, self.iconHeight, self.iconRepeat))
+				res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, colX + self.iconMargin, self.rowSplit + (self.itemHeight - self.rowSplit - self.iconHeight) / 2, self.iconWidth, self.iconHeight, self.iconRepeat))
 		else:
 			repeatedtext = begin[0] # date
 		if timer.justplay:
@@ -89,7 +83,7 @@ class TimerList(GUIComponent, object):
 				extra_text = _("(ZAP as PiP)")
 			text = repeatedtext + ((" %s " + extra_text) % (begin[1]))
 		else:
-			text = repeatedtext + ((" %s ... %s (%d " + _("mins") + ")") % (begin[1], FuzzyTime(timer.end)[1], (timer.end - timer.begin) // 60))
+			text = repeatedtext + ((" %s ... %s (%d " + _("mins") + ")") % (begin[1], FuzzyTime(timer.end)[1], (timer.end - timer.begin) / 60))
 		icon = None
 		if not processed:
 			if timer.state == TimerEntry.StateWaiting:
@@ -243,4 +237,4 @@ class TimerList(GUIComponent, object):
 		if op > 1800:
 			op = 3600 - op
 			direction = 'W'
-		return ("%d.%d%s%s") % (op // 10, op % 10, SIGN, direction)
+		return ("%d.%d\xc2\xb0%s") % (op // 10, op % 10, direction)

@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from time import time
 from Components.ActionMap import HelpableActionMap
 from Components.config import config, configfile
@@ -42,7 +40,7 @@ class EPGSelectionChannel(EPGSelectionBase, EPGStandardButtons):
 			self["list"].setItemsPerPage()
 			self["list"].recalcEntrySize()
 
-		self.closeEventViewDialog()
+ 		self.closeEventViewDialog()
 		self.session.openWithCallback(onClose, Setup, "epgsingle")
 
 	def onCreate(self):

@@ -1,6 +1,4 @@
-from __future__ import absolute_import
-
-from Components.GUIComponent import GUIComponent
+from GUIComponent import GUIComponent
 from enigma import eVideoWidget, eSize
 
 

@@ -1,7 +1,3 @@
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import division
-
 from enigma import eComponentScan, iDVBFrontend
 from Components.NimManager import nimmanager as nimmgr
 from Tools.Transponder import getChannelNumber
@@ -65,20 +61,20 @@ class ServiceScan:
 							h = _("W")
 						else:
 							h = _("E")
-						if ("%d.%d" % (orb_pos // 10, orb_pos % 10)) in sat_name:
+						if ("%d.%d" % (orb_pos / 10, orb_pos % 10)) in sat_name:
 							network = sat_name
 						else:
-							network = "%s %d.%d %s" % (sat_name, orb_pos // 10, orb_pos % 10, h)
+							network = "%s %d.%d %s" % (sat_name, orb_pos / 10, orb_pos % 10, h)
 						tp_text = {tp.System_DVB_S: "DVB-S", tp.System_DVB_S2: "DVB-S2"}.get(tp.system, "")
 						if tp_text == "DVB-S2":
 							tp_text = "%s %s" % (tp_text,
 								{tp.Modulation_Auto: "Auto", tp.Modulation_QPSK: "QPSK",
 									tp.Modulation_8PSK: "8PSK", tp.Modulation_QAM16: "QAM16",
 +									tp.Modulation_16APSK: "16APSK", tp.Modulation_32APSK: "32APSK"}.get(tp.modulation, ""))
-						tp_text = "%s %d%c / %d / %s" % (tp_text, tp.frequency // 1000,
+						tp_text = "%s %d%c / %d / %s" % (tp_text, tp.frequency / 1000,
 							{tp.Polarisation_Horizontal: 'H', tp.Polarisation_Vertical: 'V', tp.Polarisation_CircularLeft: 'L',
 								tp.Polarisation_CircularRight: 'R'}.get(tp.polarisation, ' '),
-							tp.symbol_rate // 1000,
+							tp.symbol_rate / 1000,
 							{tp.FEC_Auto: "AUTO", tp.FEC_1_2: "1/2", tp.FEC_2_3: "2/3",
 								tp.FEC_3_4: "3/4", tp.FEC_3_5: "3/5", tp.FEC_4_5: "4/5",
 								tp.FEC_5_6: "5/6", tp.FEC_6_7: "6/7", tp.FEC_7_8: "7/8",
@@ -98,7 +94,7 @@ class ServiceScan:
 							tp.Modulation_QAM64: "QAM64", tp.Modulation_QAM128: "QAM128",
 							tp.Modulation_QAM256: "QAM256"}.get(tp.modulation, ""),
 							tp.frequency,
-							tp.symbol_rate // 1000,
+							tp.symbol_rate / 1000,
 							{tp.FEC_Auto: "AUTO", tp.FEC_1_2: "1/2", tp.FEC_2_3: "2/3",
 								tp.FEC_3_4: "3/4", tp.FEC_3_5: "3/5", tp.FEC_4_5: "4/5",
 								tp.FEC_5_6: "5/6", tp.FEC_6_7: "6/7", tp.FEC_7_8: "7/8",
@@ -109,7 +105,7 @@ class ServiceScan:
 						channel = getChannelNumber(tp.frequency, self.scanList[self.run]["feid"])
 						if channel:
 							channel = _("CH") + "%s " % channel
-						freqMHz = "%0.1f MHz" % (tp.frequency // 1000000.)
+						freqMHz = "%0.1f MHz" % (tp.frequency / 1000000.)
 						tp_text = "%s %s %s %s" % (
 							{
 								tp.System_DVB_T_T2: "DVB-T/T2",
@@ -130,7 +126,7 @@ class ServiceScan:
 					elif tp_type == iDVBFrontend.feATSC:
 						network = _("ATSC")
 						tp = transponder.getATSC()
-						freqMHz = "%0.1f MHz" % (tp.frequency // 1000000.)
+						freqMHz = "%0.1f MHz" % (tp.frequency / 1000000.)
 						tp_text = ("%s %s %s %s") % (
 							{
 								tp.System_ATSC: _("ATSC"),
@@ -153,7 +149,7 @@ class ServiceScan:
 								tp.Inversion_Unknown: _("Auto")
 							}.get(tp.inversion, ""))
 					else:
-						print("[ServiceScan] unknown transponder type in scanStatusChanged")
+						print "[ServiceScan] unknown transponder type in scanStatusChanged"
 				self.network.setText(network)
 				self.transponder.setText(tp_text)
 
@@ -222,7 +218,7 @@ class ServiceScan:
 		self.scan.statusChanged.get().remove(self.scanStatusChanged)
 		self.scan.newService.get().remove(self.newService)
 		if not self.isDone():
-			print("[ServiceScan] *** warning *** scan was not finished!")
+			print "[ServiceScan] *** warning *** scan was not finished!"
 
 		del self.scan
 

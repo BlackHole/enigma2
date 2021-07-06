@@ -28,8 +28,6 @@ DEFINE_REF(eDVBRegisteredDemux);
 
 DEFINE_REF(eDVBAllocatedFrontend);
 
-int fd0lock = -1;
-
 void eDVBRegisteredFrontend::closeFrontend()
 {
 	if (!m_inuse && m_frontend->closeFrontend()) // frontend busy

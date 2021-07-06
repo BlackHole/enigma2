@@ -1,9 +1,6 @@
-from __future__ import absolute_import
-
-from enigma import iServiceInformation
-
-from Components.Converter.Converter import Converter
+from Converter import Converter
 from Components.Element import cached, ElementError
+from enigma import iServiceInformation
 
 
 class ServiceTime(Converter, object):

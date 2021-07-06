@@ -1,10 +1,6 @@
-from __future__ import absolute_import
-from __future__ import division
-
 from Components.Converter.Converter import Converter
-
-from Components.config import config
 from Components.Element import cached
+from Components.config import config
 from Components.NimManager import nimmanager
 from skin import parameters
 from Tools.Hex2strColor import Hex2strColor
@@ -101,7 +97,7 @@ class FrontendInfo(Converter):
 			return string
 		if percent is None:
 			return _("N/A")
-		return "%d %%" % (percent * 100 // 65535)
+		return "%d %%" % (percent * 100 / 65535)
 
 	@cached
 	def getBool(self):

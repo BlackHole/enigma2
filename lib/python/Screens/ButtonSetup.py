@@ -1,6 +1,3 @@
-from __future__ import print_function
-from __future__ import absolute_import
-
 from GlobalActions import globalActionMap
 from Components.ActionMap import ActionMap, HelpableActionMap
 from Components.Button import Button
@@ -17,6 +14,7 @@ from Tools.BoundFunction import boundFunction
 from ServiceReference import ServiceReference
 from enigma import eServiceReference, eActionMap
 from Components.Label import Label
+import os
 
 ButtonSetupKeys = [	(_("Red"), "red", "Infobar/activateRedButton"),
 	(_("Red long"), "red_long", ""),
@@ -73,7 +71,7 @@ ButtonSetupKeys = [	(_("Red"), "red", "Infobar/activateRedButton"),
 	(_("Slow"), "slow", ""),
 	(_("Mark/Portal/Playlist"), "mark", ""),
 	(_("Sleep"), "sleep", ""),
-	(_("Power"), "power", "Module/Screens.Standby/Standby"),
+	(_("Power"), "power", ""),
 	(_("Power long"), "power_long", ""),
 	(_("HDMIin"), "HDMIin", "Infobar/HDMIIn"),
 	(_("HDMIin") + " " + _("long"), "HDMIin_long", (SystemInfo["LcdLiveTV"] and "Infobar/ToggleLCDLiveTV") or ""),
@@ -88,7 +86,7 @@ ButtonSetupKeys = [	(_("Red"), "red", "Infobar/activateRedButton"),
 config.misc.ButtonSetup = ConfigSubsection()
 config.misc.ButtonSetup.additional_keys = ConfigYesNo(default=True)
 for x in ButtonSetupKeys:
-	exec("config.misc.ButtonSetup." + x[1] + " = ConfigText(default='" + x[2] + "')")
+	exec "config.misc.ButtonSetup." + x[1] + " = ConfigText(default='" + x[2] + "')"
 
 
 def getButtonSetupFunctions():
@@ -98,7 +96,7 @@ def getButtonSetupFunctions():
 	pluginlist = plugins.getPlugins(PluginDescriptor.WHERE_EVENTINFO)
 	pluginlist.sort(key=lambda p: p.name)
 	for plugin in pluginlist:
-		if plugin.name not in twinPlugins and plugin.path and 'selectedevent' not in plugin.__call__.__code__.co_varnames:
+		if plugin.name not in twinPlugins and plugin.path and 'selectedevent' not in plugin.__call__.func_code.co_varnames:
 			if plugin.path[plugin.path.rfind("Plugins"):] in twinPaths:
 				twinPaths[plugin.path[plugin.path.rfind("Plugins"):]] += 1
 			else:
@@ -490,7 +488,7 @@ class InfoBarButtonSetup():
 				pluginlist = plugins.getPlugins(PluginDescriptor.WHERE_EVENTINFO)
 				pluginlist.sort(key=lambda p: p.name)
 				for plugin in pluginlist:
-					if plugin.name not in twinPlugins and plugin.path and 'selectedevent' not in plugin.__call__.__code__.co_varnames:
+					if plugin.name not in twinPlugins and plugin.path and 'selectedevent' not in plugin.__call__.func_code.co_varnames:
 						if plugin.path[plugin.path.rfind("Plugins"):] in twinPaths:
 							twinPaths[plugin.path[plugin.path.rfind("Plugins"):]] += 1
 						else:
@@ -518,18 +516,20 @@ class InfoBarButtonSetup():
 						return
 			elif selected[0] == "Infobar":
 				if hasattr(self, selected[1]):
-					exec("self." + ".".join(selected[1:]) + "()")
+					exec "self." + ".".join(selected[1:]) + "()"
 				else:
 					return 0
 			elif selected[0] == "Module":
 				try:
-					exec("from %s import %s" % (selected[1], selected[2]))
-					exec("self.session.open(%s)" % ",".join(selected[2:]))
-				except:
-					print("[ButtonSetup] error during executing module %s, screen %s" % (selected[1], selected[2]))
+					exec "from " + selected[1] + " import *"
+					exec "self.session.open(" + ",".join(selected[2:]) + ")"
+				except Exception as e:
+					print "[ButtonSetup] error during executing module %s, screen %s, %s" % (selected[1], selected[2], e)
+					import traceback
+					traceback.print_exc()
 			elif selected[0] == "Setup":
-				from Screens.Setup import Setup
-				exec("self.session.open(Setup, \"%s\")" % selected[1])
+				exec "from Screens.Setup import *"
+				exec "self.session.open(Setup, \"" + selected[1] + "\")"
 			elif selected[0].startswith("Zap"):
 				if selected[0] == "ZapPanic":
 					self.servicelist.history = []

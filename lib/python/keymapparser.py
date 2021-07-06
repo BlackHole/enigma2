@@ -1,4 +1,3 @@
-from __future__ import print_function
 import enigma
 import xml.etree.cElementTree
 
@@ -54,11 +53,7 @@ def readKeymap(filename):
 	p = enigma.eActionMap.getInstance()
 	assert p
 
-	try:
-		source = open(filename)
-	except:
-		print("[keymapparser] keymap file " + filename + " not found")
-		return
+	source = open(filename)
 
 	try:
 		dom = xml.etree.cElementTree.parse(source)

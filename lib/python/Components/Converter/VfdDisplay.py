@@ -1,10 +1,8 @@
-from __future__ import absolute_import
-
 from datetime import datetime
-from enigma import iPlayableService
 
+from enigma import iPlayableService
+from Poll import Poll
 from Components.Converter.Converter import Converter
-from Components.Converter.Poll import Poll
 from Components.Element import cached
 
 

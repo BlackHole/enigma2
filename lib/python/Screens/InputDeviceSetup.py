@@ -1,6 +1,3 @@
-from __future__ import print_function
-from __future__ import absolute_import
-
 from Screens.Screen import Screen
 from Screens.HelpMenu import HelpableScreen
 from Screens.MessageBox import MessageBox
@@ -28,7 +25,7 @@ class InputDeviceSelection(Screen, HelpableScreen):
 		self["introduction"] = StaticText(self.edittext)
 
 		self.devices = [(iInputDevices.getDeviceName(x), x) for x in iInputDevices.getDeviceList()]
-		print(("[InputDeviceSetup] found devices :->", len(self.devices), self.devices))
+		print("[InputDeviceSetup] found devices :->", len(self.devices), self.devices)
 
 		self["OkCancelActions"] = HelpableActionMap(self, "OkCancelActions",
 			{
@@ -86,24 +83,19 @@ class InputDeviceSelection(Screen, HelpableScreen):
 
 	def updateList(self):
 		self.list = []
-#		print("[InputDevice] iRcTypeControl.multipleRcSupported = {}".format(iRcTypeControl.multipleRcSupported()))
-
 		if iRcTypeControl.multipleRcSupported():
 			self.list.append(self.buildInterfaceList('rctype', _('Select to configure remote control type'), None, False))
 
 		for x in self.devices:
 			dev_type = iInputDevices.getDeviceAttribute(x[1], 'type')
 			self.list.append(self.buildInterfaceList(x[1], _(x[0]), dev_type))
-#		print("[InputDevice] list = {}, self.currentIndex = {}".format(self.list, self.currentIndex))
 		self["list"].setList(self.list)
 		self["list"].setIndex(self.currentIndex)
 
 	def okbuttonClick(self):
 		selection = self["list"].getCurrent()
 		self.currentIndex = self["list"].getIndex()
-#		print "[InputDevice] selection = {}".format(selection)
 		if selection is not None:
-#			print("[InputDevice] selection[0] = {}".format(selection[0]))
 			if selection[0] == 'rctype':
 				self.session.open(RemoteControlType)
 			else:
@@ -217,77 +209,14 @@ class InputDeviceSetup(ConfigListScreen, Screen):
 
 
 class RemoteControlType(Screen, ConfigListScreen):
-	odinRemote = "OdinM9"
-	if getBoxType() == "maram9":
-		odinRemote = "MaraM9"
 
 	rcList = [
 			("0", _("Default")),
-			("3", _(odinRemote)),
-			("4", _("DMM normal")),
-			("5", _("et9000/et9100")),
-			("6", _("DMM advanced")),
-			("7", _("et5000/6000")),
 			("8", _("VU+")),
-			("9", _("et8000/et10000")),
-			("11", _("et9200/9500/6500")),
-			("13", _("et4000")),
-			("14", _("XP1000")),
-			("16", _("HD11/HD51/HD1100/HD1200/HD1265/HD1500/HD500C/HD530C/et7x00/et8500")),
-			("17", _("XP3000")),
-			("18", _("F1/F3/F4/F4-TURBO/TRIPLEX")),
-			("19", _("HD2400")),
-			("20", _("Zgemma Star S/2S/H1/H2")),
-			("21", _("Zgemma H.S/H.2S/H.2H/H5")),
-			("22", _("Zgemma i55")),
-			("23", _("WWIO 4K")),
-			("24", _("Axas E4HD Ultra")),
-			("25", _("Zgemma H9/I55Plus old Model")),
-			("26", _("Protek 4K UHD/HD61")),
-			("27", _("HD60")),
-			("28", _("H7/H9/H9COMBO/H10 new Model"))
 			]
 
 	defaultRcList = [
 			("default", 0),
-			("et4000", 13),
-			("et5000", 7),
-			("et6000", 7),
-			("et6500", 11),
-			("et7x00", 16),
-			("et8000", 9),
-			("et8500", 16),
-			("et9000", 5),
-			("et9100", 5),
-			("et9200", 11),
-			("et9500", 11),
-			("et10000", 9),
-			("formuler1", 18),
-			("formuler3", 18),
-			("hd11", 16),
-			("hd51", 16),
-			("hd52", 16),
-			("hd1100", 16),
-			("hd1200", 16),
-			("hd1265", 16),
-			("hd500c", 16),
-			("hd530c", 16),
-			("hd2400", 19),
-			("h3", 21),
-			("h5", 21),
-			#("h7", 21),# old model
-			("i55", 22),
-			("bre2ze4k", 23),
-			("e4hd", 24),
-			#("h9", 25),# old model
-			("i55plus", 25),
-			("protek4k", 26),
-			("hd61", 26),
-			("hd60", 27),
-			("h7", 28), # new model
-			("h9", 28), # new model
-			("h9combo", 28),
-			("h10", 28)
 		]
 
 	def __init__(self, session):
@@ -324,10 +253,8 @@ class RemoteControlType(Screen, ConfigListScreen):
 				break
 # If there is none in the list, use the current value...
 #
-#		print("[InputDevice] self.defaultRcType 1 = {}".format(self.defaultRcType))
 		if self.defaultRcType == 0:
 			self.defaultRcType = iRcTypeControl.readRcType()
-#		print("[InputDevice] self.defaultRcType 2 = {}".format(self.defaultRcType))
 
 	def setDefaultRcType(self):
 		iRcTypeControl.writeRcType(self.defaultRcType)

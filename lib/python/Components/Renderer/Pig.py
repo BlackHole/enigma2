@@ -1,12 +1,8 @@
 ##
 ## P(icture)i(n)g(raphics) renderer
 ##
-from __future__ import print_function
-from __future__ import absolute_import
-
+from Renderer import Renderer
 from enigma import eVideoWidget, getDesktop
-
-from Components.Renderer.Renderer import Renderer
 from Screens.PictureInPicture import PipPigMode
 
 

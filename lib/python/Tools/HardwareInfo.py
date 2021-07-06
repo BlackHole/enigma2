@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 from boxbranding import getBoxType, getBrandOEM
 from Components.About import about
 
@@ -25,18 +23,18 @@ class HardwareInfo:
 			except:
 				pass
 		except:
-			print("----------------")
-			print("you should upgrade to new drivers for the hardware detection to work properly")
-			print("----------------")
-			print("fallback to detect hardware via /proc/cpuinfo!!")
+			print "----------------"
+			print "you should upgrade to new drivers for the hardware detection to work properly"
+			print "----------------"
+			print "fallback to detect hardware via /proc/cpuinfo!!"
 			try:
 				rd = open("/proc/cpuinfo", "r").read()
 				if "Brcm4380 V4.2" in rd:
 					HardwareInfo.device_name = "dm8000"
-					print("dm8000 detected!")
+					print "dm8000 detected!"
 				elif "Brcm7401 V0.0" in rd:
 					HardwareInfo.device_name = "dm800"
-					print("dm800 detected!")
+					print "dm800 detected!"
 			except:
 				pass
 
@@ -47,7 +45,7 @@ class HardwareInfo:
 		return HardwareInfo.device_version
 
 	def has_hdmi(self):
-		return getBrandOEM() in ('xtrend', 'gigablue', 'dags', 'ixuss', 'odin', 'vuplus', 'ini', 'ebox', 'ceryon') or (getBoxType() in ('dm7020hd', 'dm800se', 'dm500hd', 'dm8000') and HardwareInfo.device_version is not None)
+		return getBrandOEM() in ('vuplus') and HardwareInfo.device_version is not None
 
 	def has_deepstandby(self):
 		return getBoxType() != 'dm800'

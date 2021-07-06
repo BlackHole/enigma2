@@ -1,9 +1,8 @@
-from __future__ import absolute_import
-
-from Components.Sources.Source import Source
 from Components.Sensors import sensors
 
 from enigma import eTimer
+
+from Source import Source
 
 
 class SensorSource(Source):

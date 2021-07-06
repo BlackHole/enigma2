@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from Screens.Screen import Screen
 from Components.ConfigList import ConfigListScreen
 from Components.config import config, getConfigListEntry, ConfigNothing, NoSave, ConfigPIN, configfile
@@ -74,7 +72,7 @@ class ParentalControlSetup(ConfigListScreen, Screen, ProtectedScreen):
 				self.list.append(getConfigListEntry(_("Protect manufacturer reset screen"), config.ParentalControl.config_sections.manufacturer_reset))
 				self.list.append(getConfigListEntry(_("Protect movie list"), config.ParentalControl.config_sections.movie_list))
 				self.list.append(getConfigListEntry(_("Protect context menus"), config.ParentalControl.config_sections.context_menus))
-				self.list.append(getConfigListEntry(_("Protect menu"), config.ParentalControl.config_sections.bhmenu))
+				self.list.append(getConfigListEntry(_("Protect menu"), config.ParentalControl.config_sections.vixmenu))
 		else:
 			self.changePin = getConfigListEntry(_("Enable parental protection"), NoSave(ConfigNothing()))
 			self.list.append(self.changePin)

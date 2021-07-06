@@ -1,14 +1,12 @@
-from __future__ import absolute_import
-
 import os
 import re
 import unicodedata
-from Components.Renderer.Renderer import Renderer
+from Renderer import Renderer
 from enigma import ePixmap, ePicLoad
 from Tools.Directories import pathExists, SCOPE_CURRENT_SKIN, resolveFilename
 from boxbranding import getDisplayType
 from Components.config import config
-from Components.Renderer.Picon import PiconLocator
+from Picon import PiconLocator
 
 
 def useLcdPicons():

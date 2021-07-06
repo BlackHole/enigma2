@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from Screens.Screen import Screen
 from Components.ActionMap import ActionMap
 from Components.Harddisk import harddiskmanager
@@ -39,7 +37,7 @@ class HarddiskSetup(Screen):
 		})
 
 	def hddQuestion(self, answer=False):
-		print('[HarddiskSetup] answer:', answer)
+		print '[HarddiskSetup] answer:', answer
 		if Screens.InfoBar.InfoBar.instance.timeshiftEnabled():
 			message = self.question + "\n\n" + _("You seem to be in timeshft, the service will briefly stop as timeshift stops.")
 			message += '\n' + _("Do you want to continue?")
@@ -64,7 +62,7 @@ class HarddiskSetup(Screen):
 				if job.name in (_("Initializing storage device..."), _("Checking filesystem..."), _("Converting ext3 to ext4...")):
 					self.showJobView(job)
 					break
-		except Exception as ex:
+		except Exception, ex:
 			self.session.open(MessageBox, str(ex), type=MessageBox.TYPE_ERROR, timeout=10)
 
 		if self.curentservice:

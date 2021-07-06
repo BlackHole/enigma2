@@ -1,10 +1,9 @@
-from __future__ import absolute_import
-
-import time
+from GUIComponent import GUIComponent
+from VariableText import VariableText
 
 from enigma import eTimer, eLabel
-from Components.GUIComponent import GUIComponent
-from Components.VariableText import VariableText
+
+import time
 # now some "real" components:
 
 

@@ -39,7 +39,7 @@ eTimerPy_dealloc(eTimerPy* self)
 		PyObject_ClearWeakRefs((PyObject *) self);
 	eTimerPy_clear(self);
 	self->tm->Release();
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	self->ob_type->tp_free((PyObject*)self);
 }
 
 static PyObject *
@@ -171,7 +171,8 @@ static PyGetSetDef eTimerPy_getseters[] = {
 };
 
 static PyTypeObject eTimerPyType = {
-	PyVarObject_HEAD_INIT(NULL, 0)
+	PyObject_HEAD_INIT(NULL)
+	0, /*ob_size*/
 	"eBaseImpl.eTimer", /*tp_name*/
 	sizeof(eTimerPy), /*tp_basicsize*/
 	.tp_dealloc = (destructor)eTimerPy_dealloc,
@@ -219,7 +220,7 @@ eSocketNotifierPy_dealloc(eSocketNotifierPy* self)
 		PyObject_ClearWeakRefs((PyObject *) self);
 	eSocketNotifierPy_clear(self);
 	self->sn->Release();
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	self->ob_type->tp_free((PyObject*)self);
 }
 
 static PyObject *
@@ -329,7 +330,8 @@ static PyGetSetDef eSocketNotifierPy_getseters[] = {
 };
 
 static PyTypeObject eSocketNotifierPyType = {
-	PyVarObject_HEAD_INIT(NULL, 0)
+	PyObject_HEAD_INIT(NULL)
+	0, /*ob_size*/
 	"eBaseImpl.eSocketNotifier", /*tp_name*/
 	sizeof(eSocketNotifierPy), /*tp_basicsize*/
 	.tp_dealloc = (destructor)eSocketNotifierPy_dealloc,
@@ -347,21 +349,6 @@ static PyMethodDef base_module_methods[] = {
 	{}  /* Sentinel */
 };
 
-#if PY_MAJOR_VERSION >= 3
-	static struct PyModuleDef eBase_moduledef = {
-	PyModuleDef_HEAD_INIT,
-	"eBaseImpl",																			/* m_name */
-	"Module that implements some enigma classes with working cyclic garbage collection.",	/* m_doc */
-	-1,																						/* m_siz
-	base_module_methods,																	/* m_methods */
-	NULL,																					/* m_reload */
-	NULL,																					/* m_traverse */
-	NULL,																					/* m_clear */
-	NULL,																					/* m_free */
-	};
-#endif
-
-#if PY_MAJOR_VERSION < 3
 void eBaseInit(void)
 {
 	PyObject* m = Py_InitModule3("eBaseImpl", base_module_methods,
@@ -381,29 +368,6 @@ void eBaseInit(void)
 		PyModule_AddObject(m, "eSocketNotifier", (PyObject*)&eSocketNotifierPyType);
 	}
 }
-#endif
-
-#if PY_MAJOR_VERSION >= 3
-PyObject* PyInit_eBaseImpl(void)
-{
-	PyObject* m = PyModule_Create(&eBase_moduledef);
-
-	if (m == NULL)
-		return NULL;
-
-	if (!PyType_Ready(&eTimerPyType))
-	{
-		Org_Py_INCREF((PyObject*)&eTimerPyType);
-		PyModule_AddObject(m, "eTimer", (PyObject*)&eTimerPyType);
-	}
-	if (!PyType_Ready(&eSocketNotifierPyType))
-	{
-		Org_Py_INCREF((PyObject*)&eSocketNotifierPyType);
-		PyModule_AddObject(m, "eSocketNotifier", (PyObject*)&eSocketNotifierPyType);
-	}
-	return m;
-}
-#endif
 }
 
 %}

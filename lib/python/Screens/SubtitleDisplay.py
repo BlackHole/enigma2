@@ -1,17 +1,15 @@
-from __future__ import absolute_import
-
 from Screens.Screen import Screen
 from Components.Label import Label
 from enigma import eTimer, getDesktop, eActionMap, gFont
 from Components.ActionMap import ActionMap
-from sys import maxsize
+from sys import maxint
 import skin
 
 
 class SubtitleDisplay(Screen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		eActionMap.getInstance().bindAction('', -maxsize - 1, self.__keypress)
+		eActionMap.getInstance().bindAction('', -maxint - 1, self.__keypress)
 
 		self.messageShown = False
 		self['message'] = Label()

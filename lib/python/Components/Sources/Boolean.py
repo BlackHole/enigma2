@@ -1,10 +1,6 @@
-from __future__ import absolute_import
-
-from enigma import eTimer
-
+from Source import Source
 from Components.Element import cached
-from Components.Sources.Source import Source
-
+from enigma import eTimer
 
 # a small warning:
 # you can use that boolean well to express screen-private
@@ -13,6 +9,8 @@ from Components.Sources.Source import Source
 # however, if you think that there is ANY interest that another
 # screen could use your expression, please put your calculation
 # into a seperate Source, providing a "boolean"-property.
+
+
 class Boolean(Source, object):
 	def __init__(self, fixed=False, function=None, destroy=None, poll=0):
 		Source.__init__(self)

@@ -13,9 +13,7 @@ class eDVBCIResourceManagerSession: public eDVBCISession
 		stateFinal };
 	int receivedAPDU(const unsigned char *tag, const void *data, int len);
 	int doAction();
-	int m_version;
 public:
-	eDVBCIResourceManagerSession(int version) : m_version(version) {};
 };
 
 #endif

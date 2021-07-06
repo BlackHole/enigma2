@@ -1,19 +1,17 @@
 from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import division
-from sys import maxsize
-
 from boxbranding import getBoxType, getDisplayType
+from sys import maxint
 
 from twisted.internet import threads
 from enigma import eDBoxLCD, eTimer, eActionMap
 
-from Components.config import config, ConfigSubsection, ConfigSelection, ConfigSlider, ConfigYesNo, ConfigNothing
+from config import config, ConfigSubsection, ConfigSelection, ConfigSlider, ConfigYesNo, ConfigNothing
 from Components.SystemInfo import SystemInfo
 from Tools.Directories import fileExists
 from Screens.InfoBar import InfoBar
 from Screens.Screen import Screen
 import Screens.Standby
+import usb
 
 
 class dummyScreen(Screen):
@@ -26,9 +24,78 @@ class dummyScreen(Screen):
 		self.close()
 
 
+def IconCheck(session=None, **kwargs):
+	if fileExists("/proc/stb/lcd/symbol_network") or fileExists("/proc/stb/lcd/symbol_usb"):
+		global networklinkpoller
+		networklinkpoller = IconCheckPoller()
+		networklinkpoller.start()
+
+
+class IconCheckPoller:
+	def __init__(self):
+		self.timer = eTimer()
+
+	def start(self):
+		if self.iconcheck not in self.timer.callback:
+			self.timer.callback.append(self.iconcheck)
+		self.timer.startLongTimer(0)
+
+	def stop(self):
+		if self.iconcheck in self.timer.callback:
+			self.timer.callback.remove(self.iconcheck)
+		self.timer.stop()
+
+	def iconcheck(self):
+		threads.deferToThread(self.JobTask)
+		self.timer.startLongTimer(30)
+
+	def JobTask(self):
+		LinkState = 0
+		if fileExists('/sys/class/net/wlan0/operstate'):
+			LinkState = open('/sys/class/net/wlan0/operstate').read()
+			if LinkState != 'down':
+				LinkState = open('/sys/class/net/wlan0/operstate').read()
+		elif fileExists('/sys/class/net/eth0/operstate'):
+			LinkState = open('/sys/class/net/eth0/operstate').read()
+			if LinkState != 'down':
+				LinkState = open('/sys/class/net/eth0/carrier').read()
+		LinkState = LinkState[:1]
+		if fileExists("/proc/stb/lcd/symbol_network") and config.lcd.mode.value == '1':
+			f = open("/proc/stb/lcd/symbol_network", "w")
+			f.write(str(LinkState))
+			f.close()
+		elif fileExists("/proc/stb/lcd/symbol_network") and config.lcd.mode.value == '0':
+			f = open("/proc/stb/lcd/symbol_network", "w")
+			f.write('0')
+			f.close()
+
+		USBState = 0
+		busses = usb.busses()
+		for bus in busses:
+			devices = bus.devices
+			for dev in devices:
+				if dev.deviceClass != 9 and dev.deviceClass != 2 and dev.idVendor > 0:
+					# print ' '
+					# print "Device:", dev.filename
+					# print "  Number:", dev.deviceClass
+					# print "  idVendor: %d (0x%04x)" % (dev.idVendor, dev.idVendor)
+					# print "  idProduct: %d (0x%04x)" % (dev.idProduct, dev.idProduct)
+					USBState = 1
+		if fileExists("/proc/stb/lcd/symbol_usb") and config.lcd.mode.value == '1':
+			f = open("/proc/stb/lcd/symbol_usb", "w")
+			f.write(str(USBState))
+			f.close()
+		elif fileExists("/proc/stb/lcd/symbol_usb") and config.lcd.mode.value == '0':
+			f = open("/proc/stb/lcd/symbol_usb", "w")
+			f.write('0')
+			f.close()
+
+		self.timer.startLongTimer(30)
+
+
 class LCD:
 	def __init__(self):
-		eActionMap.getInstance().bindAction('', -maxsize - 1, self.DimUpEvent)
+		eActionMap.getInstance().bindAction('', -maxint - 1, self.DimUpEvent)
 		self.autoDimDownLCDTimer = eTimer()
 		self.autoDimDownLCDTimer.callback.append(self.autoDimDownLCD)
 		self.autoDimUpLCDTimer = eTimer()
@@ -44,7 +111,7 @@ class LCD:
 		eActionMap.getInstance().unbindAction('', self.DimUpEvent)
 
 	def leaveStandby(self):
-		eActionMap.getInstance().bindAction('', -maxsize - 1, self.DimUpEvent)
+		eActionMap.getInstance().bindAction('', -maxint - 1, self.DimUpEvent)
 
 	def DimUpEvent(self, key, flag):
 		self.autoDimDownLCDTimer.stop()
@@ -74,7 +141,7 @@ class LCD:
 
 	def setBright(self, value):
 		value *= 255
-		value //= 10
+		value /= 10
 		if value > 255:
 			value = 255
 		self.autoDimDownLCDTimer.stop()
@@ -87,7 +154,7 @@ class LCD:
 
 	def setStandbyBright(self, value):
 		value *= 255
-		value //= 10
+		value /= 10
 		if value > 255:
 			value = 255
 		self.autoDimDownLCDTimer.stop()
@@ -101,7 +168,7 @@ class LCD:
 
 	def setDimBright(self, value):
 		value *= 255
-		value //= 10
+		value /= 10
 		if value > 255:
 			value = 255
 		self.dimBrightness = value
@@ -111,7 +178,7 @@ class LCD:
 
 	def setContrast(self, value):
 		value *= 63
-		value //= 20
+		value /= 20
 		if value > 63:
 			value = 63
 		eDBoxLCD.getInstance().setLCDContrast(value)
@@ -181,10 +248,8 @@ def standbyCounterChanged(dummy):
 
 
 def InitLcd():
-	if SystemInfo["HasNoDisplay"]:
+	if getBoxType() in ('vusolo'):
 		detected = False
-	elif getBoxType() in ('gbtrio4k',):
-		detected = True
 	else:
 		detected = eDBoxLCD.getInstance().detected()
 
@@ -219,7 +284,7 @@ def InitLcd():
 		config.lcd.powerled2 = ConfigSelection(default="on", choices=[("off", _("Off")), ("on", _("On"))])
 		config.lcd.powerled2.addNotifier(setPowerLEDstate2)
 
-	if SystemInfo["StandbyLED"]:
+ 	if SystemInfo["StandbyLED"]:
 		def setPowerLEDstanbystate(configElement):
 			print("[LCD] StandbyLED = %s configElement = %s" % (SystemInfo["StandbyLED"], configElement.value))
 			f = open("/proc/stb/power/standbyled", "w")
@@ -228,7 +293,7 @@ def InitLcd():
 		config.lcd.standbyLED = ConfigSelection(default="on", choices=[("off", _("Off")), ("on", _("On"))])
 		config.lcd.standbyLED.addNotifier(setPowerLEDstanbystate)
 
-	if SystemInfo["SuspendLED"]:
+ 	if SystemInfo["SuspendLED"]:
 		def setPowerLEDdeepstanbystate(configElement):
 			print("[LCD] SuspendLED = %s configElement = %s" % (SystemInfo["SuspendLED"], configElement.value))
 			f = open("/proc/stb/power/suspendled", "w")
@@ -308,7 +373,7 @@ def InitLcd():
 		config.lcd.ledbrightness.addNotifier(setLEDnormalstate)
 		config.lcd.ledbrightness.apply = lambda: setLEDnormalstate(config.lcd.ledbrightness)
 
-	if SystemInfo["Display"]:
+	if detected:
 		config.lcd.scroll_speed = ConfigSelection(default="300", choices=[
 			("500", _("slow")),
 			("300", _("normal")),

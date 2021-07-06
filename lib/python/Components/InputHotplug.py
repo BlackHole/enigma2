@@ -1,16 +1,12 @@
-from __future__ import print_function
-from __future__ import absolute_import
-
+import Netlink
 import enigma
 import os
-
-import Components.Netlink
 
 
 class NetlinkReader():
 	def __init__(self):
 		from twisted.internet import reactor
-		self.nls = Components.Netlink.NetlinkSocket()
+		self.nls = Netlink.NetlinkSocket()
 		reactor.addReader(self)
 
 	def fileno(self):
@@ -24,13 +20,13 @@ class NetlinkReader():
 					devname = event['DEVNAME']
 					action = event['ACTION']
 					if action == 'add':
-						print("[InputHotplug] New input device detected:", devname)
+						print "[InputHotplug] New input device detected:", devname
 						enigma.addInputDevice(os.path.join('/dev', devname))
 					elif action == 'remove':
-						print("[InputHotplug] Removed input device:", devname)
+						print "[InputHotplug] Removed input device:", devname
 						enigma.removeInputDevice(os.path.join('/dev', devname))
 				elif subsystem == 'net':
-					from Components.Network import iNetwork
+					from Network import iNetwork
 					iNetwork.hotplug(event)
 			except KeyError:
 				# Ignore "not found"
@@ -38,7 +34,7 @@ class NetlinkReader():
 
 	def connectionLost(self, failure):
 		# Ignore...
-		print("[InputHotplug] connectionLost?", failure)
+		print "[InputHotplug] connectionLost?", failure
 		self.nls.close()
 
 	def logPrefix(self):

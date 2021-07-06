@@ -1,7 +1,6 @@
-from __future__ import print_function
+from Components.Console import Console
 import os
 
-from Components.Console import Console
 swapdevice = None
 
 
@@ -15,7 +14,7 @@ def bigStorage(minFree):
 				diskstat = os.statvfs(candidate)
 				free = diskstat.f_bfree * diskstat.f_bsize
 				if free > minFree:
-					print()
+					print
 					return candidate
 			except:
 				pass
@@ -39,10 +38,10 @@ class SwapCheck:
 		if path:
 			global swapdevice
 			swapdevice = os.path.join(path, 'swapfile_tmp')
-			print("[SwapCheck] Location:", swapdevice)
+			print "[SwapCheck] Location:", swapdevice
 
 			if os.path.exists(swapdevice):
-				print("[SwapCheck] Removing old swapfile")
+				print "[SwapCheck] Removing old swapfile"
 				self.Console.ePopen("swapoff " + swapdevice + " && rm " + swapdevice)
 			f = open('/proc/meminfo', 'r')
 			for line in f.readlines():
@@ -54,12 +53,12 @@ class SwapCheck:
 					swapfree = int(parts[1])
 			f.close()
 			TotalFree = memfree + swapfree
-			print("[SwapCheck] Free Mem", TotalFree)
+			print "[SwapCheck] Free Mem", TotalFree
 			if int(TotalFree) < 5000:
-				print("[SwapCheck] Not Enough Ram")
+				print "[SwapCheck] Not Enough Ram"
 				self.MemCheck2()
 			else:
-				print("[SwapCheck] Found Enough Ram")
+				print "[SwapCheck] Found Enough Ram"
 				if self.extra_args:
 					self.callback(self.extra_args)
 				else:
@@ -71,7 +70,7 @@ class SwapCheck:
 				self.callback()
 
 	def MemCheck2(self):
-		print("[SwapCheck] Creating Swapfile")
+		print "[SwapCheck] Creating Swapfile"
 		self.Console.ePopen("dd if=/dev/zero of=" + swapdevice + " bs=1024 count=16440", self.MemCheck3)
 
 	def MemCheck3(self, result, retval, extra_args=None):
@@ -99,5 +98,5 @@ class SwapCheck:
 
 	def RemoveSwap(self):
 		if swapdevice and os.path.exists(swapdevice):
-			print("[SwapCheck] Removing Swapfile", swapdevice)
+			print "[SwapCheck] Removing Swapfile", swapdevice
 			self.Console.ePopen("swapoff " + swapdevice + " && rm " + swapdevice)

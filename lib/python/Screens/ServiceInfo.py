@@ -1,7 +1,3 @@
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import division
-
 from Components.GUIComponent import GUIComponent
 from Screens.Screen import Screen
 from Components.ActionMap import ActionMap
@@ -31,16 +27,16 @@ def to_unsigned(x):
 
 
 def ServiceInfoListEntry(a, b="", valueType=TYPE_TEXT, param=4):
-	print("b:", b)
+	print "b:", b
 	if not isinstance(b, str):
 		if valueType == TYPE_VALUE_HEX:
 			b = ("%0" + str(param) + "X") % to_unsigned(b)
 		elif valueType == TYPE_VALUE_FREQ:
-			b = "%s MHz" % (b // 1000)
+			b = "%s MHz" % (b / 1000)
 		elif valueType == TYPE_VALUE_FREQ_FLOAT:
-			b = "%.3f MHz" % (b // 1000.0)
+			b = "%.3f MHz" % (b / 1000.0)
 		elif valueType == TYPE_VALUE_BITRATE:
-			b = "%s KSymbols/s" % (b // 1000)
+			b = "%s KSymbols/s" % (b / 1000)
 		elif valueType == TYPE_VALUE_HEX_DEC:
 			b = ("%0" + str(param) + "X (%d)") % (to_unsigned(b), b)
 		elif valueType == TYPE_VALUE_ORBIT_DEC:
@@ -189,7 +185,7 @@ class ServiceInfo(Screen):
 				if width > 0 and height > 0:
 					resolution = videocodec + " - "
 					resolution += "%dx%d - " % (width, height)
-					resolution += str((self.info.getInfo(iServiceInformation.sFrameRate) + 500) // 1000)
+					resolution += str((self.info.getInfo(iServiceInformation.sFrameRate) + 500) / 1000)
 					resolution += ("i", "p", "")[self.info.getInfo(iServiceInformation.sProgressive)]
 					aspect = self.getServiceInfoValue(iServiceInformation.sAspect)
 					aspect = aspect in (1, 2, 5, 6, 9, 0xA, 0xD, 0xE) and "4:3" or "16:9"
@@ -345,6 +341,5 @@ class ServiceInfo(Screen):
 			color = "\c00??;?00" if caid[1] == int(ecmdata[3], 16) and caid[0] == int(ecmdata[1], 16) else ""
 			tlist.append(ServiceInfoListEntry("%sECMPid %04X (%d) %04X-%s %s" % (color, caid[1], caid[1], caid[0], CaIdDescription, extra_info)))
 		if not tlist:
-				tlist.append(ServiceInfoListEntry(_("No ECMPids available")))
-				tlist.append(ServiceInfoListEntry(_("(FTA Service)")))
+			tlist.append(ServiceInfoListEntry(_("No ECMPids available (FTA Service)")))
 		self["infolist"].l.setList(tlist)

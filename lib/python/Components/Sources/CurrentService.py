@@ -1,10 +1,7 @@
-from __future__ import absolute_import
-
-from enigma import iPlayableService
-
-from Components.Element import cached
 from Components.PerServiceDisplay import PerServiceBase
-from Components.Sources.Source import Source
+from enigma import iPlayableService
+from Source import Source
+from Components.Element import cached
 import NavigationInstance
 
 
