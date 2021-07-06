@@ -1,5 +1,7 @@
+from __future__ import absolute_import
+
 from Screens.Ci import MMIDialog
-import socketmmi
+from . import socketmmi
 
 
 class SocketMMIMessageHandler:
@@ -11,14 +13,22 @@ class SocketMMIMessageHandler:
 	def setSession(self, session):
 		self.session = session
 
-	def connected(self):
-		return socketmmi.getState(0)
+	def connected(self, slot=0):
+		return socketmmi.getState(slot)
 
-	def getName(self):
-		return socketmmi.getName(0)
+	def numConnections(self):
+		if socketmmi.getState(0):
+			return 1
+		else:
+			return 0
 
-	def startMMI(self):
-		slot = 0
+	def getState(self, slot=0):
+		return socketmmi.getState(slot)
+
+	def getName(self, slot=0):
+		return socketmmi.getName(slot)
+
+	def startMMI(self, slot=0):
 		self.dlgs[slot] = self.session.openWithCallback(self.dlgClosed, MMIDialog, slot, 2, socketmmi, _("wait for mmi..."))
 
 	def socketStateChanged(self, slot):

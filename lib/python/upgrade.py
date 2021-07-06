@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 
 opkgDestinations = ['/']
@@ -21,7 +22,7 @@ def opkgAddDestination(mountpoint):
 	global opkgDestinations
 	if mountpoint not in opkgDestinations:
 		opkgDestinations.append(mountpoint)
-		print "[Ipkg] Added to OPKG destinations:", mountpoint
+		print("[Ipkg] Added to OPKG destinations:", mountpoint)
 
 
 mounts = os.listdir('/media')

@@ -1,4 +1,9 @@
+from __future__ import absolute_import
+import six
+
 from Components.Converter.Converter import Converter
+
+SIGN = '°' if six.PY3 else str('\xc2\xb0')
 
 
 class SensorToText(Converter, object):
@@ -8,10 +13,8 @@ class SensorToText(Converter, object):
 	def getText(self):
 		if self.source.getValue() is None:
 			return ""
-		mark = " "
 		unit = self.source.getUnit()
 		if unit in ('C', 'F'):
-			mark = str('\xc2\xb0')
-		return "%d%s%s" % (self.source.getValue(), mark, unit)
+			return "%d%s%s" % (self.source.getValue(), SIGN, unit)
 
 	text = property(getText)

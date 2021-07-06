@@ -5,6 +5,7 @@
 #
 # PLEASE NOTE: If you add any buttons PLEASE update this list to assist
 # others in maintaining this file.
+from __future__ import print_function
 
 KEYIDS = {
 	"KEY_RESERVED": 0,
@@ -336,7 +337,7 @@ KEYFLAGS = {
 
 # First entry in each tuple is the preferred name.
 #
-knownAliases = {
+knownAlisaes = {
 	227: ("KEY_SWITCHVIDEOMODE", "KEY_VMODE"),
 	530: ("KEY_MOUSE", "KEY_TOUCHPAD_TOGGLE")
 }
@@ -348,8 +349,8 @@ def invertKeyIds():
 		if value not in invKeyIds:
 			invKeyIds[value] = key
 		else:
-			if value in knownAliases and key in knownAliases[value]:
-				invKeyIds[value] = knownAliases[value][0]
+			if value in knownAlisaes and key in knownAlisaes[value]:
+				invKeyIds[value] = knownAlisaes[value][0]
 			else:
 				print("[Keyids] Error: Key code %d is mapped to both '%s' and '%s'!" % (value, invKeyIds[value], key))
 	return invKeyIds

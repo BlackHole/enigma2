@@ -1,7 +1,7 @@
-from Screens.Screen import Screen
 from Components.ActionMap import ActionMap
 from Components.Label import Label
 from Plugins.Plugin import PluginDescriptor
+from Screens.Screen import Screen
 
 
 def getUpgradeVersion():

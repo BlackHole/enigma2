@@ -1,7 +1,10 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
 from enigma import iPlayableService, iServiceInformation
 
-from Plugins.Extensions.CutListEditor.ui import CutListEditor
 from Components.ServiceEventTracker import ServiceEventTracker
+from Plugins.Extensions.CutListEditor.ui import CutListEditor
 from Tools.Directories import fileExists
 
 
@@ -22,18 +25,18 @@ class TitleCutter(CutListEditor):
 		audio = service and service.audioTracks()
 		n = audio and audio.getNumberOfTracks() or 0
 		if n > 0:
-			from DVDTitle import ConfigFixedText
-			from TitleProperties import languageChoices
+			from .DVDTitle import ConfigFixedText
+			from .TitleProperties import languageChoices
 			from Components.config import ConfigSubsection, ConfigSubList, ConfigSelection, ConfigYesNo
 			self.t.properties.audiotracks = ConfigSubList()
-			for x in range(n):
+			for x in list(range(n)):
 				i = audio.getTrackInfo(x)
 				DVB_lang = i.getLanguage()
 				description = i.getDescription()
 				pid = str(i.getPID())
 				if description == "MPEG":
 					description = "MP2"
-				print "[audiotrack] pid:", pid, "description:", description, "language:", DVB_lang, "count:", x, "active:", (x < 8)
+				print("[audiotrack] pid:", pid, "description:", description, "language:", DVB_lang, "count:", x, "active:", (x < 8))
 				self.t.properties.audiotracks.append(ConfigSubsection())
 				self.t.properties.audiotracks[-1].active = ConfigYesNo(default=(x < 8))
 				self.t.properties.audiotracks[-1].format = ConfigFixedText(description)

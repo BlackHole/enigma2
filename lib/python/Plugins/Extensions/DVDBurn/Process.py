@@ -1,8 +1,13 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import division
+
 import os
 
 from Components.Task import Task, Job, DiskspacePrecondition, Condition, ToolExistsPrecondition
 from Components.Harddisk import harddiskmanager
 from Screens.MessageBox import MessageBox
+import Tools.Notifications
 
 
 class png2yuvTask(Task):
@@ -19,7 +24,7 @@ class png2yuvTask(Task):
 		self.container.dumpToFile(self.dumpFile)
 
 	def processStderr(self, data):
-		print "[png2yuvTask]", data[:-1]
+		print("[png2yuvTask]", data[:-1])
 
 
 class mpeg2encTask(Task):
@@ -35,7 +40,7 @@ class mpeg2encTask(Task):
 		self.container.readFromFile(self.inputFile)
 
 	def processOutputLine(self, line):
-		print "[mpeg2encTask]", line[:-1]
+		print("[mpeg2encTask]", line[:-1])
 
 
 class spumuxTask(Task):
@@ -54,7 +59,7 @@ class spumuxTask(Task):
 		self.container.readFromFile(self.inputFile)
 
 	def processStderr(self, data):
-		print "[spumuxTask]", data[:-1]
+		print("[spumuxTask]", data[:-1])
 
 
 class MakeFifoNode(Task):
@@ -138,10 +143,10 @@ class DemuxTask(Task):
 			try:
 				self.currentPID = str(int(line.split(': PID 0x', 1)[1].split(' ', 1)[0], 16))
 			except ValueError:
-				print "[DemuxTask] ERROR: couldn't detect Audio PID (projectx too old?)"
+				print("[DemuxTask] ERROR: couldn't detect Audio PID (projectx too old?)")
 
 	def haveNewFile(self, file):
-		print "[DemuxTask] produced file:", file, self.currentPID
+		print("[DemuxTask] produced file:", file, self.currentPID)
 		self.generated_files.append(file)
 		if self.currentPID in self.relevantAudioPIDs:
 			self.mplex_audiofiles[self.currentPID] = file
@@ -180,12 +185,12 @@ class DemuxTask(Task):
 		f.close()
 
 	def cleanup(self, failed):
-		print "[DemuxTask::cleanup]"
+		print("[DemuxTask::cleanup]")
 		self.mplex_streamfiles = [self.mplex_videofile]
 		for pid in self.relevantAudioPIDs:
 			if pid in self.mplex_audiofiles:
 				self.mplex_streamfiles.append(self.mplex_audiofiles[pid])
-		print self.mplex_streamfiles
+		print(self.mplex_streamfiles)
 
 		if failed:
 			import os
@@ -207,13 +212,13 @@ class MplexTaskPostcondition(Condition):
 
 	def getErrorMessage(self, task):
 		return {
-			task.ERROR_UNDERRUN: "Can't multiplex source video!",
-			task.ERROR_UNKNOWN: "An unknown error occurred!"
+			task.ERROR_UNDERRUN: ("Can't multiplex source video!"),
+			task.ERROR_UNKNOWN: ("An unknown error occurred!")
 		}[task.error]
 
 
 class MplexTask(Task):
-	ERROR_UNDERRUN, ERROR_UNKNOWN = range(2)
+	ERROR_UNDERRUN, ERROR_UNKNOWN = list(range(2))
 
 	def __init__(self, job, outputfile, inputfiles=None, demux_task=None, weighting=500):
 		Task.__init__(self, job, "Mux ES into PS")
@@ -237,7 +242,7 @@ class MplexTask(Task):
 			self.args += self.demux_task.mplex_streamfiles
 
 	def processOutputLine(self, line):
-		print "[MplexTask] ", line[:-1]
+		print("[MplexTask] ", line[:-1])
 		if line.startswith("**ERROR:"):
 			if line.find("Frame data under-runs detected") != -1:
 				self.error = self.ERROR_UNDERRUN
@@ -266,7 +271,7 @@ class ReplexTask(Task):
 		self.args += ["-t", "DVD", "-j", "-o", outputfile, inputfile]
 
 	def processOutputLine(self, line):
-		print "[ReplexTask] ", line[:-1]
+		print("[ReplexTask] ", line[:-1])
 
 
 class DVDAuthorTask(Task):
@@ -279,7 +284,7 @@ class DVDAuthorTask(Task):
 		self.menupreview = job.menupreview
 
 	def processOutputLine(self, line):
-		print "[DVDAuthorTask] ", line[:-1]
+		print("[DVDAuthorTask] ", line[:-1])
 		if not self.menupreview and line.startswith("STAT: Processing"):
 			self.callback(self, [], stay_resident=True)
 		elif line.startswith("STAT: VOBU"):
@@ -287,9 +292,9 @@ class DVDAuthorTask(Task):
 				progress = int(line.split("MB")[0].split(" ")[-1])
 				if progress:
 					self.job.mplextask.progress = progress
-					print "[DVDAuthorTask] update mplextask progress:", self.job.mplextask.progress, "of", self.job.mplextask.end
+					print("[DVDAuthorTask] update mplextask progress:", self.job.mplextask.progress, "of", self.job.mplextask.end)
 			except:
-				print "couldn't set mux progress"
+				print("couldn't set mux progress")
 
 
 class DVDAuthorFinalTask(Task):
@@ -304,7 +309,7 @@ class WaitForResidentTasks(Task):
 		Task.__init__(self, job, "waiting for dvdauthor to finalize")
 
 	def run(self, callback):
-		print "waiting for %d resident task(s) %s to finish..." % (len(self.job.resident_tasks), str(self.job.resident_tasks))
+		print("waiting for %d resident task(s) %s to finish..." % (len(self.job.resident_tasks), str(self.job.resident_tasks)))
 		self.callback = callback
 		if self.job.resident_tasks == 0:
 			callback(self, [])
@@ -335,7 +340,7 @@ class BurnTaskPostcondition(Condition):
 
 
 class BurnTask(Task):
-	ERROR_NOTWRITEABLE, ERROR_LOAD, ERROR_SIZE, ERROR_WRITE_FAILED, ERROR_DVDROM, ERROR_ISOFS, ERROR_FILETOOLARGE, ERROR_ISOTOOLARGE, ERROR_MINUSRWBUG, ERROR_UNKNOWN = range(10)
+	ERROR_NOTWRITEABLE, ERROR_LOAD, ERROR_SIZE, ERROR_WRITE_FAILED, ERROR_DVDROM, ERROR_ISOFS, ERROR_FILETOOLARGE, ERROR_ISOTOOLARGE, ERROR_MINUSRWBUG, ERROR_UNKNOWN = list(range(10))
 
 	def __init__(self, job, extra_args=None, tool="growisofs"):
 		if not extra_args:
@@ -352,10 +357,10 @@ class BurnTask(Task):
 
 	def processOutputLine(self, line):
 		line = line[:-1]
-		print "[GROWISOFS] %s" % line
+		print("[GROWISOFS] %s" % line)
 		if line[8:14] == "done, ":
 			self.progress = float(line[:6])
-			print "progress:", self.progress
+			print("progress:", self.progress)
 		elif line.find("flushing cache") != -1:
 			self.progress = 100
 		elif line.find("closing disc") != -1:
@@ -369,12 +374,12 @@ class BurnTask(Task):
 				self.error = self.ERROR_MINUSRWBUG
 			else:
 				self.error = self.ERROR_UNKNOWN
-				print "BurnTask: unknown error %s" % line
+				print("BurnTask: unknown error %s" % line)
 		elif line.startswith(":-("):
 			if line.find("No space left on device") != -1:
 				self.error = self.ERROR_SIZE
 			elif self.error == self.ERROR_MINUSRWBUG:
-				print "*sigh* this is a known bug. we're simply gonna assume everything is fine."
+				print("*sigh* this is a known bug. we're simply gonna assume everything is fine.")
 				self.postconditions = []
 			elif line.find("write failed") != -1:
 				self.error = self.ERROR_WRITE_FAILED
@@ -384,13 +389,13 @@ class BurnTask(Task):
 				self.error = self.ERROR_NOTWRITEABLE
 			else:
 				self.error = self.ERROR_UNKNOWN
-				print "BurnTask: unknown error %s" % line
+				print("BurnTask: unknown error %s" % line)
 		elif line.startswith("FATAL:"):
 			if line.find("already carries isofs!"):
 				self.error = self.ERROR_ISOFS
 			else:
 				self.error = self.ERROR_UNKNOWN
-				print "BurnTask: unknown error %s" % line
+				print("BurnTask: unknown error %s" % line)
 		elif line.find("-allow-limited-size was not specified. There is no way do represent this file size. Aborting.") != -1:
 			self.error = self.ERROR_FILETOOLARGE
 		elif line.startswith("genisoimage: File too large."):
@@ -455,14 +460,13 @@ class PreviewTask(Task):
 			if Screens.Standby.inStandby:
 				self.previewCB(False)
 			else:
-				from Tools import Notifications
-				Notifications.AddNotificationWithCallback(self.previewCB, MessageBox, _("Do you want to preview this DVD before burning?"), timeout=60, default=False)
+				Tools.Notifications.AddNotificationWithCallback(self.previewCB, MessageBox, _("Do you want to preview this DVD before burning?"), timeout=60, default=False, domain="JobManager")
 
 	def abort(self):
 		self.finish(aborted=True)
 
 	def previewCB(self, answer):
-		if answer:
+		if answer == True:
 			self.previewProject()
 		else:
 			self.closedCB(True)
@@ -471,8 +475,7 @@ class PreviewTask(Task):
 		if self.job.menupreview:
 			self.closedCB(True)
 		else:
-			from Tools import Notifications
-			Notifications.AddNotificationWithCallback(self.closedCB, MessageBox, _("Do you want to burn this collection to DVD medium?"))
+			Tools.Notifications.AddNotificationWithCallback(self.closedCB, MessageBox, _("Do you want to burn this collection to DVD medium?"), domain="JobManager")
 
 	def closedCB(self, answer):
 		if answer:
@@ -596,7 +599,7 @@ class MenuImageTask(Task):
 			menu_end_title = nr_titles + 1
 		col = 1
 		row = 1
-		for title_no in range(menu_start_title, menu_end_title):
+		for title_no in list(range(menu_start_title, menu_end_title)):
 			title = self.job.project.titles[title_no - 1]
 			col_width = (s_width - s_left - s_right) / nr_cols
 			row_height = (s_height - s_top - s_bottom) / nr_rows
@@ -722,7 +725,7 @@ class Menus:
 		job.nr_menus = ((nr_titles + job.titles_per_menu - 1) / job.titles_per_menu)
 
 		#a new menu_count every 4 titles (1,2,3,4->1 ; 5,6,7,8->2 etc.)
-		for menu_count in range(1, job.nr_menus + 1):
+		for menu_count in list(range(1, job.nr_menus + 1)):
 			num = str(menu_count)
 			spuxmlfilename = job.workspace + "/spumux" + num + ".xml"
 			menubgpngfilename = job.workspace + "/dvd_menubg" + num + ".png"
@@ -758,7 +761,7 @@ def CreateAuthoringXML_singleset(job):
 	if mode.startswith("menu"):
 		authorxml.append('   <menus lang="' + job.project.menutemplate.settings.menulang.value + '">\n')
 		authorxml.append('    <video aspect="4:3"/>\n')
-		for menu_count in range(1, job.nr_menus + 1):
+		for menu_count in list(range(1, job.nr_menus + 1)):
 			if menu_count == 1:
 				authorxml.append('    <pgc entry="root">\n')
 			else:
@@ -767,7 +770,7 @@ def CreateAuthoringXML_singleset(job):
 			menu_end_title = menu_count * job.titles_per_menu + 1
 			if menu_end_title > nr_titles:
 				menu_end_title = nr_titles + 1
-			for i in range(menu_start_title, menu_end_title):
+			for i in list(range(menu_start_title, menu_end_title)):
 				authorxml.append('     <button name="button' + (str(i).zfill(2)) + '"> jump title ' + str(i) + '; </button>\n')
 			if menu_count > 1:
 				authorxml.append('     <button name="button_prev"> jump menu ' + str(menu_count - 1) + '; </button>\n')
@@ -778,7 +781,7 @@ def CreateAuthoringXML_singleset(job):
 			authorxml.append('    </pgc>\n')
 		authorxml.append('   </menus>\n')
 	authorxml.append('   <titles>\n')
-	for i in range(nr_titles):
+	for i in list(range(nr_titles)):
 		chapters = ','.join(job.project.titles[i].getChapterMarks())
 		title_no = i + 1
 		title_filename = job.workspace + "/dvd_title_%d.mpg" % title_no
@@ -816,7 +819,7 @@ def CreateAuthoringXML_multiset(job):
 				 '   <menus lang="' + job.project.menutemplate.settings.menulang.value + '">\n',
 				 '    <video aspect="4:3"/>\n']
 	if mode.startswith("menu"):
-		for menu_count in range(1, job.nr_menus + 1):
+		for menu_count in list(range(1, job.nr_menus + 1)):
 			if menu_count == 1:
 				authorxml.append('    <pgc>\n')
 			else:
@@ -825,7 +828,7 @@ def CreateAuthoringXML_multiset(job):
 			menu_end_title = menu_count * job.titles_per_menu + 1
 			if menu_end_title > nr_titles:
 				menu_end_title = nr_titles + 1
-			for i in range(menu_start_title, menu_end_title):
+			for i in list(range(menu_start_title, menu_end_title)):
 				authorxml.append('     <button name="button' + (str(i).zfill(2)) + '"> jump titleset ' + str(i) + ' title 1; </button>\n')
 			if menu_count > 1:
 				authorxml.append('     <button name="button_prev"> jump menu ' + str(menu_count - 1) + '; </button>\n')
@@ -842,7 +845,7 @@ def CreateAuthoringXML_multiset(job):
 	authorxml.append('   </menus>\n')
 	authorxml.append('  </vmgm>\n')
 
-	for i in range(nr_titles):
+	for i in list(range(nr_titles)):
 		title = job.project.titles[i]
 		authorxml.append('  <titleset>\n')
 		authorxml.append('   <menus lang="' + job.project.menutemplate.settings.menulang.value + '">\n')
@@ -936,8 +939,8 @@ class DVDJob(Job):
 			PreviewTask(self, self.workspace + "/dvd/VIDEO_TS/")
 		else:
 			hasProjectX = os.path.exists('/usr/bin/projectx')
-			print "[DVDJob] hasProjectX=", hasProjectX
-			for self.i in range(nr_titles):
+			print("[DVDJob] hasProjectX=", hasProjectX)
+			for self.i in list(range(nr_titles)):
 				self.title = self.project.titles[self.i]
 				link_name = self.workspace + "/source_title_%d.ts" % (self.i + 1)
 				title_filename = self.workspace + "/dvd_title_%d.mpg" % (self.i + 1)
@@ -985,7 +988,7 @@ class DVDdataJob(Job):
 		if self.project.settings.output.value == "iso":
 			CheckDiskspaceTask(self)
 		nr_titles = len(self.project.titles)
-		for self.i in range(nr_titles):
+		for self.i in list(range(nr_titles)):
 			title = self.project.titles[self.i]
 			filename = title.inputfile.rstrip("/").rsplit("/", 1)[1]
 			link_name = self.workspace + filename

@@ -1,3 +1,7 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import division
+
 from enigma import iPlayableService, iRdsDecoder
 from Screens.Screen import Screen
 from Components.ActionMap import NumberActionMap
@@ -161,7 +165,7 @@ class RassInteractive(Screen):
 		service = self.session.nav.getCurrentService()
 		decoder = service and service.rdsDecoder()
 		if not decoder: # this should never happen
-			print "[RdsDisplay] NO RDS DECODER in showRassPage"
+			print("[RdsDisplay] NO RDS DECODER in showRassPage")
 		else:
 			mask = decoder.getRassInteractiveMask()
 			page = 1
@@ -175,7 +179,7 @@ class RassInteractive(Screen):
 							subpage.instance.setPixmap(png)
 							subpage.show()
 						else:
-							print "[RdsDisplay] rass png missing"
+							print("[RdsDisplay] rass png missing")
 				else:
 					subpage.hide()
 				page += 1
@@ -187,7 +191,7 @@ class RassInteractive(Screen):
 		service = self.session.nav.getCurrentService()
 		decoder = service and service.rdsDecoder()
 		if not decoder: # this should never happen
-			print "[RdsDisplay] NO RDS DECODER in showRassPage"
+			print("[RdsDisplay] NO RDS DECODER in showRassPage")
 		else:
 			decoder.showRassInteractivePic(page, subpage)
 			page_diff = page - self.current_page
@@ -203,10 +207,10 @@ class RassInteractive(Screen):
 			service = self.session.nav.getCurrentService()
 			decoder = service and service.rdsDecoder()
 			if not decoder: # this should never happen
-				print "[RdsDisplay] NO RDS DECODER in getMaskForPage"
+				print("[RdsDisplay] NO RDS DECODER in getMaskForPage")
 			masks = decoder.getRassInteractiveMask()
 		if masks:
-			mask = masks[(page * 4) / 8]
+			mask = masks[(page * 4) // 8]
 			if page % 2:
 				mask >>= 4
 			else:

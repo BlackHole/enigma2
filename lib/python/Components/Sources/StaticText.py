@@ -1,4 +1,6 @@
-from Source import Source
+from __future__ import absolute_import
+
+from Components.Sources.Source import Source
 
 
 class StaticText(Source):

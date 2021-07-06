@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from Plugins.Plugin import PluginDescriptor
 from Components.config import config, ConfigBoolean
 
@@ -16,7 +17,7 @@ def startSetup(menuid):
 
 
 def NetworkWizard(*args, **kwargs):
-	from NetworkWizard import NetworkWizard
+	from .NetworkWizard import NetworkWizard
 	return NetworkWizard(*args, **kwargs)
 
 
