@@ -13,7 +13,7 @@
 
 > [https://github.com/oe-alliance/oe-alliance-core/tree/5.0](https://github.com/oe-alliance/oe-alliance-core/tree/5.0 "OE-Alliance")
 >
-> [https://github.com/BlackHole/enigma2] "OpenBH E2")
+> https://github.com/BlackHole/enigma2
 
 
 ----------
