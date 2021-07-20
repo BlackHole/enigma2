@@ -1,4 +1,4 @@
-AC_INIT([enigma2],[4.4],[http://www.vuplus-community.net])
+AC_INIT([enigma2],[4.5],[http://www.vuplus-community.net])
 AM_INIT_AUTOMAKE([dist-bzip2 no-define tar-pax -Wno-portability])
 AC_CONFIG_HEADERS([enigma2_config.h])
 
