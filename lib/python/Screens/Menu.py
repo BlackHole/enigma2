@@ -1,7 +1,12 @@
-from Screens.Screen import Screen
+from __future__ import print_function
+from __future__ import absolute_import
+import six
+
+from Screens.HelpMenu import HelpableScreen
+from Screens.Screen import Screen, ScreenSummary
 from Screens.ParentalControlSetup import ProtectedScreen
 from Components.Sources.List import List
-from Components.ActionMap import NumberActionMap
+from Components.ActionMap import HelpableNumberActionMap
 from Components.Sources.StaticText import StaticText
 from Components.config import configfile
 from Components.PluginComponent import plugins
@@ -10,22 +15,18 @@ from Components.NimManager import nimmanager
 from Components.SystemInfo import SystemInfo
 
 from Tools.BoundFunction import boundFunction
-from Tools.Directories import resolveFilename, SCOPE_SKIN, fileExists
+from Tools.Directories import resolveFilename, SCOPE_SKIN
 from enigma import eTimer
 
 import xml.etree.cElementTree
 
-from Screens.Setup import Setup, getSetupTitle
-
-mainmenu = _("Main menu")
+from Screens.Setup import Setup
 
 # read the menu
 file = open(resolveFilename(SCOPE_SKIN, 'menu.xml'), 'r')
 mdom = xml.etree.cElementTree.parse(file)
 file.close()
 
-menu_path = ""
-full_menu_path = ""
 
 class MenuUpdater:
 	def __init__(self):
@@ -45,12 +46,35 @@ class MenuUpdater:
 	def getUpdatedMenu(self, id):
 		return self.updatedMenuItems[id]
 
+
 menuupdater = MenuUpdater()
 
-class MenuSummary(Screen):
-	pass
 
-class Menu(Screen, ProtectedScreen):
+class MenuSummary(ScreenSummary):
+	def __init__(self, session, parent):
+		ScreenSummary.__init__(self, session, parent=parent)
+		self["entry"] = StaticText("")  # DEBUG: Proposed for new summary screens.
+		if self.addWatcher not in self.onShow:
+			self.onShow.append(self.addWatcher)
+		if self.removeWatcher not in self.onHide:
+			self.onHide.append(self.removeWatcher)
+
+	def addWatcher(self):
+		if self.selectionChanged not in self.parent["menu"].onSelectionChanged:
+			self.parent["menu"].onSelectionChanged.append(self.selectionChanged)
+		self.selectionChanged()
+
+	def removeWatcher(self):
+		if self.selectionChanged in self.parent["menu"].onSelectionChanged:
+			self.parent["menu"].onSelectionChanged.remove(self.selectionChanged)
+
+	def selectionChanged(self):
+		selection = self.parent["menu"].getCurrent()
+		if selection:
+			self["entry"].text = selection[0]  # DEBUG: Proposed for new summary screens.
+
+
+class Menu(Screen, HelpableScreen, ProtectedScreen):
 	ALLOW_SUSPEND = True
 
 	def okbuttonClick(self):
@@ -62,7 +86,7 @@ class Menu(Screen, ProtectedScreen):
 			selection[1]()
 
 	def execText(self, text):
-		exec text
+		exec(text)
 
 	def runScreen(self, arg):
 		# arg[0] is the module (as string)
@@ -72,8 +96,8 @@ class Menu(Screen, ProtectedScreen):
 		#        stuff which is just imported)
 		# FIXME. somehow
 		if arg[0] != "":
-			exec "from " + arg[0] + " import *"
-		self.openDialog(*eval(arg[1]))
+			exec("from %s import %s" % (arg[0], arg[1].split(",")[0]))
+			self.openDialog(*eval(arg[1]))
 
 	def nothing(self): #dummy
 		pass
@@ -82,7 +106,7 @@ class Menu(Screen, ProtectedScreen):
 		self.session.openWithCallback(self.menuClosed, *dialog)
 
 	def openSetup(self, dialog):
-		self.session.openWithCallback(self.menuClosed, Setup, dialog, None, full_menu_path)
+		self.session.openWithCallback(self.menuClosed, Setup, dialog)
 
 	def addMenu(self, destList, node):
 		requires = node.get("requires")
@@ -92,7 +116,13 @@ class Menu(Screen, ProtectedScreen):
 					return
 			elif not SystemInfo.get(requires, False):
 				return
-		MenuTitle = _(node.get("text", "??").encode("UTF-8"))
+		if six.PY3:
+			MenuTitle = _(node.get("text", "??"))
+			# print("[MenuTiTle PY3] =%s" % (MenuTitle))
+		else:
+			MenuTitle = _(node.get("text", "??").encode("UTF-8"))
+			# print("[MenuTiTle PY2] =%s" % (MenuTitle))
+		MenuTitle = six.ensure_str(MenuTitle)
 		entryID = node.get("entryID", "undefined")
 		weight = node.get("weight", 50)
 		x = node.get("flushConfigOnClose")
@@ -104,10 +134,6 @@ class Menu(Screen, ProtectedScreen):
 		destList.append((MenuTitle, a, entryID, weight))
 
 	def menuClosedWithConfigFlush(self, *res):
-		global menu_path
-		menu_path = ""
-		global full_menu_path
-		full_menu_path = ""
 		configfile.save()
 		self.menuClosed(*res)
 
@@ -126,15 +152,22 @@ class Menu(Screen, ProtectedScreen):
 		conditional = node.get("conditional")
 		if conditional and not eval(conditional):
 			return
-		item_text = node.get("text", "").encode("UTF-8")
+		if six.PY3:
+			item_text = node.get("text", "* Undefined *")
+			# print("[Menu item_text PY3] =%s" % (item_text))
+		else:
+			item_text = node.get("text", "* Undefined *").encode("UTF-8")
+			# print("[Menu item_text PY2] =%s" % (item_text))
+		item_text = six.ensure_str(item_text)
+		if item_text:
+			item_text = _(item_text)
 		entryID = node.get("entryID", "undefined")
 		weight = node.get("weight", 50)
 		for x in node:
 			if x.tag == 'screen':
-				args = 'full_menu_path'
 				module = x.get("module")
 				screen = x.get("screen")
-				
+
 				if screen is None:
 					screen = module
 
@@ -143,12 +176,13 @@ class Menu(Screen, ProtectedScreen):
 					module = "Screens." + module
 				else:
 					module = ""
+
 				# check for arguments. they will be appended to the
 				# openDialog call
-				if x.text:
-					args = x.text or ""
+				args = x.text or ""
 				screen += ", " + args
-				destList.append((_(item_text or "??"), boundFunction(self.runScreen, (module, screen)), entryID, weight))
+
+				destList.append((item_text, boundFunction(self.runScreen, (module, screen)), entryID, weight))
 				return
 			elif x.tag == 'plugin':
 				extensions = x.get("extensions")
@@ -175,24 +209,20 @@ class Menu(Screen, ProtectedScreen):
 				args = x.text or ""
 				screen += ", " + args
 
-				destList.append((_(item_text or "??"), boundFunction(self.runScreen, (module, screen)), entryID, weight))
+				destList.append((item_text, boundFunction(self.runScreen, (module, screen)), entryID, weight))
 				return
 			elif x.tag == 'code':
-				destList.append((_(item_text or "??"), boundFunction(self.execText, x.text), entryID, weight))
+				destList.append((item_text, boundFunction(self.execText, x.text), entryID, weight))
 				return
 			elif x.tag == 'setup':
 				id = x.get("id")
-				if item_text == "":
-					item_text = _(getSetupTitle(id))
-				else:
-					item_text = _(item_text)
 				destList.append((item_text, boundFunction(self.openSetup, id), entryID, weight))
 				return
 		destList.append((item_text, self.nothing, entryID, weight))
 
-
 	def __init__(self, session, parent):
 		Screen.__init__(self, session)
+		HelpableScreen.__init__(self)
 		list = []
 
 		menuID = None
@@ -229,7 +259,7 @@ class Menu(Screen, ProtectedScreen):
 					res = (parts[0], parts[1])
 					bhorder.append(res)
 					file.close()
-					
+
 			for l in plugins.getPluginsForMenu(menuID):
 				# check if a plugin overrides an existing menu
 				plugin_menuid = l[2]
@@ -241,14 +271,14 @@ class Menu(Screen, ProtectedScreen):
 					for y in bhorder:
 						if y[0] == plugin_menuid:
 							weight = y[1]
-							
+
 				if len(l) > 4 and l[4]:
 					list.append((l[0], boundFunction(l[1], self.session, self.close), l[2], weight or 50))
 				else:
 					list.append((l[0], boundFunction(l[1], self.session), l[2], weight or 50))
 
 		# for the skin: first try a menu_<menuID>, then Menu
-		self.skinName = [ ]
+		self.skinName = []
 		if menuID is not None:
 			self.skinName.append("menu_" + menuID)
 		self.skinName.append("Menu")
@@ -262,50 +292,34 @@ class Menu(Screen, ProtectedScreen):
 			list.sort(key=lambda x: int(x[3]))
 
 		if config.usage.menu_show_numbers.value:
-			list = [(str(x[0] + 1) + "  " +x[1][0], x[1][1], x[1][2]) for x in enumerate(list)]
+			list = [(str(x[0] + 1) + "  " + x[1][0], x[1][1], x[1][2], x[1][3]) for x in enumerate(list)]
 
 		self["menu"] = List(list)
 
-		self["actions"] = NumberActionMap(["OkCancelActions", "MenuActions", "NumberActions"],
-			{
-				"ok": self.okbuttonClick,
-				"cancel": self.closeNonRecursive,
-				"menu": self.closeRecursive,
-				"0": self.keyNumberGlobal,
-				"1": self.keyNumberGlobal,
-				"2": self.keyNumberGlobal,
-				"3": self.keyNumberGlobal,
-				"4": self.keyNumberGlobal,
-				"5": self.keyNumberGlobal,
-				"6": self.keyNumberGlobal,
-				"7": self.keyNumberGlobal,
-				"8": self.keyNumberGlobal,
-				"9": self.keyNumberGlobal
-			})
-
-		a = parent.get("title", "").encode("UTF-8") or None
-		a = a and _(a) or _(parent.get("text", "").encode("UTF-8"))
-		self.menu_title = a
-		global menu_path
-		self.menu_path_compressed = menu_path
-		if menu_path == "":
-			menu_path += a
-		elif not menu_path.endswith(a):
-			menu_path += " / " + a
-		global full_menu_path
-		full_menu_path = menu_path + ' / '
-		if config.usage.show_menupath.value == 'large':
-			Screen.setTitle(self, menu_path)
-			self["title"] = StaticText(menu_path)
-			self["menu_path_compressed"] = StaticText("")
-		elif config.usage.show_menupath.value == 'small':
-			Screen.setTitle(self, a)
-			self["title"] = StaticText(a)
-			self["menu_path_compressed"] = StaticText(self.menu_path_compressed and self.menu_path_compressed + " >" or "")
+		# self["menuActions"] = HelpableNumberActionMap(self, ["OkCancelActions", "MenuActions", "NumberActions"], {
+		self["menuActions"] = HelpableNumberActionMap(self, ["OkCancelActions", "NumberActions"], {
+			"ok": (self.okbuttonClick, _("Select the current menu item")),
+			"cancel": (self.closeNonRecursive, _("Exit menu")),
+			"close": (self.closeRecursive, _("Exit all menus")),
+			# "menu": (self.closeRecursive, _("Exit all menus")),
+			"1": (self.keyNumberGlobal, _("Direct menu item selection")),
+			"2": (self.keyNumberGlobal, _("Direct menu item selection")),
+			"3": (self.keyNumberGlobal, _("Direct menu item selection")),
+			"4": (self.keyNumberGlobal, _("Direct menu item selection")),
+			"5": (self.keyNumberGlobal, _("Direct menu item selection")),
+			"6": (self.keyNumberGlobal, _("Direct menu item selection")),
+			"7": (self.keyNumberGlobal, _("Direct menu item selection")),
+			"8": (self.keyNumberGlobal, _("Direct menu item selection")),
+			"9": (self.keyNumberGlobal, _("Direct menu item selection")),
+			"0": (self.keyNumberGlobal, _("Direct menu item selection"))
+		}, prio=0, description=_("Common Menu Actions"))
+		if six.PY3:
+			a = parent.get("title", "") or None
+			a = a and _(a) or _(parent.get("text", ""))
 		else:
-			Screen.setTitle(self, a)
-			self["title"] = StaticText(a)
-			self["menu_path_compressed"] = StaticText("")
+			a = parent.get("title", "").encode("UTF-8") or None
+			a = a and _(a) or _(parent.get("text", "").encode("UTF-8"))
+		self.setTitle(a)
 
 		self.number = 0
 		self.nextNumberTimer = eTimer()
@@ -326,18 +340,10 @@ class Menu(Screen, ProtectedScreen):
 		self.number = 0
 
 	def closeNonRecursive(self):
-		global menu_path
-		menu_path = self.menu_path_compressed
-		global full_menu_path
-		full_menu_path = menu_path + ' / '
 		self.resetNumberKey()
 		self.close(False)
 
 	def closeRecursive(self):
-		global menu_path
-		menu_path = ""
-		global full_menu_path
-		full_menu_path = ""
 		self.resetNumberKey()
 		self.close(True)
 
@@ -352,6 +358,8 @@ class Menu(Screen, ProtectedScreen):
 				return True
 			elif config.ParentalControl.config_sections.standby_menu.value and self.menuID == "shutdown":
 				return True
+
+
 class MainMenu(Menu):
 	#add file load functions for the xml-file
 

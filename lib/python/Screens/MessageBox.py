@@ -1,3 +1,7 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import division
+
 from enigma import eTimer, ePoint, eSize, getDesktop
 
 from Components.ActionMap import HelpableActionMap
@@ -8,6 +12,7 @@ from Components.Pixmap import Pixmap, MultiPixmap
 from Components.Sources.StaticText import StaticText
 from Screens.HelpMenu import HelpableScreen
 from Screens.Screen import Screen
+from skin import parseScale
 
 
 class MessageBox(Screen, HelpableScreen):
@@ -76,13 +81,11 @@ class MessageBox(Screen, HelpableScreen):
 			self["icon"].show()
 		self.skinName = ["MessageBox"]
 		if simple:
-			self.skinName = ["MessageBoxSimple"]
+			self.skinName = ["MessageBoxSimple"] + self.skinName
 		if wizard:
 			self["rc"] = MultiPixmap()
 			self["rc"].setPixmapNum(config.misc.rcused.value)
 			self.skinName = ["MessageBoxWizard"]
-		if not skin_name:
-			skin_name = []
 		if isinstance(skin_name, str):
 			self.skinName = [skin_name] + self.skinName
 		if not list:
@@ -99,9 +102,9 @@ class MessageBox(Screen, HelpableScreen):
 		self.timeout_default = timeout_default
 		self.baseTitle = title
 		self.activeTitle = None
-		# DEBUG: This is a temporary patch to stop the VuRemote and GigaBlueRemote plugins from crashing!
-		# If this code is accepted then the offending lines from the plugins can safely be removed.
-		self.timerRunning = None  # DEBG: See note above!
+		self.timerRunning = False
+		if timeout > 0:
+			self.timerRunning = True
 		self["text"] = Label(self.text)
 		self["Text"] = StaticText(self.text)  # What is self["Text"] for?
 		self["selectedChoice"] = StaticText()
@@ -132,7 +135,7 @@ class MessageBox(Screen, HelpableScreen):
 			self.baseTitle = self.baseTitle % prefix
 		self.setTitle(self.baseTitle)
 		if self.timeout > 0:
-			print "[MessageBox] Timeout set to %d seconds." % self.timeout
+			print("[MessageBox] Timeout set to %d seconds." % self.timeout)
 			self.timer.start(25)
 
 	def processTimer(self):
@@ -156,20 +159,45 @@ class MessageBox(Screen, HelpableScreen):
 				self.ok()
 
 	def stopTimer(self, reason):
-		print "[MessageBox] %s" % reason
+		print("[MessageBox] %s" % reason)
 		self.timer.stop()
 		self.timeout = 0
 		if self.baseTitle is not None:
 			self.setTitle(self.baseTitle)
 
+	def getListItemHeight(self):
+		defaultItemHeight = 25 # if no itemHeight is present in the skin
+		if self.list and hasattr(self["list"], "skinAttributes") and isinstance(self["list"].skinAttributes, list):
+			for (attrib, value) in self["list"].skinAttributes:
+				if attrib == "itemHeight":
+					itemHeight = parseScale(value) # if value does not parse (due to bad syntax in skin), itemHeight will be 0
+					return itemHeight if itemHeight else defaultItemHeight
+		return defaultItemHeight # if itemHeight not in skinAttributes
+
+	def getPixmapWidth(self):
+		defaultPixmapWidth = 53
+		try: # protect from skin errors
+			return self["ErrorPixmap"].visible and hasattr(self["ErrorPixmap"], 'getSize') and isinstance(self["ErrorPixmap"].getSize(), tuple) and len(self["ErrorPixmap"].getSize()) and self["ErrorPixmap"].getSize()[0] or \
+				self["QuestionPixmap"].visible and hasattr(self["QuestionPixmap"], 'getSize') and isinstance(self["QuestionPixmap"].getSize(), tuple) and len(self["QuestionPixmap"].getSize()) and self["QuestionPixmap"].getSize()[0] or \
+				self["InfoPixmap"].visible and hasattr(self["InfoPixmap"], 'getSize') and isinstance(self["InfoPixmap"].getSize(), tuple) and len(self["InfoPixmap"].getSize()) and self["InfoPixmap"].getSize()[0] or \
+				defaultPixmapWidth
+		except Exception as err:
+			print("[MessageBox] defaultPixmapWidth, %s: '%s'" % (type(err).__name__, err))
+		return defaultPixmapWidth
+
 	def autoResize(self):
+		# Get the real pixmap width from the skin so this can be used in the formula below.
+		# Historically the default pixmap width has been 53 + 12 pixels of right margin.
+		pixmapWidth = self.getPixmapWidth()
+		pixmapMargin = 12
+		itemHeight = self.getListItemHeight()
 		count = len(self.list)
 		if not self["text"].text:
 			textsize = (520, 0)
-			listsize = (520, 25 * count)
+			listsize = (520, itemHeight * count)
 			if self.picon:
-				self["list"].instance.move(ePoint(65, 0))
-				wsizex = textsize[0] + 65
+				self["list"].instance.move(ePoint(pixmapWidth + pixmapMargin, 0))
+				wsizex = textsize[0] + pixmapWidth + pixmapMargin
 			else:
 				self["list"].instance.move(ePoint(0, 0))
 				wsizex = textsize[0]
@@ -179,16 +207,17 @@ class MessageBox(Screen, HelpableScreen):
 			if textsize[0] < textsize[1]:
 				textsize = (textsize[1], textsize[0] + 10)
 			if textsize[0] > 520:
-				textsize = (textsize[0], textsize[1] + 25)
+				textBottomMargin = int(1.0 * textsize[0] // 520 * 30) # previously always 25
+				textsize = (textsize[0], textsize[1] + textBottomMargin)
 			else:
 				textsize = (520, textsize[1] + 25)
-			listsize = (textsize[0], 25 * count)
+			listsize = (textsize[0], itemHeight * count)
 
 			self["text"].instance.resize(eSize(*textsize))
 			if self.picon:
-				self["text"].instance.move(ePoint(65, 0))
-				self["list"].instance.move(ePoint(65, textsize[1]))
-				wsizex = textsize[0] + 65
+				self["text"].instance.move(ePoint(pixmapWidth + pixmapMargin, 0))
+				self["list"].instance.move(ePoint(pixmapWidth + pixmapMargin, textsize[1]))
+				wsizex = textsize[0] + pixmapWidth + pixmapMargin
 			else:
 				self["text"].instance.move(ePoint(10, 10))
 				self["list"].instance.move(ePoint(0, textsize[1]))
@@ -196,20 +225,19 @@ class MessageBox(Screen, HelpableScreen):
 			self["list"].instance.resize(eSize(*listsize))
 		wsizey = textsize[1] + listsize[1]
 		self.instance.resize(eSize(*(wsizex, wsizey)))
-		self.instance.move(ePoint((getDesktop(0).size().width() - wsizex) / 2, (getDesktop(0).size().height() - wsizey) / 2))
+		self.instance.move(ePoint((getDesktop(0).size().width() - wsizex) // 2, (getDesktop(0).size().height() - wsizey) // 2))
 
 	def cancel(self):
-		if self["list"].list:
-			for l in self["list"].list:
-				# print "[MessageBox] DEBUG: (cancel) '%s' -> '%s'" % (str(l[0]), str(l[1]))
-				# Should we be looking at the second element to get the boolean value rather than the word?
-				if l[0].lower() == _('no') or l[0].lower() == _('false'):
-					if len(l) > 2:
-						l[2](None)
-					else:
-						self.close(False)
-					break
-		self.close(False)
+		for l in self["list"].list:
+			# print "[MessageBox] DEBUG: (cancel) '%s' -> '%s'" % (str(l[0]), str(l[1]))
+			# Should we be looking at the second element to get the boolean value rather than the word?
+			if l[0].lower() == _('no') or l[0].lower() == _('false'):
+				if len(l) > 2:
+					l[2](None)
+				break
+		# Don't close again if the MessageBox was closed in the loop
+		if hasattr(self, "execing"):
+			self.close(False)
 
 	def ok(self):
 		if self["list"].getCurrent():

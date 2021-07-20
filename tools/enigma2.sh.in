@@ -10,15 +10,33 @@ datarootdir=@datarootdir@
 #fi
 
 # hook to execute user startup script before enigma2 start
-if [ -x /etc/enigma2/startup.sh ]; then
-	/etc/enigma2/startup.sh
+if [ -x @sysconfdir@/enigma2/startup.sh ]; then
+	@sysconfdir@/enigma2/startup.sh
+fi
+
+if [ -e /proc/stb/info/boxtype ]; then
+	stbcheck=`cat /proc/stb/info/boxtype`
+	if [ $stbcheck == "viper4k" ] || [ $stbcheck == "sf8008" ] || [ $stbcheck == "sf8008m" ] || [ $stbcheck == "beyonwizv2" ] || [ $stbcheck == "ustym4kpro" ] || [ $stbcheck == "cc1" ] || [ $stbcheck == "gbtrio4k" ] ; then
+		count=`ps -ef |grep libreader |grep -v "grep" |wc -l`
+		if [ 0 == $count ];then
+			libreader 720P_50
+		fi
+	fi
 fi
 
 if [ -x @bindir@/showiframe ]; then
 	if [ -f @sysconfdir@/enigma2/backdrop.mvi ]; then
 		@bindir@/showiframe @sysconfdir@/enigma2/backdrop.mvi
-	elif [ -f @datadir@/backdrop.mvi ]; then
-		@bindir@/showiframe @datadir@/backdrop.mvi
+	else
+		skin=`sed -En 's|config\.skin\.primary_skin=(.+)/skin\.xml|\1|p' @sysconfdir@/enigma2/settings`
+		if [ -z $skin ]; then
+			skin=`grep -m1 '^DEFAULT_SKIN' @prefix@/lib/enigma2/python/skin.py | sed -e's%[^"]*"%%' -e's%/.*%%'`
+		fi
+		if [ -n $skin -a -f @datadir@/enigma2/$skin/backdrop.mvi ]; then
+			@bindir@/showiframe @datadir@/enigma2/$skin/backdrop.mvi
+		elif [ -f @datadir@/backdrop.mvi ]; then
+			@bindir@/showiframe @datadir@/backdrop.mvi
+		fi
 	fi
 fi
 
@@ -44,18 +62,20 @@ sync
 (sleep 2; echo "enigma2 is the main pvr application... adjust oom score!"; PID=$(pidof enigma2); \
 	[ -e /proc/$PID/oom_score_adj ] && echo "-999" > /proc/$PID/oom_score_adj || echo "-17" > /proc/$PID/oom_adj;) &
 
-if [ "$(grep config.crash.enabledebug /etc/enigma2/settings)" == "config.crash.enabledebug=True" ]; then
-	if [ "$(grep config.crash.debug_path= /etc/enigma2/settings | sed 's/config.crash.debug_path=//g')" != "" -a -d "$(grep config.crash.debug_path= /etc/enigma2/settings | sed 's/config.crash.debug_path=//g')" ]; then
-		LD_PRELOAD=$LIBS @bindir@/enigma2 &> $(grep config.crash.debug_path= /etc/enigma2/settings | sed 's/config.crash.debug_path=//g')Enigma2_debug_$(date +%Y-%m-%d_%H-%M-%S).log
-	else
-		LD_PRELOAD=$LIBS @bindir@/enigma2 &> /home/root/logs/Enigma2_debug_$(date +%Y-%m-%d_%H-%M-%S).log
-	fi
+export LC_CTYPE="en_US.UTF-8"
+
+# set time format used to prefix each line in the debug logs
+if grep -q 'config\.crash\.logtimeformat' @sysconfdir@/enigma2/settings; then
+	export ENIGMA_DEBUG_TIME=`grep "config\.crash\.logtimeformat" @sysconfdir@/enigma2/settings | sed -E "s/^.*=(.*)$/\1/" -`
+fi
+
+if grep -q 'config\.crash\.enabledebug=True' @sysconfdir@/enigma2/settings; then
+	DEBUG_LVL='4'
+	debug_dir=$(sed -n 's/config.crash.debug_path=//p' @sysconfdir@/enigma2/settings)
+	[ -n "${debug_dir}" -a -d "${debug_dir}" ] || debug_dir=/home/root/logs/
+	LD_PRELOAD=$LIBS @bindir@/enigma2 &> "${debug_dir}Enigma2_debug_$(date +%Y-%m-%d_%H-%M-%S).log"
 else
-	if [ ! "$(grep config.misc.firstrun=False /etc/enigma2/settings)" ]; then
-		LD_PRELOAD=$LIBS @bindir@/enigma2
-	else
-		LD_PRELOAD=$LIBS @bindir@/enigma2 2> /dev/null
-	fi
+	LD_PRELOAD=$LIBS @bindir@/enigma2
 fi
 
 # enigma2 exit codes:
@@ -67,6 +87,16 @@ fi
 # >128 signal
 
 ret=$?
+
+if [ "$ret" -ne "1" ]; then
+	if [ -e /proc/stb/info/boxtype ]; then
+		stbcheck=`cat /proc/stb/info/boxtype`
+		if [ $stbcheck == "viper4k" ] || [ $stbcheck == "sf8008" ] || [ $stbcheck == "sf8008m" ] || [ $stbcheck == "beyonwizv2" ] || [ $stbcheck == "gbtrio4k" ] ; then
+			killall -9 libreader; sleep 5
+		fi
+	fi
+fi
+
 case $ret in
 	1)
 		/sbin/halt
@@ -106,7 +136,7 @@ case $ret in
 		/sbin/reboot
 		;;
 	42)
-		python /usr/lib/enigma2/python/upgrade.pyo
+		python /usr/lib/enigma2/python/upgrade.py
 		;;
 	43)
 		init 1

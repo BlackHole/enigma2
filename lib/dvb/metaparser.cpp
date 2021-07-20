@@ -28,7 +28,7 @@ static int getctime(const std::string &basename)
 static long long fileSize(const std::string &basename)
 {
 	long long filesize = 0;
-	char buf[8];
+	char buf[16];
 	std::string splitname;
 	struct stat64 s;
 
@@ -208,6 +208,10 @@ int eDVBMetaParser::updateMeta(const std::string &tsname)
 	std::string filename = tsname + ".meta";
 	eServiceReference ref = m_ref;
 	ref.path = "";
+
+	/* To make sure you only modify the meta file you're looking at, and not one that is hardlinked to this one, remove the file first.
+	 * We don't care about the result - if it doesn't exist that's also just fine. */
+	::unlink(filename.c_str());
 
 	CFile f(filename.c_str(), "w");
 	if (!f)

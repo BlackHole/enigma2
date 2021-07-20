@@ -12,7 +12,7 @@ self.selectKey("OK")
 			<text value="Use the up/down keys on your remote control to select an option. After that, press OK." />
 			<displaytext value="Use the up/down keys on your remote control to select an option. After that, press OK." />
 			<list>
-				<listentry caption="Use the wizard to set up basic features" step="network" />
+				<listentry caption="Use the wizard to set up basic features" step="nima" />
 				<listentry caption="Exit the wizard" step="end" />
 			</list>
 			<code>
@@ -268,12 +268,12 @@ self.condition = nimmanager.somethingConnected() and not config.misc.installwiza
 self.hideRc()
 			</code>
 			<list>
-				<listentry caption="No, scan later manually" step="end" />
+				<listentry caption="No, scan later manually" step="plugins" />
 				<listentry caption="Yes, do an automatic scan now" step="scan" />
 				<listentry caption="Yes, do a manual scan now" step="manualscan" />
 			</list>
 		</step>
-		<step id="scan" nextstep="end">
+		<step id="scan" nextstep="plugins">
 			<condition>
 from Components.NimManager import nimmanager
 self.condition = nimmanager.somethingConnected() and not config.misc.installwizard.channellistdownloaded.value
@@ -352,9 +352,9 @@ config.ParentalControl.setuppin.save()
 			<displaytext value="After the start wizard is completed, you need to protect single services. Refer to your %s %s's manual on how to do that." />
 		</step>
 -->
-		<step id="plugins" nextstep="skins">
+		<step id="plugins"  nextstep="timeoptions">
 			<condition>
-self.condition = config.misc.installwizard.hasnetwork.value and config.misc.installwizard.ipkgloaded.value
+self.condition = config.misc.networkenabled.value
 			</condition>
 			<text value="Plugin install" />
 			<config screen="InstallWizard" module="InstallWizard" args="2" type="ConfigList" />
@@ -363,9 +363,31 @@ self.clearSelectedKeys()
 self.selectKey("OK")
 			</code>
 		</step>
+
+		<step id="timeoptions" nextstep="skins">
+			<text value="Please set your time options.\n\nPress YELLOW to set the time zone via geolocation." />
+			<displaytext value="Please set your time options" />
+			<config screen="Time" module="Time" type="ConfigList" />
+			<code>
+self.clearSelectedKeys()
+self.selectKey("LEFT")
+self.selectKey("RIGHT")
+self.selectKey("YELLOW")
+			</code>
+		</step>
+
+		<step id="wizardoptions" nextstep="skins">
+			<text value="Please set up the following common options"/>
+			<config screen="Setup" module="Setup" args="wizardoptions" type="ConfigList" />
+			<code>
+self.clearSelectedKeys()
+self.selectKey("OK")
+			</code>
+		</step>
+
 		<step id="skins">
 			<condition>
-self.condition = config.misc.installwizard.hasnetwork.value and config.misc.installwizard.ipkgloaded.value
+self.condition = config.misc.networkenabled.value 
 			</condition>
 			<text value="Skin install" />
 			<config screen="InstallWizard" module="InstallWizard" args="3" type="ConfigList" />
@@ -374,6 +396,7 @@ self.clearSelectedKeys()
 self.selectKey("OK")
 			</code>
 		</step>
+
 		<step id="end" laststep="true">
 			<condition>
 self.condition = self.isLastWizard

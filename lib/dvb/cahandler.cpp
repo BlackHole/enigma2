@@ -155,7 +155,7 @@ void ePMTClient::clientTLVReceived(unsigned char *tag, int length, unsigned char
 			if (displayText)
 			{
 				strncat(displayText, (const char*)value, length);
-				strncat(displayText, "\n", 1);
+				strcat(displayText, "\n");
 			}
 			break;
 		case 0x05: /* text last */
@@ -725,7 +725,21 @@ int eDVBCAService::buildCAPMT(eTable<ProgramMapSection> *ptr)
 			}
 		}
 
-		capmt.writeToBuffer(m_capmt);
+		size_t total = capmt.writeToBuffer(m_capmt);
+
+		if(!eDVBDB::getInstance()->getService(m_service, dvbservice))
+		{
+			pmtpid = dvbservice->getCacheEntry(eDVBService::cPMTPID);
+			if (pmtpid > 0)
+			{
+				m_capmt[total++] = 0x0d; // Datastream (DSM CC)
+				m_capmt[total++] = pmtpid>>8;
+				m_capmt[total++] = pmtpid&0xFF;
+				m_capmt[total++] = 0x00;
+				m_capmt[total++] = 0x00;
+				m_capmt[3] = (int)m_capmt[3] + 5;
+			}
+		}
 	}
 
 	m_prev_build_hash = build_hash;

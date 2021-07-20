@@ -119,29 +119,45 @@ void eSubtitleWidget::setPage(const eDVBTeletextSubtitlePage &p)
 
 void eSubtitleWidget::setPage(const eDVBSubtitlePage &p)
 {
-	eDebug("[eSubtitleWidget] setPage");
+	//eDebug("[eSubtitleWidget] setPage");
 	m_dvb_page = p;
 	invalidate(m_visible_region); // invalidate old visible regions
 	m_visible_region.rects.clear();
-	int line = 0;
+
+	int verticalShift=0;
 	int original_position = eConfigManager::getConfigIntValue("config.subtitles.dvb_subtitles_original_position");
+	
+//	In case of absolute positioning determine bottom of lowest region (Note that the regions are not necessarily in order)
+//	Compute vertcial shift of all regions, and make sure it does not extend above the top of the display.
+	if (original_position==1)
+	{
+		int lowestLine=0;
+		int highestLine=99999;
+		int lowerborder = eConfigManager::getConfigIntValue("config.subtitles.subtitle_position", -1);
+		for (std::list<eDVBSubtitleRegion>::iterator it(m_dvb_page.m_regions.begin()); it != m_dvb_page.m_regions.end(); ++it) {
+			int ll=it->m_position.y() +it->m_pixmap->size().height();
+			int hl=it->m_position.y();
+			lowestLine=std::max(ll,lowestLine);
+			highestLine=std::min(hl,highestLine);
+		}
+		verticalShift=std::min(highestLine,lowestLine-(p.m_display_size.height()-lowerborder));
+	}
+	
 	for (std::list<eDVBSubtitleRegion>::iterator it(m_dvb_page.m_regions.begin()); it != m_dvb_page.m_regions.end(); ++it)
 	{
 		if (original_position)
 		{
-			int lines = m_dvb_page.m_regions.size();
 			int lowerborder = eConfigManager::getConfigIntValue("config.subtitles.subtitle_position", -1);
 			if (lowerborder >= 0)
 			{
 				if (original_position == 1)
-					it->m_position=ePoint(it->m_position.x(), p.m_display_size.height() - (lines - line) * it->m_pixmap->size().height() - lowerborder);
+					it->m_position=ePoint(it->m_position.x(), it->m_position.y()-verticalShift);
 				else
 					it->m_position=ePoint(it->m_position.x(), it->m_position.y() + 55 - lowerborder);
 			}
-			line++;
 		}
 		eDebug("[eSubtitleWidget] add %d %d %d %d", it->m_position.x(), it->m_position.y(), it->m_pixmap->size().width(), it->m_pixmap->size().height());
-		eDebug("[eSubtitleWidget] disp width %d, disp height %d", p.m_display_size.width(), p.m_display_size.height());
+		//eDebug("[eSubtitleWidget] disp width %d, disp height %d", p.m_display_size.width(), p.m_display_size.height());
 		eRect r = eRect(it->m_position, it->m_pixmap->size());
 		r.scale(size().width(), p.m_display_size.width(), size().height(), p.m_display_size.height());
 		m_visible_region |= r;
@@ -355,8 +371,8 @@ int eSubtitleWidget::event(int event, void *data, void *data2)
 				text = replace_all(text, "&apos;", "'");
 				text = replace_all(text, "&quot;", "\"");
 				text = replace_all(text, "&amp;", "&");
-				text = replace_all(text, "&lt", "<");
-				text = replace_all(text, "&gt", ">");
+				text = replace_all(text, "&lt;", "<");
+				text = replace_all(text, "&gt;", ">");
 
 				if (eConfigManager::getConfigBoolValue("config.subtitles.pango_subtitle_fontswitch"))
 				{
@@ -388,6 +404,13 @@ int eSubtitleWidget::event(int event, void *data, void *data2)
 					text = replace_all(text, "<u>", "");
 					text = replace_all(text, "<i>", "");
 					text = replace_all(text, "<b>", "");
+				}
+				text = replace_all(text, "</font>", "");
+				size_t subtitleFont = 0;
+				while ((subtitleFont = text.find("<font ", subtitleFont)) != std::string::npos)
+				{
+					size_t end = text.find('>', subtitleFont);
+					text.erase(subtitleFont, end - subtitleFont + 1);
 				}
 				subtitleStyles[face].font->pointSize=fontsize;
 				painter.setFont(subtitleStyles[face].font);

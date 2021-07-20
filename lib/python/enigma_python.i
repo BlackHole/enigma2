@@ -194,6 +194,7 @@ typedef long time_t;
 %immutable iCryptoInfo::usedcardid;
 %immutable eTuxtxtApp::appClosed;
 %immutable iDVBChannel::receivedTsidOnid;
+%immutable eDVBSatelliteEquipmentControl::slotRotorSatPosChanged;
 %include <lib/base/message.h>
 %include <lib/driver/rc.h>
 %include <lib/driver/rcinput_swig.h>
@@ -421,6 +422,18 @@ int getLinkedSlotID(int fe)
 	eFBCTunerManager *mgr = eFBCTunerManager::getInstance();
 	if (mgr) return mgr->getLinkedSlotID(fe);
 	return -1;
+}
+%}
+
+PyObject *getFontFaces();
+%{
+PyObject *getFontFaces()
+{
+	std::vector<std::string> v = fontRenderClass::getInstance()->getFontFaces();
+	ePyObject result = PyList_New(v.size());
+	for (size_t i = 0; i < v.size(); i++)
+		PyList_SET_ITEM(result, i, PyString_FromString(v[i].c_str()));
+        return result;
 }
 %}
 

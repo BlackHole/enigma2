@@ -1,15 +1,16 @@
+from __future__ import absolute_import
+
 from Screens.Screen import Screen
 from Components.ConfigList import ConfigListScreen
-from Components.ActionMap import NumberActionMap
 from Components.config import config, getConfigListEntry, ConfigNothing, NoSave, ConfigPIN, configfile
 
-from Components.Sources.StaticText import StaticText
 from Screens.ChoiceBox import ChoiceBox
 from Screens.MessageBox import MessageBox
 from Screens.InputBox import PinInput
 from Tools.BoundFunction import boundFunction
 from enigma import eServiceCenter, eTimer, eServiceReference
 from operator import itemgetter
+
 
 class ProtectedScreen:
 	def __init__(self):
@@ -28,45 +29,20 @@ class ProtectedScreen:
 	def closeProtectedScreen(self, result=None):
 		self.close(None)
 
-class ParentalControlSetup(Screen, ConfigListScreen, ProtectedScreen):
-	def __init__(self, session, menu_path=""):
+
+class ParentalControlSetup(ConfigListScreen, Screen, ProtectedScreen):
+	def __init__(self, session):
 		Screen.__init__(self, session)
 		ProtectedScreen.__init__(self)
-		screentitle = _("Parental control")
-		if config.usage.show_menupath.value == 'large':
-			menu_path += screentitle
-			title = menu_path
-			self["menu_path_compressed"] = StaticText("")
-		elif config.usage.show_menupath.value == 'small':
-			title = screentitle
-			self["menu_path_compressed"] = StaticText(menu_path + " >" if not menu_path.endswith(' / ') else menu_path[:-3] + " >" or "")
-		else:
-			title = screentitle
-			self["menu_path_compressed"] = StaticText("")
-		Screen.setTitle(self, title)
-		self.setup_title = title
+		self.setTitle(_("Parental Control"))
 
 		# for the skin: first try ParentalControlSetup, then Setup, this allows individual skinning
-		self.skinName = ["ParentalControlSetup", "Setup" ]
-		self.onChangedEntry = [ ]
+		self.skinName = ["ParentalControlSetup", "Setup"]
+		self.onChangedEntry = []
 
 		self.list = []
-		ConfigListScreen.__init__(self, self.list, session = self.session, on_change = self.changedEntry)
+		ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry, fullUI=True)
 		self.createSetup(initial=True)
-
-		self["actions"] = NumberActionMap(["SetupActions", "MenuActions"],
-		{
-		  "cancel": self.keyCancel,
-		  "save": self.keySave,
-		  "menu": self.closeRecursive,
-		}, -2)
-		self["key_red"] = StaticText(_("Cancel"))
-		self["key_green"] = StaticText(_("Save"))
-		self.recursive = False
-		self.onLayoutFinish.append(self.layoutFinished)
-
-	def layoutFinished(self):
-		self.setTitle(self.setup_title)
 
 	def isProtected(self):
 		return (not config.ParentalControl.setuppinactive.value and config.ParentalControl.servicepinactive.value) or\
@@ -98,14 +74,14 @@ class ParentalControlSetup(Screen, ConfigListScreen, ProtectedScreen):
 				self.list.append(getConfigListEntry(_("Protect manufacturer reset screen"), config.ParentalControl.config_sections.manufacturer_reset))
 				self.list.append(getConfigListEntry(_("Protect movie list"), config.ParentalControl.config_sections.movie_list))
 				self.list.append(getConfigListEntry(_("Protect context menus"), config.ParentalControl.config_sections.context_menus))
-				self.list.append(getConfigListEntry(_("Protect menu"), config.ParentalControl.config_sections.vixmenu))
+				self.list.append(getConfigListEntry(_("Protect menu"), config.ParentalControl.config_sections.bhmenu))
 		else:
 			self.changePin = getConfigListEntry(_("Enable parental protection"), NoSave(ConfigNothing()))
 			self.list.append(self.changePin)
 		self["config"].list = self.list
 		self["config"].setList(self.list)
 
-	def keyOK(self):
+	def keySelect(self):
 		if self["config"].l.getCurrentSelection() == self.changePin:
 			if config.ParentalControl.servicepin[0].value:
 				self.session.openWithCallback(self.oldPinEntered, PinInput, pinList=[x.value for x in config.ParentalControl.servicepin], triesEntry=config.ParentalControl.retries.servicepin, title=_("Please enter the old PIN code"), windowTitle=_("Enter pin code"))
@@ -127,21 +103,6 @@ class ParentalControlSetup(Screen, ConfigListScreen, ProtectedScreen):
 		ConfigListScreen.keyRight(self)
 		self.createSetup()
 
-	def cancelCB(self, value):
-		self.keySave()
-
-	def keyCancel(self):
-		if self["config"].isChanged():
-			self.session.openWithCallback(self.cancelConfirm, MessageBox, _("Really close without saving settings?"))
-		else:
-			self.close()
-
-	def cancelConfirm(self, answer):
-		if answer:
-			for x in self["config"].list:
-				x[1].cancel()
-			self.close()
-
 	def keySave(self):
 		if self["config"].isChanged():
 			for x in self["config"].list:
@@ -149,29 +110,10 @@ class ParentalControlSetup(Screen, ConfigListScreen, ProtectedScreen):
 			configfile.save()
 			from Components.ParentalControl import parentalControl
 			parentalControl.hideBlacklist()
-		self.close(self.recursive)
-
-	def closeRecursive(self):
-		self.recursive = True
-		self.keySave()
+		self.close()
 
 	def keyNumberGlobal(self, number):
 		pass
-
-	# for summary:
-	def changedEntry(self):
-		for x in self.onChangedEntry:
-			x()
-
-	def getCurrentEntry(self):
-		return self["config"].getCurrent()[0]
-
-	def getCurrentValue(self):
-		return str(self["config"].getCurrent()[1].getText())
-
-	def createSummary(self):
-		from Screens.Setup import SetupSummary
-		return SetupSummary
 
 	def oldPinEntered(self, answer):
 		if answer:
@@ -186,7 +128,7 @@ class ParentalControlSetup(Screen, ConfigListScreen, ProtectedScreen):
 	def confirmNewPinEntered(self, answer1, answer2):
 		if answer2 is not None:
 			if answer1 == answer2:
-				self.session.open(MessageBox, _("The PIN code has been changed successfully."), MessageBox.TYPE_ERROR, timeout=3)
+				self.session.open(MessageBox, _("The PIN code has been changed successfully."), MessageBox.TYPE_INFO, timeout=3)
 				config.ParentalControl.servicepin[0].value = answer1
 				config.ParentalControl.servicepin[0].save()
 				self.createSetup()

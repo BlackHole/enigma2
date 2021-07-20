@@ -39,7 +39,7 @@ eTimerPy_dealloc(eTimerPy* self)
 		PyObject_ClearWeakRefs((PyObject *) self);
 	eTimerPy_clear(self);
 	self->tm->Release();
-	self->ob_type->tp_free((PyObject*)self);
+	Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static PyObject *
@@ -140,7 +140,7 @@ static PyMethodDef eTimerPy_methods[] = {
 	{"get", (PyCFunction)eTimerPy_get_callback_list, METH_NOARGS,
 	 "get timeout callback list"
 	},
-	{NULL}  /* Sentinel */
+	{}  /* Sentinel */
 };
 
 static PyObject *
@@ -167,49 +167,22 @@ static PyGetSetDef eTimerPy_getseters[] = {
 	 (char*)"synonym for our self",
 	 NULL},
 
-	{NULL} /* Sentinel */
+	{} /* Sentinel */
 };
 
 static PyTypeObject eTimerPyType = {
-	PyObject_HEAD_INIT(NULL)
-	0, /*ob_size*/
+	PyVarObject_HEAD_INIT(NULL, 0)
 	"eBaseImpl.eTimer", /*tp_name*/
 	sizeof(eTimerPy), /*tp_basicsize*/
-	0, /*tp_itemsize*/
-	(destructor)eTimerPy_dealloc, /*tp_dealloc*/
-	0, /*tp_print*/
-	0, /*tp_getattr*/
-	0, /*tp_setattr*/
-	0, /*tp_compare*/
-	0, /*tp_repr*/
-	0, /*tp_as_number*/
-	0, /*tp_as_sequence*/
-	0, /*tp_as_mapping*/
-	0, /*tp_hash */
-	0, /*tp_call*/
-	0, /*tp_str*/
-	0, /*tp_getattro*/
-	0, /*tp_setattro*/
-	0, /*tp_as_buffer*/
-	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_HAVE_GC, /*tp_flags*/
-	"eTimer objects", /* tp_doc */
-	(traverseproc)eTimerPy_traverse, /* tp_traverse */
-	(inquiry)eTimerPy_clear, /* tp_clear */
-	0, /* tp_richcompare */
-	offsetof(eTimerPy, in_weakreflist), /* tp_weaklistoffset */
-	0, /* tp_iter */
-	0, /* tp_iternext */
-	eTimerPy_methods, /* tp_methods */
-	0, /* tp_members */
-	eTimerPy_getseters, /* tp_getset */
-	0, /* tp_base */
-	0, /* tp_dict */
-	0, /* tp_descr_get */
-	0, /* tp_descr_set */
-	0, /* tp_dictoffset */
-	0, /* tp_init */
-	0, /* tp_alloc */
-	eTimerPy_new, /* tp_new */
+	.tp_dealloc = (destructor)eTimerPy_dealloc,
+	.tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_HAVE_GC,
+	.tp_doc = "eTimer objects",
+	.tp_traverse = (traverseproc)eTimerPy_traverse,
+	.tp_clear = (inquiry)eTimerPy_clear,
+	.tp_weaklistoffset = offsetof(eTimerPy, in_weakreflist),
+	.tp_methods = eTimerPy_methods,
+	.tp_getset = eTimerPy_getseters,
+	.tp_new = eTimerPy_new,
 };
 
 // eSocketNotifier replacement
@@ -246,7 +219,7 @@ eSocketNotifierPy_dealloc(eSocketNotifierPy* self)
 		PyObject_ClearWeakRefs((PyObject *) self);
 	eSocketNotifierPy_clear(self);
 	self->sn->Release();
-	self->ob_type->tp_free((PyObject*)self);
+	Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static PyObject *
@@ -338,7 +311,7 @@ static PyMethodDef eSocketNotifierPy_methods[] = {
 	{"setRequested", (PyCFunction)eSocketNotifierPy_set_requested, METH_VARARGS,
 	 "set requested"
 	},
-	{NULL}  /* Sentinel */
+	{}  /* Sentinel */
 };
 
 static PyObject *
@@ -352,55 +325,43 @@ static PyGetSetDef eSocketNotifierPy_getseters[] = {
 	 (getter)eSocketNotifierPy_get_cb_list, (setter)0,
 	 (char*)"returns the callback python list",
 	 NULL},
-	{NULL} /* Sentinel */
+	{} /* Sentinel */
 };
 
 static PyTypeObject eSocketNotifierPyType = {
-	PyObject_HEAD_INIT(NULL)
-	0, /*ob_size*/
+	PyVarObject_HEAD_INIT(NULL, 0)
 	"eBaseImpl.eSocketNotifier", /*tp_name*/
 	sizeof(eSocketNotifierPy), /*tp_basicsize*/
-	0, /*tp_itemsize*/
-	(destructor)eSocketNotifierPy_dealloc, /*tp_dealloc*/
-	0, /*tp_print*/
-	0, /*tp_getattr*/
-	0, /*tp_setattr*/
-	0, /*tp_compare*/
-	0, /*tp_repr*/
-	0, /*tp_as_number*/
-	0, /*tp_as_sequence*/
-	0, /*tp_as_mapping*/
-	0, /*tp_hash */
-	0, /*tp_call*/
-	0, /*tp_str*/
-	0, /*tp_getattro*/
-	0, /*tp_setattro*/
-	0, /*tp_as_buffer*/
-	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_HAVE_GC, /*tp_flags*/
-	"eTimer objects", /* tp_doc */
-	(traverseproc)eSocketNotifierPy_traverse, /* tp_traverse */
-	(inquiry)eSocketNotifierPy_clear, /* tp_clear */
-	0, /* tp_richcompare */
-	offsetof(eSocketNotifierPy, in_weakreflist), /* tp_weaklistoffset */
-	0, /* tp_iter */
-	0, /* tp_iternext */
-	eSocketNotifierPy_methods, /* tp_methods */
-	0, /* tp_members */
-	eSocketNotifierPy_getseters, /* tp_getset */
-	0, /* tp_base */
-	0, /* tp_dict */
-	0, /* tp_descr_get */
-	0, /* tp_descr_set */
-	0, /* tp_dictoffset */
-	0, /* tp_init */
-	0, /* tp_alloc */
-	eSocketNotifierPy_new, /* tp_new */
+	.tp_dealloc = (destructor)eSocketNotifierPy_dealloc,
+	.tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_HAVE_GC,
+	.tp_doc = "eSocketNotifier objects",
+	.tp_traverse = (traverseproc)eSocketNotifierPy_traverse,
+	.tp_clear = (inquiry)eSocketNotifierPy_clear,
+	.tp_weaklistoffset = offsetof(eSocketNotifierPy, in_weakreflist),
+	.tp_methods = eSocketNotifierPy_methods,
+	.tp_getset = eSocketNotifierPy_getseters,
+	.tp_new = eSocketNotifierPy_new,
 };
 
 static PyMethodDef base_module_methods[] = {
-	{NULL}  /* Sentinel */
+	{}  /* Sentinel */
 };
 
+#if PY_MAJOR_VERSION >= 3
+	static struct PyModuleDef eBase_moduledef = {
+	PyModuleDef_HEAD_INIT,
+	"eBaseImpl",																			/* m_name */
+	"Module that implements some enigma classes with working cyclic garbage collection.",	/* m_doc */
+	-1,																						/* m_siz
+	base_module_methods,																	/* m_methods */
+	NULL,																					/* m_reload */
+	NULL,																					/* m_traverse */
+	NULL,																					/* m_clear */
+	NULL,																					/* m_free */
+	};
+#endif
+
+#if PY_MAJOR_VERSION < 3
 void eBaseInit(void)
 {
 	PyObject* m = Py_InitModule3("eBaseImpl", base_module_methods,
@@ -420,6 +381,29 @@ void eBaseInit(void)
 		PyModule_AddObject(m, "eSocketNotifier", (PyObject*)&eSocketNotifierPyType);
 	}
 }
+#endif
+
+#if PY_MAJOR_VERSION >= 3
+PyObject* PyInit_eBaseImpl(void)
+{
+	PyObject* m = PyModule_Create(&eBase_moduledef);
+
+	if (m == NULL)
+		return NULL;
+
+	if (!PyType_Ready(&eTimerPyType))
+	{
+		Org_Py_INCREF((PyObject*)&eTimerPyType);
+		PyModule_AddObject(m, "eTimer", (PyObject*)&eTimerPyType);
+	}
+	if (!PyType_Ready(&eSocketNotifierPyType))
+	{
+		Org_Py_INCREF((PyObject*)&eSocketNotifierPyType);
+		PyModule_AddObject(m, "eSocketNotifier", (PyObject*)&eSocketNotifierPyType);
+	}
+	return m;
+}
+#endif
 }
 
 %}

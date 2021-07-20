@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from Screens.MessageBox import MessageBox
 from Screens.WizardLanguage import WizardLanguage
 from Screens.Rc import Rc
@@ -6,10 +8,11 @@ from Components.Sources.Boolean import Boolean
 from Tools.Directories import resolveFilename, SCOPE_SKIN
 from Components.Console import Console
 
+
 class UserInterfacePositionerWizard(WizardLanguage, Rc):
-	def __init__(self, session, interface = None):
+	def __init__(self, session, interface=None):
 		self.xmlfile = resolveFilename(SCOPE_SKIN, "userinterfacepositionerwizard.xml")
-		WizardLanguage.__init__(self, session, showSteps = False, showStepSlider = False)
+		WizardLanguage.__init__(self, session, showSteps=False, showStepSlider=False)
 		Rc.__init__(self)
 		self.skinName = "StartWizard"
 		self.session = session
@@ -35,7 +38,7 @@ class UserInterfacePositionerWizard(WizardLanguage, Rc):
 			"USAGE: If you continue adjust the screen size and position settings so that the shaded user interface layer *just* "
 			"covers the test pattern in the background.\n\n"
 			"Select Yes to change these settings or No to skip this step."), type=MessageBox.TYPE_YESNO, timeout=-1, default=False)
-		popup.setTitle("Start Wizard - Screen Alignment")
+		popup.setTitle(_("Start Wizard - Screen Alignment"))
 
 	def welcomeAction(self, answer):
 		if answer:
@@ -43,7 +46,7 @@ class UserInterfacePositionerWizard(WizardLanguage, Rc):
 		else:
 			self.close()
 
-	def exitWizardQuestion(self, ret = False):
+	def exitWizardQuestion(self, ret=False):
 		if ret:
 			self.markDone()
 			self.close()

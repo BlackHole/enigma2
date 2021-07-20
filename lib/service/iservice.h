@@ -1,5 +1,6 @@
 #ifndef __lib_dvb_iservice_h
 #define __lib_dvb_iservice_h
+#define HAVE_ITAPSERVICE
 
 #include <lib/python/swig.h>
 #include <lib/python/python.h>
@@ -411,8 +412,8 @@ So we move all enum's to own classes (with _ENUMS as name ending) and let our re
 class inherit from the *_ENUMS class. This *_ENUMS classes are normally exportet via swig to python.
 But in the python code we doesn't like to write iServiceInformation_ENUMS.sVideoType....
 we like to write iServiceInformation.sVideoType.
-So until swig have no Solution for this Problem we call in lib/python/Makefile.am a python script named
-enigma_py_patcher.py to remove the "_ENUMS" strings in enigma.py at all needed locations. */
+So until swig have no Solution for this Problem we call in lib/python/Makefile.inc a sed command
+to remove the "_ENUMS" strings in enigma.py at all needed locations. */
 
 class iServiceInformation: public iServiceInformation_ENUMS, public iObject
 {
@@ -652,6 +653,19 @@ public:
 	virtual void switchToLive()=0;
 };
 SWIG_TEMPLATE_TYPEDEF(ePtr<iTimeshiftService>, iTimeshiftServicePtr);
+
+SWIG_IGNORE(iTapService);
+class iTapService: public iObject
+{
+#ifdef SWIG
+	iTapService();
+	~iTapService();
+#endif
+public:
+	virtual bool startTapToFD(int fd, const std::vector<int> &pids, int packetsize = 188)=0;
+	virtual void stopTapToFD()=0;
+};
+SWIG_TEMPLATE_TYPEDEF(ePtr<iTapService>, iTapServicePtr);
 
 	/* not related to eCueSheet */
 
@@ -963,6 +977,7 @@ public:
 	virtual SWIG_VOID(RESULT) subServices(ePtr<iSubserviceList> &SWIG_OUTPUT)=0;
 	virtual SWIG_VOID(RESULT) frontendInfo(ePtr<iFrontendInformation> &SWIG_OUTPUT)=0;
 	virtual SWIG_VOID(RESULT) timeshift(ePtr<iTimeshiftService> &SWIG_OUTPUT)=0;
+	virtual SWIG_VOID(RESULT) tap(ePtr<iTapService> &SWIG_OUTPUT)=0;
 	virtual SWIG_VOID(RESULT) cueSheet(ePtr<iCueSheet> &SWIG_OUTPUT)=0;
 	virtual SWIG_VOID(RESULT) subtitle(ePtr<iSubtitleOutput> &SWIG_OUTPUT)=0;
 	virtual SWIG_VOID(RESULT) audioDelay(ePtr<iAudioDelay> &SWIG_OUTPUT)=0;

@@ -7,7 +7,7 @@
 #include <lib/dvb/dvb.h>
 #include <lib/dvb/metaparser.h>
 #include <lib/dvb_ci/dvbci.h>
-#include <lib/dvb/epgcache.h>
+#include <lib/dvb/epgtransponderdatareader.h>
 #include <lib/dvb/scan.h>
 #include <lib/dvb_ci/dvbci_session.h>
 #include <dvbsi++/ca_descriptor.h>
@@ -162,7 +162,7 @@ void eDVBServicePMTHandler::PMTready(int error)
 		case streamserver:
 		case scrambled_streamserver:
 		case streamclient:
-			eEPGCache::getInstance()->PMTready(this);
+			eEPGTransponderDataReader::getInstance()->PMTready(this);
 			break;
 		default:
 			/* do not start epg caching for other types of services */
@@ -778,7 +778,7 @@ int eDVBServicePMTHandler::compareAudioSubtitleCode(const std::string &subtitleT
 {
 	for (const auto& _audioTrack : split(audioTrack, "/"))
 	{
-		if (strcasecmp(subtitleTrack, _audioTrack) == 0)
+		if (strcasecmp(subtitleTrack.c_str(), _audioTrack.c_str()) == 0)
 			return 0;
 	}
 	return -1;

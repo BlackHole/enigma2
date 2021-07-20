@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
 from enigma import eTimer
 from Screens.Screen import Screen
 from Components.ActionMap import ActionMap
@@ -12,39 +15,31 @@ from Screens.InfoBar import InfoBar
 from Screens.MessageBox import MessageBox
 from Screens.Rc import Rc
 from Screens.Standby import TryQuitMainloop
-from Tools.Directories import resolveFilename, SCOPE_ACTIVE_SKIN
+from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
 from Tools.LoadPixmap import LoadPixmap
 import gettext
 
 inWizzard = False
 
+
 def LanguageEntryComponent(file, name, index):
-	png = LoadPixmap(resolveFilename(SCOPE_ACTIVE_SKIN, "countries/" + index + ".png"))
+	png = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "countries/" + index + ".png"))
 	if png is None:
-		png = LoadPixmap(resolveFilename(SCOPE_ACTIVE_SKIN, "countries/" + file + ".png"))
+		png = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "countries/" + file + ".png"))
 		if png is None:
-			png = LoadPixmap(resolveFilename(SCOPE_ACTIVE_SKIN, "countries/missing.png"))
+			png = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "countries/missing.png"))
 	res = (index, name, png)
 	return res
+
 
 def _cached(x):
 	return LANG_TEXT.get(config.osd.language.value, {}).get(x, "")
 
+
 class LanguageSelection(Screen):
-	def __init__(self, session, menu_path=""):
+	def __init__(self, session):
 		Screen.__init__(self, session)
-		screentitle = _("Language")
-		if config.usage.show_menupath.value == 'large':
-			menu_path += screentitle
-			title = menu_path
-			self["menu_path_compressed"] = StaticText("")
-		elif config.usage.show_menupath.value == 'small':
-			title = screentitle
-			self["menu_path_compressed"] = StaticText(menu_path + " >" if not menu_path.endswith(' / ') else menu_path[:-3] + " >" or "")
-		else:
-			title = screentitle
-			self["menu_path_compressed"] = StaticText("")
-		Screen.setTitle(self, title)
+		self.setTitle(_("Language"))
 
 		language.InitLang()
 		self.oldActiveLanguage = language.getActiveLanguage()
@@ -59,11 +54,11 @@ class LanguageSelection(Screen):
 		self.updateList()
 		self.onLayoutFinish.append(self.selectActiveLanguage)
 
-		self["key_red"] = Label(_("Cancel"))
-		self["key_green"] = Label(_("Save"))
+		self["key_red"] = Label("")
+		self["key_green"] = Label("")
 		self["key_yellow"] = Label(_("Add Language"))
-		self["key_blue"] = Label(_("Delete Language"))
-		self["description"] = Label(_("Press 'Add Language' or MENU to add additional language(s). English language can not be deleted"))
+		self["key_blue"] = Label(_("Delete Language(s)"))
+		self["description"] = Label(_("'Save' changes active language.\n'Add Language' or MENU adds additional language(s).\n'Delete Language' allows either deletion of all but English and active language OR selected language"))
 
 		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
 		{
@@ -77,8 +72,8 @@ class LanguageSelection(Screen):
 		}, -1)
 
 	def updateCache(self):
-#		print "[LanguageSelection] updateCache"
-		self["languages"].setList([('update cache',_('Updating cache, please wait...'),None)])
+#		print("[LanguageSelection] updateCache")
+		self["languages"].setList([('update cache', _('Updating cache, please wait...'), None)])
 		self.updateTimer = eTimer()
 		self.updateTimer.callback.append(self.startupdateCache)
 		self.updateTimer.start(100)
@@ -88,9 +83,8 @@ class LanguageSelection(Screen):
 		language.updateLanguageCache()
 		self["languages"].setList(self.list)
 		self.selectActiveLanguage()
-		
+
 	def selectActiveLanguage(self):
-		self.setTitle(self.title)
 		activeLanguage = language.getActiveLanguage()
 		pos = 0
 		for pos, x in enumerate(self.list):
@@ -101,7 +95,7 @@ class LanguageSelection(Screen):
 	def save(self):
 		self.run()
 		global inWizzard
-#		print "[LanguageSelection] save function inWizzard is %s", %inWizzard  
+#		print("[LanguageSelection] save function inWizzard is %s", %inWizzard)
 		if inWizzard:
 			inWizzard = False
 			#self.session.openWithCallback(self.deletelanguagesCB, MessageBox, _("Do you want to delete all other languages?"), default = False)
@@ -110,7 +104,7 @@ class LanguageSelection(Screen):
 			self.close()
 		else:
 			if self.oldActiveLanguage != config.osd.language.value:
-				self.session.openWithCallback(self.restartGUI, MessageBox,_("GUI needs a restart to apply a new language\nDo you want to restart the GUI now?"), MessageBox.TYPE_YESNO)
+				self.session.openWithCallback(self.restartGUI, MessageBox, _("GUI needs a restart to apply a new language\nDo you want to restart the GUI now?"), MessageBox.TYPE_YESNO)
 			else:
 				self.close()
 
@@ -127,16 +121,16 @@ class LanguageSelection(Screen):
 		self.close()
 
 	def delLang(self):
-#		print "[LanguageSelection] deleting language"
+#		print("[LanguageSelection] deleting language")
 		curlang = config.osd.language.value
 		lang = curlang
 		languageList = language.getLanguageListSelection()
-#		print "[LanguageSelection] deleting language  lang = %s, languagelist = %s", %(lang, languageList)
+#		print("[LanguageSelection] deleting language  lang = %s, languagelist = %s", %(lang, languageList))
 		for t in languageList:
 			if curlang == t[0]:
 				lang = t[1]
 				break
-		self.session.openWithCallback(self.delLangCB, MessageBox, _("Select 'Yes' to delete all languages except English and your chosen language:\n\nSelect 'No' to delete only the chosen language:\n\n") + _("%s") %(lang), default = False)
+		self.session.openWithCallback(self.delLangCB, MessageBox, _("Select 'Yes' to delete all languages except English and current language:\n\nSelect 'No' to delete only the chosen language:\n\n") + _("%s") % (lang), default=True)
 
 	def delLangCB(self, answer):
 		if answer:
@@ -148,12 +142,12 @@ class LanguageSelection(Screen):
 			curlang = config.osd.language.value
 			lang = curlang
 			languageList = language.getLanguageListSelection()
-	#		print "[LanguageSelection] deleting language  lang = %s, languagelist = %s", %(lang, languageList)
+	#		print("[LanguageSelection] deleting language  lang = %s, languagelist = %s", %(lang, languageList))
 			for t in languageList:
 				if curlang == t[0]:
 					lang = t[1]
 					break
-			self.session.openWithCallback(self.deletelanguagesCB, MessageBox, _("Do you really want to delete selected language:\n\n") + _("%s") %(lang), default = False)
+			self.session.openWithCallback(self.deletelanguagesCB, MessageBox, _("Do you really want to delete selected language:\n\n") + _("%s") % (lang), default=False)
 
 	def deletelanguagesCB(self, answer):
 		if answer:
@@ -165,12 +159,12 @@ class LanguageSelection(Screen):
 			self.selectActiveLanguage()
 #		self.close()
 
-	def run(self, justlocal = False):
-#		print "[LanguageSelection] updating language..."
+	def run(self, justlocal=False):
+#		print("[LanguageSelection] updating language...")
 		lang = self["languages"].getCurrent()[0]
 
 		if lang == 'update cache':
-			self.setTitle(_("Updating cache"))
+			self.setTitle(_("Updating Cache"))
 			self["summarylangname"].setText(_("Updating cache"))
 			return
 
@@ -194,9 +188,9 @@ class LanguageSelection(Screen):
 	def updateList(self):
 		languageList = language.getLanguageList()
 		if not languageList: # no language available => display only english
-			list = [ LanguageEntryComponent("en", "English (UK)", "en_GB") ]
+			list = [LanguageEntryComponent("en", "English (UK)", "en_GB")]
 		else:
-			list = [ LanguageEntryComponent(file = x[1][2].lower(), name = x[1][0], index = x[0]) for x in languageList]
+			list = [LanguageEntryComponent(file=x[1][2].lower(), name=x[1][0], index=x[0]) for x in languageList]
 		self.list = list
 		self["languages"].list = list
 
@@ -204,14 +198,14 @@ class LanguageSelection(Screen):
 		from Screens.PluginBrowser import PluginDownloadBrowser
 		self.session.openWithCallback(self.update_after_installLanguage, PluginDownloadBrowser, 0)
 
-
 	def update_after_installLanguage(self):
 		language.InitLang()
 		self.updateList()
 		self.updateCache()
 
 	def changed(self):
-		self.run(justlocal = True)
+		self.run(justlocal=True)
+
 
 class LanguageWizard(LanguageSelection, Rc):
 	def __init__(self, session):
@@ -232,7 +226,7 @@ class LanguageWizard(LanguageSelection, Rc):
 		self.selectKey("DOWN")
 
 	def changed(self):
-		self.run(justlocal = True)
+		self.run(justlocal=True)
 		self.setText()
 
 	def setText(self):
@@ -241,6 +235,7 @@ class LanguageWizard(LanguageSelection, Rc):
 
 	def createSummary(self):
 		return LanguageWizardSummary
+
 
 class LanguageWizardSummary(Screen):
 	def __init__(self, session, parent):

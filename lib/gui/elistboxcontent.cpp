@@ -275,6 +275,13 @@ void eListboxPythonStringContent::setList(ePyObject list)
 		m_listbox->entryReset(false);
 }
 
+void eListboxPythonStringContent::setItemHeight(int height)
+{
+	m_itemheight = height;
+	if (m_listbox)
+		m_listbox->setItemHeight(height);
+}
+
 PyObject *eListboxPythonStringContent::getCurrentSelection()
 {
 	if (!(m_list && cursorValid()))
@@ -799,6 +806,7 @@ void eListboxPythonMultiContent::paint(gPainter &painter, eWindowStyle &style, c
 
 		if (!items)
 		{
+			PyErr_Print();
 			eDebug("[eListboxPythonMultiContent] error getting item %d", m_cursor);
 			goto error_out;
 		}

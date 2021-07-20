@@ -1,3 +1,7 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import division
+
 from Components.GUIComponent import GUIComponent
 from Screens.Screen import Screen
 from Components.ActionMap import ActionMap
@@ -7,7 +11,7 @@ from Components.Sources.StaticText import StaticText
 from ServiceReference import ServiceReference
 from enigma import eListboxPythonMultiContent, eListbox, gFont, iServiceInformation, eServiceCenter, RT_HALIGN_LEFT, eDVBFrontendParametersSatellite
 from Tools.Transponder import ConvertToHumanReadable, getChannelNumber
-import skin
+from skin import applySkinFactor, parameters, parseFont, parseScale
 
 RT_HALIGN_LEFT = 0
 
@@ -21,20 +25,22 @@ TYPE_VALUE_FREQ = 6
 TYPE_VALUE_FREQ_FLOAT = 7
 TYPE_VALUE_BITRATE = 8
 
+
 def to_unsigned(x):
 	return x & 0xFFFFFFFF
 
+
 def ServiceInfoListEntry(a, b="", valueType=TYPE_TEXT, param=4):
-	print "b:", b
+	print("b:", b)
 	if not isinstance(b, str):
 		if valueType == TYPE_VALUE_HEX:
 			b = ("%0" + str(param) + "X") % to_unsigned(b)
 		elif valueType == TYPE_VALUE_FREQ:
-			b = "%s MHz" % (b / 1000)
+			b = "%s MHz" % (b // 1000)
 		elif valueType == TYPE_VALUE_FREQ_FLOAT:
-			b = "%.3f MHz" % (b / 1000.0)
+			b = "%.3f MHz" % (b // 1000.0)
 		elif valueType == TYPE_VALUE_BITRATE:
-			b = "%s KSymbols/s" % (b / 1000)
+			b = "%s KSymbols/s" % (b // 1000)
 		elif valueType == TYPE_VALUE_HEX_DEC:
 			b = ("%0" + str(param) + "X (%d)") % (to_unsigned(b), b)
 		elif valueType == TYPE_VALUE_ORBIT_DEC:
@@ -45,9 +51,9 @@ def ServiceInfoListEntry(a, b="", valueType=TYPE_TEXT, param=4):
 			b = ("%d.%d%s") % (b // 10, b % 10, direction)
 		else:
 			b = str(b)
-	x, y, w, h = skin.parameters.get("ServiceInfo",(0, 0, 300, 30))
-	xa, ya, wa, ha = skin.parameters.get("ServiceInfoLeft",(0, 0, 300, 25))
-	xb, yb, wb, hb = skin.parameters.get("ServiceInfoRight",(300, 0, 600, 25))
+	x, y, w, h = parameters.get("ServiceInfo", applySkinFactor(0, 0, 300, 30))
+	xa, ya, wa, ha = parameters.get("ServiceInfoLeft", applySkinFactor(0, 0, 300, 25))
+	xb, yb, wb, hb = parameters.get("ServiceInfoRight", applySkinFactor(300, 0, 600, 25))
 	if b:
 		return [
 			#PyObject *type, *px, *py, *pwidth, *pheight, *pfnt, *pstring, *pflags;
@@ -62,6 +68,7 @@ def ServiceInfoListEntry(a, b="", valueType=TYPE_TEXT, param=4):
 			(eListboxPythonMultiContent.TYPE_TEXT, xa, ya, wa + wb, ha + hb, 0, RT_HALIGN_LEFT, a)
 		]
 
+
 class ServiceInfoList(GUIComponent):
 	def __init__(self, source):
 		GUIComponent.__init__(self)
@@ -74,16 +81,16 @@ class ServiceInfoList(GUIComponent):
 
 	def applySkin(self, desktop, screen):
 		if self.skinAttributes is not None:
-			attribs = [ ]
+			attribs = []
 			for (attrib, value) in self.skinAttributes:
 				if attrib == "font":
-					font = skin.parseFont(value, ((1,1),(1,1)))
+					font = parseFont(value, ((1, 1), (1, 1)))
 					self.fontName = font.family
 					self.fontSize = font.pointSize
 				elif attrib == "itemHeight":
-					self.ItemHeight = int(value)
+					self.ItemHeight = parseScale(value)
 				else:
-					attribs.append((attrib,value))
+					attribs.append((attrib, value))
 			self.skinAttributes = attribs
 		rc = GUIComponent.applySkin(self, desktop, screen)
 		self.setFontsize()
@@ -100,13 +107,14 @@ class ServiceInfoList(GUIComponent):
 		self.instance.setContent(self.l)
 		self.setFontsize()
 
+
 TYPE_SERVICE_INFO = 1
 TYPE_TRANSPONDER_INFO = 2
 
+
 class ServiceInfo(Screen):
-	def __init__(self, session, menu_path="", serviceref=None):
+	def __init__(self, session, serviceref=None):
 		Screen.__init__(self, session)
-		self.menu_path = menu_path
 
 		self["actions"] = ActionMap(["OkCancelActions", "ColorActions"],
 		{
@@ -125,13 +133,13 @@ class ServiceInfo(Screen):
 		self.transponder_info = self.info = self.feinfo = None
 		play_service = session.nav.getCurrentlyPlayingServiceReference()
 		if serviceref and not play_service and play_service != serviceref:
-			screentitle = _("Transponder Information")
+			self.setTitle(_("Transponder Information"))
 			self.type = TYPE_TRANSPONDER_INFO
-			self.skinName="ServiceInfoSimple"
+			self.skinName = "ServiceInfoSimple"
 			self.transponder_info = eServiceCenter.getInstance().info(serviceref).getInfoObject(serviceref, iServiceInformation.sTransponderData)
 			# info is a iStaticServiceInformation, not a iServiceInformation
 		else:
-			screentitle = _("Service")
+			self.setTitle(_("Service"))
 			self.type = TYPE_SERVICE_INFO
 			service = session.nav.getCurrentService()
 			if service:
@@ -151,45 +159,14 @@ class ServiceInfo(Screen):
 				self["key_yellow"] = self["yellow"] = Label(_("Service & PIDs"))
 				self["key_blue"] = self["blue"] = Label(_("Tuner settings values"))
 			else:
-				self.skinName="ServiceInfoSimple"
+				self.skinName = "ServiceInfoSimple"
 
-		if config.usage.show_menupath.value == 'large':
-			self.menu_path += screentitle
-			title = self.menu_path
-			self["menu_path_compressed"] = StaticText("")
-			self.menu_path += ' / '
-		elif config.usage.show_menupath.value == 'small':
-			title = screentitle
-			condtext = ""
-			if self.menu_path and not self.menu_path.endswith(' / '):
-				condtext = self.menu_path + " >"
-			elif self.menu_path:
-				condtext = self.menu_path[:-3] + " >"
-			self["menu_path_compressed"] = StaticText(condtext)
-			self.menu_path += screentitle + ' / '
-		else:
-			title = screentitle
-			self["menu_path_compressed"] = StaticText("")
-		Screen.setTitle(self, title)
-
-		tlist = [ ]
+		tlist = []
 		self.onShown.append(self.ShowServiceInformation)
 
 	def ShowServiceInformation(self):
-		menu_path = self.menu_path
 		if self.type == TYPE_SERVICE_INFO:
-			screentitle = _("Service & PIDs")
-			if config.usage.show_menupath.value == 'large':
-				menu_path += screentitle
-				title = menu_path
-				self["menu_path_compressed"] = StaticText("")
-			elif config.usage.show_menupath.value == 'small':
-				title = screentitle
-				self["menu_path_compressed"] = StaticText(menu_path + " >" if not menu_path.endswith(' / ') else menu_path[:-3] + " >" or "")
-			else:
-				title = screentitle
-				self["menu_path_compressed"] = StaticText("")
-			Screen.setTitle(self, title)
+			self.setTitle(_("Service & PIDs"))
 
 			if self.feinfo or self.transponder_info:
 				self["key_blue"].text = self["blue"].text = _("Tuner settings values")
@@ -211,16 +188,16 @@ class ServiceInfo(Screen):
 				height = self.info.getInfo(iServiceInformation.sVideoHeight)
 				if width > 0 and height > 0:
 					resolution = videocodec + " - "
-					resolution += "%dx%d - " % (width,height)
-					resolution += str((self.info.getInfo(iServiceInformation.sFrameRate) + 500) / 1000)
+					resolution += "%dx%d - " % (width, height)
+					resolution += str((self.info.getInfo(iServiceInformation.sFrameRate) + 500) // 1000)
 					resolution += ("i", "p", "")[self.info.getInfo(iServiceInformation.sProgressive)]
 					aspect = self.getServiceInfoValue(iServiceInformation.sAspect)
-					aspect = aspect in ( 1, 2, 5, 6, 9, 0xA, 0xD, 0xE ) and "4:3" or "16:9"
-					resolution += " - "+aspect+""
+					aspect = aspect in (1, 2, 5, 6, 9, 0xA, 0xD, 0xE) and "4:3" or "16:9"
+					resolution += " - " + aspect + ""
 				gamma = ("SDR", "HDR", "HDR10", "HLG", "")[self.info.getInfo(iServiceInformation.sGamma)]
 				if gamma:
 					resolution += " - " + gamma
-			if "%3a//" in refstr and reftype not in (1,257,4098,4114):
+			if "%3a//" in refstr and reftype not in (1, 257, 4098, 4114):
 				fillList = [(_("Service name"), name, TYPE_TEXT),
 					(_("Videocodec, size & format"), resolution, TYPE_TEXT),
 					(_("Service reference"), ":".join(refstr.split(":")[:9]), TYPE_TEXT),
@@ -254,36 +231,21 @@ class ServiceInfo(Screen):
 			self.fillList(self.getFEData(self.transponder_info))
 
 	def ShowTransponderInformation(self):
-		menu_path = self.menu_path
-		screentitle = ""
 		if self.type == TYPE_SERVICE_INFO:
 			if self.feinfo and self.feinfo.getAll(True):
 				if self["key_blue"].text == _("Tuner settings values"):
-					screentitle = _("Tuning info: settings values")
+					self.setTitle(_("Tuning Info: Settings Values"))
 					self["key_blue"].text = self["blue"].text = _("Tuner live values")
 					frontendData = self.feinfo and self.feinfo.getAll(True)
 				else:
-					screentitle = _("Tuning info: live values")
+					self.setTitle(_("Tuning Info: Live Values"))
 					self["key_blue"].text = self["blue"].text = _("Tuner settings values")
 					frontendData = self.feinfo and self.feinfo.getAll(False)
 				self.fillList(self.getFEData(frontendData))
 			elif self.transponder_info:
-				screentitle = _("Tuning info: settings values")
+				self.setTitle(_("Tuning Info: Settings Values"))
 				self["key_blue"].text = self["blue"].text = _("Tuner settings values")
 				self.fillList(self.getFEData(self.transponder_info))
-				
-
-			if config.usage.show_menupath.value == 'large':
-				menu_path += screentitle
-				title = menu_path
-				self["menu_path_compressed"] = StaticText("")
-			elif config.usage.show_menupath.value == 'small':
-				title = screentitle
-				self["menu_path_compressed"] = StaticText(menu_path + " >" if not menu_path.endswith(' / ') else menu_path[:-3] + " >" or "")
-			else:
-				title = screentitle
-				self["menu_path_compressed"] = StaticText("")
-			Screen.setTitle(self, title)
 
 	def getFEData(self, frontendDataOrg):
 		if frontendDataOrg and len(frontendDataOrg):
@@ -316,7 +278,7 @@ class ServiceInfo(Screen):
 						(_("Inversion, Pilot & Roll-off"), "%s - %s - %s" % (frontendData["inversion"], frontendData.get("pilot", None), str(frontendData.get("rolloff", None))), TYPE_TEXT))
 			elif frontendDataOrg["tuner_type"] == "DVB-C":
 				return (tuner,
-					(_("Modulation"),"%s" % frontendData["modulation"], TYPE_TEXT),
+					(_("Modulation"), "%s" % frontendData["modulation"], TYPE_TEXT),
 					(_("Frequency"), "%s" % frontendData.get("frequency", 0), TYPE_TEXT),
 					(_("Symbol rate & FEC"), "%s - %s" % (frontendData.get("symbol_rate", 0), frontendData["fec_inner"]), TYPE_TEXT),
 					(_("Inversion"), "%s" % frontendData["inversion"], TYPE_TEXT))
@@ -340,9 +302,9 @@ class ServiceInfo(Screen):
 			if item[1]:
 				value = item[1]
 				if len(item) < 4:
-					tlist.append(ServiceInfoListEntry(item[0]+":", value, item[2]))
+					tlist.append(ServiceInfoListEntry(item[0] + ":", value, item[2]))
 				else:
-					tlist.append(ServiceInfoListEntry(item[0]+":", value, item[2], item[3]))
+					tlist.append(ServiceInfoListEntry(item[0] + ":", value, item[2], item[3]))
 		self["infolist"].l.setList(tlist)
 
 	def getServiceInfoValue(self, what):
@@ -357,7 +319,7 @@ class ServiceInfo(Screen):
 
 	def ShowECMInformation(self):
 		from Components.Converter.PliExtraInfo import caid_data
-		self["Title"].text = _("Service info - ECM Info")
+		self.setTitle(_("Service Info: ECM Info"))
 		tlist = []
 		provid = ""
 		for caid in sorted(set(self.info.getInfoObject(iServiceInformation.sCAIDPIDs)), key=lambda x: (x[0], x[1])):
@@ -383,5 +345,6 @@ class ServiceInfo(Screen):
 			color = "\c00??;?00" if caid[1] == int(ecmdata[3], 16) and caid[0] == int(ecmdata[1], 16) else ""
 			tlist.append(ServiceInfoListEntry("%sECMPid %04X (%d) %04X-%s %s" % (color, caid[1], caid[1], caid[0], CaIdDescription, extra_info)))
 		if not tlist:
-			tlist.append(ServiceInfoListEntry(_("No ECMPids available (FTA Service)")))
+				tlist.append(ServiceInfoListEntry(_("No ECMPids available")))
+				tlist.append(ServiceInfoListEntry(_("(FTA Service)")))
 		self["infolist"].l.setList(tlist)

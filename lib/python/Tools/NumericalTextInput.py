@@ -1,3 +1,5 @@
+import six
+
 from enigma import eTimer
 
 from Components.Language import language
@@ -218,15 +220,14 @@ class NumericalTextInput:
 					mode = "Search"
 				if isinstance(mapping, str):  # NOTE: Legacy interface for previous and deprecated versions of NumericalTextInput.
 					mode = mapping
-			self.mapping = []
 			index = MODES.get(str(mode).upper(), 0)
 			self.mapping = []
-			for num in range(0, 10):
+			for num in list(range(0, 10)):
 				self.mapping.append((MAPPINGS[num][index]))
 			locale = LOCALES.get(language.getLanguage(), None)
-			if locale is not None and index in range(0, 6):
+			if locale is not None and index in list(range(0, 6)):
 				index = index % 3
-				for num in range(0, 10):
+				for num in list(range(0, 10)):
 					if locale[num][index] is not None:
 						self.mapping[num] = locale[num][index]
 			self.mapping = tuple(self.mapping)
@@ -234,7 +235,7 @@ class NumericalTextInput:
 		# the listed characters, this restriction is not enforced for
 		# external keyboard input!
 		self.useableChars = "".join(self.mapping)  # This limits data entry to only characters in the mapping lists.
-		# print "[NumericalTextInput] DEBUG: Mode='%s', Index=%d, Character set: '%s'" % (mode, index, "".join(sorted(self.useableChars)))
+		# print("[NumericalTextInput] DEBUG: Mode='%s', Index=%d, Character set: '%s'" % (mode, index, "".join(sorted(self.useableChars))))
 		self.lastKey = -1
 		self.pos = -1
 
@@ -274,4 +275,4 @@ class NumericalTextInput:
 		return self.mapping[num][self.pos]
 
 	def setUseableChars(self, useable):
-		self.useableChars = unicode(useable)
+		self.useableChars = six.text_type(useable)

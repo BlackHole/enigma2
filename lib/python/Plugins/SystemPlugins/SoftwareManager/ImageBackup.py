@@ -21,14 +21,16 @@ from boxbranding import getBoxType, getMachineBrand, getMachineName, getDriverDa
 VERSION = "OpenBH"
 
 HaveGZkernel = True
-if getMachineBuild() in ("vuuno4k", "vuuno4kse", "vuzero4k", "vuultimo4k", "vusolo4k", "vuduo4k"):
+if getMachineBuild() in ("vuuno4k", "vuuno4kse", "vuzero4k", "vuultimo4k", "vusolo4k", "vuduo4k", "vuduo4kse"):
 	HaveGZkernel = False
+
 
 def Freespace(dev):
 	statdev = statvfs(dev)
 	space = (statdev.f_bavail * statdev.f_frsize) / 1024
-	print "[FULL BACKUP] Free space on %s = %i kilobytes" %(dev, space)
+	print "[FULL BACKUP] Free space on %s = %i kilobytes" % (dev, space)
 	return space
+
 
 class ImageBackup(Screen):
 	skin = """
@@ -44,8 +46,8 @@ class ImageBackup(Screen):
 		<widget name="info-hdd" position="10,30" zPosition="1" size="450,100" font="Regular;20" halign="left" valign="top" transparent="1" />
 		<widget name="info-usb" position="10,150" zPosition="1" size="450,200" font="Regular;20" halign="left" valign="top" transparent="1" />
 	</screen>"""
-		
-	def __init__(self, session, args = 0):
+
+	def __init__(self, session, args=0):
 		Screen.__init__(self, session)
 		self.session = session
 		self.MODEL = getBoxType()
@@ -60,24 +62,24 @@ class ImageBackup(Screen):
 		self.ROOTFSBIN = getMachineRootFile()
 		self.KERNELBIN = getMachineKernelFile()
 		self.ROOTFSTYPE = getImageFileSystem()
-		print "[FULL BACKUP] BOX MACHINEBUILD = >%s<" %self.MACHINEBUILD
-		print "[FULL BACKUP] BOX MACHINENAME = >%s<" %self.MACHINENAME
-		print "[FULL BACKUP] BOX MACHINEBRAND = >%s<" %self.MACHINEBRAND
-		print "[FULL BACKUP] BOX MODEL = >%s<" %self.MODEL
-		print "[FULL BACKUP] OEM MODEL = >%s<" %self.OEM
-		print "[FULL BACKUP] IMAGEFOLDER = >%s<" %self.IMAGEFOLDER
-		print "[FULL BACKUP] UBINIZE = >%s<" %self.UBINIZE_ARGS
-		print "[FULL BACKUP] MKUBIFS = >%s<" %self.MKUBIFS_ARGS
-		print "[FULL BACKUP] MTDKERNEL = >%s<" %self.MTDKERNEL
-		print "[FULL BACKUP] ROOTFSTYPE = >%s<" %self.ROOTFSTYPE
-		
+		print "[FULL BACKUP] BOX MACHINEBUILD = >%s<" % self.MACHINEBUILD
+		print "[FULL BACKUP] BOX MACHINENAME = >%s<" % self.MACHINENAME
+		print "[FULL BACKUP] BOX MACHINEBRAND = >%s<" % self.MACHINEBRAND
+		print "[FULL BACKUP] BOX MODEL = >%s<" % self.MODEL
+		print "[FULL BACKUP] OEM MODEL = >%s<" % self.OEM
+		print "[FULL BACKUP] IMAGEFOLDER = >%s<" % self.IMAGEFOLDER
+		print "[FULL BACKUP] UBINIZE = >%s<" % self.UBINIZE_ARGS
+		print "[FULL BACKUP] MKUBIFS = >%s<" % self.MKUBIFS_ARGS
+		print "[FULL BACKUP] MTDKERNEL = >%s<" % self.MTDKERNEL
+		print "[FULL BACKUP] ROOTFSTYPE = >%s<" % self.ROOTFSTYPE
+
 		self["key_green"] = Button("USB")
 		self["key_red"] = Button("HDD")
 		self["key_blue"] = Button(_("Exit"))
 		self["key_yellow"] = Button(_("Exit"))
 		self["info-usb"] = Label(_("USB = Do you want to make a USB backup ?\nThis will take between 4 and 15 minutes depending on the filesystem used and is fully automatic.\nMake sure you insert a USB flash drive before you select USB."))
 		self["info-hdd"] = Label(_("HDD = Do you want to make a backup image on your HDD ? \nThis will take between 2 and 10 minutes, and is fully automatic."))
-		self["actions"] = ActionMap(["OkCancelActions", "ColorActions"], 
+		self["actions"] = ActionMap(["OkCancelActions", "ColorActions"],
 		{
 			"blue": self.quit,
 			"yellow": self.quit,
@@ -88,22 +90,22 @@ class ImageBackup(Screen):
 
 	def check_hdd(self):
 		if not path.exists("/media/hdd"):
-			self.session.open(MessageBox, _("No /hdd found !!\nPlease make sure you have a HDD mounted.\n"), type = MessageBox.TYPE_ERROR)
+			self.session.open(MessageBox, _("No /hdd found !!\nPlease make sure you have a HDD mounted.\n"), type=MessageBox.TYPE_ERROR)
 			return False
 		if Freespace('/media/hdd') < 300000:
-			self.session.open(MessageBox, _("Not enough free space on /hdd !!\nYou need at least 300Mb free space.\n"), type = MessageBox.TYPE_ERROR)
+			self.session.open(MessageBox, _("Not enough free space on /hdd !!\nYou need at least 300Mb free space.\n"), type=MessageBox.TYPE_ERROR)
 			return False
 		return True
 
 	def check_usb(self, dev):
 		if Freespace(dev) < 300000:
-			self.session.open(MessageBox, _("Not enough free space on %s !!\nYou need at least 300Mb free space.\n" % dev), type = MessageBox.TYPE_ERROR)
+			self.session.open(MessageBox, _("Not enough free space on %s !!\nYou need at least 300Mb free space.\n" % dev), type=MessageBox.TYPE_ERROR)
 			return False
 		return True
-		
+
 	def quit(self):
 		self.close()
-		
+
 	def red(self):
 		if self.check_hdd():
 			self.doFullBackup("/hdd")
@@ -115,14 +117,14 @@ class ImageBackup(Screen):
 			text += _("To backup directly to a USB stick, the USB stick MUST\n")
 			text += _("contain a file with the name: \n\n")
 			text += _("backupstick or backupstick.txt")
-			self.session.open(MessageBox, text, type = MessageBox.TYPE_ERROR)
+			self.session.open(MessageBox, text, type=MessageBox.TYPE_ERROR)
 		else:
 			if self.check_usb(USB_DEVICE):
 				self.doFullBackup(USB_DEVICE)
 
 	def yellow(self):
 		#// Not used
-		pass	
+		pass
 
 	def SearchUSBcanidate(self):
 		for paths, subdirs, files in walk("/media"):
@@ -150,28 +152,27 @@ class ImageBackup(Screen):
 			self.MKFS = "/usr/sbin/mkfs.jffs2"
 		self.UBINIZE = "/usr/sbin/ubinize"
 		self.NANDDUMP = "/usr/sbin/nanddump"
-		self.WORKDIR= "%s/bi" %self.DIRECTORY
-		self.TARGET="XX"
+		self.WORKDIR = "%s/bi" % self.DIRECTORY
+		self.TARGET = "XX"
 
 		## TESTING IF ALL THE TOOLS FOR THE BUILDING PROCESS ARE PRESENT
 		if not path.exists(self.MKFS):
-			text = "%s not found !!" %self.MKFS
-			self.session.open(MessageBox, _(text), type = MessageBox.TYPE_ERROR)
+			text = "%s not found !!" % self.MKFS
+			self.session.open(MessageBox, _(text), type=MessageBox.TYPE_ERROR)
 			return
 		if not path.exists(self.NANDDUMP):
-			text = "%s not found !!" %self.NANDDUMP
-			self.session.open(MessageBox, _(text), type = MessageBox.TYPE_ERROR)
+			text = "%s not found !!" % self.NANDDUMP
+			self.session.open(MessageBox, _(text), type=MessageBox.TYPE_ERROR)
 			return
 
-		self.SHOWNAME = "%s %s" %(self.MACHINEBRAND, self.MODEL)
-		self.MAINDESTOLD = "%s/%s" %(self.DIRECTORY, self.MODEL)
-		self.MAINDEST = "%s/%s" %(self.DIRECTORY,self.IMAGEFOLDER)
+		self.SHOWNAME = "%s %s" % (self.MACHINEBRAND, self.MODEL)
+		self.MAINDESTOLD = "%s/%s" % (self.DIRECTORY, self.MODEL)
+		self.MAINDEST = "%s/%s" % (self.DIRECTORY, self.IMAGEFOLDER)
 		self.EXTRA = "%s/fullbackup_%s/%s/%s" % (self.DIRECTORY, self.MODEL, self.DATE, self.IMAGEFOLDER)
 		self.EXTRAOLD = "%s/fullbackup_%s/%s/%s" % (self.DIRECTORY, self.MODEL, self.DATE, self.MODEL)
 
-
 		self.message = "echo -e '\n"
-		self.message += (_("Backup Tool for a %s\n" %self.SHOWNAME)).upper()
+		self.message += (_("Backup Tool for a %s\n" % self.SHOWNAME)).upper()
 		self.message += VERSION + '\n'
 		self.message += "_________________________________________________\n\n"
 		self.message += _("Please be patient, a backup will now be made,\n")
@@ -187,7 +188,7 @@ class ImageBackup(Screen):
 		self.message += "'"
 
 		## PREPARING THE BUILDING ENVIRONMENT
-		system("rm -rf %s" %self.WORKDIR)
+		system("rm -rf %s" % self.WORKDIR)
 		if not path.exists(self.WORKDIR):
 			makedirs(self.WORKDIR)
 		if not path.exists("/tmp/bi/root"):
@@ -204,44 +205,44 @@ class ImageBackup(Screen):
 			cmd2 = "%s %s/rootfs.tar" % (self.BZIP2, self.WORKDIR)
 			cmd3 = None
 		else:
-			f = open("%s/ubinize.cfg" %self.WORKDIR, "w")
+			f = open("%s/ubinize.cfg" % self.WORKDIR, "w")
 			f.write("[ubifs]\n")
 			f.write("mode=ubi\n")
-			f.write("image=%s/root.ubi\n" %self.WORKDIR)
+			f.write("image=%s/root.ubi\n" % self.WORKDIR)
 			f.write("vol_id=0\n")
 			f.write("vol_type=dynamic\n")
 			f.write("vol_name=rootfs\n")
 			f.write("vol_flags=autoresize\n")
 			f.close()
-			ff = open("%s/root.ubi" %self.WORKDIR, "w")
+			ff = open("%s/root.ubi" % self.WORKDIR, "w")
 			ff.close()
 			cmd1 = "%s -r /tmp/bi/root -o %s/root.ubi %s" % (self.MKFS, self.WORKDIR, self.MKUBIFS_ARGS)
 			cmd2 = "%s -o %s/root.ubifs %s %s/ubinize.cfg" % (self.UBINIZE, self.WORKDIR, self.UBINIZE_ARGS, self.WORKDIR)
-			cmd3 = "mv %s/root.ubifs %s/root.%s" %(self.WORKDIR, self.WORKDIR, self.ROOTFSTYPE)
+			cmd3 = "mv %s/root.ubifs %s/root.%s" % (self.WORKDIR, self.WORKDIR, self.ROOTFSTYPE)
 
 		cmdlist = []
 		cmdlist.append(self.message)
-		cmdlist.append('echo "Create: root.%s\n"' %self.ROOTFSTYPE)
+		cmdlist.append('echo "Create: root.%s\n"' % self.ROOTFSTYPE)
 		cmdlist.append(cmd1)
 		if cmd2:
 			cmdlist.append(cmd2)
 		if cmd3:
 			cmdlist.append(cmd3)
-		cmdlist.append("chmod 644 %s/root.%s" %(self.WORKDIR, self.ROOTFSTYPE))
+		cmdlist.append("chmod 644 %s/root.%s" % (self.WORKDIR, self.ROOTFSTYPE))
 		cmdlist.append('echo " "')
 		cmdlist.append('echo "Create: kerneldump"')
 		cmdlist.append('echo " "')
 		if self.MTDKERNEL == "mmcblk0p1":
-			cmdlist.append("dd if=/dev/%s of=%s/kernel_auto.bin" % (self.MTDKERNEL ,self.WORKDIR))
+			cmdlist.append("dd if=/dev/%s of=%s/kernel_auto.bin" % (self.MTDKERNEL, self.WORKDIR))
 		else:
 			cmdlist.append("nanddump -a -f %s/vmlinux.gz /dev/%s" % (self.WORKDIR, self.MTDKERNEL))
 		cmdlist.append('echo " "')
-		
+
 		if HaveGZkernel:
 			cmdlist.append('echo "Check: kerneldump"')
 		cmdlist.append("sync")
 
-		self.session.open(Console, title = self.TITLE, cmdlist = cmdlist, finishedCallback = self.doFullBackupCB, closeOnSuccess = True)
+		self.session.open(Console, title=self.TITLE, cmdlist=cmdlist, finishedCallback=self.doFullBackupCB, closeOnSuccess=True)
 
 	def doFullBackupCB(self):
 		if HaveGZkernel:
@@ -250,7 +251,7 @@ class ImageBackup(Screen):
 				text = "Kernel dump error\n"
 				text += "Please Flash your Kernel new and Backup again"
 				system('rm -rf /tmp/vmlinux.bin')
-				self.session.open(MessageBox, _(text), type = MessageBox.TYPE_ERROR)
+				self.session.open(MessageBox, _(text), type=MessageBox.TYPE_ERROR)
 				return
 
 		cmdlist = []
@@ -262,38 +263,38 @@ class ImageBackup(Screen):
 		cmdlist.append('echo "Almost there... "')
 		cmdlist.append('echo "Now building your backup image"')
 
-		system('rm -rf %s' %self.MAINDEST)
+		system('rm -rf %s' % self.MAINDEST)
 		if not path.exists(self.MAINDEST):
 			makedirs(self.MAINDEST)
 		if not path.exists(self.EXTRA):
 			makedirs(self.EXTRA)
 
-		f = open("%s/imageversion" %self.MAINDEST, "w")
+		f = open("%s/imageversion" % self.MAINDEST, "w")
 		f.write(self.IMAGEVERSION)
 		f.close()
 
 		if self.ROOTFSBIN == "rootfs.tar.bz2":
-			system('mv %s/rootfs.tar.bz2 %s/rootfs.tar.bz2' %(self.WORKDIR, self.MAINDEST))
+			system('mv %s/rootfs.tar.bz2 %s/rootfs.tar.bz2' % (self.WORKDIR, self.MAINDEST))
 		else:
-			system('mv %s/root.%s %s/%s' %(self.WORKDIR, self.ROOTFSTYPE, self.MAINDEST, self.ROOTFSBIN))
+			system('mv %s/root.%s %s/%s' % (self.WORKDIR, self.ROOTFSTYPE, self.MAINDEST, self.ROOTFSBIN))
 		if self.KERNELBIN == "kernel_auto.bin":
-			system('mv %s/kernel_auto.bin %s/kernel_auto.bin' %(self.WORKDIR, self.MAINDEST))
+			system('mv %s/kernel_auto.bin %s/kernel_auto.bin' % (self.WORKDIR, self.MAINDEST))
 		else:
-			system('mv %s/vmlinux.gz %s/%s' %(self.WORKDIR, self.MAINDEST, self.KERNELBIN))
+			system('mv %s/vmlinux.gz %s/%s' % (self.WORKDIR, self.MAINDEST, self.KERNELBIN))
 		if self.MODEL in ("vuduo4k", "vuultimo4k", "vusolo4k", "vuduo2", "vusolo2", "vusolo", "vuduo", "vuultimo", "vuuno"):
-			cmdlist.append('echo "This file forces a reboot after the update." > %s/reboot.update' %self.MAINDEST)
-		elif self.MODEL in ("vuzero" , "vusolose", "vuuno4k"):
-			cmdlist.append('echo "This file forces the update." > %s/force.update' %self.MAINDEST)
+			cmdlist.append('echo "This file forces a reboot after the update." > %s/reboot.update' % self.MAINDEST)
+		elif self.MODEL in ("vuzero", "vusolose", "vuuno4k"):
+			cmdlist.append('echo "This file forces the update." > %s/force.update' % self.MAINDEST)
 		else:
-			cmdlist.append('echo "rename this file to "force" to force an update without confirmation" > %s/noforce' %self.MAINDEST)
+			cmdlist.append('echo "rename this file to "force" to force an update without confirmation" > %s/noforce' % self.MAINDEST)
 
 		if self.MODEL in ("gbquad", "gbquadplus", "gb800ue", "gb800ueplus", "gbultraue", "twinboxlcd"):
 			lcdwaitkey = '/usr/share/lcdwaitkey.bin'
 			lcdwarning = '/usr/share/lcdwarning.bin'
 			if path.exists(lcdwaitkey):
-				system('cp %s %s/lcdwaitkey.bin' %(lcdwaitkey, self.MAINDEST))
+				system('cp %s %s/lcdwaitkey.bin' % (lcdwaitkey, self.MAINDEST))
 			if path.exists(lcdwarning):
-				system('cp %s %s/lcdwarning.bin' %(lcdwarning, self.MAINDEST))
+				system('cp %s %s/lcdwarning.bin' % (lcdwarning, self.MAINDEST))
 		if self.MODEL == "gb800solo":
 			burnbat = "%s/fullbackup_%s/%s" % (self.DIRECTORY, self.MODEL, self.DATE)
 			f = open("%s/burn.bat" % (burnbat), "w")
@@ -323,9 +324,9 @@ class ImageBackup(Screen):
 
 		if file_found:
 			cmdlist.append('echo "_________________________________________________\n"')
-			cmdlist.append('echo "Backup created in:" %s' %self.MAINDEST)
+			cmdlist.append('echo "Backup created in:" %s' % self.MAINDEST)
 			cmdlist.append('echo "and an extra copy was created in:"')
-			cmdlist.append('echo %s' %self.EXTRA)
+			cmdlist.append('echo %s' % self.EXTRA)
 			cmdlist.append('echo "_________________________________________________\n"')
 			cmdlist.append('echo " "')
 			cmdlist.append('echo "\nPlease wait...almost ready! "')
@@ -360,10 +361,9 @@ class ImageBackup(Screen):
 				cmdlist.append('mkdir -p %s/%s' % (self.TARGET, self.IMAGEFOLDER))
 				cmdlist.append('cp -r %s %s/' % (self.MAINDEST, self.TARGET))
 
-
 				cmdlist.append("sync")
 				cmdlist.append('echo "Backup finished and copied to your USB flash drive"')
-			
+
 		cmdlist.append("umount /tmp/bi/root")
 		cmdlist.append("rmdir /tmp/bi/root")
 		cmdlist.append("rmdir /tmp/bi")
@@ -372,9 +372,9 @@ class ImageBackup(Screen):
 		END = time()
 		DIFF = int(END - self.START)
 		TIMELAP = str(datetime.timedelta(seconds=DIFF))
-		cmdlist.append('echo " Time required for this process: %s"' %TIMELAP)
+		cmdlist.append('echo " Time required for this process: %s"' % TIMELAP)
 
-		self.session.open(Console, title = self.TITLE, cmdlist = cmdlist, closeOnSuccess = False)
+		self.session.open(Console, title=self.TITLE, cmdlist=cmdlist, closeOnSuccess=False)
 
 	def imageInfo(self):
 		AboutText = _("Full Image Backup ")
@@ -385,7 +385,7 @@ class ImageBackup(Screen):
 		AboutText += _("Backup Date: %s\n") % strftime("%Y-%m-%d", localtime(self.START))
 
 		if path.exists('/proc/stb/info/chipset'):
-			AboutText += _("Chipset: BCM%s") % about.getChipSetString().lower().replace('\n','').replace('bcm','') + "\n"
+			AboutText += _("Chipset: BCM%s") % about.getChipSetString().lower().replace('\n', '').replace('bcm', '') + "\n"
 
 		AboutText += _("CPU: %s") % about.getCPUString() + "\n"
 		AboutText += _("Cores: %s") % about.getCpuCoresString() + "\n"
@@ -407,34 +407,34 @@ class ImageBackup(Screen):
 		AboutText += commands.getoutput("cat /etc/enigma2/settings")
 		AboutText += _("\n\n[User - bouquets (TV)]\n")
 		try:
-			f = open("/etc/enigma2/bouquets.tv","r")
+			f = open("/etc/enigma2/bouquets.tv", "r")
 			lines = f.readlines()
 			f.close()
 			for line in lines:
 				if line.startswith("#SERVICE:"):
 					bouqet = line.split()
 					if len(bouqet) > 3:
-						bouqet[3] = bouqet[3].replace('"','')
-						f = open("/etc/enigma2/" + bouqet[3],"r")
+						bouqet[3] = bouqet[3].replace('"', '')
+						f = open("/etc/enigma2/" + bouqet[3], "r")
 						userbouqet = f.readline()
-						AboutText += userbouqet.replace('#NAME ','')
+						AboutText += userbouqet.replace('#NAME ', '')
 						f.close()
 		except:
 			AboutText += "Error reading bouquets.tv"
-			
+
 		AboutText += _("\n[User - bouquets (RADIO)]\n")
 		try:
-			f = open("/etc/enigma2/bouquets.radio","r")
+			f = open("/etc/enigma2/bouquets.radio", "r")
 			lines = f.readlines()
 			f.close()
 			for line in lines:
 				if line.startswith("#SERVICE:"):
 					bouqet = line.split()
 					if len(bouqet) > 3:
-						bouqet[3] = bouqet[3].replace('"','')
-						f = open("/etc/enigma2/" + bouqet[3],"r")
+						bouqet[3] = bouqet[3].replace('"', '')
+						f = open("/etc/enigma2/" + bouqet[3], "r")
 						userbouqet = f.readline()
-						AboutText += userbouqet.replace('#NAME ','')
+						AboutText += userbouqet.replace('#NAME ', '')
 						f.close()
 		except:
 			AboutText += "Error reading bouquets.radio"

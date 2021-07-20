@@ -54,68 +54,11 @@ eDVBScan::~eDVBScan()
 
 int eDVBScan::isValidONIDTSID(int orbital_position, eOriginalNetworkID onid, eTransportStreamID tsid)
 {
-	int ret;
-	switch (onid.get())
+	if(onid.get() == 0 || (onid.get() == 1 && tsid < 2) || onid.get() >= 0xFF00)
 	{
-	case 0:
-	case 0x1111:
-		ret=0;
-		break;
-	case 0x13E:  // workaround for 11258H and 11470V on hotbird with same ONID/TSID (0x13E/0x578)
-		ret = orbital_position != 130 || tsid != 0x578;
-		break;
-	case 1:
-		ret = orbital_position == 192;
-		break;
-	case 0x00B1:
-		ret = tsid != 0x00B0;
-		break;
-	case 0x00eb:
-		ret = tsid != 0x4321;
-		break;
-	case 0x0002:
-		ret = absdiff(orbital_position, 282) < 6 && tsid != 2019;
-		// 12070H and 10936V have same tsid/onid.. but even the same services are provided
-		break;
-	case 0x2000:
-		ret = tsid != 0x1000;
-		break;
-	case 0x5E: // Sirius 4.8E 12322V and 12226H
-		ret = absdiff(orbital_position, 48) < 3 && tsid != 1;
-		break;
-	case 0x0070: // Eutelsat W7 36.0E 12174L and 12284R have same ONID/TSID (0x0070/0x0008)
-		ret = orbital_position != 360 || tsid != 0x0008;
-		break;
-	case 10100: // Eutelsat W7 36.0E 11644V and 11652V
-		ret = orbital_position != 360 || tsid != 10187;
-		break;
-	case 42: // Tuerksat 42.0E
-		ret = orbital_position != 420 || (
-		    tsid != 8 && // 11830V 12729V
-		    tsid != 5 && // 12679V 12685H
-		    tsid != 2 && // 11096V 12015H
-		    tsid != 55); // 11996V 11716V
-		break;
-	case 100: // Intelsat 10 68.5E 3808V 3796V 4012V, Amos 4.0W 10723V 11571H
-		ret = (orbital_position != 685 && orbital_position != 3560) || tsid != 1;
-		break;
-	case 70: // Thor 0.8W 11862H 12341V
-		ret = absdiff(orbital_position, 3592) < 3 && tsid != 46;
-		break;
-	case 32: // NSS 806 (40.5W) 4059R, 3774L
-		ret = orbital_position != 3195 || tsid != 21;
-		break;
-	case 126:  // 11221H and 11387H on Utelsat 7.0E with same ONID/TSID (126/40700)
-		ret = orbital_position != 70 || (tsid != 40700 && tsid != 30300);
-		break;
-	case 3622:  // 11881H and 12284V on Badr 26.0E with same ONID/TSID (3622/100)
-		ret = orbital_position != 260 || tsid != 100;
-		break;
-	default:
-		ret = onid.get() < 0xFF00;
-		break;
+		return 0;
 	}
-	return ret;
+	return 1;
 }
 
 eDVBNamespace eDVBScan::buildNamespace(eOriginalNetworkID onid, eTransportStreamID tsid, unsigned long hash)
@@ -521,7 +464,7 @@ void eDVBScan::PMTready(int err)
 				case 0x02: // MPEG 2 video
 					isvideo = 1;
 					forced_video = 1;
-					//break; fall through !!!
+					[[fallthrough]];
 				case 0x03: // MPEG 1 audio
 				case 0x04: // MPEG 2 audio
 				case 0x0f: // MPEG 2 AAC
@@ -531,6 +474,7 @@ void eDVBScan::PMTready(int err)
 						forced_audio = 1;
 						isaudio = 1;
 					}
+					[[fallthrough]];
 				case 0x06: // PES Private
 				case 0x81: // user private
 				case 0xEA: // TS_PSI_ST_SMPTE_VC1
@@ -863,12 +807,13 @@ void eDVBScan::channelDone()
 						eDVBFrontendParametersSatellite p;
 						m_ch_current->getDVBS(p);
 
-						if (p.is_id != sat.is_id || p.pls_mode != sat.pls_code || p.pls_code != sat.pls_code)
+						if (p.is_id != sat.is_id || p.pls_mode != sat.pls_mode || p.pls_code != sat.pls_code)
 						{
 							p.set(d); //set multistream descriptor to current tuned data
 							feparm->setDVBS(p);
 							addChannelToScan(feparm);
 						}
+						[[fallthrough]];
 					}
 					case SATELLITE_DELIVERY_SYSTEM_DESCRIPTOR:
 					{
@@ -1115,6 +1060,7 @@ void eDVBScan::channelDone()
 
 		if (!(m_flags & scanOnlyFree) || !m_pmt_in_progress->second.scrambled) {
 			SCAN_eDebug("[eDVBScan] add not scrambled!");
+			m_new_servicerefs.push_back(ref);
 			std::pair<std::map<eServiceReferenceDVB, ePtr<eDVBService> >::iterator, bool> i =
 				m_new_services.insert(std::pair<eServiceReferenceDVB, ePtr<eDVBService> >(ref, service));
 			if (i.second)
@@ -1186,6 +1132,7 @@ void eDVBScan::start(const eSmartPtrList<iDVBFrontendParameters> &known_transpon
 	m_new_channels.clear();
 	m_tuner_data.clear();
 	m_new_services.clear();
+	m_new_servicerefs.clear();
 	m_last_service = m_new_services.end();
 
 	if (m_flags & scanBlindSearch)
@@ -1448,10 +1395,10 @@ void eDVBScan::insertInto(iDVBChannelList *db, bool backgroundscanresult)
 		{
 			bouquet->m_bouquet_name = "Last Scanned";
 
-			for (std::map<eServiceReferenceDVB, ePtr<eDVBService> >::const_iterator
-				service(m_new_services.begin()); service != m_new_services.end(); ++service)
+			for (std::vector<eServiceReferenceDVB>::const_iterator
+				service(m_new_servicerefs.begin()); service != m_new_servicerefs.end(); ++service)
 			{
-				bouquet->m_services.push_back(service->first);
+				bouquet->m_services.push_back(*service);
 			}
 			bouquet->flushChanges();
 			eDVBDB::getInstance()->renumberBouquet();
@@ -1562,6 +1509,7 @@ RESULT eDVBScan::processSDT(eDVBNamespace dvbnamespace, const ServiceDescription
 			if (is_crypted and !service->m_ca.size())
 				service->m_ca.push_front(0);
 
+			m_new_servicerefs.push_back(ref);
 			std::pair<std::map<eServiceReferenceDVB, ePtr<eDVBService> >::iterator, bool> i =
 				m_new_services.insert(std::pair<eServiceReferenceDVB, ePtr<eDVBService> >(ref, service));
 
@@ -1669,6 +1617,7 @@ RESULT eDVBScan::processVCT(eDVBNamespace dvbnamespace, const VirtualChannelTabl
 			if (is_crypted and !service->m_ca.size())
 				service->m_ca.push_front(0);
 
+			m_new_servicerefs.push_back(ref);
 			std::pair<std::map<eServiceReferenceDVB, ePtr<eDVBService> >::iterator, bool> i =
 				m_new_services.insert(std::pair<eServiceReferenceDVB, ePtr<eDVBService> >(ref, service));
 

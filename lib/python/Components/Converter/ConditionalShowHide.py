@@ -1,5 +1,9 @@
+from __future__ import absolute_import
+
 from enigma import eTimer
-from Converter import Converter
+
+from Components.Converter.Converter import Converter
+
 
 class ConditionalShowHide(Converter, object):
 	def __init__(self, argstr):
@@ -13,6 +17,10 @@ class ConditionalShowHide(Converter, object):
 			self.timer.callback.append(self.blinkFunc)
 		else:
 			self.timer = None
+
+	# Make ConditionalShowHide transparent to upstream attribute requests
+	def __getattr__(self, name):
+		return getattr(self.source, name)
 
 	def blinkFunc(self):
 		if self.blinking:
@@ -47,6 +55,7 @@ class ConditionalShowHide(Converter, object):
 		else:
 			for x in self.downstream_elements:
 				x.visible = vis
+		super(Converter, self).changed(what)
 
 	def connectDownstream(self, downstream):
 		Converter.connectDownstream(self, downstream)

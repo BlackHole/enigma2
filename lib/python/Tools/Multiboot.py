@@ -1,150 +1,200 @@
-from Components.SystemInfo import SystemInfo
-from Components.Console import Console
-from boxbranding import getMachineMtdRoot
-from Tools.Directories import pathExists
-import os, time
+from __future__ import print_function
+import six
+
+import glob
 import shutil
 import subprocess
+import tempfile
 
-#		#default layout for 				Zgemma H7/Mut@nt HD51						 Giga4K						SF8008/trio4K
-# boot								/dev/mmcblk0p1						/dev/mmcblk0p1				/dev/mmcblk0p3
-# STARTUP_1 			Image 1: boot emmcflash0.kernel1 'root=/dev/mmcblk0p3 rw rootwait'	boot emmcflash0.kernel1: 'root=/dev/mmcblk0p5		boot emmcflash0.kernel 'root=/dev/mmcblk0p13 
-# STARTUP_2 			Image 2: boot emmcflash0.kernel2 'root=/dev/mmcblk0p5 rw rootwait'      boot emmcflash0.kernel2: 'root=/dev/mmcblk0p7		boot usb0.sda1 'root=/dev/sda2
-# STARTUP_3		        Image 3: boot emmcflash0.kernel3 'root=/dev/mmcblk0p7 rw rootwait'	boot emmcflash0.kernel3: 'root=/dev/mmcblk0p9		boot usb0.sda3 'root=/dev/sda4
-# STARTUP_4		        Image 4: boot emmcflash0.kernel4 'root=/dev/mmcblk0p9 rw rootwait'	NOT IN USE due to Rescue mode in mmcblk0p3		NOT IN USE due to only 4 partitions on SDcard
+from os import mkdir, path, rmdir, rename, remove, sep, stat
+
+from boxbranding import getMachineBuild, getMachineMtdRoot
+from Components.Console import Console
+from Components.SystemInfo import SystemInfo
+
+
+class tmp:
+	dir = None
+
+
+def getMBbootdevice():
+	tmp.dir = tempfile.mkdtemp(prefix="Multiboot")
+	for device in ("/dev/block/by-name/bootoptions", "/dev/mmcblk0p1", "/dev/mmcblk1p1", "/dev/mmcblk0p3", "/dev/mmcblk0p4"):
+		if path.exists(device):
+			Console().ePopen("mount %s %s" % (device, tmp.dir))
+			if path.isfile(path.join(tmp.dir, "STARTUP")):
+				# print("[Multiboot] [getMBbootdevices] Bootdevice found: %s" % device)
+				return device
+			Console().ePopen("umount %s" % tmp.dir)
+	if not path.ismount(tmp.dir):
+		rmdir(tmp.dir)
+
+
+def getparam(line, param):
+	return line.replace("userdataroot", "rootuserdata").rsplit("%s=" % param, 1)[1].split(" ", 1)[0]
+
+
+def getMultibootslots():
+	bootslots = {}
+	slotname = ""
+	if SystemInfo["MBbootdevice"]:
+		for file in glob.glob(path.join(tmp.dir, "STARTUP_*")):
+			if "STARTUP_RECOVERY" in file:
+				SystemInfo["RecoveryMode"] = True
+				# print("[multiboot] [getMultibootslots] RecoveryMode is set to:%s" % SystemInfo["RecoveryMode"])
+			slotnumber = file.rsplit("_", 3 if "BOXMODE" in file else 1)[1][0]
+			slotname = file.rsplit("_", 3 if "BOXMODE" in file else 1)[1]
+			if len(slotname) != "1" and "BOXMODE" not in file:
+				slotname = slotname[1:]
+			print("[multiboot] [getMultibootslots] slot = %s file = %s" % (slotnumber, slotname))
+			if slotnumber.isdigit() and slotnumber not in bootslots:
+				slot = {}
+				for line in open(file).readlines():
+					# print("Multiboot getMultibootslots readlines = %s " % line)
+					if "root=" in line:
+						line = line.rstrip("\n")
+						root = getparam(line, "root")
+						if path.exists(root):
+							slot["root"] = root
+							slot["startupfile"] = path.basename(file)
+							slot["slotname"] = slotname
+							if "rootsubdir" in line:
+								SystemInfo["HasRootSubdir"] = True
+								# print("[multiboot] [getMultibootslots] HasRootSubdir is set to:%s" % SystemInfo["HasRootSubdir"])
+								slot["rootsubdir"] = getparam(line, "rootsubdir")
+								slot["kernel"] = getparam(line, "kernel")
+							elif "sda" in line:
+								slot["kernel"] = getparam(line, "kernel")	# sf8008 SD card slot pairs same as oldsystle MB
+								slot["rootsubdir"] = None
+							else:
+								slot["kernel"] = "%sp%s" % (root.split("p")[0], int(root.split("p")[1]) - 1)	# oldstyle MB kernel = root-1
+						break
+				if slot:
+					bootslots[int(slotnumber)] = slot
+		#(print("[multiboot] [getMultibootslots] Finished bootslots = %s" % bootslots))
+		Console().ePopen("umount %s" % tmp.dir)
+		if not path.ismount(tmp.dir):
+			rmdir(tmp.dir)
+	# print("[Multiboot] Bootslots found:", bootslots)
+	return bootslots
+
 
 def GetCurrentImage():
-	if SystemInfo["HasRootSubdir"]:
-		return SystemInfo["HasRootSubdir"] and (int(open('/sys/firmware/devicetree/base/chosen/bootargs', 'r').read()[:-1].split("rootsubdir=linuxrootfs")[1].split(' ')[0]))
-	else:
-		f = open('/sys/firmware/devicetree/base/chosen/bootargs', 'r').read()
-		if "%s" %(SystemInfo["canMultiBoot"][2]) in f:
-			return SystemInfo["canMultiBoot"] and (int(open('/sys/firmware/devicetree/base/chosen/bootargs', 'r').read()[:-1].split("%s" % SystemInfo["canMultiBoot"][2])[1].split(' ')[0])-SystemInfo["canMultiBoot"][0])/2
+	if SystemInfo["canMultiBoot"]:
+		slot = [x[-1] for x in open("/sys/firmware/devicetree/base/chosen/bootargs", "r").read().split() if x.startswith("rootsubdir")]
+		if slot:
+			return int(slot[0])
 		else:
-			return 0	# if media not in SystemInfo["canMultiBoot"], then using SDcard and Image is in eMMC (1st slot) so tell caller with 0 return
+			root = getparam(open("/sys/firmware/devicetree/base/chosen/bootargs", "r").read(), "root")
+			for slot in list(SystemInfo["canMultiBoot"].keys()):
+				if SystemInfo["canMultiBoot"][slot]["root"] == root:
+					return slot
+
+
 def GetCurrentKern():
 	if SystemInfo["HasRootSubdir"]:
-		return SystemInfo["HasRootSubdir"] and (int(open('/sys/firmware/devicetree/base/chosen/bootargs', 'r').read()[:-1].split("kernel=/dev/mmcblk0p")[1].split(' ')[0]))
+		return SystemInfo["HasRootSubdir"] and (int(open("/sys/firmware/devicetree/base/chosen/bootargs", "r").read()[:-1].split("kernel=/dev/mmcblk0p")[1].split(" ")[0]))
+
 
 def GetCurrentRoot():
 	if SystemInfo["HasRootSubdir"]:
-		return SystemInfo["HasRootSubdir"] and (int(open('/sys/firmware/devicetree/base/chosen/bootargs', 'r').read()[:-1].split("root=/dev/mmcblk0p")[1].split(' ')[0]))
+		return SystemInfo["HasRootSubdir"] and (int(open("/sys/firmware/devicetree/base/chosen/bootargs", "r").read()[:-1].split("root=/dev/mmcblk0p")[1].split(" ")[0]))
+
 
 def GetCurrentImageMode():
-	return SystemInfo["canMultiBoot"] and SystemInfo["canMode12"] and int(open('/sys/firmware/devicetree/base/chosen/bootargs', 'r').read().replace('\0', '').split('=')[-1])
+	return bool(SystemInfo["canMultiBoot"]) and SystemInfo["canMode12"] and int(open("/sys/firmware/devicetree/base/chosen/bootargs", "r").read().replace("\0", "").split("=")[-1])
 
-class GetImagelist():
-	MOUNT = 0
-	UNMOUNT = 1
-	NoRun = 0		# receivers only uses 1 media for multiboot
-	FirstRun = 1		# receiver uses eMMC and SD card for multiboot - so handle SDcard slots 1st via SystemInfo(canMultiBoot)
-	LastRun = 2		# receiver uses eMMC and SD card for multiboot - and then handle eMMC (currently one time)
 
-	def __init__(self, callback):
-		if SystemInfo["canMultiBoot"]:
-			(self.firstslot, self.numberofslots) = SystemInfo["canMultiBoot"][:2]
-			self.callback = callback
-			self.imagelist = {}
-			if not os.path.isdir('/tmp/testmount'):
-				os.mkdir('/tmp/testmount')
-			self.container = Console()
-			self.slot = 1
-			self.slot2 = 1
-			if SystemInfo["HasSDmmc"]:
-				self.SDmmc = self.FirstRun	# process SDcard slots
+def GetImagelist():
+	Imagelist = {}
+	tmp.dir = tempfile.mkdtemp(prefix="Multiboot")
+	for slot in sorted(list(SystemInfo["canMultiBoot"].keys())):
+		Console().ePopen("mount %s %s" % (SystemInfo["canMultiBoot"][slot]["root"], tmp.dir))
+		BuildVersion = "  "
+		Build = " "  # OBH Build No.
+		Dev = " "  # OBH Dev No.
+		Creator = " "  # Openpli Openvix Openatv etc
+		Date = " "
+		BuildType = " "  # release etc
+		Imagelist[slot] = {"imagename": _("Empty slot")}
+		imagedir = sep.join([_f for _f in [tmp.dir, SystemInfo["canMultiBoot"][slot].get("rootsubdir", "")] if _f])
+		if path.isfile(path.join(imagedir, "usr/bin/enigma2")):
+			#	print("[multiboot] [GetImagelist] 2 slot = %s imagedir = %s" % (slot, imagedir))
+			Creator = open("%s/etc/issue" % imagedir).readlines()[-2].capitalize().strip()[:-6]
+			#	print("[multiboot] [GetImagelist] Creator = %s imagedir = %s" % (Creator, imagedir))
+			if Creator.startswith("Openvix"):
+				reader = boxbranding_reader(imagedir)
+				# print("[multiboot] [GetImagelist]1 slot = %s imagedir = %s" % (slot, imagedir))
+				if path.isfile(path.join(imagedir, "usr/lib/enigma2/python/ImageIdentifier.py")):
+					print("[multiboot] [GetImagelist]2 slot = %s imagedir = %s" % (slot, imagedir))
+					reader = readImageIdentifier(imagedir)
+				BuildType = reader.getImageType()
+				Build = reader.getImageBuild()
+				Creator = Creator.replace("-release", " rel")
+				# print("[multiboot] [GetImagelist] Slot = %s Creator = %s BuildType = %s Build = %s" % (slot, Creator, BuildType, Build))
+				Dev = BuildType != "release" and " %s" % reader.getImageDevBuild() or ""
+				date = VerDate(imagedir)
+				BuildVersion = "%s %s %s %s %s" % (Creator, BuildType[0:3], Build, Dev, date)
 			else:
-				self.SDmmc = self.NoRun		# only mmc slots
-			self.phase = self.MOUNT
-			self.part = SystemInfo["canMultiBoot"][2]	# pick up slot type
-			self.run()
-		else:
-			callback({})
-
-	def run(self):
-		if SystemInfo["HasRootSubdir"]:
-			if self.slot == 1 and os.path.islink("/dev/block/by-name/linuxrootfs"):
-				self.part2 = os.readlink("/dev/block/by-name/linuxrootfs")[5:]
-				self.container.ePopen('mount /dev/block/by-name/linuxrootfs /tmp/testmount' if self.phase == self.MOUNT else 'umount /tmp/testmount', self.appClosed)
-			else:
-				self.part2 = os.readlink("/dev/block/by-name/userdata")[5:]
-				self.container.ePopen('mount /dev/block/by-name/userdata /tmp/testmount' if self.phase == self.MOUNT else 'umount /tmp/testmount', self.appClosed)
-			if self.phase == self.MOUNT:
-				self.imagelist[self.slot2] = { 'imagename': _("Empty slot"), 'part': '%s' %self.part2 }
-		else:
-			if self.SDmmc == self.LastRun:
-				self.part2 = getMachineMtdRoot()	# process mmc slot
-				self.slot2 = 1
-			else:
-				self.part2 = "%s" %(self.part + str(self.slot * 2 + self.firstslot))
-				if self.SDmmc == self.FirstRun:
-					self.slot2 += 1			# allow for mmc slot"
-			if self.phase == self.MOUNT:
-				self.imagelist[self.slot2] = { 'imagename': _("Empty slot"), 'part': '%s' %self.part2 }
-			self.container.ePopen('mount /dev/%s /tmp/testmount' %self.part2 if self.phase == self.MOUNT else 'umount /tmp/testmount', self.appClosed)
-
-	def appClosed(self, data, retval, extra_args):
-		if retval == 0 and self.phase == self.MOUNT:
-			BuildVersion = "  "	
-			Build = " "	#ViX Build No.#
-			Dev = " "	#ViX Dev No.#
-			Creator = " " 	#Openpli Openvix Openatv etc #
-			Date = " "	
-			BuildType = " "	#release etc #
-			self.OsPath = "NoPath"
-			if SystemInfo["HasRootSubdir"]:
-				if self.slot == 1 and os.path.isfile("/tmp/testmount/linuxrootfs1/usr/bin/enigma2"):
-					self.OsPath = "/tmp/testmount/linuxrootfs1"
-				elif os.path.isfile("/tmp/testmount/linuxrootfs%s/usr/bin/enigma2" % self.slot):
-					self.OsPath = "/tmp/testmount/linuxrootfs%s" % self.slot
-					print "multiboot tools 1 slots", self.slot, self.slot2
-			else:
-				if os.path.isfile("/tmp/testmount/usr/bin/enigma2"):
-					self.OsPath = '/tmp/testmount'
-			print "Tools/Multiboot OsPath %s " %self.OsPath
-			if self.OsPath != "NoPath":
-				Creator = open("%s/etc/issue" %self.OsPath).readlines()[-2].capitalize().strip()[:-6].replace("-release", " rel")
-				print "Tools/Multiboot Creator %s" %Creator 
-				if Creator.startswith("Openpli"):
-					build = [x.split("-")[-2:-1][0][-8:] for x in open("%s/var/lib/opkg/info/openpli-bootlogo.control" %self.OsPath).readlines() if x.startswith("Version:")]
-					Date = "%s-%s-%s" % (build[0][6:], build[0][4:6], build[0][2:4])
-					BuildVersion = "%s %s" % (Creator, Date)
-				elif Creator.startswith("Openvix"):
-					reader = boxbranding_reader(self.OsPath)
-					BuildType = reader.getImageType()
-					Build = reader.getImageBuild()
-					Dev = BuildType != "release" and " %s" % reader.getImageDevBuild() or ''
-					BuildVersion = "%s %s %s %s" % (Creator, BuildType[0:3], Build, Dev)
-				else:
-					st = os.stat('%s/var/lib/opkg/status' %self.OsPath)
-					tm = time.localtime(st.st_mtime)
-					if tm.tm_year >= 2011:
-						Date = time.strftime("%d-%m-%Y", tm).replace("-20", "-")
-					BuildVersion = "%s rel %s" % (Creator, Date)
-				self.imagelist[self.slot2] =  { 'imagename': '%s' %BuildVersion, 'part': '%s' %self.part2 }
-			self.phase = self.UNMOUNT
-			self.run()
-		elif self.slot < self.numberofslots:
-			self.slot += 1
-			self.slot2 = self.slot
-			self.phase = self.MOUNT
-			self.run()
-		elif self.SDmmc == self.FirstRun:
-			self.phase = self.MOUNT
-			self.SDmmc = self.LastRun	# processed SDcard now process mmc slot
-			self.run()
-		else:
-			self.container.killAll()
-			if not os.path.ismount('/tmp/testmount'):
-				os.rmdir('/tmp/testmount')
-			self.callback(self.imagelist)
+				date = VerDate(imagedir)
+				Creator = Creator.replace("-release", " ")
+				BuildVersion = "%s Image Date: %s" % (Creator, date)
+			Imagelist[slot] = {"imagename": "%s" % BuildVersion}
+		elif path.isfile(path.join(imagedir, "usr/bin/enigmax")):
+			Imagelist[slot] = {"imagename": _("Deleted image")}
+		Console().ePopen("umount %s" % tmp.dir)
+	if not path.ismount(tmp.dir):
+		rmdir(tmp.dir)
+	return Imagelist
 
 
-class boxbranding_reader:		# many thanks to Huevos for creating this reader - well beyond my skill levels! 
+def VerDate(imagedir):
+	try:
+		from datetime import datetime
+		date = datetime.fromtimestamp(stat(path.join(imagedir, "var/lib/opkg/status")).st_mtime).strftime("%Y-%m-%d")
+		if date.startswith("1970"):
+			date = datetime.fromtimestamp(stat(path.join(imagedir, "usr/share/bootlogo.mvi")).st_mtime).strftime("%Y-%m-%d")
+		date = max(date, datetime.fromtimestamp(stat(path.join(imagedir, "usr/bin/enigma2")).st_mtime).strftime("%Y-%m-%d"))
+		print("[multiboot] date = %s" % date)
+	except Exception:
+		date = _("Unknown")
+	return date
+
+
+def emptySlot(slot):
+	tmp.dir = tempfile.mkdtemp(prefix="Multiboot")
+	Console().ePopen("mount %s %s" % (SystemInfo["canMultiBoot"][slot]["root"], tmp.dir))
+	imagedir = sep.join([_f for _f in [tmp.dir, SystemInfo["canMultiBoot"][slot].get("rootsubdir", "")] if _f])
+	if path.isfile(path.join(imagedir, "usr/bin/enigma2")):
+		rename((path.join(imagedir, "usr/bin/enigma2")), (path.join(imagedir, "usr/bin/enigmax")))
+		ret = 0
+	else:
+		print("[multiboot2] NO enigma2 found to rename")
+		ret = 4
+	Console().ePopen("umount %s" % tmp.dir)
+	if not path.ismount(tmp.dir):
+		rmdir(tmp.dir)
+	return ret
+
+
+def restoreSlots():
+	for slot in SystemInfo["canMultiBoot"]:
+		tmp.dir = tempfile.mkdtemp(prefix="Multiboot")
+		Console().ePopen("mount %s %s" % (SystemInfo["canMultiBoot"][slot]["root"], tmp.dir))
+		imagedir = sep.join([_f for _f in [tmp.dir, SystemInfo["canMultiBoot"][slot].get("rootsubdir", "")] if _f])
+		if path.isfile(path.join(imagedir, "usr/bin/enigmax")):
+			rename((path.join(imagedir, "usr/bin/enigmax")), (path.join(imagedir, "usr/bin/enigma2")))
+		Console().ePopen("umount %s" % tmp.dir)
+	if not path.ismount(tmp.dir):
+		rmdir(tmp.dir)
+
+
+class boxbranding_reader:  # Many thanks to Huevos for creating this reader - well beyond my skill levels!
 	def __init__(self, OsPath):
-		if pathExists('%s/usr/lib64' %OsPath):
-			self.branding_path = "%s/usr/lib64/enigma2/python/" %OsPath
+		if path.exists("%s/usr/lib64" % OsPath):
+			self.branding_path = "%s/usr/lib64/enigma2/python/" % OsPath
 		else:
-			self.branding_path = "%s/usr/lib/enigma2/python/" %OsPath
+			self.branding_path = "%s/usr/lib/enigma2/python/" % OsPath
 		self.branding_file = "boxbranding.so"
 		self.tmp_path = "/tmp/"
 		self.helper_file = "helper.py"
@@ -182,95 +232,129 @@ class boxbranding_reader:		# many thanks to Huevos for creating this reader - we
 		self.removeBrandingFile()
 		self.addBrandingMethods()
 
-	def readBrandingFile(self): # reads boxbranding.so and updates self.output
-		output = eval(subprocess.check_output(['python', self.tmp_path + self.helper_file]))
+	def readBrandingFile(self):  # Reads boxbranding.so and updates self.output
+		output = eval(subprocess.check_output(["python", path.join(self.tmp_path, self.helper_file)]))
 		if output:
-			for att in self.output.keys():
+			for att in list(self.output.keys()):
 				self.output[att] = output[att]
+			# print("[readBrandingFile1] self.output = %s" % self.output)
 
-	def addBrandingMethods(self): # this creates reader.getBoxType(), reader.getImageDevBuild(), etc
-		l =  {}                
-		for att in self.output.keys():
-			exec("def %s(self): return self.output['%s']" % (att, att), None, l)
-		for name, value in l.items():
+	def addBrandingMethods(self):  # This creates reader.getBoxType(), reader.getImageDevBuild(), etc
+		loc = {}
+		for att in list(self.output.keys()):
+			exec("def %s(self): return self.output[\"%s\"]" % (att, att), None, loc)
+		for name, value in list(loc.items()):
 			setattr(boxbranding_reader, name, value)
 
 	def createHelperFile(self):
-		f = open(self.tmp_path + self.helper_file, "w+")
+		f = open(path.join(self.tmp_path, self.helper_file), "w+")
 		f.write(self.helperFileContent())
 		f.close()
 
 	def copyBrandingFile(self):
-		shutil.copy2(self.branding_path + self.branding_file, self.tmp_path + self.branding_file)
+		shutil.copy2(path.join(self.branding_path, self.branding_file), path.join(self.tmp_path, self.branding_file))
 
 	def removeHelperFile(self):
-		self.removeFile(self.tmp_path + self.helper_file)
+		self.removeFile(path.join(self.tmp_path, self.helper_file))
 
 	def removeBrandingFile(self):
-		self.removeFile(self.tmp_path + self.branding_file)
+		self.removeFile(path.join(self.tmp_path, self.branding_file))
 
 	def removeFile(self, toRemove):
-			if os.path.isfile(toRemove):
-				os.remove(toRemove)
+		if path.isfile(toRemove):
+			remove(toRemove)
 
 	def helperFileContent(self):
-		eol = "\n"
 		out = []
-		out.append("try:%s" % eol)
-		out.append("\timport boxbranding%s" % eol)
-		out.append("\toutput = {%s" % eol)
-		for att in self.output.keys():
-			out.append('\t\t"%s": boxbranding.%s(),%s' % (att, att, eol))
-		out.append("\t}%s" % eol)
-		out.append("except:%s" % eol)
-		out.append("\t\toutput = None%s" % eol)
-		out.append("print output%s" % eol)
-		return ''.join(out)
+		out.append("try:")
+		out.append("\timport boxbranding")
+		out.append("\toutput = {")
+		for att in list(self.output.keys()):
+			out.append("\t\t\"%s\": boxbranding.%s()," % (att, att))
+		out.append("\t}")
+		out.append("except Exception:")
+		out.append("\t\toutput = None")
+		out.append("print(output)")
+		out.append("")
+		return "\n".join(out)
 
 
-class EmptySlot():
-	MOUNT = 0
-	UNMOUNT = 1
-	def __init__(self, Contents, callback):
-		self.callback = callback
-		self.container = Console()
-		(self.firstslot, self.numberofslots, self.mtdboot) = SystemInfo["canMultiBoot"]
-		self.slot = Contents
-		if not os.path.isdir('/tmp/testmount'):
-			os.mkdir('/tmp/testmount')
-		if SystemInfo["HasRootSubdir"]:
-			self.part = "%s%s" %(self.mtdboot, GetCurrentRoot())
+class readImageIdentifier():
+
+	#
+	# typical use...
+	#
+	# from readImageIdentifier import readImageIdentifier
+	# reader = readImageIdentifier()
+	# boxtype = reader.getBoxType()
+	#
+
+	def __init__(self, OsPath=None):
+		if OsPath is None:
+			OsPath = ""
+
+		if path.exists("%s/usr/lib64" % OsPath):
+			self.filepath = "%s/usr/lib64/enigma2/python/" % OsPath
 		else:
-			if SystemInfo["HasSDmmc"]:			# allow for mmc & SDcard in passed slot number, so SDcard slot -1
-				self.slot -= 1
-			self.part = "%s%s" %(self.mtdboot, str(self.slot * 2 + self.firstslot))
-			if SystemInfo["HasSDmmc"] and self.slot == 0:	# this is the mmc slot, so pick up from MtdRoot
-				self.part = getMachineMtdRoot()
-		self.phase = self.MOUNT
-		self.run()
+			self.filepath = "%s/usr/lib/enigma2/python/" % OsPath
+		self.filename = "ImageIdentifier.py"
 
-	def run(self):
-		if SystemInfo["HasRootSubdir"]:
-			if self.slot == 1 and os.path.islink("/dev/block/by-name/linuxrootfs"):
-				self.container.ePopen('mount /dev/block/by-name/linuxrootfs /tmp/testmount' if self.phase == self.MOUNT else 'umount /tmp/testmount', self.appClosed)
-			else:
-				self.container.ePopen('mount /dev/block/by-name/userdata /tmp/testmount' if self.phase == self.MOUNT else 'umount /tmp/testmount', self.appClosed)
-		else:
-			self.container.ePopen('mount /dev/%s /tmp/testmount' %self.part if self.phase == self.MOUNT else 'umount /tmp/testmount', self.appClosed)
+		self.methods = {
+			"getBoxType": "",
+			"getImageDistro": "",
+			"getImageVersion": "",
+			"getImageBuild": "",
+			"getImageDevBuild": "",
+			"getImageType": "",
+			"getMachineBrand": "",
+			"getImageBuildDate": "",
+		}
 
-	
-	def appClosed(self, data, retval, extra_args):
-		if retval == 0 and self.phase == self.MOUNT:
-			if SystemInfo["HasRootSubdir"]:
-				if os.path.isfile("/tmp/testmount/linuxrootfs%s/usr/bin/enigma2" %self.slot):
-					os.rename('/tmp/testmount/linuxrootfs%s/usr/bin/enigma2' %self.slot, '/tmp/testmount/linuxrootfs%s/usr/bin/enigmax.bin' %self.slot)
-			else:
-				if os.path.isfile("/tmp/testmount/usr/bin/enigma2"):
-					os.rename('/tmp/testmount/usr/bin/enigma2', '/tmp/testmount/usr/bin/enigmax.bin')
-			self.phase = self.UNMOUNT
-			self.run()
-		else:
-			self.container.killAll()
-			if not os.path.ismount('/tmp/testmount'):
-				os.rmdir('/tmp/testmount')
-			self.callback()
+		self.__getfile()
+		self.__readfile()
+
+	def __getfile(self):
+		self.file_content = ""
+		try:
+			self.file_content = open("%s%s" % (self.filepath, self.filename)).read()
+			# print("[readImageIdentifier][self.file_content] %s" % (self.file_content))
+		except:
+			print("[readImageIdentifier][getfile] Could not read %s%s" % (self.filepath, self.filename))
+
+	def __readfile(self):
+		try:
+			exec(self.file_content)
+		except Exception as e:
+			print("[readImageIdentifier][readfile] failed to exec")
+			print(e)
+
+		for key in list(self.methods.keys()):
+			try:
+				exec("global m;m = %s()" % (key,))
+				self.methods[key] = m
+			except Exception as e:
+				print("[readImageIdentifier][readfile] failed to exec %s" % (key,))
+
+	def getBoxType(self):
+		return self.methods["getBoxType"]
+
+	def getImageDistro(self):
+		return self.methods["getImageDistro"]
+
+	def getImageVersion(self):
+		return self.methods["getImageVersion"]
+
+	def getImageBuild(self):
+		return self.methods["getImageBuild"]
+
+	def getImageDevBuild(self):
+		return self.methods["getImageDevBuild"]
+
+	def getImageType(self):
+		return self.methods["getImageType"]
+
+	def getMachineBrand(self):
+		return self.methods["getMachineBrand"]
+
+	def getImageBuildDate(self):
+		return self.methods["getImageBuildDate"]
