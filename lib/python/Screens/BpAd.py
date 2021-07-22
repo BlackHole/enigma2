@@ -15,7 +15,8 @@ from Components.Pixmap import Pixmap, MultiPixmap
 from Tools.LoadPixmap import LoadPixmap
 from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN, SCOPE_SKIN_IMAGE, fileExists, pathExists, createDir
 from os import system, listdir, chdir, getcwd, remove as os_remove
-from urllib2 import Request, urlopen, URLError, HTTPError
+from urllib.request import Request, urlopen
+from urllib.error import URLError, HTTPError
 from operator import itemgetter
 from re import compile as re_compile, sub as re_sub
 
@@ -29,14 +30,14 @@ class DeliteAddons(Screen):
 	<screen position="160,115" size="390,330" title="Black Hole E2 Addons Manager">
 		<widget source="list" render="Listbox" position="10,16" size="370,300" scrollbarMode="showOnDemand" >
 			<convert type="TemplatedMultiContent">
-                	{"template": [
-                    	MultiContentEntryText(pos = (50, 1), size = (320, 36), flags = RT_HALIGN_LEFT|RT_VALIGN_CENTER, text = 0),
-                 	MultiContentEntryPixmapAlphaTest(pos = (4, 2), size = (36, 36), png = 1),
-                    	],
-                    	"fonts": [gFont("Regular", 22)],
-                    	"itemHeight": 36
-                	}
-            		</convert>
+			{"template": [
+			MultiContentEntryText(pos = (50, 1), size = (320, 36), flags = RT_HALIGN_LEFT|RT_VALIGN_CENTER, text = 0),
+			MultiContentEntryPixmapAlphaTest(pos = (4, 2), size = (36, 36), png = 1),
+			],
+			"fonts": [gFont("Regular", 22)],
+			"itemHeight": 36
+			}
+			</convert>
 		</widget>
 	</screen>"""
 
@@ -199,14 +200,14 @@ class Nab_downArea(Screen):
 	<screen position="160,115" size="390,330" title="Black Hole E2 Downloads Manager">
 		<widget source="list" render="Listbox" position="10,15" size="370,280" scrollbarMode="showOnDemand" >
 			<convert type="TemplatedMultiContent">
-                	{"template": [
-                   	MultiContentEntryText(pos = (50, 1), size = (320, 36), flags = RT_HALIGN_LEFT|RT_VALIGN_CENTER, text = 0),
-                 	MultiContentEntryPixmapAlphaTest(pos = (4, 2), size = (36, 36), png = 1),
-                    	],
-                    	"fonts": [gFont("Regular", 24)],
-                    	"itemHeight": 36
-                	}
-            		</convert>
+				{"template": [
+				MultiContentEntryText(pos = (50, 1), size = (320, 36), flags = RT_HALIGN_LEFT|RT_VALIGN_CENTER, text = 0),
+				MultiContentEntryPixmapAlphaTest(pos = (4, 2), size = (36, 36), png = 1),
+				],
+				"fonts": [gFont("Regular", 24)],
+				"itemHeight": 36
+				}
+			</convert>
 		</widget>
 	</screen>"""
 
@@ -366,8 +367,8 @@ class Nab_downCat(Screen):
 		step = 0
 		if fileExists("/tmp/cpanel.tmp"):
 			f = open("/tmp/cpanel.tmp", 'r')
- 			for line in f.readlines():
-     				line = line.replace('\n', '')
+			for line in f.readlines():
+				line = line.replace('\n', '')
 				line = line.strip()
 				if step == 0:
 					ivalue = line
@@ -377,7 +378,7 @@ class Nab_downCat(Screen):
 					self.flist.append(res)
 					step = 0
 
- 			f.close()
+			f.close()
 			os_remove("/tmp/cpanel.tmp")
 
 		self["list"] = List(self.flist)
@@ -462,7 +463,7 @@ class Nab_ShowDownFile(Screen):
 		strview = "TITLE: "
 		if fileExists("/tmp/cpanel.tmp"):
 			f = open("/tmp/cpanel.tmp", 'r')
- 			for line in f.readlines():
+			for line in f.readlines():
 				line = self.cleanhtml(line)
 				line = line.replace('\n', '')
 				line = line.strip()
@@ -495,7 +496,7 @@ class Nab_ShowDownFile(Screen):
 				else:
 					strview += line + "\n"
 
- 			f.close()
+			f.close()
 			os_remove("/tmp/cpanel.tmp")
 		self["infotext"].setText(strview)
 
@@ -814,7 +815,7 @@ class Nab_Stats(Screen):
 			step = 0
 			f = open("/tmp/cpanel.tmp", 'r')
 
- 			for line in f.readlines():
+			for line in f.readlines():
 				if step == 0:
 					strview += _("Total Connections:   \t")
 				elif step == 1:
@@ -947,16 +948,16 @@ class Nab_ConnectPop(Screen):
 			self.curpix = 4
 			req = Request(self.myurl)
 			try:
-    				response = urlopen(req)
-			except HTTPError, e:
-    				self.close()
-			except URLError, e:
-    				self.close()
+					response = urlopen(req)
+			except HTTPError as e:
+					self.close()
+			except URLError as e:
+					self.close()
 			else:
 				self["lab1"].setText(_("Connection Established"))
 				html = response.read()
 				out = open(self.downfile, "w")
-				out.write(html)
+				out.write(html.decode('utf-8'))
 				out.close()
 
 		self["connect"].setPixmapNum(self.curpix)

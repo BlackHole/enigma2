@@ -17,25 +17,25 @@ import socket
 class DeliteBluePanel(Screen):
 	skin = """
 	<screen name="DeliteBluePanel" position="center,center" size="1000,720"  title="Black Hole Blue Panel" flags="wfNoBorder">
-        <ePixmap position="339,170" zPosition="3" size="60,40" pixmap="skin_default/buttons/key_ok.png" alphatest="blend" transparent="1" />
-        <eLabel text="Black Hole Blue Panel" position="80,30" size="800,38" font="Regular;34" halign="left" transparent="1"/>
-        <widget name="lab1" position="129,90" size="230,25" font="Regular;24" zPosition="2"  transparent="1"/>
-        <widget name="list" position="75,126" size="340,38" zPosition="2"  transparent="1"/>
-        <widget name="lab2" position="139,172" size="190,24" font="Regular;20" halign="center" valign="center" zPosition="2" transparent="1"/>
-    	<widget name="lab3" position="79,201" size="120,28" font="Regular;24" halign="left" zPosition="2" transparent="1"/>
-        <widget name="activecam" position="79,201" size="350,28" font="Regular;24" halign="left" zPosition="2" transparent="1"/>
-        <widget name="Ilab1" position="79,257" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
-        <widget name="Ilab2" position="79,290" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
-        <widget name="Ilab3" position="79,315" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
-        <widget name="Ilab4" position="79,345" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
-        <widget name="Ecmtext" position="79,380" size="440,300" font="Regular;20" zPosition="2" transparent="1"/>
-        <ePixmap position="145,650" size="140,40" pixmap="skin_default/buttons/red.png" alphatest="on" zPosition="1" />
-        <ePixmap position="430,650" size="140,40" pixmap="skin_default/buttons/yellow.png" alphatest="on" zPosition="1" />
-        <ePixmap position="715,650" size="140,40" pixmap="skin_default/buttons/blue.png" alphatest="on" zPosition="1" />
+		<ePixmap position="339,170" zPosition="3" size="60,40" pixmap="skin_default/buttons/key_ok.png" alphatest="blend" transparent="1" />
+		<eLabel text="Black Hole Blue Panel" position="80,30" size="800,38" font="Regular;34" halign="left" transparent="1"/>
+		<widget name="lab1" position="129,90" size="230,25" font="Regular;24" zPosition="2"  transparent="1"/>
+		<widget name="list" position="75,126" size="340,38" zPosition="2"  transparent="1"/>
+		<widget name="lab2" position="139,172" size="190,24" font="Regular;20" halign="center" valign="center" zPosition="2" transparent="1"/>
+		<widget name="lab3" position="79,201" size="120,28" font="Regular;24" halign="left" zPosition="2" transparent="1"/>
+		<widget name="activecam" position="79,201" size="350,28" font="Regular;24" halign="left" zPosition="2" transparent="1"/>
+		<widget name="Ilab1" position="79,257" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
+		<widget name="Ilab2" position="79,290" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
+		<widget name="Ilab3" position="79,315" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
+		<widget name="Ilab4" position="79,345" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
+		<widget name="Ecmtext" position="79,380" size="440,300" font="Regular;20" zPosition="2" transparent="1"/>
+		<ePixmap position="145,650" size="140,40" pixmap="skin_default/buttons/red.png" alphatest="on" zPosition="1" />
+		<ePixmap position="430,650" size="140,40" pixmap="skin_default/buttons/yellow.png" alphatest="on" zPosition="1" />
+		<ePixmap position="715,650" size="140,40" pixmap="skin_default/buttons/blue.png" alphatest="on" zPosition="1" />
 		<widget name="key_red" position="145,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="red" transparent="1" />
 		<widget name="key_yellow" position="430,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="yellow" transparent="1" />
 		<widget name="key_blue" position="715,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="blue" transparent="1" />
-    </screen>"""
+	</screen>"""
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
@@ -68,7 +68,7 @@ class DeliteBluePanel(Screen):
 		self.emlist = []
 		self.populate_List()
 		self["list"] = MenuList(self.emlist)
-		self["lab1"].setText(_("%d  CAMs Installed") % (len(self.emlist)))
+		self["lab1"].setText(_("%d	CAMs Installed") % (len(self.emlist)))
 		self.onShow.append(self.updateBP)
 
 	def populate_List(self):
@@ -112,13 +112,13 @@ class DeliteBluePanel(Screen):
 		if fileExists("/etc/BhCamConf"):
 			f = open("/etc/BhCamConf", 'r')
 			for line in f.readlines():
-   				parts = line.strip().split("|")
+				parts = line.strip().split("|")
 				if parts[0] == "deldefault":
 					self.defaultcam = parts[1]
 			f.close()
 
 		self.defCamname = "Common Interface"
-		for c in self.camnames.keys():
+		for c in list(self.camnames.keys()):
 			if self.camnames[c] == self.defaultcam:
 				self.defCamname = c
 		pos = 0
@@ -131,11 +131,11 @@ class DeliteBluePanel(Screen):
 		mytext = ""
 		if fileExists("/tmp/ecm.info"):
 			f = open("/tmp/ecm.info", 'r')
- 			for line in f.readlines():
+			for line in f.readlines():
 				mytext = mytext + line.strip() + "\n"
- 			f.close()
+			f.close()
 		if len(mytext) < 5:
-			mytext = "\n\n    " + _("Ecm Info not available.")
+			mytext = "\n\n	  " + _("Ecm Info not available.")
 
 		self["activecam"].setText(self.defCamname)
 		self["Ecmtext"].setText(mytext)
@@ -172,8 +172,8 @@ class DeliteBluePanel(Screen):
 	def sendtoBh_sock(self, data):
 		client_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 		client_socket.connect("/tmp/Blackhole.socket")
-		client_socket.send(data)
-            	client_socket.close()
+		client_socket.send(b"data")
+		client_socket.close()
 
 	def keyYellow(self):
 		self.session.open(BhsysInfo)
@@ -265,11 +265,11 @@ class BhsysInfo(Screen):
 		rc = system("df -h > /tmp/syinfo.tmp")
 		text = _("BOX\n") + _("Brand:") + "\tVuplus\n"
 		f = open("/proc/stb/info/vumodel", 'r')
- 		text += _("Model:\t") + f.readline()
- 		f.close()
+		text += _("Model:\t") + f.readline()
+		f.close()
 		f = open("/proc/stb/info/chipset", 'r')
- 		text += _("Chipset:\t") + f.readline() + "\n"
- 		f.close()
+		text += _("Chipset:\t") + f.readline() + "\n"
+		f.close()
 		text += _("MEMORY\n")
 		memTotal = memFree = swapTotal = swapFree = 0
 		for line in open("/proc/meminfo", 'r'):
@@ -295,7 +295,7 @@ class BhsysInfo(Screen):
 		line = f.readline()
 		parts = line.split()
 		text += _("Flash") + "\t" + parts[1].strip() + "  " + parts[2].strip() + "  " + parts[3].strip() + "  " + parts[4] + "\n"
- 		for line in f.readlines():
+		for line in f.readlines():
 			if line.find('/media/') != -1:
 				line = line.replace('/media/', '   ')
 				parts = line.split()

@@ -280,16 +280,18 @@ class InfoBarUnhandledKey:
 			self.unhandledKeyDialog = None
 
 	def actionA(self, key, flag):  # This function is called on every keypress!
-		print "[InfoBarGenerics] Key: %s (%s) KeyID='%s' Binding='%s'." % (key, KEYFLAGS[flag], self.invKeyIds.get(key, ""), getKeyDescription(key))
-		mkey = "unset"
-		try:
-			mkey = getKeyDescription(key)[0]
-			print '[InfoBarGenerics] KEY: %s %s' % (key, mkey)
-		except:
-			print '[InfoBarGenerics] KEY: %s' % key
-		self.unhandledKeyDialog.hide()
-		if self.closeSIB(key) and self.secondInfoBarScreen and self.secondInfoBarScreen.shown:
-			if not config.usage.fix_second_infobar.value or mkey not in ("LEFT", "RIGHT", "BOUQUET+", "BOUQUET-"):
+		print("[InfoBarGenerics] Key: %s (%s) KeyID='%s' Binding='%s'." % (key, KEYFLAGS[flag], self.invKeyIds.get(key, ""), getKeyDescription(key)))
+#		mkey = "unset"
+#		try:
+#			mkey = getKeyDescription(key)[0]
+#			print ("[InfoBarGenerics] KEY: %s %s" % (key, mkey)
+#		except:
+#			print ("[InfoBarGenerics] KEY: %s" % key
+#		self.unhandledKeyDialog.hide()
+		if flag != 2: # don't hide on repeat
+			self.unhandledKeyDialog.hide()
+			if self.closeSIB(key) and self.secondInfoBarScreen and self.secondInfoBarScreen.shown:
+#			if not config.usage.fix_second_infobar.value or mkey not in ("LEFT", "RIGHT", "BOUQUET+", "BOUQUET-"):
 				self.secondInfoBarScreen.hide()
 				self.secondInfoBarWasShown = False
 		if flag != 4:

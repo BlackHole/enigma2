@@ -92,9 +92,9 @@ class DeliteDevicesPanel(Screen):
 		model = "Generic"
 		filename = "/sys/block/%s/device/vendor" % (device)
 		if fileExists(filename):
-			vendor = file(filename).read().strip()
+			vendor = open(filename).read().strip()
 			filename = "/sys/block/%s/device/model" % (device)
-			mod = file(filename).read().strip()
+			mod = open(filename).read().strip()
 			model = "%s %s" % (vendor, mod)
 		return model
 
@@ -102,7 +102,7 @@ class DeliteDevicesPanel(Screen):
 		size = "0"
 		filename = "/sys/block/%s/%s/size" % (device, partition)
 		if fileExists(filename):
-			size = int(file(filename).read().strip())
+			size = int(open(filename).read().strip())
 			cap = size / 1000 * 512 / 1000
 			size = "%d.%03d GB" % (cap / 1000, cap % 1000)
 		return size
@@ -116,7 +116,7 @@ class DeliteDevicesPanel(Screen):
 		pix = pixpath + "icons/dev_usb.png"
 		filename = "/sys/block/%s/removable" % (device)
 		if fileExists(filename):
-			if file(filename).read().strip() == "0":
+			if open(filename).read().strip() == "0":
 				name = "HARD DISK"
 				pix = pixpath + "icons/dev_hdd.png"
 
@@ -240,7 +240,7 @@ class BlackPoleSwap(Screen):
 		self.swap_file = ""
 		swapinfo = _("Swap status: disabled")
 		f = open("/proc/swaps", 'r')
- 		for line in f.readlines():
+		for line in f.readlines():
 			if line.find('swapfile') != -1:
 				parts = line.split()
 				self.swap_file = parts[0].strip()

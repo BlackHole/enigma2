@@ -25,14 +25,14 @@ class DeliteSettings(Screen):
 	<screen position="160,110" size="390,360" title="Black Hole Extra Settings">
 		<widget source="list" render="Listbox" position="10,10" size="370,330" scrollbarMode="showOnDemand" >
 			<convert type="TemplatedMultiContent">
-                		{"template": [
-                		MultiContentEntryText(pos = (60, 1), size = (300, 36), flags = RT_HALIGN_LEFT|RT_VALIGN_CENTER, text = 0),
-                		MultiContentEntryPixmapAlphaTest(pos = (4, 2), size = (36, 36), png = 1),
-                		],
-                		"fonts": [gFont("Regular", 24)],
-                		"itemHeight": 36
-                		}
-            		</convert>
+				{"template": [
+				MultiContentEntryText(pos = (60, 1), size = (300, 36), flags = RT_HALIGN_LEFT|RT_VALIGN_CENTER, text = 0),
+				MultiContentEntryPixmapAlphaTest(pos = (4, 2), size = (36, 36), png = 1),
+				],
+				"fonts": [gFont("Regular", 24)],
+				"itemHeight": 36
+				}
+			</convert>
 		</widget>
 	</screen>"""
 
@@ -253,11 +253,11 @@ class BhNetBrowser(Screen):
 		<widget source="list" render="Listbox" position="10,10" size="780,460" scrollbarMode="showOnDemand" >
 			<convert type="StringList" />
 		</widget>
-    		<ePixmap pixmap="skin_default/buttons/red.png" position="200,480" size="140,40" alphatest="on" />
+		<ePixmap pixmap="skin_default/buttons/red.png" position="200,480" size="140,40" alphatest="on" />
 		<ePixmap pixmap="skin_default/buttons/green.png" position="440,480" size="140,40" alphatest="on" />
 		<widget name="key_red" position="200,480" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 		<widget name="key_green" position="440,480" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
-    	</screen>"""
+	</screen>"""
 
 	def __init__(self, session, menu_path=""):
 		Screen.__init__(self, session)
@@ -355,7 +355,7 @@ class BhMinidlna(Screen):
 
 		if fileExists("/tmp/nvpn.tmp"):
 			f = open("/tmp/nvpn.tmp", 'r')
- 			for line in f.readlines():
+			for line in f.readlines():
 				if line.find('minidlna') != -1:
 					self.my_serv_active = True
 			f.close()
@@ -372,8 +372,8 @@ class BhMinidlna(Screen):
 class DeliteInadyn(Screen):
 	skin = """
 	<screen position="120,70" size="480,410" title="Black Hole E2 Inadyn Manager">
-		<widget name="linactive" position="10,10" zPosition="1" pixmap="skin_default/icons/ninactive.png" size="32,32"  alphatest="on" />
-		<widget name="lactive" position="10,10" zPosition="2" pixmap="skin_default/icons/nactive.png" size="32,32"  alphatest="on" />
+		<widget name="linactive" position="10,10" zPosition="1" pixmap="skin_default/icons/ninactive.png" size="32,32" alphatest="on" />
+		<widget name="lactive" position="10,10" zPosition="2" pixmap="skin_default/icons/nactive.png" size="32,32" alphatest="on" />
 		<widget name="lab1" position="50,10" size="350,30" font="Regular;20" valign="center"  transparent="1"/>
 		<widget name="lab2" position="10,50" size="230,30" font="Regular;20" valign="center" transparent="1"/>
 		<widget name="labtime" position="240,50" size="100,30" font="Regular;20" valign="center" backgroundColor="#4D5375"/>
@@ -389,7 +389,7 @@ class DeliteInadyn(Screen):
 		<widget name="labsys" position="160,250" size="310,30" font="Regular;20" valign="center" backgroundColor="#4D5375"/>
 		<widget name="lab7" position="10,300" size="150,30" font="Regular;20" valign="center" transparent="1"/>
 		<widget name="labstop" position="160,300" size="100,30" font="Regular;20" valign="center"  halign="center" backgroundColor="red"/>
-		<widget name="labrun" position="160,300" size="100,30" zPosition="1" font="Regular;20" valign="center"  halign="center" backgroundColor="green"/>
+		<widget name="labrun" position="160,300" size="100,30" zPosition="1" font="Regular;20" valign="center" halign="center" backgroundColor="green"/>
 		<ePixmap pixmap="skin_default/buttons/green.png" position="20,360" size="140,40" alphatest="on" />
 		<ePixmap pixmap="skin_default/buttons/yellow.png" position="170,360" size="140,40" alphatest="on" />
 		<ePixmap pixmap="skin_default/buttons/blue.png" position="320,360" size="140,40" alphatest="on" />
@@ -443,7 +443,7 @@ class DeliteInadyn(Screen):
 			mybox = self.session.open(MessageBox, _("You have to Activate Inadyn before to start"), MessageBox.TYPE_INFO)
 			mybox.setTitle("Info")
 		else:
-			print "[BpSet] restartIna"
+			print("[BpSet] restartIna")
 			rc = system("/etc/init.d/inadyn-mt stop")
 			rc = system("/etc/init.d/inadyn-mt start")
 			self.updateIna()
@@ -466,7 +466,7 @@ class DeliteInadyn(Screen):
 
 		if fileExists("/etc/inadyn.conf"):
 			f = open("/etc/inadyn.conf", 'r')
- 			for line in f.readlines():
+			for line in f.readlines():
 				line = line.strip()
 				if line.startswith('username '):
 					line = line[9:]
@@ -490,7 +490,7 @@ class DeliteInadyn(Screen):
 						self["sactive"].show()
 						self["labsys"].setText(line)
 
- 			f.close()
+			f.close()
 
 		p = process.ProcessList()
 		check = False
@@ -561,7 +561,7 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 
 		if fileExists("/etc/inadyn.conf"):
 			f = open("/etc/inadyn.conf", 'r')
- 			for line in f.readlines():
+			for line in f.readlines():
 				line = line.strip()
 				if line.startswith('username '):
 					line = line[9:]
@@ -599,7 +599,7 @@ class DeliteInaSetup(Screen, ConfigListScreen):
 					ina_system1 = getConfigListEntry(_("System"), self.ina_system)
 					self.list.append(ina_system1)
 
- 			f.close()
+			f.close()
 
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
@@ -733,7 +733,7 @@ class DeliteInaLog(Screen):
 		strview = ""
 		if fileExists("/var/log/inadyn.log"):
 			f = open("/var/log/inadyn.log", 'r')
- 			for line in f.readlines():
+			for line in f.readlines():
 				strview += line
 
 			f.close()
@@ -749,7 +749,7 @@ class DeliteOpenvpn(Screen):
 		<widget name="labactive" position="170,90" size="250,30" font="Regular;20" valign="center" transparent="1"/>
 		<widget name="lab3" position="20,160" size="150,30" font="Regular;20" valign="center" transparent="1"/>
 		<widget name="labstop" position="170,160" size="100,30" font="Regular;20" valign="center"  halign="center" backgroundColor="red"/>
-		<widget name="labrun" position="170,160" size="100,30" zPosition="1" font="Regular;20" valign="center"  halign="center" backgroundColor="green"/>
+		<widget name="labrun" position="170,160" size="100,30" zPosition="1" font="Regular;20" valign="center" halign="center" backgroundColor="green"/>
 		<ePixmap pixmap="skin_default/buttons/red.png" position="0,260" size="140,40" alphatest="on" />
 		<ePixmap pixmap="skin_default/buttons/green.png" position="140,260" size="140,40" alphatest="on" />
 		<ePixmap pixmap="skin_default/buttons/yellow.png" position="280,260" size="140,40" alphatest="on" />
@@ -883,7 +883,7 @@ class DeliteVpnLog(Screen):
 		#tail /etc/openvpn/openvpn.log
 		if fileExists("/etc/openvpn/tmp.log"):
 			f = open("/etc/openvpn/tmp.log", 'r')
- 			for line in f.readlines():
+			for line in f.readlines():
 				strview += line
 
 			f.close()

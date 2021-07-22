@@ -17,6 +17,7 @@ from Tools.BoundFunction import boundFunction
 from ServiceReference import ServiceReference
 from enigma import eServiceReference, eActionMap
 from Components.Label import Label
+import os
 
 ButtonSetupKeys = [	(_("Red"), "red", "Infobar/activateRedButton"),
 	(_("Red long"), "red_long", ""),
@@ -35,7 +36,7 @@ ButtonSetupKeys = [	(_("Red"), "red", "Infobar/activateRedButton"),
 	(_("Channel up"), "channelup", ""),
 	(_("Channel down"), "channeldown", ""),
 	(_("TV"), "showTv", ""),
-	(_('TV long'), 'tv_long', ""),
+	(_("TV long"), "tv_long", ""),
 	(_("Radio"), "radio", ""),
 	(_("Radio long"), "radio_long", ""),
 	(_("Rec"), "rec", ""),
@@ -528,7 +529,7 @@ class InfoBarButtonSetup():
 				except Exception as e:
 					print("[ButtonSetup] error during executing module %s, screen %s, %s" % (selected[1], selected[2], e))
 					import traceback
-					traceback.print_exc()					
+					traceback.print_exc()
 			elif selected[0] == "Setup":
 				from Screens.Setup import Setup
 				exec("self.session.open(Setup, \"%s\")" % selected[1])
@@ -548,9 +549,9 @@ class InfoBarButtonSetup():
 				if moviepath:
 					config.movielist.last_videodir.value = moviepath
 			elif selected[0] == "Script":
-				command = '/usr/script/' + selected[1] + ".sh"
+				command = "/usr/script/" + selected[1] + ".sh"
 				from Screens.Console import Console
-				exec "self.session.open(Console,_(selected[1]),[command])"
+				exec("self.session.open(Console,_(selected[1]),[command])")
 			elif selected[0] == "Menu":
 				from Screens.Menu import MainMenu, mdom
 				root = mdom.getroot()

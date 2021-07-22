@@ -15,7 +15,7 @@ from Components.NimManager import nimmanager
 from Components.SystemInfo import SystemInfo
 
 from Tools.BoundFunction import boundFunction
-from Tools.Directories import resolveFilename, SCOPE_SKIN
+from Tools.Directories import resolveFilename, SCOPE_SKIN, fileExists
 from enigma import eTimer
 
 import xml.etree.cElementTree
@@ -252,8 +252,8 @@ class Menu(Screen, HelpableScreen, ProtectedScreen):
 		if menuID is not None:
 			# plugins
 			bhorder = []
-			if fileExists(resolveFilename(SCOPE_SKIN, 'menuorder.bh')):
-				file = open(resolveFilename(SCOPE_SKIN, 'menuorder.bh'), 'r')
+			if fileExists(resolveFilename(SCOPE_SKIN, "menuorder.bh")):
+				file = open(resolveFilename(SCOPE_SKIN, "menuorder.bh"), "r")
 				for line in file.readlines():
 					parts = line.strip().split()
 					res = (parts[0], parts[1])
