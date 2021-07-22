@@ -172,7 +172,7 @@ class DeliteBluePanel(Screen):
 	def sendtoBh_sock(self, data):
 		client_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 		client_socket.connect("/tmp/Blackhole.socket")
-		client_socket.send(b"data")
+		client_socket.send(data.encode('utf-8'))
 		client_socket.close()
 
 	def keyYellow(self):
