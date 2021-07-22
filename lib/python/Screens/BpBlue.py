@@ -68,7 +68,7 @@ class DeliteBluePanel(Screen):
 		self.emlist = []
 		self.populate_List()
 		self["list"] = MenuList(self.emlist)
-		self["lab1"].setText(_("%d	CAMs Installed") % (len(self.emlist)))
+		self["lab1"].setText(_("%d  CAMs Installed") % (len(self.emlist)))
 		self.onShow.append(self.updateBP)
 
 	def populate_List(self):
@@ -135,7 +135,7 @@ class DeliteBluePanel(Screen):
 				mytext = mytext + line.strip() + "\n"
 			f.close()
 		if len(mytext) < 5:
-			mytext = "\n\n	  " + _("Ecm Info not available.")
+			mytext = "\n\n    " + _("Ecm Info not available.")
 
 		self["activecam"].setText(self.defCamname)
 		self["Ecmtext"].setText(mytext)
