@@ -360,9 +360,9 @@ class AutoVideoMode(Screen):
 				video_rate = int(info.getInfo(iServiceInformation.sFrameRate))
 		if video_height and video_width and video_pol and video_rate:
 			resolutionlabel["content"].setText(_("Video content: %ix%i%s %iHz") % (video_width, video_height, video_pol, (video_rate + 500) / 1000))
-			if video_width > 1 and video_width <= 1024 and video_height <= 480 and video_rate in (23976, 24000, 25000, 29970, 50000, 59940):
+			if (1 < video_width <= 1024) and video_height <= 480 and video_rate in (23976, 24000, 25000, 29970, 50000, 59940):
 				new_res = "480"
-			elif video_width > 1 and video_width <= 1024 and video_height <= 576 and video_rate in (23976, 24000, 25000, 50000):
+			elif (1 < video_width <= 1024) and video_height <= 576 and video_rate in (23976, 24000, 25000, 50000)):
 				new_res = "576"
 			elif (video_width == 1280) and video_height <= 720:
 				new_res = "720"
