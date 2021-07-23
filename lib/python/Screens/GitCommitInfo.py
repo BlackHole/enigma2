@@ -32,8 +32,8 @@ E2Branches = {
 
 project = 0
 projects = [
-	("https://api.github.com/repos/oe-alliance/oe-alliance-core/commits?sha=4.4", "OE-A Core"),
-	("https://api.github.com/repos/BlackHole/enigma2/commits?sha=%s" % E2Branches[getImageType()], "Enigma2"),
+	("https://api.github.com/repos/oe-alliance/oe-alliance-core/commits?sha=5.0", "OE-A Core"),
+	("https://api.github.com/repos/BlackHole/enigma2/commits?sha=%s" % getattr(E2Branches, getImageType(), "Python3"), "Enigma2"),
 	("https://api.github.com/repos/BlackHole/obh-core/commits", "OBH Core"),
 	("https://api.github.com/repos/BlackHole/skins/commits", "OBH Skins"),
 	("https://api.github.com/repos/oe-alliance/oe-alliance-plugins/commits", "OE-A Plugins"),
