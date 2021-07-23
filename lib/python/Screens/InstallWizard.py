@@ -55,7 +55,7 @@ class InstallWizard(Screen, ConfigListScreen):
 			self.enabled = ConfigYesNo(default=True)
 			self.createMenu()
 		elif self.index == self.INSTALL_SKINS:
-			self.enabled = ConfigYesNo(default=True)
+			self.enabled = ConfigYesNo(default=False)
 			self.createMenu()
 
 	def checkNetworkCB(self, data):
