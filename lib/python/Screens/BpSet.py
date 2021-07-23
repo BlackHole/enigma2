@@ -970,8 +970,8 @@ class BhSpeedUp(Screen, ConfigListScreen):
 
 	def nab_Detect_Machine(self):
 		machine = "dm8000"
-		if fileExists("/etc/bpmachine"):
-			f = open("/etc/bpmachine", 'r')
+		if fileExists("/etc/bhmachine"):
+			f = open("/etc/bhmachine", 'r')
 			machine = f.readline().strip()
 			f.close()
 		return machine

@@ -255,11 +255,11 @@ class BlackPoleSwap(Screen):
 			cmd = "swapoff %s" % self.swap_file
 			rc = system(cmd)
 			try:
-				out = open("/etc/init.d/bp_swap", "w")
+				out = open("/etc/init.d/bh_swap", "w")
 				strview = "#!/bin/sh\n\nexit 0"
 				out.write(strview)
 				out.close()
-				system("chmod 0755 /etc/init.d/bp_swap")
+				system("chmod 0755 /etc/init.d/bh_swap")
 			except:
 				pass
 			self.updateSwap()
@@ -300,11 +300,11 @@ class BlackPoleSwap(Screen):
 				rc = system(cmd)
 				cmd = "swapon %s" % (self.new_swap)
 				rc = system(cmd)
-				out = open("/etc/init.d/bp_swap", "w")
+				out = open("/etc/init.d/bh_swap", "w")
 				strview = "#!/bin/sh\nmkswap " + self.new_swap + "\nswapon " + self.new_swap + "\nexit 0"
 				out.write(strview)
 				out.close()
-				system("chmod 0755 /etc/init.d/bp_swap")
+				system("chmod 0755 /etc/init.d/bh_swap")
 				self.session.open(MessageBox, _("Swap File created."), MessageBox.TYPE_INFO)
 				self.updateSwap()
 			else:
