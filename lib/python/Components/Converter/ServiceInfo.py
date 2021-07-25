@@ -178,6 +178,7 @@ class ServiceInfo(Poll, Converter):
 		video_height = None
 		video_aspect = None
 		video_height = self._getVideoHeight(info)
+		video_width = self._getVideoWidth(info)
 		video_aspect = info.getInfo(iServiceInformation.sAspect)
 		if self.type == self.HAS_TELETEXT:
 			tpid = info.getInfo(iServiceInformation.sTXTPID)
@@ -227,21 +228,21 @@ class ServiceInfo(Poll, Converter):
 			elif self.type == self.IS_NOT_WIDESCREEN:
 				return video_aspect not in WIDESCREEN
 			elif self.type == self.IS_SD:
-				return video_height < 578
+				return video_width > 1 and video_width <= 1024 and video_height > 1 and video_height <= 578
 			elif self.type == self.IS_HD:
-				return video_height >= 720 and video_height < 1440
+				return video_width > 1025 and video_width <= 1920 and video_height >= 481 and video_height < 1440 or video_width >= 960 and video_height == 720
 			elif self.type == self.IS_SD_AND_WIDESCREEN:
 				return video_height < 578 and video_aspect in WIDESCREEN
 			elif self.type == self.IS_SD_AND_NOT_WIDESCREEN:
 				return video_height < 578 and video_aspect not in WIDESCREEN
 			elif self.type == self.IS_1080:
-				return video_height > 768 and video_height <= 1440
+				return video_width >= 1367 and video_width <= 1920 and video_height >= 768 and video_height <= 1440
 			elif self.type == self.IS_720:
-				return video_height > 481 and video_height <= 768
+				return video_width >= 1025 and video_width <= 1366 and video_height >= 481 and video_height <= 768 or video_width >= 960 and video_height == 720
 			elif self.type == self.IS_576:
-				return video_height > 1 and video_height <= 578
+				return video_width > 1 and video_width <= 1024 and video_height > 481 and video_height <= 578
 			elif self.type == self.IS_480:
-				return video_height > 1 and video_height <= 480
+ 				return video_width > 1 and video_width <= 1024 and video_height > 1 and video_height <= 480
 			elif self.type == self.IS_4K:
 				return video_height >= 1460
 			elif self.type == self.PROGRESSIVE:
