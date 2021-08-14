@@ -19,8 +19,8 @@ class VAudioInfo(Poll, Converter, object):
 		self.poll_interval = 1000
 		self.poll_enabled = True
 		self.lang_strings = ("ger", "german", "deu")
-		self.codecs = {"01_dolbydigitalplus": ("digital+", "digitalplus", "ac3+", "e-ac-3"),
-				   "02_dolbydigital": ("ac3", "ac-3", "dolbydigital"),
+		self.codecs = {"01_dolbydigitalplus": ("digital+", "digitalplus", "ac3+", "e-ac-3", "e-ac-3 audio" "a_eac3",),
+				   "02_dolbydigital": ("ac3", "ac-3", "ac-3 (atsc a/52)", "a_ac3", "a_ac-3", "a_ac-3 (atsc a/52)", "a-ac-3 audio", "dolbydigital"),
 				   "03_mp3": ("mp3", ),
 				   "04_wma": ("wma", ),
 				   "05_flac": ("flac", ),
@@ -29,6 +29,7 @@ class VAudioInfo(Poll, Converter, object):
 				   "08_dts-hd": ("dts-hd", ),
 				   "09_dts": ("dts", ),
 				   "10_pcm": ("pcm", ),
+                   "11_aac": ("a_aac", "aac", "mpeg4-aac"),
 				}
 		self.codec_info = {"dolbydigitalplus": ("51", "20", "71"),
 				    "dolbydigital": ("51", "20", "71"),
