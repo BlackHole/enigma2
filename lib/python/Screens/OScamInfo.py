@@ -78,7 +78,7 @@ class OscamInfo:
 		ipcompiled = False
 		global NAMEBIN
 
-		# Find and parse running oscam/ncam		
+		# Find and parse running oscam/ncam
 		if fileExists("/tmp/.%s/%s.version" % (NAMEBIN, NAMEBIN)):
 			with open('/tmp/.%s/%s.version' % (NAMEBIN, NAMEBIN), 'r') as data:
 				for i in data:

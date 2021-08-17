@@ -471,12 +471,12 @@ class EPGListGrid(EPGListBase):
 						flags=BT_SCALE))
 			if self.borderBottomPix is not None:
 				res.append(MultiContentEntryPixmapAlphaBlend(
-						pos =(r1.left(), r1.height() - self.serviceBorderWidth),
+						pos=(r1.left(), r1.height() - self.serviceBorderWidth),
 						size=(r1.width(), self.serviceBorderWidth),
 						png=self.borderBottomPix,
 						flags=BT_SCALE))
 				res.append(MultiContentEntryPixmapAlphaBlend(
-						pos =(left, height - self.eventBorderWidth),
+						pos=(left, height - self.eventBorderWidth),
 						size=(width, self.eventBorderWidth),
 						png=self.borderBottomPix,
 						flags=BT_SCALE))
@@ -493,12 +493,12 @@ class EPGListGrid(EPGListBase):
 						flags=BT_SCALE))
 			if self.borderRightPix is not None:
 				res.append(MultiContentEntryPixmapAlphaBlend(
-						pos =(r1.width() - self.serviceBorderWidth, r1.left()),
+						pos=(r1.width() - self.serviceBorderWidth, r1.left()),
 						size=(self.serviceBorderWidth, r1.height()),
 						png=self.borderRightPix,
 						flags=BT_SCALE))
 				res.append(MultiContentEntryPixmapAlphaBlend(
-						pos =(left + width - self.eventBorderWidth, top),
+						pos=(left + width - self.eventBorderWidth, top),
 						size=(self.eventBorderWidth, height),
 						png=self.borderRightPix,
 						flags=BT_SCALE))
@@ -628,7 +628,7 @@ class EPGListGrid(EPGListBase):
 								flags=BT_SCALE))
 					if borderBottomPix is not None:
 						res.append(MultiContentEntryPixmapAlphaBlend(
-								pos =(left + xpos, height - self.eventBorderWidth),
+								pos=(left + xpos, height - self.eventBorderWidth),
 								size=(ewidth, self.eventBorderWidth),
 								png=borderBottomPix,
 								flags=BT_SCALE))
@@ -640,7 +640,7 @@ class EPGListGrid(EPGListBase):
 								flags=BT_SCALE))
 					if borderRightPix is not None:
 						res.append(MultiContentEntryPixmapAlphaBlend(
-								pos =(left + xpos + ewidth - self.eventBorderWidth, top),
+								pos=(left + xpos + ewidth - self.eventBorderWidth, top),
 								size=(self.eventBorderWidth, height),
 								png=borderRightPix,
 								flags=BT_SCALE))
@@ -971,7 +971,7 @@ class TimelineText(GUIComponent):
 
 			res.append(MultiContentEntryText(
 				pos=(5, 0),
-				size =(serviceRect.width() - 15, self.listHeight),
+				size=(serviceRect.width() - 15, self.listHeight),
 				font=0, flags=int(config.epgselection.grid.timelinedate_alignment.value),
 				text=_(datestr),
 				color=foreColor,
