@@ -9,15 +9,14 @@ msgstr ""
 "Project-Id-Version: enigma2 pt translation for Open BlackHole 4.4 and Up\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-24 18:23+0100\n"
-"PO-Revision-Date: 2021-08-17 22:30+0100\n"
+"PO-Revision-Date: 2021-08-19 22:51+0100\n"
 "Last-Translator: BH Team <nunigaia@gmail.com>\n"
-"Language-Team: BH Team - Imagem Open Blackhole 4.4 e posteriores\n"
-"Language: pt_PT\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language-Team: Tradução para português - Open Black Hole\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: pt\n"
 "X-Generator: Poedit 3.0\n"
 
 msgid ""
@@ -1557,6 +1556,9 @@ msgstr "Continua reprodução (loop)"
 
 msgid "Contrast"
 msgstr "Contraste"
+
+msgid "This option sets the picture contrast."
+msgstr "Esta opção define o contraste de imagem."
 
 msgid "Convert ext3 to ext4"
 msgstr "Converter ext3 em ext4"
@@ -3375,6 +3377,15 @@ msgstr "Mensalmente"
 
 msgid "Mosquito noise reduction"
 msgstr "Redução de mosquitos"
+
+msgid "This option set the level of surpression of mosquito noise (Mosquito Noise is random aliasing as a result of strong compression). Obviously this goes at the cost of picture details."
+msgstr "Esta opção define o nível de surpressão do ruído dos mosquitos (Mosquito Noise é um pseudónimo aleatório como resultado de uma forte compressão). Obviamente isto vai ao custo dos detalhes da imagem."
+
+msgid "Scaler vertical dejagging"
+msgstr "Nitidez do Scaler vertical"
+
+msgid "This option allows you enable the vertical scaler dejagging."
+msgstr "Esta opção permite ativar a nitidez do scaler vertical"
 
 msgid "Mount"
 msgstr "Montagem"
@@ -5784,11 +5795,13 @@ msgstr "TB"
 #. TRANSLATORS: Add here whatever should be shown in the "translator" about screen, up to 6 lines (use \n for newline)
 msgid "TRANSLATOR_INFO"
 msgstr ""
-"Tradução efetuada por:\n"
+"Efetuada por:\n"
 "\n"
 "*** B L A C K H O L E    T E A M ***\n"
 "\n"
-"Revisão:        18 de Abril de 2020.\n"
+"\n"
+"Revisão:        19 de Agosto de 2021\n"
+"\n"
 "\n"
 "Suporte em: https://www.vuplus-community.net"
 
@@ -7815,7 +7828,7 @@ msgid "magazines/reports/documentary"
 msgstr "Revistas/Relatórios/Documentários"
 
 msgid "making a backup before updating"
-msgstr "A fazer um Backup antes de atualizar"
+msgstr "a efetuar um Backup antes de atualizar"
 
 msgid "manual"
 msgstr "manual"
@@ -8411,6 +8424,9 @@ msgstr ""
 msgid "white"
 msgstr "branco"
 
+msgid "yellow"
+msgstr "amarelo"
+
 msgid "whitelist"
 msgstr "Lista Branca"
 
@@ -8439,9 +8455,6 @@ msgstr "Ao premir longa/ tecla OK"
 
 msgid "working"
 msgstr "a trabalhar"
-
-msgid "yellow"
-msgstr "yellow"
 
 msgid "yellow button..."
 msgstr "Tecla amarela..."
@@ -10503,17 +10516,11 @@ msgstr "Explorador e Montagens de Rede"
 msgid "Extended"
 msgstr "Estendido"
 
-msgid "Open Black Hole Green Panel"
-msgstr "Open BlackHole Painel Verde"
-
 msgid "Black Hole Green Panel"
-msgstr "Open BlackHole Painel Verde"
-
-msgid "Open Black Hole Blue Panel"
-msgstr "Open BlackHole Painel Azul"
+msgstr "Black Hole Painel Verde"
 
 msgid "Black Hole Blue Panel"
-msgstr "Open BlackHole Painel Azul"
+msgstr "Black Hole Painel Azul"
 
 msgid "Black Hole E2 Addons Manager"
 msgstr "Gestor de Addons E2 Black Hole"
@@ -10755,6 +10762,9 @@ msgstr "Importador EPG"
 
 msgid "Smooth"
 msgstr "Suavidade"
+
+msgid "This option allows you enable smoothing filter to control the dithering process."
+msgstr "Esta opção permite-lhe ativar o filtro de suavidade para controlar o processo de dilatação."
 
 msgid "Show warning when in a stream"
 msgstr "Exibe aviso quando em transmissão"
@@ -11931,6 +11941,9 @@ msgstr "Prima a tecla <vermelha> para ativar o bluetooth."
 msgid "Automatic Language"
 msgstr "Idioma automático"
 
+msgid "Automatic language"
+msgstr "Idioma automático"
+
 msgid "Video Enhancement"
 msgstr "Otimização de vídeo"
 
@@ -12570,3 +12583,105 @@ msgstr "Executar"
 
 msgid "Script Panel"
 msgstr "Painel de Scripts"
+
+msgid "Use OpenTV EPG information when it is available. For reading OpenTV EPG data tuning to a dedicated transponder is required"
+msgstr "Use informações do OPENTV EPG quando estiver disponível. Para ler o OPENTV EPG Data Tuning é necessário um transponder dedicado"
+
+msgid "Choose what channel to select when the EPG opens."
+msgstr "Escolha o canal a selecionar quando o EPG abre."
+
+msgid "If set to 'yes' shows a small TV screen in the EPG."
+msgstr "Se definido como 'sim' mostra uma pequena tela de TV no EPG."
+
+msgid "Set the desired primetime."
+msgstr "Defina o horário nobre desejado."
+
+msgid "If set to 'Standard' number buttons page up/down/left/right."
+msgstr "Se definido como 'Padrão', os botões numéricos página acima/abaixo/esquerda/direita."
+
+msgid "Choose the layout. Single channel, Graphics Grid EPG or Text Grid EPG."
+msgstr "Escolha o layout. Canal único, Graphics Grid EPG ou Text Grid EPG."
+
+msgid "Select how to activate the Infobar Single EPG. This will affect Infobar behaviour"
+msgstr "Selecione como ativar o Infobar Single EPG. Isso afetará o comportamento do Infobar"
+
+msgid "Select how to activate the Infobar Grid EPG. This will affect Infobar behaviour"
+msgstr "Selecione como ativar o Infobar Grid EPG. Isso afetará o comportamento do Infobar"
+
+msgid "Set to the desired primetime."
+msgstr "Defina o horário nobre desejado."
+
+msgid "Enable to display all true/false, yes/no, on/off and enable/disable set up options as a graphical switch."
+msgstr "Ativar/desactivar como chave gráfica para exibir todas as opções de configuração: verdadeiro/falso, sim/não e on/off."
+
+msgid "In Setup screens choose whether to show the default value of the selected item in the description field."
+msgstr "Nas telas de configuração, escolha se deseja mostrar o valor padrão do item selecionado no campo de descrição."
+
+msgid "When changing skins this allows the skin to load without requiring an enigma restart."
+msgstr "Ao trocar de tema, isto permite que o tema carregue sem a necessidade de reiniciar o enigma."
+
+msgid "Select the time zone within the area or region."
+msgstr "Selecione o fuso horário dentro da área ou região."
+
+msgid "Allows you to set the maximum size (MB) of the individual debug logs. When that size is reached, the log file will be truncated to the maximum size every 60 minutes."
+msgstr "Permite que defina o tamanho máximo (MB) dos logs de depuração individuais. Quando esse tamanho é atingido, o arquivo de log será cortado para o tamanho máximo a cada 60 minutos."
+
+msgid "This is the prefix of each entry in the debug log. 'boot time' is the number of seconds since the receiver was last booted."
+msgstr "Este é o prefixo de cada entrada no log de depuração. 'boot time' é o número de segundos desde a última inicialização do receptor."
+
+msgid "Select how the satellite dish is set up. i.e. fixed dish, single LNB, DiSEqC switch, positioner, etc."
+msgstr "Selecione como a antena parabólica é configurada: prato fixo, único LNB, interruptor do Diseqc, posicionador, etc."
+
+msgid "Configure this tuner using simple or advanced options, or loop it through to another tuner, or copy a configuration from another tuner, or disable it."
+msgstr "Configure este sintonizador usando opções simples ou avançadas, ou dê um loop para outro sintonizador, ou copie uma configuração de outro sintonizador ou desative-a."
+
+msgid "Select the satellite which is connected to Port-A of your switch. If you are unsure select 'automatic' and the receiver will attempt to determine this for you. If nothing is connected to this port, select 'nothing connected'."
+msgstr "Selecione o satélite que está conetado à Porta-A do seu comutador. Se não tem certeza, selecione 'automático' e o receptor tentará determinar automaticamente. Se nada estiver conectado a esta porta, selecione 'nada conetado'."
+
+msgid "Select the satellite which is connected to Port-B of your switch. If you are unsure select 'automatic' and the receiver will attempt to determine this for you. If nothing is connected to this port, select 'nothing connected'."
+msgstr "Selecione o satélite que está conetado à Porta-B do seu comutador. Se não tem certeza, selecione 'automático' e o receptor tentará determinar automaticamente. Se nada estiver conectado a esta porta, selecione 'nada conetado'."
+
+msgid "Select the satellite which is connected to Port-C of your switch. If you are unsure select 'automatic' and the receiver will attempt to determine this for you. If nothing is connected to this port, select 'nothing connected'."
+msgstr "Selecione o satélite que está conetado à Porta-C do seu comutador. Se não tem certeza, selecione 'automático' e o receptor tentará determinar automaticamente. Se nada estiver conectado a esta porta, selecione 'nada conetado'."
+
+msgid "Select the satellite which is connected to Port-D of your switch. If you are unsure select 'automatic' and the receiver will attempt to determine this for you. If nothing is connected to this port, select 'nothing connected'."
+msgstr "Selecione o satélite que está conetado à Porta-D do seu comutador. Se não tem certeza, selecione 'automático' e o receptor tentará determinar automaticamente. Se nada estiver conectado a esta porta, selecione 'nada conetado'."
+
+msgid "Leave this set to 'yes' unless you fully understand why you are adjusting it."
+msgstr "Deixe este conjunto para 'sim', a menos que entenda completamente porque o está a ajustar."
+
+msgid "Select 'yes' to only send the DiSEqC command when changing from one satellite to another, or select 'no' for the DiSEqC command to be resent on every zap."
+msgstr "Selecione 'sim' para enviar apenas o comando DiSEqC ao mudar de um satélite para outro, ou selecione 'não' para o comando DiSEqC ser reenviado a cada zap."
+
+msgid "If set to 'yes' signal values (SNR, etc) will be calculated from API V3. This is an old API version that has now been superseded."
+msgstr "Se definido como valores de sinal 'sim' (SNR, etc) serão calculados da API V3. Esta é uma versão antiga da API que agora foi substituída."
+
+msgid "Select the satellite you want to configure. Once that satellite is configured you can select and configure other satellites that will be accessed using this same tuner."
+msgstr "Selecione o satélite que deseja configurar. Uma vez configurado o satélite, pode selecionar e configurar outros satélites usando este mesmo sintonizador."
+
+msgid "Allocate a number to the physical LNB you are configuring. You will be able to select this LNB again for other satellites (e.g. motorised dishes) to save setting up the same LNB multiple times."
+msgstr "Alocar um número para o LNB físico que está a configurar. Será capaz de selecionar este LNB novamente para outros satélites (por exemplo, pratos motorizados) para economizar a configuração do mesmo LNB várias vezes."
+
+msgid "This setting allows the tuner configuration to be a duplication of how another tuner is already configured."
+msgstr "Esta configuração permite que a configuração do sintonizador seja uma duplicação de como outro sintonizador já está configurado."
+
+msgid " Warning: the selected tuner should not use SCR Unicable type for LNBs because each tuner need a own SCR number."
+msgstr "Aviso: O sintonizador selecionado não deve usar o tipo Unicable SCR para LNBs porque cada sintonizador precisa de um número próprio de SCR."
+
+msgid "Select the tuner that this loopthrough depends on."
+msgstr "Selecione o sintonizador do qual este loopthrough depende."
+
+msgid "This is a multitype tuner. Available options depend on the hardware."
+msgstr "Este é um sintonizador de vários tipos. As opções disponíveis dependem do hardware."
+
+msgid "Select your country. If not available select 'all'."
+msgstr "Escolha o seu país. Se não estiver disponível, selecione 'todos'."
+
+msgid "Select your region. If not available change 'Country' to 'all' and select one of the default alternatives."
+msgstr "Selecione a sua região. Se não estiver disponível, altere 'País' para todos e selecione uma das alternativas padrão."
+
+msgid "Enable this setting if your aerial system needs power"
+msgstr "Activar esta configuração se antena precisar de energia"
+
+msgid "Set default"
+msgstr "Definir padrão"
