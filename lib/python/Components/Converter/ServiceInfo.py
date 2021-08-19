@@ -8,6 +8,8 @@ from Components.Element import cached
 from Components.Converter.Poll import Poll
 from Tools.Transponder import ConvertToHumanReadable
 
+from os import path
+
 WIDESCREEN = [1, 3, 4, 7, 8, 0xB, 0xC, 0xF, 0x10]
 
 
@@ -174,10 +176,22 @@ class ServiceInfo(Poll, Converter):
 		if not info:
 			return False
 		video_height = None
+		video_width = None
 		video_aspect = None
 		video_height = self._getVideoHeight(info)
 		video_width = self._getVideoWidth(info)
-		video_aspect = info.getInfo(iServiceInformation.sAspect)
+
+		if path.exists("/proc/stb/vmpeg/0/aspect"):
+			f = open("/proc/stb/vmpeg/0/aspect", "r")
+			try:
+				video_aspect = int(f.read())
+			except:
+				pass
+			f.close()
+
+		if not video_aspect:
+			video_aspect = info.getInfo(iServiceInformation.sAspect)
+
 		if self.type == self.HAS_TELETEXT:
 			tpid = info.getInfo(iServiceInformation.sTXTPID)
 			return tpid != -1
