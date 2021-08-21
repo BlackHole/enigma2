@@ -29,7 +29,7 @@ class VAudioInfo(Poll, Converter, object):
 					"08_dts-hd": ("dts-hd", ),
 					"09_dts": ("dts", ),
 					"10_pcm": ("pcm", ),
-					"11_aac": ("a_aac", "aac", "mpeg4-aac"),
+					"11_aac": ("a_aac", "aac", "mpeg4-aac", "mpeg4-aac audio"),
 				}
 		self.codec_info = {"dolbydigitalplus": ("51", "20", "71"),
 					"dolbydigital": ("51", "20", "71"),
