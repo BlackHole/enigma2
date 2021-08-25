@@ -179,6 +179,7 @@ void eDVBCISession::createSession(eDVBCISlot *slot, const unsigned char *resourc
 		eDebug("[CI SESS] Application MMI");
 		break;
 	case 0x008C1001:
+		eDVBCIInterfaces::getInstance()->setCIPlusRouting(slot->getSlotID());
 		session = new eDVBCICcSession(slot);
 		eDebug("[CI SESS] Content Control");
 		break;
