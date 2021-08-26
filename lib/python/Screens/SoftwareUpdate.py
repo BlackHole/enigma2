@@ -288,7 +288,7 @@ class UpdatePlugin(Screen, ProtectedScreen):
 						(_("Upgrade and reboot system"), "cold")]
 					if isPluginInstalled("OBH"):
 						if not config.softwareupdate.autosettingsbackup.value and config.backupmanager.backuplocation.value:
-							choices.append((_("Perform a settings backup,") + '\n\t' + _("making a backup before updating") + '\n\t' + _("is strongly advised."), "backup"))
+							choices.append((_("Perform a settings backup"), "backup"))
 						if not config.softwareupdate.autoimagebackup.value and config.imagemanager.backuplocation.value:
 							choices.append((_("Perform a full image backup"), "imagebackup"))
 					choices.append((_("Update channel list only"), "channels"))
