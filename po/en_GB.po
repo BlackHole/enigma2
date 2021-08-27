@@ -5534,8 +5534,8 @@ msgstr "Perform a full image backup"
 msgid "Perform a settings backup before updating."
 msgstr "Perform a settings backup before updating."
 
-msgid "Perform a settings backup,"
-msgstr "Perform a settings backup,"
+msgid "Perform a settings backup"
+msgstr "Perform a settings backup"
 
 msgid "Perform a settings backup, making a backup before updating is strongly advised."
 msgstr "Perform a settings backup, making a backup before updating is strongly advised."
