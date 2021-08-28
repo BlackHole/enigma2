@@ -2,15 +2,15 @@
 # Copyright (C) 2012 THE enigma2'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the enigma2 package.
 # Automatically generated, 2012.
-# Updated on 17/08/2021
+# Updated on 28/08/2021
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: enigma2 pt translation for Open BlackHole 4.4 and Up\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-24 18:23+0100\n"
-"PO-Revision-Date: 2021-08-19 22:51+0100\n"
-"Last-Translator: BH Team <nunigaia@gmail.com>\n"
+"PO-Revision-Date: 2021-08-28 15:58+0100\n"
+"Last-Translator: BlackHole Team <nunigaia@gmail.com>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Language-Team: Tradução para português - Open Black Hole\n"
 "MIME-Version: 1.0\n"
@@ -1075,7 +1075,7 @@ msgid "Button"
 msgstr "Teclas"
 
 msgid "By Team Obh"
-msgstr "Por Obh Team"
+msgstr "Por BlackHole Team"
 
 msgid "Bypass HDMI EDID Check"
 msgstr "Ignorar verificação de HDMI EDID"
@@ -1327,7 +1327,7 @@ msgid "Host receiver FTP password"
 msgstr "Senha FTP do recetor anfitrião"
 
 msgid "Enter the FTP password of the host receiver (required for any server running OpenBH 4.4 or greater)."
-msgstr "Introduza a palavra-passe FTP do recetor anfitrião (necessária para qualquer servidor em execução OpenBH 5.0 ou superior)."
+msgstr "Introduza a palavra-passe FTP do recetor anfitrião (necessária para qualquer servidor em execução OpenBH 4.4 ou superior)."
 
 msgid "Host receiver FTP port"
 msgstr "Porta FTP do recetor anfitrião"
@@ -4027,8 +4027,8 @@ msgstr "Percentagem direita"
 msgid "Perform a full image backup"
 msgstr "Faz um Backup completo da imagem"
 
-msgid "Perform a settings backup,"
-msgstr "Executar um Backup das definições."
+msgid "Perform a settings backup"
+msgstr "Efetuar um Backup das definições"
 
 msgid "Perform a settings backup, making a backup before updating is strongly advised."
 msgstr "Faz backup das configurações, fazer um backup antes de atualizar é aconselhado."
@@ -4564,7 +4564,7 @@ msgid "Recordings"
 msgstr "Gravações"
 
 msgid "Red"
-msgstr "Red"
+msgstr "Vermelho"
 
 msgid "Red button..."
 msgstr "Tecla vermelha..."
@@ -5471,7 +5471,7 @@ msgid "Skin Setting"
 msgstr "Definição do Tema"
 
 msgid "Skin Setup"
-msgstr "Definição do Tema, 3D & Osd"
+msgstr "Temas, 3D & Osd"
 
 msgid "Skins"
 msgstr "Temas"
@@ -5799,9 +5799,7 @@ msgstr ""
 "\n"
 "*** B L A C K H O L E    T E A M ***\n"
 "\n"
-"\n"
 "Revisão:        19 de Agosto de 2021\n"
-"\n"
 "\n"
 "Suporte em: https://www.vuplus-community.net"
 
@@ -10547,7 +10545,7 @@ msgid "Addons Uninstall Panel"
 msgstr "Desinstalar Addons e Plugins"
 
 msgid "Black Hole Statistics"
-msgstr "Estatísticas Open Black Hole"
+msgstr "Estatísticas Black Hole"
 
 msgid "Addons Parental Control"
 msgstr "Controlo Paternal de Addons"
@@ -11729,7 +11727,7 @@ msgid "Configure alignment of service numbers."
 msgstr "Configurar o alinhamento dos números do serviço."
 
 msgid "Open Black Hole Addons Plugins"
-msgstr "Open BH Addons e Plugins"
+msgstr "Open Black Hole Addons Plugins"
 
 msgid "Frequency (kHz)"
 msgstr "Frequência (KHz)"
@@ -12633,7 +12631,7 @@ msgid "Select how the satellite dish is set up. i.e. fixed dish, single LNB, DiS
 msgstr "Selecione como a antena parabólica é configurada: prato fixo, único LNB, interruptor do Diseqc, posicionador, etc."
 
 msgid "Configure this tuner using simple or advanced options, or loop it through to another tuner, or copy a configuration from another tuner, or disable it."
-msgstr "Configure este sintonizador usando opções simples ou avançadas, ou dê um loop para outro sintonizador, ou copie uma configuração de outro sintonizador ou desative-a."
+msgstr "Configure este tuner usando opções simples ou avançadas, ou dê um loop para outro tuner, ou copie uma configuração de outro tuner ou desative-a."
 
 msgid "Select the satellite which is connected to Port-A of your switch. If you are unsure select 'automatic' and the receiver will attempt to determine this for you. If nothing is connected to this port, select 'nothing connected'."
 msgstr "Selecione o satélite que está conetado à Porta-A do seu comutador. Se não tem certeza, selecione 'automático' e o receptor tentará determinar automaticamente. Se nada estiver conectado a esta porta, selecione 'nada conetado'."
@@ -12657,22 +12655,22 @@ msgid "If set to 'yes' signal values (SNR, etc) will be calculated from API V3. 
 msgstr "Se definido como valores de sinal 'sim' (SNR, etc) serão calculados da API V3. Esta é uma versão antiga da API que agora foi substituída."
 
 msgid "Select the satellite you want to configure. Once that satellite is configured you can select and configure other satellites that will be accessed using this same tuner."
-msgstr "Selecione o satélite que deseja configurar. Uma vez configurado o satélite, pode selecionar e configurar outros satélites usando este mesmo sintonizador."
+msgstr "Selecione o satélite que deseja configurar. Uma vez configurado o satélite, pode selecionar e configurar outros satélites usando este mesmo tuner."
 
 msgid "Allocate a number to the physical LNB you are configuring. You will be able to select this LNB again for other satellites (e.g. motorised dishes) to save setting up the same LNB multiple times."
-msgstr "Alocar um número para o LNB físico que está a configurar. Será capaz de selecionar este LNB novamente para outros satélites (por exemplo, pratos motorizados) para economizar a configuração do mesmo LNB várias vezes."
+msgstr "Alocar um número para o LNB físico que está a configurar. Será capaz de selecionar este LNB novamente para outros satélites (p.e. pratos motorizados) para economizar a configuração do mesmo LNB várias vezes."
 
 msgid "This setting allows the tuner configuration to be a duplication of how another tuner is already configured."
-msgstr "Esta configuração permite que a configuração do sintonizador seja uma duplicação de como outro sintonizador já está configurado."
+msgstr "Esta configuração permite que a configuração do tuner seja uma duplicação de como outro tuner já está configurado."
 
 msgid " Warning: the selected tuner should not use SCR Unicable type for LNBs because each tuner need a own SCR number."
-msgstr "Aviso: O sintonizador selecionado não deve usar o tipo Unicable SCR para LNBs porque cada sintonizador precisa de um número próprio de SCR."
+msgstr "Aviso: O tuner selecionado não deve usar o tipo Unicable SCR para LNBs porque cada tuner precisa de um número próprio de SCR."
 
 msgid "Select the tuner that this loopthrough depends on."
-msgstr "Selecione o sintonizador do qual este loopthrough depende."
+msgstr "Selecione o tuner do qual este loopthrough depende."
 
 msgid "This is a multitype tuner. Available options depend on the hardware."
-msgstr "Este é um sintonizador de vários tipos. As opções disponíveis dependem do hardware."
+msgstr "Este é um tuner de vários tipos. As opções disponíveis dependem do hardware."
 
 msgid "Select your country. If not available select 'all'."
 msgstr "Escolha o seu país. Se não estiver disponível, selecione 'todos'."
@@ -12685,3 +12683,108 @@ msgstr "Activar esta configuração se antena precisar de energia"
 
 msgid "Set default"
 msgstr "Definir padrão"
+
+msgid "Select 'Yes' when you want to configure this tuner for DVB-C"
+msgstr "Selecione 'Sim' quando quiser configurar este tuner para DVB-C"
+
+msgid "Select 'Yes' when you want to configure this tuner for DVB-T"
+msgstr "Selecione 'Sim' quando quiser configurar este tuner para DVB-T"
+
+msgid "Channel selection"
+msgstr "Seleção de canal"
+
+msgid "EPG button (short)"
+msgstr "Botão EPG (premir curto)"
+
+msgid "EPG button (long)"
+msgstr "Botão EPG (premir longo)"
+
+msgid "Rec button (short)"
+msgstr "Botão REC (premir curto)"
+
+msgid "Rec button (long)"
+msgstr "Botão REC (premir longo)"
+
+msgid "Red button (short)"
+msgstr "Botão vermelho (premir curto)"
+
+msgid "Red button (long)"
+msgstr "Botão vermelho (premir longo)"
+
+msgid "Green button (short)"
+msgstr "Botão verde (premir curto)"
+
+msgid "Green button (long)"
+msgstr "Botão verde (premir longo)"
+
+msgid "Yellow button (short)"
+msgstr "Botão amarelo (premir curto)"
+
+msgid "Yellow button (long)"
+msgstr "Botão amarelo (premir longo)"
+
+msgid "Blue button (short)"
+msgstr "Botão azul (premir curto)"
+
+msgid "Blue button (long)"
+msgstr "Botão azul (premir longo)"
+
+msgid "Ch+ button"
+msgstr "Botão Ch+"
+
+msgid "+24 hours"
+msgstr "+24 horas"
+
+msgid "Ch- button"
+msgstr "Botão Ch-"
+
+msgid "-24 hours"
+msgstr "-24 horas"
+
+msgid "Allow fast skin reload"
+msgstr "Permitir a troca rápida do tema"
+
+msgid "Show in Standby"
+msgstr "Visualização em Standby"
+
+msgid "Enable OpenTV EPG"
+msgstr "Ativar EPG OpenTV"
+
+msgid "Red long"
+msgstr "Vermelho longo"
+
+msgid "Green long"
+msgstr "Verde longo"
+
+msgid "Yellow long"
+msgstr "Amarelo longo"
+
+msgid "Left long"
+msgstr "Esquerdo longo"
+
+msgid "Right long"
+msgstr "Direito longo"
+
+msgid "Up"
+msgstr "Para cima"
+
+msgid "Down"
+msgstr "Para baixo"
+
+msgid "Channel up"
+msgstr "Canal seguinte"
+
+msgid "Info (EPG) Long"
+msgstr "Info (EPG) longo"
+
+msgid "Epg/Guide"
+msgstr "Epg/Guia"
+
+msgid "Epg/Guide long"
+msgstr "Epg/Guia longo"
+
+msgid "Started at"
+msgstr "Iniciou às"
+
+msgid "Starts at"
+msgstr "Inicia às"
