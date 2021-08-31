@@ -873,6 +873,7 @@ def InitUsageConfig():
 
 	config.crash = ConfigSubsection()
 	config.crash.enabledebug = ConfigYesNo(default=False)
+	config.crash.e2_debug_level = ConfigSelection(default=4, choices=[(3, _("No Logs")), (4, _("Debug Logs")), (5, _("Debug+ Logs"))])
 	config.crash.debugloglimit = ConfigSelectionNumber(min=1, max=10, stepwidth=1, default=4, wraparound=True)
 
 # Just echo CHANGE var=val for the logger process to find.
@@ -1107,6 +1108,11 @@ def InitUsageConfig():
 	config.oscaminfo.ip = ConfigIP(default=[127, 0, 0, 1], auto_jump=True)
 	config.oscaminfo.port = ConfigInteger(default=16002, limits=(0, 65536))
 	config.oscaminfo.intervall = ConfigSelectionNumber(min=1, max=600, stepwidth=1, default=10, wraparound=True)
+	config.misc.enableCamscript = ConfigYesNo(default=False)
+	config.misc.softcams = ConfigSelection(default="None", choices=CamControl("softcam").getList())
+	config.misc.softcamrestarts = ConfigSelection(default="", choices=[
+					("", _("Don't restart")),
+					("s", _("Restart softcam"))])	
 	SystemInfo["OScamInstalled"] = False
 
 	config.cccaminfo = ConfigSubsection()
