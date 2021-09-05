@@ -19,25 +19,29 @@ class VAudioInfo(Poll, Converter, object):
 		self.poll_interval = 1000
 		self.poll_enabled = True
 		self.lang_strings = ("ger", "german", "deu")
-		self.codecs = {"01_dolbydigitalplus": ("digital+", "digitalplus", "ac3+", "e-ac-3", "e-ac-3 audio" "a_eac3",),
-					"02_dolbydigital": ("ac3", "ac-3", "ac-3 (atsc a/52)", "a_ac3", "a_ac-3", "a_ac-3 (atsc a/52)", "a-ac-3 audio", "dolbydigital"),
-					"03_mp3": ("mp3", ),
-					"04_wma": ("wma", ),
-					"05_flac": ("flac", ),
-					"06_mpeg": ("mpeg", ),
-					"07_lpcm": ("lpcm", ),
-					"08_dts-hd": ("dts-hd", ),
-					"09_dts": ("dts", ),
-					"10_pcm": ("pcm", ),
-					"11_aac": ("a_aac", "aac", "mpeg4-aac", "mpeg4-aac audio"),
-				}
-		self.codec_info = {"dolbydigitalplus": ("51", "20", "71"),
-					"dolbydigital": ("51", "20", "71"),
-					"wma": ("8", "9"),
-				}
+		self.codecs = {
+			"01_dolbydigitalplus": ("digital+", "digitalplus", "ac3+", "e-ac-3", "e-ac-3 audio" "a_eac3",),
+			"02_dolbydigital": ("ac3", "ac-3", "ac-3 (atsc a/52)", "a_ac3", "a_ac-3", "a_ac-3 (atsc a/52)", "a-ac-3 audio", "dolbydigital"),
+			"03_mp3": ("mp3",),
+			"04_wma": ("wma",),
+			"05_flac": ("flac",),
+			"06_he-aac": ("he-aac",),
+			"07_aac": ("aac",),
+			"08_lpcm": ("lpcm",),
+			"09_dts-hd": ("dts-hd",),
+			"10_dts": ("dts",),
+			"11_pcm": ("pcm",),
+			"12_mpeg": ("mpeg",),
+			"13_dolbytruehd": ("truehd",),
+			}
+		self.codec_info = {
+			"dolbydigitalplus": ("51", "20", "71"),
+			"dolbydigital": ("51", "20", "71"),
+			"wma": ("8", "9"),
+			}
 		self.type, self.interesting_events = {
-				"AudioIcon": (self.GET_AUDIO_ICON, (iPlayableService.evUpdatedInfo,)),
-				"AudioCodec": (self.GET_AUDIO_CODEC, (iPlayableService.evUpdatedInfo,)),
+			"AudioIcon": (self.GET_AUDIO_ICON, (iPlayableService.evUpdatedInfo,)),
+			"AudioCodec": (self.GET_AUDIO_CODEC, (iPlayableService.evUpdatedInfo,)),
 			}[type]
 
 	def getAudio(self):
