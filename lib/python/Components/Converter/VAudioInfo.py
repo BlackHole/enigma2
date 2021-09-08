@@ -25,13 +25,13 @@ class VAudioInfo(Poll, Converter, object):
 			"03_mp3": ("mp3",),
 			"04_wma": ("wma",),
 			"05_flac": ("flac",),
-			"06_he-aac": ("he-aac",),
-			"07_aac": ("aac",),
+			"06_he-aac": ("he-aac", "mpeg4-aac", "mpeg4-aac audio" "mpeg-4-aac", "mpeg-4-aac audio", "mpeg 4-aac", "mpeg 4-aac audio", "mpeg 4 aac", "mpeg 4 aac audio", "mpeg-4 aac", "mpeg-4 aac audio"),
+			"07_aac": ("aac", "a_aac"),
 			"08_lpcm": ("lpcm",),
 			"09_dts-hd": ("dts-hd",),
 			"10_dts": ("dts",),
 			"11_pcm": ("pcm",),
-			"12_mpeg": ("mpeg",),
+			"12_mpeg": ("mpeg", "a_mpeg/l3", "mpeg-1 layer 2 (mp2)"),
 			"13_dolbytruehd": ("truehd",),
 			}
 		self.codec_info = {
