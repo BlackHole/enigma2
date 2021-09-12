@@ -2,7 +2,7 @@
 
 > Ubuntu 20.04.2 LTS (Kernel 5.4.0) 64 Bit Server OS
 
-## minimum hardware requirement : ##
+## minimum hardware requirement for image build (building feeds may require more):
 
 > RAM:  16GB
 > SWAP: 8GB
