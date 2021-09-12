@@ -558,7 +558,7 @@ class PliExtraInfo(Poll, Converter, object):
 			elif field == "StreamURLInfo":
 				val = self.createStreamURLInfo(info)
 			elif field == "TransponderModulationFEC":
-				val = self.createModulation(fedata) + '-' + self.createFEC(fedata, feraw)
+				val = self.createModulation(fedata) + self.createFEC(fedata, feraw)
 			elif field == "TransponderName":
 				val = self.createTransponderName(feraw)
 			elif field == "ProviderName":
@@ -613,7 +613,7 @@ class PliExtraInfo(Poll, Converter, object):
 		else:
 			fec = fedata.get("fec_inner")
 			if fec:
-				return fec
+				return '-' + fec
 		return ""
 
 	def createModulation(self, fedata):
