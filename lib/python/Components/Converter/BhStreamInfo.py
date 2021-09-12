@@ -59,16 +59,6 @@ class BhStreamInfo(Poll, Converter, object):
 
 	@cached
 	def getText(self):
-		service = self.source.service
-		info = service and service.info()
-		if not info:
-			return ''
-
-			if tp:
-				tpinfo = ConvertToHumanReadable(tp)
-			if not tp:
-				tp = info.getInfoObject(iServiceInformation.sTransponderData)
-				tpinfo = ConvertToHumanReadable(tp)
 		if self.type == self.DUMMY:
 			refstr = str(self.reference())
 			if '%3a' in refstrr:
