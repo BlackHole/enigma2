@@ -100,11 +100,6 @@ class AudioSelection(Screen, ConfigListScreen):
 			self.audioTracks = audio = service and service.audioTracks()
 			n = audio and audio.getNumberOfTracks() or 0
 
-			if SystemInfo["CanPcmMultichannel"]:
-				self.settings.pcm_multichannel = ConfigOnOff(default=config.av.pcm_multichannel.value)
-				self.settings.pcm_multichannel.addNotifier(self.changePCMMultichannel, initial_call=False)
-				conflist.append(getConfigListEntry(_("PCM multichannel"), self.settings.pcm_multichannel, None))
-
 			if SystemInfo["CanDownmixAC3"]:
 				if SystemInfo["CanProc"]:
 					self.choices = self.read_choices("/proc/stb/audio/ac3_choices")
@@ -116,6 +111,11 @@ class AudioSelection(Screen, ConfigListScreen):
 				self.settings.downmix_ac3 = ConfigSelection(choices=self.choices, default=config.av.downmix_ac3.value)
 				self.settings.downmix_ac3.addNotifier(self.changeAC3Downmix, initial_call=False)
 				conflist.append(getConfigListEntry(_("AC3 downmix"), self.settings.downmix_ac3, None))
+
+			if SystemInfo["CanPcmMultichannel"]:
+				self.settings.pcm_multichannel = ConfigOnOff(default=config.av.pcm_multichannel.value)
+				self.settings.pcm_multichannel.addNotifier(self.changePCMMultichannel, initial_call=False)
+				conflist.append(getConfigListEntry(_("PCM multichannel"), self.settings.pcm_multichannel, None))
 
 			if SystemInfo["CanDownmixDTS"]:
 				if SystemInfo["CanProc"]:
@@ -398,14 +398,6 @@ class AudioSelection(Screen, ConfigListScreen):
 			config.av.autovolume.value = autovolume.value
 		config.av.autovolume.save()
 
-	def changePCMMultichannel(self, multichan):
-		if multichan.value:
-			config.av.pcm_multichannel.setValue(multichan.value)
-		else:
-			config.av.pcm_multichannel.setValue(False)
-		config.av.pcm_multichannel.save()
-		self.fillList()
-
 	def changeAC3Downmix(self, downmix):
 		config.av.downmix_ac3.setValue(downmix.value)
 		if SystemInfo["supportPcmMultichannel"]:
@@ -413,6 +405,14 @@ class AudioSelection(Screen, ConfigListScreen):
 		config.av.downmix_ac3.save()
 		if SystemInfo["supportPcmMultichannel"]:
 			config.av.pcm_multichannel.save()
+		self.fillList()
+
+	def changePCMMultichannel(self, multichan):
+		if multichan.value:
+			config.av.pcm_multichannel.setValue(multichan.value)
+		else:
+			config.av.pcm_multichannel.setValue(False)
+		config.av.pcm_multichannel.save()
 		self.fillList()
 
 	def changeDTSDownmix(self, downmix):
