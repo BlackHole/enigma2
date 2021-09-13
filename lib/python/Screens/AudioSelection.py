@@ -98,11 +98,6 @@ class AudioSelection(Screen, ConfigListScreen):
 			self.audioTracks = audio = service and service.audioTracks()
 			n = audio and audio.getNumberOfTracks() or 0
 
-			if SystemInfo["CanPcmMultichannel"]:
-				self.settings.pcm_multichannel = ConfigOnOff(default=config.av.pcm_multichannel.value)
-				self.settings.pcm_multichannel.addNotifier(self.changePCMMultichannel, initial_call=False)
-				conflist.append(getConfigListEntry(_("PCM multichannel"), self.settings.pcm_multichannel, None))
-
 			if SystemInfo["CanDownmixAC3"]:
 				self.choices = [("downmix", _("Downmix")), ("passthrough", _("Passthrough"))]
 
@@ -190,6 +185,11 @@ class AudioSelection(Screen, ConfigListScreen):
 				self.settings.wmapro = ConfigSelection(choices=self.choices, default=config.av.wmapro.value)
 				self.settings.wmapro.addNotifier(self.changeWMAPro, initial_call=False)
 				conflist.append(getConfigListEntry(_("WMA Pro downmix"), self.settings.wmapro, None))
+
+			if SystemInfo["CanPcmMultichannel"]:
+				self.settings.pcm_multichannel = ConfigOnOff(default=config.av.pcm_multichannel.value)
+				self.settings.pcm_multichannel.addNotifier(self.changePCMMultichannel, initial_call=False)
+				conflist.append(getConfigListEntry(_("PCM multichannel"), self.settings.pcm_multichannel, None))
 
 			if SystemInfo["Can3DSurround"]:
 				self.choices = [("none", _("off")), ("hdmi", _("HDMI")), ("spdif", _("SPDIF")), ("dac", _("DAC"))]
@@ -388,14 +388,6 @@ class AudioSelection(Screen, ConfigListScreen):
 			config.av.autovolume.value = autovolume.value
 		config.av.autovolume.save()
 
-	def changePCMMultichannel(self, multichan):
-		if multichan.value:
-			config.av.pcm_multichannel.setValue(multichan.value)
-		else:
-			config.av.pcm_multichannel.setValue(False)
-		config.av.pcm_multichannel.save()
-		self.fillList()
-
 	def changeAC3Downmix(self, downmix):
 		config.av.downmix_ac3.setValue(downmix.value)
 		if SystemInfo["supportPcmMultichannel"]:
@@ -432,6 +424,14 @@ class AudioSelection(Screen, ConfigListScreen):
 	def setAACTranscode(self, transcode):
 		config.av.transcodeaac.setValue(transcode)
 		config.av.transcodeaac.save()
+
+	def changePCMMultichannel(self, multichan):
+		if multichan.value:
+			config.av.pcm_multichannel.setValue(multichan.value)
+		else:
+			config.av.pcm_multichannel.setValue(False)
+		config.av.pcm_multichannel.save()
+		self.fillList()
 
 	def changeEDIDChecking(self, edidchecking):
 		if edidchecking.value:
