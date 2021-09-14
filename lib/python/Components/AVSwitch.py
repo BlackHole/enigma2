@@ -441,6 +441,7 @@ def InitAVSwitch():
 	config.av.wss = ConfigEnableDisable(default=True)
 	config.av.generalAC3delay = ConfigSelectionNumber(-1000, 1000, 5, default=0)
 	config.av.generalPCMdelay = ConfigSelectionNumber(-1000, 1000, 5, default=0)
+	config.av.btaudiodelay = ConfigSelectionNumber(-1000, 1000, 5, default=0)
 	config.av.vcrswitch = ConfigEnableDisable(default=False)
 	config.av.aspect.setValue("16:9")
 	config.av.aspect.addNotifier(iAVSwitch.setAspect)
@@ -914,15 +915,6 @@ def InitAVSwitch():
 		config.av.btaudio.addNotifier(setBTAudio)
 	else:
 		config.av.btaudio = ConfigNothing()
-
-	if SystemInfo["CanBTAudioDelay"]:
-		config.av.btaudiodelay = ConfigSelectionNumber(-1000, 1000, 5, default=0)
-
-		if SystemInfo["CanProc"]:
-			f = "/proc/stb/audio/btaudio_delay_pcm", "w"
-			(choices, default) = read_choices(f, default)
-
-		config.av.btaudiodelay.addNotifier(setBTAudioDelay)
 
 	if SystemInfo["haveboxmode"]:
 		config.av.boxmode = ConfigSelection(choices={
