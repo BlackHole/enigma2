@@ -20,7 +20,7 @@ class VAudioInfo(Poll, Converter, object):
 		self.poll_enabled = True
 		self.lang_strings = ("ger", "german", "deu")
 		self.codecs = {
-			"01_dolbydigitalplus": ("digital+", "digitalplus", "ac3+", "e-ac-3", "e-ac-3 audio" "a_eac3",),
+			"01_dolbydigitalplus": ("digital+", "digitalplus", "ac3+", "e-ac-3", "e-ac-3 audio", "a_eac3",),
 			"02_dolbydigital": ("ac3", "ac-3", "ac-3 (atsc a/52)", "a_ac3", "a_ac-3", "a_ac-3 (atsc a/52)", "a-ac-3 audio", "dolbydigital"),
 			"03_mp3": ("mp3",),
 			"04_wma": ("wma",),
