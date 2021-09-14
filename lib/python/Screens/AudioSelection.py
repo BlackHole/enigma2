@@ -397,7 +397,7 @@ class AudioSelection(Screen, ConfigListScreen):
 	def changeAC3Downmix(self, downmix):
 		config.av.downmix_ac3.setValue(downmix.value)
 		if SystemInfo["supportPcmMultichannel"]:
-			config.av.pcm_multichannel.setValue(False)
+			config.av.pcm_multichannel.setValue(True)
 		config.av.downmix_ac3.save()
 		if SystemInfo["supportPcmMultichannel"]:
 			config.av.pcm_multichannel.save()
