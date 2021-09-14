@@ -503,17 +503,15 @@ def InitAVSwitch():
 		f.write(configElement.value)
 		f.close()
 
-	if SystemInfo["CanBTAudio"]:
-		def setBTAudio(configElement):
-			f = open("/proc/stb/audio/btaudio", "w")
-			f.write(configElement.value)
-			f.close()
+	def setBTAudio(configElement):
+		f = open("/proc/stb/audio/btaudio", "w")
+		f.write(configElement.value)
+		f.close()
 
-	if SystemInfo["CanBTAudioDelay"]:
-		def setBTAudioDelay(configElement):
-			f = open("/proc/stb/audio/btaudio_delay_pcm", "w")
-			f.write(format(configElement.value * 90, "x"))
-			f.close()
+	def setBTAudioDelay(configElement):
+		f = open("/proc/stb/audio/btaudio_delay_pcm", "w")
+		f.write(format(configElement.value * 90, "x"))
+		f.close()
 
 	def setBoxmode(configElement):
 		try:
