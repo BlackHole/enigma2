@@ -112,11 +112,6 @@ class AudioSelection(Screen, ConfigListScreen):
 				self.settings.downmix_ac3.addNotifier(self.changeAC3Downmix, initial_call=False)
 				conflist.append(getConfigListEntry(_("AC3 downmix"), self.settings.downmix_ac3, None))
 
-			if SystemInfo["CanPcmMultichannel"]:
-				self.settings.pcm_multichannel = ConfigOnOff(default=config.av.pcm_multichannel.value)
-				self.settings.pcm_multichannel.addNotifier(self.changePCMMultichannel, initial_call=False)
-				conflist.append(getConfigListEntry(_("PCM multichannel"), self.settings.pcm_multichannel, None))
-
 			if SystemInfo["CanDownmixDTS"]:
 				if SystemInfo["CanProc"]:
 					self.choices = self.read_choices("/proc/stb/audio/dts_choices")
@@ -212,6 +207,17 @@ class AudioSelection(Screen, ConfigListScreen):
 				self.settings.wmapro = ConfigSelection(choices=self.choices, default=config.av.wmapro.value)
 				self.settings.wmapro.addNotifier(self.changeWMAPro, initial_call=False)
 				conflist.append(getConfigListEntry(_("WMA Pro downmix"), self.settings.wmapro, None))
+
+			if SystemInfo["CanPcmMultichannel"]:
+				self.settings.pcm_multichannel = ConfigOnOff(default=config.av.pcm_multichannel.value)
+				self.settings.pcm_multichannel.addNotifier(self.changePCMMultichannel, initial_call=False)
+				conflist.append(getConfigListEntry(_("PCM multichannel"), self.settings.pcm_multichannel, None))
+
+			if SystemInfo["CanBTAudio"]:
+				choice_list = [("off", _("Off")), ("on", _("On"))]
+				self.settings.btaudio = ConfigSelection(choices=choice_list, default=config.av.btaudio.value)
+				self.settings.btaudio.addNotifier(self.changeBTAudio, initial_call=False)
+				conflist.append(getConfigListEntry(_("Enable Bluetooth Audio"), self.settings.btaudio, None))
 
 			if SystemInfo["Can3DSurround"]:
 				if SystemInfo["CanProc"]:
@@ -442,6 +448,11 @@ class AudioSelection(Screen, ConfigListScreen):
 	def setAACTranscode(self, transcode):
 		config.av.transcodeaac.setValue(transcode.value)
 		config.av.transcodeaac.save()
+
+	def changeBTAudio(self, btaudio):
+		if btaudio.value:
+			config.av.btaudio.value = btaudio.value
+		config.av.btaudio.save()
 
 	def changeEDIDChecking(self, edidchecking):
 		if edidchecking.value:

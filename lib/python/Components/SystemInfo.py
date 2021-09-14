@@ -14,7 +14,7 @@ SystemInfo["HasRootSubdir"] = False	# This needs to be here so it can be reset b
 SystemInfo["RecoveryMode"] = False	# This needs to be here so it can be reset by getMultibootslots!
 from Tools.Multiboot import GetCurrentImage, getMultibootslots  # This import needs to be here to avoid a SystemInfo load loop!
 SystemInfo["HasHiSi"] = pathExists("/proc/hisi") and getBoxType() not in ("viper4kv20",)	# This needs to be for later checks
-SystemInfo["canMultiBoot"] = getMultibootslots()	# SystemInfo["MBbootdevice"] set on call 
+SystemInfo["canMultiBoot"] = getMultibootslots()	# SystemInfo["MBbootdevice"] set on call
 SystemInfo["MultiBootSlot"] = GetCurrentImage() if SystemInfo["canMultiBoot"] else False
 
 
@@ -114,7 +114,6 @@ SystemInfo["Canaudiosource"] = fileCheck("/proc/stb/hdmi/audio_source")
 SystemInfo["Can3DSurround"] = fileHas("/proc/stb/audio/3d_surround_choices", "none")
 SystemInfo["Can3DSpeaker"] = fileHas("/proc/stb/audio/3d_surround_speaker_position_choices", "center")
 SystemInfo["CanAutoVolume"] = fileHas("/proc/stb/audio/avl_choices", "none")
-SystemInfo["supportPcmMultichannel"] = fileCheck("/proc/stb/audio/multichannel_pcm")
 SystemInfo["CanDownmixAC3"] = fileHas("/proc/stb/audio/ac3_choices", "downmix")
 SystemInfo["CanAC3Transcode"] = fileHas("/proc/stb/audio/ac3plus_choices", "force_ac3")
 SystemInfo["CanDownmixDTS"] = fileHas("/proc/stb/audio/dts_choices", "downmix")
@@ -123,6 +122,9 @@ SystemInfo["CanDownmixAAC"] = fileHas("/proc/stb/audio/aac_choices", "downmix")
 SystemInfo["CanDownmixAACPlus"] = fileHas("/proc/stb/audio/aacplus_choices", "downmix")
 SystemInfo["CanAACTranscode"] = fileHas("/proc/stb/audio/aac_transcode_choices", "off")
 SystemInfo["CanWMAPRO"] = fileHas("/proc/stb/audio/wmapro_choices", "downmix")
+SystemInfo["CanBTAudio"] = fileHas("/proc/stb/audio/btaudio_choices", "off")
+SystemInfo["CanBTAudioDelay"] = fileHas("/proc/stb/audio/btaudio_delay_pcm", "0")
+SystemInfo["supportPcmMultichannel"] = fileCheck("/proc/stb/audio/multichannel_pcm")
 SystemInfo["havecolorspace"] = fileCheck("/proc/stb/video/hdmi_colorspace")
 SystemInfo["havecolorspacechoices"] = fileCheck("/proc/stb/video/hdmi_colorspace_choices")
 SystemInfo["havecolorimetry"] = fileCheck("/proc/stb/video/hdmi_colorimetry")
