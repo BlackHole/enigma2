@@ -166,6 +166,12 @@ class VideoSetup(ConfigListScreen, Screen):
 				getConfigListEntry(_("General PCM delay"), config.av.generalPCMdelay, _("This option configures the general audio delay of stereo sound tracks."))
 			))
 
+			if SystemInfo["CanBTAudio"]:
+				self.list.append(getConfigListEntry(_("Enable Bluetooth Audio"), config.av.btaudio, _("This Option allows you to switch Audio to Bluetooth Speakers.")))
+
+			if SystemInfo["CanBTAudioDelay"]:
+				self.list.append(getConfigListEntry(_("General Bluetooth Audio delay"), config.av.btaudiodelay, _("This option configures the general audio delay for Bluetooth Speakers.")))
+
 			if SystemInfo["Can3DSurround"]:
 				self.list.append(getConfigListEntry(_("3D Surround"), config.av.surround_3d, _("This option allows you to enable 3D Surround Sound for an output.")))
 
