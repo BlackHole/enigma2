@@ -521,14 +521,12 @@ def InitAVSwitch():
 			fd.write(configElement.value)
 
 	def setBTAudio(configElement):
-		f = open("/proc/stb/audio/btaudio", "w")
-		f.write(configElement.value)
-		f.close()
+		with open("/proc/stb/audio/btaudio", "w") as fd:
+			fd.write(configElement.value)
 
 	def setBTAudioDelay(configElement):
-		f = open("/proc/stb/audio/btaudio_delay_pcm", "w")
-		f.write(format(configElement.value * 90, "x"))
-		f.close()
+		with open("/proc/stb/audio/btaudio_delay_pcm", "w") as fd:
+			fd.write(format(configElement.value * 90, "x"))
 
 	def setBoxmode(configElement):
 		try:
@@ -915,6 +913,12 @@ def InitAVSwitch():
 		config.av.btaudio.addNotifier(setBTAudio)
 	else:
 		config.av.btaudio = ConfigNothing()
+
+	if SystemInfo["CanBTAudioDelay"]:
+		config.av.btaudiodelay = ConfigSelectionNumber(-1000, 1000, 5, default=0)
+		config.av.btaudiodelay.addNotifier(setBTAudioDelay)
+	else:
+		config.av.btaudiodelay = ConfigNothing()
 
 	if SystemInfo["haveboxmode"]:
 		config.av.boxmode = ConfigSelection(choices={
