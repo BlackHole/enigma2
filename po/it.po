@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: obh 4.4  it_IT\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-02 16:50+0000\n"
-"PO-Revision-Date: 2021-04-11\n"
+"POT-Creation-Date: 2021-09-20 16:50+0000\n"
+"PO-Revision-Date: 2021-09-20\n"
 "Last-Translator: Alexwilmac\n"
 "Language-Team: @Alexwilmac-@insanity\n"
 "Language: it\n"
@@ -13,17 +13,49 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.2\n"
 
-# msgid "<Current>"
-# msgstr "<Corrente>"
-# 
-# msgid "<Emergency>"
-# msgstr "<D'emergenza>"
-# 
-# msgid "<Default>"
-# msgstr "<Standard>"
+msgid "+24 hours"
+msgstr "Giorno succ."
+
+msgid "-24 hours"
+msgstr "Giorno preced."
+
+msgid "AutoTimer List"
+msgstr "Lista autotimer"
+
+msgid "<Current>"
+msgstr "<Corrente>"
+
+msgid "<Emergency>"
+msgstr "<D'emergenza>"
+
+msgid "<Default>"
+msgstr "<Standard>"
 
 # msgid "On"
 # msgstr "On"
+
+msgid "What would you like to reconstruct?"
+msgstr "Vuoi riparare %s?"
+
+msgid "Don't reconstruct"
+msgstr "Non riparare"
+
+msgid "Reconstruct the .ap and .sc files of the selected movie"
+msgstr "Ripara la registrazione ricostruendo i file .ap e .sc"
+
+
+# Message already partially translated. So, maybe it is composed piece by piece
+msgid ""
+"Cannot move to the trash can"
+"Refusing to move to the same directory"
+"Do you really want to delete %s?"
+msgstr ""
+"Impossibile spostare nel cestino "
+"Non posso spostare un file nella stessa cartella"
+"Si desidera eliminare %s?"
+
+# msgid "Refusing to move to the same directory"
+# msgstr "Non posso spostare un file nella stessa cartella"
 
 # Need be verified in every context: should apply only to GUI Configuration submenu
 msgid "Large"
@@ -56,6 +88,10 @@ msgstr ""
 msgid "Do you really want to permanently delete '%s' from the trash can?"
 msgstr ""
 "Vuoi davvero eliminare definitivamente '%s' dal cestino?"
+
+msgid "Do you really want to permanently delete these %d items from the trash can?"
+msgstr ""
+"Vuoi davvero eliminare definitivamente questi %d elementi dal cestino?"
 
 msgid "%d Recording"
 msgid_plural "%d Recordings"
@@ -8127,7 +8163,7 @@ msgid "Right long"
 msgstr "Destro (a lungo)"
 
 msgid "Roll-off"
-msgstr "Srotolare"
+msgstr "Attenuazione"
 
 msgid "Romania"
 msgstr "Romania"
@@ -9496,8 +9532,8 @@ msgstr "Mostra orario in formato 24 ore."
 msgid "Show time remaining/elapsed"
 msgstr "Mostra tempo rimanente/trascorso"
 
-msgid "Show timer list"
-msgstr "Mostra l'elenco dei Timer"
+msgid "Show Timer List"
+msgstr "Mostra l'elenco dei timer"
 
 msgid "Show translation packages"
 msgstr "Mostra i pacchetti di traduzione"
@@ -9805,10 +9841,10 @@ msgid "Sorry, your partition(s) sizes are bigger than total device size."
 msgstr "La partizione è maggiore della dimensione totale del dispositivo."
 
 msgid "Sort"
-msgstr "Ordinamento lista registrazioni"
+msgstr "Ordinamento"
 
 msgid "Sort EPG list"
-msgstr "Ordino elenco EPG"
+msgstr "Ordina elenco EPG"
 
 msgid "Sort Trash by deletion time"
 msgstr "Ordina i file nel cestino per data di cancellazione"
