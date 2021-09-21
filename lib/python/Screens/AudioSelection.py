@@ -700,7 +700,7 @@ class QuickSubtitlesConfigMenu(ConfigListScreen, Screen):
 		return ""
 
 	def cancel(self):
-		self.center_dvb_subs.removeNotifier(self.setCenterDvbSubs)
+		self.center_dvb_subs.removeNotifier(self.setCenterDvbSubs, initial_call=False)
 		self.close()
 
 	def ok(self):
