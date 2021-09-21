@@ -4852,7 +4852,7 @@ msgid "Do you really want to exit?"
 msgstr "Вы действительно хотите выйти?"
 
 msgid ""
-"Do you really want to initialise this device?\n"
+"Do you really want to initialize this device?\n"
 "All the data on the device will be lost!"
 msgstr ""
 "Действительно хотите инициализировать устройство?\n"
@@ -6922,12 +6922,6 @@ msgstr "Начальное качество сигнала"
 
 msgid "Initial signal quality:"
 msgstr "Начальное качество сигнала:"
-
-msgid "Initialise"
-msgstr "Инициализация"
-
-msgid "Initialise Devices"
-msgstr "Инициализация устройства"
 
 msgid "Initialize"
 msgstr "Инициализация"
