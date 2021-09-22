@@ -888,7 +888,7 @@ int eDVBCAService::buildCAPMT(ePtr<eDVBService> &dvbservice)
 	pidtype[eDVBService::cAC3PID]    = 0x06;
 	pidtype[eDVBService::cAC4PID]    = 0x06;
 	pidtype[eDVBService::cSUBTITLE]  = 0x06;
-	pidtype[eDVBService::cAACHEAPID] = 0x06;
+	pidtype[eDVBService::cHEAACAPID] = 0x06;
 	pidtype[eDVBService::cDDPPID]    = 0x06;
 	pidtype[eDVBService::cAACAPID]   = 0x06;
 	pidtype[eDVBService::cDATAPID]   = 0x90; // Datastream (Blu-ray subtitling)
