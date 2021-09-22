@@ -18,23 +18,24 @@ class VAudioInfo(Poll, Converter, object):
 		self.type = type
 		self.poll_interval = 1000
 		self.poll_enabled = True
-		self.lang_strings = ("ger", "german", "deu")
+		self.lang_strings = ("english", "englisch", "original", "eng")
 		self.codecs = {
-			"01_dolbydigitalplus": ("digital+", "digitalplus", "ac3+", "e-ac-3", "e-ac-3 audio", "a_eac3"),
-			"02_dolbydigital": ("ac3", "ac-3", "ac-3 (atsc a/52)", "a_ac3", "a_ac-3", "a_ac-3 (atsc a/52)", "a-ac-3 audio", "dolbydigital"),
+			"01_dolbydigitalplus": ("digital+", "digitalplus", "ac3+", "e-ac-3", "a_eac3",),
+			"02_dolbydigital": ("ac3", "ac-3", "a_ac3", "a_ac-3", "dolbydigital",),
 			"03_mp3": ("mp3",),
 			"04_wma": ("wma",),
 			"05_flac": ("flac",),
-			"06_he-aac": ("he-aac",),
-			"07_aac": ("aac",),
+			"06_he-aac": ("he-aac", "mpeg4-aac", "mpeg4", "mpeg-4",),
+			"07_aac": ("aac", "a_aac"),
 			"08_lpcm": ("lpcm",),
 			"09_dts-hd": ("dts-hd",),
 			"10_dts": ("dts",),
 			"11_pcm": ("pcm",),
-			"12_mpeg": ("mpeg",),
+			"12_mpeg": ("mpeg", "a_mpeg/l3", "mpeg-1",),
 			"13_dolbytruehd": ("truehd",),
 			}
 		self.codec_info = {
+			"dolbytruehd": ("51", "20", "71"),
 			"dolbydigitalplus": ("51", "20", "71"),
 			"dolbydigital": ("51", "20", "71"),
 			"wma": ("8", "9"),
@@ -59,7 +60,7 @@ class VAudioInfo(Poll, Converter, object):
 		languages = self.audio_info.getLanguage()
 		for lang in self.lang_strings:
 			if lang in languages:
-				languages = "Deutsch"
+				languages = "English"
 				break
 		languages = languages.replace("und ", "")
 		return languages
