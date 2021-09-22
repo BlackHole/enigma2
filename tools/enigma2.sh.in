@@ -268,7 +268,6 @@ fi
 #
 # >128 signal
 
-ret=$?
 case $ret in
 	1)
 		/sbin/halt
