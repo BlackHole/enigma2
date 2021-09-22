@@ -1994,7 +1994,7 @@ int eDVBServicePlay::getInfo(int w)
 			apid = m_dvb_service->getCacheEntry(eDVBService::cDDPPID);
 			if (apid != -1)
 				return apid;
-			apid = m_dvb_service->getCacheEntry(eDVBService::cAACHEAPID);
+			apid = m_dvb_service->getCacheEntry(eDVBService::cHEAACAPID);
 			if (apid != -1)
 				return apid;
 			apid = m_dvb_service->getCacheEntry(eDVBService::cAACAPID);
@@ -2146,8 +2146,8 @@ RESULT eDVBServicePlay::getTrackInfo(struct iAudioTrackInfo &info, unsigned int 
 		info.m_description = "AC3+";
 	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atAAC)
 		info.m_description = "AAC";
-	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atAACHE)
-		info.m_description = "AAC-HE";
+	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atHEAAC)
+		info.m_description = "HE-AAC";
 	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atDTS)
 		info.m_description = "DTS";
 	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atDTSHD)
@@ -2260,7 +2260,7 @@ int eDVBServicePlay::selectAudioStream(int i)
 		&& (m_dvb_service->getCacheEntry(eDVBService::cAC3PID)== -1)
 		&& (m_dvb_service->getCacheEntry(eDVBService::cAC4PID)== -1)
 		&& (m_dvb_service->getCacheEntry(eDVBService::cDDPPID)== -1)
-		&& (m_dvb_service->getCacheEntry(eDVBService::cAACHEAPID) == -1)
+		&& (m_dvb_service->getCacheEntry(eDVBService::cHEAACAPID) == -1)
 		&& (m_dvb_service->getCacheEntry(eDVBService::cAACAPID) == -1)
 		&& (m_dvb_service->getCacheEntry(eDVBService::cDRAAPID) == -1))))
 	{
@@ -2268,7 +2268,7 @@ int eDVBServicePlay::selectAudioStream(int i)
 		m_dvb_service->setCacheEntry(eDVBService::cAC3PID, apidtype == eDVBAudio::aAC3 ? apid : -1);
 		m_dvb_service->setCacheEntry(eDVBService::cAC4PID, apidtype == eDVBAudio::aAC4 ? apid : -1);
 		m_dvb_service->setCacheEntry(eDVBService::cDDPPID, apidtype == eDVBAudio::aDDP ? apid : -1);
-		m_dvb_service->setCacheEntry(eDVBService::cAACHEAPID, apidtype == eDVBAudio::aAACHE ? apid : -1);
+		m_dvb_service->setCacheEntry(eDVBService::cHEAACAPID, apidtype == eDVBAudio::aHEAAC ? apid : -1);
 		m_dvb_service->setCacheEntry(eDVBService::cAACAPID, apidtype == eDVBAudio::aAAC ? apid : -1);
 		m_dvb_service->setCacheEntry(eDVBService::cDRAAPID, apidtype == eDVBAudio::aDRA ? apid : -1);
 	}
@@ -2443,7 +2443,7 @@ bool eDVBServiceBase::tryFallbackTuner(eServiceReferenceDVB &service, bool &is_s
 	service = eServiceReferenceDVB(remote_service_ref.str());
 
 	is_stream = true;
-	
+
 	m_is_streamx = true;	// used by decoder.cpp to stop tuxtxt logging on text pid for streams
 
 	return true;
@@ -3053,7 +3053,7 @@ void eDVBServicePlay::updateDecoder(bool sendSeekableStateChanged)
 		{
 			selectAudioStream();
 		}
-		
+
 		if (!(m_is_pvr || m_is_stream || m_timeshift_active))
 			m_decoder->setSyncPCR(pcrpid);
 		else
@@ -3600,7 +3600,7 @@ void eDVBServicePlay::newDVBSubtitlePage(const eDVBSubtitlePage &p)
 
 		// Where subtitles are delivered out of sync with video, only treat subtitles in the past as having bad timing.
 		// Those that are delivered too early are cached for displaying at the appropriate later time
-		// Note that this can be due to buggy drivers, as well as problems with the broadcast 
+		// Note that this can be due to buggy drivers, as well as problems with the broadcast
 		if (pos-p.m_show_time > 1800000 && (m_is_pvr || m_timeshift_enabled))
 		{
 			// Subtitles delivered over 20 seconds too late
