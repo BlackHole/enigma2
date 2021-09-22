@@ -67,7 +67,7 @@ typedef enum
  * see: https://bugzilla.gnome.org/show_bug.cgi?id=619434
  * As a workaround, we run the subsink in sync=false mode
  */
-#if GST_VERSION_MAJOR < 1 
+#if GST_VERSION_MAJOR < 1
 #define GSTREAMER_SUBTITLE_SYNC_MODE_BUG
 #else
 #undef GSTREAMER_SUBTITLE_SYNC_MODE_BUG
@@ -1978,7 +1978,7 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 				if ( gv_image )
 				{
 					GstBuffer *buf_image;
-				
+
 #if GST_VERSION_MAJOR < 1
 					buf_image = gst_value_get_buffer(gv_image);
 #else
@@ -2504,6 +2504,10 @@ audiotype_t eServiceMP3::gstCheckAudioPad(GstStructure* structure)
 	}
 
 	else if ( gst_structure_has_name (structure, "audio/x-ac3") || gst_structure_has_name (structure, "audio/ac3") )
+		return atAC3;
+	else if ( gst_structure_has_name (structure, "audio/x-eac3") || gst_structure_has_name (structure, "audio/ac3") )
+		return atAC3;
+	else if ( gst_structure_has_name (structure, "truehd") || gst_structure_has_name (structure, "audio/ac3") )
 		return atAC3;
 	else if ( gst_structure_has_name (structure, "audio/x-dts") || gst_structure_has_name (structure, "audio/dts") )
 		return atDTS;
@@ -3073,7 +3077,7 @@ void eServiceMP3::loadCuesheet()
 		eDebug("[eServiceMP3] skip loading cuesheet multiple times");
 		return;
 	}
- 
+
 	m_cue_entries.clear();
 	/* only load manual cuts if no chapter info avbl CVR */
 #if GST_VERSION_MAJOR >= 1
