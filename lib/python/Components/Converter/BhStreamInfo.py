@@ -34,9 +34,9 @@ class BhStreamInfo(Poll, Converter, object):
 			if '0.0.0.0:' in strtype and strtype.startswith('1:0:') or '127.0.0.1:' in strtype and strtype.startswith('1:0:') or 'localhost:' in strtype and strtype.startswith('1:0:'):
 				return 'Stream Relay'
 			elif '%3a' in refstr and strtype.startswith('4097:0:'):
-				return 'GStreamer'
-			elif '%3a' in refstr and strtype.startswith('1:0:'):
 				return 'MediaPlayer'
+			elif '%3a' in refstr and strtype.startswith('1:0:'):
+				return 'Enigma2'
 			elif '%3a' in refstr and strtype.startswith('5001:0:'):
 				return 'GSTPlayer'
 			elif '%3a' in refstr and strtype.startswith('5002:0:'):
