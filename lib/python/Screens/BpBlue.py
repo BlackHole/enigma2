@@ -18,18 +18,18 @@ import socket
 class DeliteBluePanel(Screen):
 	skin = """
 	<screen name="DeliteBluePanel" position="center,center" size="1000,720"  title="Black Hole Blue Panel" flags="wfNoBorder">
-        <ePixmap position="339,170" zPosition="3" size="60,40" pixmap="skin_default/buttons/key_ok.png" alphatest="blend" transparent="1" />
-        <eLabel text="Black Hole Blue Panel" position="80,30" size="800,38" font="Regular;34" halign="left" transparent="1"/>
-        <widget name="lab1" position="129,90" size="230,25" font="Regular;24" zPosition="2"  transparent="1"/>
-        <widget name="list" position="75,126" size="340,38" zPosition="2"  transparent="1"/>
-        <widget name="lab2" position="139,172" size="190,24" font="Regular;20" halign="center" valign="center" zPosition="2" transparent="1"/>
-    	<widget name="lab3" position="79,201" size="120,28" font="Regular;24" halign="left" zPosition="2" transparent="1"/>
-        <widget name="activecam" position="79,201" size="350,28" font="Regular;24" halign="left" zPosition="2" transparent="1"/>
-        <widget name="Ilab1" position="79,257" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
-        <widget name="Ilab2" position="79,290" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
-        <widget name="Ilab3" position="79,315" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
-        <widget name="Ilab4" position="79,345" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
-        <widget name="Ecmtext" position="79,380" size="440,300" font="Regular;20" zPosition="2" transparent="1"/>
+		<ePixmap position="339,170" zPosition="3" size="60,40" pixmap="skin_default/buttons/key_ok.png" alphatest="blend" transparent="1" />
+		<eLabel text="Black Hole Blue Panel" position="80,30" size="800,38" font="Regular;34" halign="left" transparent="1"/>
+		<widget name="lab1" position="129,90" size="230,25" font="Regular;24" zPosition="2"  transparent="1"/>
+		<widget name="list" position="75,126" size="340,38" zPosition="2"  transparent="1"/>
+		<widget name="lab2" position="139,172" size="190,24" font="Regular;20" halign="center" valign="center" zPosition="2" transparent="1"/>
+		<widget name="lab3" position="79,201" size="120,28" font="Regular;24" halign="left" zPosition="2" transparent="1"/>
+		<widget name="activecam" position="79,201" size="350,28" font="Regular;24" halign="left" zPosition="2" transparent="1"/>
+		<widget name="Ilab1" position="79,257" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
+		<widget name="Ilab2" position="79,290" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
+		<widget name="Ilab3" position="79,315" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
+		<widget name="Ilab4" position="79,345" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
+		<widget name="Ecmtext" position="79,380" size="440,300" font="Regular;20" zPosition="2" transparent="1"/>
 		<ePixmap position="88,650" size="140,40" pixmap="skin_default/buttons/red.png" alphatest="on" zPosition="1" />
 		<ePixmap position="316,650" size="140,40" pixmap="skin_default/buttons/green.png" alphatest="on" zPosition="1" />
 		<ePixmap position="544,650" size="140,40" pixmap="skin_default/buttons/yellow.png" alphatest="on" zPosition="1" />
@@ -248,8 +248,8 @@ class Nab_DoStartCam(Screen):
 
 class BhsysInfo(Screen):
 	skin = """
-	<screen position="center,center" size="800,600" title="Black Hole Info" flags="wfNoBorder">
-		<widget name="lab1" position="50,25" halign="left" size="700,550" zPosition="1" font="Regular;20" valign="top" transparent="1" />
+	<screen position="center,center" size="1020,600" title="Black Hole Info" flags="wfNoBorder">
+		<widget name="lab1" position="50,25" halign="left" size="1020,550" zPosition="1" font="Regular;20" valign="top" transparent="1" />
 	</screen>"""
 
 	def __init__(self, session):
@@ -276,7 +276,7 @@ class BhsysInfo(Screen):
 		text += _("MEMORY\n")
 		memTotal = memFree = swapTotal = swapFree = 0
 		for line in open("/proc/meminfo", 'r'):
-			parts = line.split(':')
+			parts = line.replace("k", "K").split(':')
 			key = parts[0].strip()
 			if key == "MemTotal":
 				memTotal = parts[1].strip()
@@ -287,7 +287,7 @@ class BhsysInfo(Screen):
 			elif key == "SwapFree":
 				swapFree = parts[1].strip()
 		text += _("Total memory:") + "\t%s\n" % memTotal
-		text += _("Free memory:") + "\t%s kB\n" % memFree
+		text += _("Free memory:") + "\t%s KB\n" % memFree
 		text += _("Swap total:") + "\t%s \n" % swapTotal
 		text += _("Swap free:") + "\t%s \n" % swapFree
 		text += "\n" + _("STORAGE") + "\n"
@@ -313,11 +313,9 @@ class BhsysInfo(Screen):
 		os_remove("/tmp/syinfo.tmp")
 
 		text += "\n" + _("SOFTWARE") + "\n"
-		f = open("/etc/bpversion", 'r')
-		text += _("Image:\tOpenbh %s.%s (%s)\n") % (getImageVersion(), getImageBuild(), getImageType().title())
+		text += "Image:\t" + "Openbh %s.%s (%s)\n" % (getImageVersion(), getImageBuild(), getImageType().title())
 		text += "Enigma2: \t" + about.getEnigmaVersionString() + "\n"
 		text += "Kernel: \t" + about.getKernelVersionString() + "\n"
-
 		self["lab1"].setText(text)
 
 
