@@ -1,5 +1,6 @@
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
+from boxbranding import getImageBuild, getMachineName, getImageVersion, getImageType
 from Components.ActionMap import ActionMap
 from Components.Label import Label
 from Components.ScrollLabel import ScrollLabel
@@ -29,12 +30,14 @@ class DeliteBluePanel(Screen):
 		<widget name="Ilab3" position="79,315" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
 		<widget name="Ilab4" position="79,345" size="350,28" font="Regular;24" zPosition="2" transparent="1"/>
 		<widget name="Ecmtext" position="79,380" size="440,300" font="Regular;20" zPosition="2" transparent="1"/>
-		<ePixmap position="145,650" size="140,40" pixmap="skin_default/buttons/red.png" alphatest="on" zPosition="1" />
-		<ePixmap position="430,650" size="140,40" pixmap="skin_default/buttons/yellow.png" alphatest="on" zPosition="1" />
-		<ePixmap position="715,650" size="140,40" pixmap="skin_default/buttons/blue.png" alphatest="on" zPosition="1" />
-		<widget name="key_red" position="145,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="red" transparent="1" />
-		<widget name="key_yellow" position="430,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="yellow" transparent="1" />
-		<widget name="key_blue" position="715,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="blue" transparent="1" />
+		<ePixmap position="88,650" size="140,40" pixmap="skin_default/buttons/red.png" alphatest="on" zPosition="1" />
+		<ePixmap position="316,650" size="140,40" pixmap="skin_default/buttons/green.png" alphatest="on" zPosition="1" />
+		<ePixmap position="544,650" size="140,40" pixmap="skin_default/buttons/yellow.png" alphatest="on" zPosition="1" />
+		<ePixmap position="772,650" size="140,40" pixmap="skin_default/buttons/blue.png" alphatest="on" zPosition="1" />
+		<widget name="key_red" position="88,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="red" transparent="1" />
+		<widget name="key_green" position="316,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="green" transparent="1" />
+		<widget name="key_yellow" position="544,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="yellow" transparent="1" />
+		<widget name="key_blue" position="772,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="blue" transparent="1" />
 	</screen>"""
 
 	def __init__(self, session):
@@ -48,7 +51,8 @@ class DeliteBluePanel(Screen):
 		self["Ilab3"] = Label()
 		self["Ilab4"] = Label()
 		self["key_red"] = Label(_("Epg Panel"))
-		self["key_yellow"] = Label(_("Sys Info"))
+		self["key_green"] = Label(_("OpenVpn Panel"))
+		self["key_yellow"] = Label(_("System Info"))
 		self["key_blue"] = Label(_("Extra Settings"))
 		self["activecam"] = Label()
 		self["Ecmtext"] = ScrollLabel()
@@ -183,7 +187,8 @@ class DeliteBluePanel(Screen):
 		self.session.open(DeliteSettings)
 
 	def keyGreen(self):
-		self.session.open(MessageBox, _("Sorry, function not available"), MessageBox.TYPE_INFO)
+		from Screens.BpSet import DeliteOpenvpn
+		self.session.open(DeliteOpenvpn)
 
 	def keyRed(self):
 		self.session.open(BhEpgPanel)
@@ -243,8 +248,8 @@ class Nab_DoStartCam(Screen):
 
 class BhsysInfo(Screen):
 	skin = """
-	<screen position="center,center" size="800,600" title="Black Hole Info" flags="wfNoBorder">
-		<widget name="lab1" position="50,25" halign="left" size="700,550" zPosition="1" font="Regular;20" valign="top" transparent="1" />
+	<screen position="center,center" size="1020,600" title="Black Hole Info" flags="wfNoBorder">
+		<widget name="lab1" position="50,25" halign="left" size="1020,550" zPosition="1" font="Regular;20" valign="top" transparent="1" />
 	</screen>"""
 
 	def __init__(self, session):
@@ -263,17 +268,15 @@ class BhsysInfo(Screen):
 
 	def updateInfo(self):
 		rc = system("df -h > /tmp/syinfo.tmp")
-		text = _("BOX\n") + _("Brand:") + "\tVuplus\n"
+		text =  _("STB \n") +_("Brand:") + "\tVuplus\n"
 		f = open("/proc/stb/info/vumodel", 'r')
-		text += _("Model:\t") + f.readline()
-		f.close()
+ 		text += _("Model:\t%s \n") % (getMachineName())
 		f = open("/proc/stb/info/chipset", 'r')
-		text += _("Chipset:\t") + f.readline() + "\n"
-		f.close()
+ 		text += _("Chipset:\t%s \n") % about.getChipSetString().upper() + "\n"
 		text += _("MEMORY\n")
 		memTotal = memFree = swapTotal = swapFree = 0
 		for line in open("/proc/meminfo", 'r'):
-			parts = line.split(':')
+			parts = line.replace("k", "K").split(':')
 			key = parts[0].strip()
 			if key == "MemTotal":
 				memTotal = parts[1].strip()
@@ -284,33 +287,35 @@ class BhsysInfo(Screen):
 			elif key == "SwapFree":
 				swapFree = parts[1].strip()
 		text += _("Total memory:") + "\t%s\n" % memTotal
-		text += _("Free memory:") + "\t%s kB\n" % memFree
+		text += _("Free memory:") + "\t%s KB\n" % memFree
 		text += _("Swap total:") + "\t%s \n" % swapTotal
 		text += _("Swap free:") + "\t%s \n" % swapFree
 		text += "\n" + _("STORAGE") + "\n"
 		f = open("/tmp/syinfo.tmp", 'r')
 		line = f.readline()
-		parts = line.split()
-		text += parts[0] + "\t" + parts[1].strip() + "      " + parts[2].strip() + "    " + parts[3].strip() + "    " + parts[4] + "\n"
+		text += _("Filesystem:") + "\t" + "Size           " + "Used           " + "Available      " + "Use%" + "\n"
 		line = f.readline()
-		parts = line.split()
-		text += _("Flash") + "\t" + parts[1].strip() + "  " + parts[2].strip() + "  " + parts[3].strip() + "  " + parts[4] + "\n"
-		for line in f.readlines():
+		parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
+		text += _("Flash:") + "\t" + "%s %+14s %+9s %+12s"  % (parts[1],parts[2],parts[3],parts[4]) + "\n"
+ 		for line in f.readlines():
 			if line.find('/media/') != -1:
-				line = line.replace('/media/', '   ')
+				line = line.replace('/media/', '').replace('hdd', 'Hdd:').replace('usb', 'Usb:')
 				parts = line.split()
 				if len(parts) == 6:
-					text += parts[5] + "\t" + parts[1].strip() + "  " + parts[2].strip() + "  " + parts[3].strip() + "  " + parts[4] + "\n"
+					if line.find('Hdd:') != -1:
+						parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
+						text += parts[5] + "\t" + "%s %+10s %+10s %+10s"  % (parts[1],parts[2],parts[3],parts[4]) + "\n"
+				if len(parts) == 6:
+					if line.find('Usb:') != -1:
+						parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
+						text += parts[5] + "\t" + "%s %+12s %+15s %+8s"  % (parts[1],parts[2],parts[3],parts[4]) + "\n"
 		f.close()
 		os_remove("/tmp/syinfo.tmp")
 
 		text += "\n" + _("SOFTWARE") + "\n"
-		f = open("/etc/bhversion", 'r')
-		text += "Firmware v.:\t" + f.readline()
-		f.close()
-		text += "Enigma2 v.: \t" + about.getEnigmaVersionString() + "\n"
-		text += "Kernel v.: \t" + about.getKernelVersionString() + "\n"
-
+		text += "Image:\t" + "Openbh %s.%s (%s)\n" % (getImageVersion(), getImageBuild(), getImageType().title())
+		text += "Enigma2: \t" + about.getEnigmaVersionString() + "\n"
+		text += "Kernel: \t" + about.getKernelVersionString() + "\n"
 		self["lab1"].setText(text)
 
 
