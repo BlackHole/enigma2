@@ -51,7 +51,7 @@ class DeliteBluePanel(Screen):
 		self["Ilab3"] = Label()
 		self["Ilab4"] = Label()
 		self["key_red"] = Label(_("Epg Panel"))
-		self["key_green"] = Label(_("OpenVpn Panel"))
+		self["key_green"] = Label(_("OpenVpn"))
 		self["key_yellow"] = Label(_("System Info"))
 		self["key_blue"] = Label(_("Extra Settings"))
 		self["activecam"] = Label()
@@ -293,10 +293,11 @@ class BhsysInfo(Screen):
 		text += "\n" + _("STORAGE") + "\n"
 		f = open("/tmp/syinfo.tmp", 'r')
 		line = f.readline()
-		text += _("Filesystem:") + "\t" + "Size           " + "Used           " + "Available      " + "Use%" + "\n"
+		parts = line.split()
+		text += _("Filesystem:") + "\t" + "{0:<16}".format(parts[1]) + "{0:<15}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
 		line = f.readline()
 		parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
-		text += _("Flash:") + "\t" + "%s %+14s %+9s %+12s"  % (parts[1],parts[2],parts[3],parts[4]) + "\n"
+		text += _("Flash:") + "\t" + "{0:<14}".format(parts[1]) + "{0:<12}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<0}".format(parts[4]) + "\n"
  		for line in f.readlines():
 			if line.find('/media/') != -1:
 				line = line.replace('/media/', '').replace('hdd', 'Hdd:').replace('usb', 'Usb:')
@@ -304,11 +305,11 @@ class BhsysInfo(Screen):
 				if len(parts) == 6:
 					if line.find('Hdd:') != -1:
 						parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
-						text += parts[5] + "\t" + "%s %+10s %+10s %+10s"  % (parts[1],parts[2],parts[3],parts[4]) + "\n"
+						text +=_("Hdd:") + "\t" + "{0:<12}".format(parts[1]) + "{0:<12}".format(parts[2]) + "{0:<13}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
 				if len(parts) == 6:
 					if line.find('Usb:') != -1:
 						parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
-						text += parts[5] + "\t" + "%s %+12s %+15s %+8s"  % (parts[1],parts[2],parts[3],parts[4]) + "\n"
+						text +=_("Usb:") + "\t" + "{0:<14}".format(parts[1]) + "{0:<14}".format(parts[2]) + "{0:<12}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
 		f.close()
 		os_remove("/tmp/syinfo.tmp")
 
