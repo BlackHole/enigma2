@@ -38,7 +38,7 @@ class DeliteBluePanel(Screen):
 		<widget name="key_green" position="316,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="green" transparent="1" />
 		<widget name="key_yellow" position="544,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="yellow" transparent="1" />
 		<widget name="key_blue" position="772,650" zPosition="2" size="140,40" font="Regular;24" halign="center" valign="center" backgroundColor="blue" transparent="1" />
-    </screen>"""
+	</screen>"""
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
@@ -116,7 +116,7 @@ class DeliteBluePanel(Screen):
 		if fileExists("/etc/BhCamConf"):
 			f = open("/etc/BhCamConf", 'r')
 			for line in f.readlines():
-   				parts = line.strip().split("|")
+				parts = line.strip().split("|")
 				if parts[0] == "deldefault":
 					self.defaultcam = parts[1]
 			f.close()
@@ -135,9 +135,9 @@ class DeliteBluePanel(Screen):
 		mytext = ""
 		if fileExists("/tmp/ecm.info"):
 			f = open("/tmp/ecm.info", 'r')
- 			for line in f.readlines():
+			for line in f.readlines():
 				mytext = mytext + line.strip() + "\n"
- 			f.close()
+			f.close()
 		if len(mytext) < 5:
 			mytext = "\n\n    " + _("Ecm Info not available.")
 
@@ -177,7 +177,7 @@ class DeliteBluePanel(Screen):
 		client_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 		client_socket.connect("/tmp/Blackhole.socket")
 		client_socket.send(data)
-            	client_socket.close()
+		client_socket.close()
 
 	def keyYellow(self):
 		self.session.open(BhsysInfo)
@@ -270,9 +270,9 @@ class BhsysInfo(Screen):
 		rc = system("df -h > /tmp/syinfo.tmp")
 		text =  _("STB \n") +_("Brand:") + "\tVuplus\n"
 		f = open("/proc/stb/info/vumodel", 'r')
- 		text += _("Model:\t%s \n") % (getMachineName())
+		text += _("Model:\t%s \n") % (getMachineName())
 		f = open("/proc/stb/info/chipset", 'r')
- 		text += _("Chipset:\t%s \n") % about.getChipSetString().upper() + "\n"
+		text += _("Chipset:\t%s \n") % about.getChipSetString().upper() + "\n"
 		text += _("MEMORY\n")
 		memTotal = memFree = swapTotal = swapFree = 0
 		for line in open("/proc/meminfo", 'r'):
@@ -298,7 +298,7 @@ class BhsysInfo(Screen):
 		line = f.readline()
 		parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
 		text += _("Flash:") + "\t" + "{0:<14}".format(parts[1]) + "{0:<12}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<0}".format(parts[4]) + "\n"
- 		for line in f.readlines():
+		for line in f.readlines():
 			if line.find('/media/') != -1:
 				line = line.replace('/media/', '').replace('hdd', 'Hdd:').replace('usb', 'Usb:')
 				parts = line.split()
