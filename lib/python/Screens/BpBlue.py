@@ -270,9 +270,9 @@ class BhsysInfo(Screen):
 		rc = system("df -h > /tmp/syinfo.tmp")
 		text =  _("STB \n") +_("Brand:") + "\tVuplus\n"
 		f = open("/proc/stb/info/vumodel", 'r')
- 		text += _("Model:\t%s \n") % (getMachineName())
+		text += _("Model:\t%s \n") % (getMachineName())
 		f = open("/proc/stb/info/chipset", 'r')
- 		text += _("Chipset:\t%s \n") % about.getChipSetString().upper() + "\n"
+		text += _("Chipset:\t%s \n") % about.getChipSetString().upper() + "\n"
 		text += _("MEMORY\n")
 		memTotal = memFree = swapTotal = swapFree = 0
 		for line in open("/proc/meminfo", 'r'):
@@ -298,7 +298,7 @@ class BhsysInfo(Screen):
 		line = f.readline()
 		parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
 		text += _("Flash:") + "\t" + "{0:<14}".format(parts[1]) + "{0:<12}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<0}".format(parts[4]) + "\n"
- 		for line in f.readlines():
+		for line in f.readlines():
 			if line.find('/media/') != -1:
 				line = line.replace('/media/', '').replace('hdd', 'Hdd:').replace('usb', 'Usb:')
 				parts = line.split()
