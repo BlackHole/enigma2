@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: enigma2 3.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-20 17:10+0100\n"
-"PO-Revision-Date: 2021-10-13 22:18+0100\n"
+"PO-Revision-Date: 2021-10-13 22:48+0100\n"
 "Last-Translator: Ev0\n"
 "Language-Team: BH\n"
 "Language: en_GB\n"
@@ -1657,6 +1657,15 @@ msgstr "Change repeat and delay settings?"
 msgid "Change step size"
 msgstr "Change step size"
 
+msgid "Change the Colordepth for UHD"
+msgstr "Change the Colourdepth for UHD"
+
+msgid "Change the Colorimetry for HDR"
+msgstr "Change the Colourimetry for HDR"
+
+msgid "Change the Colorspace from Auto to RGB"
+msgstr "Change the Colourspace from Auto to RGB"
+
 msgid "Change timer"
 msgstr "Change timer"
 
@@ -2972,6 +2981,12 @@ msgstr "ECM last"
 msgid "ECM-Time"
 msgstr "ECM-Time"
 
+msgid "Enable or disable the 10 Bit Color Mode"
+msgstr "Enable or disable the 10 Bit Colour Mode"
+
+msgid "Enable or disable the 12 Bit Color Mode"
+msgstr "Enable or disable the 12 Bit Colour Mode"
+
 msgid "EPG"
 msgstr "EPG"
 
@@ -3788,6 +3803,12 @@ msgstr "HDMI CEC"
 
 msgid "HDMI CEC Setup"
 msgstr "HDMI CEC Setup"
+
+msgid "HDMI Colordepth"
+msgstr "HDMI Colourdepth"
+
+msgid "HDMI Colorimetry"
+msgstr "HDMI Colourimetry"
 
 msgid "HDMI Colorspace"
 msgstr "HDMI Colourspace"
@@ -8615,6 +8636,12 @@ msgstr "This option allows you to boost the green tones in the picture."
 
 msgid "This option allows you to bypass HDMI EDID check"
 msgstr "This option allows you to bypass HDMI EDID check"
+
+msgid "This option allows you to change the Colordepth for UHD"
+msgstr "This option allows you to change the Colourdepth for UHD"
+
+msgid "This option allows you to change the Colorimetry for HDR"
+msgstr "This option allows you to change the Colourimetry for HDR"
 
 msgid "This option allows you to change the Colorspace from Auto to RGB"
 msgstr "This option allows you to change the Colourspace from Auto to RGB"
