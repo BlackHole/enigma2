@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: enigma2 3.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-20 17:10+0100\n"
-"PO-Revision-Date: 2020-04-19 19:25+0100\n"
+"PO-Revision-Date: 2021-10-13 22:18+0100\n"
 "Last-Translator: Ev0\n"
 "Language-Team: BH\n"
 "Language: en_GB\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.0\n"
 
 msgid ""
 "\n"
@@ -1360,19 +1360,19 @@ msgid "Begin time"
 msgstr "Begin time"
 
 msgid "Behavior of 'pause' when paused"
-msgstr "Behavior of 'pause' when paused"
+msgstr "Behaviour of 'pause' when paused"
 
 msgid "Behavior of 0 key in PiP-mode"
-msgstr "Behavior of 0 key in PiP-mode"
+msgstr "Behaviour of 0 key in PiP-mode"
 
 msgid "Behavior when a movie is started"
-msgstr "Behavior when a movie is started"
+msgstr "Behaviour when a movie is started"
 
 msgid "Behavior when a movie is stopped"
-msgstr "Behavior when a movie is stopped"
+msgstr "Behaviour when a movie is stopped"
 
 msgid "Behavior when a movie reaches the end"
-msgstr "Behavior when a movie reaches the end"
+msgstr "Behaviour when a movie reaches the end"
 
 msgid "Big PiP"
 msgstr "Big PiP"
@@ -1685,7 +1685,7 @@ msgid "Channel list context menu"
 msgstr "Channel list context menu"
 
 msgid "Channel list cursor behavior"
-msgstr "Channel list cursor behavior"
+msgstr "Channel list cursor behaviour"
 
 msgid "Channel list on mode change"
 msgstr "Channel list on mode change"
@@ -1997,16 +1997,16 @@ msgid "Configure the amount of time that will be presented."
 msgstr "Configure the amount of time that will be presented."
 
 msgid "Configure the behavior of the 'pause' key when movie playback is already paused."
-msgstr "Configure the behavior of the 'pause' key when movie playback is already paused."
+msgstr "Configure the behaviour of the 'pause' key when movie playback is already paused."
 
 msgid "Configure the behavior when movie playback is manually stopped."
-msgstr "Configure the behavior when movie playback is manually stopped."
+msgstr "Configure the behaviour when movie playback is manually stopped."
 
 msgid "Configure the behavior when movie playback is started."
-msgstr "Configure the behavior when movie playback is started."
+msgstr "Configure the behaviour when movie playback is started."
 
 msgid "Configure the behavior when reaching the end of a movie, during movie playback."
-msgstr "Configure the behavior when reaching the end of a movie, during movie playback."
+msgstr "Configure the behaviour when reaching the end of a movie, during movie playback."
 
 msgid "Configure the border width of the subtitles. The dark border makes the subtitles easier to read on a light background."
 msgstr "Configure the border width of the subtitles. The dark border makes the subtitles easier to read on a light background."
@@ -2027,7 +2027,7 @@ msgid "Configure the contrast level of the front panel display."
 msgstr "Configure the contrast level of the front panel display."
 
 msgid "Configure the cursor behavior in the channel selection list. When opening the channel selection list you can remain on the current service or already select up/down and you are able to revert the B+/B- buttons."
-msgstr "Configure the cursor behavior in the channel selection list. When opening the channel selection list you can remain on the current service or already select up/down and you are able to revert the B+/B- buttons."
+msgstr "Configure the cursor behaviour in the channel selection list. When opening the channel selection list you can remain on the current service or already select up/down and you are able to revert the B+/B- buttons."
 
 msgid "Configure the duration (in minutes) for the screensaver."
 msgstr "Configure the duration (in minutes) for the screensaver."
@@ -5333,7 +5333,7 @@ msgid "On end of movie (as menu)"
 msgstr "On end of movie (as menu)"
 
 msgid "On reaching the end of a file during playback, you can choose the box's behavior."
-msgstr "On reaching the end of a file during playback, you can choose the box's behavior."
+msgstr "On reaching the end of a file during playback, you can choose the box's behaviour."
 
 msgid "On your remote, click on the button you want to change"
 msgstr "On your remote, click on the button you want to change"
