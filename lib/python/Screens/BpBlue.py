@@ -17,9 +17,9 @@ import socket
 
 class DeliteBluePanel(Screen):
 	skin = """
-	<screen name="DeliteBluePanel" position="center,center" size="1000,720"  title="Black Hole Blue Panel" flags="wfNoBorder">
+	<screen name="DeliteBluePanel" position="center,center" size="1000,720"  title="BlackHole Blue Panel" flags="wfNoBorder">
 		<ePixmap position="339,170" zPosition="3" size="60,40" pixmap="skin_default/buttons/key_ok.png" alphatest="blend" transparent="1" />
-		<eLabel text="Black Hole Blue Panel" position="80,30" size="800,38" font="Regular;34" halign="left" transparent="1"/>
+		<eLabel text="BlackHole Blue Panel" position="80,30" size="800,38" font="Regular;34" halign="left" transparent="1"/>
 		<widget name="lab1" position="129,90" size="230,25" font="Regular;24" zPosition="2"  transparent="1"/>
 		<widget name="list" position="75,126" size="340,38" zPosition="2"  transparent="1"/>
 		<widget name="lab2" position="139,172" size="190,24" font="Regular;20" halign="center" valign="center" zPosition="2" transparent="1"/>
@@ -199,7 +199,7 @@ class DeliteBluePanel(Screen):
 
 class Nab_DoStartCam(Screen):
 	skin = """
-	<screen position="390,100" size="484,250" title="Black Hole" flags="wfNoBorder">
+	<screen position="390,100" size="484,250" title="BlackHole" flags="wfNoBorder">
 		<widget name="connect" position="0,0" size="484,250" zPosition="-1" pixmaps="skin_default/startcam_1.png,skin_default/startcam_2.png,skin_default/startcam_3.png,skin_default/startcam_4.png" transparent="1" />
 		<widget name="lab1" position="10,180" halign="center" size="460,60" zPosition="1" font="Regular;20" valign="top" transparent="1" />
 	</screen>"""
@@ -248,7 +248,7 @@ class Nab_DoStartCam(Screen):
 
 class BhsysInfo(Screen):
 	skin = """
-	<screen position="center,center" size="1020,600" title="Black Hole Info" flags="wfNoBorder">
+	<screen position="center,center" size="1020,600" title="BlackHole Info" flags="wfNoBorder">
 		<widget name="lab1" position="50,25" halign="left" size="1020,550" zPosition="1" font="Regular;20" valign="top" transparent="1" />
 	</screen>"""
 
@@ -322,7 +322,7 @@ class BhsysInfo(Screen):
 
 class BhEpgPanel(Screen):
 	skin = """
-	<screen position="center,center" size="600,400" title="Black Hole EPG Panel">
+	<screen position="center,center" size="600,400" title="BlackHole EPG Panel">
 		<widget source="list" render="Listbox" position="20,20" size="560,360" font="Regular;28" itemHeight="40"  scrollbarMode="showOnDemand" >
 			<convert type="StringList" />
 		</widget>

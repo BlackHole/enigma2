@@ -208,7 +208,7 @@ class DeliteSetupDevicePanelConf(Screen, ConfigListScreen):
 
 class BlackPoleSwap(Screen):
 	skin = """
-	<screen position="center,center" size="420,240" title="Black Hole Swap File Manager">
+	<screen position="center,center" size="420,240" title="BlackHole Swap File Manager">
 		<widget name="lab1" position="10,20" size="400,150" font="Regular;20" transparent="1"/>
 		<ePixmap pixmap="skin_default/buttons/red.png" position="0,190" size="140,40" alphatest="on" />
 		<ePixmap pixmap="skin_default/buttons/green.png" position="140,190" size="140,40" alphatest="on" />
@@ -281,7 +281,7 @@ class BlackPoleSwap(Screen):
 						options.append([parts[1].strip(), parts[1].strip()])
 			f.close()
 			if len(options) == 0:
-				self.session.open(MessageBox, _("Sorry no valid device found.\nBe sure your device is Linux formatted and mapped.\nPlease use Black Hole format wizard and Black Hole device manager to prepare and map your usb stick."), MessageBox.TYPE_INFO)
+				self.session.open(MessageBox, _("Sorry no valid device found.\nBe sure your device is Linux formatted and mapped.\nPlease use BlackHole format wizard and BlackHole device manager to prepare and map your usb stick."), MessageBox.TYPE_INFO)
 			else:
 				self.session.openWithCallback(self.selectSize, ChoiceBox, title="Select the Swap File device:", list=options)
 
