@@ -1,4 +1,4 @@
-# Black Hole usb format utility coded by meo.
+# BlackHole usb format utility coded by meo.
 
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
@@ -15,7 +15,7 @@ from os import system, listdir, remove as os_remove
 
 class Bp_UsbFormat(Screen):
 	skin = """
-	<screen position="center,center" size="580,350" title="Black Hole Usb Format Wizard">
+	<screen position="center,center" size="580,350" title="BlackHole Usb Format Wizard">
 		<widget name="lab1" position="10,10" size="560,280" font="Regular;20" valign="top" transparent="1"/>
 		<ePixmap pixmap="skin_default/buttons/red.png" position="100,300" size="140,40" alphatest="on" />
 		<ePixmap pixmap="skin_default/buttons/green.png" position="340,300" size="140,40" alphatest="on" />
