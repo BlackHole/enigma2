@@ -1057,7 +1057,7 @@ def InitUsageConfig():
 		("tha", _("Thai")),
 		("tur Audio_TUR", _("Turkish")),
 		("ukr Ukr", _("Ukrainian")),
-		(visuallyImpairedCommentary, _("Audio description for the visually impaired"))]
+		(visuallyImpairedCommentary, _("Narration"))]
 
 	def setEpgLanguage(configElement):
 		eServiceEvent.setEPGLanguage(configElement.value)

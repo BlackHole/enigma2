@@ -292,9 +292,9 @@ class AudioSelection(Screen, ConfigListScreen):
 						if lang in LanguageCodes:
 							language += _(LanguageCodes[lang][0])
 						elif lang in originalAudioTracks:
-							language += "%s  (%s)" % (_("Original language"), lang)
+							language += _("Original language")
 						elif lang in visuallyImpairedCommentary:
-							language += "%s  (%s)" % (_("Audio description"), lang)
+							language += _("Narration")
 						else:
 							language += lang
 						cnt += 1
