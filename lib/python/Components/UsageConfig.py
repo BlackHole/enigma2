@@ -1023,7 +1023,7 @@ def InitUsageConfig():
 	audio_language_choices = [
 		("", _("None")),
 		("und", _("Undetermined")),
-		(originalAudioTracks, _("Original version")),
+		(originalAudioTracks, _("Original language")),
 		("ara", _("Arabic")),
 		("eus baq", _("Basque")),
 		("bul", _("Bulgarian")),
@@ -1119,7 +1119,7 @@ def InitUsageConfig():
 	config.misc.softcams = ConfigSelection(default="None", choices=CamControl("softcam").getList())
 	config.misc.softcamrestarts = ConfigSelection(default="", choices=[
 					("", _("Don't restart")),
-					("s", _("Restart softcam"))])	
+					("s", _("Restart softcam"))])
 	SystemInfo["OScamInstalled"] = False
 
 	config.cccaminfo = ConfigSubsection()
