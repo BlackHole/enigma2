@@ -255,13 +255,13 @@ class Bp_UsbFormat(Screen):
 		info = vendor = model = size = ""
 		filename = "/sys/block/%s/device/vendor" % (device)
 		if fileExists(filename):
-			vendor = file(filename).read().strip()
+			vendor = open(filename).read().strip()
 			filename = "/sys/block/%s/device/model" % (device)
-			model = file(filename).read().strip()
+			model = open(filename).read().strip()
 			filename = "/sys/block/%s/size" % (device)
-			size = int(file(filename).read().strip())
-			cap = size / 1000 * 512 / 1024
-			size = "%d.%03d GB" % (cap / 1000, cap % 1000)
+			size = int(open(filename).read().strip())
+			cap = size // 1000 * 512 // 1024
+			size = "%d.%03d GB" % (cap // 1000, cap % 1000)
 			self.totalsize = cap
 		info = _("Model: ") + vendor + " " + model + "\n" + _("Size: ") + size + "\n" + _("Device: ") + "/dev/" + device
 		return info
