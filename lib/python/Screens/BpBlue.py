@@ -309,7 +309,7 @@ class BhsysInfo(Screen):
 				if len(parts) == 6:
 					if line.find('Usb:') != -1:
 						parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
-						text +=_("Usb:") + "\t" + "{0:<14}".format(parts[1]) + "{0:<14}".format(parts[2]) + "{0:<12}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
+						text +=_("Usb:") + "\t" + "{0:<14}".format(parts[1]) + "{0:<14}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
 		f.close()
 		os_remove("/tmp/syinfo.tmp")
 
