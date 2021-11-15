@@ -66,7 +66,7 @@ class DeliteAddons(Screen):
 
 		mypixmap = mypath + "icons/addons_manager.png"
 		png = LoadPixmap(mypixmap)
-		name = _("Addons Download Manager")
+		name = _("Addons and Feeds Manager")
 		idx = 0
 		res = (name, png, idx)
 		self.list.append(res)
@@ -245,7 +245,7 @@ class Nab_downArea(Screen):
 
 		mypixmap = mypath + "icons/nabplugins.png"
 		png = LoadPixmap(mypixmap)
-		name = _("Open BlackHole Feeds Plugins")
+		name = _("Open BlackHole Feeds")
 		idx = 2
 		res = (name, png, idx)
 		self.list.append(res)
@@ -310,7 +310,7 @@ class Nab_downArea(Screen):
 			self.title = "Open BlackHole Addons Plugins"
 		elif self.sel == 2:
 			self.url = "feeds"
-			self.title = "Open BlackHole Feeds Plugins"
+			self.title = "Open BlackHole Feeds"
 		elif self.sel == 3:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=OpenBlackHole-Skins"
 			self.title = "Open BlackHole Skins"
