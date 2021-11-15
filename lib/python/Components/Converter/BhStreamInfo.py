@@ -36,11 +36,11 @@ class BhStreamInfo(Poll, Converter, object):
 			elif '%3a' in refstr and strtype.startswith('4097:0:'):
 				return 'MediaPlayer'
 			elif '%3a' in refstr and strtype.startswith('1:0:'):
-				return 'Enigma2'
+				return 'GStreamer'
 			elif '%3a' in refstr and strtype.startswith('5001:0:'):
 				return 'GSTPlayer'
 			elif '%3a' in refstr and strtype.startswith('5002:0:'):
-				return 'Exte3'
+				return 'Ext3'
 			elif strtype.startswith('1:134:'):
 				return 'Alternative'
 			else:
