@@ -236,12 +236,12 @@ class Nab_downArea(Screen):
 		if mypath == "/usr/share/enigma2/" or mypath == "/usr/share/enigma2/./":
 			mypath = "/usr/share/enigma2/skin_default/"
 
-		mypixmap = mypath + "icons/nabplugins.png"
-		png = LoadPixmap(mypixmap)
-		name = _("Open BlackHole Addons Plugins")
-		idx = 1
-		res = (name, png, idx)
-		self.list.append(res)
+		#mypixmap = mypath + "icons/nabplugins.png"
+		#png = LoadPixmap(mypixmap)
+		#name = _("Open BlackHole Addons Plugins")
+		#idx = 1
+		#res = (name, png, idx)
+		#self.list.append(res)
 
 		mypixmap = mypath + "icons/nabplugins.png"
 		png = LoadPixmap(mypixmap)
@@ -285,12 +285,12 @@ class Nab_downArea(Screen):
 		res = (name, png, idx)
 		self.list.append(res)
 
-		mypixmap = mypath + "icons/nabuploads.png"
-		png = LoadPixmap(mypixmap)
-		name = _("Latest 10 Uploads")
-		idx = 8
-		res = (name, png, idx)
-		self.list.append(res)
+		#mypixmap = mypath + "icons/nabuploads.png"
+		#png = LoadPixmap(mypixmap)
+		#name = _("Latest 10 Uploads")
+		#idx = 8
+		#res = (name, png, idx)
+		#self.list.append(res)
 
 		self["list"].list = self.list
 
