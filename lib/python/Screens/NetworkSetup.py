@@ -3472,7 +3472,7 @@ class NetworkPassword(ConfigListScreen, Screen):
 
 	def updateList(self):
 		self.password = NoSave(ConfigPassword(default=""))
-		instructions = _("Setting a network password is mandatory in OpenViX %s if you wish to use network services. \nTo set a password using the virtual keyboard press the 'text' button on your remote control.") % getImageVersion()
+		instructions = _("Setting a network password is mandatory in OpenBH %s if you wish to use network services. \nTo set a password using the virtual keyboard press the 'text' button on your remote control.") % getImageVersion()
 		self.list.append(getConfigListEntry(_('New password'), self.password, instructions))
 		self['config'].list = self.list
 		self['config'].l.setList(self.list)
