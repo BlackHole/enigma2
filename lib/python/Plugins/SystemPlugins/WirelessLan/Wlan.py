@@ -158,10 +158,10 @@ class Wlan:
 			aps = {}
 			try:
 				scanresults = list(Cell.all(self.iface, 5))
-				print("[Wlan.py] scanresults1 = %s" % scanresults)				
+				print("[Wlan.py] scanresults1 = %s" % scanresults)
 			except:
 				scanresults = None
-				print("[Wlan.py] No wireless networks could be found")				
+				print("[Wlan.py] No wireless networks could be found")
 			if scanresults is not None:
 				for i in range(len(scanresults)):
 					bssid = scanresults[i].ssid
@@ -184,7 +184,7 @@ class Wlan:
 						'pairwise_ciphers': scanresults[i].pairwise_ciphers,
 						'authentication_suites': scanresults[i].authentication_suites,
 					}
-		print("[Wlan.py] apsresults1 = %s" % aps)		
+		print("[Wlan.py] apsresults1 = %s" % aps)
 		return aps
 
 	def stopGetNetworkList(self):
@@ -554,17 +554,17 @@ class Status:
 				if signal is not None:
 					data['signal'] = signal
 		if six.PY3:
-			if ssid != None and ssid != "off":
+			if ssid != None and ssid != "off" and ssid != "":
 				try:
 					scanresults = list(Cell.all(iface, 5))
-					print("[Wlan.py] scanresults2 = %s" % scanresults)	
-				except:	
+					print("[Wlan.py] scanresults2 = %s" % scanresults)
+				except:
 					scanresults = None
-					print("[Wlan.py] No wireless networks could be found")	
+					print("[Wlan.py] No wireless networks could be found")
 				aps = {}
 				if scanresults is not None:
 					config.misc.networkenabled.value = True
-					print("[NetworkWizard] networkenabled value = %s" % config.misc.networkenabled.value )				
+					print("[NetworkWizard] networkenabled value = %s" % config.misc.networkenabled.value )
 					for i in range(len(scanresults)):
 						bssid = scanresults[i].ssid
 						aps[bssid] = {
