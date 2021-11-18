@@ -159,7 +159,8 @@ self.session.open(SABnzbdSetupScreen)
 		<!-- Menu / Setup / Softcam Manager -->
 		<menu entryID="cam_setup" level="0" text="Softcam Manager" requires="HasInitCam" weight="8">
 			<id val="cam" />
-			<item entryID="softcam_setup" level="2" text="Settings" weight="1"><setup id="softcamsetup" /></item>
+			<item entryID="softcam_initD" level="2" text="Softcam Script" weight="1"><screen module="BpBlue" screen="DeliteBluePanel"/></item>
+			<item entryID="softcam_setup" level="2" text="Settings" weight="2"><setup id="softcamsetup" /></item>
 			<item entryID="CCcaminfo" level="2" text="CCcam Info" weight="90" requires="CCcamInstalled"><screen module="CCcamInfo" screen="CCcamInfoMain" /></item>
 			<item entryID="OSCam/Ncaminfo" level="2" text="OScam/Ncam Info" weight="91" requires="OScamInstalled"><screen module="OScamInfo" screen="OscamInfoMenu" /></item>
 		</menu>
