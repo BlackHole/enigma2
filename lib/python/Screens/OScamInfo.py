@@ -34,8 +34,10 @@ import skin
 NAMEBIN = " "
 if fileExists("/tmp/.oscam/oscam.version"):
 	NAMEBIN = "oscam"
+	NAMEBIN2 = "OScam"
 elif fileExists("/tmp/.ncam/ncam.version"):
 	NAMEBIN = "ncam"
+	NAMEBIN2 = "Ncam"
 
 f = 1
 sizeH = 700
@@ -403,7 +405,7 @@ class OscamInfoMenu(Screen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		global NAMEBIN
-		self.setTitle(_("%s Info - Main Menu" % NAMEBIN))
+		self.setTitle(_("%s Info - Main Menu" % NAMEBIN2))
 		self.menu = [_("Show /tmp/ecm.info"), _("Show Clients"), _("Show Readers/Proxies"), _("Show Log"), _("Card infos (CCcam-Reader)"), _("ECM Statistics"), _("Setup")]
 		self.osc = OscamInfo()
 		self["mainmenu"] = oscMenuList([])
@@ -806,17 +808,17 @@ class oscInfo(Screen, OscamInfo):
 					if i != "":
 						self.out.append(self.buildLogListEntry((i,)))
 			if self.what == "c":
-				self.setTitle(_("Client Info ( %s-Version: %s )") % (NAMEBIN, self.getVersion()))
+				self.setTitle(_("Client Info ( %s-Version: %s )") % (NAMEBIN2, self.getVersion()))
 				self["key_green"].setText("")
 				self["key_yellow"].setText(_("Servers"))
 				self["key_blue"].setText(_("Log"))
 			elif self.what == "s":
-				self.setTitle(_("Server Info ( %s-Version: %s )") % (NAMEBIN, self.getVersion()))
+				self.setTitle(_("Server Info ( %s-Version: %s )") % (NAMEBIN2, self.getVersion()))
 				self["key_green"].setText(_("Clients"))
 				self["key_yellow"].setText("")
 				self["key_blue"].setText(_("Log"))
 			elif self.what == "l":
-				self.setTitle(_("%s Log ( %s-Version: %s )") % (NAMEBIN, NAMEBIN, self.getVersion()))
+				self.setTitle(_("%s Log ( %s-Version: %s )") % (NAMEBIN2, NAMEBIN2, self.getVersion()))
 				self["key_green"].setText(_("Clients"))
 				self["key_yellow"].setText(_("Servers"))
 				self["key_blue"].setText("")
@@ -1198,7 +1200,7 @@ class OscamInfoConfigScreen(Screen, ConfigListScreen):
 
 	def layoutFinished(self):
 		global NAMEBIN
-		self.setTitle(_("%s Info - Configuration" % NAMEBIN))
+		self.setTitle(_("%s Info - Configuration" % NAMEBIN2))
 		self["config"].l.setList(self.oscamconfig)
 
 	def createSetup(self):
