@@ -33,8 +33,8 @@ def countFrontpanelLEDs():
 
 
 def hasInitCam():
-	for cam in listdir("/etc/init.d"):
-		if cam.startswith("softcam.") and not cam.endswith("None"):
+	for cam in listdir("/usr/camscript"):
+		if cam.startswith("Ncam_") and not cam.startswith("Ncam_Mg") and not cam.startswith ("Ncam_mg") and not cam.endswith("Ci.sh"):
 			return True
 		else:
 			pass

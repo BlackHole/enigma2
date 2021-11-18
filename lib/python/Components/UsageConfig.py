@@ -1107,6 +1107,7 @@ def InitUsageConfig():
 					("2", _("with exit button")),
 					("3", _("with left/right buttons"))])
 
+	softcams = os.listdir('/usr/camscript/')
 	config.oscaminfo = ConfigSubsection()
 	config.oscaminfo.showInExtensions = ConfigYesNo(default=False)
 	config.oscaminfo.userdatafromconf = ConfigYesNo(default=True)
@@ -1140,6 +1141,13 @@ def InitUsageConfig():
 	config.cccaminfo.blacklist = ConfigText(default="/media/cf/CCcamInfo.blacklisted", fixed_size=False)
 	config.cccaminfo.profiles = ConfigText(default="/media/cf/CCcamInfo.profiles", fixed_size=False)
 	SystemInfo["CCcamInstalled"] = False
+	for softcam in softcams:
+		if softcam.lower().startswith("ncam_cccam"):
+			config.cccaminfo.showInExtensions = ConfigYesNo(default=True)
+			SystemInfo["CCcamInstalled"] = True
+		elif softcam.lower().startswith('ncam_oscam') or softcam.lower().startswith('ncam_ncam'):
+			config.oscaminfo.showInExtensions = ConfigYesNo(default=True)
+			SystemInfo["OScamInstalled"] = True
 
 	config.streaming = ConfigSubsection()
 	config.streaming.stream_ecm = ConfigYesNo(default=False)

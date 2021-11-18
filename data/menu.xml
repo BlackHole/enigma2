@@ -156,6 +156,14 @@ self.session.open(SABnzbdSetupScreen)
 			<item entryID="ci_setup" level="1" text="Common Interface" weight="10"><screen module="Ci" screen="CiSelection" /></item>
 		</menu>
 
+		<!-- Menu / Setup / Softcam Manager -->
+		<menu entryID="cam_setup" level="0" text="Softcam Manager" requires="HasInitCam" weight="8">
+			<id val="cam" />
+			<item entryID="softcam_setup" level="2" text="Settings" weight="1"><setup id="softcamsetup" /></item>
+			<item entryID="CCcaminfo" level="2" text="CCcam Info" weight="90" requires="CCcamInstalled"><screen module="CCcamInfo" screen="CCcamInfoMain" /></item>
+			<item entryID="OSCam/Ncaminfo" level="2" text="OScam/Ncam Info" weight="91" requires="OScamInstalled"><screen module="OScamInfo" screen="OscamInfoMenu" /></item>
+		</menu>
+
 		<!-- Menu / Setup / Storage -->
 		<menu entryID="hardisk_selection" level="0" text="Storage" weight="10" requires="Harddisk">
 			<id val="harddisk" />

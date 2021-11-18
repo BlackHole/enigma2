@@ -295,6 +295,10 @@
 		<item level="1" text="Automatic settings backup" description="Perform a settings backup before updating.">config.softwareupdate.autosettingsbackup</item>
 		<item level="1" text="Automatic image backup" description="Perform a complete image backup before updating.">config.softwareupdate.autoimagebackup</item>
 	</setup>
+	<setup key="softcamsetup" title="Softcam settings">
+		<item level="2" text="Show CCcam Info in extensions?" description="Allows you to show/hide CCcam Info in extensions -blue button." requires="CCcamInstalled">config.cccaminfo.showInExtensions</item>
+		<item level="2" text="Show OScam/Ncam Info in extensions?" description="Allows you to show/hide OScam/Ncam Info in extensions -blue button." requires="OScamInstalled">config.oscaminfo.showInExtensions</item>
+	</setup>
 	<setup key="logs" title="Logs settings">
 		<item level="2" text="Logs folder location" description="Choose the location for crash and debug logs folder.">config.crash.debug_path</item>
 		<item level="2" text="Enable debug logs *" description="Allows you to enable the debug logs. They contain very detailed information about everything the system does. Reboot required to enable this!">config.crash.enabledebug</item>

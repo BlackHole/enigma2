@@ -2725,13 +2725,27 @@ class InfoBarExtensions:
 		return _("CCcam Info")
 
 	def getCCcamInfo(self):
-		return []
+		softcams = []
+		if pathExists('/usr/camscript/'):
+			softcams = os.listdir('/usr/camscript/')
+		for softcam in softcams:
+			if softcam.lower().startswith('ncam_cccam') and config.cccaminfo.showInExtensions.value:
+				return [((boundFunction(self.getCCname), boundFunction(self.openCCcamInfo), lambda: True), None)] or []
+		else:
+			return []
 
 	def getOSname(self):
 		return _("OScam/Ncam Info")
 
 	def getOScamInfo(self):
-		return []
+		softcams = []
+		if pathExists('/usr/camscript/'):
+			softcams = os.listdir('/usr/camscript/')
+		for softcam in softcams:
+			if (softcam.lower().startswith('ncam_oscam') or softcam.lower().startswith('ncam_ncam')) and config.oscaminfo.showInExtensions.value:
+				return [((boundFunction(self.getOSname), boundFunction(self.openOScamInfo), lambda: True), None)] or []
+		else:
+			return []
 
 	def addExtension(self, extension, key=None, type=EXTENSION_SINGLE):
 		self.list.append((type, extension, key))
