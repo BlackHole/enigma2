@@ -1144,11 +1144,11 @@ class oscReaderStats(Screen, OscamInfo):
 #							last_req = lastreq.split("T")[1][:-5]
 						if self.allreaders:
 							result.append((i[1], caid, channel, avg_time, last_time, rcs, last_req, int(num)))
-							title2 = _("( All readers)")
+							title2 = _("(All readers)")
 						else:
 							if i[1] == self.reader:
 								result.append((i[1], caid, channel, avg_time, last_time, rcs, last_req, int(num)))
-							title2 = _("(Show only reader:") + "%s )" % self.reader
+							title2 = _("(Show only reader)" + " (%s)" % self.reader)
 
 		outlist = self.sortData(result, 7, True)
 		out = [(_("Label"), _("CAID"), _("Channel"), _("ECM avg"), _("ECM last"), _("Status"), _("Last Req."), _("Total"))]
