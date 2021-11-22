@@ -32,6 +32,7 @@ import skin
 
 ###global
 NAMEBIN = " "
+NAMEBIN2 = " "
 if fileExists("/tmp/.oscam/oscam.version"):
 	NAMEBIN = "oscam"
 	NAMEBIN2 = "OScam"
