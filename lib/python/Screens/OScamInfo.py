@@ -563,7 +563,6 @@ class OscamInfoMenu(Screen):
 	def showMenu(self):
 		global NAMEBIN
 		entr = self.buildMenu(self.menu)
-		# self.setTitle(_("%s Info - Main Menu" % NAMEBIN))
 		self["mainmenu"].l.setList(entr)
 		self["mainmenu"].moveToIndex(0)
 
@@ -571,6 +570,7 @@ class OscamInfoMenu(Screen):
 class oscECMInfo(Screen, OscamInfo):
 	def __init__(self, session):
 		Screen.__init__(self, session)
+		self.setTitle(_("Ecm Info"))
 		self.ecminfo = "/tmp/ecm.info"
 		self["output"] = oscMenuList([])
 		if config.oscaminfo.autoupdate.value:
