@@ -19,7 +19,7 @@ caid_data = (
 	("0x600", "0x6ff",  "Irdeto", "I", True),
 	("0x1800", "0x18ff", "Nagravision", "N", True),
 	("0x100", "0x1ff",  "Seca Mediaguard", "S", True),
-	("0x1000", "0x10FF", "Tandberg", "T", True),
+	("0x1000", "0x10ff", "Tandberg", "T", True),
 	("0x500", "0x5ff",  "Viaccess", "V", True),
 	("0x2600", "0x2600", "Biss", "BI", True),
 	("0x4aee", "0x4aee", "BulCrypt", "BU", True),
@@ -29,6 +29,7 @@ caid_data = (
 	("0x2700", "0x2710", "DRE-Crypt3", "DC", False),
 	("0x4ae0", "0x4ae1", "DRE-Crypt", "DC", True),
 	("0x900", "0x9ff",  "NDS Videoguard", "ND", True),
+	("0x4afc", "0x4afc", "Panaccess", "PA", True),
 	("0xe00", "0xeff",  "PowerVu", "PV", True),
 	("0x5601", "0x5604", "Verimatrix", "VM", True)
 )
@@ -185,6 +186,7 @@ class PliExtraInfo(Poll, Converter, object):
 			("CryptoCaidDre3Available", "DC", False),
 			("CryptoCaidDreAvailable", "DC", False),
 			("CryptoCaidNDSAvailable", "ND", False),
+			("CryptoCaidPanaccessAvailable", "PA", False),
 			("CryptoCaidPowerVuAvailable", "PV", False),
 			("CryptoCaidVerimatrixAvailable", "VM", False),
 			("CryptoCaidBetaSelected", "B", True),
@@ -201,6 +203,7 @@ class PliExtraInfo(Poll, Converter, object):
 			("CryptoCaidDre3Selected", "DC", True),
 			("CryptoCaidDreSelected", "DC", True),
 			("CryptoCaidNDSSelected", "ND", True),
+			("CryptoCaidPanaccessSelected", "PA", True),
 			("CryptoCaidPowerVuSelected", "PV", True),
 			("CryptoCaidVerimatrixSelected", "VM", True),
 		)
@@ -347,6 +350,22 @@ class PliExtraInfo(Poll, Converter, object):
 		res += Hex2strColor(self.cryptocolors[3])
 		return res
 
+	def createCryptoPanaccess(self, info):
+		available_caids = info.getInfoObject(iServiceInformation.sCAIDs)
+		if int('0x4afc', 16) <= int(self.current_caid, 16) <= int('0x4afc', 16):
+			color = Hex2strColor(self.cryptocolors[0])
+		else:
+			color = Hex2strColor(self.cryptocolors[1])
+			try:
+				for caid in available_caids:
+					if int('0x4afc', 16) <= caid <= int('0x4afc', 16):
+						color = Hex2strColor(self.cryptocolors[2])
+			except:
+				pass
+		res = color + 'PA'
+		res += Hex2strColor(self.cryptocolors[3])
+		return res
+
 	def createCryptoPowerVU(self, info):
 		available_caids = info.getInfoObject(iServiceInformation.sCAIDs)
 		if int('0xe00', 16) <= int(self.current_caid, 16) <= int('0xeff', 16):
@@ -359,7 +378,7 @@ class PliExtraInfo(Poll, Converter, object):
 						color = Hex2strColor(self.cryptocolors[2])
 			except:
 				pass
-		res = color + 'P'
+		res = color + 'PV'
 		res += Hex2strColor(self.cryptocolors[3])
 		return res
 
