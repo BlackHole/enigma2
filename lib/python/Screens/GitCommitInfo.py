@@ -26,8 +26,8 @@ else:
 	ImageVer = float(ImageVer)
 
 E2Branches = {
-	'developer': 'Dev-python3-compatible',
-	'release': 'master'
+	'developer': 'Python3',
+	'release': 'Python3'
 	}
 
 project = 0
