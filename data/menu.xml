@@ -214,20 +214,20 @@ self.session.open(HdmiCECSetupScreen)
 			<id val="bhbackup" />
 			<item weight="5" level="1" text="Full Backup">
 <code>
-from Plugins.SystemPlugins.OBH.ImageManager import OBHImageManager
-self.session.open(OBHImageManager)
+from Plugins.SystemPlugins.OBH.ImageManager import OpenBhImageManager
+self.session.open(OpenBhImageManager)
 </code>
 			</item>
 			<item weight="10" level="1" text="Settings Backup">
 <code>
-from Plugins.SystemPlugins.OBH.BackupManager import OBHBackupManager
-self.session.open(OBHBackupManager)
+from Plugins.SystemPlugins.OBH.BackupManager import OpenBhBackupManager
+self.session.open(OpenBhBackupManager)
 </code>
 			</item>
 		</menu>
 
 	<!-- Menu / BH Apps -->
-		<item entryID="blackhole_extra" level="0" text="BlackHole Apps" weight="4"><screen module="BpSet" screen="DeliteSettings"/></item>
+		<item entryID="blackhole_extra" level="0" text="OpenBh Apps" weight="4"><screen module="BpSet" screen="DeliteSettings"/></item>
 
 	<!-- Menu / Plugins -->
 	<item entryID="plugin_selection" level="0" text="Plugins" weight="5"><screen module="PluginBrowser" screen="PluginBrowser" /></item>

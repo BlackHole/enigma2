@@ -597,7 +597,7 @@
 			</if>
 			<item text="Host receiver streaming port" description="Enter the streaming port of the host receiver (normally '8001').">config.clientmode.serverStreamingPort</item>
 			<item text="Host receiver FTP username" description="Enter the FTP username of the host receiver (normally 'root').">config.clientmode.serverFTPusername</item>
-			<item text="Host receiver FTP password" description="Enter the FTP password of the host receiver (required for any server running OpenBH 5.0 or greater).">config.clientmode.serverFTPpassword</item>
+			<item text="Host receiver FTP password" description="Enter the FTP password of the host receiver (required for any server running OpenBh 5.0 or greater).">config.clientmode.serverFTPpassword</item>
 			<item text="Host receiver FTP port" description="Enter the FTP port of the host receiver (normally '21').">config.clientmode.serverFTPPort</item>
 			<item text="FTP passive mode" description="Should the FTP connection to the remote receiver be established in passive mode (normally 'no')?">config.clientmode.passive</item>
 			<item text="Schedule EPG and channel list import" description="Allows you to set a schedule to import the EPG and channels list. The EPG and channels list will always be imported on reboot or GUI restart.">config.clientmode.enableSchedule</item>

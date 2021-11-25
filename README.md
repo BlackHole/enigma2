@@ -1,4 +1,4 @@
-## OpenBH buildserver requirements: ##
+## OpenBh buildserver requirements: ##
 
 > Ubuntu 20.04.2 LTS (Kernel 5.4.0) 64 Bit Server OS
 
@@ -9,7 +9,7 @@
 > CPU:  Multi core\thread Model
 > HDD:  for Single Build 250GB Free, for Multibuild 500GB or more
 
-## OpenBH python3 is built using oe-alliance build-environment and several git repositories: ##
+## OpenBh python3 is built using oe-alliance build-environment and several git repositories: ##
 
 > [https://github.com/oe-alliance/oe-alliance-core/tree/5.0](https://github.com/oe-alliance/oe-alliance-core/tree/5.0 "OE-Alliance")
 >

@@ -34,8 +34,8 @@ project = 0
 projects = [
 	("https://api.github.com/repos/oe-alliance/oe-alliance-core/commits?sha=5.0", "OE-A Core"),
 	("https://api.github.com/repos/BlackHole/enigma2/commits?sha=%s" % getattr(E2Branches, getImageType(), "Python3"), "Enigma2"),
-	("https://api.github.com/repos/BlackHole/obh-core/commits", "OBH Core"),
-	("https://api.github.com/repos/BlackHole/skins/commits", "OBH Skins"),
+	("https://api.github.com/repos/BlackHole/obh-core/commits", "OpenBh Core"),
+	("https://api.github.com/repos/BlackHole/skins/commits", "OpenBh Skins"),
 	("https://api.github.com/repos/oe-alliance/oe-alliance-plugins/commits", "OE-A Plugins"),
 	("https://api.github.com/repos/oe-alliance/AutoBouquetsMaker/commits", "AutoBouquetsMaker"),
 	("https://api.github.com/repos/oe-alliance/branding-module/commits", "Branding Module"),
@@ -56,7 +56,7 @@ def readGithubCommitLogsSoftwareUpdate():
 		except:
 			log = loads(urlopen(req, timeout=5).read())
 		for c in log:
-			if c['commit']['message'].startswith('openvix:') or (gitstart and not c['commit']['message'].startswith('openbh:') and getScreenTitle() in ("OE-A Core", "Enigma2", "OBH Core", "OBH Skins")):
+			if c['commit']['message'].startswith('openvix:') or (gitstart and not c['commit']['message'].startswith('openbh:') and getScreenTitle() in ("OE-A Core", "Enigma2", "OpenBh Core", "OpenBh Skins")):
 					continue
 			if c['commit']['message'].startswith('openbh:'):
 				gitstart = False
@@ -117,7 +117,7 @@ def readGithubCommitLogs():
 		except:
 			log = loads(urlopen(req, timeout=5).read())
 		for c in log:
-			if c['commit']['message'].startswith('openvix:') or (gitstart and not c['commit']['message'].startswith('openbh:') and getScreenTitle() in ("OE-A Core", "Enigma2", "OBH Core", "OBH Skins")):
+			if c['commit']['message'].startswith('openvix:') or (gitstart and not c['commit']['message'].startswith('openbh:') and getScreenTitle() in ("OE-A Core", "Enigma2", "OpenBh Core", "OpenBh Skins")):
 				continue
 			if c['commit']['message'].startswith('openbh:'):
 				blockstart = False
@@ -139,7 +139,7 @@ def readGithubCommitLogs():
 				if releasever > ImageVer:
 					blockstart = True
 					continue
-			elif blockstart and getScreenTitle() in ("OE-A Core", "Enigma2", "OBH Core", "OBH Skins"):
+			elif blockstart and getScreenTitle() in ("OE-A Core", "Enigma2", "OpenBh Core", "OpenBh Skins"):
 				blockstart = True
 				continue
 

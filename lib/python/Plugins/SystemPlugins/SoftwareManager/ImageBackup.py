@@ -18,7 +18,7 @@ import commands
 import datetime
 from boxbranding import getBoxType, getMachineBrand, getMachineName, getDriverDate, getImageVersion, getImageBuild, getBrandOEM, getMachineBuild, getImageFolder, getMachineUBINIZE, getMachineMKUBIFS, getMachineMtdKernel, getMachineKernelFile, getMachineRootFile, getImageFileSystem
 
-VERSION = "OpenBH"
+VERSION = "OpenBh"
 
 HaveGZkernel = True
 if getMachineBuild() in ("vuuno4k", "vuuno4kse", "vuzero4k", "vuultimo4k", "vusolo4k", "vuduo4k", "vuduo4kse"):
@@ -378,8 +378,8 @@ class ImageBackup(Screen):
 
 	def imageInfo(self):
 		AboutText = _("Full Image Backup ")
-		AboutText += _("By Bh Team") + "\n"
-		AboutText += _("Support at") + " www.vuplus-community.net\n\n"
+		AboutText += _("From the OpenBh Team") + "\n"
+		AboutText += _("Support at") + " www.openbh.net\n\n"
 		AboutText += _("[Image Info]\n")
 		AboutText += _("Model: %s %s\n") % (getMachineBrand(), getMachineName())
 		AboutText += _("Backup Date: %s\n") % strftime("%Y-%m-%d", localtime(self.START))

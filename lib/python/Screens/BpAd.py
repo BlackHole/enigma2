@@ -27,7 +27,7 @@ config.bhaddons.pin = ConfigInteger(limits=(0, 9999), default=0)
 
 class DeliteAddons(Screen):
 	skin = """
-	<screen position="160,115" size="390,330" title="BlackHole E2 Addons Manager">
+	<screen position="160,115" size="390,330" title="OpenBh E2 Addons Manager">
 		<widget source="list" render="Listbox" position="10,16" size="370,300" scrollbarMode="showOnDemand" >
 			<convert type="TemplatedMultiContent">
 			{"template": [
@@ -73,14 +73,14 @@ class DeliteAddons(Screen):
 
 		mypixmap = mypath + "icons/nabpackpanel.png"
 		png = LoadPixmap(mypixmap)
-		name = _("Open BlackHole online update")
+		name = _("OpenBh online update")
 		idx = 1
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/nabpackpanel.png"
 		png = LoadPixmap(mypixmap)
-		name = _("Manual Install Bh packages")
+		name = _("Manual Install OBh packages")
 		idx = 2
 		res = (name, png, idx)
 		self.list.append(res)
@@ -99,12 +99,12 @@ class DeliteAddons(Screen):
 		res = (name, png, idx)
 		self.list.append(res)
 
-		mypixmap = mypath + "icons/statpanel.png"
-		png = LoadPixmap(mypixmap)
-		name = _("BlackHole Statistics")
-		idx = 5
-		res = (name, png, idx)
-		self.list.append(res)
+		#mypixmap = mypath + "icons/statpanel.png"
+		#png = LoadPixmap(mypixmap)
+		#name = _("BlackHole Statistics")
+		#idx = 5
+		#res = (name, png, idx)
+		#self.list.append(res)
 
 		mypixmap = mypath + "icons/nabpackpanel.png"
 		png = LoadPixmap(mypixmap)
@@ -139,7 +139,7 @@ class DeliteAddons(Screen):
 		if self.sel == 0:
 			self.session.open(Nab_downArea)
 		elif self.sel == 1:
-			self.session.openWithCallback(self.runUpgrade, MessageBox, _("Do you want to update BlackHole image?") + "\n" + _("\nAfter pressing OK, please wait!"))
+			self.session.openWithCallback(self.runUpgrade, MessageBox, _("Do you want to update the OpenBh image?") + "\n" + _("\nAfter pressing OK, please wait!"))
 		elif self.sel == 2:
 			self.checkPanel()
 		elif self.sel == 3:
@@ -168,7 +168,7 @@ class DeliteAddons(Screen):
 	def runUpgrade(self, result):
 		if result:
 			from Screens.SoftwareUpdate import UpdatePlugin
-			self.session.open(UpdatePlugin, "Open BlackHole ")
+			self.session.open(UpdatePlugin, "OpenBh ")
 
 	def checkPanel(self):
 		check = 0
@@ -197,7 +197,7 @@ class DeliteAddons(Screen):
 
 class Nab_downArea(Screen):
 	skin = """
-	<screen position="160,115" size="390,330" title="BlackHole E2 Downloads Manager">
+	<screen position="160,115" size="390,330" title="OpenBh E2 Downloads Manager">
 		<widget source="list" render="Listbox" position="10,15" size="370,280" scrollbarMode="showOnDemand" >
 			<convert type="TemplatedMultiContent">
 				{"template": [
@@ -238,42 +238,42 @@ class Nab_downArea(Screen):
 
 		#mypixmap = mypath + "icons/nabplugins.png"
 		#png = LoadPixmap(mypixmap)
-		#name = _("Open BlackHole Addons Plugins")
+		#name = _("OpenBh Addons Plugins")
 		#idx = 1
 		#res = (name, png, idx)
 		#self.list.append(res)
 
 		mypixmap = mypath + "icons/nabplugins.png"
 		png = LoadPixmap(mypixmap)
-		name = _("Open BlackHole Feeds")
+		name = _("OpenBh Feeds")
 		idx = 2
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/nabskins.png"
 		png = LoadPixmap(mypixmap)
-		name = _("Open BlackHole Image Skins")
+		name = _("OpenBh Image Skins")
 		idx = 3
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/nabscript.png"
 		png = LoadPixmap(mypixmap)
-		name = _("BlackHole Image Script")
+		name = _("OpenBh Image Script")
 		idx = 4
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/nablangs.png"
 		png = LoadPixmap(mypixmap)
-		name = _("BlackHole Image Boot Logo")
+		name = _("OpenBh Image Boot Logo")
 		idx = 5
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/nabsettings.png"
 		png = LoadPixmap(mypixmap)
-		name = _("BlackHole Settings")
+		name = _("OpenBh Settings")
 		idx = 6
 		res = (name, png, idx)
 		self.list.append(res)
@@ -307,28 +307,28 @@ class Nab_downArea(Screen):
 
 		if self.sel == 1:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=" + pluginver
-			self.title = "Open BlackHole Addons Plugins"
+			self.title = "OpenBh Addons Plugins"
 		elif self.sel == 2:
 			self.url = "feeds"
-			self.title = "Open BlackHole Feeds"
+			self.title = "OpenBh Feeds"
 		elif self.sel == 3:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=OpenBlackHole-Skins"
-			self.title = "Open BlackHole Skins"
+			self.title = "OpenBh Skins"
 		elif self.sel == 4:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=Scripts"
-			self.title = "BlackHole Scripts"
+			self.title = "OpenBh Scripts"
 		elif self.sel == 5:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=Logos"
-			self.title = "BlackHole Boot Logo"
+			self.title = "OpenBh Boot Logo"
 		elif self.sel == 6:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=Settings"
-			self.title = "BlackHole Settings"
+			self.title = "OpenBh Settings"
 		elif self.sel == 7:
 			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=Picons"
-			self.title = "BlackHole Picons Packages"
-		elif self.sel == 8:
-			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=" + catver
-			self.title = "Latest 10 Uploads"
+			self.title = "OpenBh Picons Packages"
+		#elif self.sel == 8:
+		#	self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=" + catver
+		#	self.title = "Latest 10 Uploads"
 
 		downfile = "/tmp/cpanel.tmp"
 		if fileExists(downfile):
@@ -352,7 +352,7 @@ class Nab_downArea(Screen):
 
 class Nab_downCat(Screen):
 	skin = """
-	<screen position="80,95" size="560,405" title="BlackHole E2 Downloads Manager">
+	<screen position="80,95" size="560,405" title="OpenBh E2 Downloads Manager">
 		<widget source="list" render="Listbox" position="10,16" size="540,345" scrollbarMode="showOnDemand" >
 			<convert type="StringList" />
 		</widget>
@@ -415,7 +415,7 @@ class Nab_downCat(Screen):
 
 class Nab_ShowPreviewFile(Screen):
 	skin = """
-	<screen position="0,0" size="1280,720" title="BlackHole E2 Preview" flags="wfNoBorder">
+	<screen position="0,0" size="1280,720" title="OpenBh E2 Preview" flags="wfNoBorder">
 		<widget name="lab1" position="0,0" size="1280,720" zPosition="1" />
 		<widget name="lab2" position="0,30" size="1280,30" zPosition="2" font="Regular;26" halign="center" valign="center" backgroundColor="red" foregroundColor="white" />
 	</screen>"""
@@ -424,7 +424,7 @@ class Nab_ShowPreviewFile(Screen):
 		Screen.__init__(self, session)
 
 		self["lab1"] = Pixmap()
-		self["lab2"] = Label(_("BlackHole Preview: click ok to exit"))
+		self["lab2"] = Label(_("OpenBh Preview: click ok to exit"))
 		self["actions"] = ActionMap(["WizardActions"],
 		{
 			"ok": self.close,
@@ -443,7 +443,7 @@ class Nab_ShowPreviewFile(Screen):
 
 class Nab_ShowDownFile(Screen):
 	skin = """
-	<screen position="80,95" size="560,405" title="BlackHole E2 Package Details">
+	<screen position="80,95" size="560,405" title="OpenBh E2 Package Details">
 		<widget name="infotext" position="10,15" size="540,315" font="Regular;20" />
 		<ePixmap pixmap="skin_default/buttons/green.png" position="210,365" size="140,40" alphatest="on" />
 		<widget name="key_green" position="210,365" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
@@ -517,7 +517,7 @@ class Nab_ShowDownFile(Screen):
 		return cleantext
 
 	def KeyYellowd(self):
-		if (self.tcat != "OpenBlackHole-Skins" and self.tcat != "Logos"):
+		if (self.tcat != "OpenBh-Skins" and self.tcat != "Logos"):
 			nobox = self.session.open(MessageBox, _("Sorry, the preview is available only for Skins and Bootlogo."), MessageBox.TYPE_INFO)
 		else:
 			self.fileP = self.fileN.replace('.tgz', '.jpg')
@@ -602,7 +602,7 @@ class Nab_ShowDownFile(Screen):
 
 class Nab_downPanel(Screen):
 	skin = """
-	<screen position="80,95" size="560,405" title="BlackHole E2 Manual Install BH Packages">
+	<screen position="80,95" size="560,405" title="OpenBh E2 Manual Install BH Packages">
 		<widget source="list" render="Listbox" position="10,16" size="540,380" scrollbarMode="showOnDemand" >
 			<convert type="StringList" />
 		</widget>
@@ -665,7 +665,7 @@ class Nab_downPanel(Screen):
 
 class Nab_downPanelIPK(Screen):
 	skin = """
-	<screen position="80,95" size="560,405" title="BlackHole E2 Manual Install Ipk Packages">
+	<screen position="80,95" size="560,405" title="OpenBh E2 Manual Install Ipk Packages">
 		<widget source="list" render="Listbox" position="10,10" size="540,290" scrollbarMode="showOnDemand" >
 			<convert type="StringList" />
 		</widget>
@@ -743,7 +743,7 @@ class Nab_downPanelIPK(Screen):
 
 class Nab_uninstPanel(Screen):
 	skin = """
-	<screen position="80,95" size="560,405" title="BlackHole E2 Uninstall Panel">
+	<screen position="80,95" size="560,405" title="OpenBh E2 Uninstall Panel">
 		<widget source="list" render="Listbox" position="10,16" size="540,380" scrollbarMode="showOnDemand" >
 			<convert type="StringList" />
 		</widget>
@@ -792,7 +792,7 @@ class Nab_uninstPanel(Screen):
 
 class Nab_Stats(Screen):
 	skin = """
-	<screen position="80,95" size="560,405" title="BlackHole E2 Statistics">
+	<screen position="80,95" size="560,405" title="OpenBh E2 Statistics">
 		<widget name="infotext" position="10,15" size="540,315" font="Regular;20" />
 	</screen>"""
 
@@ -895,7 +895,7 @@ class addonsParentalConfig(Screen, ConfigListScreen):
 
 class Nab_ConnectPop(Screen):
 	skin = """
-	<screen position="390,100" size="484,220" title="BlackHole E2" flags="wfNoBorder">
+	<screen position="390,100" size="484,220" title="OpenBh E2" flags="wfNoBorder">
 		<widget name="connect" position="0,0" size="484,250" zPosition="-1" pixmaps="skin_default/connection_1.png,skin_default/connection_2.png,skin_default/connection_3.png,skin_default/connection_4.png,skin_default/connection_5.png" transparent="1" />
 		<widget name="lab1" position="10,180" halign="center" size="460,60" zPosition="1" font="Regular;20" valign="top" transparent="1" />
 	</screen>"""
