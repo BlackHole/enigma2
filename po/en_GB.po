@@ -9,9 +9,9 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "POT-Creation-Date: 2021-05-18 14:44+0200\n"
-"PO-Revision-Date: 2021-10-14 13:46+0100\n"
+"PO-Revision-Date: 2021-11-25 15:28+0000\n"
 "Last-Translator: Ev0\n"
-"Language-Team: BlackHole Team\n"
+"Language-Team: OpenBh Team\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2864,8 +2864,8 @@ msgstr "Button setup for"
 msgid "ButtonSetup"
 msgstr "ButtonSetup"
 
-msgid "By BlackHole Team"
-msgstr "From the BlackHole Team"
+msgid "By OpenBh Team"
+msgstr "From the OpenBh Team"
 
 msgid "Bypass HDMI EDID Check"
 msgstr "Bypass HDMI EDID Check"
@@ -5467,7 +5467,7 @@ msgstr "Enter pin code"
 msgid "Enter service number"
 msgstr "Enter the service pin"
 
-msgid "Enter the FTP password of the host receiver (required for any server running OpenBH %s)."
+msgid "Enter the FTP password of the host receiver (required for any server running OpenBh %s)."
 msgstr ""
 
 msgid "Enter the FTP port of the host receiver (normally '21')."
@@ -9833,8 +9833,8 @@ msgstr "Protect standby menu"
 msgid "Protect timer menu"
 msgstr "Protect timer menu"
 
-msgid "Protect obh menu"
-msgstr "Protect obh menu"
+msgid "Protect openbh menu"
+msgstr "Protect openbh menu"
 
 msgid "Protek 4K UHD/HD61"
 msgstr ""
@@ -11608,7 +11608,7 @@ msgstr "Sets the root folder of movie list, to remove the '..' from being shown 
 
 #, python-format
 msgid ""
-"Setting a network password is mandatory in OpenBH %s if you wish to use network services. \n"
+"Setting a network password is mandatory in OpenBh %s if you wish to use network services. \n"
 "To set a password using the virtual keyboard press the 'text' button on your remote control."
 msgstr ""
 
@@ -11776,8 +11776,8 @@ msgstr ""
 msgid "Show VCR scart on main menu"
 msgstr "Show VCR scart on main menu"
 
-msgid "Show OpenBH spinning logo when the system is busy."
-msgstr "Show OpenBH spinning logo when the system is busy."
+msgid "Show OpenBh spinning logo when the system is busy."
+msgstr "Show OpenBh spinning logo when the system is busy."
 
 msgid "Show WLAN status"
 msgstr "Show WLAN status"
@@ -12373,8 +12373,8 @@ msgstr ""
 msgid "Some plugins are not available:\n"
 msgstr "Some plugins are not available:\n"
 
-msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check vuplus-community.net."
-msgstr "Sorry feeds are down for maintenance, please try again later. If this issue persists please check vuplus-community.net."
+msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check www.openbh.net."
+msgstr "Sorry feeds are down for maintenance, please try again later. If this issue persists please check www.openbh.net."
 
 msgid "Sorry feeds seem be in an unstable state, if you wish to use them please enable 'Allow unstable (experimental) updates' in \"Software update settings\"."
 msgstr "Sorry feeds seem be in an unstable state, if you wish to use them please enable 'Allow unstable (experimental) updates' in \"Software update settings\"."
@@ -13314,8 +13314,8 @@ msgstr "Delete saved playlist"
 msgid "There are no updates available."
 msgstr "There are no updates available."
 
-msgid "There has been an error, please try again later. If this issue persists, please check vuplus-community.net"
-msgstr "There has been an error, please try again later. If this issue persists, please check vuplus-community.net"
+msgid "There has been an error, please try again later. If this issue persists, please check www.openbh.net"
+msgstr "There has been an error, please try again later. If this issue persists, please check www.openbh.net"
 
 msgid "There is no signal to lock on !"
 msgstr "There is no signal to lock on !"
@@ -14492,7 +14492,7 @@ msgid "Vertical turning speed"
 msgstr "Vertical turning speed"
 
 #, fuzzy, python-format
-msgid "OBH version: %s"
+msgid "OpenBh version: %s"
 msgstr "Version: %s"
 
 #, fuzzy
@@ -14776,7 +14776,7 @@ msgid "Weighted position"
 msgstr "Weighted position"
 
 msgid ""
-"Welcome to OpenBH!\n"
+"Welcome to OpenBh!\n"
 "\n"
 "NOTE: This section of the wizard is intended for people who cannot disable overscan on their television / display.  Please first try to disable overscan before using this feature.\n"
 "\n"
@@ -15324,8 +15324,8 @@ msgid "Your %s %s has no network access, please check your network settings and 
 msgstr "Your %s %s has no network access, please check your network settings and make sure you have network cable connected and try again."
 
 #, fuzzy, python-format
-msgid "Your %s %s is not able to connect to the feeds, please try again later. If this persists please report on the vuplus-community.net."
-msgstr "Sorry feeds are down for maintenance, please try again later. If this issue persists please check vuplus-community.net."
+msgid "Your %s %s is not able to connect to the feeds, please try again later. If this persists please report on the www.openbh.net."
+msgstr "Sorry feeds are down for maintenance, please try again later. If this issue persists please check www.openbh.net."
 
 #, python-format
 msgid ""
