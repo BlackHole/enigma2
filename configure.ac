@@ -589,7 +589,7 @@ data/display128/Makefile
 data/display220/Makefile
 data/display400/Makefile
 data/display480/Makefile
-data/display480/OBH-LCDskin/Makefile
+data/display480/OpenBh-LCDskin/Makefile
 data/display720/Makefile
 data/display720/Default_with_Analogue_Clock_Standby/Makefile
 data/display720/Default_with_Picon_and_Analogue_Clock_Standby/Makefile
