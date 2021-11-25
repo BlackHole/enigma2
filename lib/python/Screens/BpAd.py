@@ -80,7 +80,7 @@ class DeliteAddons(Screen):
 
 		mypixmap = mypath + "icons/nabpackpanel.png"
 		png = LoadPixmap(mypixmap)
-		name = _("Manual Install OBh packages")
+		name = _("Manual Install OpenBh packages")
 		idx = 2
 		res = (name, png, idx)
 		self.list.append(res)

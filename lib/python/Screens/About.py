@@ -342,7 +342,7 @@ class SystemMemoryInfo(Screen):
 		self.setTitle(_("Memory"))
 		self.skinName = ["SystemMemoryInfo", "About"]
 		self["lab1"] = StaticText(_("OpenBh Image"))
-		self["lab2"] = StaticText(_("From the OBh Team"))
+		self["lab2"] = StaticText(_("From the OpenBh Team"))
 		self["lab3"] = StaticText(_("Support at %s") % "www.openbh.net")
 		self["AboutScrollLabel"] = ScrollLabel()
 
