@@ -517,7 +517,7 @@ class Nab_ShowDownFile(Screen):
 		return cleantext
 
 	def KeyYellowd(self):
-		if (self.tcat != "OpenBh-Skins" and self.tcat != "Logos"):
+		if (self.tcat != "OpenBlackHole-Skins" and self.tcat != "Logos"):
 			nobox = self.session.open(MessageBox, _("Sorry, the preview is available only for Skins and Bootlogo."), MessageBox.TYPE_INFO)
 		else:
 			self.fileP = self.fileN.replace('.tgz', '.jpg')
