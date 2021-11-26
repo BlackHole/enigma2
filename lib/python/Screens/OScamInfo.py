@@ -913,11 +913,12 @@ class oscEntitlements(Screen, OscamInfo):
 		self.mlist = oscMenuList([])
 		self.cccamreader = reader
 		self["output"] = List([])
-		self["actions"] = ActionMap(["OkCancelActions"],
+		self["actions"] = ActionMap(["SetupActions"],
 					{
 						"ok": self.showData,
 						"cancel": self.exit
 					}, -1)
+		self["key_red"] = StaticText(_("Close"))
 		self.onLayoutFinish.append(self.showData)
 
 	def exit(self):
@@ -1054,11 +1055,12 @@ class oscReaderStats(Screen, OscamInfo):
 		self.reader = reader
 		self.mlist = oscMenuList([])
 		self["output"] = List([])
-		self["actions"] = ActionMap(["OkCancelActions"],
+		self["actions"] = ActionMap(["SetupActions"],
 					{
 						"ok": self.showData,
 						"cancel": self.exit
 					}, -1)
+		self["key_red"] = StaticText(_("Close"))
 		self.onLayoutFinish.append(self.showData)
 
 	def exit(self):
