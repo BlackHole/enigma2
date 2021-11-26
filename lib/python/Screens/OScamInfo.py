@@ -573,17 +573,19 @@ class oscECMInfo(Screen, OscamInfo):
 		Screen.__init__(self, session)
 		self.setTitle(_("Ecm Info"))
 		self.ecminfo = "/tmp/ecm.info"
+		self.title = _("ECM Info")
 		self["output"] = oscMenuList([])
 		if config.oscaminfo.autoupdate.value:
 			self.loop = eTimer()
 			self.loop.callback.append(self.showData)
 			timeout = config.oscaminfo.intervall.value * 1000
 			self.loop.start(timeout, False)
-		self["actions"] = ActionMap(["OkCancelActions"],
+		self["actions"] = ActionMap(["SetupActions"],
 					{
 						"ok": self.exit,
 						"cancel": self.exit
 					}, -1)
+		self["key_red"] = StaticText(_("Close"))
 		self.onLayoutFinish.append(self.showData)
 
 	def exit(self):
