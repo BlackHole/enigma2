@@ -223,7 +223,7 @@ class OscamInfo:
 #					if data.attrib.has_key("version"):
 #						self.version = data.attrib["version"]
 #					else:
-#						self.version = "n/a"
+#						self.version = "N/A"
 #					return self.version
 				status = data.find("status")
 				clients = status.findall("client")
@@ -239,7 +239,7 @@ class OscamInfo:
 					if "ecmtime" in cl.find("request").attrib:
 						ecmtime = cl.find("request").attrib["ecmtime"]
 						if ecmtime == "0" or ecmtime == "":
-							ecmtime = _("n/a")
+							ecmtime = _("N/A")
 						else:
 							ecmtime = str(float(ecmtime) / 1000)[:5]
 					else:
@@ -251,7 +251,7 @@ class OscamInfo:
 						else:
 							srvname_short = srvname
 					else:
-						srvname_short = _("n/A")
+						srvname_short = _("N/A")
 					login = cl.find("times").attrib["login"]
 					online = cl.find("times").attrib["online"]
 					if proto.lower() == "dvbapi":
@@ -311,10 +311,10 @@ class OscamInfo:
 			if "version" in data.attrib:
 				self.version = data.attrib["version"]
 			else:
-				self.version = _("n/a")
+				self.version = _("N/A")
 			return self.version
 		else:
-			self.version = _("n/a")
+			self.version = _("N/A")
 		return self.version
 
 	def getTotalCards(self, reader):
