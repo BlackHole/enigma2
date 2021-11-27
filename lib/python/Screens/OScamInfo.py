@@ -241,7 +241,7 @@ class OscamInfo:
 						if ecmtime == "0" or ecmtime == "":
 							ecmtime = _("N/A")
 						else:
-							ecmtime = str(float(ecmtime) / 1000)[:5]
+							ecmtime = str(float(ecmtime) // 1000)[:5]
 					else:
 						ecmtime = "not available"
 					srvname = cl.find("request").text
@@ -745,12 +745,12 @@ class oscInfo(Screen, OscamInfo):
 		res = [""]
 		x = 0
 		if not HDSKIN:
-			self.fieldsize = [100, 130, 100, 150, 80, 130]
-			self.startPos = [10, 110, 240, 340, 490, 570]
+			self.fieldsize = [100, 160, 100, 150, 80, 130]
+			self.startPos = [10, 110, 270, 370, 510, 600]
 			useFont = 3
 		else:
-			self.fieldsize = [150 * f, 150 * f, 150 * f, 300 * f, 150 * f, 200 * f]
-			self.startPos = [50 * f, 200 * f, 350 * f, 500 * f, 800 * f, 950 * f]
+			self.fieldsize = [150 * f, 225 * f, 150 * f, 300 * f, 150 * f, 200 * f]
+			self.startPos = [50 * f, 200 * f, 424 * f, 575 * f, 875 * f, 1025 * f]
 			useFont = 2
 
 		ypos = 2
@@ -1133,8 +1133,8 @@ class oscReaderStats(Screen, OscamInfo):
 						rcs = j.attrib["rcs"]
 						num = j.text
 						if rcs == "found":
-							avg_time = str(float(avgtime) / 1000)[:5]
-							last_time = str(float(lasttime) / 1000)[:5]
+							avg_time = str(float(avgtime) // 1000)[:5]
+							last_time = str(float(lasttime) // 1000)[:5]
 							if "lastrequest" in j.attrib:
 								lastreq = j.attrib["lastrequest"]
 								try:
