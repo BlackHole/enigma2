@@ -745,12 +745,12 @@ class oscInfo(Screen, OscamInfo):
 		res = [""]
 		x = 0
 		if not HDSKIN:
-			self.fieldsize = [100, 130, 100, 150, 80, 130]
-			self.startPos = [10, 110, 240, 340, 490, 570]
+			self.fieldsize = [100, 160, 100, 150, 80, 130]
+			self.startPos = [10, 110, 270, 370, 510, 570]
 			useFont = 3
 		else:
-			self.fieldsize = [150 * f, 150 * f, 150 * f, 300 * f, 150 * f, 200 * f]
-			self.startPos = [50 * f, 200 * f, 350 * f, 500 * f, 800 * f, 950 * f]
+			self.fieldsize = [150 * f, 250 * f, 150 * f, 300 * f, 150 * f, 200 * f]
+			self.startPos = [50 * f, 200 * f, 450 * f, 600 * f, 900 * f, 1025 * f]
 			useFont = 2
 
 		ypos = 2
