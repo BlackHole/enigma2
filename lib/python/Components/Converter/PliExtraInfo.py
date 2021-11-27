@@ -27,10 +27,11 @@ caid_data = (
 	("0xb00", "0xbff",  "Conax", "CO", True),
 	("0xd00", "0xdff",  "CryptoWorks", "CW", True),
 	("0x2700", "0x2710", "DRE-Crypt3", "DC", False),
-	("0x4ae0", "0x4ae1", "DRE-Crypt", "DC", True),
+	("0x4ae0", "0x4ae1", "DRE-Crypt", "DC", False),
 	("0x900", "0x9ff",  "NDS Videoguard", "ND", True),
-	("0x4afc", "0x4afc", "Panaccess", "PA", True),
+	("0x4afc", "0x4afc", "Panaccess", "PA", False),
 	("0xe00", "0xeff",  "PowerVu", "PV", True),
+	("0x4a02", "0x4a02", "Tongfang", "TF", False),
 	("0x5601", "0x5604", "Verimatrix", "VM", True)
 )
 
@@ -188,6 +189,7 @@ class PliExtraInfo(Poll, Converter, object):
 			("CryptoCaidNDSAvailable", "ND", False),
 			("CryptoCaidPanaccessAvailable", "PA", False),
 			("CryptoCaidPowerVuAvailable", "PV", False),
+			("CryptoCaidTongfangAvailable", "TF", False),
 			("CryptoCaidVerimatrixAvailable", "VM", False),
 			("CryptoCaidBetaSelected", "B", True),
 			("CryptoCaidIrdetoSelected", "I", True),
@@ -205,6 +207,7 @@ class PliExtraInfo(Poll, Converter, object):
 			("CryptoCaidNDSSelected", "ND", True),
 			("CryptoCaidPanaccessSelected", "PA", True),
 			("CryptoCaidPowerVuSelected", "PV", True),
+			("CryptoCaidTongfangSelected", "TF", True),
 			("CryptoCaidVerimatrixSelected", "VM", True),
 		)
 		self.type = self.type.split(',')
@@ -395,6 +398,22 @@ class PliExtraInfo(Poll, Converter, object):
 			except:
 				pass
 		res = color + 'T'
+		res += Hex2strColor(self.cryptocolors[3])
+		return res
+
+	def createCryptoTongfang(self, info):
+		available_caids = info.getInfoObject(iServiceInformation.sCAIDs)
+		if int('0x4a02', 16) <= int(self.current_caid, 16) <= int('0x4a02', 16):
+			color = Hex2strColor(self.cryptocolors[0])
+		else:
+			color = Hex2strColor(self.cryptocolors[1])
+			try:
+				for caid in available_caids:
+					if int('0x4a02', 16) <= caid <= int('0x4a02', 16):
+						color = Hex2strColor(self.cryptocolors[2])
+			except:
+				pass
+		res = color + 'TF'
 		res += Hex2strColor(self.cryptocolors[3])
 		return res
 
