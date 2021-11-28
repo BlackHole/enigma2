@@ -234,7 +234,7 @@ def getConfigNameAndContent(fileName):
 class CCcamList(MenuList):
 	def __init__(self, list):
 		MenuList.__init__(self, list, False, eListboxPythonMultiContent)
-		self.l.setItemHeight(25)
+		self.l.setItemHeight(60)
 		self.l.setFont(0, gFont("Regular", 20))
 		self.l.setFont(1, gFont("Regular", 32))
 
@@ -250,7 +250,7 @@ class CCcamShareList(MenuList):
 class CCcamConfigList(MenuList):
 	def __init__(self, list):
 		MenuList.__init__(self, list, False, eListboxPythonMultiContent)
-		self.l.setItemHeight(30)
+		self.l.setItemHeight(60)
 		self.l.setFont(0, gFont("Regular", 20))
 		self.l.setFont(1, gFont("Regular", 32))
 
@@ -258,7 +258,7 @@ class CCcamConfigList(MenuList):
 class CCcamShareViewList(MenuList):
 	def __init__(self, list):
 		MenuList.__init__(self, list, False, eListboxPythonMultiContent)
-		self.l.setItemHeight(20)
+		self.l.setItemHeight(60)
 		self.l.setFont(0, gFont("Regular", 18))
 		self.l.setFont(1, gFont("Regular", 32))
 
@@ -285,7 +285,7 @@ def CCcamListEntry(name, idx):
 	if screenwidth and screenwidth == 1920:
 		if fileExists(png):
 			res.append(MultiContentEntryPixmapAlphaBlend(pos=(10, 7), size=(67, 48), png=LoadPixmap(png)))
-		res.append(MultiContentEntryText(pos=(90, 0), size=(900, 40), font=1, text=name))
+		res.append(MultiContentEntryText(pos=(90, 8), size=(900, 40), font=1, text=name))
 	else:
 		if fileExists(png):
 			res.append(MultiContentEntryPixmapAlphaBlend(pos=(0, 0), size=(35, 25), png=LoadPixmap(png)))
@@ -302,8 +302,8 @@ def CCcamServerListEntry(name, color):
 		png = "/usr/share/enigma2/skin_default/buttons/key_%s.png" % color
 	if screenwidth and screenwidth == 1920:
 		if fileExists(png):
-			res.append(MultiContentEntryPixmapAlphaBlend(pos=(10, 6), size=(67, 48), png=LoadPixmap(png)))
-		res.append(MultiContentEntryText(pos=(90, 0), size=(900, 40), font=1, text=name))
+			res.append(MultiContentEntryPixmapAlphaBlend(pos=(10, 7), size=(67, 48), png=LoadPixmap(png)))
+		res.append(MultiContentEntryText(pos=(90, 8), size=(900, 40), font=1, text=name))
 	else:
 		if fileExists(png):
 			res.append(MultiContentEntryPixmapAlphaBlend(pos=(0, 0), size=(35, 25), png=LoadPixmap(png)))
