@@ -302,8 +302,8 @@ def CCcamServerListEntry(name, color):
 		png = "/usr/share/enigma2/skin_default/buttons/key_%s.png" % color
 	if screenwidth and screenwidth == 1920:
 		if fileExists(png):
-			res.append(MultiContentEntryPixmapAlphaBlend(pos=(10, 3), size=(67, 48), png=LoadPixmap(png)))
-		res.append(MultiContentEntryText(pos=(90, 7), size=(900, 50), font=1, text=name))
+			res.append(MultiContentEntryPixmapAlphaBlend(pos=(10, 6), size=(67, 48), png=LoadPixmap(png)))
+		res.append(MultiContentEntryText(pos=(90, 0), size=(900, 40), font=1, text=name))
 	else:
 		if fileExists(png):
 			res.append(MultiContentEntryPixmapAlphaBlend(pos=(0, 0), size=(35, 25), png=LoadPixmap(png)))
@@ -368,7 +368,7 @@ def CCcamConfigListEntry(file):
 		png = lock_off
 	if screenwidth and screenwidth == 1920:
 		res.append(MultiContentEntryPixmapAlphaBlend(pos=(5, 5), size=(50, 50), png=png))
-		res.append(MultiContentEntryText(pos=(85, 5), size=(800, 35), font=1, text=name))
+		res.append(MultiContentEntryText(pos=(85, 0), size=(800, 40), font=1, text=name))
 	else:
 		res.append(MultiContentEntryPixmapAlphaBlend(pos=(2, 2), size=(25, 25), png=png))
 		res.append(MultiContentEntryText(pos=(35, 2), size=(550, 25), font=0, text=name))
@@ -386,7 +386,7 @@ def CCcamMenuConfigListEntry(name, blacklisted):
 		png = lock_on
 	if screenwidth and screenwidth == 1920:
 		res.append(MultiContentEntryPixmapAlphaBlend(pos=(5, 5), size=(50, 50), png=png))
-		res.append(MultiContentEntryText(pos=(85, 5), size=(800, 35), font=1, text=name))
+		res.append(MultiContentEntryText(pos=(85, 0), size=(800, 40), font=1, text=name))
 	else:
 		res.append(MultiContentEntryPixmapAlphaBlend(pos=(2, 2), size=(25, 25), png=png))
 		res.append(MultiContentEntryText(pos=(35, 2), size=(550, 25), font=0, text=name))
