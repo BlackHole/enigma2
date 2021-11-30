@@ -31,8 +31,8 @@ except ImportError: # Python 2
 import skin
 
 ###global
-NAMEBIN = " "
-NAMEBIN2 = " "
+NAMEBIN = ""
+NAMEBIN2 = ""
 if fileExists("/tmp/.oscam/oscam.version"):
 	NAMEBIN = "oscam"
 	NAMEBIN2 = "OScam"
@@ -69,9 +69,9 @@ class OscamInfo:
 	SRVNAME = 4
 	ECMTIME = 5
 	IP_PORT = 6
-	HEAD = {NAME: _("Label"), PROT: _("Protocol"),
-		CAID_SRVID: _("CAID:SrvID"), SRVNAME: _("Serv.Name"),
-		ECMTIME: _("ECM-Time"), IP_PORT: _("IP address")}
+	HEAD = {NAME: _("Reader/User"), PROT: _("Protocol"),
+		CAID_SRVID: _("Caid:Srvid"), SRVNAME: _("Channel Name"),
+		ECMTIME: _("Ecm Time"), IP_PORT: _("IP Address")}
 	version = ""
 
 	def confPath(self):
@@ -223,7 +223,7 @@ class OscamInfo:
 #					if data.attrib.has_key("version"):
 #						self.version = data.attrib["version"]
 #					else:
-#						self.version = "N/A"
+#						self.version = "-"
 #					return self.version
 				status = data.find("status")
 				clients = status.findall("client")
@@ -239,7 +239,7 @@ class OscamInfo:
 					if "ecmtime" in cl.find("request").attrib:
 						ecmtime = cl.find("request").attrib["ecmtime"]
 						if ecmtime == "0" or ecmtime == "":
-							ecmtime = _("N/A")
+							ecmtime = _("-")
 						else:
 							ecmtime = str(float(ecmtime) / 1000)[:5]
 					else:
@@ -251,7 +251,7 @@ class OscamInfo:
 						else:
 							srvname_short = srvname
 					else:
-						srvname_short = _("N/A")
+						srvname_short = _("-")
 					login = cl.find("times").attrib["login"]
 					online = cl.find("times").attrib["online"]
 					if proto.lower() == "dvbapi":
@@ -311,10 +311,10 @@ class OscamInfo:
 			if "version" in data.attrib:
 				self.version = data.attrib["version"]
 			else:
-				self.version = _("N/A")
+				self.version = _("-")
 			return self.version
 		else:
-			self.version = _("N/A")
+			self.version = _("-")
 		return self.version
 
 	def getTotalCards(self, reader):
@@ -371,9 +371,9 @@ class OscamInfo:
 			data = open(ecminfo, "r").readlines()
 			for i in data:
 				if "caid" in i:
-					result.append((_("CAID"), i.split(":")[1].strip()))
+					result.append((_("Caid"), i.split(":")[1].strip()))
 				elif "pid" in i:
-					result.append((_("PID"), i.split(":")[1].strip()))
+					result.append((_("Pid"), i.split(":")[1].strip()))
 				elif "prov" in i:
 					result.append((_("Provider"), i.split(":")[1].strip()))
 				elif "reader" in i:
@@ -385,7 +385,7 @@ class OscamInfo:
 				elif "hops" in i:
 					result.append((_("Hops"), i.split(":")[1].strip()))
 				elif "ecm time" in i:
-					result.append((_("ECM Time"), i.split(":")[1].strip()))
+					result.append((_("Ecm Time"), i.split(":")[1].strip()))
 			return result
 		else:
 			return "%s not found" % self.ecminfo
@@ -407,7 +407,7 @@ class OscamInfoMenu(Screen):
 		Screen.__init__(self, session)
 		global NAMEBIN
 		self.setTitle(_("%s Info - Main Menu" % NAMEBIN2))
-		self.menu = [_("Show /tmp/ecm.info"), _("Show Clients"), _("Show Readers/Proxies"), _("Show Log"), _("Card infos (CCcam-Reader)"), _("ECM Statistics"), _("Setup")]
+		self.menu = [_("Show Ecm info"), _("Show Clients"), _("Show Readers/Proxies"), _("Show Log"), _("Card info (CCcam-Reader)"), _("Ecm Statistics"), _("Setup")]
 		self.osc = OscamInfo()
 		self["mainmenu"] = oscMenuList([])
 		self["actions"] = NumberActionMap(["OkCancelActions", "InputActions", "ColorActions"],
@@ -573,7 +573,7 @@ class oscECMInfo(Screen, OscamInfo):
 		Screen.__init__(self, session)
 		self.setTitle(_("Ecm Info"))
 		self.ecminfo = "/tmp/ecm.info"
-		self.title = _("ECM Info")
+		self.title = _("Ecm Info")
 		self["output"] = oscMenuList([])
 		if config.oscaminfo.autoupdate.value:
 			self.loop = eTimer()
@@ -897,7 +897,6 @@ class oscEntitlements(Screen, OscamInfo):
 							MultiContentEntryText(pos = (480*f, 1), size = (70*f, 24*f), font=0, flags = RT_HALIGN_LEFT, text = 7), # index 7 is sum of cards for caid
 							MultiContentEntryText(pos = (550*f, 1), size = (80*f, 24*f), font=0, flags = RT_HALIGN_LEFT, text = 8), # index 8 is reshare
 							MultiContentEntryText(pos = (630*f, 1), size = (700*f, 30*f), font=1, flags = RT_HALIGN_LEFT, text = 9), # index 9 is providers
-
 												]),
 					},
 					"fonts": [gFont("Regular", 18*f),gFont("Regular", 12*f)],
@@ -928,7 +927,7 @@ class oscEntitlements(Screen, OscamInfo):
 		caids = list(data.keys())
 		caids.sort()
 		outlist = []
-		res = [("CAID", _("System"), "1", "2", "3", "4", "5", "Total", _("Reshare"), "")]
+		res = [("Caid", _("System"), "1", "2", "3", "4", "5", "Total", _("Reshare"), "")]
 		for i in caids:
 			csum = 0
 			ca_id = i
@@ -1070,7 +1069,7 @@ class oscReaderStats(Screen, OscamInfo):
 		caids = list(data.keys())
 		caids.sort()
 		outlist = []
-		res = [("CAID", "System", "1", "2", "3", "4", "5", "Total", "Reshare", "")]
+		res = [("Caid", "System", "1", "2", "3", "4", "5", "Total", "Reshare", "")]
 		for i in caids:
 			csum = 0
 			ca_id = i
@@ -1156,7 +1155,7 @@ class oscReaderStats(Screen, OscamInfo):
 							title2 = _("(Show only reader)" + " (%s)" % self.reader)
 
 		outlist = self.sortData(result, 7, True)
-		out = [(_("Label"), _("CAID"), _("Channel"), _("ECM avg"), _("ECM last"), _("Status"), _("Last Req."), _("Total"))]
+		out = [(_("Reader/User"), _("Caid"), _("Channel"), _("Ecm avg"), _("Ecm last"), _("Status"), _("Last Req."), _("Total"))]
 		for i in outlist:
 			out.append((i[0], i[1], i[2], i[3], i[4], i[5], i[6], str(i[7])))
 
