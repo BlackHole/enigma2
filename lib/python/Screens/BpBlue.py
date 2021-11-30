@@ -10,7 +10,7 @@ from Components.Pixmap import MultiPixmap
 from Components.About import about
 from Tools.Directories import fileExists
 from ServiceReference import ServiceReference
-from os import system, listdir, remove as os_remove
+from os import system, listdir, path, remove as os_remove
 from enigma import iServiceInformation, eTimer
 import socket
 
@@ -70,10 +70,39 @@ class DeliteBluePanel(Screen):
 		}, -1)
 
 		self.emlist = []
+		self.check_scriptexists()
 		self.populate_List()
 		self["list"] = MenuList(self.emlist)
 		self["lab1"].setText(_("%d  CAMs Installed") % (len(self.emlist)))
 		self.onShow.append(self.updateBP)
+
+	def check_scriptexists(self):
+		if path.exists("/usr/softcams"):
+			cams = listdir("/usr/softcams")
+			for fil in cams:
+				self.ch_sc2(fil)
+				
+	def ch_sc2(self, name):
+		scriptname = "Ncam_" + name +".sh"
+		cams = listdir("/usr/camscript/")
+		for fil in cams:
+			if fil == scriptname:
+				return
+		fileout = "/usr/camscript/" + scriptname
+		out = open(fileout, "w")
+		f = open("/usr/camscript/Ncam_Ci.sh",'r')
+		for line in f.readlines():
+			if line.find('CAMNAME=') != -1:
+				line = "CAMNAME=\"" + name + "\""
+			if line.find('vucamd') != -1:
+				s = "/usr/softcams/" + name	
+				line = line.replace("/usr/bin/vucamd", s)
+					
+			out.write(line)
+		system("chmod 0755 " + fileout)	
+		f.close()
+		out.close()	
+				
 
 	def populate_List(self):
 		self.camnames = {}
@@ -167,6 +196,8 @@ class DeliteBluePanel(Screen):
 		system(cmd)
 		cmd = "STOP_CAMD," + self.defaultcam
 		self.sendtoBh_sock(cmd)
+		cmd = self.defaultcam + " stop"
+		system(cmd)
 
 		cmd = "NEW_CAMD," + self.newcam
 		self.sendtoBh_sock(cmd)
