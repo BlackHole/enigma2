@@ -36,11 +36,12 @@ config.misc.pluginbrowser.drivers = ConfigYesNo(default=True)
 config.misc.pluginbrowser.extensions = ConfigYesNo(default=True)
 config.misc.pluginbrowser.kernel = ConfigYesNo(default=False)
 config.misc.pluginbrowser.m2k = ConfigYesNo(default=True)
-config.misc.pluginbrowser.picons = ConfigYesNo(default=False)
+config.misc.pluginbrowser.picons = ConfigYesNo(default=True)
 config.misc.pluginbrowser.po = ConfigYesNo(default=True)
 config.misc.pluginbrowser.security = ConfigYesNo(default=True)
 config.misc.pluginbrowser.settings = ConfigYesNo(default=True)
 config.misc.pluginbrowser.skin = ConfigYesNo(default=True)
+config.misc.pluginbrowser.softcams = ConfigYesNo(default=True)
 config.misc.pluginbrowser.systemplugins = ConfigYesNo(default=True)
 config.misc.pluginbrowser.weblinks = ConfigYesNo(default=True)
 config.misc.pluginbrowser.plugin_order = ConfigText(default="")
@@ -361,6 +362,8 @@ class PluginDownloadBrowser(Screen):
 			self.PLUGIN_PREFIX2.append(self.PLUGIN_PREFIX + 'skin')
 		if config.misc.pluginbrowser.display.value:
 			self.PLUGIN_PREFIX2.append(self.PLUGIN_PREFIX + 'display')
+		if config.misc.pluginbrowser.softcams.value:
+			self.PLUGIN_PREFIX2.append(self.PLUGIN_PREFIX + 'softcams')
 		if config.misc.pluginbrowser.systemplugins.value:
 			self.PLUGIN_PREFIX2.append(self.PLUGIN_PREFIX + 'systemplugins')
 		if config.misc.pluginbrowser.weblinks.value:
