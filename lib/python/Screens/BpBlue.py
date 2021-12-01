@@ -81,7 +81,7 @@ class DeliteBluePanel(Screen):
 			cams = listdir("/usr/softcams")
 			for fil in cams:
 				self.ch_sc2(fil)
-				
+
 	def ch_sc2(self, name):
 		scriptname = "Ncam_" + name +".sh"
 		cams = listdir("/usr/camscript/")
@@ -94,15 +94,17 @@ class DeliteBluePanel(Screen):
 		for line in f.readlines():
 			if line.find('CAMNAME=') != -1:
 				line = "CAMNAME=\"" + name + "\""
-			if line.find('vucamd') != -1:
-				s = "/usr/softcams/" + name	
-				line = line.replace("/usr/bin/vucamd", s)
-					
+			if line.find('daemon -S') != -1:
+				line = "\t/usr/softcams/" + name +"\n"
+				if name.find('oscam') != -1:
+					line = line.rstrip() + " -b -c /etc/tuxbox/config/" + name +"\n"
+			if line.find('daemon -K') != -1:
+				line = "\t killall -9 " + name +" 2 >/dev/null\n\tsleep 2\n\tremove_tmp\n"
 			out.write(line)
-		system("chmod 0755 " + fileout)	
+		system("chmod 0755 " + fileout)
 		f.close()
-		out.close()	
-				
+		out.close()
+
 
 	def populate_List(self):
 		self.camnames = {}
