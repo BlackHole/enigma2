@@ -30,7 +30,7 @@ except ImportError: # Python 2
 	from urllib2 import Request, urlopen, HTTPError, URLError, HTTPHandler, HTTPPasswordMgrWithDefaultRealm, HTTPDigestAuthHandler, build_opener, install_opener
 import skin
 
-###global
+global NAMEBIN
 NAMEBIN = ""
 NAMEBIN2 = ""
 if fileExists("/tmp/.oscam/oscam.version"):
@@ -176,13 +176,15 @@ class OscamInfo:
 			self.proto = "https"
 			self.port.replace("+", "")
 
+		print("[openWebIF] NAMEBIN=%s, CAM=%s" % (NAMEBIN, NAMEBIN))
 		if part is None:
 			self.url = "%s://%s:%s/%sapi.html?part=status" % (self.proto, self.ip, self.port, NAMEBIN)
 		else:
 			self.url = "%s://%s:%s/%sapi.html?part=%s" % (self.proto, self.ip, self.port, NAMEBIN, part)
 		if part is not None and reader is not None:
 			self.url = "%s://%s:%s/%sapi.html?part=%s&label=%s" % (self.proto, self.ip, self.port, NAMEBIN, part, reader)
-
+		print("[openWebIF] NAMEBIN=%s, NAMEBIN=%s url=%s" % (NAMEBIN, NAMEBIN, self.url))
+		print("[OscamInfo] self.url=%s" % self.url)
 		opener = build_opener(HTTPHandler)
 		if not self.username == "":
 			pwman = HTTPPasswordMgrWithDefaultRealm()
@@ -476,43 +478,48 @@ class OscamInfoMenu(Screen):
 
 	def goEntry(self, entry):
 		global NAMEBIN
-		if entry in (1, 2, 3) and config.oscaminfo.userdatafromconf.value and self.osc.confPath()[0] is None:
-			config.oscaminfo.userdatafromconf.setValue(False)
-			config.oscaminfo.userdatafromconf.save()
-			self.session.openWithCallback(self.ErrMsgCallback, MessageBox, _("File %s.conf not found.\nPlease enter username/password manually." % NAMEBIN), MessageBox.TYPE_ERROR)
-		elif entry == 0:
-			if os.path.exists("/tmp/ecm.info"):
-				self.session.open(oscECMInfo)
-			else:
-				self.session.open(MessageBox, _("No ECM info is currently available. This is only available while decrypting."), MessageBox.TYPE_INFO)
-		elif entry == 1:
-			self.session.open(oscInfo, "c")
-		elif entry == 2:
-			self.session.open(oscInfo, "s")
-		elif entry == 3:
-			self.session.open(oscInfo, "l")
-		elif entry == 4:
-			osc = OscamInfo()
-			reader = osc.getReaders("cccam")  # get list of available CCcam-Readers
-			if isinstance(reader, list):
-				if len(reader) == 1:
-					self.session.open(oscEntitlements, reader[0][1])
+		if NAMEBIN:
+			print("[openWebIF] NAMEBIN=%s" % (NAMEBIN))
+			if entry in (1, 2, 3) and config.oscaminfo.userdatafromconf.value and self.osc.confPath()[0] is None:
+				config.oscaminfo.userdatafromconf.setValue(False)
+				config.oscaminfo.userdatafromconf.save()
+				self.session.openWithCallback(self.ErrMsgCallback, MessageBox, _("File %s.conf not found.\nPlease enter username/password manually." % NAMEBIN), MessageBox.TYPE_ERROR)
+			elif entry == 0:
+				if os.path.exists("/tmp/ecm.info"):
+					self.session.open(oscECMInfo)
 				else:
-					self.callbackmode = "cccam"
-					self.session.openWithCallback(self.chooseReaderCallback, ChoiceBox, title=_("Please choose CCcam-Reader"), list=reader)
-		elif entry == 5:
-			osc = OscamInfo()
-			reader = osc.getReaders()
-			if reader is not None:
-				reader.append((_("All"), "all"))
+					self.session.open(MessageBox, _("No ECM info is currently available. This is only available while decrypting."), MessageBox.TYPE_INFO)
+			elif entry == 1:
+				self.session.open(oscInfo, "c")
+			elif entry == 2:
+				self.session.open(oscInfo, "s")
+			elif entry == 3:
+				self.session.open(oscInfo, "l")
+			elif entry == 4:
+				osc = OscamInfo()
+				reader = osc.getReaders("cccam")  # get list of available CCcam-Readers
 				if isinstance(reader, list):
 					if len(reader) == 1:
-						self.session.open(oscReaderStats, reader[0][1])
+						self.session.open(oscEntitlements, reader[0][1])
 					else:
-						self.callbackmode = "readers"
-						self.session.openWithCallback(self.chooseReaderCallback, ChoiceBox, title=_("Please choose reader"), list=reader)
-		elif entry == 6:
-			self.session.open(OscamInfoConfigScreen)
+						self.callbackmode = "cccam"
+						self.session.openWithCallback(self.chooseReaderCallback, ChoiceBox, title=_("Please choose CCcam-Reader"), list=reader)
+			elif entry == 5:
+				osc = OscamInfo()
+				reader = osc.getReaders()
+				if reader is not None:
+					reader.append((_("All"), "all"))
+					if isinstance(reader, list):
+						if len(reader) == 1:
+							self.session.open(oscReaderStats, reader[0][1])
+						else:
+							self.callbackmode = "readers"
+							self.session.openWithCallback(self.chooseReaderCallback, ChoiceBox, title=_("Please choose reader"), list=reader)
+			elif entry == 6:
+				self.session.open(OscamInfoConfigScreen)
+		else:
+			self.session.open(MessageBox, _("Oscam/Ncam not running - start Cam to obtain information."), MessageBox.TYPE_INFO)
+
 
 	def chooseReaderCallback(self, retval):
 		print(retval)
