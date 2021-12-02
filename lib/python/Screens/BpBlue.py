@@ -98,6 +98,8 @@ class DeliteBluePanel(Screen):
 				line = "\t/usr/softcams/" + name +"\n"
 				if name.find('oscam') != -1:
 					line = line.rstrip() + " -b -c /etc/tuxbox/config/" + name +"\n"
+				if name.find('ncam') != -1:
+					line = line.rstrip() + " -b -c /etc/tuxbox/config/" + name +"\n"
 			if line.find('daemon -K') != -1:
 				line = "\t killall -9 " + name +" 2 >/dev/null\n\tsleep 2\n\tremove_tmp\n"
 			out.write(line)
