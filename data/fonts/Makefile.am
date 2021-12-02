@@ -1,6 +1,6 @@
 installdir = $(datadir)/fonts
 
-dist_install_DATA = *.ttf, *.ttc
+dist_install_DATA = *.ttf *.ttc
 
 install-exec-hook:
     cd $(DESTDIR)$(datadir)/fonts && \
