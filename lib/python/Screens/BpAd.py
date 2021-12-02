@@ -147,7 +147,7 @@ class DeliteAddons(Screen):
 		elif self.sel == 4:
 			self.session.open(Nab_uninstPanel)
 		elif self.sel == 5:
-			staturl = "http://www.vuplus-community.net/bhaddons/index.php?op=outmestats2"
+			staturl = "http://bhaddons.openbh.net/index.php?op=outmestats2"
 			downfile = "/tmp/cpanel.tmp"
 			if fileExists(downfile):
 				os_remove(downfile)
@@ -236,12 +236,12 @@ class Nab_downArea(Screen):
 		if mypath == "/usr/share/enigma2/" or mypath == "/usr/share/enigma2/./":
 			mypath = "/usr/share/enigma2/skin_default/"
 
-		#mypixmap = mypath + "icons/nabplugins.png"
-		#png = LoadPixmap(mypixmap)
-		#name = _("OpenBh Addons Plugins")
-		#idx = 1
-		#res = (name, png, idx)
-		#self.list.append(res)
+		mypixmap = mypath + "icons/nabplugins.png"
+		png = LoadPixmap(mypixmap)
+		name = _("OpenBh Addons Plugins")
+		idx = 1
+		res = (name, png, idx)
+		self.list.append(res)
 
 		mypixmap = mypath + "icons/nabplugins.png"
 		png = LoadPixmap(mypixmap)
@@ -295,39 +295,39 @@ class Nab_downArea(Screen):
 		self["list"].list = self.list
 
 	def KeyOk(self):
-		pluginver = "OpenBlackHole-Plugins"
+		pluginver = "OpenBh-Plugins"
 		catver = "outcat10_3"
 
 		self.sel = self["list"].getCurrent()
 		if self.sel:
 			self.sel = self.sel[2]
 
-		self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=Cams"
+		self.url = "http://bhaddons.openbh.net/index.php?op=outcat&cat=Cams"
 		self.title = "Buuuuu"
 
 		if self.sel == 1:
-			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=" + pluginver
+			self.url = "http://bhaddons.openbh.net/index.php?op=outcat&cat=" + pluginver
 			self.title = "OpenBh Addons Plugins"
 		elif self.sel == 2:
 			self.url = "feeds"
 			self.title = "OpenBh Feeds"
 		elif self.sel == 3:
-			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=OpenBlackHole-Skins"
+			self.url = "http://bhaddons.openbh.net/index.php?op=outcat&cat=OpenBh-Skins"
 			self.title = "OpenBh Skins"
 		elif self.sel == 4:
-			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=Scripts"
+			self.url = "http://bhaddons.openbh.net/index.php?op=outcat&cat=Scripts"
 			self.title = "OpenBh Scripts"
 		elif self.sel == 5:
-			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=Logos"
+			self.url = "http://bhaddons.openbh.net/index.php?op=outcat&cat=Logos"
 			self.title = "OpenBh Boot Logo"
 		elif self.sel == 6:
-			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=Settings"
+			self.url = "http://bhaddons.openbh.net/index.php?op=outcat&cat=Settings"
 			self.title = "OpenBh Settings"
 		elif self.sel == 7:
-			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outcat&cat=Picons"
+			self.url = "http://bhaddons.openbh.net/index.php?op=outcat&cat=Picons"
 			self.title = "OpenBh Picons Packages"
 		#elif self.sel == 8:
-		#	self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=" + catver
+		#	self.url = "http://bhaddons.openbh.net/index.php?op=" + catver
 		#	self.title = "Latest 10 Uploads"
 
 		downfile = "/tmp/cpanel.tmp"
@@ -398,7 +398,7 @@ class Nab_downCat(Screen):
 		self.sel = self["list"].getCurrent()
 		if self.sel:
 			self.myidf = self.sel[1]
-			self.url = "http://www.vuplus-community.net/bhaddons/index.php?op=outfile&idf=" + self.myidf
+			self.url = "http://bhaddons.openbh.net/index.php?op=outfile&idf=" + self.myidf
 
 			downfile = "/tmp/cpanel.tmp"
 			if fileExists(downfile):
@@ -517,11 +517,11 @@ class Nab_ShowDownFile(Screen):
 		return cleantext
 
 	def KeyYellowd(self):
-		if (self.tcat != "OpenBlackHole-Skins" and self.tcat != "Logos"):
+		if (self.tcat != "OpenBh-Skins" and self.tcat != "Logos"):
 			nobox = self.session.open(MessageBox, _("Sorry, the preview is available only for Skins and Bootlogo."), MessageBox.TYPE_INFO)
 		else:
 			self.fileP = self.fileN.replace('.tgz', '.jpg')
-			self.url = '"http://www.vuplus-community.net/bhaddons/files/' + self.fileP + '"'
+			self.url = '"http://bhaddons.openbh.net/files/' + self.fileP + '"'
 			cmd = "wget -O /tmp/" + self.fileP + " " + self.url
 			self.session.openWithCallback(self.addonsconn2, Nab_ConnectPop, cmd, "N/A")
 
@@ -529,7 +529,7 @@ class Nab_ShowDownFile(Screen):
 		self.session.open(Nab_ShowPreviewFile, self.fileP)
 
 	def KeyGreend(self):
-		self.url = '"http://www.vuplus-community.net/bhaddons/files/' + self.fileN + '"'
+		self.url = '"http://bhaddons.openbh.net/files/' + self.fileN + '"'
 		cmd = "wget -O /tmp/" + self.fileN + " " + self.url
 		self.session.openWithCallback(self.addonsconn, Nab_ConnectPop, cmd, "N/A")
 
