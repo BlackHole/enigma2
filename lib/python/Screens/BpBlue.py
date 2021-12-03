@@ -70,11 +70,15 @@ class DeliteBluePanel(Screen):
 		}, -1)
 
 		self.emlist = []
-		self.check_scriptexists()
-		self.populate_List()
 		self["list"] = MenuList(self.emlist)
 		self["lab1"].setText(_("%d  CAMs Installed") % (len(self.emlist)))
-		self.onShow.append(self.updateBP)
+		self.onShow.append(self.updateBP0)
+
+	def updateBP0(self):
+		self.check_scriptexists()
+		self.populate_List()
+		self["list"].setList(self.emlist)
+		self.updateBP()
 
 	def check_scriptexists(self):
 		if path.exists("/usr/softcams"):
@@ -198,8 +202,8 @@ class DeliteBluePanel(Screen):
 		system(cmd)
 		cmd = "STOP_CAMD," + self.defaultcam
 		self.sendtoBh_sock(cmd)
-		cmd = self.defaultcam + " stop"
-		system(cmd)
+#		cmd = self.defaultcam + " stop"
+#		system(cmd)
 
 		cmd = "NEW_CAMD," + self.newcam
 		self.sendtoBh_sock(cmd)
