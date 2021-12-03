@@ -71,14 +71,40 @@ class DeliteBluePanel(Screen):
 
 		self.emlist = []
 		self["list"] = MenuList(self.emlist)
-		self["lab1"].setText(_("%d  CAMs Installed") % (len(self.emlist)))
 		self.onShow.append(self.updateBP0)
 
 	def updateBP0(self):
 		self.check_scriptexists()
+		self.check_camexists()
 		self.populate_List()
 		self["list"].setList(self.emlist)
+		self["lab1"].setText(_("%d  CAMs Installed") % (len(self.emlist)))
 		self.updateBP()
+
+	def check_camexists(self):
+		if path.exists("/usr/camscript"):
+			cams = listdir("/usr/camscript/")
+			for fil in cams:
+				self.ch_ca2(fil)
+				
+	def ch_ca2(self, script):
+		if script == "Ncam_Ci.sh":
+			return
+		name = script.replace('Ncam_', '').replace('.sh', '')
+		cams = listdir("/usr/softcams/")
+		for fil in cams:
+			if fil == name:
+				return
+		vc = False
+		filein = "/usr/camscript/" + script
+		f = open(filein,'r')
+		for line in f.readlines():
+			if line.find('/usr/softcams/') != -1:
+				vc = True
+				break
+		f.close()
+		if vc == True:
+			os_remove(filein)
 
 	def check_scriptexists(self):
 		if path.exists("/usr/softcams"):
