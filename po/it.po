@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: obh 4.4  it_IT\n"
+"Project-Id-Version: OBH 5.0  it_IT\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-20 16:50+0000\n"
-"PO-Revision-Date: 2021-09-20\n"
+"POT-Creation-Date: 2021-12-03 00:00+0000\n"
+"PO-Revision-Date: 2021-12-03\n"
 "Last-Translator: Alexwilmac\n"
 "Language-Team: @Alexwilmac-@insanity\n"
 "Language: it\n"
@@ -12,6 +12,174 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.2\n"
+
+msgid "Detect next boxes before standby"
+msgstr "Controlla se altri dispositivi sono in Standby"
+
+msgid ""
+"Before sending the command to switch the TV to standby, the receiver tests if all the other devices plugged "
+"into TV are in standby. If they are not, the 'sourceactive' command will be sent to the TV instead of the "
+"'standby' command."
+msgstr ""
+"Prima di inviare il comando per porre la TV in Standby, controlla se tutti gli altri dispositivi collegati"
+"alla TV sono già in questo stato. Se non è così, viene inviato alla TV il comando 'sorgente attiva' "
+"e NON quello di Standby."
+
+msgid "Debug to file"
+msgstr "Registro eventi (log)"
+
+msgid "If enabled, a log will be kept of CEC protocol traffic ('hdmicec.log')."
+msgstr "Se abilitato verrà creato un registro degli eventi prodotti dal traffico con protocollo CEC."
+
+msgid ""
+"Command the TV to switch to the correct HDMI input when zap timers activate."
+msgstr "Comanda alla TV di attivare l'ingresso HDMI corretto quando si attiva un timer."
+
+msgid "The command to wake from standby will be sent multiple times."
+msgstr "Il comando di risveglio dallo Standby sarà inviato più volte."
+
+msgid ""
+"Delay between CEC commands when sending a series of commands. Some devices require this delay for correct "
+"functioning, usually between 50-150ms."
+msgstr ""
+
+msgid "Wake A/V receiver from standby."
+msgstr "Riattiva il ricevitore dallo stato di Standby."
+
+msgid "Put A/V receiver in standby."
+msgstr "Manda il ricevitore nello stato di Standby."
+
+msgid "Volume keys on the receiver remote will control the TV volume."
+msgstr "I tasti del ricevitore controlleranno il volume della TV."
+
+msgid ""
+"When enabled the receiver will automatically wake from standby when the TV is turned on."
+msgstr ""
+"Abilitando questa funzione il ricevitore si riattiverà automaticamente dallo Standby "
+"quando viene accesa la TV."
+
+msgid ""
+"When enabled the receiver will automatically return to standby when the TV is turned off."
+msgstr ""
+"Abilitando questa funzione il ricevitore andrà automaticamente in Standby "
+"quando viene spenta la TV."
+
+msgid "Allows the TV remote to be used to control the receiver."
+msgstr "Permette di utilizzare il telecomando della TV per controllare il ricevitore."
+
+msgid ""
+"When receiver wakes from standby, it will command the TV to switch to the HDMI input the receiver is connected to."
+msgstr ""
+"Quando il ricevitore si risveglia dallo Standby, comanderà alla TV di commutare sull'ingresso cui "
+"il ricevitore stesso è connesso."
+
+msgid ""
+"If set to 'yes' the same commands will be sent to the TV for deep standby events, as are sent during "
+"regular standby events."
+msgstr ""
+"Se impostato su 'SÌ', verranno inviati per lo spegnimento gli stessi comandi usati per la funzione Standby."
+
+msgid "NTP sync interval"
+msgstr "Intervallo di sincronizzazione con NTP"
+
+msgid "Sort menu screens"
+msgstr "Ordinamento voci dei menu"
+
+msgid ""
+"When set to 'user' this option allows you to sort or hide menu items "
+"via the blue button in menu screens. When set to 'user defined hidden' the "
+"blue button text in the menu remains hidden even though the user "
+"sort feature is active."
+msgstr ""
+"Quando è su 'user' potete ordinare o nascondere voci di menu con il tasto blu. "
+"Quando è su 'nascosto dall'utente', il testo del pulsante BLU nel menu rimane nascosto "
+"sebbene sia attiva l'opzione 'ordinato dall'utente'."
+
+msgid "user defined hidden"
+msgstr "nascosto dall'utente"
+
+msgid "alphabetical"
+msgstr "alfabetico"
+
+msgid "Image View On"
+msgstr "Visione immagini ON"
+
+msgid "Text View On"
+msgstr "Visione testo ON"
+
+msgid "Wake A/V receiver from standby"
+msgstr "Riattiva il ricevitore dallo Standby"
+
+msgid "Put A/V receiver in standby"
+msgstr "Metti il ricevitore in Standby"
+
+msgid "Wakeup command for TV"
+msgstr "Comando per riattivare la TV"
+
+msgid "Repeat leave standby messages"
+msgstr "Intervallo ripetizione messaggi riaccensione"
+
+msgid ""
+"Automatically put the TV in standby whenever the receiver goes "
+"into standby or deep standby."
+msgstr ""
+"Pone la TV automaticamente in Standby ogni volta che il ricevitore "
+"va esso stesso in Standby o viene spento."
+
+msgid ""
+"When the receiver wakes from standby, it will send a command to the TV "
+"to bring it out of standby too."
+msgstr ""
+"Quando il ricevitore si riattiva dallo Standby manderà un segnale alla TV "
+"perché si riattivi anch'essa."
+
+msgid "Enable or disable using HDMI-CEC."
+msgstr "Abilita o disabilita le funzioni di HDMI-CEC."
+
+msgid ""
+"Some TVs do not wake from standby when they receive the 'Image View On' command. "
+"If this is the case try the 'Text View On' command instead."
+msgstr "Alcune TV non si riattivano dallo Standby se si usa il comando 'Visione immagini ON'. "
+"In questo caso provare il comando 'Visione testo ON'."
+
+msgid "OpenBh Settings"
+msgstr "Setting per OpenBlackHole"
+
+msgid "OpenBh Image Boot Logo"
+msgstr "BootLogo OpenBlackHole"
+
+msgid "OpenBh Image Script"
+msgstr "Script per OpenBlackHole"
+
+msgid "OpenBh Image Skins"
+msgstr "Skin per OpenBlackHole"
+
+msgid "OpenBh Feeds"
+msgstr "Componenti aggiuntivi generici"
+
+msgid "OpenBh Addons Plugins"
+msgstr "Componenti aggiuntivi specifici di OBH"
+
+msgid "Manual Install OpenBh packages"
+msgstr "Installazione manuale pacchetti OBH"
+
+msgid "OpenBh online update"
+msgstr "Aggiornamenti OBH"
+
+msgid "Addons and Feeds Manager"
+msgstr "Componenti aggiuntivi (addons)"
+
+msgid "Network Browser & Mountpoints"
+msgstr "Sfogliare reti e punti di mount"
+
+msgid "OpenBh Speed Up"
+msgstr "Ottimizzazione OpenBlackHole"
+
+msgid "OpenBh Apps"
+msgstr "Applicazioni OBH"
+
+msgid "You have changed the share name! Update existing entry and continue?"
+msgstr "Hai modificato il nome della condivisione: confermi la modifica?"
 
 msgid "+24 hours"
 msgstr "Giorno succ."
@@ -509,11 +677,11 @@ msgstr[1] "%d ore"
 
 msgid "%d job is running in the background!"
 msgid_plural "%d jobs are running in the background!"
-msgstr[0] "%d processo attivo in background!"
-msgstr[1] "%d processi attivi in background!"
+msgstr[0] "%d processo attivo in sottofondo!"
+msgstr[1] "%d processi attivi in sottofondo!"
 
 msgid "%d jobs are running in the background!"
-msgstr "%d processi attivi in background!"
+msgstr "%d processi attivi in sottofondo!"
 
 msgid "%d kB"
 msgstr "%d Kb"
@@ -824,14 +992,14 @@ msgid ""
 "A background update check is in progress,\n"
 "please wait a few minutes and try again."
 msgstr ""
-"È in corso un controllo aggiornamenti in background:\n"
+"È in corso un controllo aggiornamenti in sottofondo:\n"
 "attendere qualche minuto e riprovare."
 
 msgid "A background update check is in progress, please wait a few minutes and then try again."
-msgstr "È in corso un controllo aggiornamenti in background: attendere qualche minuto e riprovare."
+msgstr "È in corso un controllo aggiornamenti in sottofondo: attendere qualche minuto e riprovare."
 
 msgid "A background update check is in progress, please wait a few minutes and try again."
-msgstr "È in corso un controllo aggiornamenti in background: attendere qualche minuto e riprovare."
+msgstr "È in corso un controllo aggiornamenti in sottofondo: attendere qualche minuto e riprovare."
 
 msgid ""
 "A configuration file (%s) has been modified since it was installed.\n"
@@ -1187,9 +1355,6 @@ msgstr ""
 
 msgid "Addons"
 msgstr "Addons"
-
-msgid "Addons Download Manager"
-msgstr "Download addons"
 
 msgid "Addons Parental Control"
 msgstr "Controllo parentale addons"
@@ -1703,16 +1868,16 @@ msgid "Background"
 msgstr "Sfondo"
 
 msgid "Background check"
-msgstr "Controllo in background"
+msgstr "Controllo in sottofondo"
 
 msgid "Background color"
-msgstr "Colore background"
+msgstr "Colore di sottofondo"
 
 msgid "Background delete option"
-msgstr "Opzione elimina in background"
+msgstr "Opzione elimina in sottofondo"
 
 msgid "Background delete speed"
-msgstr "Velocità cancellazione in background"
+msgstr "Velocità cancellazione in sottofondo"
 
 msgid "Backup"
 msgstr "Backup"
@@ -1802,12 +1967,6 @@ msgstr "Script E2 OpenBlackHole"
 msgid "Black Hole Feeds Plugins"
 msgstr "Altri componenti aggiuntivi"
 
-msgid "Black Hole Image Boot Logo"
-msgstr "BootLogo OpenBlackHole"
-
-msgid "Black Hole Image Script"
-msgstr "Script immagine OpenBlackHole"
-
 msgid ""
 "Black Hole Image Statistics:\n"
 "\n"
@@ -1819,12 +1978,6 @@ msgstr ""
 
 msgid "Black Hole Preview: click ok to exit"
 msgstr "Anteprima OpenBlackHole: tasto OK per uscire"
-
-msgid "Black Hole Settings"
-msgstr "Settings OpenBlackHole"
-
-msgid "Black Hole Speed Up"
-msgstr "Ottimizzazione OpenBlackHole"
 
 msgid "Black Hole Statistics"
 msgstr "Statistiche OpenBlackHole"
@@ -2525,7 +2678,7 @@ msgid "Configure if and how wide the service name column will be shown in the ch
 msgstr "Configurare se e come la larghezza colonna canali verrà visualizzata nella lista canali"
 
 msgid "Configure if behind the subtitles a background is shown."
-msgstr "Configurare la visualizzazione del background per i sottotitoli"
+msgstr "Configurare la visualizzazione del sottofondo per i sottotitoli"
 
 msgid "Configure if picons will be shown in the service list."
 msgstr "Configurare la visualizzazione delle picon nell'elenco canali."
@@ -2543,7 +2696,7 @@ msgid "Configure nameservers"
 msgstr "Configurare i DNS"
 
 msgid "Configure on which devices the background delete option should be used."
-msgstr "Configurare i supporti sui quali attivare l'opzione rimozione in background."
+msgstr "Configurare i supporti sui quali attivare l'opzione rimozione in sottofondo."
 
 msgid "Configure the DiSEqC mode for this LNB."
 msgstr "Configurare la modalità DiSEqC per questo LNB."
@@ -2571,7 +2724,7 @@ msgid ""
 "light background."
 msgstr ""
 "Configurare lo spessore bordi dei sottotitoli.\n"
-"Bordi scuri su uno background chiaro renderanno più agevole la loro lettura."
+"Bordi scuri su un sottofondo chiaro renderanno più agevole la loro lettura."
 
 msgid "Configure the brightness level of the front panel display for dimmed operation."
 msgstr "Configurare il livello di luminosità LCD in modalità luminosità attenuata."
@@ -2743,7 +2896,7 @@ msgid ""
 "Configure the speed of the background deletion process. Lower speed will consume less hard disk drive "
 "performance."
 msgstr ""
-"Configura la velocità assegnata al processo di rimozione in background. Velocità inferiori incideranno "
+"Configura la velocità assegnata al processo di rimozione in sottofondo. Velocità inferiori incideranno "
 "meno sulle prestazione dell'HDD."
 
 msgid "Configure the subtitle delay when timing information is not available."
@@ -3458,7 +3611,7 @@ msgid "Disable Timer"
 msgstr "Disabilita timer"
 
 msgid "Disable background scanning"
-msgstr "Disabilitare scansione in background"
+msgstr "Disabilitare scansione in sottofondo"
 
 msgid "Disable move mode"
 msgstr "Disabilitare spostamento"
@@ -6205,9 +6358,6 @@ msgstr "Sottorete:"
 msgid "Network"
 msgstr "Rete"
 
-msgid "Network Browser & Mountpoints"
-msgstr "Sfogliare reti e mountpoint"
-
 msgid "Network ID"
 msgstr "ID della rete"
 
@@ -6555,7 +6705,7 @@ msgid ""
 "sure that you can still see the difference between the two brightest levels of shades.If you have done "
 "that, press OK."
 msgstr ""
-"Utilizzare ora il controllo del contrasto per aumentare la luminosità del background il più possibile, "
+"Utilizzare ora il controllo del contrasto per aumentare la luminosità del sottofondo il più possibile, "
 "assicurandosi di poter distinguere la differenza tra le due sfumature più chiare. Alla fine premere OK."
 
 msgid "Number"
@@ -6616,7 +6766,7 @@ msgid "On end of movie (as menu)"
 msgstr "Alla fine del film (come menu)"
 
 msgid "On shutdown/restart warn about any pending jobs being carried out in the background."
-msgstr "In caso di avvio o spegnimento, avvisa se vi sono processi attivi in background."
+msgstr "In caso di avvio o spegnimento, avvisa se vi sono processi attivi in sottofondo."
 
 msgid "On valid ONIDs, ignore frequency sub network part"
 msgstr "Ignora la frequenza della parte sottorete sugli ONID validi"
@@ -6668,17 +6818,8 @@ msgstr ""
 "Scegliere ‘Sì’ soltanto se utilizzi un multiswitch che richieda un segnale di comando DiSEqC per la "
 "porta A. Per tutte le altre situazioni, scegli ‘no’."
 
-msgid "Open Black Hole Addons Plugins"
-msgstr "Componenti aggiuntivi specifici di OBH"
-
 msgid "Open Black Hole Image"
 msgstr "Immagine Open BlackHole"
-
-msgid "Open Black Hole Image Skins"
-msgstr "Skin per OpenBlackHole"
-
-msgid "Open Black Hole online update"
-msgstr "Aggiornamenti online OpenBlackHole"
 
 msgid "Open bouquet list"
 msgstr "Aprire elenco bouquet"
@@ -6921,7 +7062,7 @@ msgid "Perform a settings backup, making a backup before updating is strongly ad
 msgstr "Eseguire un backup delle configurazioni prima di aggiornare è fortemente consigliato."
 
 msgid "Perform an online update check in the background"
-msgstr "Eseguire un controllo aggiornamenti online in background"
+msgstr "Eseguire un controllo aggiornamenti online in sottofondo"
 
 msgid "Permanently delete all recordings in the trash can?"
 msgstr "Rimuovere definitivamente tutte le registrazioni dal cestino?"
@@ -9315,13 +9456,13 @@ msgid "Show animation while busy"
 msgstr "Mostra animazione mentre impegnato"
 
 msgid "Show background behind subtitles"
-msgstr "Mostra background dietro ai sottotitoli"
+msgstr "Mostra i sottotitoli con un sottofondo"
 
 msgid "Show background in Radio mode"
-msgstr "Mostra background in modalità radio"
+msgstr "Mostra sfondo in modalità radio"
 
 msgid "Show background when tuned to a radio channel."
-msgstr "Mostra background quando sintonizzati su un canale radio."
+msgstr "Mostra sfondo quando si è sintonizzati su un canale radio."
 
 msgid "Show bouquet on launch"
 msgstr "Mostra bouquet all'avvio"
@@ -9426,7 +9567,7 @@ msgid "Show or hide the extended description, (skin dependant)."
 msgstr "Mostra o nascondi descrizioni estese. (Dipende dalla skin)"
 
 msgid "Show picon background color"
-msgstr "Mostra colore di background picon"
+msgstr "Mostra colore di sottofondo per le picon"
 
 msgid "Show picons during channel number input"
 msgstr "Mostra le picon mentre componi il numero di canale"
@@ -10299,9 +10440,6 @@ msgstr "SR (Symbol rate) / FEC"
 msgid "Symbolrate:"
 msgstr "SR (SymbolRate):"
 
-msgid "Sync NTP every (minutes)"
-msgstr "Sincronizzare NTP ogni (minuti)"
-
 msgid "Sync failure moving back to origin !"
 msgstr "Sincronizzazione fallita: tornare all'origine!"
 
@@ -10705,7 +10843,7 @@ msgstr ""
 "rimanente/trascorso per le trasmissioni TV in diretta."
 
 msgid "This option allows you choose the background color of transparent picons."
-msgstr "Consente di scegliere il colore di background delle picon trasparenti."
+msgstr "Consente di scegliere il colore di sfondo delle picon trasparenti."
 
 msgid "This option allows you enable smoothing filter to control the dithering process."
 msgstr "Consente di attivare il filtro 'smussamento immagine' per controllare il processo 'tremolio'."
