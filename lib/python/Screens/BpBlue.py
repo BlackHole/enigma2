@@ -86,7 +86,7 @@ class DeliteBluePanel(Screen):
 			cams = listdir("/usr/camscript/")
 			for fil in cams:
 				self.ch_ca2(fil)
-				
+
 	def ch_ca2(self, script):
 		if script == "Ncam_Ci.sh":
 			return
@@ -258,9 +258,9 @@ class DeliteBluePanel(Screen):
 			from Screens.CCcamInfo import CCcamInfoMain
 			self.session.open(CCcamInfoMain)
 		else :
-			self.session.open(MessageBox, _("Please run Oscam, Ncam or Cccam to get info."), MessageBox.TYPE_INFO)
-		
-				
+			self.session.open(MessageBox, _("Please use OScam, Ncam or CCcam to get info."), MessageBox.TYPE_INFO)
+
+
 
 	def keyRed(self):
 		self.session.open(BhEpgPanel)
