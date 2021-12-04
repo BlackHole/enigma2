@@ -82,6 +82,8 @@ class DeliteBluePanel(Screen):
 		self.updateBP()
 
 	def check_camexists(self):
+		if not path.exists("/usr/softcams"):
+			return
 		if path.exists("/usr/camscript"):
 			cams = listdir("/usr/camscript/")
 			for fil in cams:
