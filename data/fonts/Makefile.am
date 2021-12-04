@@ -14,5 +14,6 @@ dist_install_DATA = \
 	wqy-microhei.ttc
 
 install-exec-hook:
+
 	cd $(DESTDIR)$(datadir)/fonts && \
 	$(LN_S) wqy-microhei.ttc fallback.font
