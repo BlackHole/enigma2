@@ -51,7 +51,7 @@ class DeliteBluePanel(Screen):
 		self["Ilab3"] = Label()
 		self["Ilab4"] = Label()
 		self["key_red"] = Label(_("Epg Panel"))
-		self["key_green"] = Label(_("OpenVpn"))
+		self["key_green"] = Label(_("Oscam Info"))
 		self["key_yellow"] = Label(_("System Info"))
 		self["key_blue"] = Label(_("Extra Settings"))
 		self["activecam"] = Label()
@@ -250,8 +250,8 @@ class DeliteBluePanel(Screen):
 		self.session.open(DeliteSettings)
 
 	def keyGreen(self):
-		from Screens.BpSet import DeliteOpenvpn
-		self.session.open(DeliteOpenvpn)
+		from Screens.OScamInfo import OscamInfoMenu
+		self.session.open(OscamInfoMenu)
 
 	def keyRed(self):
 		self.session.open(BhEpgPanel)
