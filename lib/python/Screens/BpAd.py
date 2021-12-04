@@ -101,7 +101,7 @@ class DeliteAddons(Screen):
 
 		#mypixmap = mypath + "icons/statpanel.png"
 		#png = LoadPixmap(mypixmap)
-		#name = _("BlackHole Statistics")
+		#name = _("OpenBh Statistics")
 		#idx = 5
 		#res = (name, png, idx)
 		#self.list.append(res)
@@ -285,12 +285,12 @@ class Nab_downArea(Screen):
 		res = (name, png, idx)
 		self.list.append(res)
 
-		#mypixmap = mypath + "icons/nabuploads.png"
-		#png = LoadPixmap(mypixmap)
-		#name = _("Latest 10 Uploads")
-		#idx = 8
-		#res = (name, png, idx)
-		#self.list.append(res)
+		mypixmap = mypath + "icons/nabuploads.png"
+		png = LoadPixmap(mypixmap)
+		name = _("Latest 10 Uploads")
+		idx = 8
+		res = (name, png, idx)
+		self.list.append(res)
 
 		self["list"].list = self.list
 
@@ -326,9 +326,9 @@ class Nab_downArea(Screen):
 		elif self.sel == 7:
 			self.url = "http://bhaddons.openbh.net/index.php?op=outcat&cat=Picons"
 			self.title = "OpenBh Picons Packages"
-		#elif self.sel == 8:
-		#	self.url = "http://bhaddons.openbh.net/index.php?op=" + catver
-		#	self.title = "Latest 10 Uploads"
+		elif self.sel == 8:
+			self.url = "http://bhaddons.openbh.net/index.php?op=" + catver
+			self.title = "Latest 10 Uploads"
 
 		downfile = "/tmp/cpanel.tmp"
 		if fileExists(downfile):
@@ -811,7 +811,7 @@ class Nab_Stats(Screen):
 
 	def statshow(self):
 		if fileExists("/tmp/cpanel.tmp"):
-			strview = _("BlackHole Image Statistics:\n\n_____________________________________\n")
+			strview = _("OpenBh Image Statistics:\n\n_____________________________________\n")
 			step = 0
 			f = open("/tmp/cpanel.tmp", 'r')
 
