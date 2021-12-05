@@ -65,10 +65,6 @@ class UpdateChoices(ChoiceBox):
 			self['tl_yellow'] = Pixmap()
 			self['tl_green'] = Pixmap()
 
-		self["menuActions"] = NumberActionMap(["MenuActions"],
-		{
-			"menu": self.opensettings
-		}, prio=-3) # Override ChoiceBox "menu" action
 		self.onShown.append(self.onshow)
 
 	def onshow(self):
@@ -91,10 +87,6 @@ class UpdateChoices(ChoiceBox):
 				self['tl_green'].show()
 			else:
 				self['tl_off'].show()
-
-	def opensettings(self):
-		from Screens.Setup import Setup
-		self.session.open(Setup, "softwareupdate")
 
 	def cancelClick(self, dummy=False):
 		self.close()
@@ -179,7 +171,7 @@ class UpdatePlugin(Screen, ProtectedScreen):
 				else:
 					self.startCheck()
 			else:
-				self.session.openWithCallback(self.statusMessageCallback, MessageBox, _("UNSTABLE: The feeds currently contain unstable experimental updates. You can continue at your own risk but doing so may render your %s %s unusable and in need of a complete reflash.\n\nAre you sure you want to continue?") % (getMachineBrand(), getMachineName()), type=MessageBox.TYPE_YESNO, default=False)
+				self.session.openWithCallback(self.close, MessageBox, _("Sorry the feeds seem to be in an unstable state, if you wish to use them please enable 'Allow unstable (experimental) updates' in \"Software update settings\"."), type=MessageBox.TYPE_INFO, timeout=10, close_on_any_key=True)
 
 	def statusMessageCallback(self, answer):
 		if answer:

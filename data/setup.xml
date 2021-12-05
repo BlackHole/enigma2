@@ -294,6 +294,7 @@
 		<item level="1" text="Allow unstable (experimental) updates" description="When enabled the online checker will also check for experimental versions">config.softwareupdate.updatebeta</item>
 		<item level="1" text="Automatic settings backup" description="Perform a settings backup before updating.">config.softwareupdate.autosettingsbackup</item>
 		<item level="1" text="Automatic image backup" description="Perform a complete image backup before updating.">config.softwareupdate.autoimagebackup</item>
+		<item level="1" text="Show Software Update in Extensions" description="Show Software Update in Extensions Menu (Blue button long). 'yes' adds it permanently. 'only when available' only shows it when updates are known to be available based on update polling.">config.softwareupdate.showinextensions</item>
 	</setup>
 	<setup key="softcamsetup" title="Softcam settings">
 		<item level="2" text="Show CCcam Info in extensions?" description="Allows you to show/hide CCcam Info in extensions -blue button." requires="CCcamInstalled">config.cccaminfo.showInExtensions</item>
@@ -472,7 +473,6 @@
 	<setup key="pluginbrowsersetup" title="Plugin browser settings">
 		<item level="2" text="Show translation packages" description="If set to 'yes' it will show the 'PO' packages in browser.">config.pluginbrowser.po</item>
 		<item level="2" text="Show source packages" description="If set to 'yes' it will show the 'SRC' packages in browser.">config.pluginbrowser.src</item>
-		<item level="1" text="Allow unstable (experimental) feeds" description="When enabled the feeds and software updates may contain unstable experimental versions. Enable this at your own risk.">config.softwareupdate.updatebeta</item>
 	</setup>
 	<setup key="wizardoptions" title="Common options">
 		<item level="0" text="Picons: Show in channel list" description="Configure if service picons will be shown in the channel selection list.">config.usage.service_icon_enable</item>
