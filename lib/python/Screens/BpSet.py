@@ -795,13 +795,13 @@ class DeliteOpenvpn(Screen):
 		mymess = _("OpenVpn Enabled. Autostart activated.")
 		if self.my_vpn_active == True:
 #			system("rm -f /etc/default/openvpn")
-			system("rm -f /etc/rc3.d/S20openvpn")
+			system("rm -f /etc/rc4.d/S20openvpn")
 			mymess = _("OpenVpn disabled.")
 		else:
 #			out = open("/etc/default/openvpn",'w')
 #			out.write("AUTOSTART=all")
 #			out.close()
-			system("ln -s /etc/init.d/openvpn /etc/rc3.d/S20openvpn")
+			system("ln -s /etc/init.d/openvpn /etc/rc4.d/S20openvpn")
 
 		mybox = self.session.open(MessageBox, mymess, MessageBox.TYPE_INFO)
 		mybox.setTitle("Info")
@@ -839,7 +839,7 @@ class DeliteOpenvpn(Screen):
 		self.my_vpn_active = False
 		self.my_vpn_run = False
 
-		if fileExists("/etc/rc3.d/S20openvpn"):
+		if fileExists("/etc/rc4.d/S20openvpn"):
 			self["labactive"].setText(_("Active/Autostart enabled"))
 			self["key_yellow"].setText(_("Deactivate"))
 			self.my_vpn_active = True
