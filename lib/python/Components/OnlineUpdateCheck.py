@@ -109,7 +109,8 @@ class FeedsStatusCheck:
 				else:
 					trafficLight = "unknown"
 
-				trafficLight = six.ensure_str(trafficLight)
+				#trafficLight = six.ensure_str(trafficLight)
+				trafficLight = "stable" #OpenBh
 
 				if trafficLight == "stable":
 					status = "0"
