@@ -90,7 +90,8 @@ class DeliteSettings(Screen):
 			except:
 				self.session.open(MessageBox, _("MiniDlna Server not installed."), MessageBox.TYPE_INFO)
 		elif self.sel == 11:
-			self.session.open(DeliteOpenvpn)
+			from Screens.NetworkSetup import NetworkOpenvpn
+			self.session.open(NetworkOpenvpn)
 		elif self.sel == 12:
 			self.session.open(Setup, "epgsettings")
 		elif self.sel == 13:
@@ -810,7 +811,7 @@ class DeliteOpenvpn(Screen):
 
 	def restartVpn(self):
 		if self.my_vpn_active == False:
-			mybox = self.session.open(MessageBox, _("You have to Activate OpenVpn before to start"), MessageBox.TYPE_INFO)
+			mybox = self.session.open(MessageBox, _("You need to Activate OpenVpn before you can start it"), MessageBox.TYPE_INFO)
 			mybox.setTitle("Info")
 		elif self.my_vpn_active == True and self.my_vpn_run == False:
 			rc = system("/etc/init.d/openvpn start")
