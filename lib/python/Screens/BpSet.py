@@ -76,7 +76,8 @@ class DeliteSettings(Screen):
 			from Screens.BpDevice import BlackPoleSwap
 			self.session.open(BlackPoleSwap)
 		elif self.sel == 8:
-			self.session.open(DeliteInadyn)
+			from Screens.NetworkSetup import NetworkInadyn
+			self.session.open(NetworkInadyn)
 		elif self.sel == 9:
 			try:
 				from Plugins.Extensions.DLNABrowser.plugin import DLNADeviceBrowser
@@ -84,11 +85,8 @@ class DeliteSettings(Screen):
 			except:
 				self.session.open(MessageBox, _("Dlna Browser not installed."), MessageBox.TYPE_INFO)
 		elif self.sel == 10:
-			try:
-				from Plugins.Extensions.DLNAServer.plugin import DLNAServer
-				self.session.open(DLNAServer)
-			except:
-				self.session.open(MessageBox, _("MiniDlna Server not installed."), MessageBox.TYPE_INFO)
+			from Screens.NetworkSetup import NetworkMiniDLNA
+			self.session.open(NetworkMiniDLNA)
 		elif self.sel == 11:
 			from Screens.NetworkSetup import NetworkOpenvpn
 			self.session.open(NetworkOpenvpn)
