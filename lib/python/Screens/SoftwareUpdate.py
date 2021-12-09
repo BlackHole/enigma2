@@ -412,7 +412,7 @@ class UpdatePlugin(Screen, ProtectedScreen):
 			self.close()
 
 	def showJobView(self, job):
-		if job.name == dgettext('OpenBh', 'Image manager'):
+		if job.name == dgettext('openBh', 'Image manager'):
 			self.ImageBackupDone = True
 		elif job.name == dgettext('openbh', 'Backup manager'):
 			self.SettingsBackupDone = True
