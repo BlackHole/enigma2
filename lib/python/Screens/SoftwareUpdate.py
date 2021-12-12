@@ -386,7 +386,7 @@ class UpdatePlugin(Screen, ProtectedScreen):
 		Components.Task.job_manager.AddJob(self.BackupFiles.createBackupJob())
 		Components.Task.job_manager.in_background = False
 		for job in Components.Task.job_manager.getPendingJobs():
-			if job.name == dgettext('openbh', 'Backup manager'):
+			if job.name == dgettext('obh', 'Backup manager'):
 				break
 		self.showJobView(job)
 
@@ -397,7 +397,7 @@ class UpdatePlugin(Screen, ProtectedScreen):
 		Components.Task.job_manager.AddJob(self.ImageBackup.createBackupJob())
 		Components.Task.job_manager.in_background = False
 		for job in Components.Task.job_manager.getPendingJobs():
-			if job.name == dgettext('openbh', 'Image manager'):
+			if job.name == dgettext('obh', 'Image manager'):
 				break
 		self.showJobView(job)
 
@@ -412,9 +412,9 @@ class UpdatePlugin(Screen, ProtectedScreen):
 			self.close()
 
 	def showJobView(self, job):
-		if job.name == dgettext('openbh', 'Image manager'):
+		if job.name == dgettext('obh', 'Image manager'):
 			self.ImageBackupDone = True
-		elif job.name == dgettext('openbh', 'Backup manager'):
+		elif job.name == dgettext('obh', 'Backup manager'):
 			self.SettingsBackupDone = True
 		from Screens.TaskView import JobView
 		Components.Task.job_manager.in_background = False
