@@ -1,30 +1,30 @@
 from __future__ import print_function
 from __future__ import absolute_import
 
-from Screens.Screen import Screen
-from Screens.Setup import getConfigMenuItem, Setup
-from Screens.InputBox import PinInput
-from Screens.MessageBox import MessageBox
-from Components.ServiceEventTracker import ServiceEventTracker
+from enigma import eDVBDB, eServiceCenter, eServiceReference, eSize, eTimer, iPlayableService, iServiceInformation
+
 from Components.ActionMap import NumberActionMap
+from Components.config import ConfigNothing, ConfigOnOff, ConfigSelection, ConfigSubsection, ConfigYesNo, config, getConfigListEntry
 from Components.ConfigList import ConfigListScreen
-from Components.config import config, ConfigSubsection, getConfigListEntry, ConfigNothing, ConfigSelection, ConfigOnOff, ConfigYesNo
 from Components.Label import Label
-from Components.Sources.List import List
+from Components.PluginComponent import plugins
+from Components.ServiceEventTracker import ServiceEventTracker
 from Components.Sources.Boolean import Boolean
+from Components.Sources.List import List
 from Components.SystemInfo import SystemInfo
 from Components.VolumeControl import VolumeControl
-from Components.PluginComponent import plugins
 from Plugins.Plugin import PluginDescriptor
-
-from enigma import iPlayableService, eTimer, eSize, eDVBDB, eServiceReference, eServiceCenter, iServiceInformation
-
-from Tools.ISO639 import LanguageCodes
+from Screens.InputBox import PinInput
+from Screens.MessageBox import MessageBox
+from Screens.Screen import Screen
+from Screens.Setup import Setup, getConfigMenuItem
 from Tools.BoundFunction import boundFunction
+from Tools.ISO639 import LanguageCodes
 
 FOCUS_CONFIG, FOCUS_STREAMS = range(2)
 [PAGE_AUDIO, PAGE_SUBTITLES] = ["audio", "subtitles"]
 
+global conflist
 
 class AudioSelection(Screen, ConfigListScreen):
 	def __init__(self, session, infobar=None, page=PAGE_AUDIO):
@@ -96,6 +96,7 @@ class AudioSelection(Screen, ConfigListScreen):
 		from Tools.ISO639 import LanguageCodes
 		from Components.UsageConfig import originalAudioTracks, visuallyImpairedCommentary
 		streams = []
+		global conflist
 		conflist = []
 		selectedidx = 0
 		self.subtitlelist = []
@@ -112,8 +113,6 @@ class AudioSelection(Screen, ConfigListScreen):
 			service = self.session.nav.getCurrentService()
 			self.audioTracks = audio = service and service.audioTracks()
 			n = audio and audio.getNumberOfTracks() or 0
-			if self.subtitlelist:
-				conflist.append(getConfigListEntry(_("To subtitle selection"), self.settings.menupage))
 			if SystemInfo["CanDownmixAC3"]:
 				choise_list = [
 					("downmix", _("Downmix")),
@@ -218,6 +217,9 @@ class AudioSelection(Screen, ConfigListScreen):
 				self.settings.pcm_multichannel = ConfigOnOff(default=config.av.pcm_multichannel.value)
 				self.settings.pcm_multichannel.addNotifier(self.changePCMMultichannel, initial_call=False)
 				conflist.append(getConfigListEntry(_("PCM multichannel"), self.settings.pcm_multichannel, None))
+
+			if self.subtitlelist:
+				conflist.append(getConfigListEntry(_("To subtitle selection"), self.settings.menupage))
 
 			if SystemInfo["CanBTAudio"]:
 				choice_list = [("off", _("Off")), ("on", _("On"))]
@@ -385,7 +387,7 @@ class AudioSelection(Screen, ConfigListScreen):
 			self.selectedSubtitle = self.infobar.selected_subtitle
 			if self.selectedSubtitle and self.selectedSubtitle[:4] == (0, 0, 0, 0):
 				self.selectedSubtitle = None
-			elif self.selectedSubtitle and not self.selectedSubtitle[:4] in (x[:4] for x in subtitlelist):
+			elif subtitlelist is not None and self.selectedSubtitle and not self.selectedSubtitle[:4] in (x[:4] for x in subtitlelist):
 				subtitlelist.append(self.selectedSubtitle)
 		return subtitlelist
 
@@ -415,6 +417,14 @@ class AudioSelection(Screen, ConfigListScreen):
 			config.av.autovolume.value = autovolume.value
 		config.av.autovolume.save()
 
+	def changePCMMultichannel(self, multichan):
+		if multichan.value:
+			config.av.pcm_multichannel.setValue(multichan.value)
+		else:
+			config.av.pcm_multichannel.setValue(False)
+		config.av.pcm_multichannel.save()
+		self.fillList()
+
 	def changeAC3Downmix(self, downmix):
 		config.av.downmix_ac3.setValue(downmix.value)
 		if SystemInfo["supportPcmMultichannel"]:
@@ -422,14 +432,6 @@ class AudioSelection(Screen, ConfigListScreen):
 		config.av.downmix_ac3.save()
 		if SystemInfo["supportPcmMultichannel"]:
 			config.av.pcm_multichannel.save()
-		self.fillList()
-
-	def changePCMMultichannel(self, multichan):
-		if multichan.value:
-			config.av.pcm_multichannel.setValue(multichan.value)
-		else:
-			config.av.pcm_multichannel.setValue(False)
-		config.av.pcm_multichannel.save()
 		self.fillList()
 
 	def changeDTSDownmix(self, downmix):
@@ -488,10 +490,15 @@ class AudioSelection(Screen, ConfigListScreen):
 			self["streams"].setIndex(0)
 
 	def keyRight(self, config=False):
+		global conflist
+		print("[keyRight] config=%s self.focus=%s" % (config, self.focus))
+		print("[keyRight] conflist=%s" % conflist)
 		if config or self.focus == FOCUS_CONFIG:
 			index = self["config"].getCurrentIndex()
+			print("[keyRight] config=%s self.focus=%s index=%s" % (config, self.focus, index))
+			print("[keyRight] self.settings.menupage.value=%s self.subtitlelist=%s" % (self.settings.menupage.value, self.subtitlelist))
 			if self.settings.menupage.value == PAGE_AUDIO:
-				if self.subtitlelist and index == 0:					# Subtitle selection screen
+				if self.subtitlelist and "To subtitle selection" in conflist[index]:					# Subtitle selection screen
 					self.keyAudioSubtitle()
 					self.__updatedInfo()
 				elif self["config"].getCurrent()[2]:
