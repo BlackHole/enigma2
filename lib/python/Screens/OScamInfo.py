@@ -30,15 +30,6 @@ except ImportError: # Python 2
 	from urllib2 import Request, urlopen, HTTPError, URLError, HTTPHandler, HTTPPasswordMgrWithDefaultRealm, HTTPDigestAuthHandler, build_opener, install_opener
 import skin
 
-global NAMEBIN
-NAMEBIN = ""
-NAMEBIN2 = ""
-if fileExists("/tmp/.oscam/oscam.version"):
-	NAMEBIN = "oscam"
-	NAMEBIN2 = "OScam"
-elif fileExists("/tmp/.ncam/ncam.version"):
-	NAMEBIN = "ncam"
-	NAMEBIN2 = "Ncam"
 
 def check_NAMEBIN():
 	NAMEBIN = "oscam"
@@ -582,7 +573,6 @@ class OscamInfoMenu(Screen):
 		return menuentries
 
 	def showMenu(self):
-		NAMEBIN = check_NAMEBIN()
 		entr = self.buildMenu(self.menu)
 		self["mainmenu"].l.setList(entr)
 		self["mainmenu"].moveToIndex(0)
@@ -1224,7 +1214,6 @@ class OscamInfoConfigScreen(Screen, ConfigListScreen):
 			pass
 
 	def layoutFinished(self):
-		NAMEBIN = check_NAMEBIN()
 		NAMEBIN2 = check_NAMEBIN2()
 		self.setTitle(_("%s Info - Configuration" % NAMEBIN2))
 		self["config"].l.setList(self.oscamconfig)
