@@ -1041,8 +1041,8 @@ eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *serv
 	m_subtitle_sync_timer(eTimer::create(eApp)),
 	m_nownext_timer(eTimer::create(eApp))
 {
-	m_is_streamx = m_is_stream;	// sets to false if looking at fallback url at this point as m_is_stream(ref.path.find("://") is false.
-	eDebug("[servicedvb][eDVBServicePlay] now running: m_is_streamx set by M_is_stream %d", m_is_streamx);
+//	m_is_streamx = m_is_stream;	// sets to false if looking at fallback url at this point as m_is_stream(ref.path.find("://") is false.
+	eDebug("[servicedvb][eDVBServicePlay] now running: m_is_streamx set by m_is_stream %d", m_is_streamx);
 	eDebug("[servicedvb][eDVBServicePlay] now running: m_is_pvr set to; %d", m_is_pvr);
 	CONNECT(m_service_handler.serviceEvent, eDVBServicePlay::serviceEvent);
 	CONNECT(m_service_handler_timeshift.serviceEvent, eDVBServicePlay::serviceEventTimeshift);
@@ -2443,8 +2443,8 @@ bool eDVBServiceBase::tryFallbackTuner(eServiceReferenceDVB &service, bool &is_s
 	service = eServiceReferenceDVB(remote_service_ref.str());
 
 	is_stream = true;
-
-	m_is_streamx = true;	// used by decoder.cpp to stop tuxtxt logging on text pid for streams
+	
+//	m_is_streamx = true;	// used by decoder.cpp to stop tuxtxt logging on text pid for streams
 
 	return true;
 }
@@ -3053,7 +3053,7 @@ void eDVBServicePlay::updateDecoder(bool sendSeekableStateChanged)
 		{
 			selectAudioStream();
 		}
-
+		
 		if (!(m_is_pvr || m_is_stream || m_timeshift_active))
 			m_decoder->setSyncPCR(pcrpid);
 		else
@@ -3086,7 +3086,7 @@ void eDVBServicePlay::updateDecoder(bool sendSeekableStateChanged)
 		if (!m_noaudio)
 			m_decoder->setAudioChannel(achannel);
 
-		if (!m_is_stream)
+		if (!m_is_streamx)
 		{
 			if (mustPlay && m_decode_demux && m_decoder_index == 0)
 			{
@@ -3600,7 +3600,7 @@ void eDVBServicePlay::newDVBSubtitlePage(const eDVBSubtitlePage &p)
 
 		// Where subtitles are delivered out of sync with video, only treat subtitles in the past as having bad timing.
 		// Those that are delivered too early are cached for displaying at the appropriate later time
-		// Note that this can be due to buggy drivers, as well as problems with the broadcast
+		// Note that this can be due to buggy drivers, as well as problems with the broadcast 
 		if (pos-p.m_show_time > 1800000 && (m_is_pvr || m_timeshift_enabled))
 		{
 			// Subtitles delivered over 20 seconds too late
