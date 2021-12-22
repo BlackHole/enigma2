@@ -1,6 +1,6 @@
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
-from boxbranding import getImageBuild, getMachineName, getImageVersion, getImageType
+from boxbranding import getMachineBrand, getImageBuild, getMachineName, getImageVersion, getImageType
 from Components.ActionMap import ActionMap
 from Components.Label import Label
 from Components.ScrollLabel import ScrollLabel
@@ -342,10 +342,8 @@ class BhsysInfo(Screen):
 
 	def updateInfo(self):
 		rc = system("df -h > /tmp/syinfo.tmp")
-		text =  _("STB \n") +_("Brand:") + "\tVuplus\n"
-		f = open("/proc/stb/info/vumodel", 'r')
+		text =  _("STB \n") +_("Brand:") + "\t%s\n" % getMachineBrand()
 		text += _("Model:\t%s \n") % (getMachineName())
-		f = open("/proc/stb/info/chipset", 'r')
 		text += _("Chipset:\t%s \n") % about.getChipSetString().upper() + "\n"
 		text += _("MEMORY\n")
 		memTotal = memFree = swapTotal = swapFree = 0
