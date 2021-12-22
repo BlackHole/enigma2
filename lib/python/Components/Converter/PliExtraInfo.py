@@ -64,10 +64,10 @@ codec_data = {
 
 # Dynamic range ("gamma") value to text
 gamma_data = {
-	0: "SDR",
-	1: "HDR",
-	2: "HDR10",
-	3: "HLG",
+	#0: " SDR",
+	1: " HDR",
+	2: " HDR10",
+	3: " HLG",
 }
 
 
