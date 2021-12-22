@@ -365,14 +365,13 @@ self.selectKey("OK")
 		</step>
 
 		<step id="timeoptions" nextstep="skins">
-			<text value="Please set your time options.\n\nPress YELLOW to set the time zone via geolocation." />
+			<text value="Please set your time options.\n\nPress Left/Right buttons to set the time zone via geolocation." />
 			<displaytext value="Please set your time options" />
 			<config screen="Time" module="Time" type="ConfigList" />
 			<code>
 self.clearSelectedKeys()
 self.selectKey("LEFT")
 self.selectKey("RIGHT")
-self.selectKey("YELLOW")
 			</code>
 		</step>
 
@@ -387,7 +386,7 @@ self.selectKey("OK")
 
 		<step id="skins">
 			<condition>
-self.condition = config.misc.networkenabled.value 
+self.condition = config.misc.networkenabled.value
 			</condition>
 			<text value="Skin install" />
 			<config screen="InstallWizard" module="InstallWizard" args="3" type="ConfigList" />
