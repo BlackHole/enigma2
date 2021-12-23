@@ -1,6 +1,7 @@
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 from Screens.Standby import TryQuitMainloop
+from boxbranding import getBrandOEM, getBoxType
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Components.ActionMap import ActionMap
 from Components.Label import Label
@@ -952,30 +953,21 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		["MiniDlna UPnP Server", "enigma2-plugin-extensions-dlnaserver"],
 		]
 
-		machine = self.nab_Detect_Machine()
-		if machine != "vusolo" and not (machine.endswith("4k") or machine.endswith("4kse") or machine.startswith != "vu"):
+		if getBoxType() in ("vuduo", "vuuno", "vuultimo", "vuzero", "vusolo2", "vusolose", "vuduo2"):
 			self.pluglist.append(["Opera browser & HbbTV", "enigma2-plugin-extensions-hbbtv"])
-		elif machine.endswith("4k") or machine.endswith("4kse"):
+		elif getBrandOEM() == "vuplus" and getBoxType() != "vusolo":
 			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-webkithbbtv"])
-		elif machine.startswith != "vu":
+		elif getBrandOEM() != "vuplus":
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-webkit"])
 
-		if machine not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero"):
+		if getBoxType() not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero"):
 			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
 
 		self.activityTimer = eTimer()
 		self.activityTimer.timeout.get().append(self.updateFeed2)
 
 		self.updateFeed()
-
-	def nab_Detect_Machine(self):
-		machine = "dm8000"
-		if fileExists("/etc/bhmachine"):
-			f = open("/etc/bhmachine", 'r')
-			machine = f.readline().strip()
-			f.close()
-		return machine
 
 	def updateFeed(self):
 		self.activityTimer.start(3)
