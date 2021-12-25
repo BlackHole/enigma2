@@ -571,7 +571,7 @@ def InitAVSwitch():
 			choiceslist = procChoices.split(" ")
 			choices = [(item, _(item)) for item in choiceslist]
 			default = choiceslist[0]
-			print("[AVSwitch][readChoices from Proc] choices=%s, default=%s" % (choices, default))			
+			print("[AVSwitch][readChoices from Proc] choices=%s, default=%s" % (choices, default))
 		return (choices, default)
 
 	iAVSwitch.setInput("ENCODER")  # Init on startup.
@@ -768,6 +768,7 @@ def InitAVSwitch():
 		config.av.autovolume.addNotifier(setAutoVolume)
 	else:
 		config.av.autovolume = ConfigNothing()
+
 	if SystemInfo["supportPcmMultichannel"]:
 		def setPCMMultichannel(configElement):
 			open("/proc/stb/audio/multichannel_pcm", "w").write(configElement.value and "enable" or "disable")
@@ -891,7 +892,7 @@ def InitAVSwitch():
 
 	if SystemInfo["CanBTAudio"]:
 		choices = [
-			("off", _("Off")), 
+			("off", _("Off")),
 			("on", _("On"))
 		]
 		default = "off"
