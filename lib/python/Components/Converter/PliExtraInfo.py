@@ -618,8 +618,9 @@ class PliExtraInfo(Poll, Converter, object):
 	def createStreamURLInfo(self, info):
 		refstr = info.getInfoString(iServiceInformation.sServiceref)
 		if "%3a//" in refstr.lower():
-			return refstr.split(":")[10].replace("%3a", ":").replace("%3A", ":")
-		return ""
+			return refstr.split(":")[10].replace('%3a', ':').replace('http://', '').replace('https://', '').split('/1:0:')[0].split('//')[0].split('/')[0].split('@')[-1]
+		else:
+			return ""
 
 	def createFrequency(self, fedata):
 		frequency = fedata.get("frequency")
