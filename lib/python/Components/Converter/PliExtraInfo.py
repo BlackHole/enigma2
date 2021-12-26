@@ -99,6 +99,7 @@ class PliExtraInfo(Poll, Converter, object):
 					"CryptoSpecial",
 					"VideoCodec",
 					"ResolutionString",
+					"GammaData",
 				), (  # config.usage.show_cryptoinfo.value > 0
 					"ProviderName",
 					"TransponderInfo",
@@ -110,6 +111,7 @@ class PliExtraInfo(Poll, Converter, object):
 					"PIDInfo",
 					"VideoCodec",
 					"ResolutionString",
+					"GammaData",
 				)
 			),
 			"CryptoInfo": (
@@ -134,6 +136,7 @@ class PliExtraInfo(Poll, Converter, object):
 				"TransponderName",
 				"VideoCodec",
 				"ResolutionString",
+				"GammaData",
 			),
 			"TransponderInfo": (
 				( # not feraw
@@ -542,8 +545,10 @@ class PliExtraInfo(Poll, Converter, object):
 			f.close()
 
 		fps = str((video_rate + 500) // 1000)
-		gamma = gamma_data.get(info.getInfo(iServiceInformation.sGamma), "")
-		return str(video_width) + "x" + str(video_height) + video_pol + fps + gamma
+		return str(video_width) + "x" + str(video_height) + video_pol + fps
+
+	def createGammaData(self, info):
+		return gamma_data.get(info.getInfo(iServiceInformation.sGamma), "")
 
 	def createVideoCodec(self, info):
 		return codec_data.get(info.getInfo(iServiceInformation.sVideoType), _("N/A"))
@@ -926,6 +931,9 @@ class PliExtraInfo(Poll, Converter, object):
 
 		if textType == "ResolutionString":
 			return self.createResolution(info)
+
+		if textType == "GammaData":
+			return self.createGammaData(info)
 
 		if textType == "VideoCodec":
 			return self.createVideoCodec(info)
