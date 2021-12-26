@@ -510,6 +510,9 @@ class PliExtraInfo(Poll, Converter, object):
 			pass
 		return ""
 
+	def createGammaData(self, info):
+		return gamma_data.get(info.getInfo(iServiceInformation.sGamma), "")
+
 	def createResolution(self, info):
 		video_height = 0
 		video_width = 0
@@ -546,9 +549,6 @@ class PliExtraInfo(Poll, Converter, object):
 
 		fps = str((video_rate + 500) // 1000)
 		return str(video_width) + "x" + str(video_height) + video_pol + fps
-
-	def createGammaData(self, info):
-		return gamma_data.get(info.getInfo(iServiceInformation.sGamma), "")
 
 	def createVideoCodec(self, info):
 		return codec_data.get(info.getInfo(iServiceInformation.sVideoType), _("N/A"))
@@ -929,11 +929,11 @@ class PliExtraInfo(Poll, Converter, object):
 			else:
 				return ""
 
-		if textType == "ResolutionString":
-			return self.createResolution(info)
-
 		if textType == "GammaData":
 			return self.createGammaData(info)
+
+		if textType == "ResolutionString":
+			return self.createResolution(info)
 
 		if textType == "VideoCodec":
 			return self.createVideoCodec(info)
