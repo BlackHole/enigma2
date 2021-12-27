@@ -55,6 +55,10 @@ if VUULTIMO4K
 SUBDIRS += CableScan
 endif
 
+if SF8008
+SUBDIRS += CableScan
+endif
+
 if HAVE_LIBVUGLES2
 SUBDIRS += AnimationSetup
 endif
