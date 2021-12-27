@@ -1,63 +1,11 @@
 installdir = $(pkglibdir)/python/Plugins/SystemPlugins
 
-SUBDIRS = PositionerSetup Satfinder \
+SUBDIRS = PositionerSetup Satfinder CableScan \
 	VideoTune Hotplug OpentvZapper \
 	DefaultServicesScanner CommonInterfaceAssignment \
 	VideoClippingSetup VideoEnhancement \
 	WirelessLan NetworkWizard SABnzbdSetup \
 	FastScan SatelliteEquipmentControl DiseqcTester
-
-if VUSOLO2
-SUBDIRS += CableScan
-endif
-
-if VUSOLOSE
-SUBDIRS += CableScan
-endif
-
-if VUDUO2
-SUBDIRS += CableScan
-endif
-
-if VUUNO
-SUBDIRS += CableScan
-endif
-
-if VUULTIMO
-SUBDIRS += CableScan
-endif
-
-if VUZERO4K
-SUBDIRS += CableScan
-endif
-
-if VUSOLO4K
-SUBDIRS += CableScan
-endif
-
-if VUUNO4K
-SUBDIRS += CableScan
-endif
-
-if VUUNO4KSE
-SUBDIRS += CableScan
-endif
-
-if VUDUO4K
-SUBDIRS += CableScan
-endif
-
-if VUDUO4KSE
-SUBDIRS += CableScan
-endif
-
-if VUULTIMO4K
-SUBDIRS += CableScan
-endif
-
-if SF8008
-SUBDIRS += CableScan
-endif
 
 if HAVE_LIBVUGLES2
 SUBDIRS += AnimationSetup
