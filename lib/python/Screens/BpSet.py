@@ -965,7 +965,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
 
 		if getBoxType() == "sf8008":
-			self.pluglist.append (["Netflix", "enigma2-plugin-extensions-netflix"])
+			self.pluglist.append (["Netflix & YoutubeTV", "enigma2-plugin-extensions-netflix"])
 
 		self.activityTimer = eTimer()
 		self.activityTimer.timeout.get().append(self.updateFeed2)
