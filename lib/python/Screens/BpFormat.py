@@ -27,7 +27,7 @@ class Bp_UsbFormat(Screen):
 		Screen.__init__(self, session)
 
 		msg = _("This wizard will help you to format Usb mass storage devices for Linux.\n")
-		msg += _("Please make sure your usb drive is NOT CONNECTED to your Vu+ box before you continue.\n")
+		msg += _("Please make sure your usb drive is NOT CONNECTED to your stb before you continue.\n")
 		msg += _("If your usb drive is connected and mounted you must poweroff your box, remove the usb device and reboot.\n")
 		msg += _("Press Green button to continue, when you are ready if your usb is disconnected.\n")
 
@@ -49,7 +49,7 @@ class Bp_UsbFormat(Screen):
 		self.canclose = True
 
 	def stepOne(self):
-		msg = _("Connect your usb storage to your Vu+ box\n")
+		msg = _("Connect your usb storage to your stb\n")
 		msg += _("Press Green button to continue when ready.\n\n")
 		msg += _("Warning: If your usb is already connected\n")
 		msg += _("to the box you have to unplug it, press\n")
