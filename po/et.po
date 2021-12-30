@@ -3378,8 +3378,8 @@ msgstr "Ühenda"
 msgid "Connect to a wireless network"
 msgstr "Ühenda traadita võrguga"
 
-msgid "Connect your usb storage to your Vu+ box\n"
-msgstr "Ühenda USB seade vastuvõtjaga\n"
+msgid "Connect your usb storage to your stb\n"
+msgstr "Ühendage USB-mäluseade oma digiboksiga\n"
 
 msgid "Connected"
 msgstr "Ühendatud"
@@ -8193,8 +8193,8 @@ msgstr "Sisesta vana PIN kood"
 msgid "Please follow the instructions on the TV"
 msgstr "Jälgi ekraanil olevaid juhiseid"
 
-msgid "Please make sure your usb drive is NOT CONNECTED to your Vu+ box before you continue.\n"
-msgstr "Enne jätkamist veendu, et USB seade EI OLE vastuvõtjaga ühendatud.\n"
+msgid "Please make sure your usb drive is NOT CONNECTED to your stb before you continue.\n"
+msgstr "Enne jätkamist veenduge, et teie USB-draiv EI ole teie digiboksiga ühendatud.\n"
 
 msgid "Please note that the previously selected media could not be accessed and therefore the default directory is being used instead."
 msgstr "Eelnevalt valitud andmekandja ei ole kättesaadav ja selle asemel kasutatakse vaikimisi määratud kataloogi."
@@ -10758,13 +10758,13 @@ msgstr "Inadyn skript puudub"
 
 msgid ""
 "Sorry due to spamming, log sending has been disabled.\n"
-"Please post your log @ www.vuplus-community.net."
+"Please post your log @ www.www.openbh.net."
 msgstr ""
 "Kahjuks on spämmimise tõttu logide saatmine keelatud.\n"
-"Postita logi portaali www.vuplus-community.net."
+"Postita logi portaali www.openbh.net."
 
-msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check www.vuplus-community.net"
-msgstr "Toimuvad hoidlate hooldetööd. Proovi hiljem uuesti. Kui probleem on kestev, vaata lehele vuplus-community.net."
+msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check www.openbh.net"
+msgstr "Toimuvad hoidlate hooldetööd. Proovi hiljem uuesti. Kui probleem on kestev, vaata lehele www.openbh.net."
 
 msgid "Sorry feeds seem be in an unstable state, if you wish to use them please enable 'Allow unstable (experimental) updates' in \"Software update settings\"."
 msgstr "Uuendused serverites on testimata. Kui soovid neid kasutada luba 'Testimata uuendused' tarkvara uuendamise seadistustes."
@@ -11697,8 +11697,8 @@ msgstr "Täitmata tegevusi ei ole."
 msgid "There are no updates available."
 msgstr "Uuendusi ei ole saadaval."
 
-msgid "There has been an error, please try again later. If this issue persists, please check www.vuplus-community.net"
-msgstr "Toimus viga, proovi hiljem uuesti. Probleemi jätkudes vaata lehele vuplus-community.net"
+msgid "There has been an error, please try again later. If this issue persists, please check www.openbh.net"
+msgstr "Toimus viga, proovi hiljem uuesti. Probleemi jätkudes vaata lehele www.openbh.net"
 
 msgid "There is no [webif] section in oscam.conf"
 msgstr "[webif] osa puudub 'oscam.conf' failis"
@@ -13536,8 +13536,8 @@ msgid "Your %s %s has no network access, please check your network settings and 
 msgstr "%s %s ei oma ligipääsu võrgule. Kontrolli võrguseadeid, veendu, et võrgukaabel on ühendatud ja proovi uuesti."
 
 #, python-format
-msgid "Your %s %s is not able to connect to the feeds, please try again later. If this persists please report on the BH forum at www.vuplus-community.net"
-msgstr "%s %s ei saa hoidlatega ühendust. Proovi hiljem uuesti. Kui probleem kestab, teavita OBH foorumile www.vuplus-community.net"
+msgid "Your %s %s is not able to connect to the feeds, please try again later. If this persists please report on the OpenBh forum at www.openbh.net"
+msgstr "%s %s ei saa hoidlatega ühendust. Proovi hiljem uuesti. Kui probleem kestab, teavita OpenBh foorumile www.openbh.net"
 
 #, python-format
 msgid ""

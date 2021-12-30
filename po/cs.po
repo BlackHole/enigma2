@@ -9319,7 +9319,7 @@ msgstr ""
 #
 #, fuzzy, python-format
 msgid "The DVD standard doesn't support H.264 (HDTV) video streams. Do you want to create a %s %s format data DVD (which will not play in stand-alone DVD players) instead?"
-msgstr "DVD standard nepodporuje H.264 (HDTV) video streamy. Chcete aby vytvořil Vu+ Ultimo místo toho formát datového DVD (které nebude hrát v DVD přehrávačích "
+msgstr "Standard DVD nepodporuje toky videa H.264 (HDTV). Chcete místo toho vytvořit datové DVD ve formátu %s %s (které nebude možné přehrávat v samostatných přehrávačích DVD)? "
 
 #
 msgid ""

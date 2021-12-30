@@ -8177,7 +8177,7 @@ msgstr ""
 
 #, fuzzy, python-format
 msgid "The DVD standard doesn't support H.264 (HDTV) video streams. Do you want to create a %s %s format data DVD (which will not play in stand-alone DVD players) instead?"
-msgstr "DVD staðallinn er ekki með möguleika á H.264 (HDTV). Viltu búa til Vu+ Ultimo gagna disk (sem ekki er hægt að venjulegum DVD spilara) í staðinn?"
+msgstr "DVD staðallinn styður ekki H.264 (HDTV) myndbandsstrauma. Viltu búa til %s %s sniði gagna DVD (sem mun ekki spila í sjálfstæðum DVD spilurum) í staðinn?"
 
 msgid ""
 "The EPGSearch plugin is not installed!\n"

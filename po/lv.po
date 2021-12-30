@@ -9794,7 +9794,7 @@ msgstr ""
 #
 #, fuzzy
 msgid "Welcome to the image upgrade wizard. The wizard will assist you in upgrading the firmware of your %s %s by providing a backup facility for your current settings and a short explanation of how to upgrade your firmware."
-msgstr "Sveicināti imidža atjaunināšanas vednī. Vednis palīdzēs Jums atjaunot Vu+ Ultimo programmatūru, sniedzot pašreizējo iestatījumu dublējumkopēšanas iespējas, kā arī īsumā izskaidros, kā veikt programmatūras atjaunināšanu."
+msgstr "Laipni lūdzam attēlu atjaunināšanas vednī. Vednis palīdzēs atjaunot programmatūru jūsu stb, nodrošinot pašreizējo iestatījumu dublēšanas opcijas, un īsi paskaidros, kā atjaunināt programmatūru."
 
 #
 msgid ""

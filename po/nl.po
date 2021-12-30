@@ -7818,8 +7818,8 @@ msgstr "Sofwarebeheer informatie"
 msgid "Some plugins are not available:\n"
 msgstr "Applicaties die niet beschikbaar zijn:\n"
 
-msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check vuplus-community.net"
-msgstr "De feeds zijn niet actief vanwege onderhoud. Probeer het later opnieuw. Als het probleem aanhoudt, controleer dan op openObh.co.uk of world-of-satellite.com wat er aan de hand is."
+msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check www.openbh.net"
+msgstr "De feeds zijn niet actief vanwege onderhoud. Probeer het later opnieuw. Als het probleem aanhoudt, controleer dan op www.openbh.net  wat er aan de hand is."
 
 msgid "Sorry feeds seem be in an unstable state, if you wish to use them please enable 'Allow unstable (experimental) updates' in \"Software update settings\"."
 msgstr "Sorry: de feeds lijken onstabiel te zijn. Als u die toch wilt gebruiken, moet u 'Accepteer niet geteste updates' activeren in\"Software update settings\"."
@@ -8539,8 +8539,8 @@ msgstr "Er zijn geen uitstaande acties"
 msgid "There are no updates available."
 msgstr "Er zijn momenteel geen updates beschikbaar"
 
-msgid "There has been an error, please try again later. If this issue persists, please check vuplus-community.net"
-msgstr "Er is een fout opgetreden. Als het probleem aanhoudt, controleer dan op openObh.co.uk of op world-of-satellite.com wat er aan de hand is."
+msgid "There has been an error, please try again later. If this issue persists, please check www.openbh.net"
+msgstr "Er is een fout opgetreden. Als het probleem aanhoudt, controleer dan op openbh.net  wat er aan de hand is."
 
 msgid "There is no [webif] section in oscam.conf"
 msgstr "Er is geen[webif] sectie in oscam.conf"

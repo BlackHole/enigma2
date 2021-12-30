@@ -12,7 +12,6 @@ msgstr ""
 "X-Generator: Poedit 2.4.1\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
-"X-Poedit-SearchPath-0: D:/Decoder/VU+/OBH 4.2/it/LC_MESSAGES/enigma2/OBH/OBH LOCALE\n"
 
 msgctxt "now/next: 'next' event label"
 msgid "Next"
@@ -3185,8 +3184,8 @@ msgstr "متصل"
 msgid "Connect to a wireless network"
 msgstr "الاتصال بشبكة لاسلكية"
 
-msgid "Connect your usb storage to your Vu+ box\n"
-msgstr "قم بتوصيل الفلاش مموري في جهاز فوبلس\n"
+msgid "Connect your usb storage to your stb\n"
+msgstr "قم بتوصيل ذاكرة الفلاش بجهاز stb\n"
 
 msgid "Connected"
 msgstr "متصل"
@@ -7840,7 +7839,7 @@ msgstr "الرجاء إدخال الرمز السري القديم"
 msgid "Please follow the instructions on the TV"
 msgstr "من فضلك اتبع التعليمات على التليفزيون"
 
-msgid "Please make sure your usb drive is NOT CONNECTED to your Vu+ box before you continue.\n"
+msgid "Please make sure your usb drive is NOT CONNECTED to your stb before you continue.\n"
 msgstr "الرجاء التأكد من أن الفلاش مموري الخاص بك غير متصل بجهاز الإستقبال الخاص بك قبل المتابعة.\n"
 
 msgid "Please note that the previously selected media could not be accessed and therefore the default directory is being used instead."
@@ -10327,13 +10326,13 @@ msgstr "آسف سكريبت الايبي الاسمي مفقود"
 
 msgid ""
 "Sorry due to spamming, log sending has been disabled.\n"
-"Please post your log @ www.vuplus-community.net."
+"Please post your log @ www.openbh.net."
 msgstr ""
 "عذرًا نظرًا لوجود محتوى غير مرغوب فيه ، تم تعطيل إرسال الرسائل.\n"
-"الرجاء نشر سجل الأعطال الخاص بك @ www.vuplus-community.net."
+"الرجاء نشر سجل الأعطال الخاص بك @ www.openbh.net."
 
-msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check www.vuplus-community.net"
-msgstr "عفوًا عن عمليات الصيانة ، يرجى إعادة المحاولة لاحقًا. إذا استمرت هذه المشكلة ، يُرجى زيارة www.vuplus-community.net"
+msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check www.openbh.net"
+msgstr "عفوًا عن عمليات الصيانة ، يرجى إعادة المحاولة لاحقًا. إذا استمرت هذه المشكلة ، يُرجى زيارة www.openbh.net"
 
 msgid "Sorry feeds seem be in an unstable state, if you wish to use them please "
 msgstr "عذرا يبدو أن فييدات التدفق في حاله غير مستقره ، إذا كنت ترغب في استخدامها من فضلك "
@@ -11253,8 +11252,8 @@ msgstr "لا يوجد حاليا أي إجراءات معلقة."
 msgid "There are no updates available."
 msgstr "لا توجد تحديثات متوفرة."
 
-msgid "There has been an error, please try again later. If this issue persists, please check www.vuplus-community.net"
-msgstr "حدث خطا ، الرجاء المحاولة مره أخرى لاحقا. إذا استمرت هذه المشكلة ، الرجاء مراجعه www.vuplus-community.net"
+msgid "There has been an error, please try again later. If this issue persists, please check www.openbh.net"
+msgstr "حدث خطا ، الرجاء المحاولة مره أخرى لاحقا. إذا استمرت هذه المشكلة ، الرجاء مراجعه www.openbh.net"
 
 msgid "There is no [webif] section in oscam.conf"
 msgstr "لا يوجد قسم [صفحة ويب] في ملف إعدادات الاوسكام"
@@ -13035,8 +13034,8 @@ msgstr "لا يمتلك %s %s الوصول إلى الإنترنت ، يرجى �
 msgid "Your %s %s has no network access, please check your network settings and make sure you have network cable connected and try again."
 msgstr "ليس لدى %s %s إمكانية الدخول إلى الشبكة، يرجى التحقق من إعدادات الشبكة والتأكد من اتصال كابل الشبكة وإعادة المحاولة مرة أخرى."
 
-msgid "Your %s %s is not able to connect to the feeds, please try again later. If this persists please report on the BH forum at www.vuplus-community.net"
-msgstr "لا يمكنك %s %s الاتصال بالفييدات ,يرجى المحاولة مرة أخرى في وقت لاحق. إذا استمر هذا الرجاء الإبلاغ في منتدى البلاكهول على www.vuplus-community.net"
+msgid "Your %s %s is not able to connect to the feeds, please try again later. If this persists please report on the OpenBh forum at www.openbh.net"
+msgstr "لا يمكنك %s %s الاتصال بالفييدات ,يرجى المحاولة مرة أخرى في وقت لاحق. إذا استمر هذا الرجاء الإبلاغ في منتدى البلاكهول على www.openbh.net"
 
 msgid ""
 "Your %s %s is now ready to be used.\n"
@@ -15091,8 +15090,8 @@ msgstr "* مساعدة في الريموت كنترول"
 msgid "RC Help"
 msgstr "مساعدة في الريموت كنترول"
 
-msgid "YouTube TV is a new way to watch YouTube videos on Vu+"
-msgstr "طريقة جديدة لمشاهدة مقاطع اليوتيوب على أجهزة الفوبلس"
+msgid "YouTube TV is a new way to watch YouTube videos on your stb"
+msgstr "طريقة جديدة لمشاهدة مقاطع فيديو YouTube على stb"
 
 msgid "Tuners & Scanning"
 msgstr "المؤالفات و البحث"

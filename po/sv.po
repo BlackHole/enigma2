@@ -8330,7 +8330,7 @@ msgstr "Tyvärr, feeds är nere för underhåll"
 msgid "Sorry feeds are down for maintenance, please try again later."
 msgstr "Tyvärr, feeds är nere för underåll, v.v. försök igen senare."
 
-msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check vuplus-community.net"
+msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check www.openbh.net"
 msgstr "Tyvärr, feeds är nere för underhåll, v.v. försök igen senare."
 
 msgid "Sorry feeds seem be in an unstable state, if you wish to use them please enable 'Allow unstable (experimental) updates' in \"Software update settings\"."

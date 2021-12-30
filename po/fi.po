@@ -9183,7 +9183,7 @@ msgstr "Seuraavat lisäosat eivät ole saatavilla:\n"
 
 msgid ""
 "Sorry feeds are down for maintenance, please try again later. If this issue "
-"persists please check vuplus-community.net"
+"persists please check www.openbh.net"
 msgstr ""
 "Ohjelmasyötteet eivät ole käytössä huollon takia, yritä myöhemmin uudelleen."
 
@@ -10021,10 +10021,9 @@ msgstr "Päivityksiä ei ole saatavilla."
 
 msgid ""
 "There has been an error, please try again later. If this issue persists, "
-"please check vuplus-community.net"
+"please check www.openbh.net"
 msgstr ""
-"Tapahtui virhe, yritä myöhemmin uudelleen. Jos virhe jatkuu käy openObh.co."
-"uk or world-of-satellite.com sivuilla."
+"Tapahtui virhe, yritä myöhemmin uudelleen. Jos virhe jatkuu käy www.openbh.net."
 
 msgid "There is no [webif] section in oscam.conf"
 msgstr "Oscam.conf:ssa ei ole [webif] -osiota"
