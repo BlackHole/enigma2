@@ -12874,7 +12874,7 @@ msgid "TRANSLATOR_INFO"
 msgstr ""
 "Перевод Open Black Hole 4.4\n"
 "litvcom\n"
-"Март 2021\n"
+"Март 2021"
 
 msgid "TS file is too large for ISO9660 level 1!"
 msgstr "TS файл слишком большой для ISO9660 уровень 1!"
