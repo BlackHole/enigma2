@@ -212,9 +212,9 @@ self.session.open(SABnzbdSetupScreen)
 	</menu>
 
 	<!-- Menu / Backup Menu -->
-		<menu entryID="backup_screen" level="0" text="Backup Menu" weight="3">
+		<menu entryID="backup_screen" level="0" text="Backup &amp; Image Manager" weight="3">
 			<id val="bhbackup" />
-			<item weight="5" level="1" text="Full Backup">
+			<item weight="5" level="1" text="Image Manager">
 <code>
 from Plugins.SystemPlugins.OBH.ImageManager import OpenBhImageManager
 self.session.open(OpenBhImageManager)
