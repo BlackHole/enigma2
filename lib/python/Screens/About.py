@@ -666,7 +666,7 @@ class AboutSummary(ScreenSummary):
 		if path.exists("/proc/stb/info/chipset"):
 			chipset = open("/proc/stb/info/chipset", "r").read()
 			aboutText += _("Chipset: %s") % chipset.replace("\n", "") + "\n"
-		aboutText += _("ViX version: %s") % getImageVersion() + "\n"
+		aboutText += _("OpenBh version: %s") % getImageVersion() + "\n"
 		aboutText += _("Build: %s") % getImageBuild() + "\n"
 		aboutText += _("Kernel: %s") % about.getKernelVersionString() + "\n"
 		string = getDriverDate()
