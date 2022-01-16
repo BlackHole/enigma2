@@ -953,12 +953,12 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		["MiniDlna UPnP Server", "enigma2-plugin-extensions-dlnaserver"],
 		]
 
-		if getBoxType() in ("vuduo", "vuuno", "vuultimo", "vuzero", "vusolo2", "vusolose", "vuduo2"):
+		if getBoxType() in ("vuduo", "vuuno", "vuultimo", "vuzero", "vusolo2", "vusolose", "vuduo2", "osninoplus", "osninopro"):
 			self.pluglist.append(["Opera browser & HbbTV", "enigma2-plugin-extensions-hbbtv"])
 		elif getBrandOEM() == "vuplus" and getBoxType() != "vusolo":
 			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-webkithbbtv"])
-		elif getBrandOEM() != "vuplus" and getBrandOEM() != "abcom":
+		elif getBrandOEM() != "vuplus" and getBrandOEM() != "abcom" and getBoxType() != "osninoplus" and getBoxType() != "osninopro" :
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-webkit"])
 		elif getBrandOEM() == "abcom":
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-openhbbtvbrowser"])
