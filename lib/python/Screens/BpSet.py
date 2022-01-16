@@ -954,7 +954,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		]
 
 		if getBoxType() in ("vuduo", "vuuno", "vuultimo", "vuzero", "vusolo2", "vusolose", "vuduo2", "osninoplus", "osninopro"):
-			self.pluglist.append(["Opera browser & HbbTV", "enigma2-plugin-extensions-hbbtv"])
+			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv"])
 		elif getBrandOEM() == "vuplus" and getBoxType() != "vusolo":
 			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-webkithbbtv"])
