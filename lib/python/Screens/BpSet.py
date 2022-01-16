@@ -963,7 +963,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		elif getBrandOEM() == "abcom":
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-openhbbtvbrowser"])
 
-		if getBoxType() not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero"):
+		if getBoxType() not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero", "osninoplus", "osninopro"):
 			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
 
 		if getBoxType() == "sf8008":
