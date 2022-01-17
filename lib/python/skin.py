@@ -11,11 +11,13 @@ from os.path import basename, dirname, isfile
 from Components.config import ConfigSubsection, ConfigText, config
 from Components.RcModel import rc_model
 from Components.Sources.Source import ObsoleteSource
+from Components.SystemInfo import SystemInfo
 from Tools.Directories import SCOPE_CONFIG, SCOPE_CURRENT_LCDSKIN, SCOPE_CURRENT_SKIN, SCOPE_FONTS, SCOPE_SKIN, SCOPE_SKIN_IMAGE, resolveFilename
 from Tools.Import import my_import
 from Tools.LoadPixmap import LoadPixmap
 
 DEFAULT_SKIN = "BlackShadowSE_P/skin.xml"
+DEFAULT_SKIN = SystemInfo["HasFullHDSkinSupport"] and "BlackShadowSE_P/skin.xml"
 EMERGENCY_SKIN = "skin_default/skin.xml"
 EMERGENCY_NAME = "Default OE-A"
 DEFAULT_DISPLAY_SKIN = "skin_default/skin_display.xml"
@@ -837,7 +839,7 @@ def loadSingleSkinData(desktop, screenID, domSkin, pathSkin, scope=SCOPE_CURRENT
 				parameters["PartnerBoxTimerName"] = applySkinFactor(0, 30, 20)
 				parameters["PartnerBoxTimerServicename"] = applySkinFactor(0, 0, 30)
 				parameters["SelectionListDescr"] = applySkinFactor(32, 3, 650, 30) # EPG Importer expandable sources list
-				parameters["SelectionListLock"] = applySkinFactor(0, 2, 28, 24) # EPG Importer expandable sources list 
+				parameters["SelectionListLock"] = applySkinFactor(0, 2, 28, 24) # EPG Importer expandable sources list
 				parameters["SHOUTcastListItem"] = applySkinFactor(20, 18, 22, 69, 20, 23, 43, 22)
 
 	for tag in domSkin.findall("include"):
