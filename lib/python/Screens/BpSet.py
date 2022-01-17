@@ -958,15 +958,15 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		elif getBrandOEM() == "vuplus" and getBoxType() != "vusolo":
 			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-webkithbbtv"])
-		elif getBrandOEM() != "vuplus" and getBrandOEM() != "abcom" and getBoxType() != "osninoplus" and getBoxType() != "osninopro" :
+		elif getBrandOEM() != "vuplus" and getBrandOEM() != "abcom" and getBrandOEM() != "airdigital" and getBoxType() != "osninoplus" and getBoxType() != "osninopro" :
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-webkit"])
-		elif getBrandOEM() == "abcom":
+		elif getBrandOEM() == "abcom" or getBrandOEM() == "airdigital":
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-openhbbtvbrowser"])
 
 		if getBoxType() not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero", "osninoplus", "osninopro"):
 			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
 
-		if getBoxType() == "sf8008":
+		if getBoxType() == "sf8008" or getBoxType() == "sx988":
 			self.pluglist.append (["Netflix & YoutubeTV", "enigma2-plugin-extensions-netflix"])
 
 		self.activityTimer = eTimer()
