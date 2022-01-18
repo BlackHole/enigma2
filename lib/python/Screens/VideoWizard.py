@@ -10,6 +10,7 @@ from Components.AVSwitch import iAVSwitch as iAV
 from Components.Pixmap import Pixmap
 from Components.config import config, ConfigBoolean, configfile
 from Components.SystemInfo import SystemInfo
+from Components.Console import Console
 
 from Tools.Directories import resolveFilename, SCOPE_SKIN, SCOPE_CURRENT_SKIN
 from Tools.HardwareInfo import HardwareInfo
@@ -143,6 +144,7 @@ class VideoWizard(WizardLanguage, Rc):
 			iAV.setMode(port=self.port, mode=mode, rate="multi")
 		else:
 			iAV.setMode(port=self.port, mode=mode, rate=ratesList[0][0])
+		Console().ePopen('/usr/bin/showiframe /usr/share/backdrop.mvi')
 
 	def listRates(self, querymode=None):
 		if querymode is None:
