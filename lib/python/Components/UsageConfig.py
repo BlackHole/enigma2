@@ -1196,6 +1196,7 @@ def InitUsageConfig():
 		"textview": _("Text View On"),
 		},
 		default="imageview")
+	config.hdmicec.fixed_physical_address = ConfigText(default="0.0.0.0")		
 	config.hdmicec.volume_forwarding = ConfigYesNo(default=False)
 	config.hdmicec.control_receiver_wakeup = ConfigYesNo(default=False)
 	config.hdmicec.control_receiver_standby = ConfigYesNo(default=False)
