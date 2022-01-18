@@ -85,6 +85,12 @@ ButtonSetupKeys = [	(_("Red"), "red", "Infobar/activateRedButton"),
 	(_("F2 long"), "f2_long", ""),
 	(_("F3"), "f3", ""),
 	(_("F3 long"), "f3_long", ""), ]
+	(_("F4"), "f4", ""),
+	(_("F4 long"), "f4_long", ""), ]
+	(_("Kodi"), "kodi", ""),
+	(_("Kodi long"), "kodi_long", ""),
+	(_("YouTube"), "youtube", ""),
+	(_("YouTube long"), "youtube_long", ""),
 
 config.misc.ButtonSetup = ConfigSubsection()
 config.misc.ButtonSetup.additional_keys = ConfigYesNo(default=True)
