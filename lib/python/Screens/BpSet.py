@@ -960,10 +960,10 @@ class BhSpeedUp(Screen, ConfigListScreen):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-webkithbbtv"])
 		elif getBrandOEM() != "vuplus" and getBrandOEM() != "abcom" and getBrandOEM() != "airdigital" and getBoxType() != "osninoplus" and getBoxType() != "osninopro" :
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-webkit"])
-		elif getBrandOEM() == "abcom" or getBrandOEM() == "airdigital":
+		elif getBrandOEM() == "abcom" or getBoxType() == "zgemmah11s":
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-openhbbtvbrowser"])
 
-		if getBoxType() not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero", "osninoplus", "osninopro"):
+		if getBoxType() not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero", "osninoplus", "osninopro", "zgemmah82h"):
 			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
 
 		if getBoxType() == "sf8008" or getBoxType() == "sx988":
