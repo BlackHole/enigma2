@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OBH 5.0  it_IT\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-03 00:00+0000\n"
-"PO-Revision-Date: 2021-12-03\n"
-"Last-Translator: Alexwilmac\n"
+"POT-Creation-Date: 2022-01-01 00:00+0000\n"
+"PO-Revision-Date: 2022-01-01\n"
+"Last-Translator: AlexWilMac\n"
 "Language-Team: @Alexwilmac-@insanity\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -12,6 +12,154 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.2\n"
+
+msgid "TRANSLATOR_INFO"
+msgstr ""
+"Traduzione italiana enigma2\n"
+"a cura di @AlexWilmac / @insanity \n"
+"aggiornamento gennaio 2022 -\n"
+"Supporto: vuplus-community.net"
+
+msgid "Backup & Image Manager"
+msgstr "Gestione dei BACKUP"
+
+#msgid "Full Backup"
+#msgstr "Backup completo"
+
+msgid "Select Network Interface"
+msgstr "Seleziona interfaccia di rete"
+
+msgid ""
+"Your network interface wlan0 is not properly configured, so a network scan cannot be done.\n"
+"Please configure the interface and try again."
+msgstr ""
+"L'interfaccia di rete wlan0 (wireless) non è ben configurata, per cui non posso effettuare una scansione."
+"Si prega di configurare l'interfaccia e riprovare."
+
+msgid "Enable EPG event name abbreviation removal"
+msgstr "Abilitare rimozione abbreviazione nome evento in EPG"
+
+msgid "Broadcasters sometimes split long event names into the event description using ... Choose whether to prevent this behaviour."
+msgstr ""
+"Alle volte certi canali spezzano i nomi di eventi lunghi proseguendoli all'interno della descrizione "
+"dell'evento stesso usando ...\n"
+"Scegliere se impedire questo comportamento."
+
+msgid "Remove EPG event name prefixes"
+msgstr "Rimuovi prefissi nel nome degli eventi"
+
+msgid "Broadcasters sometimes prefix event names with 'New: ' or 'Live: '. Choose what to do with these prefixes."
+msgstr ""
+"I canali qualche volta mettono un prefisso nel nome evento: 'Nuovo' oppure 'Dal Vivo'."
+"Scegliere cosa fare con questi prefissi."
+
+msgid "Set Enigma2 Log Level"
+msgstr "Impostare il tipo di registro"
+
+msgid "Enigma2 debug level"
+msgstr "Tipo di registro"
+
+msgid "Debug+ Logs"
+msgstr "Debug+registro"
+
+msgid "No Logs"
+msgstr "Nessun registro"
+
+msgid "Enable Bluetooth Audio"
+msgstr "Abilita l'audio Bluetooth"
+
+msgid "This Option allows you to switch audio to bluetooth speakers."
+msgstr "Permette di inviare l'audio a degli altoparlanti o dispositivi audio BT."
+
+msgid "General Bluetooth Audio delay"
+msgstr "Ritardo generale dei dispositivi BT"
+
+msgid "This option configures the general audio delay for bluetooth speakers."
+msgstr "Opzione che imposta il ritardo generale per altoparlanti o dispositivi audio BT."
+
+msgid "VU+"
+msgstr "box"
+
+#vecchie righe 4.4
+#msgid "Subtitle quickmenu"
+#msgstr "Menu veloce sottotitoli"
+
+msgid "To subtitle selection"
+msgstr "Selezione sottotitoli"
+
+msgid "To audio selection"
+msgstr "Scelta traccia audio"
+
+msgid "Detect next boxes before standby"
+msgstr "Controlla se altri dispositivi sono in Standby"
+
+msgid ""
+"Before sending the command to switch the TV to standby, the receiver tests if all the other devices plugged "
+"into TV are in standby. If they are not, the 'sourceactive' command will be sent to the TV instead of the "
+"'standby' command."
+msgstr ""
+"Prima di inviare il comando per porre la TV in Standby, controlla se tutti gli altri dispositivi collegati"
+"alla TV sono già in questo stato. Se non è così, viene inviato alla TV il comando 'sorgente attiva' "
+"e NON quello di Standby."
+
+msgid "Debug to file"
+msgstr "Registro eventi (log)"
+
+msgid "If enabled, a log will be kept of CEC protocol traffic ('hdmicec.log')."
+msgstr "Se abilitato verrà creato un registro degli eventi prodotti dal traffico con protocollo CEC."
+
+msgid ""
+"Command the TV to switch to the correct HDMI input when zap timers activate."
+msgstr "Comanda alla TV di attivare l'ingresso HDMI corretto quando si attiva un timer."
+
+msgid "The command to wake from standby will be sent multiple times."
+msgstr "Il comando di risveglio dallo Standby sarà inviato più volte."
+
+msgid ""
+"Delay between CEC commands when sending a series of commands. Some devices require this delay for correct "
+"functioning, usually between 50-150ms."
+msgstr ""
+"Intervallo fra un comando CEC e il successivo, quando sono inviati in serie. Alcuni dispositivi "
+"hanno bisogno di un certo intervallo per funzionare correttamente (di solito fra 50 e 150ms)."
+
+msgid "Wake A/V receiver from standby."
+msgstr "Riattiva il ricevitore dallo stato di Standby."
+
+msgid "Put A/V receiver in standby."
+msgstr "Manda il ricevitore nello stato di Standby."
+
+msgid "Volume keys on the receiver remote will control the TV volume."
+msgstr "I tasti del ricevitore controlleranno il volume della TV."
+
+msgid ""
+"When enabled the receiver will automatically wake from standby when the TV is turned on."
+msgstr ""
+"Abilitando questa funzione il ricevitore si riattiverà automaticamente dallo Standby "
+"quando viene accesa la TV."
+
+msgid ""
+"When enabled the receiver will automatically return to standby when the TV is turned off."
+msgstr ""
+"Abilitando questa funzione il ricevitore andrà automaticamente in Standby "
+"quando viene spenta la TV."
+
+msgid "Allows the TV remote to be used to control the receiver."
+msgstr "Permette di utilizzare il telecomando della TV per controllare il ricevitore."
+
+msgid ""
+"When receiver wakes from standby, it will command the TV to switch to the HDMI input the receiver is connected to."
+msgstr ""
+"Quando il ricevitore si risveglia dallo Standby, comanderà alla TV di commutare sull'ingresso cui "
+"il ricevitore stesso è connesso."
+
+msgid ""
+"If set to 'yes' the same commands will be sent to the TV for deep standby events, as are sent during "
+"regular standby events."
+msgstr ""
+"Se impostato su 'SÌ', verranno inviati per lo spegnimento gli stessi comandi usati per la funzione Standby."
+
+msgid "NTP sync interval"
+msgstr "Intervallo di sincronizzazione con NTP"
 
 msgid "Sort menu screens"
 msgstr "Ordinamento voci dei menu"
@@ -2929,8 +3077,8 @@ msgstr "Connettere"
 msgid "Connect to a wireless network"
 msgstr "Connettere a rete wireless"
 
-msgid "Connect your usb storage to your Vu+ box\n"
-msgstr "Connettere il dispositivo USB al ricevitore Vu+\n"
+msgid "Connect your usb storage to your box\n"
+msgstr "Connettere il dispositivo USB al ricevitore\n"
 
 msgid "Connected"
 msgstr "Connesso"
@@ -4631,9 +4779,6 @@ msgstr "Display LCD"
 msgid "Front panel settings"
 msgstr "Configurazioni Display LCD"
 
-msgid "Full Backup"
-msgstr "Backup completo"
-
 msgid "Full Image Backup "
 msgstr "Backup immagine completo"
 
@@ -4836,7 +4981,7 @@ msgid "HDMI Colorimetry"
 msgstr "Colorimetria HDMI"
 
 msgid "HDMI Colorspace"
-msgstr "HDMI Colorspace"
+msgstr "Spazio colore HDMI"
 
 msgid "HDMIin"
 msgstr "HDMIin"
@@ -7178,9 +7323,9 @@ msgstr "Inserire il vecchio codice PIN"
 msgid "Please follow the instructions on the TV"
 msgstr "Seguire le istruzioni mostrate sullo schermo"
 
-msgid "Please make sure your usb drive is NOT CONNECTED to your Vu+ box before you continue.\n"
+msgid "Please make sure your usb drive is NOT CONNECTED to your box before you continue.\n"
 msgstr ""
-"Controllare che il dispositivo USB NON sia connesso al VU+ prima di continuare.\n"
+"Controllare che il dispositivo USB NON sia connesso al box prima di continuare.\n"
 "\n"
 
 msgid ""
@@ -8082,9 +8227,6 @@ msgstr "Ripetizioni"
 
 msgid "Repeat Display Message"
 msgstr "Ripetizione visione messaggio"
-
-msgid "Repeat how often"
-msgstr "Ripeti quanto spesso"
 
 msgid "Repeat type"
 msgstr "Tipo di ripetizione"
@@ -10218,9 +10360,6 @@ msgstr "Selezione lingua sottotitoli 4"
 msgid "Subtitle position"
 msgstr "Posizione sottotitoli"
 
-msgid "Subtitle quickmenu"
-msgstr "Menu veloce sottotitoli"
-
 msgid "Subtitle selection"
 msgstr "Selezione sottotitoli"
 
@@ -10371,9 +10510,6 @@ msgstr "SR (Symbol rate) / FEC"
 msgid "Symbolrate:"
 msgstr "SR (SymbolRate):"
 
-msgid "Sync NTP every (minutes)"
-msgstr "Sincronizzare NTP ogni (minuti)"
-
 msgid "Sync failure moving back to origin !"
 msgstr "Sincronizzazione fallita: tornare all'origine!"
 
@@ -10406,13 +10542,6 @@ msgstr "Sistema: "
 
 msgid "TB"
 msgstr "TB"
-
-msgid "TRANSLATOR_INFO"
-msgstr ""
-"Traduzione italiana OBH 4.4 enigma2\n"
-"a cura di @AlexWilmac / @insanity \n"
-"aggiornamento novembre 2020 -\n"
-"Supporto: vuplus-community.net"
 
 msgid "TS file is too large for ISO9660 level 1!"
 msgstr "File TS troppo grande per ISO9660 livello 1!"
@@ -11723,9 +11852,6 @@ msgstr "VMGM (trailer introduttivo)"
 
 msgid "VOB file"
 msgstr "File VOB"
-
-msgid "VU+"
-msgstr "VU+"
 
 msgid "Version: "
 msgstr "Versione: "
