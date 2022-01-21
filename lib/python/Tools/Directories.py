@@ -10,6 +10,8 @@ from enigma import eEnv, getDesktop
 from re import compile
 from stat import S_IMODE
 
+DEFAULT_MODULE_NAME = __name__.split(".")[-1]
+
 pathExists = os.path.exists
 isMount = os.path.ismount  # Only used in OpenATV /lib/python/Plugins/SystemPlugins/NFIFlash/downloader.py.
 
@@ -42,7 +44,7 @@ SCOPE_ACTIVE_SKIN = SCOPE_CURRENT_SKIN
 SCOPE_ACTIVE_LCDSKIN = SCOPE_CURRENT_LCDSKIN
 SCOPE_SKIN_IMAGE = SCOPE_SKIN
 
-# compatibility scopes 
+# compatibility scopes
 SCOPE_HOME = SCOPE_USERETC
 SCOPE_SKINS = SCOPE_SKIN
 SCOPE_GUISKIN = SCOPE_CURRENT_SKIN
@@ -234,6 +236,30 @@ def resolveFilename(scope, base="", path_prefix=None):
 		path = "%s:%s" % (path, suffix)
 	return path
 
+def fileReadLine(filename, default=None, source=DEFAULT_MODULE_NAME):
+	line = None
+	try:
+		with open(filename, "r") as fd:
+			line = fd.read().strip().replace("\0", "")
+		msg = "Read"
+	except (IOError, OSError) as err:
+		if err.errno != ENOENT:  # ENOENT - No such file or directory.
+			print("[%s] Error %d: Unable to read a line from file '%s'!  (%s)" % (source, err.errno, filename, err.strerror))
+		line = default
+		msg = "Default"
+	return line
+
+def fileWriteLine(filename, line, source=DEFAULT_MODULE_NAME):
+	try:
+		with open(filename, "w") as fd:
+			fd.write(str(line))
+		msg = "Wrote"
+		result = 1
+	except (IOError, OSError) as err:
+		print("[%s] Error %d: Unable to write a line to file '%s'!  (%s)" % (source, err.errno, filename, err.strerror))
+		msg = "Failed to write"
+		result = 0
+	return result
 
 def comparePath(leftPath, rightPath):
 	if leftPath.endswith(os.sep):

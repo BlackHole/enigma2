@@ -53,7 +53,7 @@ from ServiceReference import ServiceReference, isPlayableForCur
 from RecordTimer import RecordTimerEntry, parseEvent, AFTEREVENT, findSafeRecordPath
 
 from Tools import Notifications
-from Tools.Directories import pathExists, fileExists
+from Tools.Directories import pathExists, fileExists, fileReadLine, fileWriteLine
 from Tools.KeyBindings import getKeyDescription, getKeyBindingKeys
 
 import NavigationInstance
@@ -72,6 +72,8 @@ if version_info[0] >= 3:
 	import pickle as cPickle	# py3
 else:
 	import cPickle			# py2
+
+MODULE_NAME = __name__.split(".")[-1]
 
 # hack alert!
 from Screens.Menu import MainMenu, Menu, mdom
@@ -172,7 +174,6 @@ whitelist_vbi = None
 def reload_whitelist_vbi():
 	global whitelist_vbi
 	whitelist_vbi = [line.strip() for line in open('/etc/enigma2/whitelist_vbi', 'r').readlines()] if os.path.isfile('/etc/enigma2/whitelist_vbi') else []
-
 
 reload_whitelist_vbi()
 
@@ -375,7 +376,6 @@ class HideVBILine(Screen):
 		self.skin = """<screen position="0,0" size="%s,%s" flags="wfNoBorder" zPosition="1"/>""" % (getDesktop(0).size().width(), getDesktop(0).size().height() / 360 + 1)
 		Screen.__init__(self, session)
 
-
 class SecondInfoBar(Screen, HelpableScreen):
 	ADD_TIMER = 0
 	REMOVE_TIMER = 1
@@ -562,7 +562,7 @@ class SecondInfoBar(Screen, HelpableScreen):
 			print("[InfoBarGenerics] setEvent text:", ' '.join('{:02X}'.format(ord(c)) for c in text))
 			text = text.encode(encoding="utf8", errors="replace").decode() # attempt to replace bad chars with '?'
 			self["epg_description"].setText(text)
-			
+
 		serviceref = self.currentService
 		eventid = self.event.getEventId()
 		refstr = serviceref.ref.toString()
@@ -3681,6 +3681,135 @@ class InfoBarTimerButton:
 	def timerSelection(self):
 		self.session.open(TimerEditList)
 
+class InfoBarAspectSelection:
+	STATE_HIDDEN = 0
+	STATE_ASPECT = 1
+	STATE_RESOLUTION = 2
+
+	def __init__(self):
+		self["AspectSelectionAction"] = HelpableActionMap(self, "InfobarAspectSelectionActions",{
+			"aspectSelection": (self.ExGreen_toggleGreen, _("Aspect list...")),
+		}, prio=0, description=_("Aspect Ratio Actions"))
+
+		self.__ExGreen_state = self.STATE_HIDDEN
+
+	def ExGreen_doAspect(self):
+		print("[InfoBarGenerics] do self.STATE_ASPECT")
+		self.__ExGreen_state = self.STATE_ASPECT
+		self.aspectSelection()
+
+	def ExGreen_doResolution(self):
+		print("[InfoBarGenerics] do self.STATE_RESOLUTION")
+		self.__ExGreen_state = self.STATE_RESOLUTION
+		self.resolutionSelection()
+
+	def ExGreen_doHide(self):
+		print("[InfoBarGenerics] do self.STATE_HIDDEN")
+		self.__ExGreen_state = self.STATE_HIDDEN
+
+	def ExGreen_toggleGreen(self, arg=""):
+		print("[InfoBarGenerics] toggleGreen:", self.__ExGreen_state)
+		if self.__ExGreen_state == self.STATE_HIDDEN:
+			print("[InfoBarGenerics] self.STATE_HIDDEN")
+			self.ExGreen_doAspect()
+		elif self.__ExGreen_state == self.STATE_ASPECT:
+			print("[InfoBarGenerics] self.STATE_ASPECT")
+			self.ExGreen_doResolution()
+		elif self.__ExGreen_state == self.STATE_RESOLUTION:
+			print("[InfoBarGenerics] self.STATE_RESOLUTION")
+			self.ExGreen_doHide()
+
+	def aspectSelection(self):
+		selection = 0
+		aspectList = [
+			(_("Resolution"), "resolution"),
+			("--", ""),
+			(_("4:3 Letterbox"), "0"),
+			(_("4:3 PanScan"), "1"),
+			(_("16:9"), "2"),
+			(_("16:9 Always"), "3"),
+			(_("16:10 Letterbox"), "4"),
+			(_("16:10 PanScan"), "5"),
+			(_("16:9 Letterbox"), "6")
+		]
+		keys = ["green", "", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+		from Components.AVSwitch import AVSwitch
+		iAVSwitch = AVSwitch()
+		aspect = iAVSwitch.getAspectRatioSetting()
+		selection = 0
+		for item in range(len(aspectList)):
+			if aspectList[item][1] == aspect:
+				selection = item
+				break
+		self.session.openWithCallback(self.aspectSelected, ChoiceBox, text=_("Please select an aspect ratio..."), list=aspectList, keys=keys, selection=selection)
+
+	def aspectSelected(self, aspect):
+		if not aspect is None:
+			if isinstance(aspect[1], str):
+				if aspect[1] == "":
+					self.ExGreen_doHide()
+				elif aspect[1] == "resolution":
+					self.ExGreen_toggleGreen()
+				else:
+					from Components.AVSwitch import AVSwitch
+					iAVSwitch = AVSwitch()
+					iAVSwitch.setAspectRatio(int(aspect[1]))
+					self.ExGreen_doHide()
+		else:
+			self.ExGreen_doHide()
+		return
+
+
+class InfoBarResolutionSelection:
+	def __init__(self):
+		pass
+
+	def resolutionSelection(self):
+		xRes = int(fileReadLine("/proc/stb/vmpeg/0/xres", 0, source=MODULE_NAME), 16)
+		yRes = int(fileReadLine("/proc/stb/vmpeg/0/yres", 0, source=MODULE_NAME), 16)
+		fps = float(fileReadLine("/proc/stb/vmpeg/0/framerate", 50000, source=MODULE_NAME)) / 1000.0
+		resList = []
+		resList.append((_("Exit"), "exit"))
+		resList.append((_("Auto(not available)"), "auto"))
+		resList.append((_("Video: ") + "%dx%d@%gHz" % (xRes, yRes, fps), ""))
+		resList.append(("--", ""))
+		# Do we need a new sorting with this way here or should we disable some choices?
+		if fileExists("/proc/stb/video/videomode_choices"):
+			videoModes = fileReadLine("/proc/stb/video/videomode_choices", "", source=MODULE_NAME)
+			videoModes = videoModes.replace("pal ", "").replace("ntsc ", "").split(" ")
+			for videoMode in videoModes:
+				video = videoMode
+				if videoMode.endswith("23"):
+					video = "%s.976" % videoMode
+				if videoMode[-1].isdigit():
+					video = "%sHz" % videoMode
+				resList.append((video, videoMode))
+		videoMode = fileReadLine("/proc/stb/video/videomode", "Unknown", source=MODULE_NAME)
+		keys = ["green", "yellow", "blue", "", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+		selection = 0
+		for item in range(len(resList)):
+			if resList[item][1] == videoMode:
+				selection = item
+				break
+		print("[InfoBarGenerics] Current video mode is %s." % videoMode)
+		self.session.openWithCallback(self.resolutionSelected, ChoiceBox, text=_("Please select a resolution..."), list=resList, keys=keys, selection=selection)
+
+	def resolutionSelected(self, videoMode):
+		if videoMode is not None:
+			if isinstance(videoMode[1], str):
+				if videoMode[1] == "exit" or videoMode[1] == "" or videoMode[1] == "auto":
+					self.ExGreen_toggleGreen()
+				if videoMode[1] != "auto":
+					if fileWriteLine("/proc/stb/video/videomode", videoMode[1], source=MODULE_NAME):
+						print("[InfoBarGenerics] New video mode is %s." % videoMode[1])
+					else:
+						print("[InfoBarGenerics] Error: Unable to set new video mode of %s!" % videoMode[1])
+					# from enigma import gMainDC
+					# gMainDC.getInstance().setResolution(-1, -1)
+					self.ExGreen_doHide()
+		else:
+			self.ExGreen_doHide()
+		return
 
 class InfoBarVmodeButton:
 	def __init__(self):
@@ -3692,6 +3821,22 @@ class InfoBarVmodeButton:
 	def vmodeSelection(self):
 		self.session.open(VideoMode)
 
+def ToggleVideo():
+	mode = open("/proc/stb/video/policy").read()[:-1]
+	print("[InfoBarGenerics] toggle videomode:", mode)
+	if mode == "letterbox":
+		f = open("/proc/stb/video/policy", "w")
+		f.write("panscan")
+		f.close()
+	elif mode == "panscan":
+		f = open("/proc/stb/video/policy", "w")
+		f.write("letterbox")
+		f.close()
+	else:
+		# if current policy is not panscan or letterbox, set to panscan
+		f = open("/proc/stb/video/policy", "w")
+		f.write("panscan")
+		f.close()
 
 class VideoMode(Screen):
 	def __init__(self, session):

@@ -8,6 +8,8 @@ from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 from Components.Label import Label
 from Components.Pixmap import MultiPixmap
+from Components.PluginComponent import plugins
+from Plugins.Plugin import PluginDescriptor
 from Components.SystemInfo import SystemInfo
 
 profile("LOAD:enigma")
@@ -16,7 +18,7 @@ import enigma
 profile("LOAD:InfoBarGenerics")
 from Screens.InfoBarGenerics import InfoBarShowHide, \
 	InfoBarNumberZap, InfoBarChannelSelection, InfoBarMenu, InfoBarRdsDecoder, \
-	InfoBarEPG, InfoBarSeek, InfoBarInstantRecord, InfoBarRedButton, InfoBarTimerButton, InfoBarVmodeButton, \
+	InfoBarEPG, InfoBarSeek, InfoBarInstantRecord, InfoBarResolutionSelection, InfoBarAspectSelection, InfoBarRedButton, InfoBarTimerButton, InfoBarVmodeButton, \
 	InfoBarAudioSelection, InfoBarAdditionalInfo, InfoBarNotifications, InfoBarDish, InfoBarUnhandledKey, InfoBarLongKeyDetection, \
 	InfoBarSubserviceSelection, InfoBarShowMovies,  \
 	InfoBarServiceNotifications, InfoBarPVRState, InfoBarCueSheetSupport, InfoBarBuffer, \
@@ -37,7 +39,7 @@ from Screens.HelpMenu import HelpableScreen
 
 class InfoBar(InfoBarBase, InfoBarShowHide,
 	InfoBarNumberZap, InfoBarChannelSelection, InfoBarMenu, InfoBarEPG, InfoBarRdsDecoder,
-	InfoBarInstantRecord, InfoBarAudioSelection, InfoBarRedButton, InfoBarTimerButton, InfoBarVmodeButton,
+	InfoBarInstantRecord, InfoBarAudioSelection, InfoBarRedButton, InfoBarTimerButton, InfoBarResolutionSelection, InfoBarAspectSelection, InfoBarVmodeButton,
 	HelpableScreen, InfoBarAdditionalInfo, InfoBarNotifications, InfoBarDish, InfoBarUnhandledKey, InfoBarLongKeyDetection,
 	InfoBarSubserviceSelection, InfoBarTimeshift, InfoBarSeek, InfoBarCueSheetSupport, InfoBarBuffer,
 	InfoBarSummarySupport, InfoBarTimeshiftState, InfoBarTeletextPlugin, InfoBarExtensions,
@@ -55,6 +57,10 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 				"showRadio": (self.keyRadio, _("Show the radio player...")),
 				"showTv": (self.keyTV, _("Show the tv player...")),
 				"openBouquetList": (self.openBouquetList, _("Open bouquet list")),
+				"showWWW": (self.showPORTAL, _("Open XStreamity")),
+				"showKodi": (self.showKodi, _("Open Kodi")),
+				"showNetflix": (self.showNetflix, _("Open Netflix")),
+				"showYoutube": (self.showYoutube, _("Open Youtube")),
 			}, prio=2, description=_("Basic functions"))
 
 		self["key_red"] = Label()
@@ -69,7 +75,7 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 				InfoBarBase, InfoBarShowHide, \
 				InfoBarNumberZap, InfoBarChannelSelection, InfoBarMenu, InfoBarEPG, InfoBarRdsDecoder, \
 				InfoBarInstantRecord, InfoBarAudioSelection, InfoBarRedButton, InfoBarTimerButton, InfoBarUnhandledKey, InfoBarLongKeyDetection, InfoBarVmodeButton,\
-				InfoBarAdditionalInfo, InfoBarNotifications, InfoBarDish, InfoBarSubserviceSelection, InfoBarBuffer, \
+				InfoBarAdditionalInfo, InfoBarNotifications, InfoBarDish, InfoBarSubserviceSelection, InfoBarResolutionSelection, InfoBarAspectSelection, InfoBarBuffer, \
 				InfoBarTimeshift, InfoBarSeek, InfoBarCueSheetSupport, InfoBarSummarySupport, InfoBarTimeshiftState, \
 				InfoBarTeletextPlugin, InfoBarExtensions, InfoBarPiP, InfoBarSubtitleSupport, InfoBarJobman, InfoBarZoom, \
 				InfoBarHdmi, InfoBarPlugins, InfoBarServiceErrorPopupSupport, InfoBarButtonSetup:
@@ -226,6 +232,37 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 			LastService = self.session.nav.getCurrentlyPlayingServiceOrGroup()
 		self.session.open(MoviePlayer, ref, slist=self.servicelist, lastservice=LastService)
 
+	def showPORTAL(self):
+		try:
+			from Plugins.Extensions.XStreamity.plugin import extensionsmenu
+			extensionsmenu(self.session)
+			no_plugin = False
+		except Exception as e:
+			self.session.open(MessageBox, _("XStreamity is not installed!\nPlease install it."), type=MessageBox.TYPE_INFO, timeout=10)
+
+	def showKodi(self):
+		try:
+			from Plugins.Extensions.Kodi.plugin import startLauncher
+			startLauncher(self.session)
+			no_plugin = False
+		except Exception as e:
+			self.session.open(MessageBox, _("Kodi is not installed!\nPlease install it."), type=MessageBox.TYPE_INFO, timeout=10)
+
+	def showNetflix(self):
+		try:
+			from Plugins.Extensions.Netflix.plugin import main
+			main(self.session)
+			no_plugin = False
+		except Exception as e:
+			self.session.open(MessageBox, _("Netflix is not installed!\nPlease install it."), type=MessageBox.TYPE_INFO, timeout=10)
+
+	def showYoutube(self):
+		try:
+			from Plugins.Extensions.YouTube.plugin import main
+			main(self.session)
+			no_plugin = False
+		except Exception as e:
+			self.session.open(MessageBox, _("YouTube is not installed!\nPlease install it."), type=MessageBox.TYPE_INFO, timeout=10)
 
 class MoviePlayer(InfoBarBase, InfoBarShowHide, InfoBarLongKeyDetection, InfoBarMenu, InfoBarEPG,
 				  InfoBarSeek, InfoBarShowMovies, InfoBarInstantRecord, InfoBarAudioSelection, HelpableScreen, InfoBarNotifications,

@@ -336,6 +336,11 @@
 		These key maps are yet to be checked / updated.
 	-->
 
+	<map context="2ndInfobarActions">
+		<key id="KEY_UP" mapto="pageUp" flags="mr" />
+		<key id="KEY_DOWN" mapto="pageDown" flags="mr" />
+	</map>
+
 	<map context="ListboxActions">
 		<device name="keyboard">
 			<key id="a" mapto="up" flags="mr" />
@@ -560,6 +565,7 @@
 		<key id="KEY_OPTION" mapto="showNetworkSetup" flags="mr" />
 		<key id="KEY_F5" mapto="showRFmod" flags="b" />
 		<key id="KEY_F5" mapto="toggleAspectRatio" flags="l" />
+		<key id="KEY_VMODE" mapto="toggleAspectRatio" flags="b" />
 	</map>
 
 	<map context="InfobarShowHideActions">
@@ -578,6 +584,9 @@
 		<key id="KEY_TV" mapto="openBouquetList" flags="l" />
 		<key id="KEY_TV2" mapto="showTv" flags="b" />
 		<key id="KEY_TV2" mapto="openBouquetList" flags="l" />
+		<key id="KEY_HOMEPAGE" mapto="showWWW" flags="b" />
+		<key id="KEY_BOOKMARKS" mapto="showWWW" flags="b" />
+		<key id="KEY_VOD" mapto="showWWW" flags="b" />
 		<key id="KEY_PROG1" mapto="openBouquetList" flags="m" />
 		<key id="KEY_PROG2" mapto="openBouquetList" flags="m" />
 		<key id="KEY_FILE" mapto="showMovies" flags="b" />
@@ -585,12 +594,21 @@
 		<key id="KEY_LIST" mapto="showMovies" flags="b" />
 		<key id="KEY_PVR" mapto="showMovies" flags="b" />
 		<key id="KEY_TEXT" mapto="showText" flags="b" />
+		<key id="KEY_F10" mapto="showNetflix" flags="b" />
+		<key id="KEY_PLAYER" mapto="showKodi" flags="b" />
+		<key id="KEY_MP3" mapto="showYoutube" flags="b" />
 	</map>
 
 	<map context="InfobarAudioSelectionActions">
 		<key id="KEY_AUDIO" mapto="audioSelection" flags="b" />
 		<key id="KEY_AUDIO" mapto="audioSelectionLong" flags="l" />
 		<key id="KEY_YELLOW" mapto="audioSelection" flags="b"/>
+	</map>
+
+	<map context="InfobarAspectSelectionActions">
+		<key id="KEY_GREEN" mapto="aspectSelection" flags="l" />
+		<key id="KEY_MODE" mapto="aspectSelection" flags="l" />
+		<key id="KEY_MODE" mapto="aspectSelection" flags="b" />
 	</map>
 
 	<map context="InfobarSubtitleSelectionActions">
@@ -615,6 +633,7 @@
 
 	<map context="InfobarVmodeButtonActions">
 		<key id="KEY_VMODE" mapto="vmodeSelection" flags="m" />
+		<key id="KEY_ANGLE" mapto="vmodeSelection" flags="m" />
 	</map>
 
 	<map context="InfobarPiPActions">
@@ -1196,6 +1215,10 @@
 		<key id="KEY_RIGHT" mapto="cross_right_long" flags="l" />
 		<key id="KEY_UP" mapto="cross_up" flags="b" />
 		<key id="KEY_DOWN" mapto="cross_down" flags="b" />
+		<key id="KEY_PAGEUP" mapto="pageup" flags="b" />
+		<key id="KEY_PAGEUP" mapto="pageup_long" flags="l" />
+		<key id="KEY_PAGEDOWN" mapto="pagedown" flags="b" />
+		<key id="KEY_PAGEDOWN" mapto="pagedown_long" flags="l" />
 		<key id="KEY_CHANNELUP" mapto="channelup" flags="b" />
 		<key id="KEY_CHANNELDOWN" mapto="channeldown" flags="b" />
 		<key id="KEY_NEXT" mapto="next" flags="mr" />

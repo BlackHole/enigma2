@@ -308,6 +308,9 @@ class AVSwitch:
 		fb_size = getDesktop(0).size()
 		return (aspect[0] * fb_size.height(), aspect[1] * fb_size.width())
 
+	def setAspectRatio(self, value):
+		eAVSwitch.getInstance().setAspectRatio(value)
+
 	def getAspectRatioSetting(self):
 		valstr = config.av.aspectratio.value
 		if valstr == "4_3_letterbox":
@@ -563,6 +566,8 @@ def InitAVSwitch():
 			"16_9_letterbox": 6
 		}
 		iAVSwitch.setAspectRatio(map[configElement.value])
+
+	iAVSwitch.setInput("ENCODER") # init on startup
 
 	def readChoices(procx, choices, default):
 		with open(procx, "r") as myfile:
