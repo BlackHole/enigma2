@@ -67,6 +67,7 @@
 		<item level="0" text="Show time elapsed as positive" description="This option allows you choose how to display elapsed time as + or -">config.usage.elapsed_time_positive_osd</item>
 		<item level="0" text="Show transponder remaining/elapsed as" description="This option allows you to choose how to display the remaining/elapsed time for live TV.">config.usage.swap_time_display_on_osd</item>
 		<item level="0" text="Media playback Remaining/Elapsed as" description="This option allows you to choose how to display the remaining/elapsed time for media playback.">config.usage.swap_media_time_display_on_osd</item>
+		<item level="1" text="Enable VOD skip buttons" description="This option allows you to choose to use the left/right buttons to change channels, or enable them for seeking VOD content.">config.seek.vod_buttons</item>
 		<item level="2" text="Hide zap errors" description="Hide any zap error messages.">config.usage.hide_zap_errors</item>
 		<item level="2" text="Hide CI messages" description="Hide error messages from the Common Interface module.">config.usage.hide_ci_messages</item>
 		<item level="2" text="Show crypto info in infobar" description="Show encryption info in the infobar (when supported by the skin).">config.usage.show_cryptoinfo</item>
@@ -200,7 +201,6 @@
 		<item level="2" text="Behavior when a movie reaches the end" description="Configure the behavior when reaching the end of a movie, during movie playback.">config.usage.on_movie_eof</item>
 		<item level="2" text="Display message before playing next movie" description="When enabled, a popup message will be shown when a movie has finished and the next one will start.">config.usage.next_movie_msg</item>
 		<item level="2" text="Behavior of 'pause' when paused" description="Configure the behavior of the 'pause' key when movie playback is already paused.">config.seek.on_pause</item>
-		<item level="1" text="Enable VOD skip buttons">config.seek.vod_buttons</item>
 		<item level="2" text="Custom skip time for '1'/'3' buttons" description="Configure the skip time interval for the 1 and 3 buttons.">config.seek.selfdefined_13</item>
 		<item level="2" text="Custom skip time for '4'/'6' buttons" description="Configure the skip time interval for the 4 and 6 buttons.">config.seek.selfdefined_46</item>
 		<item level="2" text="Custom skip time for '7'/'9' buttons" description="Configure the skip time interval for the 7 and 9 buttons.">config.seek.selfdefined_79</item>
@@ -608,7 +608,7 @@
 			<if conditional="config.hdmicec.handle_tv_wakeup.value">
 				<item text="Wakeup signal from TV" description="Wake the receiver from standby when the wake command is sent from the TV.">config.hdmicec.tv_wakeup_detection</item>
 			</if>
-			<item text="Set fixed CEC address" description="Fix CEC address setting, default is 0.0.0.0">config.hdmicec.fixed_physical_address</item>			
+			<item text="Set fixed CEC address" description="Fix CEC address setting, default is 0.0.0.0">config.hdmicec.fixed_physical_address</item>
 			<item text="Forward volume keys" description="Volume keys on the receiver remote will control the TV volume.">config.hdmicec.volume_forwarding</item>
 			<item text="Put A/V receiver in standby" description="Put A/V receiver in standby.">config.hdmicec.control_receiver_standby</item>
 			<item text="Wake A/V receiver from standby" description="Wake A/V receiver from standby.">config.hdmicec.control_receiver_wakeup</item>
