@@ -567,8 +567,6 @@ def InitAVSwitch():
 		}
 		iAVSwitch.setAspectRatio(map[configElement.value])
 
-	iAVSwitch.setInput("ENCODER") # init on startup
-
 	def readChoices(procx, choices, default):
 		with open(procx, "r") as myfile:
 			procChoices = myfile.read().strip()
@@ -580,6 +578,7 @@ def InitAVSwitch():
 		return (choices, default)
 
 	iAVSwitch.setInput("ENCODER")  # Init on startup.
+
 	SystemInfo["ScartSwitch"] = eAVSwitch.getInstance().haveScartSwitch()
 
 	if SystemInfo["Canedidchecking"]:
