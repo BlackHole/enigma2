@@ -289,7 +289,7 @@ class RemoteControlType(Screen, ConfigListScreen):
 			("h8", 28),
 			("h9", 28), # new model
 			("h9combo", 28),
-			("h10", 28)
+			("h10", 28),
 			("h11", 28),
 			("pulse4k", 30),
 			("pulse4kmini", 30)
