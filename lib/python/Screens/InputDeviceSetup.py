@@ -246,7 +246,7 @@ class RemoteControlType(Screen, ConfigListScreen):
 			("26", _("Protek 4K UHD/HD61")),
 			("27", _("HD60")),
 			("28", _("H7/H8/H9/H9COMBO/H10/H11 new Model")),
-			("30", _("PULSe 4K(mini)"))
+			("30", _("PULSe 4K/4K Mini"))
 			]
 
 	defaultRcList = [
