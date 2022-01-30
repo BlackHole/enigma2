@@ -597,6 +597,7 @@
 		<key id="KEY_F10" mapto="showNetflix" flags="b" />
 		<key id="KEY_PLAYER" mapto="showKodi" flags="b" />
 		<key id="KEY_MP3" mapto="showYoutube" flags="b" />
+		<key id="KEY_MP3" mapto="showMovies" flags="l" />
 	</map>
 
 	<map context="InfobarAudioSelectionActions">
