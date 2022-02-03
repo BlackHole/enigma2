@@ -118,7 +118,7 @@ self.session.openWithCallback(msgClosed, EpgDeleteMsg)
 		</menu>
 
 		<!-- Menu / Setup / Recordings, Playback & Timeshift -->
-		<menu entryID="rec_setup" level="1" text="Recordings, Playback &amp; Timeshift" requires="Harddisk" weight="5">
+		<menu entryID="rec_setup" level="1" text="Recordings, Playback &amp; Timeshift" weight="5">
 			<id val="rec" />
 			<item entryID="recording_setup" level="0" text="Recording &amp; Playback" weight="10"><screen module="Recordings" screen="RecordingSettings" /></item>
 			<item entryID="timshift_setup" level="0" text="Timeshift" weight="15"><screen module="Timeshift" screen="TimeshiftSettings" /></item>
