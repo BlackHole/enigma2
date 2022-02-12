@@ -600,7 +600,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		self["ShowHideActions"] = HelpableActionMap(self, ["InfobarShowHideActions"],
 			{
 				"LongOKPressed": (self.toggleShowLong, self._helpToggleShowLong),
-				"toggleShow": (self.toggleShow, _("Cycle through infobar displays")),
+				"toggleShow": (self.OkPressed, _("Toggle display of the InfoBar")),
 				"hide": (self.keyHide, self._helpKeyHide),
 			}, prio=1, description=_("Show/hide infobar")) # lower prio to make it possible to override ok and cancel..
 
@@ -622,6 +622,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		self.onShowHideNotifiers = []
 
 		self.standardInfoBar = False
+		self.lastSecondInfoBar = 0
 		self.lastResetAlpha = True
 		self.secondInfoBarScreen = ""
 		if isStandardInfoBar(self):
@@ -654,6 +655,25 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		self.secondInfoBarWasShown = False
 		self.hideVBILineScreen.hide()
 		self.EventViewIsShown = False
+
+	def OkPressed(self):
+		if config.usage.okbutton_mode.value == "0":
+			self.toggleShow()
+		elif config.usage.okbutton_mode.value == "1":
+			if self.secondInfoBarScreen:
+				self.secondInfoBarScreen.hide()
+				self.secondInfoBarWasShown = False
+				self.startHideTimer()
+			try:
+				self.openServiceList()
+			except:
+				self.toggleShow()
+
+	def SwitchSecondInfoBarScreen(self):
+		if self.lastSecondInfoBar == int(config.usage.show_second_infobar.value):
+			return
+		self.secondInfoBarScreen = self.session.instantiateDialog(SecondInfoBar)
+		self.lastSecondInfoBar = int(config.usage.show_second_infobar.value)
 
 	def __onShow(self):
 		self.__state = self.STATE_SHOWN
@@ -1237,8 +1257,8 @@ class InfoBarChannelSelection:
 
 		self["ChannelSelectActions"] = HelpableActionMap(self, "InfobarChannelSelection",
 			{
-				"switchChannelUp": (self.switchChannelUp, _("Open service list and select the previous channel")),
-				"switchChannelDown": (self.switchChannelDown, _("Open service list and select the next channel")),
+				"switchChannelUp": (self.DownPressed, _("Open service list and select the previous channel")),
+				"switchChannelDown": (self.UpPressed, _("Open service list and select the next channel")),
 				"switchChannelUpLong": (self.switchChannelUpLong, _("Open service list and select the previous channel for PiP")),
 				"switchChannelDownLong": (self.switchChannelDownLong, _("Open service list and select the next channel for PiP")),
 				"zapUp": (self.zapUp, _("Switch to the previous channel")),
@@ -1250,8 +1270,8 @@ class InfoBarChannelSelection:
 				"openBouquets": (self.openBouquets, _("Open the favourites list")),
 				"LeftPressed": (self.LeftPressed, self._helpLeftPressed),
 				"RightPressed": (self.RightPressed, self._helpRightPressed),
-				"ChannelPlusPressed": (self.zapDown, _("Switch to the next channel")),
-				"ChannelMinusPressed": (self.zapUp, _("Switch to the previous channel")),
+				"ChannelPlusPressed": (self.ChannelPlusPressed, _("Switch to the next channel")),
+				"ChannelMinusPressed": (self.ChannelMinusPressed, _("Switch to the previous channel")),
 				"ChannelPlusPressedLong": (self.zapDownPip, _("Switch the PiP to the next channel")),
 				"ChannelMinusPressedLong": (self.zapUpPip, _("Switch the PiP to the previous channel")),
 			}, description=_("Channel selection"))
@@ -1340,6 +1360,38 @@ class InfoBarChannelSelection:
 	def switchChannelDownLong(self):
 		self.switchChannelDown(self.servicelist2 if SystemInfo.get("NumVideoDecoders", 1) > 1 else None)
 
+	def UpPressed(self):
+		if config.usage.updownbutton_mode.value == "0":
+			self.zapDown()
+		elif config.usage.updownbutton_mode.value == "1":
+			self.switchChannelUp()
+
+	def DownPressed(self):
+		if config.usage.updownbutton_mode.value == "0":
+			self.zapUp()
+		elif config.usage.updownbutton_mode.value == "1":
+			self.switchChannelDown()
+
+	def ChannelPlusPressed(self):
+		if config.usage.channelbutton_mode.value == "0":
+			self.zapDown()
+		elif config.usage.channelbutton_mode.value == "1" or config.usage.channelbutton_mode.value == "3":
+			self.openServiceList()
+		elif config.usage.channelbutton_mode.value == "2":
+			self.serviceListType = "Norm"
+			self.servicelist.showFavourites()
+			self.session.execDialog(self.servicelist)
+
+	def ChannelMinusPressed(self):
+		if config.usage.channelbutton_mode.value == "0":
+			self.zapUp()
+		elif config.usage.channelbutton_mode.value == "1" or config.usage.channelbutton_mode.value == "3":
+			self.openServiceList()
+		elif config.usage.channelbutton_mode.value == "2":
+			self.serviceListType = "Norm"
+			self.servicelist.showFavourites()
+			self.session.execDialog(self.servicelist)
+
 	def openServiceList(self):
 		self.session.execDialog(self.servicelist)
 
@@ -1378,6 +1430,7 @@ class InfoBarChannelSelection:
 				while True:
 					if config.usage.quickzap_bouquet_change.value and servicelist.atBegin():
 						servicelist.prevBouquet()
+						self.servicelist.moveEnd()
 					else:
 						servicelist.moveUp()
 					cur = servicelist.getCurrentSelection()
@@ -1420,6 +1473,7 @@ class InfoBarChannelSelection:
 				while True:
 					if config.usage.quickzap_bouquet_change.value and servicelist.atEnd():
 						servicelist.nextBouquet()
+						self.servicelist.moveTop()
 					else:
 						servicelist.moveDown()
 					cur = servicelist.getCurrentSelection()

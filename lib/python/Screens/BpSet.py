@@ -61,48 +61,50 @@ class DeliteSettings(Screen):
 			from Screens.BpDevice import DeliteDevicesPanel
 			self.session.open(DeliteDevicesPanel)
 		elif self.sel == 2:
-			self.session.open(Setup, "usage")
+			self.session.open(Setup, "quickoptionsetup")
 		elif self.sel == 3:
-			self.session.open(Setup, "userinterface")
+			self.session.open(Setup, "usage")
 		elif self.sel == 4:
+			self.session.open(Setup, "userinterface")
+		elif self.sel == 5:
 			from Screens.UserInterfacePositioner import UserInterfacePositioner
 			self.session.open(UserInterfacePositioner)
-		elif self.sel == 5:
+		elif self.sel == 6:
 			from Screens.UserInterfacePositioner import OSD3DSetupScreen
 			self.session.open(OSD3DSetupScreen)
-		elif self.sel == 6:
+		elif self.sel == 7:
 			from Screens.BpFormat import Bp_UsbFormat
 			self.session.open(Bp_UsbFormat)
-		elif self.sel == 7:
+		elif self.sel == 8:
 			from Screens.BpDevice import BlackPoleSwap
 			self.session.open(BlackPoleSwap)
-		elif self.sel == 8:
+		elif self.sel == 9:
 			from Screens.NetworkSetup import NetworkInadyn
 			self.session.open(NetworkInadyn)
-		elif self.sel == 9:
+		elif self.sel == 10:
 			try:
 				from Plugins.Extensions.DLNABrowser.plugin import DLNADeviceBrowser
 				self.session.open(DLNADeviceBrowser)
 			except:
 				self.session.open(MessageBox, _("Dlna Browser not installed."), MessageBox.TYPE_INFO)
-		elif self.sel == 10:
+		elif self.sel == 11:
 			from Screens.NetworkSetup import NetworkMiniDLNA
 			self.session.open(NetworkMiniDLNA)
-		elif self.sel == 11:
+		elif self.sel == 12:
 			from Screens.NetworkSetup import NetworkOpenvpn
 			self.session.open(NetworkOpenvpn)
-		elif self.sel == 12:
-			self.session.open(Setup, "epgsettings")
 		elif self.sel == 13:
-			self.session.open(Setup, "recording")
+			self.session.open(Setup, "epgsettings")
 		elif self.sel == 14:
+			self.session.open(Setup, "recording")
+		elif self.sel == 15:
 			from Screens.RecordPaths import RecordPathsSettings
 			self.session.open(RecordPathsSettings)
-		elif self.sel == 15:
-			self.session.open(Setup, "subtitlesetup")
 		elif self.sel == 16:
-			self.session.open(Setup, "autolanguagesetup")
+			self.session.open(Setup, "subtitlesetup")
 		elif self.sel == 17:
+			self.session.open(Setup, "autolanguagesetup")
+		elif self.sel == 18:
 			self.session.open(BhNetBrowser)
 
 		else:
@@ -134,113 +136,120 @@ class DeliteSettings(Screen):
 
 		mypixmap = mypath + "icons/infopanel_osd.png"
 		png = LoadPixmap(mypixmap)
-		name = _("General settings")
+		name = _("Quick Option settings")
 		idx = 2
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/infopanel_osd.png"
 		png = LoadPixmap(mypixmap)
-		name = _("Osd settings")
+		name = _("General settings")
 		idx = 3
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/infopanel_osd.png"
 		png = LoadPixmap(mypixmap)
-		name = _("Osd Position setup")
+		name = _("Osd settings")
 		idx = 4
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/infopanel_osd.png"
 		png = LoadPixmap(mypixmap)
-		name = _("Osd 3D setup")
+		name = _("Osd Position setup")
 		idx = 5
+		res = (name, png, idx)
+		self.list.append(res)
+
+		mypixmap = mypath + "icons/infopanel_osd.png"
+		png = LoadPixmap(mypixmap)
+		name = _("Osd 3D setup")
+		idx = 6
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/infopanel_space.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Usb Format Wizard")
-		idx = 6
+		idx = 7
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/swapsettings.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Swap File settings")
-		idx = 7
+		idx = 8
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/inadynsettings.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Inadyn")
-		idx = 8
-		res = (name, png, idx)
-		self.list.append(res)
-
-		mypixmap = mypath + "icons/infopanel_samba.png"
-		png = LoadPixmap(mypixmap)
-		name = _("Dlna Client")
 		idx = 9
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/infopanel_samba.png"
 		png = LoadPixmap(mypixmap)
-		name = _("Dlna Server")
+		name = _("Dlna Client")
 		idx = 10
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/infopanel_samba.png"
 		png = LoadPixmap(mypixmap)
-		name = _("OpenVpn Panel")
+		name = _("Dlna Server")
 		idx = 11
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/infopanel_samba.png"
 		png = LoadPixmap(mypixmap)
-		name = _("Internal Epg settings")
+		name = _("OpenVpn Panel")
 		idx = 12
+		res = (name, png, idx)
+		self.list.append(res)
+
+		mypixmap = mypath + "icons/infopanel_samba.png"
+		png = LoadPixmap(mypixmap)
+		name = _("Internal Epg settings")
+		idx = 13
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/infopanel_cron.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Record settings")
-		idx = 13
+		idx = 14
 		res = (name, png, idx)
 		self.list.append(res)
 
 #		mypixmap = mypath + "icons/infopanel_space.png"
 #		png = LoadPixmap(mypixmap)
 #		name = _("Recording paths")
-#		idx = 14
+#		idx = 15
 #		res = (name, png, idx)
 #		self.list.append(res)
 
 		mypixmap = mypath + "icons/infopanel_kmod.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Subtitle settings")
-		idx = 15
+		idx = 16
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/inadynsettings.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Auto language settings")
-		idx = 16
+		idx = 17
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/mountwizard.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Network Browser & Mountpoints")
-		idx = 17
+		idx = 18
 		res = (name, png, idx)
 		self.list.append(res)
 

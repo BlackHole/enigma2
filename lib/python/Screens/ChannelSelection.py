@@ -1768,15 +1768,27 @@ class ChannelSelectionBase(Screen, HelpableScreen):
 
 	def nextBouquet(self):
 		if "reverseB" in config.usage.servicelist_cursor_behavior.value:
-			self.changeBouquet(-1)
+			if config.usage.channelbutton_mode.value == '0' or config.usage.channelbutton_mode.value == '3':
+				self.changeBouquet(-1)
+			else:
+				self.servicelist.moveDown()
 		else:
-			self.changeBouquet(+1)
+			if config.usage.channelbutton_mode.value == '0' or config.usage.channelbutton_mode.value == '3':
+				self.changeBouquet(+1)
+			else:
+				self.servicelist.moveUp()
 
 	def prevBouquet(self):
 		if "reverseB" in config.usage.servicelist_cursor_behavior.value:
-			self.changeBouquet(+1)
+			if config.usage.channelbutton_mode.value == '0' or config.usage.channelbutton_mode.value == '3':
+				self.changeBouquet(+1)
+			else:
+				self.servicelist.moveUp()
 		else:
-			self.changeBouquet(-1)
+			if config.usage.channelbutton_mode.value == '0' or config.usage.channelbutton_mode.value == '3':
+				self.changeBouquet(-1)
+			else:
+				self.servicelist.moveDown()
 
 	def toggleTwoLines(self):
 		if config.usage.setup_level.index > 1 and not self.pathChangeDisabled and self.servicelist.mode == self.servicelist.MODE_FAVOURITES:
