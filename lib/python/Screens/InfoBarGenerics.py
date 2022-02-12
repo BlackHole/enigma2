@@ -1430,7 +1430,6 @@ class InfoBarChannelSelection:
 				while True:
 					if config.usage.quickzap_bouquet_change.value and servicelist.atBegin():
 						servicelist.prevBouquet()
-						self.servicelist.moveEnd()
 					else:
 						servicelist.moveUp()
 					cur = servicelist.getCurrentSelection()
@@ -1473,7 +1472,6 @@ class InfoBarChannelSelection:
 				while True:
 					if config.usage.quickzap_bouquet_change.value and servicelist.atEnd():
 						servicelist.nextBouquet()
-						self.servicelist.moveTop()
 					else:
 						servicelist.moveDown()
 					cur = servicelist.getCurrentSelection()
