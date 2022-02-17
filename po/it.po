@@ -17,8 +17,123 @@ msgid "TRANSLATOR_INFO"
 msgstr ""
 "Traduzione italiana enigma2\n"
 "a cura di @AlexWilmac / @insanity \n"
-"aggiornamento gennaio 2022 -\n"
+"Aggiornamento del febbraio 2022 -\n"
 "Supporto: vuplus-community.net"
+
+msgid "Quick Options Setup"
+msgstr "Impostazione opzioni veloci"
+
+msgid "INFO button action"
+msgstr "Funzione pulsante INFO"
+
+msgid "Choose what will be displayed when the 'INFO' button is pressed."
+msgstr "Scegli l'azione da assegnare al tasto INFO"
+
+msgid "OK button mode"
+msgstr "Funzione tasto OK"
+
+msgid "Select what you want the OK button to activate:"
+msgstr "Scegli l'azione da assegnare al tasto OK"
+
+msgid "QuickEPG mode"
+msgstr "Modalità EPG veloce"
+
+msgid "Select how to activate the Quick EPG mode:"
+msgstr "Seleziona come attivare la modalità EPG veloce"
+
+msgid "TV button mode"
+msgstr "Funzione per tasto TV"
+
+msgid "Select what you want the TV button to activate:"
+msgstr "Scegli l'azione da assegnare al tasto TV"
+
+msgid "Hide mute icon"
+msgstr "Nascondi l'icona 'Muto'"
+
+msgid "If volume muted, hide mute icon or mute information after few seconds."
+msgstr "Se viene tolto il volume (funzione 'Muto'), nascondi la relativa icona dopo qualche secondo."
+
+msgid "Channel +/- button mode"
+msgstr "Funzione tasti CH +/-"
+
+msgid "Select what you want the Channel +/- button to activate:"
+msgstr "Scegli l'azione da assegnare ai tasti CH +/-"
+
+msgid "Just change channels"
+msgstr "Cambia canale +/-"
+
+msgid "Just change Bouquet"
+msgstr "Cambia bouquet (+/-)"
+
+msgid "Up/Down button mode"
+msgstr "Funzione tasti SU/GIÙ"
+
+msgid "Select what you want the Up/Down button to activate:"
+msgstr "Scegli l'azione da assegnare ai tasti SU/GIÙ"
+
+msgid "Enable VOD skip buttons"
+msgstr "Abilita i salti con i tasti nello streaming"
+
+msgid "This option allows you to choose to use the left/right buttons to change channels, or enable them for seeking VOD content."
+msgstr ""
+"Consente se scegliere di usare i tasti Sinistra/Destra per cambiare canale oppure per spostarsi avanti/indietro nella visione in streaming."
+
+msgid "Select which tuner to use for the scan."
+msgstr "Selezionare quale tuner usare per la scansione"
+
+msgid "Bluetooth Setup"
+msgstr "Impostazioni bluetooth"
+
+msgid "Press red key to enable bluetooth."
+msgstr "Premere ROSSO per abilitare il bluetooth"
+
+msgid "Device is enabling..."
+msgstr "Abilito il dispositivo..."
+
+msgid "Device is disabling..."
+msgstr "Dispositivo disabilitato"
+
+msgid "Device is enabled."
+msgstr "Dispositivo abilitato"
+
+msgid "Show Software Update in Extensions"
+msgstr "Mostra Gestione immagine nelle estensioni"
+
+msgid "only when available"
+msgstr "Solo se sono disponibili"
+
+msgid ""
+"Show Software Update in Extensions Menu (Blue button long). 'yes' adds it permanently. "
+"'only when available' only shows it when updates are known to be available based on update polling."
+msgstr ""
+"Quest'opzione mostra la 'Gestione immagine' premendo BLU a LUNGO."
+"'Sì' mostra questa voce in ogni caso; 'Solo se sono disponibili' la mostra solo quando ve ne fossero da scaricare."
+
+msgid "Online update"
+msgstr "Aggiornamento online"
+
+# Vecchie righe 4.4
+# msgid "Restore"
+# msgstr "Ripristino"
+
+# msgid "OpenBh online update"
+# msgstr "Aggiornamenti OBH"
+
+
+# msgid "Flash"
+# msgstr "Flash"
+
+msgid "Image Download"
+msgstr "Ripristino"
+
+msgid "Online Flash"
+msgstr "Flash"
+
+#msgid "Full backup"
+#msgstr "Backup completo"
+
+msgid "Image Manager"
+msgstr "Backup immagine completo"
 
 msgid "Backup & Image Manager"
 msgstr "Gestione dei BACKUP"
@@ -170,7 +285,7 @@ msgid ""
 "blue button text in the menu remains hidden even though the user "
 "sort feature is active."
 msgstr ""
-"Quando è su 'user' potete ordinare o nascondere voci di menu con il tasto blu. "
+"Quando è su 'definito dall'utente' potete ordinare o nascondere voci di menu con il tasto blu. "
 "Quando è su 'nascosto dall'utente', il testo del pulsante BLU nel menu rimane nascosto "
 "sebbene sia attiva l'opzione 'ordinato dall'utente'."
 
@@ -242,9 +357,6 @@ msgstr "Componenti aggiuntivi specifici di OBH"
 msgid "Manual Install OpenBh packages"
 msgstr "Installazione manuale pacchetti OBH"
 
-msgid "OpenBh online update"
-msgstr "Aggiornamenti OBH"
-
 msgid "Addons and Feeds Manager"
 msgstr "Componenti aggiuntivi (addons)"
 
@@ -289,7 +401,6 @@ msgstr "Non riparare"
 
 msgid "Reconstruct the .ap and .sc files of the selected movie"
 msgstr "Ripara la registrazione ricostruendo i file .ap e .sc"
-
 
 # Message already partially translated. So, maybe it is composed piece by piece
 msgid ""
@@ -4076,9 +4187,6 @@ msgstr "Abilitare Netmed EPG"
 msgid "Enable OpenTV EPG"
 msgstr "Abilita l'EPG di tipo OpenTV"
 
-msgid "Enable VOD skip buttons"
-msgstr "Abilita i salti con i tasti nello streaming"
-
 msgid "Enable ViaSat EPG"
 msgstr "Abilitare Viasat EPG"
 
@@ -5005,7 +5113,7 @@ msgid "Hard disk standby after"
 msgstr "Standby hard disk dopo"
 
 msgid "Harddisk setup"
-msgstr "impostazioni Harddisk"
+msgstr "Impostazioni hard disk"
 
 msgid "Hebrew"
 msgstr "Ebraico"
@@ -5334,9 +5442,6 @@ msgstr "Ignora gruppo dei nomi della sottorete DVB-T"
 
 msgid "Image Slot:\t%s"
 msgstr "Posizione immagine:\t%s"
-
-msgid "Image manager"
-msgstr "Gestione immagine"
 
 msgid "Image:\t%s.%s%s (%s)\n"
 msgstr "Immagine:\t%s.%s%s (%s)\n"
@@ -8310,9 +8415,6 @@ msgstr "Riavviare il test"
 msgid "Restart your network connection and interfaces.\n"
 msgstr "Riavviare le connessioni di rete e relative interfacce.\n"
 
-msgid "Restore"
-msgstr "Ripristinare"
-
 msgid "Restore backups"
 msgstr "Ripristinare un backup"
 
@@ -9060,9 +9162,6 @@ msgstr "Selezionare una rete wireless"
 msgid "Select your ATSC provider."
 msgstr "Seleziona il provider ATSC."
 
-msgid "Select your country. If not available select 'all'."
-msgstr "Seleziona il tuo paese. Se non disponibile selezionare 'tutto'."
-
 msgid ""
 "Select your provider and region. If not present in this list you will need to select one of the other "
 "'service scan types'."
@@ -9072,13 +9171,6 @@ msgstr ""
 
 msgid "Select your provider, and press OK to start the scan"
 msgstr "Selezionare il provider. Tasto 'OK' per iniziare la ricerca"
-
-msgid ""
-"Select your region. If not available change 'Country' to 'all' and select one of the default "
-"alternatives."
-msgstr ""
-"Scegli la tua nazione. Se non è disponibile, cambia la nazione in “Tutte” e scegli una delle alternative "
-"proposte."
 
 msgid "Select your time zone area or region."
 msgstr "Scegli l'area geografica del tuo fuso orario."
