@@ -17,8 +17,62 @@ msgid "TRANSLATOR_INFO"
 msgstr ""
 "Traduzione italiana enigma2\n"
 "a cura di @AlexWilmac / @insanity \n"
-"aggiornamento gennaio 2022 -\n"
+"Aggiornamento del febbraio 2022 -\n"
 "Supporto: vuplus-community.net"
+
+msgid "Bluetooth Setup"
+msgstr "Impostazioni bluetooth"
+
+msgid "Press red key to enable bluetooth."
+msgstr "Premere ROSSO per abilitare il bluetooth"
+
+msgid "Device is enabling..."
+msgstr "Abilito il dispositivo..."
+
+msgid "Device is disabling..."
+msgstr "Dispositivo disabilitato"
+
+msgid "Device is enabled."
+msgstr "Dispositivo abilitato"
+
+msgid "Show Software Update in Extensions"
+msgstr "Mostra Gestione immagine nelle estensioni"
+
+msgid "only when available"
+msgstr "Solo se sono disponibili"
+
+msgid ""
+"Show Software Update in Extensions Menu (Blue button long). 'yes' adds it permanently. "
+"'only when available' only shows it when updates are known to be available based on update polling."
+msgstr ""
+"Quest'opzione mostra la 'Gestione immagine' premendo BLU a LUNGO."
+"'Sì' mostra questa voce in ogni caso; 'Solo se sono disponibili' la mostra solo quando ve ne fossero da scaricare."
+
+msgid "Online update"
+msgstr "Aggiornamento online"
+
+# Vecchie righe 4.4
+# msgid "Restore"
+# msgstr "Ripristino"
+
+# msgid "OpenBh online update"
+# msgstr "Aggiornamenti OBH"
+
+
+# msgid "Flash"
+# msgstr "Flash"
+
+msgid "Image Download"
+msgstr "Ripristino"
+
+msgid "Online Flash"
+msgstr "Flash"
+
+#msgid "Full backup"
+#msgstr "Backup completo"
+
+msgid "Image Manager"
+msgstr "Backup immagine completo"
 
 msgid "Backup & Image Manager"
 msgstr "Gestione dei BACKUP"
@@ -170,7 +224,7 @@ msgid ""
 "blue button text in the menu remains hidden even though the user "
 "sort feature is active."
 msgstr ""
-"Quando è su 'user' potete ordinare o nascondere voci di menu con il tasto blu. "
+"Quando è su 'definito dall'utente' potete ordinare o nascondere voci di menu con il tasto blu. "
 "Quando è su 'nascosto dall'utente', il testo del pulsante BLU nel menu rimane nascosto "
 "sebbene sia attiva l'opzione 'ordinato dall'utente'."
 
@@ -241,9 +295,6 @@ msgstr "Componenti aggiuntivi specifici di OBH"
 
 msgid "Manual Install OpenBh packages"
 msgstr "Installazione manuale pacchetti OBH"
-
-msgid "OpenBh online update"
-msgstr "Aggiornamenti OBH"
 
 msgid "Addons and Feeds Manager"
 msgstr "Componenti aggiuntivi (addons)"
@@ -5005,7 +5056,7 @@ msgid "Hard disk standby after"
 msgstr "Standby hard disk dopo"
 
 msgid "Harddisk setup"
-msgstr "impostazioni Harddisk"
+msgstr "Impostazioni hard disk"
 
 msgid "Hebrew"
 msgstr "Ebraico"
@@ -5334,9 +5385,6 @@ msgstr "Ignora gruppo dei nomi della sottorete DVB-T"
 
 msgid "Image Slot:\t%s"
 msgstr "Posizione immagine:\t%s"
-
-msgid "Image manager"
-msgstr "Gestione immagine"
 
 msgid "Image:\t%s.%s%s (%s)\n"
 msgstr "Immagine:\t%s.%s%s (%s)\n"
@@ -8309,9 +8357,6 @@ msgstr "Riavviare il test"
 
 msgid "Restart your network connection and interfaces.\n"
 msgstr "Riavviare le connessioni di rete e relative interfacce.\n"
-
-msgid "Restore"
-msgstr "Ripristinare"
 
 msgid "Restore backups"
 msgstr "Ripristinare un backup"
