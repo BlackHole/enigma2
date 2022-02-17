@@ -16,7 +16,7 @@ from Tools.Directories import SCOPE_CONFIG, SCOPE_CURRENT_LCDSKIN, SCOPE_CURRENT
 from Tools.Import import my_import
 from Tools.LoadPixmap import LoadPixmap
 
-DEFAULT_SKIN = SystemInfo["HasFullHDSkinSupport"] and "BlackShadowSE_P/skin.xml"
+DEFAULT_SKIN = SystemInfo["HasFullHDSkinSupport"] and "Vu_HD_1080P/skin.xml" or "Vu_HD/skin.xml"
 EMERGENCY_SKIN = "skin_default/skin.xml"
 EMERGENCY_NAME = "Default OE-A"
 DEFAULT_DISPLAY_SKIN = "skin_default/skin_display.xml"
