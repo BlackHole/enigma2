@@ -1115,7 +1115,7 @@ def InitUsageConfig():
 
 	config.obhsettings = ConfigSubsection()
 	config.obhsettings.Subservice = ConfigYesNo(default=getImageDistro() in "vuplus" and True or False)
-	config.obhsettings.ColouredButtons = ConfigYesNo(default=True)
+	config.obhsettings.ColouredButtons = ConfigYesNo(default=getImageDistro() not in "vuplus" and True or False)
 	config.obhsettings.InfoBarEpg_mode = ConfigSelection(default="0", choices=[
 					("0", _("as plugin in extended bar")),
 					("1", _("with long OK press")),

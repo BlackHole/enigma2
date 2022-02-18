@@ -465,8 +465,8 @@
 	</map>
 
 	<map context="InfobarExtensions">
-		<key id="KEY_BLUE" mapto="showPluginBrowser" flags="b"/>
-		<key id="KEY_BLUE" mapto="extensions" flags="l"/>
+		<key id="KEY_BLUE" mapto="showPluginBrowser" flags="l"/>
+		<key id="KEY_BLUE" mapto="extensions" flags="b"/>
 		<key id="KEY_BOOKMARKS" mapto="showPluginBrowser" flags="mr" />
 		<key id="KEY_PROGRAM" mapto="openTimerList" flags="b" />
 		<key id="KEY_PROGRAM" mapto="openAutoTimerList" flags="l" />
