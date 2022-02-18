@@ -31,17 +31,6 @@ def countFrontpanelLEDs():
 		numLeds += 1
 	return numLeds
 
-
-def hasInitCam():
-	for cam in listdir("/usr/camscript"):
-		if cam.startswith("Ncam_") and not cam.startswith("Ncam_Mg") and not cam.startswith ("Ncam_mg") and not cam.endswith("Ci.sh"):
-			return True
-		else:
-			pass
-	return False
-
-
-SystemInfo["HasInitCam"] = hasInitCam()
 SystemInfo["MachineBrand"] = getMachineBrand()
 SystemInfo["MachineName"] = getMachineName()
 SystemInfo["DeveloperImage"] = getImageType().lower() != "release"
