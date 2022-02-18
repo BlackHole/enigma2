@@ -6,7 +6,7 @@ import locale
 import os
 import skin
 from time import time
-from boxbranding import getBrandOEM, getDisplayType
+from boxbranding import getBrandOEM, getDisplayType, getImageDistro
 
 from enigma import eDVBDB, eEPGCache, setTunerTypePriorityOrder, setPreferredTuner, setSpinnerOnOff, setEnableTtCachingOnOff, eEnv, Misc_Options, eBackgroundFileEraser, eServiceEvent, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, RT_WRAP
 
@@ -1114,7 +1114,7 @@ def InitUsageConfig():
 	config.logmanager.sentfiles = ConfigLocations(default='')
 
 	config.obhsettings = ConfigSubsection()
-	config.obhsettings.Subservice = ConfigYesNo(default=False)
+	config.obhsettings.Subservice = ConfigYesNo(default=getImageDistro() in "vuplus" and True or False)
 	config.obhsettings.ColouredButtons = ConfigYesNo(default=True)
 	config.obhsettings.InfoBarEpg_mode = ConfigSelection(default="0", choices=[
 					("0", _("as plugin in extended bar")),
