@@ -6,7 +6,7 @@ import six
 from os import listdir, path, popen
 from re import search
 from enigma import eTimer, getEnigmaVersionString, getDesktop
-from boxbranding import getMachineBrand, getMachineBuild, getMachineName, getImageVersion, getImageType, getImageBuild, getDriverDate, getImageDevBuild
+from boxbranding import getMachineBrand, getMachineBuild, getMachineName, getImageVersion, getImageType, getImageBuild, getDriverDate, getImageDevBuild, getImageDistro
 from Components.About import about
 from Components.ActionMap import ActionMap
 from Components.Button import Button
@@ -52,11 +52,18 @@ class About(Screen):
 									})
 
 	def populate(self):
-		self["lab1"] = StaticText(_("OpenBh"))
-		self["lab2"] = StaticText(_("From the OpenBh Team"))
-		model = None
-		AboutText = ""
-		self["lab3"] = StaticText(_("Support at %s") % "www.openbh.net")
+		if getImageDistro() == "openbh":
+			self["lab1"] = StaticText(_("OpenBh"))
+			self["lab2"] = StaticText(_("From the OpenBh Team"))
+			model = None
+			AboutText = ""
+			self["lab3"] = StaticText(_("Support at %s") % "www.openbh.net")
+		elif getImageDistro() == "vuplus":
+			self["lab1"] = StaticText(_("Vuplus"))
+			self["lab2"] = StaticText(_("From the Vuplus Team"))
+			model = None
+			AboutText = ""
+			self["lab3"] = StaticText(_("Support at %s") % "www.vuplus.com")
 
 		AboutText += _("Model:\t%s %s\n") % (getMachineBrand(), getMachineName())
 
