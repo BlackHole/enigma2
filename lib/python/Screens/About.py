@@ -59,8 +59,8 @@ class About(Screen):
 			AboutText = ""
 			self["lab3"] = StaticText(_("Support at %s") % "www.openbh.net")
 		elif getImageDistro() == "vuplus":
-			self["lab1"] = StaticText(_("Vuplus"))
-			self["lab2"] = StaticText(_("From the Vuplus Team"))
+			self["lab1"] = StaticText(_("Vuplus Factory Image"))
+			self["lab2"] = StaticText(_("by Vuplus"))
 			model = None
 			AboutText = ""
 			self["lab3"] = StaticText(_("Support at %s") % "www.vuplus.com")
