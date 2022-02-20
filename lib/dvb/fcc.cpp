@@ -189,7 +189,8 @@ RESULT eFCCServiceManager::stopFCCService()
 
 RESULT eFCCServiceManager::tryFCCService(const eServiceReference &sref, ePtr<iPlayableService> &service)
 {
-	if (!isEnable())
+	eFCCServiceManager *fcc_mng = eFCCServiceManager::getInstance();
+	if (!fcc_mng->isEnable())
 		return -1;
 
 	ePtr<iPlayableService> new_service = 0;
@@ -320,8 +321,7 @@ void eFCCServiceManager::printFCCServices()
 	std::map< ePtr<iPlayableService>, FCCServiceElem >::iterator it = m_FCCServices.begin();
 	for (;it != m_FCCServices.end();++it)
 	{
-		int isLocked = isLocked(it->first);
-		eDebug("[eFCCServiceManager] printFCCServices [*] sref : %s, state : %d, tune : %d, useNormalDecode : %d", it->second.m_service_reference.toString().c_str(), it->second.m_state, isLocked, it->second.m_useNormalDecode);
+		eDebug("[eFCCServiceManager] printFCCServices [*] sref : %s, state : %d, tune : %d, useNormalDecode : %d", it->second.m_service_reference.toString().c_str(), it->second.m_state, isLocked(it->first), it->second.m_useNormalDecode);
 	}
 #else
 	;
