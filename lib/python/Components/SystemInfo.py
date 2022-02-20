@@ -44,7 +44,7 @@ def hasInitCam():
 SystemInfo["HasInitCam"] = hasInitCam()
 SystemInfo["MachineBrand"] = getMachineBrand()
 SystemInfo["MachineName"] = getMachineName()
-SystemInfo["DeveloperImage"] = getImageType().lower() != "release"
+SystemInfo["DeveloperImage"] = getImageType().lower() != "release" or fileExists("/etc/enigma2/dev")
 SystemInfo["CommonInterface"] =  getBoxType() in ("pulse4kmini") and 1 and getBoxType() not in ("pulse4k") or eDVBCIInterfaces.getInstance().getNumOfSlots()
 SystemInfo["CommonInterfaceCIDelay"] = fileCheck("/proc/stb/tsmux/rmx_delay")
 for cislot in range(0, SystemInfo["CommonInterface"]):
