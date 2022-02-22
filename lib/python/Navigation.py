@@ -154,6 +154,10 @@ class Navigation:
 			else:
 				playref = ref
 			if self.pnav:
+			# config.plugins.fccsetup.activate
+				if hasattr(config.plugins, "fccsetup") and hasattr(config.plugins.fccsetup, "activate") and config.plugins.fccsetup.activate.value and not self.pnav.playService(playref):
+					self.currentlyPlayingServiceReference = playref
+					return 0
 				self.pnav.stopService()
 				self.currentlyPlayingServiceReference = playref
 				self.currentlyPlayingServiceOrGroup = ref
