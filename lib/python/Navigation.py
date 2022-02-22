@@ -152,6 +152,12 @@ class Navigation:
 			else:
 				playref = ref
 			if self.pnav:
+				if hasattr(config.plugins, "fccsetup") and hasattr(config.plugins.fccsetup, "activate") and config.plugins.fccsetup.activate.value and not self.pnav.playService(playref):
+					self.currentlyPlayingServiceReference = playref
+					self.currentlyPlayingServiceOrGroup = ref
+#					if InfoBarInstance and InfoBarInstance.servicelist.servicelist.setCurrent(ref, adjust):
+#						self.currentlyPlayingServiceOrGroup = InfoBarInstance.servicelist.servicelist.getCurrent()
+					return 0
 				self.pnav.stopService()
 				self.currentlyPlayingServiceReference = playref
 				self.currentlyPlayingServiceOrGroup = ref
