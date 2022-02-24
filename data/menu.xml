@@ -44,8 +44,7 @@
 		<!-- Menu / Setup / EPG -->
 		<menu entryID="epg_menu" level="0" text="EPG" weight="3">
 			<id val="epg" />
-
-			<item weight="2" level="0" text="EpgSearch">
+			<item weight="4" level="0" text="EPG Search">
 <code>
 from Plugins.Extensions.EPGSearch.EPGSearch import EPGSearch as epgsearch
 self.session.open(epgsearch)
