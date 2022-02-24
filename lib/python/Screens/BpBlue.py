@@ -456,7 +456,7 @@ class BhEpgPanel(Screen):
 
 class DeliteAutocamMan2(Screen):
 	skin = """
-	<screen position="240,120" size="800,520" title="OpenBh Autocam Manager">
+	<screen position="center,center" size="800,520" title="OpenBh Autocam Manager">
 		<widget name="defaultcam" position="10,10" size="780,30" font="Regular;24" halign="center" valign="center" backgroundColor="#9f1313" />
 		<widget source="list" render="Listbox" position="20,60" size="760,400" scrollbarMode="showOnDemand" >
 			<convert type="StringList" />
@@ -550,7 +550,7 @@ class DeliteAutocamMan2(Screen):
 
 class DeliteSetupAutocam2(Screen, ConfigListScreen):
 	skin = """
-	<screen position="240,190" size="800,340" title="Black Hole Autocam Setup">
+	<screen position="center,center" size="800,340" title="OpenBh Autocam Setup">
 		<widget name="config" position="10,20" size="780,280" scrollbarMode="showOnDemand" />
 		<ePixmap pixmap="skin_default/buttons/green.png" position="330,270" size="140,40" alphatest="on" />
 		<widget name="key_green" position="330,270" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
