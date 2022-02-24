@@ -67,6 +67,7 @@ import os
 from sys import maxsize, version_info
 import itertools
 import datetime
+import socket
 
 if version_info[0] >= 3:
 	import pickle as cPickle	# py3
@@ -612,6 +613,13 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		self.__state = self.STATE_SHOWN
 		self.__locked = 0
 
+#Blackhole
+		self.autocamTimer = eTimer()
+		self.autocamTimer.timeout.get().append(self.checkAutocam)
+		self.autocamTimer_active = 0
+		self.autocampop_active = 0
+#end
+
 		self.hideTimer = eTimer()
 		self.hideTimer.callback.append(self.doTimerHide)
 		self.hideTimer.start(5000, True)
@@ -762,6 +770,15 @@ class InfoBarShowHide(InfoBarScreenSaver):
 
 	def serviceStarted(self):
 		if self.execing:
+#Blackhole
+			if self.autocamTimer_active == 1:
+				self.autocamTimer.stop()
+			self.autocamTimer.start(1000)
+			self.autocamTimer_active = 1
+			if self.autocampop_active == 1:
+				Notifications.RemovePopup(id = "DeliteAutocam")
+				self.autocampop_active = 0
+#end
 			if config.usage.show_infobar_on_zap.value:
 				self.doShow()
 		self.showHideVBI()
@@ -943,6 +960,73 @@ class InfoBarShowHide(InfoBarScreenSaver):
 				whitelist_vbi.append(service)
 			open('/etc/enigma2/whitelist_vbi', 'w').write('\n'.join(whitelist_vbi))
 			self.showHideVBI()
+
+#Blackhole
+	def checkAutocam(self):
+		self.autocamTimer.stop()
+		self.autocamTimer_active = 0
+		refstr = ""
+		if self.session.nav.getCurrentlyPlayingServiceReference():
+			refstr = self.session.nav.getCurrentlyPlayingServiceReference().toString()
+		nabcur = "/usr/camscript/Ncam_Ci.sh"
+		nabnew = "/usr/camscript/Ncam_Ci.sh"
+		if fileExists("/etc/BhCamConf"):
+			f = open("/etc/BhCamConf",'r')
+			for line in f.readlines():
+				parts = line.strip().split("|")
+				if parts[0] == "delcurrent":
+					nabcur = parts[1]
+				elif parts[0] == "deldefault":
+					nabnew = parts[1]
+				elif parts[0] == refstr:
+					nabnew = parts[1]
+			f.close()
+
+		if nabcur != nabnew:
+			camname = self.nab_Switch_Autocam(nabcur, nabnew)
+			mymess = "     OpenBh Autocam switching to:\n\n     " + camname
+			Notifications.AddPopup(text = mymess, type = MessageBox.TYPE_INFO, timeout = 3, id = "DeliteAutocam")
+			self.autocampop_active = 1
+
+	def nab_Switch_Autocam(self, current, new):
+		camname = "N/A"
+		inme = open("/etc/BhCamConf",'r')
+		out = open("/etc/BhCamConf.tmp",'w')
+		for line in inme.readlines():
+			if line.find("delcurrent") == 0:
+				line = "delcurrent|" + new + "\n"
+			out.write(line)
+		out.close()
+		inme.close()
+		os.rename("/etc/BhCamConf.tmp", "/etc/BhCamConf")
+
+		f = open(new,'r')
+		for line in f.readlines():
+			if line.find('CAMNAME=') != -1:
+				line = line.strip()
+				camname = line[9:-1]
+		f.close()
+
+		out = open("/etc/CurrentBhCamName", "w")
+		out.write(camname)
+		out.close()
+		cmd = "cp -f " + new + " /usr/bin/StartBhCam"
+		os.system (cmd)
+
+		client_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+		client_socket.connect("/tmp/Blackhole.socket")
+		mydata = "STOP_CAMD," + current
+		client_socket.send(mydata.encode())
+		client_socket.close()
+		client_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+		client_socket.connect("/tmp/Blackhole.socket")
+		mydata = "NEW_CAMD," + new
+		client_socket.send(mydata.encode())
+		client_socket.close()
+		return camname
+
+
+#end
 
 
 class BufferIndicator(Screen):
