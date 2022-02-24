@@ -8,9 +8,11 @@ from Components.MenuList import MenuList
 from Components.Sources.List import List
 from Components.Pixmap import MultiPixmap
 from Components.About import about
+from Components.ConfigList import ConfigListScreen
+from Components.config import config, ConfigSubsection, ConfigText, getConfigListEntry, ConfigSelection, NoSave
 from Tools.Directories import fileExists
 from ServiceReference import ServiceReference
-from os import system, listdir, path, remove as os_remove
+from os import system, listdir, path, remove as os_remove, rename as os_rename
 from enigma import iServiceInformation, eTimer
 import socket
 
@@ -50,7 +52,7 @@ class DeliteBluePanel(Screen):
 		self["Ilab2"] = Label()
 		self["Ilab3"] = Label()
 		self["Ilab4"] = Label()
-		self["key_red"] = Label(_("Epg Panel"))
+		self["key_red"] = Label(_("Autocam"))
 		self["key_green"] = Label(_("Cam Info"))
 		self["key_yellow"] = Label(_("System Info"))
 		self["key_blue"] = Label(_("Extra Settings"))
@@ -74,6 +76,7 @@ class DeliteBluePanel(Screen):
 		self.onShow.append(self.updateBP0)
 
 	def updateBP0(self):
+		self.emlist = []
 		self.check_scriptexists()
 		self.check_camexists()
 		self.populate_List()
@@ -176,13 +179,24 @@ class DeliteBluePanel(Screen):
 		self["Ilab4"].setText(_("Videosize: ") + videosize)
 
 		self.defaultcam = "/usr/camscript/Ncam_Ci.sh"
+		check = False
 		if fileExists("/etc/BhCamConf"):
 			f = open("/etc/BhCamConf", 'r')
 			for line in f.readlines():
 				parts = line.strip().split("|")
 				if parts[0] == "deldefault":
 					self.defaultcam = parts[1]
+				elif parts[0] == "delcurrent":
+					check = True
 			f.close()
+
+		if check == False:
+			out = open("/etc/BhCamConf",'w')
+			line = "deldefault|" + self.defaultcam + "\n"
+			out.write(line)
+			line = "delcurrent|" + self.defaultcam + "\n"
+			out.write(line)
+			out.close()
 
 		self.defCamname = "Common Interface"
 		for c in list(self.camnames.keys()):
@@ -219,9 +233,17 @@ class DeliteBluePanel(Screen):
 		self.sel = self["list"].getCurrent()
 		self.newcam = self.camnames[self.sel]
 
-		out = open("/etc/BhCamConf", 'w')
-		out.write("deldefault|" + self.newcam + "\n")
+		inme = open("/etc/BhCamConf",'r')
+		out = open("/etc/BhCamConf.tmp",'w')
+		for line in inme.readlines():
+			if line.find("delcurrent") == 0:
+				line = "delcurrent|" + self.newcam + "\n"
+			elif line.find("deldefault") == 0:
+				line = "deldefault|" + self.newcam + "\n"
+			out.write(line)
 		out.close()
+		inme.close()
+		os_rename("/etc/BhCamConf.tmp", "/etc/BhCamConf")
 
 		out = open("/etc/CurrentBhCamName", "w")
 		out.write(self.sel)
@@ -265,7 +287,8 @@ class DeliteBluePanel(Screen):
 
 
 	def keyRed(self):
-		self.session.open(BhEpgPanel)
+#		self.session.open(BhEpgPanel)
+		self.session.open(DeliteAutocamMan2)
 
 	def myclose(self):
 		self.close()
@@ -430,6 +453,173 @@ class BhEpgPanel(Screen):
 				#epgsearch(self.session)
 				from Plugins.Extensions.EPGSearch.EPGSearch import EPGSearch as epgsearch
 				self.session.open(epgsearch)
+
+class DeliteAutocamMan2(Screen):
+	skin = """
+	<screen position="240,120" size="800,520" title="OpenBh Autocam Manager">
+		<widget name="defaultcam" position="10,10" size="780,30" font="Regular;24" halign="center" valign="center" backgroundColor="#9f1313" />
+		<widget source="list" render="Listbox" position="20,60" size="760,400" scrollbarMode="showOnDemand" >
+			<convert type="StringList" />
+		</widget>
+    		<ePixmap pixmap="skin_default/buttons/red.png" position="200,480" size="140,40" alphatest="on" />
+		<ePixmap pixmap="skin_default/buttons/green.png" position="440,480" size="140,40" alphatest="on" />
+		<widget name="key_red" position="200,480" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
+		<widget name="key_green" position="440,480" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
+    	</screen>"""
+
+	def __init__(self, session):
+		Screen.__init__(self, session)
+
+		self["key_red"] = Label(_("Delete"))
+		self["key_green"] = Label(_("Add"))
+		self["defaultcam"] = Label(_("Default Cam:"))
+		self.emlist = []
+		self.camnames = {}
+
+		self.list = []
+		self["list"] = List(self.list)
+
+		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
+		{
+			"ok": self.close,
+			"back": self.close,
+			"red": self.deltocam,
+			"green": self.addtocam
+		})
+
+		self.updateList()
+
+	def addtocam(self):
+		self.session.openWithCallback(self.updateList, DeliteSetupAutocam2)
+
+	def updateList(self):
+		self.list = [ ]
+		cams = listdir("/usr/camscript")
+		for fil in cams:
+			if fil.find('Ncam_') != -1:
+				f = open("/usr/camscript/" + fil,'r')
+				for line in f.readlines():
+					if line.find('CAMNAME=') != -1:
+						line = line.strip()
+						cn = line[9:-1]
+						self.emlist.append(cn)
+						self.camnames[cn] = "/usr/camscript/" + fil
+
+
+				f.close()
+
+		if fileExists("/etc/BhCamConf"):
+			f = open("/etc/BhCamConf",'r')
+			for line in f.readlines():
+				parts = line.strip().split("|")
+				if parts[0] == "delcurrent":
+					continue
+				elif parts[0] == "deldefault":
+					defaultcam = self.GetCamName(parts[1])
+					self["defaultcam"].setText(_("Default Cam:  ") + defaultcam)
+				else:
+					text = parts[2] + "\t" + self.GetCamName(parts[1])
+					res = (text, parts[0])
+					self.list.append(res)
+
+			f.close()
+		self["list"].list = self.list
+
+	def GetCamName(self, cam):
+		activeCam = ""
+		for c in self.camnames.keys():
+			if self.camnames[c] == cam:
+				activeCam = c
+		return activeCam
+
+	def deltocam(self):
+		mysel = self["list"].getCurrent()
+		if mysel:
+			mysel = mysel[1]
+			out = open("/etc/BhCamConf.tmp", "w")
+			f = open("/etc/BhCamConf",'r')
+			for line in f.readlines():
+				parts = line.strip().split("|")
+				if parts[0] != mysel:
+					out.write(line)
+			f.close()
+			out.close()
+			os_rename("/etc/BhCamConf.tmp", "/etc/BhCamConf")
+			self.updateList()
+
+
+class DeliteSetupAutocam2(Screen, ConfigListScreen):
+	skin = """
+	<screen position="240,190" size="800,340" title="Black Hole Autocam Setup">
+		<widget name="config" position="10,20" size="780,280" scrollbarMode="showOnDemand" />
+		<ePixmap pixmap="skin_default/buttons/green.png" position="330,270" size="140,40" alphatest="on" />
+		<widget name="key_green" position="330,270" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
+	</screen>"""
+
+	def __init__(self, session):
+		Screen.__init__(self, session)
+
+		self.list = []
+		ConfigListScreen.__init__(self, self.list)
+		self["key_green"] = Label(_("Save"))
+
+		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
+		{
+			"green": self.saveMyconf,
+			"back": self.close
+
+		})
+		self.updateList()
+
+	def updateList(self):
+		mychoices = []
+		self.chname = "Unknown"
+		self.chref = "Unknown"
+
+		myservice = self.session.nav.getCurrentService()
+		if myservice is not None:
+			myserviceinfo = myservice.info()
+			if self.session.nav.getCurrentlyPlayingServiceReference():
+				self.chname = ServiceReference(self.session.nav.getCurrentlyPlayingServiceReference()).getServiceName()
+				self.chref = self.session.nav.getCurrentlyPlayingServiceReference().toString()
+		cams = listdir("/usr/camscript")
+		for fil in cams:
+			if fil.find('Ncam_') != -1:
+				f = open("/usr/camscript/" + fil,'r')
+				for line in f.readlines():
+					if line.find('CAMNAME=') != -1:
+						line = line.strip()
+						cn = line[9:-1]
+						cn2 = "/usr/camscript/" + fil
+						res = (cn2, cn)
+						mychoices.append(res)
+				f.close()
+
+		self.autocam_file = NoSave(ConfigSelection(choices = mychoices))
+
+		res = getConfigListEntry(self.chname, self.autocam_file)
+		self.list.append(res)
+
+		self["config"].list = self.list
+		self["config"].l.setList(self.list)
+
+	def saveMyconf(self):
+		check = True
+		if fileExists("/etc/BhCamConf"):
+			f = open("/etc/BhCamConf",'r')
+			for line in f.readlines():
+				parts = line.strip().split("|")
+				if parts[0] == self.chref:
+					check = False
+			f.close()
+
+		if check == True:
+			line = self.chref + "|" + self.autocam_file.value + "|" + self.chname + "\n"
+			out = open("/etc/BhCamConf", "a")
+			out.write(line)
+			out.close()
+		self.close()
+
 
 
 class DeliteBp:

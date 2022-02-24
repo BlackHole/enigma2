@@ -44,6 +44,13 @@
 		<!-- Menu / Setup / EPG -->
 		<menu entryID="epg_menu" level="0" text="EPG" weight="3">
 			<id val="epg" />
+
+			<item weight="2" level="0" text="EpgSearch">
+<code>
+from Plugins.Extensions.EPGSearch.EPGSearch import EPGSearch as epgsearch
+self.session.open(epgsearch)
+</code>
+			</item>
 			<item entryID="epg_setup" level="0" weight="1" text="Settings"><setup id="epgsettings" /></item>
 			<item entryID="setup_epgsingle" level="2" text="Single EPG"><setup id="epgsingle" /></item>
 			<item entryID="setup_epggrid" level="2" text="Grid EPG"><setup id="epggrid" /></item>
