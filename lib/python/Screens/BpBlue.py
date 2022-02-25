@@ -636,7 +636,7 @@ class BhsysInfo2(Screen):
 		for device in hdds:
 			filename = "/sys/block/%s/removable" % (device)
 			if fileExists(filename):
-				if file(filename).read().strip() == "0":
+				if open(filename).read().strip() == "0":
 					hdd_dev = device
 					break
 		
@@ -892,7 +892,7 @@ class BhsysInfo2(Screen):
 		for device in hdds:
 			filename = "/sys/block/%s/removable" % (device)
 			if fileExists(filename):
-				if file(filename).read().strip() == "0":
+				if open(filename).read().strip() == "0":
 					hdd_dev = device
 					break
 		hddloc = "/dev/" + hdd_dev
