@@ -75,8 +75,8 @@ class ConfigList(GUIComponent):
 	GUI_WIDGET = eListbox
 
 	def isChanged(self):
-		for x in self.list:
-			if x[1].isChanged():
+		for item in self.list:
+			if len(item) > 1 and item[1].isChanged():
 				return True
 		return False
 
@@ -200,10 +200,10 @@ class ConfigListScreen:
 			"gotAsciiCode": (self.keyGotAscii, _("Keyboard data entry"))
 		}, prio=1, description=_("Common Setup Actions"))
 		self["editConfigActions"].setEnabled(False if fullUI else True)
-		self["VirtualKB"] = HelpableActionMap(self, "VirtualKeyboardActions", {
+		self["virtualKeyBoardActions"] = HelpableActionMap(self, "VirtualKeyboardActions", {
 			"showVirtualKeyboard": (self.keyText, _("Display the virtual keyboard for data entry"))
 		}, prio=1, description=_("Common Setup Actions"))
-		self["VirtualKB"].setEnabled(False)
+		self["virtualKeyBoardActions"].setEnabled(False)
 		self["config"] = ConfigList(list, session=session)
 		self.setCancelMessage(None)
 		self.setRestartMessage(None)
@@ -256,19 +256,19 @@ class ConfigListScreen:
 				self["menuConfigActions"].setEnabled(False)
 				self["key_menu"].setText("")
 			if isinstance(currConfig[1], ConfigText):
-				self.showVKeyboard(True)
+				self.showVirtualKeyBoard(True)
 				if "HelpWindow" in self and currConfig[1].help_window and currConfig[1].help_window.instance is not None:
 					helpwindowpos = self["HelpWindow"].getPosition()
 					currConfig[1].help_window.instance.move(ePoint(helpwindowpos[0], helpwindowpos[1]))
 			else:
-				self.showVKeyboard(False)
+				self.showVirtualKeyBoard(False)
 			if "description" in self:
 				self["description"].text = self.getCurrentDescription()
 
-	def showVKeyboard(self, state):
+	def showVirtualKeyBoard(self, state):
 		if "VKeyIcon" in self:
-			self["VirtualKB"].setEnabled(state)
 			self["VKeyIcon"].boolean = state
+			self["virtualKeyBoardActions"].setEnabled(state)
 
 	def showHelpWindow(self):
 		self.displayHelp(True)
@@ -290,7 +290,7 @@ class ConfigListScreen:
 			self.keyToggle()
 		elif isinstance(self.getCurrentItem(), ConfigSelection):
 			self.keyMenu()
-		elif isinstance(self.getCurrentItem(), ConfigText):
+		elif isinstance(self.getCurrentItem(), ConfigText) and not isinstance(self.getCurrentItem(), (ConfigMACText, ConfigNumber)):
 			self.keyText()
 		else:
 			self["config"].handleKey(ACTIONKEY_SELECT)
@@ -396,10 +396,11 @@ class ConfigListScreen:
 
 	def saveAll(self):
 		restart = False
-		for x in self["config"].list:
-			if x[0].endswith("*") and x[1].isChanged():
-				restart = True
-			x[1].save()
+		for item in self["config"].list:
+			if len(item) > 1:
+				if item[0].endswith("*") and item[1].isChanged():
+					restart = True
+				item[1].save()
 		configfile.save()
 		return restart
 
@@ -419,8 +420,9 @@ class ConfigListScreen:
 	def cancelConfirm(self, result):
 		if not result:
 			return
-		for x in self["config"].list:
-			x[1].cancel()
+		for item in self["config"].list:
+			if len(item) > 1:
+				item[1].cancel()
 		if not hasattr(self, "closeParameters"):
 			self.closeParameters = ()
 		self.close(*self.closeParameters)
