@@ -555,22 +555,26 @@ class BhsysInfo2(Screen):
 		ramused = 0
 		swapused = 0
 		totused = 0
+		t1 = 0
+		t2 = 0
 
-		rc = system("free > /tmp/ninfo.tmp")
-		if fileExists("/tmp/ninfo.tmp"):
-			f = open("/tmp/ninfo.tmp",'r')
-			for line in f.readlines():
-				parts = line.strip().split()
-				if parts[0] == "Mem:":
-					ramused = int(( int(parts[2]) * 100) // int(parts[1]))
-				elif parts[0] == "Swap:":
-					if int(parts[1]) > 1:
-						swapused = int(( int(parts[2]) * 100) // int(parts[1]))
-				elif parts[0] == "Total:":
-					totused = int(( int(parts[2]) * 100) // int(parts[1]))
-			f.close()
-			os_remove("/tmp/ninfo.tmp")
+		output = subprocess.run(['free'], encoding='utf-8', errors='ignore', capture_output=True)
+		for line in output.stdout.split("\n"):
+			parts = line.strip().split()
+			if len(parts) < 2:
+				continue
+			if parts[0] == "Mem:":
+				ramused = int(( int(parts[2]) * 100) // int(parts[1]))
+				t1 += int(parts[1])
+				t2 += int(parts[2])
+			elif parts[0] == "Swap:":
+				if int(parts[1]) > 1:
+					swapused = int(( int(parts[2]) * 100) // int(parts[1]))
+					t1 += int(parts[1])
+					t2 += int(parts[2])
 
+		totused = int(( int(t2) * 100) // int(t1))
+		
 		self.smallmontxt += _("Ram in use: ") + str(ramused) + " %\n"
 		self.smallmontxt += _("Swap in use: ") + str(swapused) + " %\n"
 
