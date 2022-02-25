@@ -585,22 +585,17 @@ class BhsysInfo2(Screen):
 		anfs = False
 		rc = system("ps > /tmp/nvpn.tmp")
 		
-		if fileExists("/etc/inetd.conf"):
-			f = open("/etc/inetd.conf",'r')
-			for line in f.readlines():
-				parts = line.strip().split()
-				if parts[0] == 'telnet':
-					atelnet = True
-				if parts[0] == 'ftp':
-					aftp = True
-			f.close()
 		if fileExists("/tmp/nvpn.tmp"):
 			f = open("/tmp/nvpn.tmp",'r')
 			for line in f.readlines():
 				if line.find('openvpn') != -1:
 					avpn = True
-				if line.find('smbd') != -1:
+				if line.find('smb') != -1:
 					asamba = True
+				if line.find('telnet') != -1:
+					atelnet = True
+				if line.find('ftp') != -1:
+					aftp = True
 				if line.find('rpc.mountd') != -1:
 					anfs = True
 			f.close()
