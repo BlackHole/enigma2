@@ -1,5 +1,7 @@
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
+from Screens.About import About
+from Screens.ServiceInfo import ServiceInfo
 from boxbranding import getMachineBrand, getImageBuild, getMachineName, getImageVersion, getImageType
 from Components.ActionMap import ActionMap
 from Components.Label import Label
