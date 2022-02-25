@@ -715,7 +715,7 @@ class BhsysInfo2(Screen):
 		if hdd_dev:
 			hddloc = "/dev/" + hdd_dev
 			output = subprocess.run(['hddtemp', '-w', '-n', hddloc], encoding='utf-8', errors='ignore', capture_output=True)
-			temperature = output.stdout
+			temperature = output.stdout.strip()
 			if temperature.isnumeric():
 				temperc = int(temperature)
 			else:
