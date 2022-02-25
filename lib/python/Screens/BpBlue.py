@@ -18,6 +18,7 @@ from Tools.Directories import fileExists
 from ServiceReference import ServiceReference
 from os import system, listdir, path, remove as os_remove, rename as os_rename
 from enigma import iServiceInformation, ePoint, eSize, eTimer
+from skin import findSkinScreen
 import socket
 import subprocess
 
@@ -271,7 +272,10 @@ class DeliteBluePanel(Screen):
 		client_socket.close()
 
 	def keyYellow(self):
-		self.session.open(BhsysInfo2)
+		if findSkinScreen("BhsysInfo2"):
+			self.session.open(BhsysInfo2)
+		else:
+			self.session.open(BhsysInfo)
 
 	def keyBlue(self):
 		from Screens.BpSet import DeliteSettings
@@ -343,6 +347,76 @@ class Nab_DoStartCam(Screen):
 	def delTimer(self):
 		del self.activityTimer
 
+class BhsysInfo(Screen):
+	skin = """
+	<screen position="center,center" size="1020,600" title="OpenBh Info" flags="wfNoBorder">
+		<widget name="lab1" position="50,25" halign="left" size="1020,550" zPosition="1" font="Regular;20" valign="top" transparent="1" />
+	</screen>"""
+
+	def __init__(self, session):
+		Screen.__init__(self, session)
+		self["lab1"] = ScrollLabel()
+
+		self.onShow.append(self.updateInfo)
+
+		self["actions"] = ActionMap(["OkCancelActions", "DirectionActions"],
+		{
+			"ok": self.close,
+			"cancel": self.close,
+			"up": self["lab1"].pageUp,
+			"down": self["lab1"].pageDown
+		}, -1)
+
+	def updateInfo(self):
+		rc = system("df -h > /tmp/syinfo.tmp")
+		text =  _("STB \n") +_("Brand:") + "\t%s\n" % getMachineBrand()
+		text += _("Model:\t%s \n") % (getMachineName())
+		text += _("Chipset:\t%s \n") % about.getChipSetString().upper() + "\n"
+		text += _("MEMORY\n")
+		memTotal = memFree = swapTotal = swapFree = 0
+		for line in open("/proc/meminfo", 'r'):
+			parts = line.replace("k", "K").split(':')
+			key = parts[0].strip()
+			if key == "MemTotal":
+				memTotal = parts[1].strip()
+			elif key in ("MemFree", "Buffers", "Cached"):
+				memFree += int(parts[1].strip().split(' ', 1)[0])
+			elif key == "SwapTotal":
+				swapTotal = parts[1].strip()
+			elif key == "SwapFree":
+				swapFree = parts[1].strip()
+		text += _("Total memory:") + "\t%s\n" % memTotal
+		text += _("Free memory:") + "\t%s KB\n" % memFree
+		text += _("Swap total:") + "\t%s \n" % swapTotal
+		text += _("Swap free:") + "\t%s \n" % swapFree
+		text += "\n" + _("STORAGE") + "\n"
+		f = open("/tmp/syinfo.tmp", 'r')
+		line = f.readline()
+		parts = line.split()
+		text += _("Filesystem:") + "\t" + "{0:<16}".format(parts[1]) + "{0:<15}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
+		line = f.readline()
+		parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
+		text += _("Flash:") + "\t" + "{0:<14}".format(parts[1]) + "{0:<12}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<0}".format(parts[4]) + "\n"
+		for line in f.readlines():
+			if line.find('/media/') != -1:
+				line = line.replace('/media/', '').replace('hdd', 'Hdd:').replace('usb', 'Usb:')
+				parts = line.split()
+				if len(parts) == 6:
+					if line.find('Hdd:') != -1:
+						parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
+						text +=_("Hdd:") + "\t" + "{0:<12}".format(parts[1]) + "{0:<12}".format(parts[2]) + "{0:<13}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
+				if len(parts) == 6:
+					if line.find('Usb:') != -1:
+						parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
+						text +=_("Usb:") + "\t" + "{0:<14}".format(parts[1]) + "{0:<14}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
+		f.close()
+		os_remove("/tmp/syinfo.tmp")
+
+		text += "\n" + _("SOFTWARE") + "\n"
+		text += "Image:\t" + "OpenBh %s.%s (%s)\n" % (getImageVersion(), getImageBuild(), getImageType().title())
+		text += "Enigma2: \t" + about.getEnigmaVersionString() + "\n"
+		text += "Kernel: \t" + about.getKernelVersionString() + "\n"
+		self["lab1"].setText(text)
 
 class BhsysInfo2(Screen):
 	skin = """
