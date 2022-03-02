@@ -21,6 +21,7 @@ from enigma import iServiceInformation, ePoint, eSize, eTimer
 from skin import findSkinScreen
 import socket
 import subprocess
+import re
 
 class DeliteBluePanel(Screen):
 	skin = """
@@ -574,7 +575,7 @@ class BhsysInfo2(Screen):
 					t2 += int(parts[2])
 
 		totused = int(( int(t2) * 100) // int(t1))
-		
+
 		self.smallmontxt += _("Ram in use: ") + str(ramused) + " %\n"
 		self.smallmontxt += _("Swap in use: ") + str(swapused) + " %\n"
 
@@ -888,7 +889,7 @@ class BhsysInfo2(Screen):
 			if fused > 1000000000:
 				fused = fused // 1000000
 				meas = "Tera"
-			fused = "%d.%03d " % (fused/1000, fused%1000)
+			fused = "%d.%03d " % (fused//1000, fused%1000)
 			fused += meas
 
 			meas = "M"
@@ -898,7 +899,7 @@ class BhsysInfo2(Screen):
 			if ffree > 1000000000:
 				ffree = ffree // 1000000
 				meas = "Tera"
-			ffree = "%d.%03d " % (ffree/1000, ffree%1000)
+			ffree = "%d.%03d " % (ffree//1000, ffree%1000)
 			ffree += meas
 
 			mytext += _("Total Space: ") + ftot + _("    in use: ") + str(fperc) + "% \n"
@@ -970,14 +971,14 @@ class NabProcInfo(Screen):
 	skin = """
 	<screen position="70,110" size="580,380" title="Black Hole E2 Process Info">
 		<ePixmap position="0,0" pixmap="skin_default/shout_back2.png" size="580,380" alphatest="on" />
-		<widget name="pibartit" zPosition="2" position="10,1" size="560,30" font="Regular;18" valign="center" transparent="1" foregroundColor="white" backgroundColor="white" />
-		<widget name="infotext" position="20,50" size="560,320" font="Regular;18" />
+		<widget name="pibartit" zPosition="1" position="0,1" size="560,30" font="Regular;18" valign="center" transparent="1" foregroundColor="white" backgroundColor="white" />
+		<widget name="infotext" zPosition="2" position="0,80" size="560,320" font="Regular;18" valign="center" transparent="1" foregroundColor="white" backgroundColor="white" />
 	</screen>"""
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
 
-		self["pibartit"] = Label(" Pid \t Uid \t Command")
+		self["pibartit"] = Label("Pid \t  Time \t    Command")
 		self["infotext"] = ScrollLabel("")
 
 		self["actions"] = ActionMap(["WizardActions", "DirectionActions"],
@@ -999,15 +1000,16 @@ class NabProcInfo(Screen):
 		if fileExists("/tmp/ninfo.tmp"):
 			f = open("/tmp/ninfo.tmp",'r')
 			for line in f.readlines():
-				parts = line.strip().split()
+				parts = line.replace("?", "").strip().split()
 				if parts[0] == "PID":
 					continue
-				#strview += parts[0] + "\t"
-				#strview += parts[1] + "\t"
-				#i = (len(parts) -1)
-				#if i > 1:
-					#strview += parts[i] + "\n"
-				strview += line + "\n"
+				strview += parts[0]
+				strview += "\t" + parts[1]
+				line = re.sub(r'\b(PID|TTY|CMD)\b', '', line)
+				i = (len(parts) -1)
+				if i > 1:
+					strview += "\t" + parts[i] +  "\n"
+				#strview += line + "\n"
 
 			f.close()
 			os_remove("/tmp/ninfo.tmp")
