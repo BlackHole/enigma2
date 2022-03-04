@@ -183,7 +183,7 @@ void eDVBRdsDecoder::processPESPacket(uint8_t *data, int len)
 {
 	int pos=9+data[8];// skip pes header
 
-	if (m_audio_type == eDVBAudio::aAAC  || m_audio_type == eDVBAudio::aAACHE)
+	if (m_audio_type == eDVBAudio::aAAC  || m_audio_type == eDVBAudio::aHEAAC)
 		processPESAACPacket(data, pos, len);
 	else
 		processPESMPEGPacket(data, pos, len);
@@ -492,7 +492,7 @@ void eDVBRdsDecoder::gotAncillaryData(const uint8_t *buf, int len)
 	int dir;
 
 	// RDS data included in MPEG Audio frames needs to be readed in reverse order
-	if (m_mode == 1 || m_audio_type == eDVBAudio::aAAC || m_audio_type == eDVBAudio::aAACHE)
+	if (m_mode == 1 || m_audio_type == eDVBAudio::aAAC || m_audio_type == eDVBAudio::aHEAAC)
 	{
 		pos = 0;
 		dir = 1;
