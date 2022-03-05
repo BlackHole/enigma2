@@ -261,6 +261,22 @@ def fileWriteLine(filename, line, source=DEFAULT_MODULE_NAME):
 		result = 0
 	return result
 
+def fileReadLines(filename, default=None, source=DEFAULT_MODULE_NAME):
+	lines = None
+	try:
+		with open(filename, "r") as fd:
+			lines = fd.read().splitlines()
+		msg = "Read"
+	except (IOError, OSError) as err:
+		if err.errno != ENOENT:  # ENOENT - No such file or directory.
+			print("[%s] Error %d: Unable to read lines from file '%s'!  (%s)" % (source, err.errno, filename, err.strerror))
+		lines = default
+		msg = "Default"
+	if debug or forceDebug:
+		length = len(lines) if lines else 0
+		print("[%s] Line %d: %s %d lines from file '%s'." % (source, getframe(1).f_lineno, msg, length, filename))
+	return lines
+
 def comparePath(leftPath, rightPath):
 	if leftPath.endswith(os.sep):
 		leftPath = leftPath[:-1]
