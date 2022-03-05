@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OBH 5.0  it_IT\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-03 00:00+0000\n"
-"PO-Revision-Date: 2021-12-03\n"
-"Last-Translator: Alexwilmac\n"
+"POT-Creation-Date: 2022-01-01 00:00+0000\n"
+"PO-Revision-Date: 2022-01-01\n"
+"Last-Translator: AlexWilMac\n"
 "Language-Team: @Alexwilmac-@insanity\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -12,6 +12,198 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.2\n"
+
+msgid "TRANSLATOR_INFO"
+msgstr ""
+"Traduzione italiana enigma2\n"
+"a cura di @AlexWilmac / @insanity \n"
+"Aggiornamento del 26 febbraio 2022 -\n"
+"Supporto: vuplus-community.net"
+
+msgid "Quick Options Setup"
+msgstr "Impostazione opzioni veloci"
+
+msgid "INFO button action"
+msgstr "Funzione pulsante INFO"
+
+msgid "Choose what will be displayed when the 'INFO' button is pressed."
+msgstr "Scegli l'azione da assegnare al tasto INFO"
+
+msgid "OK button mode"
+msgstr "Funzione tasto OK"
+
+msgid "Select what you want the OK button to activate:"
+msgstr "Scegli l'azione da assegnare al tasto OK"
+
+msgid "QuickEPG mode"
+msgstr "Modalità EPG veloce"
+
+msgid "Select how to activate the Quick EPG mode:"
+msgstr "Seleziona come attivare la modalità EPG veloce"
+
+msgid "TV button mode"
+msgstr "Funzione per tasto TV"
+
+msgid "Select what you want the TV button to activate:"
+msgstr "Scegli l'azione da assegnare al tasto TV"
+
+msgid "Hide mute icon"
+msgstr "Nascondi l'icona 'Muto'"
+
+msgid "If volume muted, hide mute icon or mute information after few seconds."
+msgstr "Se viene tolto il volume (funzione 'Muto'), nascondi la relativa icona dopo qualche secondo."
+
+msgid "Channel +/- button mode"
+msgstr "Funzione tasti CH +/-"
+
+msgid "Select what you want the Channel +/- button to activate:"
+msgstr "Scegli l'azione da assegnare ai tasti CH +/-"
+
+msgid "Just change channels"
+msgstr "Cambia canale +/-"
+
+msgid "Just change Bouquet"
+msgstr "Cambia bouquet (+/-)"
+
+msgid "Up/Down button mode"
+msgstr "Funzione tasti SU/GIÙ"
+
+msgid "Select what you want the Up/Down button to activate:"
+msgstr "Scegli l'azione da assegnare ai tasti SU/GIÙ"
+
+msgid "Enable VOD skip buttons"
+msgstr "Abilita i salti con i tasti nello streaming"
+
+msgid "This option allows you to choose to use the left/right buttons to change channels, or enable them for seeking VOD content."
+msgstr ""
+"Consente se scegliere di usare i tasti Sinistra/Destra per cambiare canale oppure per spostarsi avanti/indietro nella visione in streaming."
+
+msgid "Select which tuner to use for the scan."
+msgstr "Selezionare quale tuner usare per la scansione"
+
+msgid "Bluetooth Setup"
+msgstr "Impostazioni bluetooth"
+
+msgid "Press red key to enable bluetooth."
+msgstr "Premere ROSSO per abilitare il bluetooth"
+
+msgid "Device is enabling..."
+msgstr "Abilito il dispositivo..."
+
+msgid "Device is disabling..."
+msgstr "Dispositivo disabilitato"
+
+msgid "Device is enabled."
+msgstr "Dispositivo abilitato"
+
+msgid "Show Software Update in Extensions"
+msgstr "Mostra Gestione immagine nelle estensioni"
+
+msgid "only when available"
+msgstr "Solo se sono disponibili"
+
+msgid ""
+"Show Software Update in Extensions Menu (Blue button long). 'yes' adds it permanently. "
+"'only when available' only shows it when updates are known to be available based on update polling."
+msgstr ""
+"Quest'opzione mostra la 'Gestione immagine' premendo BLU a LUNGO."
+"'Sì' mostra questa voce in ogni caso; 'Solo se sono disponibili' la mostra solo quando ve ne fossero da scaricare."
+
+msgid "Online update"
+msgstr "Aggiornamento online"
+
+# Vecchie righe 4.4
+# msgid "Restore"
+# msgstr "Ripristino"
+
+# msgid "OpenBh online update"
+# msgstr "Aggiornamenti OBH"
+
+
+# msgid "Flash"
+# msgstr "Flash"
+
+msgid "Image Download"
+msgstr "Ripristino"
+
+msgid "Online Flash"
+msgstr "Flash"
+
+#msgid "Full backup"
+#msgstr "Backup completo"
+
+msgid "Image Manager"
+msgstr "Backup immagine completo"
+
+msgid "Backup & Image Manager"
+msgstr "Gestione dei BACKUP"
+
+#msgid "Full Backup"
+#msgstr "Backup completo"
+
+msgid "Select Network Interface"
+msgstr "Seleziona interfaccia di rete"
+
+msgid ""
+"Your network interface wlan0 is not properly configured, so a network scan cannot be done.\n"
+"Please configure the interface and try again."
+msgstr ""
+"L'interfaccia di rete wlan0 (wireless) non è ben configurata, per cui non posso effettuare una scansione."
+"Si prega di configurare l'interfaccia e riprovare."
+
+msgid "Enable EPG event name abbreviation removal"
+msgstr "Abilitare rimozione abbreviazione nome evento in EPG"
+
+msgid "Broadcasters sometimes split long event names into the event description using ... Choose whether to prevent this behaviour."
+msgstr ""
+"Alle volte certi canali spezzano i nomi di eventi lunghi proseguendoli all'interno della descrizione "
+"dell'evento stesso usando ...\n"
+"Scegliere se impedire questo comportamento."
+
+msgid "Remove EPG event name prefixes"
+msgstr "Rimuovi prefissi nel nome degli eventi"
+
+msgid "Broadcasters sometimes prefix event names with 'New: ' or 'Live: '. Choose what to do with these prefixes."
+msgstr ""
+"I canali qualche volta mettono un prefisso nel nome evento: 'Nuovo' oppure 'Dal Vivo'."
+"Scegliere cosa fare con questi prefissi."
+
+msgid "Set Enigma2 Log Level"
+msgstr "Impostare il tipo di registro"
+
+msgid "Enigma2 debug level"
+msgstr "Tipo di registro"
+
+msgid "Debug+ Logs"
+msgstr "Debug+registro"
+
+msgid "No Logs"
+msgstr "Nessun registro"
+
+msgid "Enable Bluetooth Audio"
+msgstr "Abilita l'audio Bluetooth"
+
+msgid "This Option allows you to switch audio to bluetooth speakers."
+msgstr "Permette di inviare l'audio a degli altoparlanti o dispositivi audio BT."
+
+msgid "General Bluetooth Audio delay"
+msgstr "Ritardo generale dei dispositivi BT"
+
+msgid "This option configures the general audio delay for bluetooth speakers."
+msgstr "Opzione che imposta il ritardo generale per altoparlanti o dispositivi audio BT."
+
+msgid "VU+"
+msgstr "box"
+
+#vecchie righe 4.4
+#msgid "Subtitle quickmenu"
+#msgstr "Menu veloce sottotitoli"
+
+msgid "To subtitle selection"
+msgstr "Selezione sottotitoli"
+
+msgid "To audio selection"
+msgstr "Scelta traccia audio"
 
 msgid "Detect next boxes before standby"
 msgstr "Controlla se altri dispositivi sono in Standby"
@@ -42,6 +234,8 @@ msgid ""
 "Delay between CEC commands when sending a series of commands. Some devices require this delay for correct "
 "functioning, usually between 50-150ms."
 msgstr ""
+"Intervallo fra un comando CEC e il successivo, quando sono inviati in serie. Alcuni dispositivi "
+"hanno bisogno di un certo intervallo per funzionare correttamente (di solito fra 50 e 150ms)."
 
 msgid "Wake A/V receiver from standby."
 msgstr "Riattiva il ricevitore dallo stato di Standby."
@@ -91,7 +285,7 @@ msgid ""
 "blue button text in the menu remains hidden even though the user "
 "sort feature is active."
 msgstr ""
-"Quando è su 'user' potete ordinare o nascondere voci di menu con il tasto blu. "
+"Quando è su 'definito dall'utente' potete ordinare o nascondere voci di menu con il tasto blu. "
 "Quando è su 'nascosto dall'utente', il testo del pulsante BLU nel menu rimane nascosto "
 "sebbene sia attiva l'opzione 'ordinato dall'utente'."
 
@@ -163,9 +357,6 @@ msgstr "Componenti aggiuntivi specifici di OBH"
 msgid "Manual Install OpenBh packages"
 msgstr "Installazione manuale pacchetti OBH"
 
-msgid "OpenBh online update"
-msgstr "Aggiornamenti OBH"
-
 msgid "Addons and Feeds Manager"
 msgstr "Componenti aggiuntivi (addons)"
 
@@ -210,7 +401,6 @@ msgstr "Non riparare"
 
 msgid "Reconstruct the .ap and .sc files of the selected movie"
 msgstr "Ripara la registrazione ricostruendo i file .ap e .sc"
-
 
 # Message already partially translated. So, maybe it is composed piece by piece
 msgid ""
@@ -2998,7 +3188,7 @@ msgstr "Connettere"
 msgid "Connect to a wireless network"
 msgstr "Connettere a rete wireless"
 
-msgid "Connect your usb storage to your stb\n"
+msgid "Connect your usb storage to your box\n"
 msgstr "Connettere il dispositivo USB al ricevitore\n"
 
 msgid "Connected"
@@ -3997,9 +4187,6 @@ msgstr "Abilitare Netmed EPG"
 msgid "Enable OpenTV EPG"
 msgstr "Abilita l'EPG di tipo OpenTV"
 
-msgid "Enable VOD skip buttons"
-msgstr "Abilita i salti con i tasti nello streaming"
-
 msgid "Enable ViaSat EPG"
 msgstr "Abilitare Viasat EPG"
 
@@ -4700,9 +4887,6 @@ msgstr "Display LCD"
 msgid "Front panel settings"
 msgstr "Configurazioni Display LCD"
 
-msgid "Full Backup"
-msgstr "Backup completo"
-
 msgid "Full Image Backup "
 msgstr "Backup immagine completo"
 
@@ -4905,7 +5089,7 @@ msgid "HDMI Colorimetry"
 msgstr "Colorimetria HDMI"
 
 msgid "HDMI Colorspace"
-msgstr "HDMI Colorspace"
+msgstr "Spazio colore HDMI"
 
 msgid "HDMIin"
 msgstr "HDMIin"
@@ -4929,7 +5113,7 @@ msgid "Hard disk standby after"
 msgstr "Standby hard disk dopo"
 
 msgid "Harddisk setup"
-msgstr "impostazioni Harddisk"
+msgstr "Impostazioni hard disk"
 
 msgid "Hebrew"
 msgstr "Ebraico"
@@ -5258,9 +5442,6 @@ msgstr "Ignora gruppo dei nomi della sottorete DVB-T"
 
 msgid "Image Slot:\t%s"
 msgstr "Posizione immagine:\t%s"
-
-msgid "Image manager"
-msgstr "Gestione immagine"
 
 msgid "Image:\t%s.%s%s (%s)\n"
 msgstr "Immagine:\t%s.%s%s (%s)\n"
@@ -7247,9 +7428,9 @@ msgstr "Inserire il vecchio codice PIN"
 msgid "Please follow the instructions on the TV"
 msgstr "Seguire le istruzioni mostrate sullo schermo"
 
-msgid "Please make sure your usb drive is NOT CONNECTED to your stb before you continue.\n"
+msgid "Please make sure your usb drive is NOT CONNECTED to your box before you continue.\n"
 msgstr ""
-"Verificare che il dispositivo USB NON sia collegato al ricevitore prima di continuare.\n"
+"Controllare che il dispositivo USB NON sia connesso al box prima di continuare.\n"
 "\n"
 
 msgid ""
@@ -8152,9 +8333,6 @@ msgstr "Ripetizioni"
 msgid "Repeat Display Message"
 msgstr "Ripetizione visione messaggio"
 
-msgid "Repeat how often"
-msgstr "Ripeti quanto spesso"
-
 msgid "Repeat type"
 msgstr "Tipo di ripetizione"
 
@@ -8236,9 +8414,6 @@ msgstr "Riavviare il test"
 
 msgid "Restart your network connection and interfaces.\n"
 msgstr "Riavviare le connessioni di rete e relative interfacce.\n"
-
-msgid "Restore"
-msgstr "Ripristinare"
 
 msgid "Restore backups"
 msgstr "Ripristinare un backup"
@@ -8987,9 +9162,6 @@ msgstr "Selezionare una rete wireless"
 msgid "Select your ATSC provider."
 msgstr "Seleziona il provider ATSC."
 
-msgid "Select your country. If not available select 'all'."
-msgstr "Seleziona il tuo paese. Se non disponibile selezionare 'tutto'."
-
 msgid ""
 "Select your provider and region. If not present in this list you will need to select one of the other "
 "'service scan types'."
@@ -8999,13 +9171,6 @@ msgstr ""
 
 msgid "Select your provider, and press OK to start the scan"
 msgstr "Selezionare il provider. Tasto 'OK' per iniziare la ricerca"
-
-msgid ""
-"Select your region. If not available change 'Country' to 'all' and select one of the default "
-"alternatives."
-msgstr ""
-"Scegli la tua nazione. Se non è disponibile, cambia la nazione in “Tutte” e scegli una delle alternative "
-"proposte."
 
 msgid "Select your time zone area or region."
 msgstr "Scegli l'area geografica del tuo fuso orario."
@@ -9900,10 +10065,10 @@ msgstr "Script Inadyn mancante"
 
 msgid ""
 "Sorry feeds are down for maintenance, please try again later. If this issue persists please check www."
-"openbh.net"
+"vuplus-community.net"
 msgstr ""
 "I feed non sono disponibili per manutenzione: riprova più tardi. Se il problema persiste, consultare www."
-"openbh.net"
+"vuplus-community.net"
 
 msgid ""
 "Sorry feeds seem be in an unstable state, if you wish to use them please enable 'Allow unstable "
@@ -10287,9 +10452,6 @@ msgstr "Selezione lingua sottotitoli 4"
 msgid "Subtitle position"
 msgstr "Posizione sottotitoli"
 
-msgid "Subtitle quickmenu"
-msgstr "Menu veloce sottotitoli"
-
 msgid "Subtitle selection"
 msgstr "Selezione sottotitoli"
 
@@ -10472,13 +10634,6 @@ msgstr "Sistema: "
 
 msgid "TB"
 msgstr "TB"
-
-msgid "TRANSLATOR_INFO"
-msgstr ""
-"Traduzione italiana OBH 4.4 enigma2\n"
-"a cura di @AlexWilmac / @insanity \n"
-"aggiornamento novembre 2020 -\n"
-"Supporto: www.openbh.net"
 
 msgid "TS file is too large for ISO9660 level 1!"
 msgstr "File TS troppo grande per ISO9660 livello 1!"
@@ -10764,9 +10919,11 @@ msgid "There are no updates available."
 msgstr "Nessun aggiornamento disponibile."
 
 msgid ""
-"There has been an error, please try again later. If this issue persists, please check www.openbh.net"
+"There has been an error, please try again later. If this issue persists, please check www.vuplus-"
+"community.net"
 msgstr ""
-"Si è verificato un problema. Provare più tardi e, se il problema persiste, verificare in www.openbh.net"
+"Si è verificato un problema. Provare più tardi e, se il problema persiste, verificare in www.vuplus-"
+"community.net"
 
 msgid "There is no signal to lock on !"
 msgstr "Nessun segnale da sbloccare!"
@@ -11788,9 +11945,6 @@ msgstr "VMGM (trailer introduttivo)"
 msgid "VOB file"
 msgstr "File VOB"
 
-msgid "VU+"
-msgstr "VU+"
-
 msgid "Version: "
 msgstr "Versione: "
 
@@ -12609,10 +12763,10 @@ msgstr ""
 
 msgid ""
 "Your %s %s is not able to connect to the feeds, please try again later. If this persists please report "
-"on the OpenBh forum at www.openbh.net"
+"on the BH forum at www.vuplus-community.net"
 msgstr ""
 "Il %s %s non può connettersi alle fonti. Riprova più tardi. Se il problema persiste riportalo al forum "
-"OpenBh (www.openbh.net)"
+"BH/OBH (www.vuplus-community.net)"
 
 msgid ""
 "Your %s %s is now ready to be used.\n"
