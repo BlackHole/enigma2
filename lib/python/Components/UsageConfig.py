@@ -115,7 +115,7 @@ def InitUsageConfig():
 	except Exception as err:
 		print("[UsageConfig] Error loading 'SecondInfoBarSimple' skin parameter! (%s)" % err)
 		SystemInfo["SecondInfoBarSimple"] = False
-	config.usage.second_infobar_simple = ConfigBoolean(descriptions={False: _("Standard"), True: _("Simple")}, graphic=False)
+	config.usage.second_infobar_simple = ConfigBoolean(descriptions={False: _("Standard"), True: _("Alternative")}, graphic=False)
 
 	config.usage.infobar_frontend_source = ConfigSelection(default="tuner", choices=[("settings", _("Settings")), ("tuner", _("Tuner"))])
 
@@ -299,7 +299,7 @@ def InitUsageConfig():
 	config.usage.show_servicelist = ConfigYesNo(default=True)
 	config.usage.servicelist_mode = ConfigSelection(default="standard", choices=[
 		("standard", _("Standard")),
-		("simple", _("Slim"))])
+		("simple", _("Alternative"))])
 	config.usage.servicelistpreview_mode = ConfigYesNo(default=False)
 	config.usage.tvradiobutton_mode = ConfigSelection(default="BouquetList", choices=[
 					("ChannelList", _("Channel List")),
