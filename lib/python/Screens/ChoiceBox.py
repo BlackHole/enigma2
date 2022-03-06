@@ -1,5 +1,3 @@
-from six.moves import zip
-
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 from Components.ActionMap import NumberActionMap
