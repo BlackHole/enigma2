@@ -272,9 +272,6 @@ def fileReadLines(filename, default=None, source=DEFAULT_MODULE_NAME):
 			print("[%s] Error %d: Unable to read lines from file '%s'!  (%s)" % (source, err.errno, filename, err.strerror))
 		lines = default
 		msg = "Default"
-	if debug or forceDebug:
-		length = len(lines) if lines else 0
-		print("[%s] Line %d: %s %d lines from file '%s'." % (source, getframe(1).f_lineno, msg, length, filename))
 	return lines
 
 def comparePath(leftPath, rightPath):
