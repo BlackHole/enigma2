@@ -50,10 +50,11 @@ class DeliteDevicesPanel(Screen):
 		self.activityTimer.stop()
 		self.list = []
 		self.conflist = []
+
 		rc = system("blkid > /tmp/blkid.log")
 		f = open("/tmp/blkid.log", 'r')
 		for line in f.readlines():
-			if getMachineName().find('PULSe') != -1:
+			if getMachineName().find('PULSe') != -1 or getMachineName().find('SX988') != -1:
 				if line.find('/dev/sd') == -1 and line.find('mmcblk1p1') == -1:
 					continue
 			else:
