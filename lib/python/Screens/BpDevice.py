@@ -9,7 +9,7 @@ from Components.Label import Label
 from Components.Pixmap import Pixmap
 from Components.ConfigList import ConfigListScreen
 from Components.config import getConfigListEntry, ConfigSelection, NoSave
-from boxbranding import getMachineName
+from boxbranding import getMachineBuild
 from Tools.LoadPixmap import LoadPixmap
 from Tools.Directories import fileExists, pathExists, createDir, resolveFilename, SCOPE_CURRENT_SKIN
 from os import system, listdir, remove as os_remove, rename as os_rename, stat as os_stat
@@ -54,7 +54,7 @@ class DeliteDevicesPanel(Screen):
 		rc = system("blkid > /tmp/blkid.log")
 		f = open("/tmp/blkid.log", 'r')
 		for line in f.readlines():
-			if getMachineName().find('PULSe') != -1 or getMachineName().find('SX988') != -1:
+			if getMachineBuild() in ("h11", "pulse4kmini", "pulse4k", "sx988"):
 				if line.find('/dev/sd') == -1 and line.find('mmcblk1p1') == -1:
 					continue
 			else:
@@ -125,7 +125,7 @@ class DeliteDevicesPanel(Screen):
 		if fileExists(filename):
 			if open(filename).read().strip() == "0":
 				name = "HARD DISK"
-				pix = pixpath + "icons/dev_hdd.png"		
+				pix = pixpath + "icons/dev_hdd.png"
 		if device == "mmcblk1":
 			name = "MicroSD"
 		return name, pix
