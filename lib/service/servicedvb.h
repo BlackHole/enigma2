@@ -96,7 +96,7 @@ public:
 	virtual ~eDVBServicePlay();
 
 		// iPlayableService
-	RESULT connectEvent(const sigc::slot2<void,iPlayableService*,int> &event, ePtr<eConnection> &connection);
+	RESULT connectEvent(const sigc::slot<void(iPlayableService*,int)> &event, ePtr<eConnection> &connection);
 	RESULT start();
 	RESULT stop();
 	RESULT setTarget(int target, bool noaudio);
@@ -209,6 +209,7 @@ protected:
 	ePtr<eDVBService> m_dvb_service;
 
 	ePtr<iTSMPEGDecoder> m_decoder;
+	int m_is_primary;
 	int m_decoder_index;
 	int m_is_primary;
 	int m_have_video_pid;
@@ -228,7 +229,7 @@ protected:
 
 	void serviceEvent(int event);
 	void serviceEventTimeshift(int event);
-	sigc::signal2<void,iPlayableService*,int> m_event;
+	sigc::signal<void(iPlayableService*,int)> m_event;
 
 		/* fix tuxtxt for streams */
 	bool m_is_stream;
