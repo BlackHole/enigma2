@@ -2,9 +2,9 @@ name: Enigma2 Python3
 
 on:
   push:
-    branches: [ python3, FCC ]
+    branches: [ Python3.10 ]
   pull_request:
-    branches: [ python3, FCC ]
+    branches: [ Python3.10 ]
 
 jobs:
   build:
@@ -93,7 +93,7 @@ jobs:
       run: |
         sed -i 's/mallinfo2/mallinfo/g' main/enigma.cpp
     - name: build enigma2
-      env: 
+      env:
         CC: "gcc-${{ matrix.gcc }}"
         CXX: "g++-${{ matrix.gcc }}"
       run: |
