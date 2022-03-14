@@ -139,7 +139,7 @@ class UpdatePluginMenu(Screen):
 			for p in plugins.getPlugins(PluginDescriptor.WHERE_SOFTWAREMANAGER):
 				if "SoftwareSupported" in p.fnc:
 					callFnc = p.fnc["SoftwareSupported"](None)
-					if callFnc is not None:
+					if callFnc != None:
 						if "menuEntryName" in p.fnc:
 							menuEntryName = p.fnc["menuEntryName"](None)
 						else:
@@ -161,7 +161,7 @@ class UpdatePluginMenu(Screen):
 			for p in plugins.getPlugins(PluginDescriptor.WHERE_SOFTWAREMANAGER):
 				if "AdvancedSoftwareSupported" in p.fnc:
 					callFnc = p.fnc["AdvancedSoftwareSupported"](None)
-					if callFnc is not None:
+					if callFnc != None:
 						if "menuEntryName" in p.fnc:
 							menuEntryName = p.fnc["menuEntryName"](None)
 						else:
@@ -229,7 +229,7 @@ class UpdatePluginMenu(Screen):
 
 	def getUpdateInfos(self):
 		if iSoftwareTools.NetworkConnectionAvailable is True:
-			if iSoftwareTools.available_updates is not 0:
+			if iSoftwareTools.available_updates != 0:
 				self.text = _("There are at least %s updates available.") % (str(iSoftwareTools.available_updates))
 			else:
 				self.text = "" #_("There are no updates available.")
@@ -250,7 +250,7 @@ class UpdatePluginMenu(Screen):
 				self.session.open(SoftwareManagerInfo, mode="backupinfo")
 
 	def go(self, num=None):
-		if num is not None:
+		if num != None:
 			num -= 1
 			if not num < self["menu"].count():
 				return
@@ -311,7 +311,7 @@ class UpdatePluginMenu(Screen):
 
 	def backuplocation_choosen(self, option):
 		oldpath = config.plugins.configurationbackup.backuplocation.value
-		if option is not None:
+		if option != None:
 			config.plugins.configurationbackup.backuplocation.value = str(option[1])
 		config.plugins.configurationbackup.backuplocation.save()
 		config.plugins.configurationbackup.save()
@@ -514,7 +514,7 @@ class SoftwareManagerInfo(Screen):
 
 	def layoutFinished(self):
 		self.setTitle(_("Softwaremanager information"))
-		if self.mode is not None:
+		if self.mode != None:
 			self.showInfos()
 
 	def showInfos(self):
@@ -662,16 +662,16 @@ class PluginManager(Screen, PackageInfoHandler):
 			self['list'].setList(self.statuslist)
 
 	def getUpdateInfos(self):
-		if iSoftwareTools.lastDownloadDate is not None and iSoftwareTools.NetworkConnectionAvailable is False:
+		if iSoftwareTools.lastDownloadDate != None and iSoftwareTools.NetworkConnectionAvailable is False:
 			self.rebuildList()
 		else:
 			self.setState('update')
 			iSoftwareTools.startSoftwareTools(self.getUpdateInfosCB)
 
 	def getUpdateInfosCB(self, retval=None):
-		if retval is not None:
+		if retval != None:
 			if retval is True:
-				if iSoftwareTools.available_updates is not 0:
+				if iSoftwareTools.available_updates != 0:
 					self["status"].setText(_("There are at least ") + str(iSoftwareTools.available_updates) + ' ' + _("updates available."))
 				else:
 					self["status"].setText(_("There are no updates available."))
@@ -715,9 +715,9 @@ class PluginManager(Screen, PackageInfoHandler):
 						self["key_green"].setText("")
 				self["key_yellow"].setText(_("View details"))
 				self["key_blue"].setText("")
-				if len(self.selectedFiles) == 0 and iSoftwareTools.available_updates is not 0:
+				if len(self.selectedFiles) == 0 and iSoftwareTools.available_updates != 0:
 					self["status"].setText(_("There are at least ") + str(iSoftwareTools.available_updates) + ' ' + _("updates available."))
-				elif len(self.selectedFiles) is not 0:
+				elif len(self.selectedFiles) != 0:
 					self["status"].setText(str(len(self.selectedFiles)) + ' ' + _("packages selected."))
 				else:
 					self["status"].setText(_("There are currently no outstanding actions."))
@@ -726,10 +726,10 @@ class PluginManager(Screen, PackageInfoHandler):
 				self["key_green"].setText("")
 				self["key_yellow"].setText("")
 				self["key_blue"].setText("")
-				if len(self.selectedFiles) == 0 and iSoftwareTools.available_updates is not 0:
+				if len(self.selectedFiles) == 0 and iSoftwareTools.available_updates != 0:
 					self["status"].setText(_("There are at least ") + str(iSoftwareTools.available_updates) + ' ' + _("updates available."))
 					self["key_yellow"].setText(_("Update"))
-				elif len(self.selectedFiles) is not 0:
+				elif len(self.selectedFiles) != 0:
 					self["status"].setText(str(len(self.selectedFiles)) + ' ' + _("packages selected."))
 					self["key_yellow"].setText(_("Process"))
 				else:
@@ -749,7 +749,7 @@ class PluginManager(Screen, PackageInfoHandler):
 				selectedTag = current[2]
 				self.buildPacketList(selectedTag)
 			elif self.currList == "packages":
-				if current[7] is not '':
+				if current[7] != '':
 					idx = self["list"].getIndex()
 					detailsFile = self.list[idx][1]
 					if self.list[idx][7]:
@@ -791,7 +791,7 @@ class PluginManager(Screen, PackageInfoHandler):
 		current = self["list"].getCurrent()
 		if current:
 			if self.currList == "packages":
-				if current[7] is not '':
+				if current[7] != '':
 					detailsfile = iSoftwareTools.directory[0] + "/" + current[1]
 					if os_path.exists(detailsfile):
 						self.saved_currentSelectedPackage = self.currentSelectedPackage
@@ -804,8 +804,8 @@ class PluginManager(Screen, PackageInfoHandler):
 					self.session.openWithCallback(self.runExecute, PluginManagerInfo, self.skin_path, self.cmdList)
 
 	def detailsClosed(self, result=None):
-		if result is not None:
-			if result is not False:
+		if result != None:
+			if result != False:
 				self.setState('sync')
 				iSoftwareTools.lastDownloadDate = time()
 				for entry in self.selectedFiles:
@@ -841,7 +841,7 @@ class PluginManager(Screen, PackageInfoHandler):
 			return name, details, description, packagename, state, installpng, divpng, selected
 
 	def buildPacketList(self, categorytag=None):
-		if categorytag is not None:
+		if categorytag != None:
 			self.currList = "packages"
 			self.currentSelectedTag = categorytag
 			self.packetlist = []
@@ -906,7 +906,7 @@ class PluginManager(Screen, PackageInfoHandler):
 
 	def buildCategoryComponent(self, tag=None):
 		divpng = LoadPixmap(cached=True, path=resolveFilename(SCOPE_CURRENT_SKIN, "div-h.png"))
-		if tag is not None:
+		if tag != None:
 			if tag == 'System':
 				return _("System"), _("View list of available system extensions"), tag, divpng
 			elif tag == 'Skin':
@@ -969,7 +969,7 @@ class PluginManager(Screen, PackageInfoHandler):
 						self.cmdList.append((IpkgComponent.CMD_INSTALL, {"package": plugin[2]}))
 
 	def runExecute(self, result=None):
-		if result is not None:
+		if result != None:
 			if result[0] is True:
 				self.session.openWithCallback(self.runExecuteFinished, Ipkg, cmdList=self.cmdList)
 			elif result[0] is False:
@@ -1052,7 +1052,7 @@ class PluginManagerInfo(Screen):
 
 	def rebuildList(self):
 		self.list = []
-		if self.cmdlist is not None:
+		if self.cmdlist != None:
 			for entry in self.cmdlist:
 				action = ""
 				info = ""
@@ -1104,7 +1104,7 @@ class PluginManagerInfo(Screen):
 
 	def process_extensions(self):
 		self.list = []
-		if self.cmdlist is not None:
+		if self.cmdlist != None:
 			for entry in self.cmdlist:
 				cmd = entry[0]
 				if entry[0] in (0, 2):
@@ -1316,7 +1316,7 @@ class PluginDetails(Screen, PackageInfoHandler):
 				if thumbnailUrl[-7:] == "_en.jpg":
 					thumbnailUrl = thumbnailUrl[:-7] + "_de.jpg"
 
-		if thumbnailUrl is not None:
+		if thumbnailUrl != None:
 			self.thumbnail = "/tmp/" + thumbnailUrl.split('/')[-1]
 			print("[PluginDetails] downloading screenshot " + thumbnailUrl + " to " + self.thumbnail)
 			if iSoftwareTools.NetworkConnectionAvailable:
@@ -1336,16 +1336,16 @@ class PluginDetails(Screen, PackageInfoHandler):
 		self.picload.setPara((self["screenshot"].instance.size().width(), self["screenshot"].instance.size().height(), sc[0], sc[1], False, 1, "#00000000"))
 		self.picload.startDecode(filename)
 
-		if self.statuspicinstance is not None:
+		if self.statuspicinstance != None:
 			self["statuspic"].instance.setPixmap(self.statuspicinstance.__deref__())
 			self["statuspic"].show()
-		if self.divpicinstance is not None:
+		if self.divpicinstance != None:
 			self["divpic"].instance.setPixmap(self.divpicinstance.__deref__())
 			self["divpic"].show()
 
 	def paintScreenshotPixmapCB(self, picInfo=None):
 		ptr = self.picload.getData()
-		if ptr is not None:
+		if ptr != None:
 			self["screenshot"].instance.setPixmap(ptr.__deref__())
 			self["screenshot"].show()
 		else:
@@ -1655,7 +1655,7 @@ class PacketManager(Screen, NumericalTextInput):
 
 	def keyNumberGlobal(self, val):
 		key = self.getKey(val)
-		if key is not None:
+		if key != None:
 			keyvalue = key.encode("utf-8")
 			if len(keyvalue) == 1:
 				self.setNextIdx(keyvalue[0])
@@ -1680,7 +1680,7 @@ class PacketManager(Screen, NumericalTextInput):
 
 	def exit(self):
 		self.ipkg.stop()
-		if self.Console is not None:
+		if self.Console != None:
 			self.Console.killAll()
 		rcinput = eRCInput.getInstance()
 		rcinput.setKeyboardMode(rcinput.kmNone)
