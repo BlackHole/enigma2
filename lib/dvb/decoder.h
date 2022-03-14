@@ -101,14 +101,6 @@ private:
 	ePtr<eDVBPCR> m_pcr;
 	ePtr<eDVBTText> m_text;
 	int m_vpid, m_vtype, m_apid, m_atype, m_pcrpid, m_textpid;
-	int m_fcc_fd;
-	bool m_fcc_enable;
-	int m_fcc_state;
-
-	int m_fcc_feid;
-	int m_fcc_vpid;
-	int m_fcc_vtype;
-	int m_fcc_pcrpid;
 	enum
 	{
 		changeVideo = 1,
