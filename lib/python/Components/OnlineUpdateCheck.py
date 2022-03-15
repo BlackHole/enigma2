@@ -100,7 +100,6 @@ class FeedsStatusCheck:
 				else:
 					trafficLight = "unknown"
 
-				#trafficLight = six.ensure_str(trafficLight)
 				trafficLight = "stable" #OpenBh
 
 				if trafficLight == "stable":
@@ -134,17 +133,17 @@ class FeedsStatusCheck:
 
 	def getFeedsBool(self):
 		global error
-		self.feedstatus = six.ensure_str(feedsstatuscheck.getFeedStatus())
+		self.feedstatus = self.getFeedStatus()
 		if self.feedstatus in (-2, -3, 403, 404):
-			print("[OnlineUpdateCheck][getFeedsBool] Error %s" % self.feedstatus)
-			return self.feedstatus
+			print("[OnlineUpdateCheck][getFeedsBool] Error %s" % str(self.feedstatus))
+			return str(self.feedstatus) # must be str as used in string keys of feed_status_msgs
 		elif error:
 			print("[OnlineUpdateCheck][getFeedsBool] Check already in progress")
 			return "inprogress"
 		elif self.feedstatus == "updating":
 			print("[OnlineUpdateCheck][getFeedsBool] Feeds Updating")
 			return "updating"
-		elif self.feedstatus in ("stable", "unstable", "unknown", "alien"):
+		elif self.feedstatus in ("stable", "unstable", "unknown", "alien", "developer"):
 			print("[OnlineUpdateCheck][getFeedsBool]", self.feedstatus)
 			return self.feedstatus
 
