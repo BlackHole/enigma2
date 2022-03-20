@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import six
-
 from os import listdir, path, rename, remove 
 import os
 import re
@@ -1844,12 +1842,12 @@ class ChannelSelectionBase(Screen, HelpableScreen):
 						self.numberSelectionActions(number)
 				else:
 					unichar = self.numericalTextInput.getKey(number)
-					charstr = six.ensure_str(unichar)
+					charstr = str(unichar)
 					if len(charstr) == 1:
 						self.servicelist.moveToChar(charstr[0])
 		else:
 			unichar = self.numericalTextInput.getKey(number)
-			charstr = six.ensure_str(unichar)
+			charstr = str(unichar)
 			if len(charstr) == 1:
 				self.servicelist.moveToChar(charstr[0])
 
@@ -1872,8 +1870,8 @@ class ChannelSelectionBase(Screen, HelpableScreen):
 		self.selectionNumber = ""
 
 	def keyAsciiCode(self):
-		unichar = unichr(getPrevAsciiCode())
-		charstr = six.ensure_str(unichar)
+		unichar = chr(getPrevAsciiCode())
+		charstr = str(unichar)
 		if len(charstr) == 1:
 			self.servicelist.moveToChar(charstr[0])
 
