@@ -10,7 +10,9 @@
 #include <lib/dvb/dvb.h>
 #include <lib/dvb/sec.h>
 #include <lib/dvb/fbc.h>
+#ifdef HAVE_FCC
 #include <lib/dvb/fcc.h>
+#endif
 #include <lib/dvb/specs.h>
 #include "filepush.h"
 
@@ -20,7 +22,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#ifdef HAVE_FCC
 #include <fstream>
+#endif
 
 #define MIN(a,b) (a < b ? a : b)
 #define MAX(a,b) (a > b ? a : b)
@@ -106,7 +110,9 @@ eDVBResourceManager::eDVBResourceManager()
 		num_adapter++;
 	}
 
+#ifdef HAVE_FCC
 	setUsbTuner();
+#endif
 
 	if (eDVBAdapterLinux::exist(0))
 	{
@@ -687,6 +693,7 @@ void eDVBResourceManager::addAdapter(iDVBAdapter *adapter, bool front)
 
 }
 
+#ifdef HAVE_FCC
 void eDVBResourceManager::setUsbTuner()
 {
 	std::ifstream in("/proc/bus/nim_sockets");
@@ -739,6 +746,7 @@ void eDVBResourceManager::setUsbTuner()
 		}
 	}
 }
+#endif
 
 PyObject *eDVBResourceManager::setFrontendSlotInformations(ePyObject list)
 {
@@ -1465,6 +1473,7 @@ int eDVBResourceManager::canAllocateChannel(const eDVBChannelID &channelid, cons
 	int *decremented_cached_channel_fe_usecount=NULL,
 		*decremented_fe_usecount=NULL;
 
+#ifdef HAVE_FCC
 	/* check FCC channels */
 	std::vector<int*> fcc_decremented_fe_usecounts;
 	std::map<eDVBChannelID, int> fcc_chids;
@@ -1485,7 +1494,6 @@ int eDVBResourceManager::canAllocateChannel(const eDVBChannelID &channelid, cons
 				if (ii->m_channel_id == i->first)
 				{
 					eDVBChannel *channel = (eDVBChannel*) &(*ii->m_channel);
-
 					int check_usecount = channel == &(*m_cached_channel) ? 1 : 0;
 					check_usecount += i->second * 2; // one is used in eDVBServicePMTHandler and another is used in eDVBScan.
 					//eDebug("[eDVBResourceManager::canAllocateChannel] channel->getUseCount() : %d , check_usecount : %d (cached : %d)", channel->getUseCount(), check_usecount, channel == &(*m_cached_channel));
@@ -1514,6 +1522,7 @@ int eDVBResourceManager::canAllocateChannel(const eDVBChannelID &channelid, cons
 			}
 		}
 	}
+#endif //HAVE_FCC
 
 	for (std::list<active_channel>::iterator i(active_channels.begin()); i != active_channels.end(); ++i)
 	{
@@ -1526,10 +1535,14 @@ int eDVBResourceManager::canAllocateChannel(const eDVBChannelID &channelid, cons
 			// another on eUsePtr<iDVBChannel> is used in the eDVBScan instance used in eDVBServicePMTHandler (for SDT scan)
 			// so we must check here if usecount is 3 (when the channel is equal to the cached channel)
 			// or 2 when the cached channel is not equal to the compared channel
+#ifndef HAVE_FCC
+			if (channel == &(*m_cached_channel) ? channel->getUseCount() == 3 : channel->getUseCount() == 2)  // channel only used once..
+#else
 			int check_usecount = channel == &(*m_cached_channel) ? 1 : 0;
 			check_usecount += (apply_to_ignore+1) * 2; // one is used in eDVBServicePMTHandler and another is used in eDVBScan.
 			//eDebug("[eDVBResourceManager] canAllocateChannel channel->getUseCount() : %d , check_usecount : %d (cached : %d)", channel->getUseCount(), check_usecount, channel == &(*m_cached_channel));
 			if (channel->getUseCount() == check_usecount)  // channel only used once..(except fcc)
+#endif
 			{
 				ePtr<iDVBFrontend> fe;
 				if (!i->m_channel->getFrontend(fe))
@@ -1601,6 +1614,7 @@ error:
 		++(*decremented_fe_usecount);
 	if (decremented_cached_channel_fe_usecount)
 		++(*decremented_cached_channel_fe_usecount);
+#ifdef HAVE_FCC
 	if (fcc_decremented_fe_usecounts.size())
 	{
 		for (std::vector<int*>::iterator i(fcc_decremented_fe_usecounts.begin()); i != fcc_decremented_fe_usecounts.end(); ++i)
@@ -1609,6 +1623,7 @@ error:
 			++(**i);
 		}
 	}
+#endif
 
 	return ret;
 }

@@ -174,7 +174,11 @@ public:
 	RESULT setNextPlaybackFile(const char *fn);
 	RESULT saveTimeshiftFile();
 	std::string getTimeshiftFilename();
+#ifndef HAVE_FCC
+	void switchToLive();
+#else
 	virtual void switchToLive();
+#endif
 
 		// iTapService
 	bool startTapToFD(int fd, const std::vector<int> &pids, int packetsize = 188);
@@ -210,7 +214,9 @@ protected:
 
 	ePtr<iTSMPEGDecoder> m_decoder;
 	int m_decoder_index;
+#ifdef HAVE_FCC
 	int m_is_primary;
+#endif
 	int m_have_video_pid;
 	int m_tune_state;
 	bool m_noaudio;
@@ -221,7 +227,11 @@ protected:
 	int m_current_audio_pid;
 	int m_current_video_pid_type;
 
+#ifndef HAVE_FCC
+	eDVBServicePlay(const eServiceReference &ref, eDVBService *service);
+#else
 	eDVBServicePlay(const eServiceReference &ref, eDVBService *service, bool connect_event=true);
+#endif
 
 		/* events */
 	void gotNewEvent(int error);

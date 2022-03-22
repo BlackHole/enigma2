@@ -166,7 +166,9 @@ class eDVBResourceManager: public iObject, public sigc::trackable
 	eSmartPtrList<eDVBRegisteredDemux> m_demux;
 	eSmartPtrList<eDVBRegisteredFrontend> m_frontend, m_simulate_frontend;
 	void addAdapter(iDVBAdapter *adapter, bool front = false);
+#ifdef HAVE_FCC
 	void setUsbTuner();
+#endif
 
 	struct active_channel
 	{

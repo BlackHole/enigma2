@@ -453,7 +453,9 @@ public:
 		syncState,
 		frontendNumber,
 		signalQualitydB,
+#ifdef HAVE_FCC
 		isUsbTuner,
+#endif
 		frontendStatus,
 		snrValue,
 		frequency,
@@ -950,7 +952,9 @@ public:
 
 		evVideoGammaChanged,
 
+#ifdef HAVE_FCC
 		evFccFailed,
+#endif
 
 		evUser = 0x100
 	};
@@ -1010,8 +1014,10 @@ public:
 		evRecordFailed,
 		evRecordWriteError,
 		evNewEventInfo,
+#ifdef HAVE_FCC
 		evTuneStart,
 		evPvrTuneStart,
+#endif
 		evRecordAborted,
 		evGstRecordEnded,
 	};

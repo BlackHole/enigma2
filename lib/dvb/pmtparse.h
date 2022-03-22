@@ -90,8 +90,10 @@ public:
 		int serviceId;
 		int adapterId;
 		int demuxId;
+#ifdef HAVE_FCC
 		int pmtVersion;
 		bool isCached;
+#endif
 		bool isCrypted() { return !caids.empty(); }
 	};
 
