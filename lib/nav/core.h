@@ -6,7 +6,9 @@
 #include <connection.h>
 #include <map>
 #include <set>
+#ifdef HAVE_FCC
 #include <lib/dvb/fcc.h>
+#endif
 
 class eNavigation: public iObject, public sigc::trackable
 {
@@ -26,9 +28,10 @@ class eNavigation: public iObject, public sigc::trackable
 
 	sigc::signal2<void,ePtr<iRecordableService>,int> m_record_event;
 	void recordEvent(iRecordableService* service, int event);
-
+#ifdef HAVE_FCC
 	friend class eFCCServiceManager;
 	ePtr<eFCCServiceManager> m_fccmgr;
+#endif
 public:
 
 	RESULT playService(const eServiceReference &service);

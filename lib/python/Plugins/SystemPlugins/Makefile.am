@@ -5,8 +5,11 @@ SUBDIRS = PositionerSetup Satfinder CableScan \
 	DefaultServicesScanner CommonInterfaceAssignment \
 	VideoClippingSetup VideoEnhancement \
 	WirelessLan NetworkWizard SABnzbdSetup \
-	FastScan SatelliteEquipmentControl DiseqcTester \
-	FastChannelChange
+	FastScan SatelliteEquipmentControl DiseqcTester
+
+if HAVE_FCC
+SUBDIRS += FastChannelChange
+endif
 
 if HAVE_LIBVUGLES2
 SUBDIRS += AnimationSetup

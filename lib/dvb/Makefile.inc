@@ -35,9 +35,7 @@ dvb_libenigma_dvb_a_SOURCES = \
 	dvb/streamserver.cpp \
 	dvb/pmtparse.cpp \
 	dvb/encoder.cpp \
-	dvb/atsc.cpp \
-	dvb/fcc.cpp \
-	dvb/fccdecoder.cpp
+	dvb/atsc.cpp
 
 dvbincludedir = $(pkgincludedir)/lib/dvb
 dvbinclude_HEADERS = \
@@ -81,6 +79,13 @@ dvbinclude_HEADERS = \
 	dvb/streamserver.h \
 	dvb/pmtparse.h \
 	dvb/encoder.h \
-	dvb/atsc.h \
+	dvb/atsc.h 
+
+if HAVE_FCC
+dvb_libenigma_dvb_a_SOURCES += \
+	dvb/fcc.cpp \
+	dvb/fccdecoder.cpp
+dvbinclude_HEADERS += \
 	dvb/fcc.h \
 	dvb/fccdecoder.h
+endif

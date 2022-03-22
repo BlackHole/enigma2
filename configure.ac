@@ -549,6 +549,13 @@ if test x"$with_lcddev" != xno ; then
 	AC_DEFINE_UNQUOTED(LCD_DEV, "$withval", [Defines which device to use for lcd (e.g. /dev/fb1)])
 fi
 
+AC_ARG_WITH(fcc,
+	AS_HELP_STRING([--with-fcc],[enable fast channel change]),
+	[with_fcc="$withval"],[with_fcc="no"])
+if test "$with_fcc" = "yes"; then
+	AC_DEFINE([HAVE_FCC],[1],[Define to 1 to enable fast channel change])
+fi
+
 AC_CHECK_HEADERS([sys/klog.h])
 AC_CHECK_FUNCS([klogctl])
 
