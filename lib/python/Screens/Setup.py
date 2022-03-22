@@ -2,7 +2,7 @@ from xml.etree.cElementTree import fromstring, parse
 
 from gettext import dgettext
 from os.path import getmtime, join as pathjoin
-from skin import setups
+from skin import setups, findSkinScreen # findSkinScreen used in eval
 
 from Components.config import ConfigBoolean, ConfigNothing, ConfigSelection, config
 from Components.ConfigList import ConfigListScreen
@@ -81,7 +81,9 @@ class Setup(ConfigListScreen, Screen, HelpableScreen):
 		if title:
 			title = dgettext(self.pluginLanguageDomain, title) if self.pluginLanguageDomain else _(title)
 		self.setTitle(title if title else _("Setup"))
-		if self.list != oldList or self.showDefaultChanged or self.graphicSwitchChanged:
+		if not self.list: # This forces the self["config"] list to be cleared if there are no eligible items available to be displayed.
+			self["config"].list = self.list
+		elif self.list != oldList or self.showDefaultChanged or self.graphicSwitchChanged:
 			currentItem = self["config"].getCurrent()
 			self["config"].list = self.list
 			if config.usage.sort_settings.value:
