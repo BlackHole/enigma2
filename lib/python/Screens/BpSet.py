@@ -975,7 +975,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		if getBoxType() not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero", "osninoplus", "osninopro", "zgemmah82h"):
 			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
 
-		if getBoxType() == "sf8008" or getBoxType() == "sx988":
+		if getBoxType() == "sf8008" or getBoxType() == "sx988" or getBoxType() == "pulse4k" or getBoxType() == "pulse4kmini" or getBoxType() == "zgemmah11s":
 			self.pluglist.append (["Netflix & YoutubeTV", "enigma2-plugin-extensions-netflix"])
 
 		self.activityTimer = eTimer()
