@@ -40,13 +40,6 @@ class MenuList(GUIComponent):
 		self.list = list
 		self.l.setList(self.list)
 
-	def getList(self):
-		return self.list
-		
-	# We can't have a "list" property due to terrible coding in 
-	# plugins with no understanding of inheritance and namespace.
-	# So we have to make do with using self.list as a variable. Yuck!
-
 	def moveToIndex(self, idx):
 		if self.instance != None:
 			self.instance.moveSelectionTo(idx)
@@ -91,9 +84,3 @@ class MenuList(GUIComponent):
 	def selectionEnabled(self, enabled):
 		if self.instance != None:
 			self.instance.setSelectionEnable(enabled)
-
-	def setFont(self, *args): # only in openvix
-		self.l.setFont(*args)
-
-	def setItemHeight(self, itemHeight): # only in openvix
-		self.l.setItemHeight(itemHeight)
