@@ -138,11 +138,9 @@ void eDVBServiceFCCPlay::pushbackFCCEvents(int event)
 
 void eDVBServiceFCCPlay::popFCCEvents()
 {
-	eDebug("[eDVBServiceFCCPlay] popFCCEvents");
 	m_fcc_events.unique(); // remove duplicate evUpdatedInfo
 	for (std::list<int>::iterator it = m_fcc_events.begin(); it != m_fcc_events.end(); ++it)
 	{
-		eDebug("[eDVBServiceFCCPlay] popFCCEvents loop 1");
 		if (*it == evUpdatedInfo)
 		{
 			updateFCCDecoder();
@@ -156,10 +154,8 @@ void eDVBServiceFCCPlay::popFCCEvents()
 	/* send events */
 	for (std::list<int>::iterator it = m_fcc_events.begin(); it != m_fcc_events.end(); ++it)
 	{
-		eDebug("[eDVBServiceFCCPlay] popFCCEvents loop 2");
 		int event = *it;
 		m_event((iPlayableService*)this, event);
-		eDebug("[eDVBServiceFCCPlay] m_event: %d", event);
 	}
 }
 
