@@ -90,8 +90,6 @@ public:
 		int serviceId;
 		int adapterId;
 		int demuxId;
-		int pmtVersion;
-		bool isCached;
 		bool isCrypted() { return !caids.empty(); }
 	};
 
