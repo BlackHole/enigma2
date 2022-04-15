@@ -96,7 +96,7 @@ public:
 	virtual ~eDVBServicePlay();
 
 		// iPlayableService
-	RESULT connectEvent(const sigc::slot2<void,iPlayableService*,int> &event, ePtr<eConnection> &connection);
+	RESULT connectEvent(const sigc::slot<void(iPlayableService*,int)> &event, ePtr<eConnection> &connection);
 	RESULT start();
 	RESULT stop();
 	RESULT setTarget(int target, bool noaudio);
@@ -174,7 +174,7 @@ public:
 	RESULT setNextPlaybackFile(const char *fn);
 	RESULT saveTimeshiftFile();
 	std::string getTimeshiftFilename();
-	virtual void switchToLive();
+	void switchToLive();
 
 		// iTapService
 	bool startTapToFD(int fd, const std::vector<int> &pids, int packetsize = 188);
@@ -210,7 +210,6 @@ protected:
 
 	ePtr<iTSMPEGDecoder> m_decoder;
 	int m_decoder_index;
-	int m_is_primary;
 	int m_have_video_pid;
 	int m_tune_state;
 	bool m_noaudio;
@@ -221,14 +220,14 @@ protected:
 	int m_current_audio_pid;
 	int m_current_video_pid_type;
 
-	eDVBServicePlay(const eServiceReference &ref, eDVBService *service, bool connect_event=true);
+	eDVBServicePlay(const eServiceReference &ref, eDVBService *service);
 
 		/* events */
 	void gotNewEvent(int error);
 
 	void serviceEvent(int event);
 	void serviceEventTimeshift(int event);
-	sigc::signal2<void,iPlayableService*,int> m_event;
+	sigc::signal<void(iPlayableService*,int)> m_event;
 
 		/* fix tuxtxt for streams */
 	bool m_is_stream;

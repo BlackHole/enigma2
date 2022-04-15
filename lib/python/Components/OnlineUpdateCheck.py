@@ -1,7 +1,3 @@
-from __future__ import print_function
-from __future__ import absolute_import
-import six
-
 from time import time
 
 from boxbranding import getImageVersion, getImageBuild, getMachineBrand, getMachineName, getMachineBuild, getImageType, getBoxType, getFeedsUrl
@@ -15,12 +11,8 @@ import Components.Task
 import socket
 import sys
 # required methods: Request, urlopen, HTTPError, URLError
-try: # python 3
-	from urllib.request import urlopen, Request # raises ImportError in Python 2
-	from urllib.error import HTTPError, URLError # raises ImportError in Python 2
-except ImportError: # Python 2
-	from urllib2 import Request, urlopen, HTTPError, URLError
-
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError, URLError
 
 error = 0
 
@@ -71,8 +63,7 @@ class FeedsStatusCheck:
 			print("[OnlineUpdateCheck][NetworkUp] PASSED")
 			result = True
 		except:
-			err = sys.exc_info()[0]
-			print("[OnlineUpdateCheck][NetworkUp] FAILED", err)
+			print("[OnlineUpdateCheck][NetworkUp] FAILED", sys.exc_info()[0])
 			result = False
 		finally:
 			if sd:
@@ -109,7 +100,6 @@ class FeedsStatusCheck:
 				else:
 					trafficLight = "unknown"
 
-				#trafficLight = six.ensure_str(trafficLight)
 				trafficLight = "stable" #OpenBh
 
 				if trafficLight == "stable":
@@ -143,17 +133,17 @@ class FeedsStatusCheck:
 
 	def getFeedsBool(self):
 		global error
-		self.feedstatus = six.ensure_str(feedsstatuscheck.getFeedStatus())
+		self.feedstatus = self.getFeedStatus()
 		if self.feedstatus in (-2, -3, 403, 404):
-			print("[OnlineUpdateCheck][getFeedsBool] Error %s" % self.feedstatus)
-			return self.feedstatus
+			print("[OnlineUpdateCheck][getFeedsBool] Error %s" % str(self.feedstatus))
+			return str(self.feedstatus) # must be str as used in string keys of feed_status_msgs
 		elif error:
 			print("[OnlineUpdateCheck][getFeedsBool] Check already in progress")
 			return "inprogress"
 		elif self.feedstatus == "updating":
 			print("[OnlineUpdateCheck][getFeedsBool] Feeds Updating")
 			return "updating"
-		elif self.feedstatus in ("stable", "unstable", "unknown", "alien"):
+		elif self.feedstatus in ("stable", "unstable", "unknown", "alien", "developer"):
 			print("[OnlineUpdateCheck][getFeedsBool]", self.feedstatus)
 			return self.feedstatus
 
@@ -328,7 +318,7 @@ def kernelMismatch():
 
 	pattern = "kernel-([0-9]+[.][0-9]+[.][0-9]+)"
 	# print("[OnlineUpdateCheck][kernelMismatch] packages=%s" % (packages))
-	packages = six.ensure_str(packages)
+	packages = packages.decode()
 	matches = re.findall(pattern, packages)
 	if matches:
 		match = sorted(matches, key=lambda s: list(map(int, s.split("."))))[-1]

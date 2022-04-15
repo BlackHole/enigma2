@@ -1,6 +1,3 @@
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import division
 import six
 
 from os import system, path as os_path, remove, unlink, rename, chmod, access, X_OK
@@ -8,7 +5,6 @@ import netifaces as ni
 from random import Random
 from shutil import move
 import string
-import sys
 import time
 
 from enigma import eTimer, eConsoleAppContainer
@@ -113,9 +109,9 @@ class NSCommon:
 	def UninstallCheck(self):
 		self.Console.ePopen("/usr/bin/opkg list_installed " + self.service_name, self.RemovedataAvail)
 
-	def RemovedataAvail(self, str, retval, extra_args):
-		str = six.ensure_str(str)
-		if str:
+	def RemovedataAvail(self, result, retval, extra_args):
+		result = six.ensure_str(result)
+		if result:
 			self.session.openWithCallback(self.RemovePackage, MessageBox, _("Are you ready to remove %s ?") % self.getTitle(), MessageBox.TYPE_YESNO)
 		else:
 			self.updateService()
@@ -283,7 +279,7 @@ class NetworkAdapterSelection(Screen, HelpableScreen):
 
 		if os_path.exists(resolveFilename(SCOPE_PLUGINS, "SystemPlugins/NetworkWizard/networkwizard.xml")):
 			self["key_blue"].setText(_("Network wizard"))
-		self["list"].setList(self.list)
+		self["list"].list = self.list
 
 	def setDefaultInterface(self):
 		selection = self["list"].getCurrent()
@@ -389,7 +385,6 @@ class NameserverSetup(ConfigListScreen, HelpableScreen, Screen):
 			i += 1
 
 		self["config"].list = self.list
-		self["config"].l.setList(self.list)
 
 	def ok(self):
 		iNetwork.clearNameservers()
@@ -427,7 +422,18 @@ class NetworkMacSetup(ConfigListScreen, HelpableScreen, Screen):
 		Screen.__init__(self, session)
 		HelpableScreen.__init__(self)
 		self.setTitle(_("MAC Address Settings"))
-		self.curMac = self.getmac("eth0")
+		ifacex = "wlan0"
+		ifacey = "wlan3"
+		if iNetwork.getAdapterAttribute(ifacex, "up"):
+			self.mode = "wlan0"
+			self.curMac = self.getmac("wlan0")
+		elif iNetwork.getAdapterAttribute(ifacey, "up"):
+			self.mode = "wlan3"
+			self.curMac = self.getmac("wlan3")
+		else:
+			self.mode = "eth0"
+			self.curMac = self.getmac("eth0")
+		# print("[NetworkSetup]self.mode=, MacWiFiLan=", self.mode, "   ", self.curMac)
 		if self.curMac:
 			self.getConfigMac = NoSave(ConfigMacText(default=self.curMac))
 		self["key_red"] = StaticText(_("Cancel"))
@@ -464,13 +470,14 @@ class NetworkMacSetup(ConfigListScreen, HelpableScreen, Screen):
 		self.list = []
 		self.list.append(getConfigListEntry(_("MAC address"), self.getConfigMac))
 		self["config"].list = self.list
-		self["config"].l.setList(self.list)
 
 	def ok(self):
-		MAC = self.getConfigMac.value
-		f = open("/etc/enigma2/hwmac", "w")
-		f.write(MAC)
-		f.close()
+		if self.mode in ("wlan0", "wlan3"):
+			iNetwork.resetWiFiMac(Mac=self.getConfigMac.value, wlan=self.mode)
+		else:
+			f = open("/etc/enigma2/hwmac", "w")
+			f.write(self.getConfigMac.value)
+			f.close()
 		self.restartLan()
 
 	def run(self):
@@ -674,12 +681,12 @@ class AdapterSetup(ConfigListScreen, HelpableScreen, Screen):
 			self.extended = None
 			self.configStrings = None
 			for p in plugins.getPlugins(PluginDescriptor.WHERE_NETWORKSETUP):
-				callFnc = p.__call__["ifaceSupported"](self.iface)
+				callFnc = p.fnc["ifaceSupported"](self.iface)
 				if callFnc != None:
-					if "WlanPluginEntry" in p.__call__: # internally used only for WLAN Plugin
+					if "WlanPluginEntry" in p.fnc: # internally used only for WLAN Plugin
 						self.extended = callFnc
-						if "configStrings" in p.__call__:
-							self.configStrings = p.__call__["configStrings"]
+						if "configStrings" in p.fnc:
+							self.configStrings = p.fnc["configStrings"]
 
 						isExistBcmWifi = os_path.exists("/tmp/bcm/" + self.iface)
 						if not isExistBcmWifi:
@@ -699,7 +706,6 @@ class AdapterSetup(ConfigListScreen, HelpableScreen, Screen):
 									self.list.append(self.encryptionType)
 							self.list.append(self.encryptionKey)
 		self["config"].list = self.list
-		self["config"].l.setList(self.list)
 
 	def KeyBlue(self):
 		self.session.openWithCallback(self.NameserverSetupClosed, NameserverSetup)
@@ -930,44 +936,24 @@ class AdapterSetupConfiguration(Screen, HelpableScreen):
 		self.onLayoutFinish.append(self.updateStatusbar)
 
 	def queryWirelessDevice(self, iface):
-		if six.PY3:
+		try:
+			from wifi.scan import Cell
+			import errno
+		except ImportError:
+			return False
+		else:
 			try:
-				from wifi.scan import Cell
-				import errno
-			except ImportError:
-				return False
-			else:
-				try:
-					system("ifconfig %s up" % iface)
-					wlanresponse = list(Cell.all(iface))
-				except IOError as err:
-					error_no, error_str = err.args
-					if error_no in (errno.EOPNOTSUPP, errno.ENODEV, errno.EPERM):
-						return False
-					else:
-						print("[AdapterSetupConfiguration] error: ", error_no, error_str)
-						return True
+				system("ifconfig %s up" % iface)
+				wlanresponse = list(Cell.all(iface))
+			except IOError as err:
+				error_no, error_str = err.args
+				if error_no in (errno.EOPNOTSUPP, errno.ENODEV, errno.EPERM):
+					return False
 				else:
+					print("[AdapterSetupConfiguration] error: ", error_no, error_str)
 					return True
-
-		if six.PY2:
-			try:
-				from pythonwifi.iwlibs import Wireless
-				import errno
-			except ImportError:
-				return False
 			else:
-				try:
-					ifobj = Wireless(iface) # a Wireless NIC Object
-					wlanresponse = ifobj.getAPaddr()
-				except IOError as error_no:
-					if error_no in (errno.EOPNOTSUPP, errno.ENODEV, errno.EPERM):
-						return False
-					else:
-						print("[AdapterSetupConfiguration] error: ", error_no, error_str)
-						return True
-				else:
-					return True
+				return True
 
 	def ok(self):
 		self.cleanup()
@@ -1094,20 +1080,20 @@ class AdapterSetupConfiguration(Screen, HelpableScreen):
 		self.extended = None
 		self.extendedSetup = None
 		for p in plugins.getPlugins(PluginDescriptor.WHERE_NETWORKSETUP):
-			callFnc = p.__call__["ifaceSupported"](self.iface)
+			callFnc = p.fnc["ifaceSupported"](self.iface)
 			if callFnc != None:
 				self.extended = callFnc
-				if "WlanPluginEntry" in p.__call__: # internally used only for WLAN Plugin
+				if "WlanPluginEntry" in p.fnc: # internally used only for WLAN Plugin
 					menu.append((_("Scan wireless networks"), "scanwlan"))
 					if iNetwork.getAdapterAttribute(self.iface, "up"):
 						menu.append((_("Show WLAN status"), "wlanstatus"))
 				else:
-					if "menuEntryName" in p.__call__:
-						menuEntryName = p.__call__["menuEntryName"](self.iface)
+					if "menuEntryName" in p.fnc:
+						menuEntryName = p.fnc["menuEntryName"](self.iface)
 					else:
 						menuEntryName = _("Extended setup...")
-					if "menuEntryDescription" in p.__call__:
-						menuEntryDescription = p.__call__["menuEntryDescription"](self.iface)
+					if "menuEntryDescription" in p.fnc:
+						menuEntryDescription = p.fnc["menuEntryDescription"](self.iface)
 					else:
 						menuEntryDescription = _("Extended network setup plugin...")
 					self.extendedSetup = ("extendedSetup", menuEntryDescription, self.extended)
@@ -1736,15 +1722,15 @@ class NetworkMountsMenu(Screen, HelpableScreen):
 		self.extended = None
 		self.extendedSetup = None
 		for p in plugins.getPlugins(PluginDescriptor.WHERE_NETWORKMOUNTS):
-			callFnc = p.__call__["ifaceSupported"](self)
+			callFnc = p.fnc["ifaceSupported"](self)
 			if callFnc != None:
 				self.extended = callFnc
-				if "menuEntryName" in p.__call__:
-					menuEntryName = p.__call__["menuEntryName"](self)
+				if "menuEntryName" in p.fnc:
+					menuEntryName = p.fnc["menuEntryName"](self)
 				else:
 					menuEntryName = _("Extended Setup...")
-				if "menuEntryDescription" in p.__call__:
-					menuEntryDescription = p.__call__["menuEntryDescription"](self)
+				if "menuEntryDescription" in p.fnc:
+					menuEntryDescription = p.fnc["menuEntryDescription"](self)
 				else:
 					menuEntryDescription = _("Extended Networksetup Plugin...")
 				self.extendedSetup = ("extendedSetup", menuEntryDescription, self.extended)
@@ -2491,7 +2477,6 @@ class NetworkInadynSetup(ConfigListScreen, Screen):
 
 			f.close()
 		self["config"].list = self.list
-		self["config"].l.setList(self.list)
 
 	def VirtualKeyBoardCallback(self, callback=None):
 		if callback != None and len(callback):
@@ -2840,7 +2825,6 @@ class NetworkuShareSetup(ConfigListScreen, Screen):
 					self.list.append(ushare_ps31)
 			f.close()
 		self["config"].list = self.list
-		self["config"].l.setList(self.list)
 
 	def VirtualKeyBoardCallback(self, callback=None):
 		if callback != None and len(callback):
@@ -3252,7 +3236,6 @@ class NetworkMiniDLNASetup(ConfigListScreen, Screen):
 					self.list.append(minidlna_strictdlna1)
 			f.close()
 		self["config"].list = self.list
-		self["config"].l.setList(self.list)
 
 	def VirtualKeyBoardCallback(self, callback=None):
 		if callback != None and len(callback):
@@ -3430,53 +3413,30 @@ class NetworkServicesSummary(Screen):
 		self["autostartstatus_summary"].text = autostartstatus_summary
 
 
-class NetworkPassword(ConfigListScreen, Screen):
+class NetworkPassword(Setup):
 	def __init__(self, session):
-		Screen.__init__(self, session)
-		self.setTitle(_("Password Setup"))
+		self.password = NoSave(ConfigPassword(default=""))
+		Setup.__init__(self, session=session, setup=None)
 		self.skinName = "Setup"
-		self.onChangedEntry = []
-		self.list = []
-		ConfigListScreen.__init__(self, self.list, session=self.session)
-
-		self["key_red"] = StaticText(_("Exit"))
-		self["key_green"] = StaticText(_("Save"))
-		self["key_yellow"] = StaticText(_("Random password"))
-
-		self["actions"] = ActionMap(["SetupActions", "ColorActions"], {
-			"cancel": self.close,
-			"save": self.SetPasswd,
-			"yellow": self.newRandom
-		})
-
-		self["description"] = Label()
-		self['footnote'] = Label()
-		self["VKeyIcon"] = Boolean(False)
-		self["HelpWindow"] = Pixmap()
-		self["HelpWindow"].hide()
-
+		self.title = _("Password Setup")
+		self["key_yellow"] = StaticText(_("Random Password"))
+		self["passwordActions"] = HelpableActionMap(self, ["ColorActions"], {
+			"yellow": (self.newRandom, _("Randomly generate a password"))
+		}, prio=0, description=_("Password Actions"))
 		self.user = "root"
-		self.output_line = ""
-
-		self.updateList()
 
 	def newRandom(self):
-		self.password.value = self.GeneratePassword()
+		passwdChars = string.ascii_letters + string.digits
+		passwdLength = 10
+		self.password.value = "".join(Random().sample(passwdChars, passwdLength))
 		self["config"].invalidateCurrent()
 
-	def updateList(self):
-		self.password = NoSave(ConfigPassword(default=""))
+	def createSetup(self):
 		instructions = _("Setting a network password is mandatory in OpenBh %s if you wish to use network services. \nTo set a password using the virtual keyboard press the 'text' button on your remote control.") % getImageVersion()
 		self.list.append(getConfigListEntry(_('New password'), self.password, instructions))
 		self['config'].list = self.list
-		self['config'].l.setList(self.list)
 
-	def GeneratePassword(self):
-		passwdChars = string.ascii_letters + string.digits
-		passwdLength = 10
-		return ''.join(Random().sample(passwdChars, passwdLength))
-
-	def SetPasswd(self):
+	def keySave(self):
 		password = self.password.value
 		if not password:
 			self.session.open(MessageBox, _("The password can not be blank."), MessageBox.TYPE_ERROR)
@@ -3485,7 +3445,7 @@ class NetworkPassword(ConfigListScreen, Screen):
 		self.container = eConsoleAppContainer()
 		self.container.appClosed.append(self.runFinished)
 		self.container.dataAvail.append(self.dataAvail)
-		retval = self.container.execute("echo -e '%s\n%s' | (passwd %s)" % (password, password, self.user))
+		retval = self.container.execute(*("/usr/bin/passwd", "/usr/bin/passwd", self.user))
 		if retval:
 			message = _("Unable to change password")
 			self.session.open(MessageBox, message, MessageBox.TYPE_ERROR)
@@ -3495,17 +3455,8 @@ class NetworkPassword(ConfigListScreen, Screen):
 			self.close()
 
 	def dataAvail(self, data):
-		data = six.ensure_str(data)
-		self.output_line += data
-		while True:
-			i = self.output_line.find('\n')
-			if i == -1:
-				break
-			self.processOutputLine(self.output_line[:i + 1])
-			self.output_line = self.output_line[i + 1:]
-
-	def processOutputLine(self, line):
-		if line.find("password: "):
+		data = data.decode("UTF-8", "ignore")
+		if data.endswith("password: "):
 			self.container.write("%s\n" % self.password.value)
 
 	def runFinished(self, retval):

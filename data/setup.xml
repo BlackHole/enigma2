@@ -4,8 +4,10 @@
 		<item level="0" text="Time zone area" description="Select your time zone area or region.">config.timezone.area</item>
 		<item level="0" text="Time zone" description="Select the time zone within the area or region.">config.timezone.val</item>
 		<item level="0" text="Sync time using" description="Synchronize system time using transponder or internet.">config.misc.SyncTimeUsing</item>
-		<item level="0" text="NTP server" description="Configure your NTP server.">config.misc.NTPserver</item>
-		<item level="0" text="NTP sync interval" description="Setup network time synchronization interval." requires="config.misc.SyncTimeUsing" >config.misc.useNTPminutes</item>
+		<if conditional="config.misc.SyncTimeUsing.value == 'ntp'">
+			<item level="0" text="NTP server" description="Configure your NTP server.">config.misc.NTPserver</item>
+			<item level="0" text="NTP sync interval" description="Setup network time synchronization interval.">config.misc.useNTPminutes</item>
+		</if>
 		<item level="0" text="Date style" description="Choose the display formatting style for dates. 'D' / 'DD' is the date and 'M' / 'MM' is the month in digits.  ('DD' and 'MM' have leading zeros for single digit values.) The screen display will be based on your choice but can be influenced by the skin." requires="config.usage.date.enabled">config.usage.date.dayfull</item>
 		<item level="0" text="Time style" description="Choose the display formatting style for times. 'H' / 'HH' is the hour for a 24 hour clock, 'h' / 'hh' is the hour for a 12 hour clock, 'mm' is the minutes and 'ss' is the seconds.  ('HH' and 'hh' have leading zeros for single digit values.) The screen display will be based on your choice but can be influenced by the skin." requires="config.usage.time.enabled">config.usage.time.long</item>
 	</setup>
@@ -76,6 +78,7 @@
 		<item level="1" text="Sort setting screens alphabetically" description="This option allows you to disable sorting of the option in setting screens">config.usage.sort_settings</item>
 		<item level="1" text="Sort menu screens" description="When set to 'user' this option allows you to sort or hide menu items via the blue button in menu screens. When set to 'user defined hidden' the blue button text in the menu remains hidden even though the user sort feature is active.">config.usage.menu_sort_mode</item>
 		<item level="0" text="Show menu numbers" description="This option allows you to show menu number quick links.">config.usage.menu_show_numbers</item>
+		<item level="0" text="Menu style" conditional="findSkinScreen('MenuHorizontal')" description="Select 'Standard' to display the standard vertical menu layout, or 'Horizontal' to display the menu items in a row.">config.usage.menu_style</item>
 		<item level="1" text="Sort plug-in browser alphabetically" description="This option allows you to disable sorting of the plugin browser.">config.usage.sort_pluginlist</item>
 		<item level="1" text="Show PVR status in Movie Player infobar" description="This option moves the PVR status from the separate window into the Movie Player infobar.">config.usage.movieplayer_pvrstate</item>
 		<item level="2" text="Close PiP on exit" description="When enabled, the PiP can be closed by the EXIT button.">config.usage.pip_hideOnExit</item>
@@ -622,8 +625,9 @@
 			<if conditional="config.hdmicec.handle_tv_wakeup.value">
 				<item text="Wakeup signal from TV" description="Wake the receiver from standby when the wake command is sent from the TV.">config.hdmicec.tv_wakeup_detection</item>
 			</if>
-			<item text="Set fixed CEC address" description="Fix CEC address setting, default is 0.0.0.0">config.hdmicec.fixed_physical_address</item>
+			<item text="Set fixed CEC address" description="Fix CEC address setting, default is 1.0.0.0">config.hdmicec.fixed_physical_address</item>
 			<item text="Forward volume keys" description="Volume keys on the receiver remote will control the TV volume.">config.hdmicec.volume_forwarding</item>
+			<item text="Force volume keys" description="Force receiver to send volume keys to all devices on hdmi when no response to audio channel request.">config.hdmicec.force_volume_forwarding</item>
 			<item text="Put A/V receiver in standby" description="Put A/V receiver in standby.">config.hdmicec.control_receiver_standby</item>
 			<item text="Wake A/V receiver from standby" description="Wake A/V receiver from standby.">config.hdmicec.control_receiver_wakeup</item>
 			<item text="Minimum send interval" description="Delay between CEC commands when sending a series of commands. Some devices require this delay for correct functioning, usually between 50-150ms.">config.hdmicec.minimum_send_interval</item>

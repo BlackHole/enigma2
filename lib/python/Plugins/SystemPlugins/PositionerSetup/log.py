@@ -1,6 +1,3 @@
-from __future__ import print_function
-import six
-
 # logging for XMLTV importer
 #
 # One can simply use
@@ -10,10 +7,7 @@ import six
 
 import sys
 
-if six.PY3:
-	from io import StringIO
-else:
-	from StringIO import StringIO
+from io import StringIO
 import threading
 
 
@@ -38,7 +32,7 @@ def write(data):
 	try:
 		if logfile.tell() > size:
 			# Do a sort of 16k round robin
-			logfile.reset()
+			logfile.seek(0)
 		logfile.write(data)
 	finally:
 		mutex.release()
@@ -51,12 +45,12 @@ def getvalue():
 	try:
 		pos = logfile.tell()
 		head = logfile.read()
-		logfile.reset()
+		logfile.seek(0)
 		tail = logfile.read(pos)
 	finally:
 		mutex.release()
 	return head + tail
-
+	
 
 def close():
 	global logfile

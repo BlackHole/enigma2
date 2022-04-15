@@ -1,7 +1,3 @@
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import division
-
 import locale
 import os
 import skin
@@ -33,7 +29,6 @@ visuallyImpairedCommentary = "NAR qad"
 
 def InitUsageConfig():
 	config.version = ConfigNumber(default=0)
-	config.misc.useNTPminutes = ConfigSelection(default="30", choices=[("30", "30" + " " + _("minutes")), ("60", _("Hour")), ("1440", _("Once per day"))])
 	if getBrandOEM() in ('vuplus', 'ini'):
 		config.misc.remotecontrol_text_support = ConfigYesNo(default=True)
 	else:
@@ -121,6 +116,7 @@ def InitUsageConfig():
 
 	config.usage.show_picon_bkgrn = ConfigSelection(default="transparent", choices=[("none", _("Disabled")), ("transparent", _("Transparent")), ("blue", _("Blue")), ("red", _("Red")), ("black", _("Black")), ("white", _("White")), ("lightgrey", _("Light Grey")), ("grey", _("Grey"))])
 	config.usage.show_genre_info = ConfigYesNo(default=False)
+	config.usage.menu_style = ConfigSelection(default="standard", choices=[("standard", _("Standard")), ("horizontal", _("Horizontal"))])
 	config.usage.menu_sort_weight = ConfigDictionarySet(default={"mainmenu": {"submenu": {}}})
 	config.usage.menu_sort_mode = ConfigSelection(default="default", choices=[("a_z", _("alphabetical")), ("default", _("Default")), ("user", _("user defined")), ("user_hidden", _("user defined hidden"))])
 	config.usage.menu_show_numbers = ConfigYesNo(default=False)
@@ -1209,6 +1205,7 @@ def InitUsageConfig():
 		default="imageview")
 	config.hdmicec.fixed_physical_address = ConfigText(default="0.0.0.0")
 	config.hdmicec.volume_forwarding = ConfigYesNo(default=False)
+	config.hdmicec.force_volume_forwarding = ConfigYesNo(default=False)
 	config.hdmicec.control_receiver_wakeup = ConfigYesNo(default=False)
 	config.hdmicec.control_receiver_standby = ConfigYesNo(default=False)
 	config.hdmicec.handle_deepstandby_events = ConfigYesNo(default=False)
@@ -1382,7 +1379,7 @@ def upgradeConfig():
 		upgrade(config.epgselection.grid.piconwidth, "epgselection.graph_piconwidth")
 		upgrade(config.epgselection.grid.infowidth, "epgselection.graph_infowidth")
 		upgrade(config.epgselection.grid.rec_icon_height, "epgselection.graph_rec_icon_height")
-		for (key, item) in list(config.misc.ButtonSetup.content.items.items()):
+		for (key, item) in config.misc.ButtonSetup.content.items.items():
 			if item.value == "Infobar/openGraphEPG":
 				item.value = "Infobar/openGridEPG"
 				item.save()

@@ -28,7 +28,7 @@ if getMachineBuild() in ("vuuno4k", "vuuno4kse", "vuzero4k", "vuultimo4k", "vuso
 def Freespace(dev):
 	statdev = statvfs(dev)
 	space = (statdev.f_bavail * statdev.f_frsize) / 1024
-	print "[FULL BACKUP] Free space on %s = %i kilobytes" % (dev, space)
+	print ("[FULL BACKUP] Free space on %s = %i kilobytes" % (dev, space))
 	return space
 
 
@@ -62,16 +62,16 @@ class ImageBackup(Screen):
 		self.ROOTFSBIN = getMachineRootFile()
 		self.KERNELBIN = getMachineKernelFile()
 		self.ROOTFSTYPE = getImageFileSystem()
-		print "[FULL BACKUP] BOX MACHINEBUILD = >%s<" % self.MACHINEBUILD
-		print "[FULL BACKUP] BOX MACHINENAME = >%s<" % self.MACHINENAME
-		print "[FULL BACKUP] BOX MACHINEBRAND = >%s<" % self.MACHINEBRAND
-		print "[FULL BACKUP] BOX MODEL = >%s<" % self.MODEL
-		print "[FULL BACKUP] OEM MODEL = >%s<" % self.OEM
-		print "[FULL BACKUP] IMAGEFOLDER = >%s<" % self.IMAGEFOLDER
-		print "[FULL BACKUP] UBINIZE = >%s<" % self.UBINIZE_ARGS
-		print "[FULL BACKUP] MKUBIFS = >%s<" % self.MKUBIFS_ARGS
-		print "[FULL BACKUP] MTDKERNEL = >%s<" % self.MTDKERNEL
-		print "[FULL BACKUP] ROOTFSTYPE = >%s<" % self.ROOTFSTYPE
+		print ("[FULL BACKUP] BOX MACHINEBUILD = >%s<" % self.MACHINEBUILD)
+		print ("[FULL BACKUP] BOX MACHINENAME = >%s<" % self.MACHINENAME)
+		print ("[FULL BACKUP] BOX MACHINEBRAND = >%s<" % self.MACHINEBRAND)
+		print ("[FULL BACKUP] BOX MODEL = >%s<" % self.MODEL)
+		print ("[FULL BACKUP] OEM MODEL = >%s<" % self.OEM)
+		print ("[FULL BACKUP] IMAGEFOLDER = >%s<" % self.IMAGEFOLDER)
+		print ("[FULL BACKUP] UBINIZE = >%s<" % self.UBINIZE_ARGS)
+		print ("[FULL BACKUP] MKUBIFS = >%s<" % self.MKUBIFS_ARGS)
+		print ("[FULL BACKUP] MTDKERNEL = >%s<" % self.MTDKERNEL)
+		print ("[FULL BACKUP] ROOTFSTYPE = >%s<" % self.ROOTFSTYPE)
 
 		self["key_green"] = Button("USB")
 		self["key_red"] = Button("HDD")
@@ -132,7 +132,7 @@ class ImageBackup(Screen):
 				if not dir == 'hdd' and not dir == 'net':
 					for file in listdir("/media/" + dir):
 						if file.find("backupstick") > -1:
-							print "USB DEVICE found on: /media/%s" % dir
+							print ("USB DEVICE found on: /media/%s" % dir)
 							return "/media/" + dir
 			break
 		return "XX"
@@ -311,15 +311,15 @@ class ImageBackup(Screen):
 		file_found = True
 
 		if not path.exists("%s/%s" % (self.MAINDEST, self.ROOTFSBIN)):
-			print 'ROOTFS bin file not found'
+			print ('ROOTFS bin file not found')
 			file_found = False
 
 		if not path.exists("%s/%s" % (self.MAINDEST, self.KERNELBIN)):
-			print 'KERNEL bin file not found'
+			print ('KERNEL bin file not found')
 			file_found = False
 
 		if path.exists("%s/noforce" % self.MAINDEST):
-			print 'NOFORCE bin file not found'
+			print ('NOFORCE bin file not found')
 			file_found = False
 
 		if file_found:
@@ -345,7 +345,7 @@ class ImageBackup(Screen):
 
 		if self.DIRECTORY == "/hdd":
 			self.TARGET = self.SearchUSBcanidate()
-			print "TARGET = %s" % self.TARGET
+			print ("TARGET = %s" % self.TARGET)
 			if self.TARGET == 'XX':
 				cmdlist.append('echo " "')
 			else:
