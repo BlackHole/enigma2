@@ -520,9 +520,9 @@ class FCCSetup(Screen, ConfigListScreen):
 
 def getExtensionName():
 	if config.plugins.fccsetup.activate.value:
-		return _("Disable Fast Channel Change")
+		return _("Disable FCC")
 
-	return _("Enable Fast Channel Change")
+	return _("Enable FCC")
 
 def ToggleUpdate():
 	if config.plugins.fccsetup.activate.value:
@@ -546,14 +546,8 @@ def showFCCExtentionMenu():
 def addExtentions(infobarExtensions):
 	infobarExtensions.addExtension((getExtensionName, ToggleUpdate, showFCCExtentionMenu), None)
 
-def FCCStart(session, **kwargs):
+def main(session, **kwargs):
 	session.open(FCCSetup)
-
-def main(menuid, **kwargs):
-	if menuid == "scan":
-		return [(_("Fast Channel Change"), FCCStart, "FCCSetup", 5)]
-	else:
-		return []
 
 def Plugins(**kwargs):
 	list = []
@@ -572,11 +566,11 @@ def Plugins(**kwargs):
 			where = [PluginDescriptor.WHERE_EXTENSIONSINGLE],
 			fnc = addExtentions))
 
-		list.append(
-			PluginDescriptor(name=_("FCCSetup"),
-			description=_("Fast Channel Change setup"),
-			where = [PluginDescriptor.WHERE_MENU],
-			needsRestart = False,
-			fnc = main))
+	list.append(
+		PluginDescriptor(name=_("FCCSetup"),
+		description=_("Fast Channel Change setup"),
+		where = [PluginDescriptor.WHERE_PLUGINMENU],
+		needsRestart = False,
+		fnc = main))
 
 	return list
