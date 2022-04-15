@@ -4,10 +4,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: enigma2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-19 22:18+0000\n"
-"PO-Revision-Date: 2022-02-26 14:43+0200\n"
-"Last-Translator: Orlandox\n"
-"Language-Team: timoj/Kojo/Samzam/Orlandox\n"
+"POT-Creation-Date: 2019-04-17 08:27+0100\n"
+"PO-Revision-Date: 2019-05-21 22:36+0200\n"
+"Last-Translator: Kojo\n"
+"Language-Team: AndyBlac/timoj/Kojo/Samzam\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -11744,7 +11744,7 @@ msgid "Sort Trash by deletion time"
 msgstr "Lajittele roskakori poistoajan mukaan"
 
 msgid "Sort by"
-msgstr "Listan järjestystapa"
+msgstr "Listan järjestystapa:"
 
 msgid "Sort by default"
 msgstr "Oletusjärjestys"
@@ -15343,7 +15343,7 @@ msgid "fitness & health"
 msgstr "kuntoilu ja terveys"
 
 msgid "flat alphabetic"
-msgstr "aakkosjärjestys, kansionäkymä"
+msgstr "Aakkosjärjestys, kansionäkymä"
 
 msgid "flat alphabetic reverse"
 msgstr "Käänteinen aakkosjärjestys, kansionäkymä"
@@ -15986,7 +15986,7 @@ msgid "show/game show (general)"
 msgstr "show/visailu (yleinen)"
 
 msgid "shuffle"
-msgstr "satunnaisjärjestys"
+msgstr "Satunnaisjärjestys"
 
 #
 msgid "shut down"
@@ -16411,35 +16411,37 @@ msgstr "Vaihdettu"
 #~ msgid "Settings..."
 #~ msgstr "Asetukset..."
 
-msgid "Select horizontal resolution:"
-msgstr "Valitse vaakaerottelu:"
+#
+#~ msgid "Show warning when in a stream"
+#~ msgstr "Näytä varoitus kun streamataan"
+#
+#~ msgid "Signal Finder"
+#~ msgstr "Signaalimittari"
+#~ msgid "Sucessfully changed the password for the root user to: "
+#~ msgstr "Root-käyttäjän salasanan vaihto onnistui:"
+#~ msgid "Switchable tuner types:"
+#~ msgstr "Vaihdettavat viritintyypit:"
+#~ msgid "There is no [webif] section in oscam.conf"
+#~ msgstr "Oscam.conf:ssa ei ole [webif] -osiota"
+#~ msgid "This is a multitype tuner. Available options depend on the hardware. Cable and terrestrial cannot be configured at the same time. If you want to use as cable + satellite or terrestrial + satellite, configure cable/terrestrial first and then save. Re-open and configure again as satellite."
+#~ msgstr "Tämä on tuplaviritin. Vaihtoehdot riippivat laitteistostasi. Et voi virittää antenni. ja kaapeliviritintä samaan aikaan. Jos haluat käyttää kaapeli+sateliitti tai antenni+sateliitti, määrittele ensin kaapeli/antenniviritin ja tallenna. Avaa uudelleen asetukset ja määrittele sitten sateliitti."
+#~ msgid "Timer conflict detection when fallback is enabled"
+#~ msgstr "Ajastusten ristiriidat havaitaan kun peruutus on aktivoitu"
+#~ msgid "Timeshift on a stream is not supported!"
+#~ msgstr "Streamin ajansiirtoa ei ole tuettu!"
+#, fuzzy
+#~ msgid "When enabled the LNB power will not be switched off in standby"
+#~ msgstr "Kun päällä, VCR SCART -valinta näytetään päävalikossa"
 
-msgid "newest recordings first then other media by name"
-msgstr "uusimmat tallennukset ensin, muu media nimen mukaan"
+#~ msgid "When enabled, a warning will be displayed that timeshift is not supported in an IP stream.."
+#~ msgstr "Kun päällä, näytetään varoitus että ajansiirtoa ei tueta IP-streamissa."
 
-msgid "newest first"
-msgstr "uusin ensin"
+#, fuzzy
+#~ msgid "When using the remote fallback tuner for recordings, it is impossible to correctly detect timer conflicts. This option allows you to skip timer confict detection when remote fallback is enabled, but can lead to timer conflicts. This setting is only for advanced users; the default is 'yes'."
+#~ msgstr "Kun käytät etävastaanotinta tallennuksiin, ajastusristiriitojen haku ei voi kunnolla havaita ristiriitoja. Tämä valinta sallii sinun ottaa haku pois päältä. Vain edistyneemmille käyttäjille. Oletus: Kyllä."
 
-msgid "oldest first"
-msgstr "vanhin ensin"
+#~ msgid "You system does not support ext4"
+#~ msgstr "Laitteistosi ei tue ext4-tiedostojärjestelmää"
 
-msgid "alphabetic then newest first"
-msgstr "aakkosjärjestys sitten uusin ensin"
-
-msgid "alphabetic then oldest first"
-msgstr "aakkosjärjestys sitten vanhin ensin"
-
-msgid "shortest first"
-msgstr "lyhin ensin"
-
-msgid "longest first"
-msgstr "pisin ensin"
-
-msgid "flat reverse alphabetic"
-msgstr "käänteinen aakkosjärjestys, kansionäkymä"
-
-msgid "reverse alphabetic then newest first"
-msgstr "käänteinen aakkosjärjestys sitten uusin ensin"
-
-msgid "reverse alphabetic then oldest first"
-msgstr "käänteinen aakkosjärjestys sitten vanhin ensin"
+#~ msgid "Your %s %s is not connected to the internet, please check your network settings and try again."
+#~ msgstr "%s %s ei ole kytketty internettiin, tarkista verkkoasetukset ja yritä uudelleen."

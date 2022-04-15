@@ -1,7 +1,3 @@
-from __future__ import print_function, division
-from builtins import range
-import six
-
 import os
 from boxbranding import getMachineBrand, getMachineName
 import xml.etree.cElementTree
@@ -56,7 +52,7 @@ class TIMERTYPE:
 # please do not translate log messages
 
 
-class PowerTimerEntry(TimerEntry, object):
+class PowerTimerEntry(TimerEntry):
 	def __init__(self, begin, end, disabled=False, afterEvent=AFTEREVENT.NONE, timerType=TIMERTYPE.WAKEUP, checkOldTimers=False):
 		TimerEntry.__init__(self, int(begin), int(end))
 		if checkOldTimers:
@@ -379,8 +375,7 @@ def createTimer(xml):
 		}[timertype]
 	begin = int(xml.get("begin"))
 	end = int(xml.get("end"))
-	# FIXME WHY NOT str()
-	repeated = six.ensure_str(xml.get("repeated"))
+	repeated = str(xml.get("repeated"))
 	disabled = int(xml.get("disabled") or "0")
 	afterevent = str(xml.get("afterevent") or "nothing")
 	afterevent = {
@@ -414,7 +409,8 @@ def createTimer(xml):
 	for l in xml.findall("log"):
 		ltime = int(l.get("time"))
 		lcode = int(l.get("code"))
-		msg = six.ensure_str(l.text).strip()
+		# print("[PowerManager]: ltext, time, code", l.text, "   ", l.get("time"), "   ", l.get("code"))		
+		msg = l.text.strip()
 		entry.log_entries.append((ltime, lcode, msg))
 	return entry
 
