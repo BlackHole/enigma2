@@ -32,7 +32,6 @@ class eDVBVideo: public iObject, public sigc::trackable
 private:
 	ePtr<eDVBDemux> m_demux;
 	int m_fd, m_fd_demux, m_dev;
-	bool m_fcc_enable;
 	static int m_close_invalidates_attributes;
 	int m_is_slow_motion, m_is_fast_forward, m_is_freezed;
 	ePtr<eSocketNotifier> m_sn;
@@ -42,7 +41,7 @@ private:
 	static int readApiSize(int fd, int &xres, int &yres, int &aspect);
 public:
 	enum { UNKNOWN = -1, MPEG2, MPEG4_H264, VC1 = 3, MPEG4_Part2, VC1_SM, MPEG1, H265_HEVC, AVS = 16, AVS2 = 40 };
-	eDVBVideo(eDVBDemux *demux, int dev, bool fcc_enable=false);
+	eDVBVideo(eDVBDemux *demux, int dev);
 	void stop();
 	int startPid(int pid, int type=MPEG2);
 	void flush();
@@ -185,23 +184,6 @@ public:
 	int getVideoGamma();
 	static RESULT setHwPCMDelay(int delay);
 	static RESULT setHwAC3Delay(int delay);
-
-	enum 
-	{
-		fcc_state_stop,
-		fcc_state_ready,
-		fcc_state_decoding
-	};
-
-	RESULT prepareFCC(int fe_id, int vpid, int vtype, int pcrpid);
-	RESULT fccStart();
-	RESULT fccStop();
-	RESULT fccDecoderStart();
-	RESULT fccDecoderStop();
-	RESULT fccUpdatePids(int fe_id, int vpid, int vtype, int pcrpid);
-	RESULT fccSetPids(int fe_id, int vpid, int vtype, int pcrpid);
-	RESULT fccGetFD();
-	RESULT fccFreeFD();
 };
 
 #endif
