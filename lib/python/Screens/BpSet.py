@@ -975,8 +975,8 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		if getBoxType() not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero", "osninoplus", "osninopro", "zgemmah82h"):
 			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
 
-		if getBoxType() == "sf8008" or getBoxType() == "sx988" or getBoxType() == "pulse4k" or getBoxType() == "pulse4kmini" or getBoxType() == "zgemmah11s":
-			self.pluglist.append (["Chromium2 (Netflix, YoutubeTV, Disney +)", "enigma2-plugin-extensions-chromium2"])
+		if getBoxType() == "sf8008" or getBoxType() == "sx988" or getBoxType() == "pulse4k" or getBoxType() == "pulse4kmini" or getBoxType() == "zgemmah11s" or getBoxType() == "viper4kv40":
+			self.pluglist.append (["Chromium2 (Netflix, YoutubeTV, Dazn, Prime Video, Disney +)", "enigma2-plugin-extensions-chromium2"])
 
 		self.activityTimer = eTimer()
 		self.activityTimer.timeout.get().append(self.updateFeed2)
