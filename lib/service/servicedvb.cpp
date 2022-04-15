@@ -19,7 +19,6 @@
 #include <lib/base/nconfig.h> // access to python config
 #include <lib/base/httpsstream.h>
 #include <lib/base/httpstream.h>
-#include <lib/service/servicedvbfcc.h>
 #include "servicepeer.h"
 
 		/* for subtitles */
@@ -30,8 +29,6 @@
 
 #include <byteswap.h>
 #include <netinet/in.h>
-
-#include <lib/dvb/fcc.h>
 
 #include <iostream>
 #include <fstream>
@@ -929,10 +926,7 @@ RESULT eServiceFactoryDVB::play(const eServiceReference &ref, ePtr<iPlayableServ
 	if (r)
 		service = 0;
 		// check resources...
-	if (eFCCServiceManager::checkAvailable(ref))
-		ptr = new eDVBServiceFCCPlay(ref, service);
-	else
-		ptr = new eDVBServicePlay(ref, service);
+	ptr = new eDVBServicePlay(ref, service);
 	return 0;
 }
 
@@ -1022,10 +1016,9 @@ RESULT eServiceFactoryDVB::lookupService(ePtr<eDVBService> &service, const eServ
 	return 0;
 }
 
-eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *service, bool connect_event):
+eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *service):
 	m_reference(ref),
 	m_dvb_service(service),
-	m_is_primary(1),
 	m_decoder_index(0),
 	m_have_video_pid(0),
 	m_tune_state(-1),
@@ -1051,8 +1044,7 @@ eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *serv
 //	m_is_streamx = m_is_stream;	// sets to false if looking at fallback url at this point as m_is_stream(ref.path.find("://") is false.
 	eDebug("[servicedvb][eDVBServicePlay] now running: m_is_streamx set by m_is_stream %d", m_is_streamx);
 	eDebug("[servicedvb][eDVBServicePlay] now running: m_is_pvr set to; %d", m_is_pvr);
-	if (connect_event)
-		CONNECT(m_service_handler.serviceEvent, eDVBServicePlay::serviceEvent);
+	CONNECT(m_service_handler.serviceEvent, eDVBServicePlay::serviceEvent);
 	CONNECT(m_service_handler_timeshift.serviceEvent, eDVBServicePlay::serviceEventTimeshift);
 	CONNECT(m_event_handler.m_eit_changed, eDVBServicePlay::gotNewEvent);
 	CONNECT(m_subtitle_sync_timer->timeout, eDVBServicePlay::checkSubtitleTiming);
@@ -1465,7 +1457,6 @@ RESULT eDVBServicePlay::stop()
 
 RESULT eDVBServicePlay::setTarget(int target, bool noaudio = false)
 {
-	m_is_primary = !target;
 	m_decoder_index = target;
 	m_noaudio = noaudio;
 	return 0;
@@ -2221,7 +2212,7 @@ int eDVBServicePlay::selectAudioStream(int i)
 
 	m_current_audio_pid = apid;
 
-	if (m_is_primary && !m_noaudio && m_decoder->setAudioPID(apid, apidtype))
+	if (!m_noaudio && m_decoder->setAudioPID(apid, apidtype))
 	{
 		eDebug("[eDVBServicePlay] set audio pid %04x failed", apid);
 		return -4;
@@ -2236,7 +2227,7 @@ int eDVBServicePlay::selectAudioStream(int i)
 	int rdsPid = apid;
 
 		/* if timeshift is not active and we are not in pip mode, check if we need to enable the rds reader */
-	if (!(m_timeshift_active || m_decoder_index || m_have_video_pid || !m_is_primary))
+	if (!(m_timeshift_active || m_decoder_index || m_have_video_pid))
 	{
 		int different_pid = program.videoStreams.empty() && program.audioStreams.size() == 1 && program.audioStreams[stream].rdsPid != -1;
 		if (different_pid)
