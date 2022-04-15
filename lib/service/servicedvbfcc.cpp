@@ -161,6 +161,7 @@ void eDVBServiceFCCPlay::popFCCEvents()
 		m_event((iPlayableService*)this, event);
 		eDebug("[eDVBServiceFCCPlay] m_event: %d", event);
 	}
+	m_event((iPlayableService*)this, evStart);
 }
 
 void eDVBServiceFCCPlay::changeFCCMode()
