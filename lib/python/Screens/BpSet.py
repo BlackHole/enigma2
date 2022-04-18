@@ -3,6 +3,7 @@ from Screens.MessageBox import MessageBox
 from Screens.Standby import TryQuitMainloop
 from boxbranding import getBrandOEM, getBoxType
 from Screens.VirtualKeyBoard import VirtualKeyBoard
+from Components.About import getChipSetString
 from Components.ActionMap import ActionMap
 from Components.Label import Label
 from Components.ScrollLabel import ScrollLabel
@@ -975,7 +976,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		if getBoxType() not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero", "osninoplus", "osninopro", "zgemmah82h"):
 			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
 
-		if getBoxType() == "sf8008" or getBoxType() == "sx988":
+		if getChipSetString() in ("3798mv200", "3798mv200h"):
 			self.pluglist.append (["Netflix & YoutubeTV", "enigma2-plugin-extensions-netflix"])
 
 		self.activityTimer = eTimer()
