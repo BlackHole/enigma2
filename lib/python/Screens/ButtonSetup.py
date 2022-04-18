@@ -99,6 +99,8 @@ ButtonSetupKeys = [	(_("Red"), "red", "Infobar/activateRedButton"),
 	(_("VOD long"), "vod_long", ""),
 	(_("Kodi"), "kodi", ""),
 	(_("Kodi long"), "kodi_long", ""),
+	(_("WWW"), "www", ""),
+	(_("WWW long"), "www_long", ""),
 	(_("YouTube"), "youtube", ""),
 	(_("YouTube long"), "youtube_long", "") ]
 
