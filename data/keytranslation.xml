@@ -1,0 +1,7 @@
+<keymap>
+	<translate>
+		<device name="dreambox advanced remote control (native)">
+			<key from="KEY_TIME" to="KEY_EDIT"/> <!--Viper4Kv40 RCU has a TIMER Button but sends KEY_TIME other boxes use KEY_EDIT  -->
+		</device>
+	</translate>
+</keymap>
