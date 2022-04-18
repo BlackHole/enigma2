@@ -3903,7 +3903,6 @@ class InfoBarResolutionSelection:
 		fps = float(fileReadLine("/proc/stb/vmpeg/0/framerate", 50000, source=MODULE_NAME)) / 1000.0
 		resList = []
 		resList.append((_("Exit"), "exit"))
-		resList.append((_("Auto(not available)"), "auto"))
 		resList.append((_("Video: ") + "%dx%d@%gHz" % (xRes, yRes, fps), ""))
 		resList.append(("--", ""))
 		# Do we need a new sorting with this way here or should we disable some choices?
@@ -3918,7 +3917,7 @@ class InfoBarResolutionSelection:
 					video = "%sHz" % videoMode
 				resList.append((video, videoMode))
 		videoMode = fileReadLine("/proc/stb/video/videomode", "Unknown", source=MODULE_NAME)
-		keys = ["green", "yellow", "blue", "", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+		keys = ["green", "yellow", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 		selection = 0
 		for item in range(len(resList)):
 			if resList[item][1] == videoMode:
@@ -3933,7 +3932,7 @@ class InfoBarResolutionSelection:
 				if videoMode[1] == "exit" or videoMode[1] == "" or videoMode[1] == "auto":
 					self.ExGreen_toggleGreen()
 				if videoMode[1] != "auto":
-					if fileWriteLine("/proc/stb/video/videomode", videoMode[1], source=MODULE_NAME):
+					if fileWriteLine("/proc/stb/video/videomode", videoMode[1], source=MODULE_NAME) and fileWriteLine("/proc/stb/video/videomode_24hz", videoMode[1], source=MODULE_NAME) and fileWriteLine("/proc/stb/video/videomode_50hz", videoMode[1], source=MODULE_NAME) and fileWriteLine("/proc/stb/video/videomode_60hz", videoMode[1], source=MODULE_NAME):
 						print("[InfoBarGenerics] New video mode is %s." % videoMode[1])
 					else:
 						print("[InfoBarGenerics] Error: Unable to set new video mode of %s!" % videoMode[1])
