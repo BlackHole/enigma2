@@ -39,7 +39,7 @@ class TimerList(GUIComponent):
 				refstr = str(timer.service_ref)
 
 			displayPicon = None
-			picon = getPiconName(refstr)
+			picon = getPiconName(refstr) or getPiconName(serviceName)
 			if picon != "":
 				displayPicon = LoadPixmap(picon)
 			if displayPicon is not None:
