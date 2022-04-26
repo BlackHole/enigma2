@@ -101,6 +101,53 @@ void eRCDeviceInputDev::handleCode(long rccode)
 	}
 	else
 	{
+
+#if KEY_CONTEXT_MENU_TO_KEY_AUX
+		if (ev->code == KEY_CONTEXT_MENU)
+		{
+			/* Gigablue New Remote rc has a KEY_HDMI-IN, which sends KEY_CONTEXT_MENU events. Correct this, so we do not have to place hacks in the keymaps. */
+			ev->code = KEY_AUX;
+		}
+#endif
+
+#if KEY_F2_TO_KEY_F6
+		if (ev->code == KEY_F2)
+		{
+			/* Gigablue New Remote rc has a KEY_PIP key, which sends KEY_F2 events. Correct this, so we do not have to place hacks in the keymaps. */
+			ev->code = KEY_F6;
+		}
+#endif
+
+#if KEY_F1_TO_KEY_HELP
+		if (ev->code == KEY_F1)
+		{
+			/* Gigablue New Remote rc has no help key so use KEY_F1 key */
+			ev->code = KEY_HELP;
+		}
+#endif
+
+#if KEY_OPTION_TO_KEY_HELP
+		if (ev->code == KEY_OPTION)
+		{
+			/* Gigablue New Remote rc has no help key so use KEY_F1 key */
+			ev->code = KEY_HELP;
+		}
+#endif
+
+#if KEY_F1_TO_KEY_F6
+		if (ev->code == KEY_F1)
+		{
+			ev->code = KEY_F6;
+		}
+#endif
+
+#if KEY_F2_TO_KEY_AUX
+		if (ev->code == KEY_F2)
+		{
+			ev->code = KEY_AUX;
+		}
+#endif
+
 #if KEY_PLAY_ACTUALLY_IS_KEY_PLAYPAUSE
 		if (ev->code == KEY_PLAY)
 		{
