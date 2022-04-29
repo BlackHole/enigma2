@@ -307,7 +307,7 @@ fi
 if [ "$ret" -ne "1" ]; then
 	if [ -e /proc/stb/info/boxtype ]; then
 		stbcheck=`cat /proc/stb/info/boxtype`
-		if [ $stbcheck == "viper4k" ] || [ $stbcheck == "sf8008" ] || [ $stbcheck == "sf8008m" ] || [ $stbcheck == "sx988" ] || [ $stbcheck == "beyonwizv2" ] || [ $stbcheck == "gbmv200" ] ; then
+		if [ $stbcheck == "viper4k" ] || [ $stbcheck == "sf8008" ] || [ $stbcheck == "sf8008m" ] || [ $stbcheck == "sx988" ] || [ $stbcheck == "beyonwizv2" ] || [ $stbcheck == "ustym4kpro" ] || [ $stbcheck == "gbmv200" ] ; then
 			killall -9 libreader; sleep 5
 		fi
 	fi
