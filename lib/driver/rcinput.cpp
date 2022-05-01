@@ -16,12 +16,10 @@
 void eRCDeviceInputDev::handleCode(long rccode)
 {
 	struct input_event *ev = (struct input_event *)rccode;
-
+	eDebug("[eInputDeviceInit0] %x %x (%u) %x", ev->value, ev->code, ev->code, ev->type);
 	if (ev->type != EV_KEY)
 		return;
 		
-	eDebug("[eInputDeviceInit] %x %x (%u) %x", ev->value, ev->code, ev->code, ev->type);
-
 	int km = iskeyboard ? input->getKeyboardMode() : eRCInput::kmNone;
 
 	switch (ev->code)
@@ -101,6 +99,40 @@ void eRCDeviceInputDev::handleCode(long rccode)
 	}
 	else
 	{
+
+
+#if KEY_SCREEN_TO_KEY_MODE
+		if (ev->code == KEY_SCREEN)
+		{
+			/* GBTrio4K rc has a KEY_ASPECT key, which sends KEY_SCREEN events. Correct this, so we do not have to place hacks in the keymaps. */
+			ev->code = KEY_MODE;
+		}
+#endif
+
+#if KEY_SUBTITLE_TO_KEY_SUBTITLE
+		if (ev->code == KEY_SCREEN)
+		{
+			/* GBTrio4K rc has a KEY_OPTION key, which sends KEY_SUBTITLE events. Correct this, so we do not have to place hacks in the keymaps. */
+			ev->code = KEY_SUBTITLE;
+		}
+#endif
+
+#if KEY_F1_TO_KEY_HELP
+		if (ev->code == KEY_F1)
+		{
+			/* Gigablue Trio4K Remote rc has no help key so use KEY_F1 key */
+			ev->code = KEY_HELP;
+		}
+#endif
+
+#if KEY_F2_TO_KEY_SCREEN
+		if (ev->code == KEY_F2)
+		{
+			/* Gigablue Trio4K Remote rc has a KEY_PIP key, which sends KEY_F2 events. Correct this, so we do not have to place hacks in the keymaps. */
+			ev->code = KEY_SCREEN;
+		}
+#endif
+
 #if KEY_PLAY_ACTUALLY_IS_KEY_PLAYPAUSE
 		if (ev->code == KEY_PLAY)
 		{
