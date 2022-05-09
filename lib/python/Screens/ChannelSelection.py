@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from os import listdir, path, rename, remove 
+from os import listdir, path, rename, remove
 import os
 import re
 from time import localtime, time, strftime
@@ -1751,27 +1751,15 @@ class ChannelSelectionBase(Screen, HelpableScreen):
 
 	def nextBouquet(self):
 		if "reverseB" in config.usage.servicelist_cursor_behavior.value:
-			if config.usage.channelbutton_mode.value == '0' or config.usage.channelbutton_mode.value == '3':
-				self.changeBouquet(-1)
-			else:
-				self.servicelist.moveDown()
+			self.changeBouquet(-1)
 		else:
-			if config.usage.channelbutton_mode.value == '0' or config.usage.channelbutton_mode.value == '3':
-				self.changeBouquet(+1)
-			else:
-				self.servicelist.moveUp()
+			self.changeBouquet(+1)
 
 	def prevBouquet(self):
 		if "reverseB" in config.usage.servicelist_cursor_behavior.value:
-			if config.usage.channelbutton_mode.value == '0' or config.usage.channelbutton_mode.value == '3':
-				self.changeBouquet(+1)
-			else:
-				self.servicelist.moveUp()
+			self.changeBouquet(+1)
 		else:
-			if config.usage.channelbutton_mode.value == '0' or config.usage.channelbutton_mode.value == '3':
-				self.changeBouquet(-1)
-			else:
-				self.servicelist.moveDown()
+			self.changeBouquet(-1)
 
 	def toggleTwoLines(self):
 		if config.usage.setup_level.index > 1 and not self.pathChangeDisabled and self.servicelist.mode == self.servicelist.MODE_FAVOURITES:
