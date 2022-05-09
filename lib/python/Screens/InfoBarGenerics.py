@@ -1337,8 +1337,8 @@ class InfoBarChannelSelection:
 
 		self["ChannelSelectActions"] = HelpableActionMap(self, "InfobarChannelSelection",
 			{
-				"switchChannelUp": (self.DownPressed, _("Open service list and select the previous channel")),
-				"switchChannelDown": (self.UpPressed, _("Open service list and select the next channel")),
+				"switchChannelUp": (self.UpPressed, _("Open service list and select the previous channel")),
+				"switchChannelDown": (self.DownPressed, _("Open service list and select the next channel")),
 				"switchChannelUpLong": (self.switchChannelUpLong, _("Open service list and select the previous channel for PiP")),
 				"switchChannelDownLong": (self.switchChannelDownLong, _("Open service list and select the next channel for PiP")),
 				"zapUp": (self.zapUp, _("Switch to the previous channel")),
