@@ -68,7 +68,7 @@ class PluginDescriptor():
 	# or return a function which is called with session and the interface name for extended setup of this interface
 	WHERE_NETWORKMOUNTS = 17
 
-	WHERE_VIXMENU = 18
+	WHERE_OBHMENU = 18
 
 	WHERE_SATCONFIGCHANGED = 19
 
@@ -110,7 +110,7 @@ class PluginDescriptor():
 			return []
 
 	# overrides the builtin object.__getattribute__(self, name).
-	# Method for old code still using the __call__ attribute expecting 
+	# Method for old code still using the __call__ attribute expecting
 	# to get the plugin's fnc, i.e. old code was "self.__call__ = fnc"
 	def __getattribute__(self, name):
 		if name == '__call__':
