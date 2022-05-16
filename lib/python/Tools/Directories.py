@@ -12,8 +12,6 @@ from xml.etree.cElementTree import Element, fromstring, parse
 
 pathExists = os.path.exists
 
-DEFAULT_MODULE_NAME = __name__.split(".")[-1]
-
 SCOPE_HOME = 0  # DEBUG: Not currently used in Enigma2.
 SCOPE_LANGUAGE = 1
 SCOPE_KEYMAPS = 2
@@ -241,45 +239,49 @@ def resolveFilename(scope, base="", path_prefix=None):
 		path = "%s:%s" % (path, suffix)
 	return path
 
-def fileReadLine(filename, default=None, source=DEFAULT_MODULE_NAME):
-	line = None
+def fileReadLine(filename, default=None, *args, **kwargs):
 	try:
 		with open(filename, "r") as fd:
 			line = fd.read().strip().replace("\0", "")
-		msg = "Read"
 	except (IOError, OSError) as err:
 		if err.errno != ENOENT:  # ENOENT - No such file or directory.
-			print("[%s] Error %d: Unable to read a line from file '%s'!  (%s)" % (source, err.errno, filename, err.strerror))
+			print_exc()
 		line = default
-		msg = "Default"
 	return line
 
 
-def fileWriteLine(filename, line, source=DEFAULT_MODULE_NAME):
+def fileWriteLine(filename, line, *args, **kwargs):
 	try:
 		with open(filename, "w") as fd:
 			fd.write(str(line))
-		msg = "Wrote"
-		result = 1
+		return 1
 	except (IOError, OSError) as err:
-		print("[%s] Error %d: Unable to write a line to file '%s'!  (%s)" % (source, err.errno, filename, err.strerror))
-		msg = "Failed to write"
-		result = 0
-	return result
+		print_exc()
+		return 0
 
 
-def fileReadLines(filename, default=None, source=DEFAULT_MODULE_NAME):
-	lines = None
+def fileReadLines(filename, default=None, *args, **kwargs):
 	try:
 		with open(filename, "r") as fd:
 			lines = fd.read().splitlines()
-		msg = "Read"
 	except (IOError, OSError) as err:
 		if err.errno != ENOENT:  # ENOENT - No such file or directory.
-			print("[%s] Error %d: Unable to read lines from file '%s'!  (%s)" % (source, err.errno, filename, err.strerror))
+			print_exc()
 		lines = default
-		msg = "Default"
 	return lines
+
+
+def fileWriteLines(filename, lines, *args, **kwargs):
+	try:
+		with open(filename, "w") as fd:
+			if isinstance(lines, list):
+				lines.append("")
+				lines = "\n".join(lines)
+			fd.write(lines)
+		return 1
+	except (IOError, OSError) as err:
+		print_exc()
+		return 0
 
 
 def comparePaths(leftPath, rightPath):
