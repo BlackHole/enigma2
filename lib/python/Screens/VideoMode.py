@@ -146,7 +146,7 @@ class VideoSetup(ConfigListScreen, Screen):
 				getConfigListEntry(_("General PCM delay"), config.av.generalPCMdelay, _("This option configures the general audio delay of stereo sound tracks."))
 			))
 			if SystemInfo["CanBTAudio"]:
-				self.list.append(getConfigListEntry(_("Enable Bluetooth Audio"), config.av.btaudio, _("This Option allows you to switch audio to bluetooth speakers.")))
+				self.list.append(getConfigListEntry(_("Enable Bluetooth Audio"), config.av.btaudio, _("This option allows you to switch audio to bluetooth speakers.")))
 			if SystemInfo["CanBTAudioDelay"]:
 				self.list.append(getConfigListEntry(_("General Bluetooth Audio delay"), config.av.btaudiodelay, _("This option configures the general audio delay for bluetooth speakers.")))
 			if SystemInfo["Can3DSurround"]:
@@ -163,7 +163,7 @@ class VideoSetup(ConfigListScreen, Screen):
 		# 	self.list.append(getConfigListEntry(_("Scaler sharpness"), config.av.scaler_sharpness, _("This option configures the picture sharpness.")))
 		self["config"].list = self.list
 		if config.usage.sort_settings.value:
-			self["config"].list.sort()
+			self["config"].list.sort(key=lambda x: x[0])
 
 	def keyLeft(self):
 		ConfigListScreen.keyLeft(self)
