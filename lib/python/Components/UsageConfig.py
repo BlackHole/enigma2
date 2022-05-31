@@ -432,36 +432,36 @@ def InitUsageConfig():
 
 	# TRANSLATORS: full date representation dayname daynum monthname year in strftime() format! See 'man strftime'
 	config.usage.date.dayfull = ConfigSelection(default=_("%A %-d %B %Y"), choices=[
-		(_("%A %d %B %Y"), _("Dayname DD Month Year")),
-		(_("%A %d. %B %Y"), _("Dayname DD. Month Year")),
-		(_("%A %-d %B %Y"), _("Dayname D Month Year")),
-		(_("%A %-d. %B %Y"), _("Dayname D. Month Year")),
-		(_("%A %d-%B-%Y"), _("Dayname DD-Month-Year")),
-		(_("%A %-d-%B-%Y"), _("Dayname D-Month-Year")),
-		(_("%A %d/%m/%Y"), _("Dayname DD/MM/Year")),
-		(_("%A %d.%m.%Y"), _("Dayname DD.MM.Year")),
-		(_("%A %-d/%m/%Y"), _("Dayname D/MM/Year")),
-		(_("%A %-d.%m.%Y"), _("Dayname D.MM.Year")),
-		(_("%A %d/%-m/%Y"), _("Dayname DD/M/Year")),
-		(_("%A %d.%-m.%Y"), _("Dayname DD.M.Year")),
-		(_("%A %-d/%-m/%Y"), _("Dayname D/M/Year")),
-		(_("%A %-d.%-m.%Y"), _("Dayname D.M.Year")),
-		(_("%A %B %d %Y"), _("Dayname Month DD Year")),
-		(_("%A %B %-d %Y"), _("Dayname Month D Year")),
-		(_("%A %B-%d-%Y"), _("Dayname Month-DD-Year")),
-		(_("%A %B-%-d-%Y"), _("Dayname Month-D-Year")),
-		(_("%A %m/%d/%Y"), _("Dayname MM/DD/Year")),
-		(_("%A %-m/%d/%Y"), _("Dayname M/DD/Year")),
-		(_("%A %m/%-d/%Y"), _("Dayname MM/D/Year")),
-		(_("%A %-m/%-d/%Y"), _("Dayname M/D/Year")),
-		(_("%A %Y %B %d"), _("Dayname Year Month DD")),
-		(_("%A %Y %B %-d"), _("Dayname Year Month D")),
-		(_("%A %Y-%B-%d"), _("Dayname Year-Month-DD")),
-		(_("%A %Y-%B-%-d"), _("Dayname Year-Month-D")),
-		(_("%A %Y/%m/%d"), _("Dayname Year/MM/DD")),
-		(_("%A %Y/%m/%-d"), _("Dayname Year/MM/D")),
-		(_("%A %Y/%-m/%d"), _("Dayname Year/M/DD")),
-		(_("%A %Y/%-m/%-d"), _("Dayname Year/M/D"))
+		(_("%A %d %B %Y"), _("DD Month Year")),
+		(_("%A %d. %B %Y"), _("DD. Month Year")),
+		(_("%A %-d %B %Y"), _("D Month Year")),
+		(_("%A %-d. %B %Y"), _("D. Month Year")),
+		(_("%A %d-%B-%Y"), _("DD-Month-Year")),
+		(_("%A %-d-%B-%Y"), _("D-Month-Year")),
+		(_("%A %d/%m/%Y"), _("DD/MM/Year")),
+		(_("%A %d.%m.%Y"), _("DD.MM.Year")),
+		(_("%A %-d/%m/%Y"), _("D/MM/Year")),
+		(_("%A %-d.%m.%Y"), _("D.MM.Year")),
+		(_("%A %d/%-m/%Y"), _("DD/M/Year")),
+		(_("%A %d.%-m.%Y"), _("DD.M.Year")),
+		(_("%A %-d/%-m/%Y"), _("D/M/Year")),
+		(_("%A %-d.%-m.%Y"), _("D.M.Year")),
+		(_("%A %B %d %Y"), _("Month DD Year")),
+		(_("%A %B %-d %Y"), _("Month D Year")),
+		(_("%A %B-%d-%Y"), _("Month-DD-Year")),
+		(_("%A %B-%-d-%Y"), _("Month-D-Year")),
+		(_("%A %m/%d/%Y"), _("MM/DD/Year")),
+		(_("%A %-m/%d/%Y"), _("M/DD/Year")),
+		(_("%A %m/%-d/%Y"), _("MM/D/Year")),
+		(_("%A %-m/%-d/%Y"), _("M/D/Year")),
+		(_("%A %Y %B %d"), _("Year Month DD")),
+		(_("%A %Y %B %-d"), _("Year Month D")),
+		(_("%A %Y-%B-%d"), _("Year-Month-DD")),
+		(_("%A %Y-%B-%-d"), _("Year-Month-D")),
+		(_("%A %Y/%m/%d"), _("Year/MM/DD")),
+		(_("%A %Y/%m/%-d"), _("Year/MM/D")),
+		(_("%A %Y/%-m/%d"), _("Year/M/DD")),
+		(_("%A %Y/%-m/%-d"), _("Year/M/D"))
 	])
 
 	# TRANSLATORS: long date representation short dayname daynum monthname year in strftime() format! See 'man strftime'
@@ -1211,7 +1211,7 @@ def InitUsageConfig():
 		default="imageview")
 	config.hdmicec.fixed_physical_address = ConfigText(default="0.0.0.0")
 	config.hdmicec.volume_forwarding = ConfigYesNo(default=False)
-	config.hdmicec.force_volume_forwarding = ConfigYesNo(default=False)	
+	config.hdmicec.force_volume_forwarding = ConfigYesNo(default=False)
 	config.hdmicec.control_receiver_wakeup = ConfigYesNo(default=False)
 	config.hdmicec.control_receiver_standby = ConfigYesNo(default=False)
 	config.hdmicec.handle_deepstandby_events = ConfigYesNo(default=False)
