@@ -18,7 +18,7 @@ from Screens.Screen import Screen, ScreenSummary
 from Screens.GitCommitInfo import CommitInfo
 from Screens.SoftwareUpdate import UpdatePlugin
 from Tools.Directories import fileExists, fileCheck, pathExists
-from Tools.Multiboot import GetCurrentImage, GetCurrentImageMode
+from Tools.Multiboot import GetCurrentImage, GetCurrentImageMode, isPluginInstalled
 from Tools.StbHardware import getFPVersion
 
 
@@ -53,8 +53,13 @@ class About(Screen):
 		self["lab3"] = StaticText(_("Support at %s") % "www.openbh.net")
 
 		AboutText += _("Model:\t%s %s\n") % (getMachineBrand(), getMachineName())
-
-		if about.getChipSetString() != _("unavailable"):
+		
+		if SystemInfo["BoxInfo"]:
+			BoxInfo = SystemInfo["BoxInfo"]
+			AboutText += _("Boot Device:\t%s\n") % BoxInfo.getItem("mtdbootfs")			
+			AboutText += _("Chipset:\t%s\n") % BoxInfo.getItem("socfamily")
+							
+		elif about.getChipSetString() != _("unavailable"):
 			if SystemInfo["HasHiSi"]:
 				AboutText += _("Chipset:\tHiSilicon %s\n") % about.getChipSetString().upper()
 			elif about.getIsBroadcom():
@@ -76,7 +81,7 @@ class About(Screen):
 			AboutText += _("%s") % part
 
 		if SystemInfo["canMultiBoot"]:
-			slot = image = GetCurrentImage()
+			slot = image = SystemInfo["MultiBootSlot"]
 			part = "eMMC slot %s" % slot
 			bootmode = ""
 			if SystemInfo["canMode12"]:
@@ -107,6 +112,10 @@ class About(Screen):
 		AboutText += _("Drivers:\t%s\n") % driversdate
 		AboutText += _("Kernel:\t%s\n") % about.getKernelVersionString()
 		AboutText += _("GStreamer:\t%s\n") % about.getGStreamerVersionString().replace("GStreamer ", "")
+		if isPluginInstalled("ServiceApp") and config.plugins.serviceapp.servicemp3.replace.value == True:
+			AboutText += _("IPTV 4097 player:\t%s\n") % config.plugins.serviceapp.servicemp3.player.value
+		else:
+			AboutText += _("IPTV 4097 player:\tDefault player\n")	
 		AboutText += _("Python:\t%s\n") % about.getPythonVersionString()
 		AboutText += _("Installed:\t%s\n") % about.getFlashDateString()
 		AboutText += _("Last update:\t%s\n") % getEnigmaVersionString()
