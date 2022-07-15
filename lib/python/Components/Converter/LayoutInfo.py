@@ -155,10 +155,10 @@ class LayoutInfo(Poll, Converter):
             for line in fd:
                 if value + 'Total' in line:
                     check += 1
-                    result[0] = int(line.split()[1]) * 1024
+                    result[0] = int(line.split()[1]) * 1000
                 elif value + 'Free' in line:
                     check += 1
-                    result[2] = int(line.split()[1]) * 1024
+                    result[2] = int(line.split()[1]) * 1000
                 if check > 1:
                     if result[0] > 0:
                         result[1] = result[0] - result[2]
@@ -206,11 +206,11 @@ class LayoutInfo(Poll, Converter):
 
     def getSizeStr(self, value, u=0):
         fractal = 0
-        if value >= 1024:
+        if value >= 1000:
             fmt = '%(size)u.%(frac)d %(unit)s'
-            while value >= 1024 and u < len(SIZE_UNITS):
-                value, mod = divmod(value, 1024)
-                fractal = mod * 10 // 1024
+            while value >= 1000 and u < len(SIZE_UNITS):
+                value, mod = divmod(value, 1000)
+                fractal = mod * 10 // 1000
                 u += 1
 
         else:
