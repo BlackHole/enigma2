@@ -22,8 +22,6 @@ from Tools.BoundFunction import boundFunction
 FOCUS_CONFIG, FOCUS_STREAMS = range(2)
 [PAGE_AUDIO, PAGE_SUBTITLES] = ["audio", "subtitles"]
 
-global conflist
-
 class AudioSelection(ConfigListScreen, Screen):
 	def __init__(self, session, infobar=None, page=PAGE_AUDIO):
 		Screen.__init__(self, session)
@@ -94,7 +92,6 @@ class AudioSelection(ConfigListScreen, Screen):
 		from Tools.ISO639 import LanguageCodes
 		from Components.UsageConfig import originalAudioTracks, visuallyImpairedCommentary
 		streams = []
-		global conflist
 		conflist = []
 		selectedidx = 0
 		self.subtitlelist = []
@@ -484,13 +481,10 @@ class AudioSelection(ConfigListScreen, Screen):
 	def keyRight(self, config=False):
 		global conflist
 		print("[keyRight] config=%s self.focus=%s" % (config, self.focus))
-		print("[keyRight] conflist=%s" % conflist)
 		if config or self.focus == FOCUS_CONFIG:
 			index = self["config"].getCurrentIndex()
-			print("[keyRight] config=%s self.focus=%s index=%s" % (config, self.focus, index))
-			print("[keyRight] self.settings.menupage.value=%s self.subtitlelist=%s" % (self.settings.menupage.value, self.subtitlelist))
 			if self.settings.menupage.value == PAGE_AUDIO:
-				if self.subtitlelist and "To subtitle selection" in conflist[index]:					# Subtitle selection screen
+				if self.subtitlelist and self["config"].getCurrent()[1] is self.settings.menupage:				# Subtitle selection screen
 					self.keyAudioSubtitle()
 					self.__updatedInfo()
 				elif self["config"].getCurrent()[2]:
