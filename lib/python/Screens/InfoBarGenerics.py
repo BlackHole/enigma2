@@ -64,13 +64,7 @@ from sys import maxsize, version_info
 import itertools
 import datetime
 import socket
-
-if version_info[0] >= 3:
-	import pickle as cPickle	# py3
-else:
-	import cPickle			# py2
-
-MODULE_NAME = __name__.split(".")[-1]
+import pickle
 
 # hack alert!
 from Screens.Menu import MainMenu, Menu, mdom
@@ -139,7 +133,7 @@ def saveResumePoints():
 	global resumePointCache, resumePointCacheLast
 	try:
 		f = open('/etc/enigma2/resumepoints.pkl', 'wb')
-		cPickle.dump(resumePointCache, f, cPickle.HIGHEST_PROTOCOL)
+		pickle.dump(resumePointCache, f, pickle.HIGHEST_PROTOCOL)
 		f.close()
 	except Exception as ex:
 		print("[InfoBarGenerics] Failed to write resumepoints:%s" % ex)
@@ -149,7 +143,7 @@ def saveResumePoints():
 def loadResumePoints():
 	try:
 		file = open('/etc/enigma2/resumepoints.pkl', 'rb')
-		PickleFile = cPickle.load(file)
+		PickleFile = pickle.load(file)
 		file.close()
 		return PickleFile
 	except Exception as ex:
@@ -1065,7 +1059,7 @@ class BufferIndicator(Screen):
 		return info and info.getInfo(iServiceInformation.sBuffer)
 
 
-class InfoBarBuffer():
+class InfoBarBuffer:
 	def __init__(self):
 		self.bufferScreen = self.session.instantiateDialog(BufferIndicator)
 		self.bufferScreen.hide()
@@ -2983,12 +2977,12 @@ class InfoBarExtensions:
 		# overview and is always present.
 
 		for l in plugins.getPlugins(PluginDescriptor.WHERE_MENU):
-			# l.name is the translated version from the *.po in the 
-			# AutoTimer plugin, whereas with _("Auto Timers") the 
-			# translated version comes from enigma2 *.po. This means 
-			# for this to work the translation in plugin.po must 
-			# match the translation in enigma.po. We also have the 
-			# problem that the maybe it is translated in enigma.po 
+			# l.name is the translated version from the *.po in the
+			# AutoTimer plugin, whereas with _("Auto Timers") the
+			# translated version comes from enigma2 *.po. This means
+			# for this to work the translation in plugin.po must
+			# match the translation in enigma.po. We also have the
+			# problem that the maybe it is translated in enigma.po
 			# but in plugin.po it is still in the untranslated form.
 			# For that case we also test against the untranslated form.
 			if l.name in (_("Auto Timers"), "Auto Timers"):
@@ -3905,16 +3899,16 @@ class InfoBarResolutionSelection:
 		pass
 
 	def resolutionSelection(self):
-		xRes = int(fileReadLine("/proc/stb/vmpeg/0/xres", 0, source=MODULE_NAME), 16)
-		yRes = int(fileReadLine("/proc/stb/vmpeg/0/yres", 0, source=MODULE_NAME), 16)
-		fps = float(fileReadLine("/proc/stb/vmpeg/0/framerate", 50000, source=MODULE_NAME)) / 1000.0
+		xRes = int(fileReadLine("/proc/stb/vmpeg/0/xres", 0), 16)
+		yRes = int(fileReadLine("/proc/stb/vmpeg/0/yres", 0), 16)
+		fps = float(fileReadLine("/proc/stb/vmpeg/0/framerate", 50000)) // 1000.0
 		resList = []
 		resList.append((_("Exit"), "exit"))
 		resList.append((_("Video: ") + "%dx%d@%gHz" % (xRes, yRes, fps), ""))
 		resList.append(("--", ""))
 		# Do we need a new sorting with this way here or should we disable some choices?
 		if fileExists("/proc/stb/video/videomode_choices"):
-			videoModes = fileReadLine("/proc/stb/video/videomode_choices", "", source=MODULE_NAME)
+			videoModes = fileReadLine("/proc/stb/video/videomode_choices", "")
 			videoModes = videoModes.replace("pal ", "").replace("ntsc ", "").split(" ")
 			for videoMode in videoModes:
 				video = videoMode
@@ -3923,7 +3917,7 @@ class InfoBarResolutionSelection:
 				if videoMode[-1].isdigit():
 					video = "%sHz" % videoMode
 				resList.append((video, videoMode))
-		videoMode = fileReadLine("/proc/stb/video/videomode", "Unknown", source=MODULE_NAME)
+		videoMode = fileReadLine("/proc/stb/video/videomode", "Unknown")
 		keys = ["green", "yellow", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 		selection = 0
 		for item in range(len(resList)):
@@ -3939,7 +3933,7 @@ class InfoBarResolutionSelection:
 				if videoMode[1] == "exit" or videoMode[1] == "":
 					self.ExGreen_toggleGreen()
 				if videoMode[1] != "auto":
-					if fileWriteLine("/proc/stb/video/videomode", videoMode[1], source=MODULE_NAME) and fileWriteLine("/proc/stb/video/videomode_24hz", videoMode[1], source=MODULE_NAME) and fileWriteLine("/proc/stb/video/videomode_50hz", videoMode[1], source=MODULE_NAME) and fileWriteLine("/proc/stb/video/videomode_60hz", videoMode[1], source=MODULE_NAME):
+					if fileWriteLine("/proc/stb/video/videomode", videoMode[1]) and fileWriteLine("/proc/stb/video/videomode_24hz", videoMode[1]) and fileWriteLine("/proc/stb/video/videomode_50hz", videoMode[1]) and fileWriteLine("/proc/stb/video/videomode_60hz", videoMode[1]):
 						print("[InfoBarGenerics] New video mode is %s." % videoMode[1])
 					else:
 						print("[InfoBarGenerics] Error: Unable to set new video mode of %s!" % videoMode[1])
@@ -4504,7 +4498,7 @@ class InfoBarTeletextPlugin:
 		self.teletext_plugin and self.teletext_plugin(session=self.session, service=self.session.nav.getCurrentService())
 
 
-class InfoBarSubtitleSupport():
+class InfoBarSubtitleSupport:
 	def __init__(self):
 		object.__init__(self)
 		self["SubtitleSelectionAction"] = HelpableActionMap(self, "InfobarSubtitleSelectionActions",
