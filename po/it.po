@@ -9918,8 +9918,8 @@ msgstr "Alcuni plugin non sono disponibili:\n"
 msgid "Sorry Inadyn Script is Missing"
 msgstr "Script Inadyn mancante"
 
-msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check www.vuplus-community.net"
-msgstr "I feed non sono disponibili per manutenzione: riprova più tardi. Se il problema persiste, consultare www.vuplus-community.net"
+msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check www.openbh.net"
+msgstr "I feed non sono disponibili per manutenzione: riprova più tardi. Se il problema persiste, consultare www.openbh.net"
 
 msgid ""
 "Sorry feeds seem be in an unstable state, if you wish to use them please enable 'Allow unstable (experimental) updates' in \"Software "
