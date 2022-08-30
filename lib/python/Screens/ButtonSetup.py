@@ -19,6 +19,7 @@ import os
 ButtonSetupKeys = [	(_("Red"), "red", "Infobar/activateRedButton"),
 	(_("Red long"), "red_long", ""),
 	(_("Green long"), "green_long", ""),
+	(_("Yellow "), "yellow", "Infobar/AudioSelection"),
 	(_("Yellow long"), "yellow_long", "Infobar/subtitleSelection"),
 	(_("Info (EPG)"), "info", "Infobar/InfoPressed/1"),
 	(_("Info (EPG) Long"), "info_long", "Infobar/showEventInfoPlugins/1"),

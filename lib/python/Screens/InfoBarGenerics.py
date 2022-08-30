@@ -407,8 +407,7 @@ class SecondInfoBar(Screen, HelpableScreen):
 
 	def __Show(self):
 		if config.obhsettings.ColouredButtons.value:
-			self["key_yellow"].setText(_("Audio Panel"))
-		self["key_red"].setText(_(" "))
+			self["key_red"].setText(_(" "))
 		self["key_blue"].setText(_("Blue Panel"))
 		self["SecondInfoBar"].doBind()
 		self.getEvent()
