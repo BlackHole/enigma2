@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: OBH 5.0  it_IT\n"
+"Project-Id-Version: OBH 5.1  it_IT\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-01 00:00+0000\n"
-"PO-Revision-Date: 2022-04-03 00:27+0200\n"
+"PO-Revision-Date: 2022-08-30 10:10+0200\n"
 "Last-Translator: Alexwilmac\n"
 "Language-Team: @AlexWilMac-@insanity\n"
 "Language: it\n"
@@ -17,8 +17,73 @@ msgid "TRANSLATOR_INFO"
 msgstr ""
 "Traduzione italiana enigma2\n"
 "a cura di @AlexWilmac / @insanity \n"
-"Aggiornamento 3 aprile 2022 (a)\n"
+"Aggiornamento 30 agosto 2022\n"
 "Supporto: www.openbh.net"
+
+#2022-08-31 new lines cutlist editor
+
+msgid "preserve bookmarks in cuts"
+msgstr "Preserva i contrassegni col taglio"
+
+msgid "remove bookmarks in cuts"
+msgstr "Rimuovi i contrassegni col taglio"
+
+msgid "enable intro screen"
+msgstr "Abilita schermata iniziale"
+
+msgid "disable intro screen"
+msgstr "Disabilita schermata iniziale"
+
+msgid "execute cuts (requires MovieCut plugin)"
+msgstr "Esegui tagli (serve il plugin MovieCut)"
+
+#new lines about sort options for recording list
+#needed to clean old lines after checking which have only changed definition, not meaning
+
+msgid "newest recordings first then other media by name"
+msgstr "Prima registrazioni più recenti, il resto per nome"
+
+msgid "newest first"
+msgstr "Prima registrazioni più recenti"
+
+msgid "oldest first"
+msgstr "Prima registrazioni più datate"
+
+msgid "alphabetic then newest first"
+msgstr "alfabetico, poi più recenti in cima"
+
+msgid "alphabetic then oldest first"
+msgstr "alfabetico, poi più vecchie in cima"
+
+msgid "shortest first"
+msgstr "dalla più breve alla più lunga"
+
+msgid "longest first"
+msgstr "dalla più lunga alla più breve"
+
+msgid "flat reverse alphabetic"
+msgstr "ordine alfabetico puro Z->A"
+
+msgid "reverse alphabetic then newest first"
+msgstr "alfabetico inverso, poi le più recenti"
+
+msgid "reverse alphabetic then oldest first"
+msgstr "alfabetico inverso, poi le più vecchie"
+
+msgid "You have a marked recording"
+msgstr "Hai un file selezionato"
+
+msgid "Play the marked recording"
+msgstr "Esegui il file selezionato"
+
+msgid "Play the selected recording"
+msgstr "Esegui il file evidenziato"
+
+msgid "You have marked recordings"
+msgstr "Hai selezionato alcuni file"
+
+msgid "Play the %d marked recordings"
+msgstr "Esegui i %d file selezionati"
 
 msgid "Show"
 msgstr "Mostra"
