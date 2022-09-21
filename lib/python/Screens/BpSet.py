@@ -968,10 +968,12 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		elif getBrandOEM() == "vuplus" and getBoxType() != "vusolo":
 			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-webkithbbtv"])
-		elif getBrandOEM() != "vuplus" and getBrandOEM() != "abcom" and getBrandOEM() != "airdigital" and getBoxType() != "osninoplus" and getBoxType() != "osninopro" :
+		elif getBrandOEM() != "vuplus" and getBrandOEM() != "abcom" and getBrandOEM() != "airdigital" and getBoxType() != "osninoplus" and getBoxType() != "osninopro" and getBoxType() != "gbquad4k" and getBoxType() != "gbue4k":
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-webkit"])
 		elif getBrandOEM() == "abcom" or getBoxType() == "zgemmah9twinse" or getBoxType() == "zgemmah11s":
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-openhbbtvbrowser"])
+		elif getBrandOEM() == "gigablue" and getBoxType() == "gbquad4k" or getBoxType() == "gbue4k":
+			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-gb"])
 
 		if getBoxType() not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero", "osninoplus", "osninopro", "zgemmah82h"):
 			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
