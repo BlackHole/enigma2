@@ -974,6 +974,8 @@ class BhSpeedUp(Screen, ConfigListScreen):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-openhbbtvbrowser"])
 		elif getBrandOEM() == "gigablue" and getBoxType() == "gbquad4k" or getBoxType() == "gbue4k":
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-gb"])
+		elif getBoxType() == "zgemmah7":
+			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-qt"])
 
 		if getBoxType() not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero", "osninoplus", "osninopro", "zgemmah82h"):
 			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
