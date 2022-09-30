@@ -17,6 +17,7 @@ from operator import itemgetter
 from enigma import eDVBDB
 
 config.misc.fast_plugin_button = ConfigText(default="")
+config.misc.plugin_list_ordered = ConfigInteger(default=0)
 
 
 class DeliteGreenPanel(Screen):
@@ -78,7 +79,7 @@ class DeliteGreenPanel(Screen):
 		sorted_dict = {}
 		self.list = []
 		mylist = []
-		
+
 		if fileExists('/etc/bh_plugins.pos') == False:
 			i = 1
 			out = open("/etc/bh_plugins.pos", "w")
@@ -87,15 +88,15 @@ class DeliteGreenPanel(Screen):
 				out.write(line)
 				i += 1
 			out.close()
-			
+
 		f = open('/etc/bh_plugins.pos', 'r')
 		for line in f.readlines():
 			d = line.rsplit(':', 1)
 			if len(d) > 1:
 				sorted_dict[d[0].strip()] = int(d[1].strip())
 			f.close()
-		
-		
+
+
 		for plugin in self.pluginlist:
 			pos = sorted_dict.get(plugin.name, 99)
 			#self.list.append(PluginEntryComponent(plugin))
@@ -105,8 +106,12 @@ class DeliteGreenPanel(Screen):
 				png = plugin.icon
 			res = (plugin.name, plugin.description, png, plugin, pos)
 			mylist.append(res)
-		
-		self.list = sorted(mylist,  key=itemgetter(4))
+
+		if config.misc.plugin_list_ordered.value == 1:
+			self.list = sorted(mylist,  key=itemgetter(4))
+		else:
+			self.list = mylist
+
 		self["list"].list = self.list
 
 	def keyYellow(self):
@@ -148,29 +153,29 @@ class BhSetupGreen(Screen):
             		</convert>
 		</widget>
 	</screen>"""
-	
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
 
 		self.list = []
 		self["list"] = List(self.list)
 		self.updateList()
-		
+
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"ok": self.KeyOk,
 			"back": self.close,
 
 		})
-		
+
 	def updateList(self):
 		self.list = [ ]
 
 		mypath = resolveFilename(SCOPE_CURRENT_SKIN, "")
 		if mypath == "/usr/share/enigma2/":
 			mypath = "/usr/share/enigma2/skin_default/"
-		
-		
+
+
 		mypixmap = mypath + "icons/plugin_list_setup.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Reorder plugins list")
@@ -184,9 +189,9 @@ class BhSetupGreen(Screen):
 		idx = 1
 		res = (name, png, idx)
 		self.list.append(res)
-		
+
 		self["list"].list = self.list
-		
+
 	def KeyOk(self):
 		self.sel = self["list"].getCurrent()
 		if self.sel:
@@ -204,55 +209,59 @@ class BhGreenPluginsSetup(Screen, ConfigListScreen):
 		<widget name="config" position="30,10" size="540,320" scrollbarMode="showOnDemand"/>
 		<ePixmap pixmap="skin_default/buttons/red.png" position="50,350" size="140,40" alphatest="on"/>
 		<ePixmap pixmap="skin_default/buttons/green.png" position="400,350" size="140,40" alphatest="on"/>
+		<ePixmap pixmap="skin_default/buttons/blue.png" position="1100,350" size="140,40" alphatest="on"/>
 		<widget name="key_red" position="50,350" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1"/>
 		<widget name="key_green" position="400,350" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1"/>
+		<widget name="key_blue" position="1100,350" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1"/>
 	</screen>"""
 
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		
+
 		self.list = []
 		ConfigListScreen.__init__(self, self.list)
 		self["key_red"] = Label(_("Cancel"))
 		self["key_green"] = Label(_("Save"))
-		
+		self["key_blue"] = Label(_("Reset"))
+
 		self["actions"] = ActionMap(["WizardActions", "ColorActions"],
 		{
 			"red": self.close,
 			"green": self.savePos,
+			"blue": self.resetPos,
 			"back": self.close
 
 		})
-			
+
 		self.updateList()
 
 	def updateList(self):
 		self.list = []
 		mylist = []
 		sorted_dict = {}
-		
+
 		f = open('/etc/bh_plugins.pos', 'r')
 		for line in f.readlines():
 			d = line.rsplit(':', 1)
 			if len(d) > 1:
 				sorted_dict[d[0].strip()] = int(d[1].strip())
 			f.close()
-		
+
 		self.pluginlist = plugins.getPlugins(PluginDescriptor.WHERE_PLUGINMENU)
 		for plugin in self.pluginlist:
 			pos = sorted_dict.get(plugin.name, 99)
 			res = (plugin.name, pos)
 			mylist.append(res)
-		
+
 		mylist2 = sorted(mylist,  key=itemgetter(1))
-		
+
 		for x in mylist2:
 			item = NoSave(ConfigInteger(limits = (1, 99), default = 99))
 			item.value = x[1]
 			res = getConfigListEntry(x[0], item)
 			self.list.append(res)
-			
+
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
 
@@ -263,17 +272,32 @@ class BhGreenPluginsSetup(Screen, ConfigListScreen):
 		for x in self["config"].list:
 			res =(x[0], x[1].value)
 			mylist.append(res)
-		
+
 		mylist2 = sorted(mylist,  key=itemgetter(1))
-			
+
 		out = open("/etc/bh_plugins.pos", "w")
 		for x in mylist2:
 			line = "%s:%d\n" % (x[0], x[1])
-			out.write(line)	
+			out.write(line)
 		out.close()
+		config.misc.plugin_list_ordered.value = 1
 		self.session.open(MessageBox, _("Plugins list positions saved."), MessageBox.TYPE_INFO)
 		self.close()
-		
+
+	def resetPos(self):
+		self.list = []
+		config.misc.plugin_list_ordered.value = 0
+		if fileExists('/etc/bh_plugins.pos') == True:
+			i = 1
+			out = open("/etc/bh_plugins.pos", "w")
+			for plugin in self.pluginlist:
+				line = "%s:%d\n" % (plugin.name, i)
+				out.write(line)
+				i += 1
+			out.close()
+		self.savePos
+		self.session.open(MessageBox, _("Plugins list positions reset."), MessageBox.TYPE_INFO)
+		self.close()
 
 
 class DeliteSetupFp(Screen):
