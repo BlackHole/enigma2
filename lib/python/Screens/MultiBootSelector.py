@@ -1,6 +1,7 @@
 from enigma import getDesktop
 from os import mkdir, path, rmdir
 import tempfile
+import struct
 
 from Components.ActionMap import HelpableActionMap
 from Components.ChoiceList import ChoiceEntryComponent, ChoiceList
@@ -87,7 +88,7 @@ class MultiBootSelector(Screen, HelpableScreen):
 					self.deletedImagesExists = True
 				if SystemInfo["canMode12"]:
 					if self.imagedict[x]["imagename"] == _("Empty slot"):
-						list.insert(index, ChoiceEntryComponent("", (slotSingle % (x, SystemInfo["canMultiBoot"][x]["slotname"], self.imagedict[x]["imagename"], current if x == currentimageslot else ""), (x, 1))))					
+						list.insert(index, ChoiceEntryComponent("", (slotSingle % (x, SystemInfo["canMultiBoot"][x]["slotname"], self.imagedict[x]["imagename"], current if x == currentimageslot else ""), (x, 1))))
 					else:
 						list.insert(index, ChoiceEntryComponent("", (slotMulti % (x, SystemInfo["canMultiBoot"][x]["slotname"], self.imagedict[x]["imagename"], "Kodi", current if x == currentimageslot and mode != 12 else ""), (x, 1))))
 						list.append(ChoiceEntryComponent("", (slotMulti % (x, SystemInfo["canMultiBoot"][x]["slotname"], self.imagedict[x]["imagename"], "PiP", current if x == currentimageslot and mode == 12 else ""), (x, 12))))
@@ -124,11 +125,14 @@ class MultiBootSelector(Screen, HelpableScreen):
 					open(path.join(self.tmp_dir, "STARTUP"), "w").write(f)
 			else:
 				copyfile(path.join(self.tmp_dir, SystemInfo["canMultiBoot"][slot]["startupfile"]), path.join(self.tmp_dir, "STARTUP"))
+			if SystemInfo["HasMultibootMTD"]:
+				with open('/dev/block/by-name/flag', 'wb') as f:
+					f.write(struct.pack("B", int(slot)))
 			self.cancel(QUIT_REBOOT)
 
 	def deleteImage(self):
 		self.currentSelected = self["config"].l.getCurrentSelection()
-		self.slot = self.currentSelected[0][1][0]		
+		self.slot = self.currentSelected[0][1][0]
 		if SystemInfo["MultiBootSlot"] != self.currentSelected[0][1] and self.imagedict[self.slot]["imagename"] != _("Empty slot"):
 			self.session.openWithCallback(self.deleteImageCallback, MessageBox, "%s:\n%s" % (_("Are you sure you want to delete image:"), self.currentSelected[0][0]), simple=True)
 		else:
