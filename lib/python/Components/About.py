@@ -94,7 +94,7 @@ def getCPUSpeedMHzInt():
 					cpu_speed = round(int(binascii.hexlify(clockfrequency), 16) // 1000000, 1)
 			except IOError:
 				cpu_speed = 1700
-		if getMachineBuild() in ("h8"):
+		if getMachineBuild() in ("h8", "sfx6008"):
 			cpu_speed = 1200
 		else:
 			try: # Solo4K sf8008
