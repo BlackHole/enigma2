@@ -968,7 +968,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		elif getBrandOEM() == "vuplus" and getBoxType() != "vusolo":
 			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-webkithbbtv"])
-		elif getBrandOEM() != "vuplus" and getBrandOEM() != "abcom" and getBrandOEM() != "airdigital" and getBoxType() != "osninoplus" and getBoxType() != "osninopro" and getBoxType() != "gbquad4k" and getBoxType() != "gbue4k":
+		elif getBrandOEM() != "vuplus" and getBrandOEM() != "abcom" and getBrandOEM() != "airdigital" and getBoxType() != "osninoplus" and getBoxType() != "osninopro" and getBoxType() != "gbquad4k" and getBoxType() != "gbue4k" and getBoxType() != "sfx6008" and getBoxType() != "sfx6018":
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-webkit"])
 		elif getBrandOEM() == "abcom" or getBoxType() == "zgemmah9twinse" or getBoxType() == "zgemmah11s":
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-openhbbtvbrowser"])
@@ -977,7 +977,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		elif getBoxType() == "zgemmah7":
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-qt"])
 
-		if getBoxType() not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero", "osninoplus", "osninopro", "zgemmah82h"):
+		if getBoxType() not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero", "osninoplus", "osninopro", "zgemmah82h", "sfx6008", "sfx6018"):
 			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
 
 		if getChipSetString() in ("3798mv200", "hi3798mv200", "hi3798mv200h", "hi3798mv200advca"):
