@@ -281,12 +281,16 @@ class BhGreenPluginsSetup(Screen, ConfigListScreen):
 			out.write(line)
 		out.close()
 		config.misc.plugin_list_ordered.value = 1
+		config.misc.plugin_list_ordered.save()
+		configfile.save()
 		self.session.open(MessageBox, _("Plugins list positions saved."), MessageBox.TYPE_INFO)
 		self.close()
 
 	def resetPos(self):
 		self.list = []
 		config.misc.plugin_list_ordered.value = 0
+		config.misc.plugin_list_ordered.save()
+		configfile.save()
 		if fileExists('/etc/bh_plugins.pos') == True:
 			i = 1
 			out = open("/etc/bh_plugins.pos", "w")
