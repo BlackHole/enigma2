@@ -138,11 +138,11 @@ SystemInfo["HDRSupport"] = fileExists("/proc/stb/hdmi/hlg_support_choices")
 SystemInfo["Canedidchecking"] = fileCheck("/proc/stb/hdmi/bypass_edid_checking")
 SystemInfo["haveboxmode"] = fileCheck("/proc/stb/info/boxmode")
 SystemInfo["HasScaler_sharpness"] = pathExists("/proc/stb/vmpeg/0/pep_scaler_sharpness")
-SystemInfo["hasJack"] = getHaveAVJACK() in ('True',)
-SystemInfo["hasRCA"] = getHaveRCA() in ('True',)
-SystemInfo["hasScart"] = getHaveSCART() in ('True',)
-SystemInfo["hasScartYUV"] = getHaveSCARTYUV() in ('True',)
-SystemInfo["hasYUV"] = getHaveYUV() in ('True',)
+SystemInfo["hasJack"] = getHaveAVJACK() in ("True",)
+SystemInfo["hasRCA"] = getHaveRCA() in ("True",)
+SystemInfo["hasScart"] = getHaveSCART() in ("True",)
+SystemInfo["hasScartYUV"] = getHaveSCARTYUV() in ("True",)
+SystemInfo["hasYUV"] = getHaveYUV() in ("True",)
 SystemInfo["VideoModes"] = getChipSetString() in (  # 2160p and 1080p capable hardware...
 	"5272s", "7251", "7251s", "7252", "7252s", "7278", "7366", "7376", "7444s", "72604", "3798mv200", "3798cv200", "3798mv200h", "hi3798mv200", "hi3798mv200h", "hi3798mv200advca", "hi3798cv200"
 ) and (
@@ -163,5 +163,5 @@ SystemInfo["HasPhysicalLoopthrough"] = ["Vuplus DVB-S NIM(AVL2108)", "GIGA DVB-S
 SystemInfo["HasFBCtuner"] = ["Vuplus DVB-C NIM(BCM3158)", "Vuplus DVB-C NIM(BCM3148)", "Vuplus DVB-S NIM(7376 FBC)", "Vuplus DVB-S NIM(45308X FBC)", "Vuplus DVB-S NIM(45208 FBC)", "DVB-S2 NIM(45208 FBC)", "DVB-S2X NIM(45308X FBC)", "DVB-S2 NIM(45308 FBC)", "DVB-C NIM(3128 FBC)", "BCM45208", "BCM45308X", "BCM3158"]
 SystemInfo["rc_model"] = rc_model.getRcFolder()
 SystemInfo["mapKeyInfoToEpgFunctions"] = SystemInfo["rc_model"] in ("vu", "vu2", "vu3", "vu4") # due to button limitations of the remote control
-SystemInfo["toggleTvRadioButtonEvents"] = SystemInfo["rc_model"] in ("gb0", "gb1", "gb2", "gb3", "gb4", "sf8008", "ustym4kpro", 'sfx6008') # due to button limitations of the remote control
+SystemInfo["toggleTvRadioButtonEvents"] = SystemInfo["rc_model"] in ("gb0", "gb1", "gb2", "gb3", "gb4", "sf8008", "octagon1", "octagon3", "uclan1") # due to button limitations of the remote control
 SystemInfo["rc_default"] = SystemInfo["rc_model"] in ("dmm0", )
