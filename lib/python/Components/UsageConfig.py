@@ -206,6 +206,7 @@ def InitUsageConfig():
 		except:
 			pass
 	defaultValue = resolveFilename(SCOPE_TIMESHIFT)
+	config.usage.timeshift_skipreturntolive = ConfigYesNo(default=False)
 	config.usage.timeshift_path = ConfigSelection(default=defaultValue, choices=[(defaultValue, defaultValue)])
 	config.usage.timeshift_path.load()
 	if config.usage.timeshift_path.saved_value:
