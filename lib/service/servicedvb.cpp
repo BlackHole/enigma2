@@ -1309,6 +1309,7 @@ void eDVBServicePlay::serviceEventTimeshift(int event)
 				}
 			}
 			else
+			{
 				eDebug("[eDVBServicePlay] timeshift EOF, switch to next file");
 
 				m_first_program_info |= 2;
