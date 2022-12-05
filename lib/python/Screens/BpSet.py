@@ -77,23 +77,23 @@ class DeliteSettings(Screen):
 			from Screens.BpFormat import Bp_UsbFormat
 			self.session.open(Bp_UsbFormat)
 		elif self.sel == 8:
+			from Screens.NetworkSetup import NetworkOpenvpn
+			self.session.open(NetworkOpenvpn)
+		elif self.sel == 9:
 			from Screens.BpDevice import BlackPoleSwap
 			self.session.open(BlackPoleSwap)
-		elif self.sel == 9:
+		elif self.sel == 10:
 			from Screens.NetworkSetup import NetworkInadyn
 			self.session.open(NetworkInadyn)
-		elif self.sel == 10:
+		elif self.sel == 11:
 			try:
 				from Plugins.Extensions.DLNABrowser.plugin import DLNADeviceBrowser
 				self.session.open(DLNADeviceBrowser)
 			except:
 				self.session.open(MessageBox, _("Dlna Browser not installed."), MessageBox.TYPE_INFO)
-		elif self.sel == 11:
+		elif self.sel == 12:
 			from Screens.NetworkSetup import NetworkMiniDLNA
 			self.session.open(NetworkMiniDLNA)
-		elif self.sel == 12:
-			from Screens.NetworkSetup import NetworkOpenvpn
-			self.session.open(NetworkOpenvpn)
 		elif self.sel == 13:
 			self.session.open(Setup, "epgsettings")
 		elif self.sel == 14:
@@ -177,37 +177,37 @@ class DeliteSettings(Screen):
 		res = (name, png, idx)
 		self.list.append(res)
 
+		mypixmap = mypath + "icons/infopanel_samba.png"
+		png = LoadPixmap(mypixmap)
+		name = _("OpenVpn Panel")
+		idx = 8
+		res = (name, png, idx)
+		self.list.append(res)
+
 		mypixmap = mypath + "icons/swapsettings.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Swap File settings")
-		idx = 8
+		idx = 9
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/inadynsettings.png"
 		png = LoadPixmap(mypixmap)
 		name = _("Inadyn")
-		idx = 9
-		res = (name, png, idx)
-		self.list.append(res)
-
-		mypixmap = mypath + "icons/infopanel_samba.png"
-		png = LoadPixmap(mypixmap)
-		name = _("Dlna Client")
 		idx = 10
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/infopanel_samba.png"
 		png = LoadPixmap(mypixmap)
-		name = _("Dlna Server")
+		name = _("Dlna Client")
 		idx = 11
 		res = (name, png, idx)
 		self.list.append(res)
 
 		mypixmap = mypath + "icons/infopanel_samba.png"
 		png = LoadPixmap(mypixmap)
-		name = _("OpenVpn Panel")
+		name = _("Dlna Server")
 		idx = 12
 		res = (name, png, idx)
 		self.list.append(res)
