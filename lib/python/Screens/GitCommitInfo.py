@@ -22,14 +22,14 @@ else:
 	ImageVer = float(ImageVer)
 
 E2Branches = {
-	'developer': 'Python3.10',
-	'release': 'Python3.10'
+	'developer': 'Python3.11',
+	'release': 'Python3.11'
 	}
 
 project = 0
 projects = [
-	("https://api.github.com/repos/oe-alliance/oe-alliance-core/commits?sha=5.1", "OE-A Core"),
-	("https://api.github.com/repos/BlackHole/enigma2/commits?sha=%s" % getattr(E2Branches, getImageType(), "Python3.10"), "Enigma2"),
+	("https://api.github.com/repos/oe-alliance/oe-alliance-core/commits?sha=5.2", "OE-A Core"),
+	("https://api.github.com/repos/BlackHole/enigma2/commits?sha=%s" % getattr(E2Branches, getImageType(), "Python3.11"), "Enigma2"),
 	("https://api.github.com/repos/BlackHole/obh-core/commits", "OpenBh Core"),
 	("https://api.github.com/repos/BlackHole/skins/commits", "OpenBh Skins"),
 	("https://api.github.com/repos/oe-alliance/oe-alliance-plugins/commits", "OE-A Plugins"),
