@@ -16,6 +16,8 @@ from enigma import eServiceReference, eActionMap
 from Components.Label import Label
 import os
 
+from time import time
+
 ButtonSetupKeys = [	(_("Red"), "red", "Infobar/activateRedButton"),
 	(_("Red long"), "red_long", ""),
 	(_("Green long"), "green_long", ""),
@@ -457,6 +459,18 @@ class InfoBarButtonSetup():
 			dict((x[1], (self.ButtonSetupGlobal, boundFunction(self.getHelpText, x[1]))) for x in ButtonSetupKeys), -10)
 		self.longkeyPressed = False
 		self.onExecEnd.append(self.clearLongkeyPressed)
+		self.ButtonSetupFunctions = None
+		self.ButtonSetupFunctionsCheck = 0
+
+	def getButtonSetupFunctions(self):
+		# This is a min cache that persists for just 1 second.
+		# This saves getButtonSetupFunctions() being called multiple times when working from a loop.
+		t = time()
+		if (t - self.ButtonSetupFunctionsCheck) > 1 or not self.ButtonSetupFunctions:
+			self.ButtonSetupFunctions = getButtonSetupFunctions()
+			self.ButtonSetupFunctionsCheck = t
+		return self.ButtonSetupFunctions
+
 
 	def clearLongkeyPressed(self):
 		self.longkeyPressed = False
@@ -472,7 +486,7 @@ class InfoBarButtonSetup():
 			elif x.startswith("Zap"):
 				selected.append(((_("Zap to") + " " + ServiceReference(eServiceReference(x.split("/", 1)[1]).toString()).getServiceName()), x))
 			elif x:
-				function = next((function for function in getButtonSetupFunctions() if function[1] == x), None)
+				function = next((function for function in self.getButtonSetupFunctions() if function[1] == x), None)
 				if function:
 					selected.append(function)
 		return selected

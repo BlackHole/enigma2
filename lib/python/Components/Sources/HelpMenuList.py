@@ -2,7 +2,6 @@ from Components.Sources.List import List
 from Tools.KeyBindings import queryKeyBinding, getKeyDescription
 from Components.config import config
 from collections import defaultdict
-from functools import cmp_to_key
 
 # Helplist structure:
 # [ ( actionmap, context, [(action, help), (action, help), ...] ), (actionmap, ... ), ... ]
@@ -57,18 +56,18 @@ class HelpMenuList(List):
 		def actMapId():
 			return getattr(actionmap, "description", None) or id(actionmap)
 
-		headings, sortCmp, sortKey = {
-			"headings+alphabetic": (True, None, self._sortKeyAlpha),
-			"flat+alphabetic": (False, None, self._sortKeyAlpha),
-			"flat+remotepos": (False, self._sortCmpPos, None),
-			"flat+remotegroups": (False, self._sortCmpInd, None)
-		}.get(config.usage.help_sortorder.value, (False, None, None))
+		headings, sortKey = {
+			"headings+alphabetic": (True, self._sortKeyAlpha),
+			"flat+alphabetic": (False, self._sortKeyAlpha),
+			"flat+remotepos": (False, self._sortPos),
+			"flat+remotegroups": (False, self._sortInd)
+		}.get(config.usage.help_sortorder.value, (False, None))
 
 		if rcPos is None:
-			if sortCmp in (self._sortCmpPos, self._sortCmpInd):
-				sortCmp = None
+			if sortKey in (self._sortPos, self._sortInd):
+				sortKey = None
 		else:
-			if sortCmp == self._sortCmpInd:
+			if sortKey == self._sortInd:
 				self.rcKeyIndex = dict((x[1], x[0]) for x in enumerate(rcPos.getRcKeyList()))
 
 		buttonsProcessed = set()
@@ -136,11 +135,11 @@ class HelpMenuList(List):
 		l = []
 		extendedPadding = (None, ) if formatFlags & self.EXTENDED else ()
 
-		for (actionmap, context, actions) in helplist:
+		for (actionmap, context, actions) in sorted(helplist, key=self._sortHeadingsAlpha):
 			amId = actMapId()
 			if headings and amId in actionMapHelp and getattr(actionmap, "description", None):
-				if sortCmp or sortKey:
-					actionMapHelp[amId].sort(key=cmp_to_key(sortCmp) if sortCmp else sortKey)
+				if sortKey:
+					actionMapHelp[amId].sort(key=sortKey)
 				self.addListBoxContext(actionMapHelp[amId], formatFlags)
 
 				l.append((None, actionmap.description, None) + extendedPadding)
@@ -159,8 +158,8 @@ class HelpMenuList(List):
 					otherHelp.extend(actionMapHelp[amId])
 					del actionMapHelp[amId]
 
-			if sortCmp or sortKey:
-				otherHelp.sort(key=cmp_to_key(sortCmp) if sortCmp else sortKey)
+			if sortKey:
+				otherHelp.sort(key=sortKey)
 			self.addListBoxContext(otherHelp, formatFlags)
 			l.extend(otherHelp)
 
@@ -212,8 +211,8 @@ class HelpMenuList(List):
 		# ordering by y then x.
 		return min(map(lambda x: tuple(reversed(self.rcPos.getRcKeyPos(x[0]))), a))
 
-	def _sortCmpPos(self, a, b):
-		return cmp(self._getMinPos(a[0][3]), self._getMinPos(b[0][3]))
+	def _sortPos(self, a):
+		return self._getMinPos(a[0][3])
 
 	# Sort order "Flat by key group on remote" is really
 	# "Sort in order of buttons in rcpositions.xml", and so
@@ -223,13 +222,17 @@ class HelpMenuList(List):
 	def _getMinInd(self, a):
 		return min(map(lambda x: self.rcKeyIndex[x[0]], a))
 
-	def _sortCmpInd(self, a, b):
-		return cmp(self._getMinInd(a[0][3]), self._getMinInd(b[0][3]))
+	def _sortInd(self, a):
+		return self._getMinInd(a[0][3])
 
 	def _sortKeyAlpha(self, hlp):
 		# Convert normal help to extended help form for comparison
 		# and ignore case
 		return list(map(str.lower, hlp[1] if isinstance(hlp[1], (tuple, list)) else [hlp[1], '']))
+
+	def _sortHeadingsAlpha(self, a):
+		# ignore case
+		return (getattr(a[0], "description", None) or "").lower()
 
 	def ok(self):
 		# a list entry has a "private" tuple as first entry...
