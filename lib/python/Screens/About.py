@@ -49,8 +49,10 @@ class About(Screen):
 		self["lab2"] = StaticText(_("From the OpenBh Team"))
 		model = None
 		AboutText = ""
-		self["lab3"] = StaticText(_("Support at %s") % "www.openbh.net")
-
+		if getImageType() == "release":
+			self["lab3"] = StaticText(_("Support at %s") % "www.openbh.net")
+		elif getImageType() == "community":
+			self["lab3"] = StaticText(_("Support at %s") % "blackhole-community.com")
 		AboutText += _("Model:\t%s %s\n") % (getMachineBrand(), getMachineName())
 
 		if about.getChipSetString() != _("unavailable"):

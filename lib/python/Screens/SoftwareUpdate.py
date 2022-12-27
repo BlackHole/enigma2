@@ -152,11 +152,11 @@ class UpdatePlugin(Screen, ProtectedScreen):
 			self['tl_yellow'].show()
 		else:
 			self['tl_off'].show()
-		if (getImageType() != 'release' and self.trafficLight not in  ("unknown", "alien")) or (getImageType() == 'release' and self.trafficLight not in ("stable", "unstable", "alien")):
+		if self.trafficLight not in ("unknown", "alien"):
 			self.session.openWithCallback(self.close, MessageBox, feedsstatuscheck.getFeedsErrorMessage(), type=MessageBox.TYPE_INFO, timeout=30, close_on_any_key=True)
 			return
 		else:
-			if getImageType() != 'release' or (config.softwareupdate.updateisunstable.value == '1' and config.softwareupdate.updatebeta.value) or config.softwareupdate.updateisunstable.value == '0':
+			if (config.softwareupdate.updateisunstable.value == '1' and config.softwareupdate.updatebeta.value) or config.softwareupdate.updateisunstable.value == '0':
 				if kernelMismatch():
 					self.session.openWithCallback(self.close, MessageBox, _("The Linux kernel has changed, an update is not permitted. \nInstall latest image using USB stick or Image Manager."), type=MessageBox.TYPE_INFO, timeout=30, close_on_any_key=True)
 					return
@@ -255,7 +255,7 @@ class UpdatePlugin(Screen, ProtectedScreen):
 				self.ipkg.startCmd(IpkgComponent.CMD_UPGRADE_LIST)
 			elif self.ipkg.currentCommand == IpkgComponent.CMD_UPGRADE_LIST:
 				self.total_packages = None
-				if getImageType() != 'release' or (config.softwareupdate.updateisunstable.value == '1' and config.softwareupdate.updatebeta.value):
+				if (config.softwareupdate.updateisunstable.value == '1' and config.softwareupdate.updatebeta.value):
 					self.total_packages = len(self.ipkg.getFetchedList())
 					message = _("The current update may be unstable") + "\n" + _("Are you sure you want to update your %s %s ?") % (getMachineBrand(), getMachineName()) + "\n(" + (ngettext("%s updated package available", "%s updated packages available", self.total_packages) % self.total_packages) + ")"
 				elif config.softwareupdate.updateisunstable.value == '0':
