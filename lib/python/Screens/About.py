@@ -100,7 +100,7 @@ class About(Screen):
 			AboutText += _("Processor temp:\t%s") % tempinfo.replace("\n", "").replace(" ", "") + "\xb0" + "C\n"
 
 		imageSubBuild = ""
-		if getImageType() != "release":
+		if getImageType() == "developer":
 			imageSubBuild = ".%s" % getImageDevBuild()
 		AboutText += _("Image:\t%s.%s%s (%s)\n") % (getImageVersion(), getImageBuild(), imageSubBuild, getImageType().title())
 
