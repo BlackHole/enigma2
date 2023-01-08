@@ -141,7 +141,7 @@ def setRCFile(source):
 
 SystemInfo["HasRootSubdir"] = False	# This needs to be here so it can be reset by getMultibootslots!
 SystemInfo["RecoveryMode"] = False	# This needs to be here so it can be reset by getMultibootslots!
-SystemInfo["AndroidMode"] = False	# This needs to be here so it can be reset by getMultibootslots!	
+SystemInfo["AndroidMode"] = False	# This needs to be here so it can be reset by getMultibootslots!
 SystemInfo["HasMultibootMTD"] = False # This needs to be here so it can be reset by getMultibootslots!
 from Tools.Multiboot import getMultibootslots  # This import needs to be here to avoid a SystemInfo load loop!
 SystemInfo["HasHiSi"] = pathExists("/proc/hisi") and getBoxType() not in ("vipertwin", "viper4kv20", "viper4kv40", "sfx6008", "sfx6018")	# This needs to be for later checks
@@ -178,7 +178,7 @@ SystemInfo["ArchIsARM64"] = "64" in ARCHITECTURE
 SystemInfo["HasInitCam"] = hasInitCam()
 SystemInfo["MachineBrand"] = getMachineBrand()
 SystemInfo["MachineName"] = getMachineName()
-SystemInfo["DeveloperImage"] = getImageType().lower() != "release" or fileExists("/etc/enigma2/dev")
+SystemInfo["DeveloperImage"] = fileExists("/etc/enigma2/dev")
 SystemInfo["CommonInterface"] = eDVBCIInterfaces.getInstance().getNumOfSlots()
 SystemInfo["CommonInterfaceCIDelay"] = fileCheck("/proc/stb/tsmux/rmx_delay")
 for cislot in range(0, SystemInfo["CommonInterface"]):
