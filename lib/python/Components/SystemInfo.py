@@ -163,7 +163,7 @@ SystemInfo["ArchIsARM64"] = "64" in ARCHITECTURE
 SystemInfo["HasInitCam"] = hasInitCam()
 SystemInfo["MachineBrand"] = getMachineBrand()
 SystemInfo["MachineName"] = getMachineName()
-SystemInfo["DeveloperImage"] = getImageType().lower() != "release" or fileExists("/etc/enigma2/dev")
+SystemInfo["DeveloperImage"] = fileExists("/etc/enigma2/dev")
 SystemInfo["CommonInterface"] = eDVBCIInterfaces.getInstance().getNumOfSlots()
 SystemInfo["CommonInterfaceCIDelay"] = fileCheck("/proc/stb/tsmux/rmx_delay")
 for cislot in range(0, SystemInfo["CommonInterface"]):
