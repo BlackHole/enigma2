@@ -670,6 +670,8 @@ class BhsysInfo2(Screen):
 			for line in f.readlines():
 				if line.find('openvpn') != -1:
 					avpn = True
+				elif fileExists("/var/volatile/run/resolvconf/interfaces/wg0"):
+					avpn = True
 				if line.find('smb') != -1:
 					asamba = True
 				if line.find('telnet') != -1:
