@@ -32,7 +32,7 @@ if dvbreader_available:
 	import _thread as thread
 
 
-class Satfinder(ScanSetup, ServiceScan):
+class Satfinder(ScanSetup):
 	"""Inherits StaticText [key_red] and [key_green] properties from ScanSetup"""
 
 	def __init__(self, session):
@@ -63,6 +63,7 @@ class Satfinder(ScanSetup, ServiceScan):
 
 		ScanSetup.__init__(self, session)
 		self.entryChanged = self.newConfig
+		self.skinName = ["Satfinder"]
 		self.setTitle(_("Signal finder"))
 		self["Frontend"] = FrontendStatus(frontend_source=lambda: self.frontend, update_interval=100)
 
@@ -165,6 +166,7 @@ class Satfinder(ScanSetup, ServiceScan):
 				self.scan_sat.t2mi_pid.value = eDVBFrontendParametersSatellite.T2MI_Default_Pid
 			self.createSetup()
 			self.retune()
+		self.changedEntry() # force summary update immediately, not just on select/deselect
 
 	def createSetup(self):
 		self.list = []
@@ -594,7 +596,6 @@ class SatfinderExtra(Satfinder):
 	# This class requires AutoBouquetsMaker to be installed.
 	def __init__(self, session):
 		Satfinder.__init__(self, session)
-		self.skinName = ["Satfinder"]
 
 		self["key_yellow"] = StaticText("")
 

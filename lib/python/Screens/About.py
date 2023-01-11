@@ -297,19 +297,19 @@ class Devices(Screen):
 					hddp = hddp.replace("Internal", "ATA Bus ")
 				free = hdd.Totalfree()
 				if (free / 1000 / 1000) >= 1:
-					freeline = _("Free: ") + str(round((free / 1000 / 1000), 2)) + _("TB")
+					freeline = _("\n") + ("Free: ") + str(round((free / 1000 / 1000), 2)) + _("TB")
 				elif (free / 1000) >= 1:
-					freeline = _("Free: ") + str(round((free / 1000), 2)) + _("GB")
+					freeline = _("\n") + ("Free: ") + str(round((free / 1000), 2)) + _("GB")
 				elif free >= 1:
-					freeline = _("Free: ") + str(round(free, 2)) + _("MB")
+					freeline = _("\n") + ("Free: ") + str(round(free, 2)) + _("MB")
 				elif "Generic(STORAGE" in hddp:				# This is the SDA boot volume for SF8008 if "full" #
 					continue
 				else:
-					freeline = _("Free: ") + _("full")
+					freeline = _("\n") + ("Free: ") + _("Full")
 				line = "%s      %s" % (hddp, freeline)
 				self.list.append(line)
 		self.list = "\n".join(self.list)
-		self["hdd"].setText(self.list)
+		self["hdd"].setText("HDD" + self.list)
 
 		self.Console.ePopen("df -mh | grep -v '^Filesystem'", self.Stage1Complete)
 
