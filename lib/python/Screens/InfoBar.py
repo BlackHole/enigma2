@@ -251,16 +251,16 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 
 	def showNetflix(self):
 		try:
-			from Plugins.Extensions.Netflix.plugin import main
-			main(self.session)
+			from Plugins.Extensions.Chromium.plugin import vod1
+			vod1(self.session)
 			no_plugin = False
 		except Exception as e:
 			self.session.open(MessageBox, _("Netflix is not installed!\nPlease install it."), type=MessageBox.TYPE_INFO, timeout=10)
 
 	def showYoutube(self):
 		try:
-			from Plugins.Extensions.YouTube.plugin import main
-			main(self.session)
+			from Plugins.Extensions.Chromium.plugin import vod2
+			vod2(self.session)
 			no_plugin = False
 		except Exception as e:
 			self.session.open(MessageBox, _("YouTube is not installed!\nPlease install it."), type=MessageBox.TYPE_INFO, timeout=10)
