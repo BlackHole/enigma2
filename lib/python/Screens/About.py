@@ -292,9 +292,8 @@ class Devices(Screen):
 			for count in range(len(self.hddlist)):
 				hdd = self.hddlist[count][1]
 				hddp = self.hddlist[count][0]
-				if "ATA" in hddp:
-					hddp = hddp.replace("ATA", "")
-					hddp = hddp.replace("Internal", "ATA Bus ")
+				if "ATA" or "USB" in hddp:
+					hddp = hddp.replace("ATA ", "").replace("Internal", "ATA Bus").replace("USB ", "")
 				free = hdd.Totalfree()
 				if (free / 1000 / 1000) >= 1:
 					freeline = _("\n") + ("Free: ") + str(round((free / 1000 / 1000), 2)) + _("TB")
@@ -309,7 +308,7 @@ class Devices(Screen):
 				line = "%s      %s" % (hddp, freeline)
 				self.list.append(line)
 		self.list = "\n".join(self.list)
-		self["hdd"].setText("HDD" + self.list)
+		self["hdd"].setText(self.list)
 
 		self.Console.ePopen("df -mh | grep -v '^Filesystem'", self.Stage1Complete)
 
@@ -333,7 +332,7 @@ class Devices(Screen):
 		if self.mountinfo:
 			self["mounts"].setText(self.mountinfo)
 		else:
-			self["mounts"].setText(_("none"))
+			self["mounts"].setText(_("None"))
 		self["actions"].setEnabled(True)
 
 	def createSummary(self):
