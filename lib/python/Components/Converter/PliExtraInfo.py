@@ -418,6 +418,22 @@ class PliExtraInfo(Poll, Converter, object):
 		res += Hex2strColor(self.cryptocolors[3])
 		return res
 
+	def createCryptoVerimatrix(self, info):
+		available_caids = info.getInfoObject(iServiceInformation.sCAIDs)
+		if int('0x5601', 16) <= int(self.current_caid, 16) <= int('0x5604', 16):
+			color = Hex2strColor(self.cryptocolors[0])
+		else:
+			color = Hex2strColor(self.cryptocolors[1])
+			try:
+				for caid in available_caids:
+					if int('0x5601', 16) <= caid <= int('0x5604', 16):
+						color = Hex2strColor(self.cryptocolors[2])
+			except:
+				pass
+		res = color + 'VM'
+		res += Hex2strColor(self.cryptocolors[3])
+		return res
+
 	def createCryptoBeta(self, info):
 		available_caids = info.getInfoObject(iServiceInformation.sCAIDs)
 		if int('0x1700', 16) <= int(self.current_caid, 16) <= int('0x17ff', 16):
