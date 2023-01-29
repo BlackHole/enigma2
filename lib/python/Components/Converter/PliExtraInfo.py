@@ -547,7 +547,14 @@ class PliExtraInfo(Poll, Converter, object):
 		return res
 
 	def createCryptoSpecial(self, info):
+		refstr = info.getInfoString(iServiceInformation.sServiceref)
 		caid_name = "Free to Air"
+		try:
+			if "4097" in refstr.lower() or "@" in refstr.lower():
+				return "IPTV"
+		except:
+			if "%3a//" in refstr.lower() and not "127.0.0.1" in refstr and not "0.0.0.0" in refstr and not "localhost" in refstr:
+				return "IPTV"
 		if int(self.current_caid, 16) == 0:
 			return caid_name + ":%06X:%04X" % (int(self.current_provid, 16), info.getInfo(iServiceInformation.sSID))
 		try:
@@ -854,7 +861,11 @@ class PliExtraInfo(Poll, Converter, object):
 			return str((float(orbpos)) / 10.0) + "E"
 
 	def createProviderName(self, info):
-		return info.getInfoString(iServiceInformation.sProvider)
+		refstr = info.getInfoString(iServiceInformation.sServiceref)
+		if "%3a//" in refstr.lower() and not "127.0.0.1" in refstr and not "0.0.0.0" in refstr and not "localhost" in refstr:
+			return ""
+		else:
+			return info.getInfoString(iServiceInformation.sProvider)
 
 	def createMisPls(self, fedata):
 		tmp = ""
