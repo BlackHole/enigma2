@@ -482,6 +482,38 @@ class PliExtraInfo(Poll, Converter, object):
 		res += Hex2strColor(self.cryptocolors[3])
 		return res
 
+	def createCryptoBul1(self, info):
+		available_caids = info.getInfoObject(iServiceInformation.sCAIDs)
+		if int('0x4aee', 16) <= int(self.current_caid, 16) <= int('0x4aee', 16):
+			color = Hex2strColor(self.cryptocolors[0])
+		else:
+			color = Hex2strColor(self.cryptocolors[1])
+			try:
+				for caid in available_caids:
+					if int('0x4aee', 16) <= caid <= int('0x4aee', 16):
+						color = Hex2strColor(self.cryptocolors[2])
+			except:
+				pass
+		res = color + 'BU'
+		res += Hex2strColor(self.cryptocolors[3])
+		return res
+
+	def createCryptoBul2(self, info):
+		available_caids = info.getInfoObject(iServiceInformation.sCAIDs)
+		if int('0x5581', 16) <= int(self.current_caid, 16) <= int('0x5581', 16):
+			color = Hex2strColor(self.cryptocolors[0])
+		else:
+			color = Hex2strColor(self.cryptocolors[1])
+			try:
+				for caid in available_caids:
+					if int('0x5581', 16) <= caid <= int('0x5581', 16):
+						color = Hex2strColor(self.cryptocolors[2])
+			except:
+				pass
+		res = color + 'BU'
+		res += Hex2strColor(self.cryptocolors[3])
+		return res
+
 	def createCryptoDre(self, info):
 		available_caids = info.getInfoObject(iServiceInformation.sCAIDs)
 		if int('0x4ae0', 16) <= int(self.current_caid, 16) <= int('0x4ae1', 16):
@@ -491,6 +523,22 @@ class PliExtraInfo(Poll, Converter, object):
 			try:
 				for caid in available_caids:
 					if int('0x4ae0', 16) <= caid <= int('0x4ae1', 16):
+						color = Hex2strColor(self.cryptocolors[2])
+			except:
+				pass
+		res = color + 'DC'
+		res += Hex2strColor(self.cryptocolors[3])
+		return res
+
+	def createCryptoDre3(self, info):
+		available_caids = info.getInfoObject(iServiceInformation.sCAIDs)
+		if int('0x2700', 16) <= int(self.current_caid, 16) <= int('0x2710', 16):
+			color = Hex2strColor(self.cryptocolors[0])
+		else:
+			color = Hex2strColor(self.cryptocolors[1])
+			try:
+				for caid in available_caids:
+					if int('0x2700', 16) <= caid <= int('0x2710', 16):
 						color = Hex2strColor(self.cryptocolors[2])
 			except:
 				pass
@@ -900,6 +948,20 @@ class PliExtraInfo(Poll, Converter, object):
 			else:
 				return ""
 
+		if textType == "CryptoBul1":
+			if int(config.usage.show_cryptoinfo.value) > 0:
+				self.getCryptoInfo(info)
+				return self.CryptoBul1(info)
+			else:
+				return ""
+
+		if textType == "CryptoBul2":
+			if int(config.usage.show_cryptoinfo.value) > 0:
+				self.getCryptoInfo(info)
+				return self.CryptoBul2(info)
+			else:
+				return ""
+
 		if textType == "CryptoBiss":
 			if int(config.usage.show_cryptoinfo.value) > 0:
 				self.getCryptoInfo(info)
@@ -914,10 +976,45 @@ class PliExtraInfo(Poll, Converter, object):
 			else:
 				return ""
 
+		if textType == "CryptoDre3":
+			if int(config.usage.show_cryptoinfo.value) > 0:
+				self.getCryptoInfo(info)
+				return self.createCryptoDre3(info)
+			else:
+				return ""
+
+		if textType == "CryptoPowerVu":
+			if int(config.usage.show_cryptoinfo.value) > 0:
+				self.getCryptoInfo(info)
+				return self.CryptoPowerVu(info)
+			else:
+				return ""
+
 		if textType == "CryptoTandberg":
 			if int(config.usage.show_cryptoinfo.value) > 0:
 				self.getCryptoInfo(info)
 				return self.createCryptoTandberg(info)
+			else:
+				return ""
+
+		if textType == "CryptoPanaccess":
+			if int(config.usage.show_cryptoinfo.value) > 0:
+				self.getCryptoInfo(info)
+				return self.CryptoPanaccess(info)
+			else:
+				return ""
+
+		if textType == "CryptoTongfang":
+			if int(config.usage.show_cryptoinfo.value) > 0:
+				self.getCryptoInfo(info)
+				return self.CryptoTongfang(info)
+			else:
+				return ""
+
+		if textType == "CryptoVerimatrix":
+			if int(config.usage.show_cryptoinfo.value) > 0:
+				self.getCryptoInfo(info)
+				return self.CryptoVerimatrix(info)
 			else:
 				return ""
 
