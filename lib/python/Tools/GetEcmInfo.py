@@ -65,7 +65,7 @@ class GetEcmInfo:
 			protocol = info.get('protocol', '')
 			if using or protocol:
 				if config.usage.show_cryptoinfo.value == '0':
-					self.textvalue = ' '
+					self.textvalue = ''
 				elif config.usage.show_cryptoinfo.value == '1':
 					# CCcam
 					if using == 'fta':
@@ -92,15 +92,15 @@ class GetEcmInfo:
 					else:
 						address = _('Server:') + ' '
 						if info.get('address', None):
-							address += info.get('address', '')
+							address += info.get('address', '').replace("local:", "local ").lower()
 						elif info.get('from', None):
-							address += info.get('from', '')
+							address += info.get('from', '').replace("local:", "local ").lower()
 
 						protocol = _('Protocol:') + ' '
 						if info.get('protocol', None):
-							protocol += info.get('protocol', '')
+							protocol += info.get('protocol', '').lower()
 						elif info.get('using', None):
-							protocol += info.get('using', '')
+							protocol += info.get('using', '').lower()
 
 						hops = _('Hops:') + ' '
 						if info.get('hops', None):
