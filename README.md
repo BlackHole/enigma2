@@ -11,10 +11,9 @@
 
 ## OpenBh python3 is built using oe-alliance build-environment and several git repositories: ##
 
-> [https://github.com/oe-alliance/oe-alliance-core/tree/5.1](https://github.com/oe-alliance/oe-alliance-core/tree/5.1 "OE-Alliance")
+> [https://github.com/oe-alliance/oe-alliance-core/tree/5.2](https://github.com/oe-alliance/oe-alliance-core/tree/5.2 "OE-Alliance")
 >
 > https://github.com/BlackHole/enigma2
-
 
 ----------
 
@@ -22,7 +21,7 @@
 
 1 - Install packages on your buildserver
 
-	sudo apt-get install -y autoconf automake bison bzip2 chrpath coreutils cpio curl cvs debianutils default-jre default-jre-headless diffstat flex g++ gawk gcc gcc-8 gcc-multilib g++-multilib gettext git git-core gzip help2man info iputils-ping java-common libc6-dev libegl1-mesa libglib2.0-dev libncurses5-dev libperl4-corelibs-perl libproc-processtable-perl libsdl1.2-dev libserf-dev libtool libxml2-utils lz4 make ncurses-bin patch perl pkg-config psmisc python3 python3-git python3-jinja2 python3-pexpect python3-pip python-setuptools qemu quilt socat sshpass subversion tar texi2html texinfo unzip wget xsltproc xterm xz-utils zip zlib1g-dev zstd
+	sudo apt-get install -y autoconf automake bison bzip2 chrpath coreutils cpio curl cvs debianutils default-jre default-jre-headless diffstat flex g++ gawk gcc gcc-8 gcc-multilib g++-multilib gettext git git-core gzip help2man info iputils-ping java-common libc6-dev libegl1-mesa libglib2.0-dev libncurses5-dev libperl4-corelibs-perl libproc-processtable-perl libsdl1.2-dev libserf-dev libtool libxml2-utils make ncurses-bin patch perl pkg-config psmisc python3 python3-git python3-jinja2 python3-pexpect python3-pip python-setuptools qemu quilt socat sshpass subversion tar texi2html texinfo unzip wget xsltproc xterm xz-utils zip zlib1g-dev zstd
 
 ----------
 2 - Set python3 as preferred provider for python
@@ -74,7 +73,7 @@
 ----------
 10 - Clone oe-alliance git
 
-    git clone https://github.com/oe-alliance/build-enviroment.git -b 5.1
+    git clone https://github.com/oe-alliance/build-enviroment.git -b 5.2
 
 ----------
 11 - Switch to folder build-enviroment
@@ -86,17 +85,16 @@
 
 	make update
 
-
 ----------
 13 - Update site.conf
 
-	- BB_NUMBER_THREADS, PARALLEL_MAKE set to number of threads supported by the CPU
-	- add/modify DL_DIR = " location for build sources " to point to a location where you can save derived build sources,
-	this will reduce build time in fetching these sources again.
+    - BB_NUMBER_THREADS, PARALLEL_MAKE set to number of threads supported by the CPU
+    - add/modify DL_DIR = " location for build sources " to point to a location where you can save derived build sources,
+    this will reduce build time in fetching these sources again.
 
 ----------
 14 - Finally you can start building a image
-	 For example:-
+	For example:-
 
-	 MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make image
+	MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make image
 
