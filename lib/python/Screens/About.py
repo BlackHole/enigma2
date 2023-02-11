@@ -120,17 +120,14 @@ class About(AboutBase):
 
 		if SystemInfo["canMultiBoot"]:
 			slot = image = SystemInfo["MultiBootSlot"]
-			part = "eMMC slot %s" % slot
-			bootmode = ""
-			if SystemInfo["canMode12"]:
-				bootmode = "bootmode = %s" % GetCurrentImageMode()
-			print("[About] HasHiSi = %s, slot = %s" % (SystemInfo["HasHiSi"], slot))
 			if SystemInfo["HasHiSi"] and "sda" in SystemInfo["canMultiBoot"][slot]["root"]:
 				if slot > 4:
 					image -= 4
 				else:
 					image -= 1
-				part = "SDcard slot %s (%s) " % (image, SystemInfo["canMultiBoot"][slot]["root"])
+			slotType = SystemInfo["canMultiBoot"][slot]["slotType"].replace(" ", "")
+			part = "%s Slot %s" % (slotType, slot)
+			bootmode = "bootmode = %s" % GetCurrentImageMode() if SystemInfo["canMode12"] else ""
 			AboutText += _("Image Slot:\t%s") % "Startup " + str(slot) + " - " + part + " " + bootmode + "\n"
 
 		if getMachineName() in ("ET8500") and path.exists("/proc/mtd"):
