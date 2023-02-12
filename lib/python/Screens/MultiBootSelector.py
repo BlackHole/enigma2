@@ -78,7 +78,7 @@ class MultiBootSelector(Screen, HelpableScreen):
 		print("[MultiBootSelector] reboot0 slot:", currentimageslot)
 		current = "  %s" % _("(Current)")
 		slotSingle = _("Slot%s %s %s: %s%s")
-		slotMulti = _("Slot%s (%s) %s: %s - %s mode%s")
+		slotMulti = _("Slot%s %s %s: %s - %s mode%s")
 		if self.imagedict:
 			indextot = 0
 			for index, x in enumerate(sorted(self.imagedict.keys())):
