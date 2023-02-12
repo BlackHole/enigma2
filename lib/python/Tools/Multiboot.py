@@ -151,13 +151,13 @@ def GetImagelist():
 			if path.isfile(path.join(imagedir, "usr/lib/enigma.info")):
 #				print("[multiboot] [BoxInfo] using BoxInfo")
 				BoxInfo = BoxInformation(root=imagedir) if SystemInfo["MultiBootSlot"] != slot else BoxInfoRunningInstance
-				Creator = BoxInfo.getItem("distro")
+				Creator = BoxInfo.getItem("distro").capitalize()
 				BuildImgVersion = BoxInfo.getItem("imgversion")
 				BuildType = BoxInfo.getItem("imagetype")[0:3]
 				BuildVer = BoxInfo.getItem("imagebuild")
 				BuildDate = str(BoxInfo.getItem("compiledate"))
-				BuildDate = datetime.strptime(BuildDate, '%Y%m%d').strftime("%Y-%m-%d")
 				BuildDev = str(BoxInfo.getItem("imagedevbuild")).zfill(3) if BuildType != "rel" else ""
+				BuildDate = datetime.strptime(BuildDate, '%Y%m%d').strftime("(%d-%m-%Y)")
 				BuildVersion = "%s %s %s %s %s %s" % (Creator, BuildImgVersion, BuildType, BuildVer, BuildDev, BuildDate)
 #				print("[multiboot] [BoxInfo]  slot=%s, Creator=%s, BuildType=%s, BuildImgVersion=%s, BuildDate=%s, BuildDev=%s" % (slot, Creator, BuildType, BuildImgVersion, BuildDate, BuildDev))
 			else:
@@ -179,7 +179,7 @@ def GetImagelist():
 #					print("[BootInfo]6 vti = ", Vti)
 					date = VerDate(imagedir)
 					Creator = Vti[0:3]
-					Build = Vti[-7:-1]
+					Build = Vti[-8:-1]
 					print("[BootInfo]7 len(date), date", len(date), "   ", date)
 					BuildVersion  = "%s %s %s " % (Creator, Build, date)
 #					print("[BootInfo]8 BuildVersion  = ", BuildVersion )
@@ -201,8 +201,8 @@ def GetImagelist():
 
 def VerDate(imagedir):
 	try:
-		date = datetime.fromtimestamp(stat(path.join(imagedir, "var/lib/opkg/status")).st_mtime).strftime("%Y-%m-%d")
-		date = max(date, datetime.fromtimestamp(stat(path.join(imagedir, "usr/bin/enigma2")).st_mtime).strftime("%Y-%m-%d"))
+		date = datetime.fromtimestamp(stat(path.join(imagedir, "var/lib/opkg/status")).st_mtime).strftime("(%d-%m-%Y)")
+		date = max(date, datetime.fromtimestamp(stat(path.join(imagedir, "usr/bin/enigma2")).st_mtime).strftime("(%d-%m-%Y)"))
 #		print("[multiboot] date = %s" % date)
 	except Exception:
 		date = _("Unknown")
