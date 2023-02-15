@@ -91,11 +91,9 @@ def getMultibootslots():
 		bootArgs = open("/sys/firmware/devicetree/base/chosen/bootargs", "r").read()
 		print("[Multiboot][MultiBootSlot] bootArgs:", bootArgs)
 		if fileHas("/proc/cmdline", "kexec=1") and SystemInfo["HasRootSubdir"]:							# Kexec Vu+ receiver
-			import re
-			m = re.match(r".*[(linuxrootfs)]([0-9]+) *", bootArgs)
-			slot = m.groups()[0]
-			print ("current slot used",slot)
-			SystemInfo["MultiBootSlot"] = int(slot)
+			rootsubdir = [x for x in bootArgs.split() if x.startswith("rootsubdir")]
+			char = "/" if "/" in rootsubdir[0] else "="
+			SystemInfo["MultiBootSlot"] = int(rootsubdir[0].rsplit(char, 1)[1][11:])
 			print("[Multiboot][MultiBootSlot]0 current slot used:", SystemInfo["MultiBootSlot"])
 		elif SystemInfo["HasRootSubdir"] and "root=/dev/sda" not in bootArgs:							# RootSubdir receiver or sf8008 receiver with root in eMMC slot
 			slot = [x[-1] for x in bootArgs.split() if x.startswith("rootsubdir")]
