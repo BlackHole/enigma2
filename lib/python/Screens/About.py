@@ -113,7 +113,7 @@ class About(AboutBase):
 			AboutText += _("Boot Device: \tRecovery Slot\n")
 		else:
 			if BoxInfo.getItem("mtdbootfs") != "" and " " not in BoxInfo.getItem("mtdbootfs"):
-				AboutText += _("Boot Device%s%s\n") % (VuPlustxt, BoxInfo.getItem("mtdbootfs"))
+				AboutText += _("Boot Device:\t%s%s\n") % (VuPlustxt, BoxInfo.getItem("mtdbootfs"))
 
 		if SystemInfo["HasH9SD"]:
 			if "rootfstype=ext4" in open("/sys/firmware/devicetree/base/chosen/bootargs", "r").read():
@@ -129,10 +129,10 @@ class About(AboutBase):
 					image -= 4
 				else:
 					image -= 1
-			slotType = SystemInfo["canMultiBoot"][slot]["slotType"].replace(" ", "")
-			part = "%s Slot %s" % (slotType, slot)
-			bootmode = "bootmode = %s" % GetCurrentImageMode() if SystemInfo["canMode12"] else ""
-			AboutText += _("Image Slot:\t%s") % "Startup " + str(slot) + " - " + part + " " + bootmode + "\n"
+			slotType = {"eMMC": _("eMMC"), "SDCARD": _("SDCARD"), "USB": _("USB")}.get(SystemInfo["canMultiBoot"][slot]["slotType"].replace(" ", ""), SystemInfo["canMultiBoot"][slot]["slotType"].replace(" ", ""))
+			part = _("%s Slot %s") % (slotType, slot)
+			bootmode = _("bootmode = %s") % GetCurrentImageMode() if SystemInfo["canMode12"] else ""
+			AboutText += (_("Image Slot:\tStartup %s - %s %s") % (str(slot), part, bootmode)) + "\n"
 
 		if getMachineName() in ("ET8500") and path.exists("/proc/mtd"):
 			self.dualboot = self.dualBoot()
