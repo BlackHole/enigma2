@@ -45,8 +45,8 @@ class MultiBootSelector(Screen, HelpableScreen):
 		Screen.setTitle(self, _("MultiBoot Image Selector"))
 		self.skinName = ["MultiBootSelector", "Setup"]
 		self.tmp_dir = None
-		usbIn = True if SystemInfo["HasUsbhdd"] != {} and SystemInfo["HasKexecMultiboot"] else False
-		print("[MultiBootSelector] usbIn, SystemInfo['HasUsbhdd'], SystemInfo['HasKexecMultiboot'], SystemInfo['HasKexecUSB']", usbIn, "   ", SystemInfo["HasUsbhdd"], "   ", SystemInfo["HasKexecMultiboot"], "   ", SystemInfo["HasKexecUSB"])
+		usbIn = SystemInfo["HasUsbhdd"] != {} and SystemInfo["HasKexecMultiboot"]
+#		print("[MultiBootSelector] usbIn, SystemInfo['HasUsbhdd'], SystemInfo['HasKexecMultiboot'], SystemInfo['HasKexecUSB']", usbIn, "   ", SystemInfo["HasUsbhdd"], "   ", SystemInfo["HasKexecMultiboot"], "   ", SystemInfo["HasKexecUSB"])
 		self["config"] = ChoiceList(list=[ChoiceEntryComponent("", ((_("Retrieving image slots - Please wait...")), "Queued"))])
 		self["description"] = StaticText(_("Press GREEN (Reboot) to switch images, YELLOW (Delete) to erase an image or BLUE (Restore) to restore all deleted images."))
 		self["key_red"] = StaticText(_("Add Extra USB slots") if usbIn else _("Cancel"))
@@ -189,7 +189,7 @@ class MultiBootSelector(Screen, HelpableScreen):
 
 		else:
 			hiKey = sorted(SystemInfo["canMultiBoot"].keys(), reverse=True)[0]
-			self.session.openWithCallback(self.addSTARTUPs, MessageBox, _("Add 4 more Vu+ Multiboot USB slots after slot %s ?" % hiKey), MessageBox.TYPE_YESNO, timeout=30)
+			self.session.openWithCallback(self.addSTARTUPs, MessageBox, _("Add 4 more Vu+ Multiboot USB slots after slot %s ?") % hiKey, MessageBox.TYPE_YESNO, timeout=30)
 
 	def addSTARTUPs(self, answer):
 		hiKey = sorted(SystemInfo["canMultiBoot"].keys(), reverse=True)[0]
