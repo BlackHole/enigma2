@@ -55,12 +55,17 @@ def getMultibootslots():
 						SystemInfo["RecoveryMode"] = True
 						if fileHas("/proc/cmdline", "kexec=1"):
 							slotnumber = "0"
+						else:
+							continue
 					print("[multiboot] [getMultibootslots3] slot = %s file = %s" % (slotnumber, slotname))
 					if slotnumber.isdigit() and slotnumber not in bootslots:
 						line = open(file).read().replace("'", "").replace('"', "").replace("\n", " ").replace("ubi.mtd", "mtd").replace("bootargs=", "")
 #						print("[Multiboot][getMultibootslots]6 readlines = %s " % line)
 						slot = dict([(x.split("=", 1)[0].strip(), x.split("=", 1)[1].strip()) for x in line.strip().split(" ") if "=" in x])
-						slot["slotType"] = "eMMC" if "mmc" in slot["root"] else "USB"
+						if slotnumber == "0":
+							slot["slotType"] = ""
+						else:
+							slot["slotType"] = "eMMC" if "mmc" in slot["root"] else "USB"
 						if fileHas("/proc/cmdline", "kexec=1") and int(slotnumber) > 3:
 							SystemInfo["HasKexecUSB"] = True
 						print("[Multiboot][getMultibootslots]6a slot", slot)
@@ -93,7 +98,7 @@ def getMultibootslots():
 	if not path.ismount(tmp.dir):
 		rmdir(tmp.dir)
 	if bootslots:
-#		print("[Multiboot] Bootslots found:", bootslots)
+		print("[Multiboot] Bootslots found:", bootslots)
 		bootArgs = open("/sys/firmware/devicetree/base/chosen/bootargs", "r").read()
 		print("[Multiboot][MultiBootSlot] bootArgs:", bootArgs)
 		if fileHas("/proc/cmdline", "kexec=1") and SystemInfo["HasRootSubdir"]:							# Kexec Vu+ receiver
@@ -116,12 +121,12 @@ def getMultibootslots():
 	return bootslots
 
 def getUUIDtoSD(UUID): # returns None on failure
-#	print("[multiboot][getUUIDtoSD2] UUID = ", UUID)
+	print("[multiboot][getUUIDtoSD2] UUID = ", UUID)
 	check = "/sbin/blkid"
 	if fileExists(check):
 		lines = subprocess.check_output([check]).decode(encoding="utf8", errors="ignore").split("\n")
 		for line in lines:
-#			print("[Multiboot][getUUIDtoSD2] line", line)
+			print("[Multiboot][getUUIDtoSD2] line", line)
 			if UUID in line.replace('"', ''):
 				return line.split(":")[0].strip()
 	else:
@@ -131,13 +136,17 @@ def GetCurrentImageMode():
 	return bool(SystemInfo["canMultiBoot"]) and SystemInfo["canMode12"] and int(open("/sys/firmware/devicetree/base/chosen/bootargs", "r").read().replace("\0", "").split("=")[-1])
 
 
-def GetImagelist():
+def GetImagelist(Recovery=None):
 	Imagelist = {}
 	tmp.dir = tempfile.mkdtemp(prefix="GetImagelist")
 	tmpname = tmp.dir
 	for slot in sorted(list(SystemInfo["canMultiBoot"].keys())):
-		if fileHas("/proc/cmdline", "kexec=1") and slot == 0:
-			continue
+		if slot == 0:
+			if not Recovery:		# called by ImageManager
+				continue
+			else:					# called by MultiBootSelector
+				Imagelist[slot] = {"imagename": _("Recovery Mode")}
+				continue
 		print("[multiboot] [GetImagelist] slot = ", slot)
 		BuildVersion = "  "
 		Build = " "  # OpenBh Build No.
@@ -165,7 +174,7 @@ def GetImagelist():
 				BuildType = BoxInfo.getItem("imagetype")[0:3]
 				BuildVer = BoxInfo.getItem("imagebuild")
 				BuildDate = VerDate(imagedir)
-				BuildDev = str(BoxInfo.getItem("imagedevbuild")).zfill(3) if BuildType != "rel" else ""
+				BuildDev = str(BoxInfo.getItem("imagedevbuild")).zfill(3) if BuildType == "developer" else ""
 				BuildVersion = "%s %s %s %s %s (%s)" % (Creator, BuildImgVersion, BuildType, BuildVer, BuildDev, BuildDate)
 #				print("[multiboot] [BoxInfo]  slot=%s, Creator=%s, BuildType=%s, BuildImgVersion=%s, BuildDate=%s, BuildDev=%s" % (slot, Creator, BuildType, BuildImgVersion, BuildDate, BuildDev))
 			else:
@@ -179,7 +188,7 @@ def GetImagelist():
 					Build = reader.getImageBuild()
 					Creator = Creator.replace("-release", " rel")
 #					print("[multiboot] [GetImagelist]5 Slot = %s Creator = %s BuildType = %s Build = %s" % (slot, Creator, BuildType, Build))
-					Dev = BuildType != "release" and " %s" % reader.getImageDevBuild() or ""
+					Dev = BuildType == "developer" and " %s" % reader.getImageDevBuild() or ""
 					date = VerDate(imagedir)
 					BuildVersion = "%s %s %s %s (%s)" % (Creator, BuildType[0:3], Build, Dev, date)
 				elif fileHas("/proc/cmdline", "kexec=1") and path.isfile(path.join(imagedir, "etc/vtiversion.info")):

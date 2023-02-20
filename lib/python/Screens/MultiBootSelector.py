@@ -111,9 +111,6 @@ class MultiBootSelector(Screen, HelpableScreen):
 		elif self.currentSelected[0][1] != "Queued":
 			slot = self.currentSelected[0][1][0]
 			boxmode = self.currentSelected[0][1][1]
-			# print("[MultiBootSelector] reboot1 reboot slot = %s, " % slot)
-			# print("[MultiBootSelector] reboot2 reboot boxmode = %s, " % boxmode)
-			# print("[MultiBootSelector] reboot3 slotinfo = %s" % SystemInfo["canMultiBoot"])
 			if SystemInfo["canMode12"]:
 				if "BOXMODE" in SystemInfo["canMultiBoot"][slot]['startupfile']:
 					startupfile = path.join(self.tmp_dir, "%s_%s" % (SystemInfo["canMultiBoot"][slot]['startupfile'].rsplit('_', 1)[0], boxmode))
@@ -201,7 +198,9 @@ class MultiBootSelector(Screen, HelpableScreen):
 			boxmodel = getBoxType()[2:]
 			for usbslot in range(hiKey+1, hiKey+5):
 				STARTUP_usbslot = "kernel=%s/linuxrootfs%d/zImage root=%s rootsubdir=%s/linuxrootfs%d" % (boxmodel, usbslot, SystemInfo["VuUUIDSlot"][0], boxmodel, usbslot) # /STARTUP_<n>
-				if boxmodel in ("duo4k", "duo4kse"):
+				if boxmodel in ("duo4k"):
+					STARTUP_usbslot += " rootwait=40"
+				elif boxmodel in ("duo4kse"):
 					STARTUP_usbslot += " rootwait=35"
 				with open("/%s/STARTUP_%d" % (self.tmp_dir, usbslot), 'w') as f:
 					f.write(STARTUP_usbslot)
@@ -218,7 +217,9 @@ class MultiBootSelector(Screen, HelpableScreen):
 
 		for usbslot in range(4,8):
 			STARTUP_usbslot = "kernel=%s/linuxrootfs%d/zImage root=%s rootsubdir=%s/linuxrootfs%d" % (boxmodel, usbslot, self.device_uuid, boxmodel, usbslot) # /STARTUP_<n>
-			if boxmodel in ("duo4k", "duo4kse"):
+			if boxmodel in ("duo4k"):
+				STARTUP_usbslot += " rootwait=40"
+			elif boxmodel in ("duo4kse"):
 				STARTUP_usbslot += " rootwait=35"
 			print("[MultiBootSelector] STARTUP_%d --> %s, self.tmp_dir: %s" % (usbslot, STARTUP_usbslot, self.tmp_dir))
 			with open("/%s/STARTUP_%d" % (self.tmp_dir, usbslot), 'w') as f:
