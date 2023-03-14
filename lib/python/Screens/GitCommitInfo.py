@@ -15,7 +15,7 @@ from json import loads
 from urllib.request import urlopen, Request # raises ImportError in Python 2
 from urllib.error import HTTPError, URLError # raises ImportError in Python 2
 
-if getImageType() == 'release':
+if getImageType() != 'developer':
 	ImageVer = "%03d" % int(getImageBuild())
 else:
 	ImageVer = "%s.%s" % (getImageBuild(), getImageDevBuild())
@@ -23,7 +23,8 @@ else:
 
 E2Branches = {
 	'developer': 'Python3.11',
-	'release': 'Python3.11'
+	'release': 'Python3.11',
+	'community': 'Python3.11'
 	}
 
 project = 0
@@ -56,15 +57,15 @@ def readGithubCommitLogsSoftwareUpdate():
 					continue
 			if c['commit']['message'].startswith('openbh:'):
 				gitstart = False
-				if getImageType() == 'release' and c['commit']['message'].startswith('openbh: developer'):
+				if getImageType() != 'developer' and c['commit']['message'].startswith('openbh: developer'):
 					print('[GitCommitLog] Skipping developer line')
 					continue
-				elif getImageType() != 'release' and c['commit']['message'].startswith('openbh: release'):
-					print('[GitCommitLog] Skipping release line')
+				elif getImageType() == 'developer' and c['commit']['message'].startswith('openbh: release') or c['commit']['message'].startswith('openbh: community'):
+					print('[GitCommitLog] Skipping release/community line')
 					continue
 				tmp = c['commit']['message'].split(' ')[2].split('.')
 				if len(tmp) > 2:
-					if getImageType() == 'release':
+					if getImageType() != 'developer':
 						releasever = tmp[2]
 						releasever = "%03d" % int(releasever)
 					else:
@@ -116,15 +117,15 @@ def readGithubCommitLogs():
 			if c['commit']['message'].startswith('openbh:'):
 				blockstart = False
 				gitstart = False
-				if getImageType() == 'release' and c['commit']['message'].startswith('openbh: developer'):
+				if getImageType() != 'developer' and c['commit']['message'].startswith('openbh: developer'):
 					print('[GitCommitLog] Skipping developer line')
 					continue
-				elif getImageType() == 'developer' and c['commit']['message'].startswith('openbh: release'):
-					print('[GitCommitLog] Skipping release line')
+				elif getImageType() == 'developer' and c['commit']['message'].startswith('openbh: release') or c['commit']['message'].startswith('openbh: community'):
+					print('[GitCommitLog] Skipping release/community line')
 					continue
 				tmp = c['commit']['message'].split(' ')[2].split('.')
 				if len(tmp) > 2:
-					if getImageType() == 'release':
+					if getImageType() != 'developer':
 						releasever = tmp[2]
 						releasever = "%03d" % int(releasever)
 					else:
