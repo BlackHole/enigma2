@@ -31,7 +31,7 @@ class AboutBase(TextBox):
 			if getImageType() == "release":
 				self["lab3"] = StaticText(_("Support at") + " www.openbh.net")
 			elif getImageType() == "community":
-				self["lab3"] = StaticText(_("Support at") + "blackhole-community.com")
+				self["lab3"] = StaticText(_("Support at") + " blackhole-community.com")
 
 	def createSummary(self):
 		return AboutSummary
