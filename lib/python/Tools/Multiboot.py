@@ -10,7 +10,7 @@ from Components.Console import Console
 from Components.SystemInfo import SystemInfo, BoxInfo as BoxInfoRunningInstance, BoxInformation
 from Tools.Directories import fileHas, fileExists
 
-if fileHas("/proc/cmdline", "kexec=1"):		
+if fileHas("/proc/cmdline", "kexec=1"):
 	from PIL import Image
 	from PIL import ImageDraw
 	from PIL import ImageFont
@@ -178,15 +178,8 @@ def GetImagelist(Recovery=None):
 #			print("[multiboot] [GetImagelist]1 Slot = %s imagedir = %s" % (slot, imagedir))
 			if path.isfile(path.join(imagedir, "usr/lib/enigma.info")):
 				print("[multiboot] [BoxInfo] using BoxInfo")
-				BoxInfo = BoxInformation(root=imagedir) if SystemInfo["MultiBootSlot"] != slot else BoxInfoRunningInstance
-				Creator = BoxInfo.getItem("distro", " ").capitalize()
-				BuildImgVersion = BoxInfo.getItem("imgversion")
-				BuildType = BoxInfo.getItem("imagetype", " ")[0:3]
-				BuildVer = BoxInfo.getItem("imagebuild")
-				BuildDate = VerDate(imagedir)
-				BuildDev = str(BoxInfo.getItem("imagedevbuild")).zfill(3) if BuildType == "developer" else ""
-				BuildVersion = "%s %s %s %s %s (%s)" % (Creator, BuildImgVersion, BuildType, BuildVer, BuildDev, BuildDate)
-#				print("[multiboot] [BoxInfo]  slot=%s, Creator=%s, BuildType=%s, BuildImgVersion=%s, BuildDate=%s, BuildDev=%s" % (slot, Creator, BuildType, BuildImgVersion, BuildDate, BuildDev))
+				BuildVersion = createInfo(slot, imagedir=imagedir)
+#				print("[multiboot] [BoxInfo]  slot=%s, BuildVersion=%s" % (slot, BuildVersion))
 			else:
 #				print("[multiboot] [BoxInfo] using BoxBranding")
 				print("[multiboot] [GetImagelist] 2 slot = %s imagedir = %s" % (slot, imagedir))
@@ -214,7 +207,7 @@ def GetImagelist(Recovery=None):
 					Creator = Creator.replace("-release", " ")
 					BuildVersion = "%s (%s)" % (Creator, date)
 			if fileHas("/proc/cmdline", "kexec=1") and Recovery:
-				bootmviSlot(imagedir=imagedir, text=BuildVersion, slot=slot)		
+				bootmviSlot(imagedir=imagedir, text=BuildVersion, slot=slot)
 			Imagelist[slot] = {"imagename": "%s" % BuildVersion}
 		elif path.isfile(path.join(imagedir, "usr/bin/enigmax")):
 			Imagelist[slot] = {"imagename": _("Deleted image")}
@@ -227,6 +220,17 @@ def GetImagelist(Recovery=None):
 	return Imagelist
 
 
+def createInfo(slot, imagedir="/"):
+	BoxInfo = BoxInformation(root=imagedir) if SystemInfo["MultiBootSlot"] != slot else BoxInfoRunningInstance
+	Creator = BoxInfo.getItem("distro", " ").capitalize()
+	BuildImgVersion = BoxInfo.getItem("imgversion")
+	BuildType = BoxInfo.getItem("imagetype", " ")[0:3]
+	BuildVer = BoxInfo.getItem("imagebuild")
+	BuildDate = VerDate(imagedir)
+	BuildDev = str(BoxInfo.getItem("imagedevbuild")).zfill(3) if BuildType == "developer" else ""
+	return 	"%s %s %s %s %s (%s)" % (Creator, BuildImgVersion, BuildType, BuildVer, BuildDev, BuildDate)
+
+
 def VerDate(imagedir):
 	date3 = "00000000"
 	date1 = datetime.fromtimestamp(stat(path.join(imagedir, "var/lib/opkg/status")).st_mtime).strftime("%Y-%m-%d")
@@ -237,7 +241,6 @@ def VerDate(imagedir):
 	date = max(date1, date2, date3)
 	print("[multiboot][VerDate]2 date = %s" % date)
 	date = datetime.strptime(date, '%Y-%m-%d').strftime("%d-%m-%Y")
-
 	return date
 
 
