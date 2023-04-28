@@ -239,7 +239,10 @@ def InitLcd():
 			f = open("/proc/stb/fp/ledpowercolor", "w")
 			f.write(configElement.value)
 			f.close()
-		config.lcd.ledpowercolor = ConfigSelection(default="1", choices=[("0", _("off")), ("1", _("blue")), ("2", _("red")), ("3", _("violet"))])
+		if getBoxType() in ('dual',):
+			config.lcd.ledpowercolor = ConfigSelection(default="1", choices=[("0", _("off")), ("1", _("blue"))])
+		else:
+			config.lcd.ledpowercolor = ConfigSelection(default="1", choices=[("0", _("off")), ("1", _("blue")), ("2", _("red")), ("3", _("violet"))])
 		config.lcd.ledpowercolor.addNotifier(setLedPowerColor)
 
 	if SystemInfo["LedStandbyColor"]:
@@ -247,7 +250,10 @@ def InitLcd():
 			f = open("/proc/stb/fp/ledstandbycolor", "w")
 			f.write(configElement.value)
 			f.close()
-		config.lcd.ledstandbycolor = ConfigSelection(default="3", choices=[("0", _("off")), ("1", _("blue")), ("2", _("red")), ("3", _("violet"))])
+		if getBoxType() in ('dual',):
+			config.lcd.ledstandbycolor = ConfigSelection(default="1", choices=[("0", _("off")), ("1", _("blue"))])
+		else:
+			config.lcd.ledstandbycolor = ConfigSelection(default="3", choices=[("0", _("off")), ("1", _("blue")), ("2", _("red")), ("3", _("violet"))])
 		config.lcd.ledstandbycolor.addNotifier(setLedStandbyColor)
 
 	if SystemInfo["LedSuspendColor"]:
@@ -255,7 +261,10 @@ def InitLcd():
 			f = open("/proc/stb/fp/ledsuspendledcolor", "w")
 			f.write(configElement.value)
 			f.close()
-		config.lcd.ledsuspendcolor = ConfigSelection(default="2", choices=[("0", _("off")), ("1", _("blue")), ("2", _("red")), ("3", _("violet"))])
+		if getBoxType() in ('dual',):
+			config.lcd.ledsuspendcolor = ConfigSelection(default="1", choices=[("0", _("off")), ("1", _("blue"))])
+		else:
+			config.lcd.ledsuspendcolor = ConfigSelection(default="2", choices=[("0", _("off")), ("1", _("blue")), ("2", _("red")), ("3", _("violet"))])
 		config.lcd.ledsuspendcolor.addNotifier(setLedSuspendColor)
 
 	if SystemInfo["Power24x7On"]:
