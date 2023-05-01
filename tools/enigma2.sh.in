@@ -16,8 +16,8 @@ if [ -x @sysconfdir@/enigma2/startup.sh ]; then
 fi
 
 if [ -e /proc/stb/info/boxtype ]; then
-	stbcheck=`cat /proc/stb/info/boxtype`
-	if [ $stbcheck == "sf8008" ] || [ $stbcheck == "sx988" ] || [ $stbcheck == "sfx6008" ] || [ $stbcheck == "sx88v2" ] || [ $stbcheck == "ustym4kpro" ] || [ $stbcheck == "dagsmv200" ] || [ $stbcheck == "gbmv200" ]; then
+	stbcheck=`cat /proc/stb/info/chipset`
+	if [ $stbcheck == "3798mv200" ] || [ $stbcheck == "3798mv300" ] || [ $stbcheck == "3716mv430" ]; then
 		count=`ps -ef |grep libreader |grep -v "grep" |wc -l`
 		if [ 0 == $count ];then
 			libreader 720P_50
@@ -308,8 +308,8 @@ fi
 
 if [ "$ret" -ne "1" ]; then
 	if [ -e /proc/stb/info/boxtype ]; then
-		stbcheck=`cat /proc/stb/info/boxtype`
-		if [ $stbcheck == "sf8008" ] || [ $stbcheck == "sx988" ] || [ $stbcheck == "sfx6008" ] || [ $stbcheck == "sx88v2" ] || [ $stbcheck == "ustym4kpro" ] || [ $stbcheck == "dagsmv200" ] || [ $stbcheck == "gbmv200" ]; then
+		stbcheck=`cat /proc/stb/info/chipset`
+		if [ $stbcheck == "3798mv200" ] || [ $stbcheck == "3798mv300" ] || [ $stbcheck == "3716mv430" ]; then
 			killall -9 libreader; sleep 5
 		fi
 	fi
