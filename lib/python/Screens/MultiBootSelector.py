@@ -139,7 +139,7 @@ class MultiBootSelector(Screen, HelpableScreen):
 				open(path.join(self.tmp_dir, "STARTUP"), "w").write(f)
 		else:
 			copyfile(path.join(self.tmp_dir, SystemInfo["canMultiBoot"][slot]["startupfile"]), path.join(self.tmp_dir, "STARTUP"))
-		if SystemInfo["HasMultibootMTD"]:
+		if SystemInfo["HasMultibootMTD"] or SystemInfo["HasMultibootFlags"]:
 			with open('/dev/block/by-name/flag', 'wb') as f:
 				f.write(struct.pack("B", int(slot)))
 		self.cancel(QUIT_REBOOT)

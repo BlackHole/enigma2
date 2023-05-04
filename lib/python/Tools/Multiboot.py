@@ -4,6 +4,7 @@ import shutil
 import subprocess
 import tempfile
 from os import mkdir, path, rmdir, rename, remove, sep, stat
+import struct
 
 from boxbranding import getMachineBuild, getMachineMtdRoot
 from Components.Console import Console
@@ -85,6 +86,7 @@ def getMultibootslots():
 								slot["startupfile"] = path.basename(file)
 								slot["slotname"] = slotname
 								SystemInfo["HasMultibootMTD"] = slot.get("mtd")
+								SystemInfo["HasMultibootFlags"] = path.exists("/dev/block/by-name/flag")
 								if not fileHas("/proc/cmdline", "kexec=1") and "sda" in slot["root"]:		# Not Kexec Vu+ receiver -- sf8008 type receiver with sd card, reset value as SD card slot has no rootsubdir
 									slot["rootsubdir"] = None
 									slot["slotType"] = "SDCARD"
@@ -116,6 +118,13 @@ def getMultibootslots():
 			SystemInfo["VuUUIDSlot"] = (UUID, UUIDnum) if UUIDnum !=0 else ""
 			print("[Multiboot][MultiBootSlot]0 current slot used:", SystemInfo["MultiBootSlot"])
 #			print("[Multiboot][MultiBootSlot]0 UID, UUIDnum:", SystemInfo["VuUUIDSlot"], "   ", SystemInfo["VuUUIDSlot"][0], "   ", SystemInfo["VuUUIDSlot"][1])
+		elif SystemInfo["HasMultibootFlags"]:
+			with open('/dev/block/by-name/flag', 'rb') as f:
+				struct_fmt = "B"
+				flag = f.read(struct.calcsize(struct_fmt))
+				slot = struct.unpack(struct_fmt, flag)
+				SystemInfo["MultiBootSlot"] = int(slot[0])
+				print("[Multiboot][MultiBootSlot]1 current slot used:", SystemInfo["MultiBootSlot"])
 		elif SystemInfo["HasRootSubdir"] and "root=/dev/sda" not in bootArgs:							# RootSubdir receiver or sf8008 receiver with root in eMMC slot
 			slot = [x[-1] for x in bootArgs.split() if x.startswith("rootsubdir")]
 			SystemInfo["MultiBootSlot"] = int(slot[0])
