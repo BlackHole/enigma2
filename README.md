@@ -5,7 +5,7 @@
 ## minimum hardware requirement for image build (building feeds may require more):
 
 > RAM:  16GB
-> SWAP: 8GB
+> SWAP: 16GB
 > CPU:  Multi core\thread Model
 > HDD:  for Single Build 250GB Free, for Multibuild 500GB or more
 
@@ -86,15 +86,29 @@
 	make update
 
 ----------
-13 - Update site.conf
+13 - Initialise the first machine so site.conf gets created
+
+    MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make  init
+
+----------
+14 - Update site.conf
 
     - BB_NUMBER_THREADS, PARALLEL_MAKE set to number of threads supported by the CPU
     - add/modify DL_DIR = " location for build sources " to point to a location where you can save derived build sources,
     this will reduce build time in fetching these sources again.
 
 ----------
-14 - Finally you can start building a image
-	For example:-
+15 - Building image with feeds  e.g.:-
 
 	MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make image
+
+----------
+16 - Building an image without feeds (Build time 1-2h)
+
+	MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make enigma2-image
+
+----------
+17 - Building feeds only
+
+	MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make feeds
 
