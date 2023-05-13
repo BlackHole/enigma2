@@ -43,7 +43,7 @@ class VuWizard(WizardLanguage, Rc):
 		if self.welcomeWarning in self.onShow:
 			self.onShow.remove(self.welcomeWarning)
 		popup = self.session.openWithCallback(self.welcomeAction, MessageBox, _("Welcome to OpenBh!\n\n"
-			"Select 'No' to setup Standard Vu+ image.\n"
+			"Select 'No' to setup Standard Vu+ image.\n\n"
 			"Select 'Yes' to setup Vu+ Multiboot."), type=MessageBox.TYPE_YESNO, timeout=-1, default=False)
 		popup.setTitle(_("Vu+ 4K image install options"))
 
@@ -109,7 +109,8 @@ class VuWizard(WizardLanguage, Rc):
 				cmdlist.append("cp -R /media/hdd/%s/linuxrootfs%s . /" % (getBoxType(), eMMCslot))
 				cmdlist.append("rm -r /media/hdd/%s/linuxrootfs%s" % (getBoxType(), eMMCslot))
 		if cmdlist:
-			self.Console.eBatch(cmdlist, self.reBoot, debug=False)
+			cmdlist.append("rm -rf /media/hdd/%s" % getBoxType())
+			self.Console.eBatch(cmdlist, self.reBoot, debug=True)
 		else:
 			self.reBoot()
 
@@ -136,4 +137,3 @@ class VuWizard(WizardLanguage, Rc):
 
 	def back(self):
 		WizardLanguage.back(self)
-
