@@ -300,5 +300,5 @@ SystemInfo["HasFBCtuner"] = ["Vuplus DVB-C NIM(BCM3158)", "Vuplus DVB-C NIM(BCM3
 SystemInfo["rc_model"] = rc_model.getRcFolder()
 SystemInfo["mapKeyInfoToEpgFunctions"] = SystemInfo["rc_model"] in ("vu", "vu2", "vu3", "vu4") # due to button limitations of the remote control
 SystemInfo["hasDuplicateVideoAndPvrButtons"] = SystemInfo["rc_model"] in ("edision3",) # Allow multiple functions only if both buttons are present
-SystemInfo["toggleTvRadioButtonEvents"] = SystemInfo["rc_model"] in ("abcom", "qviart5", "gb0", "gb1", "gb2", "gb3", "gb4", "sf8008", "octagon3", "uclan1") # due to button limitations of the remote control
+SystemInfo["toggleTvRadioButtonEvents"] = SystemInfo["rc_model"] in ("abcom", "gb3", "gb4", "gb5", "octagon1", "octagon3", "qviart5", "sf8008", "uclan1") # due to button limitations of the remote control
 SystemInfo["rc_default"] = SystemInfo["rc_model"] in ("dmm0", )
