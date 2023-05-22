@@ -7,6 +7,8 @@ import struct
 
 from boxbranding import getDriverDate, getImageVersion, getMachineBuild, getBoxType
 
+from enigma import getEnigmaVersionString
+
 
 def getVersionString():
 	return getImageVersion()
@@ -15,21 +17,20 @@ def getVersionString():
 def getFlashDateString():
 	if ospath.isfile('/etc/install'):
 		with open("/etc/install", "r") as f:
-			flashdate = f.read()
-			return flashdate[8:]  + flashdate[4:8] + flashdate[0:4]
+			return _formatDate(f.read())
 	else:
 		return _("unknown")
 
-def driversDate():
-	string = getDriverDate()
-	year = string[0:4]
-	month = string[4:6]
-	day = string[6:8]
-	return "-".join((day, month, year))
+def driversDate(): 
+	return _formatDate(getDriverDate())
 
-def getEnigmaVersionString():
-	return getImageVersion()
+def getLastUpdate():
+	return _formatDate(getEnigmaVersionString().replace("-", ""))
 
+def _formatDate(Date):
+	# expected input = "YYYYMMDD"
+	from Components.config import config
+	return config.usage.date.dateFormatAbout.value % {"year": Date[0:4], "month": Date[4:6], "day": Date[6:8]}
 
 def getGStreamerVersionString():
 	try:
