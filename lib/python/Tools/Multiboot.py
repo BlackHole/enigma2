@@ -276,7 +276,7 @@ def bootmviSlot(imagedir="/", text=" ", slot=0):
 	inmviPath = path.join(imagedir, "usr/share/bootlogo.mvi")
 	outmviPath = path.join(imagedir, "usr/share/enigma2/bootlogo.mvi")
 	txtPath = path.join(imagedir, "usr/share/enigma2/bootlogo.txt")
-	text = "booting slot %s %s" % (slot, text)
+	text = "Booting Slot %s %s" % (slot, text)
 	print("[multiboot][bootmviSlot] inPath, outpath ", inmviPath, "   ", outmviPath)
 	if path.exists(inmviPath):
 		if path.exists(outmviPath) and path.exists(txtPath) and open(txtPath).read() == text:
@@ -294,7 +294,7 @@ def bootmviSlot(imagedir="/", text=" ", slot=0):
 		I1 = ImageDraw.Draw(img)									# Call draw Method to add 2D graphics in an image
 		myFont = ImageFont.truetype("/usr/share/fonts/OpenSans-Regular.ttf", 65)		# Custom font style and font size
 		print("[multiboot][bootmviSlot] Write text to png")
-		I1.text((52, 12), text, font=myFont, fill =(255, 0, 0))		# Add Text to an image
+		I1.text((50, 10), text, font=myFont, fill =(255, 255, 255))		# Add Text to an image
 		I1.text((50, 10), text, font=myFont, fill =(255, 255, 255))
 		img.save("/tmp/out1.png")									# Save the edited image
 		print ("[multiboot][bootmviSlot] Repack bootlogo")
