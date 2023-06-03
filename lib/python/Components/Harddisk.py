@@ -143,6 +143,16 @@ def addInstallTask(job, package):
 	task.args.append(package)
 
 
+def bytesToHumanReadable(size_bytes, binary=False):
+	# input is bytes, convert from KB, MB before use.
+	size_units = ("B", "kB", "MB", "GB", "TB")
+	base = 1024 if binary else 1000
+	i = 0; L = len(size_units)-1
+	while i < L and size_bytes >= base:
+		size_bytes /= base; i += 1
+	return ("%.2f %s" if i != 0 and size_bytes < 10 else "%.0f %s") % (size_bytes, size_units[i])
+
+
 SystemInfo["ext4"] = isFileSystemSupported("ext4")
 
 
@@ -210,6 +220,7 @@ class Harddisk:
 		return busName
 
 	def diskSize(self):
+		# output in MB
 		dev = self.findMount()
 		if dev:
 			try:
@@ -222,18 +233,15 @@ class Harddisk:
 		else:
 			data = readFile(self.sysfsPath("size"))
 			if data is not None:
-				cap = int(data) / 1000 * 512 / 1024
+				cap = int(int(data) / 1000 * 512 / 1024)
 			else:
 				cap = 0
 		return cap
 
 	def capacity(self):
-		cap = self.diskSize()
-		if cap == 0:
-			return ""
-		if cap < 1000:
-			return _("%02d MB") % cap
-		return _("%s GB") % (round(cap / 1000, 2))
+		cap = self.diskSize() # cap is in MB
+		cap *= 1000000 # convert to MB to bytes
+		return bytesToHumanReadable(cap)
 
 	def model(self):
 		data = None
@@ -267,6 +275,7 @@ class Harddisk:
 		return -1
 
 	def totalFree(self):
+		# output in MB
 		mediapath = []
 		freetot = 0
 		print("[Harddisk][totalFree]self.dev_path:", self.dev_path)
@@ -281,7 +290,7 @@ class Harddisk:
 			free = self.free(mpath)
 			if free > 0:
 				freetot += free
-		return freetot
+		return int(freetot)
 
 	def Totalfree(self):
 		return self.totalFree()
