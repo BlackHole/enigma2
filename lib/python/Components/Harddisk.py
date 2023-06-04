@@ -147,9 +147,11 @@ def bytesToHumanReadable(size_bytes, binary=False):
 	# input is bytes, convert from KB, MB before use.
 	size_units = ("B", "kB", "MB", "GB", "TB")
 	base = 1024 if binary else 1000
-	i = 0; L = len(size_units)-1
+	i = 0
+	L = len(size_units) - 1
 	while i < L and size_bytes >= base:
-		size_bytes /= base; i += 1
+		size_bytes /= base
+		i += 1
 	return ("%.2f %s" if i != 0 and size_bytes < 10 else "%.0f %s") % (size_bytes, size_units[i])
 
 
@@ -752,7 +754,7 @@ class HarddiskManager:
 							description = self.getUserfriendlyDeviceName(partition, physicalDevice)
 							print("[Harddisk] Found partition '%s', description='%s', device='%s'." % (partition, description, physicalDevice))
 #							part = Partition(mountpoint=self.getMountpoint(partition), description=description, force_mounted=True, device=partition)
-							part = Partition(mountpoint=self.getMountpoint(partition, skiproot = True), description=description, force_mounted=True, device=partition)
+							part = Partition(mountpoint=self.getMountpoint(partition, skiproot=True), description=description, force_mounted=True, device=partition)
 							self.partitions.append(part)
 							# print("[Harddisk] DEBUG: Partition(mountpoint = %s, description = %s, force_mounted = True, device = %s)" % (self.getMountpoint(partition), description, partition))
 							self.on_partition_list_change("add", part)
@@ -817,7 +819,7 @@ class HarddiskManager:
 			return ospath.join("/media", device)
 		return mnt
 
-	def getMountpoint(self, device, skiproot = None):
+	def getMountpoint(self, device, skiproot=None):
 		dev = ospath.join("/dev", device)
 		for item in getProcMounts():
 			if (item[0] == dev and skiproot == None) or (item[0] == dev and skiproot == True and item[1] != "/"):

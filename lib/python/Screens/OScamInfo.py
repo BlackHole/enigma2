@@ -27,17 +27,20 @@ import urllib.parse
 
 global NAMEBIN
 
+
 def check_NAMEBIN():
 	NAMEBIN = "oscam"
 	if fileExists("/tmp/.ncam/ncam.version"):
 		NAMEBIN = "ncam"
 	return NAMEBIN
 
+
 def check_NAMEBIN2():
 	NAMEBIN2 = "OScam"
 	if fileExists("/tmp/.ncam/ncam.version"):
 		NAMEBIN2 = "Ncam"
 	return NAMEBIN2
+
 
 f = 1
 sizeH = 700
@@ -232,7 +235,7 @@ class OscamInfo:
 #			print("[OscamInfo][readXML] show typ, result 0,1", typ, "   ", result[0], "  ", result[1])
 			if not self.showLog:
 				dataXML = ElementTree.XML(result[1])
-				if typ=="version":
+				if typ == "version":
 					if "version" in dataXML.attrib:
 						self.version = dataXML.attrib["version"]
 					else:
@@ -536,7 +539,6 @@ class OscamInfoMenu(Screen):
 		else:
 			self.session.open(MessageBox, _("Oscam/Ncam not running - start Cam to obtain information."), MessageBox.TYPE_INFO)
 
-
 	def chooseReaderCallback(self, retval):
 		print(retval)
 		if retval is not None:
@@ -654,7 +656,7 @@ class oscInfo(Screen, OscamInfo):
 			xpos = k * button_width
 			self.skin += """<ePixmap name="%s" position="%d,%d" size="35,25" pixmap="buttons/key_%s.png" zPosition="1" transparent="1" alphatest="on" />""" % (v, xpos, ypos, v)
 			self.skin += """<widget source="key_%s" render="Label" position="%d,%d" size="%d,%d" font="Regular;18" zPosition="1" valign="center" transparent="1" />""" % (v, xpos + 40, ypos, button_width, 22)
-		self.skin += """<ePixmap name="divh" position="center,37" size="%d,%d" pixmap="div-h.png" transparent="1" alphatest="blend" scale="1" zposition="2" />""" % (sizeH, int(2*f))
+		self.skin += """<ePixmap name="divh" position="center,37" size="%d,%d" pixmap="div-h.png" transparent="1" alphatest="blend" scale="1" zposition="2" />""" % (sizeH, int(2 * f))
 		self.skin += """<widget name="output" position="10,45" size="%d,%d" zPosition="1" scrollbarMode="showOnDemand" />""" % (self.sizeLH, ysize - 50)
 		self.skin += """</screen>"""
 		Screen.__init__(self, session)

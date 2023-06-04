@@ -175,7 +175,7 @@ class MultiBootSelector(Screen, HelpableScreen):
 						if xline.find(usblist[hddkey]) != -1 and "ext4" in xline:
 							index = xline.find(usblist[hddkey])
 							print("[MultiBootSelector] key, line ", usblist[hddkey], "   ", xline)
-							hdd.append(xline[index:index+4])
+							hdd.append(xline[index:index + 4])
 						else:
 							continue
 	#						print("[MultiBootSelector] key, not in line ", usblist[hddkey], "   ", xline)
@@ -207,7 +207,7 @@ class MultiBootSelector(Screen, HelpableScreen):
 			self.close()
 		else:
 			boxmodel = getBoxType()[2:]
-			for usbslot in range(hiKey+1, hiKey+5):
+			for usbslot in range(hiKey + 1, hiKey + 5):
 				STARTUP_usbslot = "kernel=%s/linuxrootfs%d/zImage root=%s rootsubdir=%s/linuxrootfs%d" % (boxmodel, usbslot, SystemInfo["VuUUIDSlot"][0], boxmodel, usbslot) # /STARTUP_<n>
 				if boxmodel in ("duo4k"):
 					STARTUP_usbslot += " rootwait=40"
@@ -218,7 +218,6 @@ class MultiBootSelector(Screen, HelpableScreen):
 				print("[MultiBootSelector] STARTUP_%d --> %s, self.tmp_dir: %s" % (usbslot, STARTUP_usbslot, self.tmp_dir))
 			self.session.open(TryQuitMainloop, QUIT_RESTART)
 
-
 	def KexecMountRet(self, result=None, retval=None, extra_args=None):
 		self.device_uuid = "UUID=" + result.split("UUID=")[1].split(" ")[0].replace('"', '')
 		usb = result.split(":")[0]
@@ -226,7 +225,7 @@ class MultiBootSelector(Screen, HelpableScreen):
 # 		using UUID	 kernel=/linuxrootfs1/boot/zImage root=UUID="12c2025e-2969-4bd1-9e0c-da08b97d40ce" rootsubdir=linuxrootfs1
 #		using dev = "kernel=/linuxrootfs4/zImage root=/dev/%s rootsubdir=linuxrootfs4" % hdd[0] 	# /STARTUP_4
 
-		for usbslot in range(4,8):
+		for usbslot in range(4, 8):
 			STARTUP_usbslot = "kernel=%s/linuxrootfs%d/zImage root=%s rootsubdir=%s/linuxrootfs%d" % (boxmodel, usbslot, self.device_uuid, boxmodel, usbslot) # /STARTUP_<n>
 			if boxmodel in ("duo4k"):
 				STARTUP_usbslot += " rootwait=40"
