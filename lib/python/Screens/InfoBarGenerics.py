@@ -276,9 +276,9 @@ class InfoBarUnhandledKey:
 		mkey = "unset"
 		try:
 			mkey = getKeyDescription(key)[0]
-			print ("[InfoBarGenerics] KEY: %s %s" % (key, mkey))
+			print("[InfoBarGenerics] KEY: %s %s" % (key, mkey))
 		except:
-			print ("[InfoBarGenerics] KEY: %s" % key)
+			print("[InfoBarGenerics] KEY: %s" % key)
 		self.unhandledKeyDialog.hide()
 		if self.closeSIB(key) and self.secondInfoBarScreen and self.secondInfoBarScreen.shown:
 			if not config.usage.fix_second_infobar.value or mkey not in ("LEFT", "RIGHT", "BOUQUET+", "BOUQUET-"):
@@ -999,7 +999,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		out.write(camname)
 		out.close()
 		cmd = "cp -f " + new + " /usr/bin/StartBhCam"
-		os.system (cmd)
+		os.system(cmd)
 
 		client_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 		client_socket.connect("/tmp/Blackhole.socket")

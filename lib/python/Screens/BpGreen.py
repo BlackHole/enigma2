@@ -169,7 +169,7 @@ class BhSetupGreen(Screen):
 		})
 
 	def updateList(self):
-		self.list = [ ]
+		self.list = []
 
 		mypath = resolveFilename(SCOPE_CURRENT_SKIN, "")
 		if mypath == "/usr/share/enigma2/":

@@ -18,7 +18,7 @@ import os
 
 from time import time
 
-ButtonSetupKeys = [	(_("Red"), "red", "Infobar/activateRedButton"),
+ButtonSetupKeys = [(_("Red"), "red", "Infobar/activateRedButton"),
 	(_("Red long"), "red_long", ""),
 	(_("Green long"), "green_long", ""),
 	(_("Yellow "), "yellow", "Infobar/AudioSelection"),
@@ -102,7 +102,7 @@ ButtonSetupKeys = [	(_("Red"), "red", "Infobar/activateRedButton"),
 	(_("WWW"), "www", ""),
 	(_("WWW long"), "www_long", ""),
 	(_("YouTube"), "youtube", ""),
-	(_("YouTube long"), "youtube_long", "") ]
+	(_("YouTube long"), "youtube_long", "")]
 
 config.misc.ButtonSetup = ConfigSubsection()
 config.misc.ButtonSetup.additional_keys = ConfigYesNo(default=True)

@@ -290,7 +290,7 @@ class DeliteBluePanel(Screen):
 		elif fileExists("/tmp/.CCcam.nodeid"):
 			from Screens.CCcamInfo import CCcamInfoMain
 			self.session.open(CCcamInfoMain)
-		else :
+		else:
 			self.session.open(MessageBox, _("Please use OScam, Ncam or CCcam to get info."), MessageBox.TYPE_INFO)
 
 	def keyRed(self):
@@ -565,16 +565,16 @@ class BhsysInfo2(Screen):
 			if len(parts) < 2:
 				continue
 			if parts[0] == "Mem:":
-				ramused = int(( int(parts[2]) * 100) // int(parts[1]))
+				ramused = int((int(parts[2]) * 100) // int(parts[1]))
 				t1 += int(parts[1])
 				t2 += int(parts[2])
 			elif parts[0] == "Swap:":
 				if int(parts[1]) > 1:
-					swapused = int(( int(parts[2]) * 100) // int(parts[1]))
+					swapused = int((int(parts[2]) * 100) // int(parts[1]))
 					t1 += int(parts[1])
 					t2 += int(parts[2])
 
-		totused = int(( int(t2) * 100) // int(t1))
+		totused = int((int(t2) * 100) // int(t1))
 
 		self.smallmontxt += _("Ram in use: ") + str(ramused) + " %\n"
 		self.smallmontxt += _("Swap in use: ") + str(swapused) + " %\n"
@@ -748,17 +748,17 @@ class BhsysInfo2(Screen):
 			for line in f.readlines():
 				parts = line.strip().split()
 				if parts[0] == "Mem:":
-					ramused = int(( int(parts[2]) * 100) // int(parts[1]))
+					ramused = int((int(parts[2]) * 100) // int(parts[1]))
 					mytext += _("Ram in use: ") + str(ramused) + " % \n"
 					mytext += _("Total: ") + parts[1] + "\t" + _("Used: ") + parts[2] + "\t" + _("Free: ") + parts[3] + "\n"
 				elif parts[0] == "Swap:":
 					swapused = 0
 					if int(parts[1]) > 1:
-						swapused = int(( int(parts[2]) * 100) // int(parts[1]))
+						swapused = int((int(parts[2]) * 100) // int(parts[1]))
 					mytext += _("Swap in use: ") + str(swapused) + " % \n"
 					mytext += _("Total: ") + parts[1] + "\t" + _("Used: ") + parts[2] + "\t" + _("Free: ") + parts[3] + "\n"
 				elif parts[0] == "Total:":
-					totused = int(( int(parts[2]) * 100) // int(parts[1]))
+					totused = int((int(parts[2]) * 100) // int(parts[1]))
 					mytext += _("Total in use: ") + str(totused) + " % \n"
 
 			f.close()
@@ -962,7 +962,7 @@ class BhsysInfo2(Screen):
 					hdd_dev = device
 					break
 		hddloc = "/dev/" + hdd_dev
-		if hdd_dev != "" :
+		if hdd_dev != "":
 			cmd = "hdparm -y " + hddloc
 			system(cmd)
 
@@ -1096,7 +1096,7 @@ class DeliteAutocamMan2(Screen):
 		self.session.openWithCallback(self.updateList, DeliteSetupAutocam2)
 
 	def updateList(self):
-		self.list = [ ]
+		self.list = []
 		cams = listdir("/usr/camscript")
 		for fil in cams:
 			if fil.find('Ncam_') != -1:
