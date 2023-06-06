@@ -257,7 +257,7 @@ class BhGreenPluginsSetup(Screen, ConfigListScreen):
 		mylist2 = sorted(mylist,  key=itemgetter(1))
 
 		for x in mylist2:
-			item = NoSave(ConfigInteger(limits = (1, 99), default = 99))
+			item = NoSave(ConfigInteger(limits=(1, 99), default=99))
 			item.value = x[1]
 			res = getConfigListEntry(x[0], item)
 			self.list.append(res)

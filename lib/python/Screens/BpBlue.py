@@ -1198,7 +1198,7 @@ class DeliteSetupAutocam2(Screen, ConfigListScreen):
 						mychoices.append(res)
 				f.close()
 
-		self.autocam_file = NoSave(ConfigSelection(choices = mychoices))
+		self.autocam_file = NoSave(ConfigSelection(choices=mychoices))
 
 		res = getConfigListEntry(self.chname, self.autocam_file)
 		self.list.append(res)

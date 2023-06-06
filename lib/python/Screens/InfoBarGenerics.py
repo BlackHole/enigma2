@@ -764,7 +764,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 			self.autocamTimer.start(1000)
 			self.autocamTimer_active = 1
 			if self.autocampop_active == 1:
-				Notifications.RemovePopup(id = "DeliteAutocam")
+				Notifications.RemovePopup(id="DeliteAutocam")
 				self.autocampop_active = 0
 #end
 			if config.usage.show_infobar_on_zap.value:
@@ -973,7 +973,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		if nabcur != nabnew:
 			camname = self.nab_Switch_Autocam(nabcur, nabnew)
 			mymess = "     OpenBh Autocam switching to:\n\n     " + camname
-			Notifications.AddPopup(text = mymess, type = MessageBox.TYPE_INFO, timeout = 3, id = "DeliteAutocam")
+			Notifications.AddPopup(text=mymess, type=MessageBox.TYPE_INFO, timeout=3, id="DeliteAutocam")
 			self.autocampop_active = 1
 
 	def nab_Switch_Autocam(self, current, new):
