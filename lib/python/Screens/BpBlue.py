@@ -108,7 +108,7 @@ class DeliteBluePanel(Screen):
 				return
 		vc = False
 		filein = "/usr/camscript/" + script
-		f = open(filein,'r')
+		f = open(filein, 'r')
 		for line in f.readlines():
 			if line.find('/usr/softcams/') != -1:
 				vc = True
@@ -131,7 +131,7 @@ class DeliteBluePanel(Screen):
 				return
 		fileout = "/usr/camscript/" + scriptname
 		out = open(fileout, "w")
-		f = open("/usr/camscript/Ncam_Ci.sh",'r')
+		f = open("/usr/camscript/Ncam_Ci.sh", 'r')
 		for line in f.readlines():
 			if line.find('CAMNAME=') != -1:
 				line = "CAMNAME=\"" + name + "\""
@@ -197,7 +197,7 @@ class DeliteBluePanel(Screen):
 			f.close()
 
 		if check == False:
-			out = open("/etc/BhCamConf",'w')
+			out = open("/etc/BhCamConf", 'w')
 			line = "deldefault|" + self.defaultcam + "\n"
 			out.write(line)
 			line = "delcurrent|" + self.defaultcam + "\n"
@@ -239,8 +239,8 @@ class DeliteBluePanel(Screen):
 		self.sel = self["list"].getCurrent()
 		self.newcam = self.camnames[self.sel]
 
-		inme = open("/etc/BhCamConf",'r')
-		out = open("/etc/BhCamConf.tmp",'w')
+		inme = open("/etc/BhCamConf", 'r')
+		out = open("/etc/BhCamConf.tmp", 'w')
 		for line in inme.readlines():
 			if line.find("delcurrent") == 0:
 				line = "delcurrent|" + self.newcam + "\n"
@@ -601,7 +601,7 @@ class BhsysInfo2(Screen):
 		fperc = 0
 
 		if fileExists("/tmp/ninfo.tmp"):
-			f = open("/tmp/ninfo.tmp",'r')
+			f = open("/tmp/ninfo.tmp", 'r')
 			for line in f.readlines():
 				line = line.replace('part1', ' ')
 				parts = line.strip().split()
@@ -666,7 +666,7 @@ class BhsysInfo2(Screen):
 		rc = system("ps > /tmp/nvpn.tmp")
 
 		if fileExists("/tmp/nvpn.tmp"):
-			f = open("/tmp/nvpn.tmp",'r')
+			f = open("/tmp/nvpn.tmp", 'r')
 			for line in f.readlines():
 				if line.find('openvpn') != -1:
 					avpn = True
@@ -744,7 +744,7 @@ class BhsysInfo2(Screen):
 		totaltot = 0
 		rc = system("free > /tmp/ninfo.tmp")
 		if fileExists("/tmp/ninfo.tmp"):
-			f = open("/tmp/ninfo.tmp",'r')
+			f = open("/tmp/ninfo.tmp", 'r')
 			for line in f.readlines():
 				parts = line.strip().split()
 				if parts[0] == "Mem:":
@@ -766,7 +766,7 @@ class BhsysInfo2(Screen):
 
 		count = 0
 		if fileExists("/proc/meminfo"):
-			f = open("/proc/meminfo",'r')
+			f = open("/proc/meminfo", 'r')
 			for line in f.readlines():
 				mytext += line
 				count += 1
@@ -798,7 +798,7 @@ class BhsysInfo2(Screen):
 			mountflash = "/usr"
 
 		if fileExists("/tmp/ninfo.tmp"):
-			f = open("/tmp/ninfo.tmp",'r')
+			f = open("/tmp/ninfo.tmp", 'r')
 			for line in f.readlines():
 				meas = "M"
 				line = line.replace('part1', ' ')
@@ -915,7 +915,7 @@ class BhsysInfo2(Screen):
 		mytext = ""
 		count = 0
 		if fileExists("/proc/stat"):
-			f = open("/proc/stat",'r')
+			f = open("/proc/stat", 'r')
 			for line in f.readlines():
 				if line.find('intr') != -1:
 					continue
@@ -924,7 +924,7 @@ class BhsysInfo2(Screen):
 				mytext += line
 			f.close()
 		if fileExists("/proc/stat"):
-			f = open("/proc/cpuinfo",'r')
+			f = open("/proc/cpuinfo", 'r')
 			for line in f.readlines():
 				parts = line.strip().split(":")
 				if len(parts) > 1:
@@ -1000,7 +1000,7 @@ class NabProcInfo(Screen):
 		strview = ""
 		rc = system("ps > /tmp/ninfo.tmp")
 		if fileExists("/tmp/ninfo.tmp"):
-			f = open("/tmp/ninfo.tmp",'r')
+			f = open("/tmp/ninfo.tmp", 'r')
 			for line in f.readlines():
 				parts = line.replace("?", "").strip().split()
 				if parts[0] == "PID":
@@ -1047,7 +1047,7 @@ class NabEnsetInfo(Screen):
 	def updatetext(self):
 		strview = ""
 		if fileExists("/etc/enigma2/settings"):
-			f = open("/etc/enigma2/settings",'r')
+			f = open("/etc/enigma2/settings", 'r')
 			for line in f.readlines():
 				strview += line
 
@@ -1100,7 +1100,7 @@ class DeliteAutocamMan2(Screen):
 		cams = listdir("/usr/camscript")
 		for fil in cams:
 			if fil.find('Ncam_') != -1:
-				f = open("/usr/camscript/" + fil,'r')
+				f = open("/usr/camscript/" + fil, 'r')
 				for line in f.readlines():
 					if line.find('CAMNAME=') != -1:
 						line = line.strip()
@@ -1112,7 +1112,7 @@ class DeliteAutocamMan2(Screen):
 				f.close()
 
 		if fileExists("/etc/BhCamConf"):
-			f = open("/etc/BhCamConf",'r')
+			f = open("/etc/BhCamConf", 'r')
 			for line in f.readlines():
 				parts = line.strip().split("|")
 				if parts[0] == "delcurrent":
@@ -1140,7 +1140,7 @@ class DeliteAutocamMan2(Screen):
 		if mysel:
 			mysel = mysel[1]
 			out = open("/etc/BhCamConf.tmp", "w")
-			f = open("/etc/BhCamConf",'r')
+			f = open("/etc/BhCamConf", 'r')
 			for line in f.readlines():
 				parts = line.strip().split("|")
 				if parts[0] != mysel:
@@ -1188,7 +1188,7 @@ class DeliteSetupAutocam2(Screen, ConfigListScreen):
 		cams = listdir("/usr/camscript")
 		for fil in cams:
 			if fil.find('Ncam_') != -1:
-				f = open("/usr/camscript/" + fil,'r')
+				f = open("/usr/camscript/" + fil, 'r')
 				for line in f.readlines():
 					if line.find('CAMNAME=') != -1:
 						line = line.strip()
@@ -1209,7 +1209,7 @@ class DeliteSetupAutocam2(Screen, ConfigListScreen):
 	def saveMyconf(self):
 		check = True
 		if fileExists("/etc/BhCamConf"):
-			f = open("/etc/BhCamConf",'r')
+			f = open("/etc/BhCamConf", 'r')
 			for line in f.readlines():
 				parts = line.strip().split("|")
 				if parts[0] == self.chref:

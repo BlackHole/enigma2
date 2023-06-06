@@ -959,7 +959,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		nabcur = "/usr/camscript/Ncam_Ci.sh"
 		nabnew = "/usr/camscript/Ncam_Ci.sh"
 		if fileExists("/etc/BhCamConf"):
-			f = open("/etc/BhCamConf",'r')
+			f = open("/etc/BhCamConf", 'r')
 			for line in f.readlines():
 				parts = line.strip().split("|")
 				if parts[0] == "delcurrent":
@@ -978,8 +978,8 @@ class InfoBarShowHide(InfoBarScreenSaver):
 
 	def nab_Switch_Autocam(self, current, new):
 		camname = "N/A"
-		inme = open("/etc/BhCamConf",'r')
-		out = open("/etc/BhCamConf.tmp",'w')
+		inme = open("/etc/BhCamConf", 'r')
+		out = open("/etc/BhCamConf.tmp", 'w')
 		for line in inme.readlines():
 			if line.find("delcurrent") == 0:
 				line = "delcurrent|" + new + "\n"
@@ -988,7 +988,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		inme.close()
 		os.rename("/etc/BhCamConf.tmp", "/etc/BhCamConf")
 
-		f = open(new,'r')
+		f = open(new, 'r')
 		for line in f.readlines():
 			if line.find('CAMNAME=') != -1:
 				line = line.strip()
@@ -3839,7 +3839,7 @@ class InfoBarAspectSelection:
 	STATE_RESOLUTION = 2
 
 	def __init__(self):
-		self["AspectSelectionAction"] = HelpableActionMap(self, "InfobarAspectSelectionActions",{
+		self["AspectSelectionAction"] = HelpableActionMap(self, "InfobarAspectSelectionActions", {
 			"aspectSelection": (self.ExGreen_toggleGreen, _("Aspect list...")),
 		}, prio=0, description=_("Aspect Ratio Actions"))
 
