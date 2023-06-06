@@ -124,7 +124,7 @@ class DeliteBluePanel(Screen):
 				self.ch_sc2(fil)
 
 	def ch_sc2(self, name):
-		scriptname = "Ncam_" + name +".sh"
+		scriptname = "Ncam_" + name + ".sh"
 		cams = listdir("/usr/camscript/")
 		for fil in cams:
 			if fil == scriptname:
@@ -136,11 +136,11 @@ class DeliteBluePanel(Screen):
 			if line.find('CAMNAME=') != -1:
 				line = "CAMNAME=\"" + name + "\""
 			if line.find('daemon -S') != -1:
-				line = "\t/usr/softcams/" + name +"\n"
+				line = "\t/usr/softcams/" + name + "\n"
 				if name.find('oscam') != -1 or name.find('ncam') != -1:
-					line = line.rstrip() + " -b -c /etc/tuxbox/config/" + name +"\n"
+					line = line.rstrip() + " -b -c /etc/tuxbox/config/" + name + "\n"
 			if line.find('daemon -K') != -1:
-				line = "\t killall -9 " + name +" 2 >/dev/null\n\tsleep 2\n\tremove_tmp\n"
+				line = "\t killall -9 " + name + " 2 >/dev/null\n\tsleep 2\n\tremove_tmp\n"
 			out.write(line)
 		system("chmod 0755 " + fileout)
 		f.close()
@@ -370,7 +370,7 @@ class BhsysInfo(Screen):
 
 	def updateInfo(self):
 		rc = system("df -h > /tmp/syinfo.tmp")
-		text =  _("STB \n") +_("Brand:") + "\t%s\n" % getMachineBrand()
+		text = _("STB \n") + _("Brand:") + "\t%s\n" % getMachineBrand()
 		text += _("Model:\t%s \n") % (getMachineName())
 		text += _("Chipset:\t%s \n") % about.getChipSetString().upper() + "\n"
 		text += _("MEMORY\n")
@@ -405,11 +405,11 @@ class BhsysInfo(Screen):
 				if len(parts) == 6:
 					if line.find('Hdd:') != -1:
 						parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
-						text +=_("Hdd:") + "\t" + "{0:<12}".format(parts[1]) + "{0:<12}".format(parts[2]) + "{0:<13}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
+						text += _("Hdd:") + "\t" + "{0:<12}".format(parts[1]) + "{0:<12}".format(parts[2]) + "{0:<13}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
 				if len(parts) == 6:
 					if line.find('Usb:') != -1:
 						parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
-						text +=_("Usb:") + "\t" + "{0:<14}".format(parts[1]) + "{0:<14}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
+						text += _("Usb:") + "\t" + "{0:<14}".format(parts[1]) + "{0:<14}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
 		f.close()
 		os_remove("/tmp/syinfo.tmp")
 
@@ -530,13 +530,13 @@ class BhsysInfo2(Screen):
 		self["moni"].instance.move(ePoint(int(self.x), int(self.y)))
 		self["moni"].instance.resize(eSize(int(self.w), int(self.h)))
 		if self.x > 364:
-			self.x -= (280/20)
+			self.x -= (280 / 20)
 		if self.y > 80:
-			self.y -= (270/20)
+			self.y -= (270 / 20)
 		if self.h < 560:
-			self.h += (560/20)
+			self.h += (560 / 20)
 		if self.w < 560:
-			self.w += (560/20)
+			self.w += (560 / 20)
 			self.moniTimer.start(80)
 		else:
 			self["monipix"].show()
@@ -579,9 +579,9 @@ class BhsysInfo2(Screen):
 		self.smallmontxt += _("Ram in use: ") + str(ramused) + " %\n"
 		self.smallmontxt += _("Swap in use: ") + str(swapused) + " %\n"
 
-		self["ramg"].setValue(int(((ramused *100) //120) + 50))
-		self["swapg"].setValue(int(((swapused *100) //120) + 50))
-		self["memtg"].setValue(int(((totused *100) //120) + 50))
+		self["ramg"].setValue(int(((ramused * 100) // 120) + 50))
+		self["swapg"].setValue(int(((swapused * 100) // 120) + 50))
+		self["memtg"].setValue(int(((totused * 100) // 120) + 50))
 
 	def getSpace(self):
 		rc = system("df > /tmp/ninfo.tmp")
@@ -605,36 +605,36 @@ class BhsysInfo2(Screen):
 			for line in f.readlines():
 				line = line.replace('part1', ' ')
 				parts = line.strip().split()
-				totsp = (len(parts) -1)
+				totsp = (len(parts) - 1)
 				if parts[totsp] == "/":
-					strview = parts[totsp -1].replace('%', '')
+					strview = parts[totsp - 1].replace('%', '')
 					if strview.isdigit():
-						flperc = int(parts[totsp -1].replace('%', ''))
-						fltot = int(parts[totsp -4])
-						flused = int(parts[totsp -3])
+						flperc = int(parts[totsp - 1].replace('%', ''))
+						fltot = int(parts[totsp - 4])
+						flused = int(parts[totsp - 3])
 				if parts[totsp] == "/usr":
 					self.extendedFlash = True
-					strview = parts[totsp -1].replace('%', '')
+					strview = parts[totsp - 1].replace('%', '')
 					if strview.isdigit():
-						flperc = int(parts[totsp -1].replace('%', ''))
-						fltot = int(parts[totsp -4])
-						flused = int(parts[totsp -3])
+						flperc = int(parts[totsp - 1].replace('%', ''))
+						fltot = int(parts[totsp - 4])
+						flused = int(parts[totsp - 3])
 				if parts[totsp] == "/media/mmc":
-					mmcperc = int(parts[totsp -1].replace('%', ''))
-					mmctot = int(parts[totsp -4])
-					mmcused = int(parts[totsp -3])
+					mmcperc = int(parts[totsp - 1].replace('%', ''))
+					mmctot = int(parts[totsp - 4])
+					mmcused = int(parts[totsp - 3])
 				if parts[totsp] == "/media/usb":
-					strview = parts[totsp -1].replace('%', '')
+					strview = parts[totsp - 1].replace('%', '')
 					if strview.isdigit():
-						usperc = int(parts[totsp -1].replace('%', ''))
-						ustot = int(parts[totsp -4])
-						usused = int(parts[totsp -3])
+						usperc = int(parts[totsp - 1].replace('%', ''))
+						ustot = int(parts[totsp - 4])
+						usused = int(parts[totsp - 3])
 				if parts[totsp] == "/media/hdd":
-					strview = parts[totsp -1].replace('%', '')
+					strview = parts[totsp - 1].replace('%', '')
 					if strview.isdigit():
-						hdperc = int(parts[totsp -1].replace('%', ''))
-						hdtot = int(parts[totsp -4])
-						hdused = int(parts[totsp -3])
+						hdperc = int(parts[totsp - 1].replace('%', ''))
+						hdtot = int(parts[totsp - 4])
+						hdused = int(parts[totsp - 3])
 
 			f.close()
 			os_remove("/tmp/ninfo.tmp")
@@ -642,7 +642,7 @@ class BhsysInfo2(Screen):
 			ftot = mmctot + ustot + hdtot
 			fused = int(mmcused) + int(usused) + int(hdused)
 			if ftot > 100:
-				fperc = (fused  * 100) //ftot
+				fperc = (fused * 100) // ftot
 
 
 		self.smallmontxt += _("Flash in use: ") + str(flperc) + " %\n"
@@ -650,11 +650,11 @@ class BhsysInfo2(Screen):
 		self.smallmontxt += _("Usb in use: ") + str(usperc) + " %\n"
 		self.smallmontxt += _("Hdd in use: ") + str(hdperc) + " %\n"
 
-		self["spacetg"].setValue(int(((fperc *100) //120) + 50))
-		self["mmcfg"].setValue(int(((mmcperc *100) //120) + 50))
-		self["usbg"].setValue(int(((usperc *100) //120) + 50))
-		self["hddg"].setValue(int(((hdperc *100) //120) + 50))
-		self["flashg"].setValue(int(((flperc *100) //120) + 50))
+		self["spacetg"].setValue(int(((fperc * 100) // 120) + 50))
+		self["mmcfg"].setValue(int(((mmcperc * 100) // 120) + 50))
+		self["usbg"].setValue(int(((usperc * 100) // 120) + 50))
+		self["hddg"].setValue(int(((hdperc * 100) // 120) + 50))
+		self["flashg"].setValue(int(((flperc * 100) // 120) + 50))
 
 
 	def getSpyes(self):
@@ -711,7 +711,7 @@ class BhsysInfo2(Screen):
 		temperc = 0
 
 		hdd_dev = ""
-		hdds = ['sda', 'sdb', 'sdc',  'sdd', 'sde', 'sdf']
+		hdds = ['sda', 'sdb', 'sdc', 'sdd', 'sde', 'sdf']
 		for device in hdds:
 			filename = "/sys/block/%s/removable" % (device)
 			if fileExists(filename):
@@ -803,67 +803,67 @@ class BhsysInfo2(Screen):
 				meas = "M"
 				line = line.replace('part1', ' ')
 				parts = line.strip().split()
-				totsp = (len(parts) -1)
+				totsp = (len(parts) - 1)
 				if parts[totsp] == mountflash:
 					if flused:
 						continue
-					flused = parts[totsp -1]
+					flused = parts[totsp - 1]
 					flperc = int(flused.replace('%', ''))
-					fltot = int(parts[totsp -4])
+					fltot = int(parts[totsp - 4])
 					if fltot > 1000000:
 						fltot = fltot // 1000
 						meas = "Gb"
-					capacity = "%d.%03d " % (fltot//1000, fltot%1000)
-					mytext +=  _("FLASH: ") + capacity + meas + _("   in use: ") + flused + "\n"
-					mytext += _("Total: ") + parts[totsp -4] + _("   Used: ") + parts[totsp -3] + _("   Free: ") + parts[totsp -2]  + "\n\n"
-					fltot = int(parts[totsp -4])
-					flused = int(parts[totsp -3])
+					capacity = "%d.%03d " % (fltot // 1000, fltot % 1000)
+					mytext += _("FLASH: ") + capacity + meas + _("   in use: ") + flused + "\n"
+					mytext += _("Total: ") + parts[totsp - 4] + _("   Used: ") + parts[totsp - 3] + _("   Free: ") + parts[totsp - 2] + "\n\n"
+					fltot = int(parts[totsp - 4])
+					flused = int(parts[totsp - 3])
 
 
 				if parts[totsp] == "/media/mmc":
 					if mmcused:
 						continue
-					mmcused = parts[totsp -1]
+					mmcused = parts[totsp - 1]
 					mmcperc = int(mmcused.replace('%', ''))
-					mmctot = int(parts[totsp -4])
+					mmctot = int(parts[totsp - 4])
 					if mmctot > 1000000:
 						mmctot = mmctot // 1000
 						meas = "Gb"
-					capacity = "%d.%03d " % (mmctot//1000, mmctot%1000)
+					capacity = "%d.%03d " % (mmctot // 1000, mmctot % 1000)
 					mytext += ("Micro SD: ") + capacity + meas + _("   in use: ") + mmcused + "\n"
-					mytext += _("Total: ") + parts[totsp -4] + _("   Used: ") + parts[totsp -3] + _("   Free: ") + parts[totsp -2]  + "\n\n"
-					mmctot = int(parts[totsp -4])
-					mmcused = int(parts[totsp -3])
+					mytext += _("Total: ") + parts[totsp - 4] + _("   Used: ") + parts[totsp - 3] + _("   Free: ") + parts[totsp - 2] + "\n\n"
+					mmctot = int(parts[totsp - 4])
+					mmcused = int(parts[totsp - 3])
 				if parts[totsp] == "/media/usb":
 					if usused:
 						continue
-					usused = parts[totsp -1]
+					usused = parts[totsp - 1]
 					usperc = int(usused.replace('%', ''))
-					ustot = int(parts[totsp -4])
+					ustot = int(parts[totsp - 4])
 					if ustot > 1000000:
 						ustot = ustot // 1000
 						meas = "Gb"
-					capacity = "%d.%03d " % (ustot//1000, ustot%1000)
+					capacity = "%d.%03d " % (ustot // 1000, ustot % 1000)
 					mytext += _("USB: ") + capacity + meas + _("   in use: ") + usused + "\n"
-					mytext += _("Total: ") + parts[totsp -4] + _("   Used: ") + parts[totsp -3] + _("   Free: ") + parts[totsp -2] + "\n\n"
-					ustot = int(parts[totsp -4])
-					usused = int(parts[totsp -3])
+					mytext += _("Total: ") + parts[totsp - 4] + _("   Used: ") + parts[totsp - 3] + _("   Free: ") + parts[totsp - 2] + "\n\n"
+					ustot = int(parts[totsp - 4])
+					usused = int(parts[totsp - 3])
 				if parts[totsp] == "/media/hdd":
 					if hdused:
 						continue
-					strview = parts[totsp -1].replace('%', '')
+					strview = parts[totsp - 1].replace('%', '')
 					if strview.isdigit():
-						hdused = parts[totsp -1]
+						hdused = parts[totsp - 1]
 						hdperc = int(hdused.replace('%', ''))
-						hdtot = int(parts[totsp -4])
+						hdtot = int(parts[totsp - 4])
 						if hdtot > 1000000:
 							hdtot = hdtot // 1000
 							meas = "Gb"
-						capacity = "%d.%03d " % (hdtot//1000, hdtot%1000)
+						capacity = "%d.%03d " % (hdtot // 1000, hdtot % 1000)
 						mytext += _("HDD: ") + capacity + meas + _("   in use: ") + hdused + "\n"
-						mytext += _("Total: ") + parts[totsp -4] + _("   Used: ") + parts[totsp -3] + _("   Free: ") + parts[totsp -2] + "\n\n"
-						hdtot = int(parts[totsp -4])
-						hdused = int(parts[totsp -3])
+						mytext += _("Total: ") + parts[totsp - 4] + _("   Used: ") + parts[totsp - 3] + _("   Free: ") + parts[totsp - 2] + "\n\n"
+						hdtot = int(parts[totsp - 4])
+						hdused = int(parts[totsp - 3])
 
 			f.close()
 			os_remove("/tmp/ninfo.tmp")
@@ -874,14 +874,14 @@ class BhsysInfo2(Screen):
 			ffree = (ftot - fused)
 			fperc = 0
 			if ftot > 100:
-				fperc = (fused  * 100) //ftot
+				fperc = (fused * 100) // ftot
 			if ftot > 1000000:
 				ftot = ftot // 1000
 				meas = "Gb"
 			if ftot > 1000000000:
 				ftot = ftot // 1000000
 				meas = "Tera"
-			ftot = "%d.%03d " % (ftot//1000, ftot%1000)
+			ftot = "%d.%03d " % (ftot // 1000, ftot % 1000)
 			ftot += meas
 
 			meas = "M"
@@ -891,7 +891,7 @@ class BhsysInfo2(Screen):
 			if fused > 1000000000:
 				fused = fused // 1000000
 				meas = "Tera"
-			fused = "%d.%03d " % (fused//1000, fused%1000)
+			fused = "%d.%03d " % (fused // 1000, fused % 1000)
 			fused += meas
 
 			meas = "M"
@@ -901,7 +901,7 @@ class BhsysInfo2(Screen):
 			if ffree > 1000000000:
 				ffree = ffree // 1000000
 				meas = "Tera"
-			ffree = "%d.%03d " % (ffree//1000, ffree%1000)
+			ffree = "%d.%03d " % (ffree // 1000, ffree % 1000)
 			ffree += meas
 
 			mytext += _("Total Space: ") + ftot + _("    in use: ") + str(fperc) + "% \n"
@@ -954,7 +954,7 @@ class BhsysInfo2(Screen):
 
 	def delTimer(self):
 		hdd_dev = ""
-		hdds = ['sda', 'sdb', 'sdc',  'sdd', 'sde', 'sdf']
+		hdds = ['sda', 'sdb', 'sdc', 'sdd', 'sde', 'sdf']
 		for device in hdds:
 			filename = "/sys/block/%s/removable" % (device)
 			if fileExists(filename):
@@ -1008,9 +1008,9 @@ class NabProcInfo(Screen):
 				strview += parts[0]
 				strview += "\t" + parts[1]
 				line = re.sub(r'\b(PID|TTY|CMD)\b', '', line)
-				i = (len(parts) -1)
+				i = (len(parts) - 1)
 				if i > 1:
-					strview += "\t" + parts[i] +  "\n"
+					strview += "\t" + parts[i] + "\n"
 				#strview += line + "\n"
 
 			f.close()

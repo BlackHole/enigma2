@@ -108,7 +108,7 @@ class DeliteGreenPanel(Screen):
 			mylist.append(res)
 
 		if config.misc.plugin_list_ordered.value == 1:
-			self.list = sorted(mylist,  key=itemgetter(4))
+			self.list = sorted(mylist, key=itemgetter(4))
 		else:
 			self.list = mylist
 
@@ -254,7 +254,7 @@ class BhGreenPluginsSetup(Screen, ConfigListScreen):
 			res = (plugin.name, pos)
 			mylist.append(res)
 
-		mylist2 = sorted(mylist,  key=itemgetter(1))
+		mylist2 = sorted(mylist, key=itemgetter(1))
 
 		for x in mylist2:
 			item = NoSave(ConfigInteger(limits=(1, 99), default=99))
@@ -270,10 +270,10 @@ class BhGreenPluginsSetup(Screen, ConfigListScreen):
 	def savePos(self):
 		mylist = []
 		for x in self["config"].list:
-			res =(x[0], x[1].value)
+			res = (x[0], x[1].value)
 			mylist.append(res)
 
-		mylist2 = sorted(mylist,  key=itemgetter(1))
+		mylist2 = sorted(mylist, key=itemgetter(1))
 
 		out = open("/etc/bh_plugins.pos", "w")
 		for x in mylist2:
