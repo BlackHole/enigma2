@@ -23,6 +23,7 @@ import socket
 import subprocess
 import re
 
+
 class DeliteBluePanel(Screen):
 	skin = """
 	<screen name="DeliteBluePanel" position="center,center" size="1000,720"  title="OpenBh Blue Panel" flags="wfNoBorder">
@@ -145,7 +146,6 @@ class DeliteBluePanel(Screen):
 		system("chmod 0755 " + fileout)
 		f.close()
 		out.close()
-
 
 	def populate_List(self):
 		self.camnames = {}
@@ -348,6 +348,7 @@ class Nab_DoStartCam(Screen):
 	def delTimer(self):
 		del self.activityTimer
 
+
 class BhsysInfo(Screen):
 	skin = """
 	<screen position="center,center" size="1020,600" title="OpenBh Info" flags="wfNoBorder">
@@ -419,6 +420,7 @@ class BhsysInfo(Screen):
 		text += "Kernel: \t" + about.getKernelVersionString() + "\n"
 		self["lab1"].setText(text)
 
+
 class BhsysInfo2(Screen):
 	skin = """
 	<screen position="0,0" size="1280,720" title="OpenBh System Info" flags="wfNoBorder">
@@ -479,7 +481,6 @@ class BhsysInfo2(Screen):
 		self["smallmon"].hide()
 		self["monipix"].hide()
 		self["moni2"].hide()
-
 
 		self["actions"] = ActionMap(["WizardActions", "ColorActions", "NumberActions"],
 		{
@@ -644,7 +645,6 @@ class BhsysInfo2(Screen):
 			if ftot > 100:
 				fperc = (fused * 100) // ftot
 
-
 		self.smallmontxt += _("Flash in use: ") + str(flperc) + " %\n"
 		self.smallmontxt += _("Micro SD in use: ") + str(mmcperc) + " %\n"
 		self.smallmontxt += _("Usb in use: ") + str(usperc) + " %\n"
@@ -655,7 +655,6 @@ class BhsysInfo2(Screen):
 		self["usbg"].setValue(int(((usperc * 100) // 120) + 50))
 		self["hddg"].setValue(int(((hdperc * 100) // 120) + 50))
 		self["flashg"].setValue(int(((flperc * 100) // 120) + 50))
-
 
 	def getSpyes(self):
 		atelnet = False
@@ -704,8 +703,6 @@ class BhsysInfo2(Screen):
 		else:
 			self["spy11"].hide()
 
-
-
 	def getHddtemp(self):
 		temperature = "N/A"
 		temperc = 0
@@ -730,7 +727,6 @@ class BhsysInfo2(Screen):
 
 		self["hddtempg"].setValue(temperc + 64)
 		self.smallmontxt += "Hdd temp: " + temperature + " °C"
-
 
 	def KeyRed(self):
 		if self.moni_state == 0:
@@ -818,7 +814,6 @@ class BhsysInfo2(Screen):
 					mytext += _("Total: ") + parts[totsp - 4] + _("   Used: ") + parts[totsp - 3] + _("   Free: ") + parts[totsp - 2] + "\n\n"
 					fltot = int(parts[totsp - 4])
 					flused = int(parts[totsp - 3])
-
 
 				if parts[totsp] == "/media/mmc":
 					if mmcused:
@@ -951,7 +946,6 @@ class BhsysInfo2(Screen):
 	def KeyThree(self):
 		self.session.open(About)
 
-
 	def delTimer(self):
 		hdd_dev = ""
 		hdds = ['sda', 'sdb', 'sdc', 'sdd', 'sde', 'sdf']
@@ -968,6 +962,7 @@ class BhsysInfo2(Screen):
 
 		del self.activityTimer
 		del self.moniTimer
+
 
 class NabProcInfo(Screen):
 	skin = """
@@ -1043,7 +1038,6 @@ class NabEnsetInfo(Screen):
 
 		self.onLayoutFinish.append(self.updatetext)
 
-
 	def updatetext(self):
 		strview = ""
 		if fileExists("/etc/enigma2/settings"):
@@ -1053,8 +1047,6 @@ class NabEnsetInfo(Screen):
 
 			f.close()
 			self["infotext"].setText(strview)
-
-
 
 
 class DeliteAutocamMan2(Screen):
@@ -1107,7 +1099,6 @@ class DeliteAutocamMan2(Screen):
 						cn = line[9:-1]
 						self.emlist.append(cn)
 						self.camnames[cn] = "/usr/camscript/" + fil
-
 
 				f.close()
 
@@ -1222,7 +1213,6 @@ class DeliteSetupAutocam2(Screen, ConfigListScreen):
 			out.write(line)
 			out.close()
 		self.close()
-
 
 
 class DeliteBp:

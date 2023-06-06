@@ -166,6 +166,7 @@ def reload_whitelist_vbi():
 	global whitelist_vbi
 	whitelist_vbi = [line.strip() for line in open('/etc/enigma2/whitelist_vbi', 'r').readlines()] if os.path.isfile('/etc/enigma2/whitelist_vbi') else []
 
+
 reload_whitelist_vbi()
 
 subservice_groupslist = None
@@ -365,6 +366,7 @@ class HideVBILine(Screen):
 	def __init__(self, session):
 		self.skin = """<screen position="0,0" size="%s,%s" flags="wfNoBorder" zPosition="1"/>""" % (getDesktop(0).size().width(), getDesktop(0).size().height() / 360 + 1)
 		Screen.__init__(self, session)
+
 
 class SecondInfoBar(Screen, HelpableScreen):
 	ADD_TIMER = 0
@@ -3833,6 +3835,7 @@ class InfoBarTimerButton:
 	def timerSelection(self):
 		self.session.open(TimerEditList)
 
+
 class InfoBarAspectSelection:
 	STATE_HIDDEN = 0
 	STATE_ASPECT = 1
@@ -3962,6 +3965,7 @@ class InfoBarResolutionSelection:
 			self.ExGreen_doHide()
 		return
 
+
 class InfoBarVmodeButton:
 	def __init__(self):
 		self["VmodeButtonActions"] = HelpableActionMap(self, "InfobarVmodeButtonActions",
@@ -3971,6 +3975,7 @@ class InfoBarVmodeButton:
 
 	def vmodeSelection(self):
 		self.session.open(VideoMode)
+
 
 def ToggleVideo():
 	mode = open("/proc/stb/video/policy").read()[:-1]
@@ -3988,6 +3993,7 @@ def ToggleVideo():
 		f = open("/proc/stb/video/policy", "w")
 		f.write("panscan")
 		f.close()
+
 
 class VideoMode(Screen):
 	def __init__(self, session):

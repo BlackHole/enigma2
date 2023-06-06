@@ -4,6 +4,7 @@ from Components.VariableValue import VariableValue
 
 from enigma import eGauge
 
+
 class Gauge(VariableValue, HTMLComponent, GUIComponent):
 	def __init__(self):
 		VariableValue.__init__(self)
@@ -17,6 +18,5 @@ class Gauge(VariableValue, HTMLComponent, GUIComponent):
 	def setValue(self, value):
 		if self.instance is not None:
 			self.instance.setValue(value)
-
 
 	value = property(setValue)
