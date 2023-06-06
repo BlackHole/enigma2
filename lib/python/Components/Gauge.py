@@ -11,7 +11,7 @@ class Gauge(VariableValue, HTMLComponent, GUIComponent):
 		GUIComponent.__init__(self)
 
 	GUI_WIDGET = eGauge
-	
+
 	def postWidgetCreate(self, instance):
 		instance.setValue(10)
 
