@@ -23,19 +23,9 @@
 	<menu entryID="setup_selection" level="0" text="Setup" flushConfigOnClose="1" weight="1">
 		<id val="setup" />
 
-		<!-- Menu / Setup / AV -->
-		<menu entryID="av_setup" level="0" text="Audio &amp; Video" weight="1">
-			<id val="av" />
-			<item entryID="av_setup" level="0" text="Settings" weight="1"><screen module="VideoMode" screen="VideoSetup" /></item>
-		</menu>
-
 		<!-- Menu / Setup / User Interface -->
 		<menu entryID="gui_setup" level="0" text="User Interface" weight="4">
 			<id val="gui_menu" />
-			<menu entryID="osd_setup" level="0" text="On Screen Display" weight="4" requires="OsdMenu">
-				<id val="osd_menu" />
-				<item entryID="osdsetup" level="2" text="OSD Position" requires="OsdSetup"><screen module="UserInterfacePositioner" screen="UserInterfacePositioner" /></item>
-			</menu>
 			<item entryID="language_setup" level="0" text="Language" weight="9"><screen module="LanguageSelection" /></item>
 		</menu>
 
