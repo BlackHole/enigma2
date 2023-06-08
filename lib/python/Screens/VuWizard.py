@@ -32,7 +32,7 @@ patterns = [
 	"glibc",
 	"gnome-themes",
 	"hddtmp",
-	"inadyn-mt"
+	"inadyn-mt",
 	"kernel-module",
 	"libcrypto-compat-0.9.7",
 	"lib-samba",
