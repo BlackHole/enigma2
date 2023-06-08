@@ -16,7 +16,10 @@ from Tools.LoadPixmap import LoadPixmap
 from Tools.Directories import fileExists, pathExists, resolveFilename, SCOPE_CURRENT_SKIN
 from os import system, remove as os_remove, rename as os_rename, popen, getcwd, chdir
 from Screens.Setup import Setup
-from Plugins.SystemPlugins.NetworkBrowser.NetworkBrowser import NetworkBrowser
+try:
+	from Plugins.SystemPlugins.NetworkBrowser.NetworkBrowser import NetworkBrowser
+except:
+	pass
 from enigma import eTimer
 from Screens.Console import Console
 import process
@@ -298,8 +301,10 @@ class BhNetBrowser(Screen):
 		mysel = self["list"].getCurrent()
 		if mysel:
 			inter = mysel[1]
-			self.session.open(NetworkBrowser, inter, "/usr/lib/enigma2/python/Plugins/SystemPlugins/NetworkBrowser")
-
+			try:
+				self.session.open(NetworkBrowser, inter, "/usr/lib/enigma2/python/Plugins/SystemPlugins/NetworkBrowser")
+			except:
+				return self.session.open(MessageBox, _("Network Browser not Available"), MessageBox.TYPE_INFO)
 
 class BhMinidlna(Screen):
 	skin = """
@@ -450,7 +455,7 @@ class DeliteInadyn(Screen):
 
 	def restartIna(self):
 		if self.my_nabina_state == False:
-			mybox = self.session.open(MessageBox, _("You have to Activate Inadyn before to start"), MessageBox.TYPE_INFO)
+			mybox = self.session.open(MessageBox, _("You have to Activate Inadyn before you starting"), MessageBox.TYPE_INFO)
 			mybox.setTitle("Info")
 		else:
 			print("[BpSet] restartIna")
