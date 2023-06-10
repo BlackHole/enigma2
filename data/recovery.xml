@@ -19,21 +19,40 @@
 <menu entryID="main_menu" level="0" text="Main Menu">
 	<id val="mainmenu" />
 
-	<!-- Menu / Setup -->
-	<menu entryID="setup_selection" level="0" text="Setup" flushConfigOnClose="1" weight="1">
-		<id val="setup" />
+	<!-- Menu / Multiboot Selector -->
+	<menu entryID="multiboot" text="Multiboot Selector" level="0" weight="1">
+		<id val="multiboot" />
+		<item entryID="multiboot" level="0" text="MultiBoot Image Selector" requires="canMultiBoot"><screen module="MultiBootSelector" screen="MultiBootSelector">1</screen></item>
+	</menu>
 
-		<!-- Menu / Setup / User Interface -->
-		<menu entryID="gui_setup" level="0" text="User Interface" weight="4">
-			<id val="gui_menu" />
-			<item entryID="language_setup" level="0" text="Language" weight="9"><screen module="LanguageSelection" /></item>
-		</menu>
+		<!-- Menu / Image Manager -->
+		<item entryID="image" level="0" text="Image Manager" weight="2">
+<code>
+from Plugins.SystemPlugins.OBH.ImageManager import OpenBhImageManager
+self.session.open(OpenBhImageManager)
+</code>
+		</item>
+
+	<!-- Menu / Information -->
+	<menu entryID="info_screen" level="0" text="Information" weight="98">
+		<id val="information" />
+		<item entryID="about_screen" level="0" text="About"><screen module="About" screen="About" /></item>
+		<item entryID="device_screen" level="0" text="Devices"><screen module="About" screen="Devices" /></item>
+		<item entryID="memory_screen" level="0" text="Memory"><screen module="About" screen="SystemMemoryInfo" /></item>
+		<item entryID="network_screen" level="0" text="Network"><screen module="About" screen="SystemNetworkInfo" /></item>
+		<item entryID="boxinfo_screen" level="0" text="BoxInfo"><screen module="AboutBoxInfo" screen="AboutBoxInfo" /></item>
+	</menu>
+
+	<!-- Menu / Settings -->
+	<menu entryID="settings" level="0" text="Settings" flushConfigOnClose="1" weight="97">
+		<id val="settings" />
+
 
 		<!-- Menu / Setup / Network -->
 		<menu entryID="network_menu" level="0" text="Network" weight="6">
 			<id val="network" />
 			<item entryID="device_setup" level="0" text="Device" weight="1"><screen module="NetworkSetup" screen="NetworkAdapterSelection" /></item>
-			<item entryID="password_setup" level="2" text="Password"><screen module="NetworkSetup" screen="NetworkPassword" /></item>
+			<item entryID="password_setup" level="0" text="Password"><screen module="NetworkSetup" screen="NetworkPassword" /></item>
 		</menu>
 
 		<!-- Menu / Setup / Storage -->
@@ -46,13 +65,19 @@
 		<!-- Menu / Setup / Time Settings -->
 		<item entryID="time_setup" level="0" text="Time" weight="12"><screen module="Time" screen="Time" /></item>
 
+		<!-- Menu / Setup / Language -->
+		<menu entryID="gui_setup" level="0" text="Language" weight="4">
+			<id val="gui_menu" />
+			<item entryID="language_setup" level="0" text="Language" weight="9"><screen module="LanguageSelection" /></item>
+		</menu>
+
 		<!-- Menu / Setup / System -->
 		<menu entryID="system_selection" level="0" text="System" weight="98">
 			<id val="system" />
-			<menu entryID="logs_setup" level="2" text="Logs" weight="2">
+			<menu entryID="logs_setup" level="0" text="Logs" weight="2">
 				<id val="logs_menu" />
-				<item entryID="logs_setup" level="2" text="Settings"><setup id="logs" /></item>
-				<item entryID="logs_man" level="2" text="Log Manager"><screen module="LogManager" screen="LogManager" /></item>
+				<item entryID="logs_setup" level="0" text="Settings"><setup id="logs" /></item>
+				<item entryID="logs_man" level="0" text="Log Manager"><screen module="LogManager" screen="LogManager" /></item>
 			</menu>
 
 		<!-- Menu / Setup / System / Software Update -->
@@ -63,42 +88,5 @@
 		</menu>
 			<item entryID="factory_reset" level="0" text="Factory Reset" weight="99"><screen module="FactoryReset" screen="FactoryReset" /></item>
 		</menu>
-	</menu>
-
-	<!-- Menu / Backup Menu -->
-		<menu entryID="backup_screen" level="0" text="Backup &amp; Image Manager" weight="3">
-			<id val="bhbackup" />
-			<item weight="5" level="1" text="Image Manager">
-<code>
-from Plugins.SystemPlugins.OBH.ImageManager import OpenBhImageManager
-self.session.open(OpenBhImageManager)
-</code>
-			</item>
-			<item weight="10" level="1" text="Settings Backup">
-<code>
-from Plugins.SystemPlugins.OBH.BackupManager import OpenBhBackupManager
-self.session.open(OpenBhBackupManager)
-</code>
-			</item>
-		</menu>
-
-	<!-- Menu / Information -->
-	<menu entryID="info_screen" level="0" text="Information" weight="98">
-		<id val="information" />
-		<item entryID="about_screen" level="0" text="About"><screen module="About" screen="About" /></item>
-		<item entryID="device_screen" level="0" text="Devices"><screen module="About" screen="Devices" /></item>
-		<item entryID="memory_screen" level="0" text="Memory"><screen module="About" screen="SystemMemoryInfo" /></item>
-		<item entryID="network_screen" level="0" text="Network"><screen module="About" screen="SystemNetworkInfo" /></item>
-		<item entryID="boxinfo_screen" level="2" text="BoxInfo"><screen module="AboutBoxInfo" screen="AboutBoxInfo" /></item>
-	</menu>
-
-	<!-- Menu / Standby and Restart -->
-	<menu entryID="standby_restart_list" text="Standby &amp; Restart" weight="99">
-		<id val="shutdown" />
-		<item entryID="standby" level="0" text="Standby"><screen module="Standby" screen="Standby" /></item>
-		<item entryID="deep_standby" level="0" text="Shut Down" requires="!DeepstandbySupport"><screen module="Standby" screen="TryQuitMainloop">1</screen></item>
-		<item entryID="multiboot" level="0" text="MultiBoot Image Selector" requires="canMultiBoot"><screen module="MultiBootSelector" screen="MultiBootSelector">1</screen></item>
-		<item entryID="restart" level="0" text="Reboot"><screen module="Standby" screen="TryQuitMainloop">2</screen></item>
-		<item entryID="restart_enigma" level="0" text="Restart Enigma2"><screen module="Standby" screen="TryQuitMainloop">3</screen></item>
 	</menu>
 </menu>
