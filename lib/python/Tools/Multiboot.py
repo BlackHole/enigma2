@@ -164,7 +164,7 @@ def GetImagelist(Recovery=None):
 	Imagelist = {}
 	tmp.dir = tempfile.mkdtemp(prefix="GetImagelist")
 	tmpname = tmp.dir
-	from Components.config import config
+	from Components.config import config		# here to prevent boot loop
 	for slot in sorted(list(SystemInfo["canMultiBoot"].keys())):
 		if slot == 0:
 			if not Recovery:		# called by ImageManager
