@@ -13,21 +13,21 @@ from skin import parameters
 
 caid_data = (
 	("0x1700", "0x17ff", "BetaCrypt", "B", True),
-	("0x600", "0x6ff",  "Irdeto", "I", True),
+	("0x600", "0x6ff", "Irdeto", "I", True),
 	("0x1800", "0x18ff", "Nagravision", "N", True),
-	("0x100", "0x1ff",  "Seca Mediaguard", "S", True),
+	("0x100", "0x1ff", "Seca Mediaguard", "S", True),
 	("0x1000", "0x10ff", "Tandberg", "T", True),
-	("0x500", "0x5ff",  "Viaccess", "V", True),
+	("0x500", "0x5ff", "Viaccess", "V", True),
 	("0x2600", "0x2600", "Biss", "BI", True),
 	("0x4aee", "0x4aee", "BulCrypt", "BU", True),
 	("0x5581", "0x5581", "BulCrypt", "BU", False),
-	("0xb00", "0xbff",  "Conax", "CO", True),
-	("0xd00", "0xdff",  "CryptoWorks", "CW", True),
+	("0xb00", "0xbff", "Conax", "CO", True),
+	("0xd00", "0xdff", "CryptoWorks", "CW", True),
 	("0x2700", "0x2710", "DRE-Crypt3", "DC", False),
 	("0x4ae0", "0x4ae1", "DRE-Crypt", "DC", False),
-	("0x900", "0x9ff",  "NDS Videoguard", "ND", True),
+	("0x900", "0x9ff", "NDS Videoguard", "ND", True),
 	("0x4afc", "0x4afc", "Panaccess", "PA", False),
-	("0xe00", "0xeff",  "PowerVu", "PV", True),
+	("0xe00", "0xeff", "PowerVu", "PV", True),
 	("0x4a02", "0x4a02", "Tongfang", "TF", False),
 	("0x5601", "0x5604", "Verimatrix", "VM", True)
 )

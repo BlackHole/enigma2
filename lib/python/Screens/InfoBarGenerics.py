@@ -166,6 +166,7 @@ def reload_whitelist_vbi():
 	global whitelist_vbi
 	whitelist_vbi = [line.strip() for line in open('/etc/enigma2/whitelist_vbi', 'r').readlines()] if os.path.isfile('/etc/enigma2/whitelist_vbi') else []
 
+
 reload_whitelist_vbi()
 
 subservice_groupslist = None
@@ -276,9 +277,9 @@ class InfoBarUnhandledKey:
 		mkey = "unset"
 		try:
 			mkey = getKeyDescription(key)[0]
-			print ("[InfoBarGenerics] KEY: %s %s" % (key, mkey))
+			print("[InfoBarGenerics] KEY: %s %s" % (key, mkey))
 		except:
-			print ("[InfoBarGenerics] KEY: %s" % key)
+			print("[InfoBarGenerics] KEY: %s" % key)
 		self.unhandledKeyDialog.hide()
 		if self.closeSIB(key) and self.secondInfoBarScreen and self.secondInfoBarScreen.shown:
 			if not config.usage.fix_second_infobar.value or mkey not in ("LEFT", "RIGHT", "BOUQUET+", "BOUQUET-"):
@@ -365,6 +366,7 @@ class HideVBILine(Screen):
 	def __init__(self, session):
 		self.skin = """<screen position="0,0" size="%s,%s" flags="wfNoBorder" zPosition="1"/>""" % (getDesktop(0).size().width(), getDesktop(0).size().height() / 360 + 1)
 		Screen.__init__(self, session)
+
 
 class SecondInfoBar(Screen, HelpableScreen):
 	ADD_TIMER = 0
@@ -764,7 +766,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 			self.autocamTimer.start(1000)
 			self.autocamTimer_active = 1
 			if self.autocampop_active == 1:
-				Notifications.RemovePopup(id = "DeliteAutocam")
+				Notifications.RemovePopup(id="DeliteAutocam")
 				self.autocampop_active = 0
 #end
 			if config.usage.show_infobar_on_zap.value:
@@ -959,7 +961,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		nabcur = "/usr/camscript/Ncam_Ci.sh"
 		nabnew = "/usr/camscript/Ncam_Ci.sh"
 		if fileExists("/etc/BhCamConf"):
-			f = open("/etc/BhCamConf",'r')
+			f = open("/etc/BhCamConf", 'r')
 			for line in f.readlines():
 				parts = line.strip().split("|")
 				if parts[0] == "delcurrent":
@@ -973,13 +975,13 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		if nabcur != nabnew:
 			camname = self.nab_Switch_Autocam(nabcur, nabnew)
 			mymess = "     OpenBh Autocam switching to:\n\n     " + camname
-			Notifications.AddPopup(text = mymess, type = MessageBox.TYPE_INFO, timeout = 3, id = "DeliteAutocam")
+			Notifications.AddPopup(text=mymess, type=MessageBox.TYPE_INFO, timeout=3, id="DeliteAutocam")
 			self.autocampop_active = 1
 
 	def nab_Switch_Autocam(self, current, new):
 		camname = "N/A"
-		inme = open("/etc/BhCamConf",'r')
-		out = open("/etc/BhCamConf.tmp",'w')
+		inme = open("/etc/BhCamConf", 'r')
+		out = open("/etc/BhCamConf.tmp", 'w')
 		for line in inme.readlines():
 			if line.find("delcurrent") == 0:
 				line = "delcurrent|" + new + "\n"
@@ -988,7 +990,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		inme.close()
 		os.rename("/etc/BhCamConf.tmp", "/etc/BhCamConf")
 
-		f = open(new,'r')
+		f = open(new, 'r')
 		for line in f.readlines():
 			if line.find('CAMNAME=') != -1:
 				line = line.strip()
@@ -999,7 +1001,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		out.write(camname)
 		out.close()
 		cmd = "cp -f " + new + " /usr/bin/StartBhCam"
-		os.system (cmd)
+		os.system(cmd)
 
 		client_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 		client_socket.connect("/tmp/Blackhole.socket")
@@ -3833,13 +3835,14 @@ class InfoBarTimerButton:
 	def timerSelection(self):
 		self.session.open(TimerEditList)
 
+
 class InfoBarAspectSelection:
 	STATE_HIDDEN = 0
 	STATE_ASPECT = 1
 	STATE_RESOLUTION = 2
 
 	def __init__(self):
-		self["AspectSelectionAction"] = HelpableActionMap(self, "InfobarAspectSelectionActions",{
+		self["AspectSelectionAction"] = HelpableActionMap(self, "InfobarAspectSelectionActions", {
 			"aspectSelection": (self.ExGreen_toggleGreen, _("Aspect list...")),
 		}, prio=0, description=_("Aspect Ratio Actions"))
 
@@ -3962,6 +3965,7 @@ class InfoBarResolutionSelection:
 			self.ExGreen_doHide()
 		return
 
+
 class InfoBarVmodeButton:
 	def __init__(self):
 		self["VmodeButtonActions"] = HelpableActionMap(self, "InfobarVmodeButtonActions",
@@ -3971,6 +3975,7 @@ class InfoBarVmodeButton:
 
 	def vmodeSelection(self):
 		self.session.open(VideoMode)
+
 
 def ToggleVideo():
 	mode = open("/proc/stb/video/policy").read()[:-1]
@@ -3988,6 +3993,7 @@ def ToggleVideo():
 		f = open("/proc/stb/video/policy", "w")
 		f.write("panscan")
 		f.close()
+
 
 class VideoMode(Screen):
 	def __init__(self, session):

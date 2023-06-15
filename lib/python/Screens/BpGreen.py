@@ -96,7 +96,6 @@ class DeliteGreenPanel(Screen):
 				sorted_dict[d[0].strip()] = int(d[1].strip())
 			f.close()
 
-
 		for plugin in self.pluginlist:
 			pos = sorted_dict.get(plugin.name, 99)
 			#self.list.append(PluginEntryComponent(plugin))
@@ -108,7 +107,7 @@ class DeliteGreenPanel(Screen):
 			mylist.append(res)
 
 		if config.misc.plugin_list_ordered.value == 1:
-			self.list = sorted(mylist,  key=itemgetter(4))
+			self.list = sorted(mylist, key=itemgetter(4))
 		else:
 			self.list = mylist
 
@@ -169,12 +168,11 @@ class BhSetupGreen(Screen):
 		})
 
 	def updateList(self):
-		self.list = [ ]
+		self.list = []
 
 		mypath = resolveFilename(SCOPE_CURRENT_SKIN, "")
 		if mypath == "/usr/share/enigma2/":
 			mypath = "/usr/share/enigma2/skin_default/"
-
 
 		mypixmap = mypath + "icons/plugin_list_setup.png"
 		png = LoadPixmap(mypixmap)
@@ -202,7 +200,6 @@ class BhSetupGreen(Screen):
 			self.session.open(DeliteSetupFp)
 
 
-
 class BhGreenPluginsSetup(Screen, ConfigListScreen):
 	skin = """
 	<screen position="center,center" size="600,400" title="Reorder Plugin List">
@@ -214,7 +211,6 @@ class BhGreenPluginsSetup(Screen, ConfigListScreen):
 		<widget name="key_green" position="400,350" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1"/>
 		<widget name="key_blue" position="1100,350" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1"/>
 	</screen>"""
-
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
@@ -254,10 +250,10 @@ class BhGreenPluginsSetup(Screen, ConfigListScreen):
 			res = (plugin.name, pos)
 			mylist.append(res)
 
-		mylist2 = sorted(mylist,  key=itemgetter(1))
+		mylist2 = sorted(mylist, key=itemgetter(1))
 
 		for x in mylist2:
-			item = NoSave(ConfigInteger(limits = (1, 99), default = 99))
+			item = NoSave(ConfigInteger(limits=(1, 99), default=99))
 			item.value = x[1]
 			res = getConfigListEntry(x[0], item)
 			self.list.append(res)
@@ -265,15 +261,13 @@ class BhGreenPluginsSetup(Screen, ConfigListScreen):
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
 
-
-
 	def savePos(self):
 		mylist = []
 		for x in self["config"].list:
-			res =(x[0], x[1].value)
+			res = (x[0], x[1].value)
 			mylist.append(res)
 
-		mylist2 = sorted(mylist,  key=itemgetter(1))
+		mylist2 = sorted(mylist, key=itemgetter(1))
 
 		out = open("/etc/bh_plugins.pos", "w")
 		for x in mylist2:

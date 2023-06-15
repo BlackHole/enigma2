@@ -242,7 +242,7 @@ def createInfo(slot, imagedir="/"):
 	BuildVer = BoxInfo.getItem("imagebuild")
 	BuildDate = VerDate(imagedir)
 	BuildDev = str(BoxInfo.getItem("imagedevbuild")).zfill(3) if BuildType == "developer" else ""
-	return 	"%s %s %s %s %s (%s)" % (Creator, BuildImgVersion, BuildType, BuildVer, BuildDev, BuildDate)
+	return "%s %s %s %s %s (%s)" % (Creator, BuildImgVersion, BuildType, BuildVer, BuildDev, BuildDate)
 
 
 def VerDate(imagedir):
@@ -300,8 +300,8 @@ def bootmviSlot(imagedir="/", text=" ", slot=0):
 		I1 = ImageDraw.Draw(img)									# Call draw Method to add 2D graphics in an image
 		myFont = ImageFont.truetype("/usr/share/fonts/OpenSans-Regular.ttf", 65)		# Custom font style and font size
 		print("[multiboot][bootmviSlot] Write text to png")
-		I1.text((50, 10), text, font=myFont, fill =(255, 255, 255))		# Add Text to an image
-		I1.text((50, 10), text, font=myFont, fill =(255, 255, 255))
+		I1.text((50, 10), text, font=myFont, fill=(255, 255, 255))		# Add Text to an image
+		I1.text((50, 10), text, font=myFont, fill=(255, 255, 255))
 		img.save("/tmp/out1.png")									# Save the edited image
 		print("[multiboot][bootmviSlot] Repack bootlogo")
 		Console(binary=True).ePopen("ffmpeg -i /tmp/out1.png -r 25 -b 20000 -y /tmp/mypicture.m1v  2>/dev/null")

@@ -173,7 +173,7 @@ def countFrontpanelLEDs():
 
 def hasInitCam():
 	for cam in listdir("/usr/camscript"):
-		if cam.startswith("Ncam_") and not cam.startswith("Ncam_Mg") and not cam.startswith ("Ncam_mg") and not cam.endswith("Ci.sh"):
+		if cam.startswith("Ncam_") and not cam.startswith("Ncam_Mg") and not cam.startswith("Ncam_mg") and not cam.endswith("Ci.sh"):
 			return True
 		else:
 			pass

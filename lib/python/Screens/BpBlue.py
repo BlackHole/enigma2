@@ -23,6 +23,7 @@ import socket
 import subprocess
 import re
 
+
 class DeliteBluePanel(Screen):
 	skin = """
 	<screen name="DeliteBluePanel" position="center,center" size="1000,720"  title="OpenBh Blue Panel" flags="wfNoBorder">
@@ -108,7 +109,7 @@ class DeliteBluePanel(Screen):
 				return
 		vc = False
 		filein = "/usr/camscript/" + script
-		f = open(filein,'r')
+		f = open(filein, 'r')
 		for line in f.readlines():
 			if line.find('/usr/softcams/') != -1:
 				vc = True
@@ -124,28 +125,27 @@ class DeliteBluePanel(Screen):
 				self.ch_sc2(fil)
 
 	def ch_sc2(self, name):
-		scriptname = "Ncam_" + name +".sh"
+		scriptname = "Ncam_" + name + ".sh"
 		cams = listdir("/usr/camscript/")
 		for fil in cams:
 			if fil == scriptname:
 				return
 		fileout = "/usr/camscript/" + scriptname
 		out = open(fileout, "w")
-		f = open("/usr/camscript/Ncam_Ci.sh",'r')
+		f = open("/usr/camscript/Ncam_Ci.sh", 'r')
 		for line in f.readlines():
 			if line.find('CAMNAME=') != -1:
 				line = "CAMNAME=\"" + name + "\""
 			if line.find('daemon -S') != -1:
-				line = "\t/usr/softcams/" + name +"\n"
+				line = "\t/usr/softcams/" + name + "\n"
 				if name.find('oscam') != -1 or name.find('ncam') != -1:
-					line = line.rstrip() + " -b -c /etc/tuxbox/config/" + name +"\n"
+					line = line.rstrip() + " -b -c /etc/tuxbox/config/" + name + "\n"
 			if line.find('daemon -K') != -1:
-				line = "\t killall -9 " + name +" 2 >/dev/null\n\tsleep 2\n\tremove_tmp\n"
+				line = "\t killall -9 " + name + " 2 >/dev/null\n\tsleep 2\n\tremove_tmp\n"
 			out.write(line)
 		system("chmod 0755 " + fileout)
 		f.close()
 		out.close()
-
 
 	def populate_List(self):
 		self.camnames = {}
@@ -197,7 +197,7 @@ class DeliteBluePanel(Screen):
 			f.close()
 
 		if check == False:
-			out = open("/etc/BhCamConf",'w')
+			out = open("/etc/BhCamConf", 'w')
 			line = "deldefault|" + self.defaultcam + "\n"
 			out.write(line)
 			line = "delcurrent|" + self.defaultcam + "\n"
@@ -239,8 +239,8 @@ class DeliteBluePanel(Screen):
 		self.sel = self["list"].getCurrent()
 		self.newcam = self.camnames[self.sel]
 
-		inme = open("/etc/BhCamConf",'r')
-		out = open("/etc/BhCamConf.tmp",'w')
+		inme = open("/etc/BhCamConf", 'r')
+		out = open("/etc/BhCamConf.tmp", 'w')
 		for line in inme.readlines():
 			if line.find("delcurrent") == 0:
 				line = "delcurrent|" + self.newcam + "\n"
@@ -290,7 +290,7 @@ class DeliteBluePanel(Screen):
 		elif fileExists("/tmp/.CCcam.nodeid"):
 			from Screens.CCcamInfo import CCcamInfoMain
 			self.session.open(CCcamInfoMain)
-		else :
+		else:
 			self.session.open(MessageBox, _("Please use OScam, Ncam or CCcam to get info."), MessageBox.TYPE_INFO)
 
 	def keyRed(self):
@@ -348,6 +348,7 @@ class Nab_DoStartCam(Screen):
 	def delTimer(self):
 		del self.activityTimer
 
+
 class BhsysInfo(Screen):
 	skin = """
 	<screen position="center,center" size="1020,600" title="OpenBh Info" flags="wfNoBorder">
@@ -370,7 +371,7 @@ class BhsysInfo(Screen):
 
 	def updateInfo(self):
 		rc = system("df -h > /tmp/syinfo.tmp")
-		text =  _("STB \n") +_("Brand:") + "\t%s\n" % getMachineBrand()
+		text = _("STB \n") + _("Brand:") + "\t%s\n" % getMachineBrand()
 		text += _("Model:\t%s \n") % (getMachineName())
 		text += _("Chipset:\t%s \n") % about.getChipSetString().upper() + "\n"
 		text += _("MEMORY\n")
@@ -405,11 +406,11 @@ class BhsysInfo(Screen):
 				if len(parts) == 6:
 					if line.find('Hdd:') != -1:
 						parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
-						text +=_("Hdd:") + "\t" + "{0:<12}".format(parts[1]) + "{0:<12}".format(parts[2]) + "{0:<13}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
+						text += _("Hdd:") + "\t" + "{0:<12}".format(parts[1]) + "{0:<12}".format(parts[2]) + "{0:<13}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
 				if len(parts) == 6:
 					if line.find('Usb:') != -1:
 						parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
-						text +=_("Usb:") + "\t" + "{0:<14}".format(parts[1]) + "{0:<14}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
+						text += _("Usb:") + "\t" + "{0:<14}".format(parts[1]) + "{0:<14}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
 		f.close()
 		os_remove("/tmp/syinfo.tmp")
 
@@ -418,6 +419,7 @@ class BhsysInfo(Screen):
 		text += "Enigma2: \t" + about.getEnigmaVersionString() + "\n"
 		text += "Kernel: \t" + about.getKernelVersionString() + "\n"
 		self["lab1"].setText(text)
+
 
 class BhsysInfo2(Screen):
 	skin = """
@@ -480,7 +482,6 @@ class BhsysInfo2(Screen):
 		self["monipix"].hide()
 		self["moni2"].hide()
 
-
 		self["actions"] = ActionMap(["WizardActions", "ColorActions", "NumberActions"],
 		{
 			"ok": self.KeyOk,
@@ -530,13 +531,13 @@ class BhsysInfo2(Screen):
 		self["moni"].instance.move(ePoint(int(self.x), int(self.y)))
 		self["moni"].instance.resize(eSize(int(self.w), int(self.h)))
 		if self.x > 364:
-			self.x -= (280/20)
+			self.x -= (280 / 20)
 		if self.y > 80:
-			self.y -= (270/20)
+			self.y -= (270 / 20)
 		if self.h < 560:
-			self.h += (560/20)
+			self.h += (560 / 20)
 		if self.w < 560:
-			self.w += (560/20)
+			self.w += (560 / 20)
 			self.moniTimer.start(80)
 		else:
 			self["monipix"].show()
@@ -565,23 +566,23 @@ class BhsysInfo2(Screen):
 			if len(parts) < 2:
 				continue
 			if parts[0] == "Mem:":
-				ramused = int(( int(parts[2]) * 100) // int(parts[1]))
+				ramused = int((int(parts[2]) * 100) // int(parts[1]))
 				t1 += int(parts[1])
 				t2 += int(parts[2])
 			elif parts[0] == "Swap:":
 				if int(parts[1]) > 1:
-					swapused = int(( int(parts[2]) * 100) // int(parts[1]))
+					swapused = int((int(parts[2]) * 100) // int(parts[1]))
 					t1 += int(parts[1])
 					t2 += int(parts[2])
 
-		totused = int(( int(t2) * 100) // int(t1))
+		totused = int((int(t2) * 100) // int(t1))
 
 		self.smallmontxt += _("Ram in use: ") + str(ramused) + " %\n"
 		self.smallmontxt += _("Swap in use: ") + str(swapused) + " %\n"
 
-		self["ramg"].setValue(int(((ramused *100) //120) + 50))
-		self["swapg"].setValue(int(((swapused *100) //120) + 50))
-		self["memtg"].setValue(int(((totused *100) //120) + 50))
+		self["ramg"].setValue(int(((ramused * 100) // 120) + 50))
+		self["swapg"].setValue(int(((swapused * 100) // 120) + 50))
+		self["memtg"].setValue(int(((totused * 100) // 120) + 50))
 
 	def getSpace(self):
 		rc = system("df > /tmp/ninfo.tmp")
@@ -601,40 +602,40 @@ class BhsysInfo2(Screen):
 		fperc = 0
 
 		if fileExists("/tmp/ninfo.tmp"):
-			f = open("/tmp/ninfo.tmp",'r')
+			f = open("/tmp/ninfo.tmp", 'r')
 			for line in f.readlines():
 				line = line.replace('part1', ' ')
 				parts = line.strip().split()
-				totsp = (len(parts) -1)
+				totsp = (len(parts) - 1)
 				if parts[totsp] == "/":
-					strview = parts[totsp -1].replace('%', '')
+					strview = parts[totsp - 1].replace('%', '')
 					if strview.isdigit():
-						flperc = int(parts[totsp -1].replace('%', ''))
-						fltot = int(parts[totsp -4])
-						flused = int(parts[totsp -3])
+						flperc = int(parts[totsp - 1].replace('%', ''))
+						fltot = int(parts[totsp - 4])
+						flused = int(parts[totsp - 3])
 				if parts[totsp] == "/usr":
 					self.extendedFlash = True
-					strview = parts[totsp -1].replace('%', '')
+					strview = parts[totsp - 1].replace('%', '')
 					if strview.isdigit():
-						flperc = int(parts[totsp -1].replace('%', ''))
-						fltot = int(parts[totsp -4])
-						flused = int(parts[totsp -3])
+						flperc = int(parts[totsp - 1].replace('%', ''))
+						fltot = int(parts[totsp - 4])
+						flused = int(parts[totsp - 3])
 				if parts[totsp] == "/media/mmc":
-					mmcperc = int(parts[totsp -1].replace('%', ''))
-					mmctot = int(parts[totsp -4])
-					mmcused = int(parts[totsp -3])
+					mmcperc = int(parts[totsp - 1].replace('%', ''))
+					mmctot = int(parts[totsp - 4])
+					mmcused = int(parts[totsp - 3])
 				if parts[totsp] == "/media/usb":
-					strview = parts[totsp -1].replace('%', '')
+					strview = parts[totsp - 1].replace('%', '')
 					if strview.isdigit():
-						usperc = int(parts[totsp -1].replace('%', ''))
-						ustot = int(parts[totsp -4])
-						usused = int(parts[totsp -3])
+						usperc = int(parts[totsp - 1].replace('%', ''))
+						ustot = int(parts[totsp - 4])
+						usused = int(parts[totsp - 3])
 				if parts[totsp] == "/media/hdd":
-					strview = parts[totsp -1].replace('%', '')
+					strview = parts[totsp - 1].replace('%', '')
 					if strview.isdigit():
-						hdperc = int(parts[totsp -1].replace('%', ''))
-						hdtot = int(parts[totsp -4])
-						hdused = int(parts[totsp -3])
+						hdperc = int(parts[totsp - 1].replace('%', ''))
+						hdtot = int(parts[totsp - 4])
+						hdused = int(parts[totsp - 3])
 
 			f.close()
 			os_remove("/tmp/ninfo.tmp")
@@ -642,20 +643,18 @@ class BhsysInfo2(Screen):
 			ftot = mmctot + ustot + hdtot
 			fused = int(mmcused) + int(usused) + int(hdused)
 			if ftot > 100:
-				fperc = (fused  * 100) //ftot
-
+				fperc = (fused * 100) // ftot
 
 		self.smallmontxt += _("Flash in use: ") + str(flperc) + " %\n"
 		self.smallmontxt += _("Micro SD in use: ") + str(mmcperc) + " %\n"
 		self.smallmontxt += _("Usb in use: ") + str(usperc) + " %\n"
 		self.smallmontxt += _("Hdd in use: ") + str(hdperc) + " %\n"
 
-		self["spacetg"].setValue(int(((fperc *100) //120) + 50))
-		self["mmcfg"].setValue(int(((mmcperc *100) //120) + 50))
-		self["usbg"].setValue(int(((usperc *100) //120) + 50))
-		self["hddg"].setValue(int(((hdperc *100) //120) + 50))
-		self["flashg"].setValue(int(((flperc *100) //120) + 50))
-
+		self["spacetg"].setValue(int(((fperc * 100) // 120) + 50))
+		self["mmcfg"].setValue(int(((mmcperc * 100) // 120) + 50))
+		self["usbg"].setValue(int(((usperc * 100) // 120) + 50))
+		self["hddg"].setValue(int(((hdperc * 100) // 120) + 50))
+		self["flashg"].setValue(int(((flperc * 100) // 120) + 50))
 
 	def getSpyes(self):
 		atelnet = False
@@ -666,7 +665,7 @@ class BhsysInfo2(Screen):
 		rc = system("ps > /tmp/nvpn.tmp")
 
 		if fileExists("/tmp/nvpn.tmp"):
-			f = open("/tmp/nvpn.tmp",'r')
+			f = open("/tmp/nvpn.tmp", 'r')
 			for line in f.readlines():
 				if line.find('openvpn') != -1:
 					avpn = True
@@ -704,14 +703,12 @@ class BhsysInfo2(Screen):
 		else:
 			self["spy11"].hide()
 
-
-
 	def getHddtemp(self):
 		temperature = "N/A"
 		temperc = 0
 
 		hdd_dev = ""
-		hdds = ['sda', 'sdb', 'sdc',  'sdd', 'sde', 'sdf']
+		hdds = ['sda', 'sdb', 'sdc', 'sdd', 'sde', 'sdf']
 		for device in hdds:
 			filename = "/sys/block/%s/removable" % (device)
 			if fileExists(filename):
@@ -731,7 +728,6 @@ class BhsysInfo2(Screen):
 		self["hddtempg"].setValue(temperc + 64)
 		self.smallmontxt += "Hdd temp: " + temperature + " °C"
 
-
 	def KeyRed(self):
 		if self.moni_state == 0:
 			self.moniShow()
@@ -744,21 +740,21 @@ class BhsysInfo2(Screen):
 		totaltot = 0
 		rc = system("free > /tmp/ninfo.tmp")
 		if fileExists("/tmp/ninfo.tmp"):
-			f = open("/tmp/ninfo.tmp",'r')
+			f = open("/tmp/ninfo.tmp", 'r')
 			for line in f.readlines():
 				parts = line.strip().split()
 				if parts[0] == "Mem:":
-					ramused = int(( int(parts[2]) * 100) // int(parts[1]))
+					ramused = int((int(parts[2]) * 100) // int(parts[1]))
 					mytext += _("Ram in use: ") + str(ramused) + " % \n"
 					mytext += _("Total: ") + parts[1] + "\t" + _("Used: ") + parts[2] + "\t" + _("Free: ") + parts[3] + "\n"
 				elif parts[0] == "Swap:":
 					swapused = 0
 					if int(parts[1]) > 1:
-						swapused = int(( int(parts[2]) * 100) // int(parts[1]))
+						swapused = int((int(parts[2]) * 100) // int(parts[1]))
 					mytext += _("Swap in use: ") + str(swapused) + " % \n"
 					mytext += _("Total: ") + parts[1] + "\t" + _("Used: ") + parts[2] + "\t" + _("Free: ") + parts[3] + "\n"
 				elif parts[0] == "Total:":
-					totused = int(( int(parts[2]) * 100) // int(parts[1]))
+					totused = int((int(parts[2]) * 100) // int(parts[1]))
 					mytext += _("Total in use: ") + str(totused) + " % \n"
 
 			f.close()
@@ -766,7 +762,7 @@ class BhsysInfo2(Screen):
 
 		count = 0
 		if fileExists("/proc/meminfo"):
-			f = open("/proc/meminfo",'r')
+			f = open("/proc/meminfo", 'r')
 			for line in f.readlines():
 				mytext += line
 				count += 1
@@ -798,72 +794,71 @@ class BhsysInfo2(Screen):
 			mountflash = "/usr"
 
 		if fileExists("/tmp/ninfo.tmp"):
-			f = open("/tmp/ninfo.tmp",'r')
+			f = open("/tmp/ninfo.tmp", 'r')
 			for line in f.readlines():
 				meas = "M"
 				line = line.replace('part1', ' ')
 				parts = line.strip().split()
-				totsp = (len(parts) -1)
+				totsp = (len(parts) - 1)
 				if parts[totsp] == mountflash:
 					if flused:
 						continue
-					flused = parts[totsp -1]
+					flused = parts[totsp - 1]
 					flperc = int(flused.replace('%', ''))
-					fltot = int(parts[totsp -4])
+					fltot = int(parts[totsp - 4])
 					if fltot > 1000000:
 						fltot = fltot // 1000
 						meas = "Gb"
-					capacity = "%d.%03d " % (fltot//1000, fltot%1000)
-					mytext +=  _("FLASH: ") + capacity + meas + _("   in use: ") + flused + "\n"
-					mytext += _("Total: ") + parts[totsp -4] + _("   Used: ") + parts[totsp -3] + _("   Free: ") + parts[totsp -2]  + "\n\n"
-					fltot = int(parts[totsp -4])
-					flused = int(parts[totsp -3])
-
+					capacity = "%d.%03d " % (fltot // 1000, fltot % 1000)
+					mytext += _("FLASH: ") + capacity + meas + _("   in use: ") + flused + "\n"
+					mytext += _("Total: ") + parts[totsp - 4] + _("   Used: ") + parts[totsp - 3] + _("   Free: ") + parts[totsp - 2] + "\n\n"
+					fltot = int(parts[totsp - 4])
+					flused = int(parts[totsp - 3])
 
 				if parts[totsp] == "/media/mmc":
 					if mmcused:
 						continue
-					mmcused = parts[totsp -1]
+					mmcused = parts[totsp - 1]
 					mmcperc = int(mmcused.replace('%', ''))
-					mmctot = int(parts[totsp -4])
+					mmctot = int(parts[totsp - 4])
 					if mmctot > 1000000:
 						mmctot = mmctot // 1000
 						meas = "Gb"
-					capacity = "%d.%03d " % (mmctot//1000, mmctot%1000)
+					capacity = "%d.%03d " % (mmctot // 1000, mmctot % 1000)
 					mytext += ("Micro SD: ") + capacity + meas + _("   in use: ") + mmcused + "\n"
-					mytext += _("Total: ") + parts[totsp -4] + _("   Used: ") + parts[totsp -3] + _("   Free: ") + parts[totsp -2]  + "\n\n"
-					mmctot = int(parts[totsp -4])
-					mmcused = int(parts[totsp -3])
+					mytext += _("Total: ") + parts[totsp - 4] + _("   Used: ") + parts[totsp - 3] + _("   Free: ") + parts[totsp - 2] + "\n\n"
+					mmctot = int(parts[totsp - 4])
+					mmcused = int(parts[totsp - 3])
 				if parts[totsp] == "/media/usb":
 					if usused:
 						continue
-					usused = parts[totsp -1]
+					usused = parts[totsp - 1]
 					usperc = int(usused.replace('%', ''))
-					ustot = int(parts[totsp -4])
+					ustot = int(parts[totsp - 4])
 					if ustot > 1000000:
 						ustot = ustot // 1000
 						meas = "Gb"
-					capacity = "%d.%03d " % (ustot//1000, ustot%1000)
+					capacity = "%d.%03d " % (ustot // 1000, ustot % 1000)
 					mytext += _("USB: ") + capacity + meas + _("   in use: ") + usused + "\n"
-					mytext += _("Total: ") + parts[totsp -4] + _("   Used: ") + parts[totsp -3] + _("   Free: ") + parts[totsp -2] + "\n\n"
-					ustot = int(parts[totsp -4])
-					usused = int(parts[totsp -3])
+					mytext += _("Total: ") + parts[totsp - 4] + _("   Used: ") + parts[totsp - 3] + _("   Free: ") + parts[totsp - 2] + "\n\n"
+					ustot = int(parts[totsp - 4])
+					usused = int(parts[totsp - 3])
 				if parts[totsp] == "/media/hdd":
 					if hdused:
 						continue
-					strview = parts[totsp -1].replace('%', '')
+					strview = parts[totsp - 1].replace('%', '')
 					if strview.isdigit():
-						hdused = parts[totsp -1]
+						hdused = parts[totsp - 1]
 						hdperc = int(hdused.replace('%', ''))
-						hdtot = int(parts[totsp -4])
+						hdtot = int(parts[totsp - 4])
 						if hdtot > 1000000:
 							hdtot = hdtot // 1000
 							meas = "Gb"
-						capacity = "%d.%03d " % (hdtot//1000, hdtot%1000)
+						capacity = "%d.%03d " % (hdtot // 1000, hdtot % 1000)
 						mytext += _("HDD: ") + capacity + meas + _("   in use: ") + hdused + "\n"
-						mytext += _("Total: ") + parts[totsp -4] + _("   Used: ") + parts[totsp -3] + _("   Free: ") + parts[totsp -2] + "\n\n"
-						hdtot = int(parts[totsp -4])
-						hdused = int(parts[totsp -3])
+						mytext += _("Total: ") + parts[totsp - 4] + _("   Used: ") + parts[totsp - 3] + _("   Free: ") + parts[totsp - 2] + "\n\n"
+						hdtot = int(parts[totsp - 4])
+						hdused = int(parts[totsp - 3])
 
 			f.close()
 			os_remove("/tmp/ninfo.tmp")
@@ -874,14 +869,14 @@ class BhsysInfo2(Screen):
 			ffree = (ftot - fused)
 			fperc = 0
 			if ftot > 100:
-				fperc = (fused  * 100) //ftot
+				fperc = (fused * 100) // ftot
 			if ftot > 1000000:
 				ftot = ftot // 1000
 				meas = "Gb"
 			if ftot > 1000000000:
 				ftot = ftot // 1000000
 				meas = "Tera"
-			ftot = "%d.%03d " % (ftot//1000, ftot%1000)
+			ftot = "%d.%03d " % (ftot // 1000, ftot % 1000)
 			ftot += meas
 
 			meas = "M"
@@ -891,7 +886,7 @@ class BhsysInfo2(Screen):
 			if fused > 1000000000:
 				fused = fused // 1000000
 				meas = "Tera"
-			fused = "%d.%03d " % (fused//1000, fused%1000)
+			fused = "%d.%03d " % (fused // 1000, fused % 1000)
 			fused += meas
 
 			meas = "M"
@@ -901,7 +896,7 @@ class BhsysInfo2(Screen):
 			if ffree > 1000000000:
 				ffree = ffree // 1000000
 				meas = "Tera"
-			ffree = "%d.%03d " % (ffree//1000, ffree%1000)
+			ffree = "%d.%03d " % (ffree // 1000, ffree % 1000)
 			ffree += meas
 
 			mytext += _("Total Space: ") + ftot + _("    in use: ") + str(fperc) + "% \n"
@@ -915,7 +910,7 @@ class BhsysInfo2(Screen):
 		mytext = ""
 		count = 0
 		if fileExists("/proc/stat"):
-			f = open("/proc/stat",'r')
+			f = open("/proc/stat", 'r')
 			for line in f.readlines():
 				if line.find('intr') != -1:
 					continue
@@ -924,7 +919,7 @@ class BhsysInfo2(Screen):
 				mytext += line
 			f.close()
 		if fileExists("/proc/stat"):
-			f = open("/proc/cpuinfo",'r')
+			f = open("/proc/cpuinfo", 'r')
 			for line in f.readlines():
 				parts = line.strip().split(":")
 				if len(parts) > 1:
@@ -951,10 +946,9 @@ class BhsysInfo2(Screen):
 	def KeyThree(self):
 		self.session.open(About)
 
-
 	def delTimer(self):
 		hdd_dev = ""
-		hdds = ['sda', 'sdb', 'sdc',  'sdd', 'sde', 'sdf']
+		hdds = ['sda', 'sdb', 'sdc', 'sdd', 'sde', 'sdf']
 		for device in hdds:
 			filename = "/sys/block/%s/removable" % (device)
 			if fileExists(filename):
@@ -962,12 +956,13 @@ class BhsysInfo2(Screen):
 					hdd_dev = device
 					break
 		hddloc = "/dev/" + hdd_dev
-		if hdd_dev != "" :
+		if hdd_dev != "":
 			cmd = "hdparm -y " + hddloc
 			system(cmd)
 
 		del self.activityTimer
 		del self.moniTimer
+
 
 class NabProcInfo(Screen):
 	skin = """
@@ -1000,7 +995,7 @@ class NabProcInfo(Screen):
 		strview = ""
 		rc = system("ps > /tmp/ninfo.tmp")
 		if fileExists("/tmp/ninfo.tmp"):
-			f = open("/tmp/ninfo.tmp",'r')
+			f = open("/tmp/ninfo.tmp", 'r')
 			for line in f.readlines():
 				parts = line.replace("?", "").strip().split()
 				if parts[0] == "PID":
@@ -1008,9 +1003,9 @@ class NabProcInfo(Screen):
 				strview += parts[0]
 				strview += "\t" + parts[1]
 				line = re.sub(r'\b(PID|TTY|CMD)\b', '', line)
-				i = (len(parts) -1)
+				i = (len(parts) - 1)
 				if i > 1:
-					strview += "\t" + parts[i] +  "\n"
+					strview += "\t" + parts[i] + "\n"
 				#strview += line + "\n"
 
 			f.close()
@@ -1043,18 +1038,15 @@ class NabEnsetInfo(Screen):
 
 		self.onLayoutFinish.append(self.updatetext)
 
-
 	def updatetext(self):
 		strview = ""
 		if fileExists("/etc/enigma2/settings"):
-			f = open("/etc/enigma2/settings",'r')
+			f = open("/etc/enigma2/settings", 'r')
 			for line in f.readlines():
 				strview += line
 
 			f.close()
 			self["infotext"].setText(strview)
-
-
 
 
 class DeliteAutocamMan2(Screen):
@@ -1096,11 +1088,11 @@ class DeliteAutocamMan2(Screen):
 		self.session.openWithCallback(self.updateList, DeliteSetupAutocam2)
 
 	def updateList(self):
-		self.list = [ ]
+		self.list = []
 		cams = listdir("/usr/camscript")
 		for fil in cams:
 			if fil.find('Ncam_') != -1:
-				f = open("/usr/camscript/" + fil,'r')
+				f = open("/usr/camscript/" + fil, 'r')
 				for line in f.readlines():
 					if line.find('CAMNAME=') != -1:
 						line = line.strip()
@@ -1108,11 +1100,10 @@ class DeliteAutocamMan2(Screen):
 						self.emlist.append(cn)
 						self.camnames[cn] = "/usr/camscript/" + fil
 
-
 				f.close()
 
 		if fileExists("/etc/BhCamConf"):
-			f = open("/etc/BhCamConf",'r')
+			f = open("/etc/BhCamConf", 'r')
 			for line in f.readlines():
 				parts = line.strip().split("|")
 				if parts[0] == "delcurrent":
@@ -1140,7 +1131,7 @@ class DeliteAutocamMan2(Screen):
 		if mysel:
 			mysel = mysel[1]
 			out = open("/etc/BhCamConf.tmp", "w")
-			f = open("/etc/BhCamConf",'r')
+			f = open("/etc/BhCamConf", 'r')
 			for line in f.readlines():
 				parts = line.strip().split("|")
 				if parts[0] != mysel:
@@ -1188,7 +1179,7 @@ class DeliteSetupAutocam2(Screen, ConfigListScreen):
 		cams = listdir("/usr/camscript")
 		for fil in cams:
 			if fil.find('Ncam_') != -1:
-				f = open("/usr/camscript/" + fil,'r')
+				f = open("/usr/camscript/" + fil, 'r')
 				for line in f.readlines():
 					if line.find('CAMNAME=') != -1:
 						line = line.strip()
@@ -1198,7 +1189,7 @@ class DeliteSetupAutocam2(Screen, ConfigListScreen):
 						mychoices.append(res)
 				f.close()
 
-		self.autocam_file = NoSave(ConfigSelection(choices = mychoices))
+		self.autocam_file = NoSave(ConfigSelection(choices=mychoices))
 
 		res = getConfigListEntry(self.chname, self.autocam_file)
 		self.list.append(res)
@@ -1209,7 +1200,7 @@ class DeliteSetupAutocam2(Screen, ConfigListScreen):
 	def saveMyconf(self):
 		check = True
 		if fileExists("/etc/BhCamConf"):
-			f = open("/etc/BhCamConf",'r')
+			f = open("/etc/BhCamConf", 'r')
 			for line in f.readlines():
 				parts = line.strip().split("|")
 				if parts[0] == self.chref:
@@ -1222,7 +1213,6 @@ class DeliteSetupAutocam2(Screen, ConfigListScreen):
 			out.write(line)
 			out.close()
 		self.close()
-
 
 
 class DeliteBp:

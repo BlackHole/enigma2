@@ -986,7 +986,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
 
 		if getChipSetString() in ("3798mv200", "3798mv300", "hi3798mv200", "hi3798mv200h", "hi3798mv200advca", "hi3798mv300"):
-			self.pluglist.append (["Chromium2 (Netflix, YoutubeTV, Dazn, Prime Video, Disney +)", "enigma2-plugin-extensions-chromium2"])
+			self.pluglist.append(["Chromium2 (Netflix, YoutubeTV, Dazn, Prime Video, Disney +)", "enigma2-plugin-extensions-chromium2"])
 
 		self.activityTimer = eTimer()
 		self.activityTimer.timeout.get().append(self.updateFeed2)

@@ -265,6 +265,7 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 		except Exception as e:
 			self.session.open(MessageBox, _("YouTube is not installed!\nPlease install it."), type=MessageBox.TYPE_INFO, timeout=10)
 
+
 class MoviePlayer(InfoBarBase, InfoBarShowHide, InfoBarLongKeyDetection, InfoBarMenu, InfoBarEPG,
 				  InfoBarSeek, InfoBarShowMovies, InfoBarInstantRecord, InfoBarAudioSelection, InfoBarVideoSetup, HelpableScreen, InfoBarNotifications,
 				  InfoBarServiceNotifications, InfoBarPVRState, InfoBarCueSheetSupport,
