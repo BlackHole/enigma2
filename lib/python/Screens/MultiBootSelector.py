@@ -21,32 +21,6 @@ from Tools.Multiboot import emptySlot, GetImagelist, GetCurrentImageMode, restor
 
 
 class MultiBootSelector(Screen, HelpableScreen):
-	skin = ["""
-	<screen title="MultiBoot Image Selector" position="center,center" size="%d,%d">
-		<widget name="config" position="%d,%d" size="%d,%d" font="Regular;%d" itemHeight="%d" scrollbarMode="showOnDemand" />
-		<widget source="description" render="Label" position="%d,e-%d" size="%d,%d" font="Regular;%d" />
-		<widget source="key_red" render="Label" position="%d,e-%d" size="%d,%d" backgroundColor="key_red" font="Regular;%d" foregroundColor="key_text" halign="center" noWrap="1" valign="center">
-			<convert type="ConditionalShowHide"/>
-		</widget>
-		<widget source="key_green" render="Label" position="%d,e-%d" size="%d,%d" backgroundColor="key_green" font="Regular;%d" foregroundColor="key_text" halign="center" noWrap="1" valign="center">
-			<convert type="ConditionalShowHide"/>
-		</widget>
-		<widget source="key_yellow" render="Label" position="%d,e-%d" size="%d,%d" backgroundColor="key_yellow" font="Regular;%d" foregroundColor="key_text" halign="center" noWrap="1" valign="center">
-			<convert type="ConditionalShowHide"/>
-		</widget>
-		<widget source="key_blue" render="Label" position="%d,e-%d" size="%d,%d" backgroundColor="key_blue" font="Regular;%d" foregroundColor="key_text" halign="center" noWrap="1" valign="center">
-			<convert type="ConditionalShowHide"/>
-		</widget>
-	</screen>""",
-		900, 460,
-		10, 10, 880, 306, 28, 34,
-		10, 125, 880, 60, 22,
-		10, 50, 210, 40, 20,
-		230, 50, 210, 40, 20,
-		450, 50, 210, 40, 20,
-		670, 50, 210, 40, 20
-	]
-
 	def __init__(self, session, *args):
 		Screen.__init__(self, session, mandatoryWidgets=["key_yellow", "key_blue"])
 		HelpableScreen.__init__(self)
@@ -54,9 +28,10 @@ class MultiBootSelector(Screen, HelpableScreen):
 		self.skinName = ["MultiBootSelector", "Setup"]
 		self.onChangedEntry = []
 		self.tmp_dir = None
+		self.fromInit = True
 		usbIn = SystemInfo["HasUsbhdd"].keys() and SystemInfo["HasKexecMultiboot"]
 #		print("[MultiBootSelector] usbIn, SystemInfo['HasUsbhdd'], SystemInfo['HasKexecMultiboot'], SystemInfo['HasKexecUSB']", usbIn, "   ", SystemInfo["HasUsbhdd"], "   ", SystemInfo["HasKexecMultiboot"], "   ", SystemInfo["HasKexecUSB"])
-		self["config"] = ChoiceList(list=[ChoiceEntryComponent("", ((_("Retrieving image slots - Please wait...")), "Queued"))])
+		self["config"] = ChoiceList(list=[ChoiceEntryComponent(text=((_("Retrieving image slots - Please wait...")), "Queued"))])
 		self["description"] = StaticText(_("Press GREEN (Reboot) to switch images, YELLOW (Delete) to erase an image or BLUE (Restore) to restore all deleted images."))
 		self["key_red"] = StaticText(_("Add Extra USB slots") if usbIn else _("Cancel"))
 		self["key_green"] = StaticText()
@@ -89,6 +64,7 @@ class MultiBootSelector(Screen, HelpableScreen):
 	def getImagelist(self):
 		self.imagedict = GetImagelist(Recovery=SystemInfo["RecoveryMode"])
 		imageList = []
+		imageList12 = []
 		self.deletedImagesExists = False
 		self["key_blue"].text = ""
 		currentimageslot = SystemInfo["MultiBootSlot"]
@@ -99,29 +75,28 @@ class MultiBootSelector(Screen, HelpableScreen):
 		slotMulti = _("Slot %s %s%s: %s - %s mode%s")
 		slotRecov = _("%s: Boot to access Recovery Options%s")
 		if self.imagedict:
-			indextot = 0
-			for index, x in enumerate(sorted(self.imagedict.keys())):
+			for x in sorted(self.imagedict.keys()):
 				if self.imagedict[x]["imagename"] == _("Deleted image"):
 					self.deletedImagesExists = True
 					self["key_blue"].text = _("Restore")
-				if SystemInfo["canMode12"]:
-					if self.imagedict[x]["imagename"] == _("Empty slot"):
-						imageList.insert(index, ChoiceEntryComponent("", (slotSingle % (x, SystemInfo["canMultiBoot"][x]["slotType"], SystemInfo["canMultiBoot"][x]["slotname"], self.imagedict[x]["imagename"], current if x == currentimageslot else ""), (x, 1))))
-					else:
-						imageList.insert(index, ChoiceEntryComponent("", (slotMulti % (x, SystemInfo["canMultiBoot"][x]["slotType"], SystemInfo["canMultiBoot"][x]["slotname"], self.imagedict[x]["imagename"], "Kodi", current if x == currentimageslot and mode != 12 else ""), (x, 1))))
-						imageList.append(ChoiceEntryComponent("", (slotMulti % (x, SystemInfo["canMultiBoot"][x]["slotType"], SystemInfo["canMultiBoot"][x]["slotname"], self.imagedict[x]["imagename"], "PiP", current if x == currentimageslot and mode == 12 else ""), (x, 12))))
-					indextot = index + 1
 				elif self.imagedict[x]["imagename"] != _("Empty slot"):
-					if self.imagedict[x]["imagename"] == _("Recovery Mode"):
-						imageList.append(ChoiceEntryComponent("", (slotRecov % (self.imagedict[x]["imagename"], current if x == currentimageslot else ""), (x, 1))))
+					if SystemInfo["canMode12"]:
+						imageList.append(ChoiceEntryComponent(text=(slotMulti % (x, SystemInfo["canMultiBoot"][x]["slotType"], SystemInfo["canMultiBoot"][x]["slotname"], self.imagedict[x]["imagename"], "Kodi", current if x == currentimageslot and mode != 12 else ""), (x, 1))))
+						imageList12.append(ChoiceEntryComponent(text=(slotMulti % (x, SystemInfo["canMultiBoot"][x]["slotType"], SystemInfo["canMultiBoot"][x]["slotname"], self.imagedict[x]["imagename"], "PiP", current if x == currentimageslot and mode == 12 else ""), (x, 12))))
 					else:
-						imageList.append(ChoiceEntryComponent("", (slotSingle % (x, SystemInfo["canMultiBoot"][x]["slotType"], SystemInfo["canMultiBoot"][x]["slotname"], self.imagedict[x]["imagename"], current if x == currentimageslot else ""), (x, 1))))
-			if SystemInfo["canMode12"]:
-				imageList.insert(indextot, " ")
+						if self.imagedict[x]["imagename"] == _("Recovery Mode"):
+							imageList.append(ChoiceEntryComponent(text=(slotRecov % (self.imagedict[x]["imagename"], current if x == currentimageslot else ""), (x, 1))))
+						else:
+							imageList.append(ChoiceEntryComponent(text=(slotSingle % (x, SystemInfo["canMultiBoot"][x]["slotType"], SystemInfo["canMultiBoot"][x]["slotname"], self.imagedict[x]["imagename"], current if x == currentimageslot else ""), (x, 1))))
+			if imageList12:
+				imageList += [" "] + imageList12
 		else:
-			imageList.append(ChoiceEntryComponent("", ((_("No images found")), "Waiter")))
+			imageList.append(ChoiceEntryComponent(text=((_("No images found")), "Waiter")))
 		self["config"].setList(imageList)
 		print("[MultiBootSelector] imageList X = %s" % imageList)
+		if self.fromInit:
+			self["config"].moveToIndex(next(iter([i for i, x in enumerate(imageList) if current in x[0][0]]), 0))
+			self.fromInit = False
 		self.updateKeys()
 
 	def reboot(self):
