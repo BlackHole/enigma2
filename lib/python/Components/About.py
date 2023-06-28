@@ -42,7 +42,7 @@ def getGStreamerVersionString():
 	try:
 		from glob import glob
 		gst = [x.split("Version: ") for x in open(glob("/var/lib/opkg/info/gstreamer[0-9].[0-9].control")[0], "r") if x.startswith("Version:")][0]
-		return "%s" % gst[1].split("+")[0].replace("\n", "")
+		return "%s" % gst[1].split("+")[0].split("-")[0].replace("\n", "")
 	except:
 		return _("unknown")
 
@@ -160,16 +160,12 @@ def getCPUString():
 
 
 def getCpuCoresInt():
-	if ospath.isfile("/proc/cpuinfo"):
-		with open("/proc/cpuinfo", "r") as file:
-			lines = file.readlines()
-			for x in lines:
-				splitted = x.split(": ")
-				if len(splitted) > 1:
-					splitted[1] = splitted[1].replace("\n", "")
-					if splitted[0].startswith("processor"):
-						cores = int(splitted[1]) + 1
-	return cores
+	if ospath.isfile("/sys/devices/system/cpu/possible"):
+		with open("/sys/devices/system/cpu/possible", "r") as file:
+			splitted = file.read().strip().split("-")
+			return int(splitted[1]) + 1
+	else:
+		return 0
 
 
 def getCpuCoresString():
