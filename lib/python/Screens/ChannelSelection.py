@@ -315,6 +315,7 @@ class ChannelContextMenu(Screen):
 				else:
 					_append_when_current_valid(current, menu, actions, (_("End alternatives edit"), self.bouquetMarkEnd), level=0, key="bullet")
 					_append_when_current_valid(current, menu, actions, (_("Abort alternatives edit"), self.bouquetMarkAbort), level=0, key="bullet")
+		menu.append(ChoiceEntryComponent(key="green", text=(_("Reload Services"), self.reloadServices)))
 		self["actions"] = ActionMap(["OkCancelActions", "ColorActions", "NumberActions", "MenuActions"], actions)
 
 	def set3DMode(self, value):
@@ -444,6 +445,11 @@ class ChannelContextMenu(Screen):
 			self.close(True)
 		else:
 			return 0
+
+	def reloadServices(self):
+		eDVBDB.getInstance().reloadBouquets()
+		eDVBDB.getInstance().reloadServicelist()
+		self.session.openWithCallback(self.close, MessageBox, _("The service list is reloaded."), MessageBox.TYPE_INFO, timeout=5)
 
 	def okbuttonClick(self):
 		self["menu"].getCurrent()[0][1]()
