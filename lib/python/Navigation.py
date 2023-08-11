@@ -172,8 +172,10 @@ class Navigation:
 			else:
 				playref = ref
 			if self.pnav:
-				self.pnav.stopService()
-				self.skipServiceReferenceReset = True
+				if not SystemInfo["FCCactive"]:
+					self.pnav.stopService()
+				else:
+					self.skipServiceReferenceReset = True
 				self.currentlyPlayingServiceReference = playref
 				self.currentlyPlayingServiceOrGroup = ref
 				if InfoBarInstance and InfoBarInstance.servicelist.servicelist.setCurrent(ref, adjust):
@@ -215,9 +217,9 @@ class Navigation:
 						self.retryServicePlayTimer = eTimer()
 						self.retryServicePlayTimer.callback.append(boundFunction(self.playService, ref, checkParentalControl, forceRestart, adjust))
 						self.retryServicePlayTimer.start(500, True)
+				self.skipServiceReferenceReset = False
 				if setPriorityFrontend:
 					setPreferredTuner(int(config.usage.frontend_priority.value))
-				self.skipServiceReferenceReset = False
 				return 0
 		elif oldref and InfoBarInstance and InfoBarInstance.servicelist.servicelist.setCurrent(oldref, adjust):
 			self.currentlyPlayingServiceOrGroup = InfoBarInstance.servicelist.servicelist.getCurrent()

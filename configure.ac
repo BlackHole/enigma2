@@ -537,6 +537,17 @@ if test x"$with_lcddev" != xno ; then
 	AC_DEFINE_UNQUOTED(LCD_DEV, "$withval", [Defines which device to use for lcd (e.g. /dev/fb1)])
 fi
 
+AC_ARG_WITH(fcc,
+	AC_HELP_STRING([--with-fcc], [add FCC system plugin]),
+	[[with_fcc=$withval]],
+	[[with_fcc=no]]
+)
+
+AM_CONDITIONAL(HAVE_FCC, test x"$with_fcc" = xyes)
+if test x"$with_fcc" = xyes ; then
+	AC_DEFINE(HAVE_FCC, 1,[add FCC system plugin])
+fi
+
 AC_CHECK_HEADERS([sys/klog.h])
 AC_CHECK_FUNCS([klogctl])
 
@@ -627,6 +638,8 @@ lib/python/Plugins/SystemPlugins/DefaultServicesScanner/Makefile
 lib/python/Plugins/SystemPlugins/DefaultServicesScanner/meta/Makefile
 lib/python/Plugins/SystemPlugins/DiseqcTester/Makefile
 lib/python/Plugins/SystemPlugins/DiseqcTester/meta/Makefile
+lib/python/Plugins/SystemPlugins/FastChannelChange/Makefile
+lib/python/Plugins/SystemPlugins/FastChannelChange/meta/Makefile
 lib/python/Plugins/SystemPlugins/FastScan/Makefile
 lib/python/Plugins/SystemPlugins/FrontprocessorUpgrade/Makefile
 lib/python/Plugins/SystemPlugins/FrontprocessorUpgrade/meta/Makefile
