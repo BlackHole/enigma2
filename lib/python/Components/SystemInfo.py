@@ -98,8 +98,8 @@ class BoxInformation:
 		SystemInfo[item] = value
 		return True
 
-	def deleteItem(self, item):
-		if item in self.immutableList:
+	def deleteItem(self, item, forceOverride=False):
+		if item in self.immutableList and not forceOverride:
 			print("[BoxInfo] Error: Item '%s' is immutable and can not be deleted!" % item)
 		elif item in self.boxInfo:
 			del self.boxInfo[item]
@@ -172,12 +172,8 @@ def countFrontpanelLEDs():
 
 
 def hasInitCam():
-	for cam in listdir("/usr/camscript"):
-		if cam.startswith("Ncam_") and not cam.startswith("Ncam_Mg") and not cam.startswith("Ncam_mg") and not cam.endswith("Ci.sh"):
-			return True
-		else:
-			pass
-	return False
+	return bool([f for f in listdir("/usr/camscript") if f.startswith("Ncam_") and f != "Ncam_Ci.sh"])
+
 
 
 SystemInfo["CanKexecVu"] = getBoxType() in ("vusolo4k", "vuduo4k", "vuduo4kse", "vuultimo4k", "vuuno4k", "vuuno4kse", "vuzero4k") and not SystemInfo["HasKexecMultiboot"]

@@ -29,7 +29,7 @@ file.close()
 def MenuEntryPixmap(entryID, png_cache, parentMenuEntryID):
  	# imported here to avoid circular import
 	from skin import parameters
-	isMenuIcons = int(parameters.get("MenuIcons", 0)) == 1
+	isMenuIcons = parameters.get("MenuIcons", "").lower() in ("1", "enabled", "on", "true", "yes")
 	if not isMenuIcons:
 		return None
 
@@ -373,11 +373,11 @@ class Menu(Screen, HelpableScreen, ProtectedScreen):
 							weight = y[1]
 				description = l[4] if len(l) == 5 else plugins.getDescriptionForMenuEntryID(self.menuID, plugin_menuid)
 				menupng = MenuEntryPixmap(l[2], self.png_cache, parentEntryID)
-				if len(l) > 4 and l[4]:
-
-					self.list.append((l[0], boundFunction(l[1], self.session, self.close), l[2], weight or 50, description, menupng))
-				else:
-					self.list.append((l[0], boundFunction(l[1], self.session), l[2], weight or 50, description, menupng))
+#				if len(l) > 4 and l[4]:
+#
+#					self.list.append((l[0], boundFunction(l[1], self.session, self.close), l[2], weight or 50, description, menupng))
+#				else:
+				self.list.append((l[0], boundFunction(l[1], self.session, close=self.close), l[2], weight or 50, description, menupng))
 
 		if "user" in config.usage.menu_sort_mode.value and self.menuID == "mainmenu":
 			plugin_list = []
