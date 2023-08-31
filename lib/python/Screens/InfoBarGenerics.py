@@ -274,7 +274,6 @@ class InfoBarUnhandledKey:
 
 	def actionA(self, key, flag):  # This function is called on every keypress!
 		print("[InfoBarGenerics] Key: %s (%s) KeyID='%s' Binding='%s'." % (key, KEYFLAGS.get(flag, _("Unknown")), KEYIDNAMES.get(key, _("Unknown")), getKeyDescription(key)))
-<<<<<<< HEAD
 		mkey = "unset"
 		try:
 			mkey = getKeyDescription(key)[0]
