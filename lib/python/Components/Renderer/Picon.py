@@ -92,7 +92,7 @@ class PiconLocator:
 			#fallback to 0 for iptv buffering
 			fields[9] = "0"
 			pngname = self.findPicon('_'.join(fields))
-		if not pngname: # picon by channel name
+		if not pngname:  # picon by channel name
 			name = sanitizeFilename(eServiceReference(serviceRef).getServiceName())
 			name = re.sub("[^a-z0-9]", "", name.replace("&", "and").replace("+", "plus").replace("*", "star").lower())
 			if len(name) > 0:
@@ -143,7 +143,7 @@ class Picon(Renderer):
 		if self.instance:
 			if what[0] in (self.CHANGED_DEFAULT, self.CHANGED_ALL, self.CHANGED_SPECIFIC):
 				pngname = piconLocator.getPiconName(self.source.text)
-				if not pathExists(pngname): # no picon for service found
+				if not pathExists(pngname):  # no picon for service found
 					pngname = self.defaultpngname
 				if self.pngname != pngname:
 					if pngname:
