@@ -512,8 +512,11 @@ msgstr "??"
 msgid "A"
 msgstr "A"
 
-msgid "A background update check is in progress, please wait a few minutes and try again."
-msgstr "Arkaplan güncelleme kontrolu sürüyor, birkaç dakika sonra tekrar deneyin."
+msgid ""
+"A background update check is in progress, please wait a few minutes and try "
+"again."
+msgstr ""
+"Arkaplan güncelleme kontrolu sürüyor, birkaç dakika sonra tekrar deneyin."
 
 #, python-format
 msgid ""
@@ -611,15 +614,24 @@ msgstr ""
 "Ne yapmak istiyorsunuz?"
 
 #
-msgid "A recording is currently running. Please stop the recording before trying to configure the positioner."
-msgstr "Kayıt devam ediyor. Lütfen konumlayıcı yapılandırmasını denemeden önce kayıdı durdurun."
+msgid ""
+"A recording is currently running. Please stop the recording before trying to "
+"configure the positioner."
+msgstr ""
+"Kayıt devam ediyor. Lütfen konumlayıcı yapılandırmasını denemeden önce "
+"kayıdı durdurun."
 
-msgid "A recording is currently running. Please stop the recording before trying to scan."
+msgid ""
+"A recording is currently running. Please stop the recording before trying to "
+"scan."
 msgstr "Kayıt yapılmaktadır. Lütfen taramayı denemeden önce kayıdı durdurun."
 
 #
-msgid "A recording is currently running. Please stop the recording before trying to start the satfinder."
-msgstr "Kayıt devam ediyor. Lütfen uydu bulucuyu başlatmadan önce kayıdı durdurun."
+msgid ""
+"A recording is currently running. Please stop the recording before trying to "
+"start the satfinder."
+msgstr ""
+"Kayıt devam ediyor. Lütfen uydu bulucuyu başlatmadan önce kayıdı durdurun."
 
 msgid "A repeating timer or just once?"
 msgstr "Tekrarlanan bir zamanlayıcı mı, yoksa sadece bir kez mi?"
@@ -863,8 +875,16 @@ msgid "Adjust 3D settings"
 msgstr "3D Ayarlarını düzenle"
 
 #
-msgid "Adjust the color settings so that all the color shades are distinguishable, but appear as saturated as possible. If you are happy with the result, press OK to close the video fine-tuning, or use the number keys to select other test screens."
-msgstr "Renk ayarlarınızı yaparken, renk geçişlerini mümkün olduğunca dolgun ve ayırt edilebilir şekilde ayarlayın. Sonuçtan memnunsanız, görüntü ince ayarını kapatmak için OK'a basın ya da test ekranında belirtilen numaraları tuşlayarak diğer test ekranlarını görün."
+msgid ""
+"Adjust the color settings so that all the color shades are distinguishable, "
+"but appear as saturated as possible. If you are happy with the result, press "
+"OK to close the video fine-tuning, or use the number keys to select other "
+"test screens."
+msgstr ""
+"Renk ayarlarınızı yaparken, renk geçişlerini mümkün olduğunca dolgun ve "
+"ayırt edilebilir şekilde ayarlayın. Sonuçtan memnunsanız, görüntü ince "
+"ayarını kapatmak için OK'a basın ya da test ekranında belirtilen numaraları "
+"tuşlayarak diğer test ekranlarını görün."
 
 #
 msgid "Advanced options"
@@ -938,12 +958,19 @@ msgstr "%s %s düzenli olarak saklanan EPG bilgisini okusun."
 msgid "Allows the %s %s to store the EPG data regularly."
 msgstr "%s %s EPG bilgisini düzenli olarak saklasın."
 
-msgid "Allows you to adjust the amount of time the resolution infomation display on screen."
-msgstr "Çözünürlük bilgisinin ekranda görünme süresini ayarlamanıza olanak sağlar."
+msgid ""
+"Allows you to adjust the amount of time the resolution infomation display on "
+"screen."
+msgstr ""
+"Çözünürlük bilgisinin ekranda görünme süresini ayarlamanıza olanak sağlar."
 
 #, fuzzy
-msgid "Allows you to enable the debug logs. They contain very detailed information about everything the system does."
-msgstr "Hata ayıklama günlüğünün etkinleştirilmesi. Sistemin yaptığı herşeyin çok detaylı bilgisini içerirler."
+msgid ""
+"Allows you to enable the debug logs. They contain very detailed information "
+"about everything the system does."
+msgstr ""
+"Hata ayıklama günlüğünün etkinleştirilmesi. Sistemin yaptığı herşeyin çok "
+"detaylı bilgisini içerirler."
 
 #, fuzzy
 msgid "Allows you to enable/disable displaying icons on the front panel."
@@ -956,8 +983,12 @@ msgid "Allows you to send a copy of the log to yourself."
 msgstr "Günlüğün bir kopyasının kendinize gönderilmesi."
 
 #, fuzzy
-msgid "Allows you to set the maximum size (MB) of the individual debug logs. When that size is reached, a new file will be created."
-msgstr "Hata ayıklama günlüğü boyut (MB) ayarı. Bu boyuta ulaşıldığında yeni bir dosya yaratılır."
+msgid ""
+"Allows you to set the maximum size (MB) of the individual debug logs. When "
+"that size is reached, a new file will be created."
+msgstr ""
+"Hata ayıklama günlüğü boyut (MB) ayarı. Bu boyuta ulaşıldığında yeni bir "
+"dosya yaratılır."
 
 msgid "Allows you to setup the button to do what you choose."
 msgstr "Tuşun seçtiğiniz eyleme ayarlanması."
@@ -1531,7 +1562,9 @@ msgid "Calibrate"
 msgstr "Ayar et"
 
 msgid "Can be used for different fps between external subtitles and video."
-msgstr "Altyazı ve video arasında değişik fps (saniyedeki çerçeve sayısı) için kullanılabilir."
+msgstr ""
+"Altyazı ve video arasında değişik fps (saniyedeki çerçeve sayısı) için "
+"kullanılabilir."
 
 #
 msgid "Cancel"
@@ -1751,11 +1784,19 @@ msgstr "Günlük, Haftalık, Haftaiçi veya tanımladığınız birini seçin."
 msgid "Choose the location for crash and debug logs."
 msgstr "Çökme ve hata ayıklama günlük konumunu seçin."
 
-msgid "Choose the location where the EPG data will be stored when the %s %s is shut down. The location must be available at boot time."
-msgstr "%s %s kapandığında EPG bilgisinin saklanacağı yeri seçin. Önyükleme sırasında konum hazır olmalıdır."
+msgid ""
+"Choose the location where the EPG data will be stored when the %s %s is shut "
+"down. The location must be available at boot time."
+msgstr ""
+"%s %s kapandığında EPG bilgisinin saklanacağı yeri seçin. Önyükleme "
+"sırasında konum hazır olmalıdır."
 
-msgid "Choose the name of the file that holds the EPG data when the %s %s is shut down. This can be handy to differentiate between several boxes."
-msgstr "%s %s kapandığında EPG bilgisinin saklanacağı dosya adını seçin. Birden çok alıcı kullanıldığında, faydalı olabilir."
+msgid ""
+"Choose the name of the file that holds the EPG data when the %s %s is shut "
+"down. This can be handy to differentiate between several boxes."
+msgstr ""
+"%s %s kapandığında EPG bilgisinin saklanacağı dosya adını seçin. Birden çok "
+"alıcı kullanıldığında, faydalı olabilir."
 
 msgid "Choose time interval to which the graphics will be rounded off."
 msgstr "Grafiklerin tamamlanacağı zaman aralığını seçin."
@@ -1764,7 +1805,8 @@ msgstr "Grafiklerin tamamlanacağı zaman aralığını seçin."
 msgid "Choose what you want the '0' button to do when PIP is active."
 msgstr "PIP etkinken '0' tuşunun eylemini seçin."
 
-msgid "Choose whether multi channel sound tracks should be downmixed to stereo."
+msgid ""
+"Choose whether multi channel sound tracks should be downmixed to stereo."
 msgstr "Çok kanallı ses izi stereoya indirgensin mi?"
 
 #, fuzzy
@@ -1772,8 +1814,11 @@ msgid "Choose whether or not to show an icon when a motorised dish is moving."
 msgstr "Motorize çanak hareketinde ikon görüntü durumunu seçin."
 
 #, fuzzy
-msgid "Choose which level of menu/settings to display. 'Expert' level shows all items."
-msgstr "Menü/Ayarlar görüntü seviyesini seçin. 'Uzman'-seviye bütün öğeleri gösterir."
+msgid ""
+"Choose which level of menu/settings to display. 'Expert' level shows all "
+"items."
+msgstr ""
+"Menü/Ayarlar görüntü seviyesini seçin. 'Uzman'-seviye bütün öğeleri gösterir."
 
 msgid "Choose which tuner to configure."
 msgstr "Yapılandırılacak tuneri seçin."
@@ -1927,17 +1972,24 @@ msgstr "Yapılandırma modu"
 msgid "Configuration mode: %s"
 msgstr "Yapılandırılıyor: %s"
 
-msgid "Configure an additional delay to improve external subtitle synchronisation."
+msgid ""
+"Configure an additional delay to improve external subtitle synchronisation."
 msgstr "Altyazı eşlemesini iyileştirmek için ek gecikme yapılandır."
 
 msgid "Configure an additional delay to improve subtitle synchronisation."
 msgstr "Altyazı eşlemesini iyileştirmek için ek gecikme yapılandır."
 
-msgid "Configure duration of inactivity before the hard disk drive goes to standby"
+msgid ""
+"Configure duration of inactivity before the hard disk drive goes to standby"
 msgstr ""
 
-msgid "Configure for how many minutes finished events should remain visible in the EPG. Useful when you need information about an event which has just finished, or has been delayed."
-msgstr "Biten olayların EPGde kaç dakika görünmesi gerektiğini yapılandır. Henüz bitmiş veya geciktirilmiş olay hakkında bilgi gerekince yararlıdır."
+msgid ""
+"Configure for how many minutes finished events should remain visible in the "
+"EPG. Useful when you need information about an event which has just "
+"finished, or has been delayed."
+msgstr ""
+"Biten olayların EPGde kaç dakika görünmesi gerektiğini yapılandır. Henüz "
+"bitmiş veya geciktirilmiş olay hakkında bilgi gerekince yararlıdır."
 
 msgid "Configure how recording filenames are constructed."
 msgstr "Kayıt dosya isimlerinin nasıl yaratılacağını yapılandır."
@@ -1958,7 +2010,9 @@ msgid "Configure nameservers"
 msgstr "Ad sunucu yapılandırması"
 
 msgid "Configure on which devices the background delete option should be used."
-msgstr "Arkaplan silme seçeneğinin hangi aygıtlarda kullanılması gerektiğini yapılandır."
+msgstr ""
+"Arkaplan silme seçeneğinin hangi aygıtlarda kullanılması gerektiğini "
+"yapılandır."
 
 msgid "Configure remote control type"
 msgstr "Uzaktan kumanda tipini yapılandır"
@@ -1972,7 +2026,9 @@ msgstr "İP adresini yapılandır."
 msgid "Configure the amount of time that will be presented."
 msgstr "Gösterim süresini seçin."
 
-msgid "Configure the behavior of the 'pause' key when movie playback is already paused."
+msgid ""
+"Configure the behavior of the 'pause' key when movie playback is already "
+"paused."
 msgstr "Oynatma durduğu zaman 'pause' tuşunun işlevini yapılandır."
 
 msgid "Configure the behavior when movie playback is manually stopped."
@@ -1981,22 +2037,34 @@ msgstr "Film oynatma elle durdurulunca davranışını yapılandır."
 msgid "Configure the behavior when movie playback is started."
 msgstr "Film oynatla başlayınca davranışı yapılandır."
 
-msgid "Configure the behavior when reaching the end of a movie, during movie playback."
+msgid ""
+"Configure the behavior when reaching the end of a movie, during movie "
+"playback."
 msgstr "Film oynatma sırasında filmin sonuna gelince davranışı yapılandır."
 
-msgid "Configure the border width of the subtitles. The dark border makes the subtitles easier to read on a light background."
-msgstr "Altyazı sınır genişliğini yapılandır. Koyu sınır aydınlık arkaplanda altyazı okumayı kolaylaştırır."
+msgid ""
+"Configure the border width of the subtitles. The dark border makes the "
+"subtitles easier to read on a light background."
+msgstr ""
+"Altyazı sınır genişliğini yapılandır. Koyu sınır aydınlık arkaplanda altyazı "
+"okumayı kolaylaştırır."
 
 #, fuzzy
-msgid "Configure the brightness level of the front panel display for normal operation."
+msgid ""
+"Configure the brightness level of the front panel display for normal "
+"operation."
 msgstr "Normal işleyişte önpanel ekranının parlaklık düzeyini yapılandır."
 
 #, fuzzy
 msgid "Configure the brightness level of the front panel display for standby."
 msgstr "Beklemede önpanel ekranının parlaklık düzeyini yapılandır."
 
-msgid "Configure the color of the external subtitles, alternative (normal in white, italic in yellow, bold in cyan, underscore in green), white or yellow."
-msgstr "Altyazı rengini belirleyin, seçenekler (siyah normal, sarı italik, camgöbeği dik, yeşil altı çizili) beyaz veya sarı."
+msgid ""
+"Configure the color of the external subtitles, alternative (normal in white, "
+"italic in yellow, bold in cyan, underscore in green), white or yellow."
+msgstr ""
+"Altyazı rengini belirleyin, seçenekler (siyah normal, sarı italik, camgöbeği "
+"dik, yeşil altı çizili) beyaz veya sarı."
 
 msgid "Configure the color of the teletext subtitles."
 msgstr "Teletekst yazılarının rengini belirleyin."
@@ -2005,8 +2073,14 @@ msgid "Configure the contrast level of the front panel display."
 msgstr "Ön panel ekran kontrast düzeyini yapılandır."
 
 #, fuzzy
-msgid "Configure the cursor behavior in the channel selection list. When opening the channel selection list you can remain on the current service or already select up/down and you are able to revert the B+/B- buttons."
-msgstr "Kanal seçim listesinde imleç davranışını yapılandır.  Kanal seçim listesi açılınca yayındaki kanal üzerinde kalabilir ya da aşağı/yukarı kayabilirsiniz, ayrıca B+/B- tuşlarını çevirebilirsiniz."
+msgid ""
+"Configure the cursor behavior in the channel selection list. When opening "
+"the channel selection list you can remain on the current service or already "
+"select up/down and you are able to revert the B+/B- buttons."
+msgstr ""
+"Kanal seçim listesinde imleç davranışını yapılandır.  Kanal seçim listesi "
+"açılınca yayındaki kanal üzerinde kalabilir ya da aşağı/yukarı "
+"kayabilirsiniz, ayrıca B+/B- tuşlarını çevirebilirsiniz."
 
 msgid "Configure the duration (in minutes) for the screensaver."
 msgstr "Ekrankoruyucu süresini dakika olarak belirleyin"
@@ -2020,8 +2094,12 @@ msgstr "İlk altyazı dilini yapılandırın (en öncelikli)."
 msgid "Configure the font size of the subtitles."
 msgstr "Altyazı font boyutunu yapılandırın."
 
-msgid "Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size."
-msgstr "Font boyunu, görsel-arayüz boyuna göre değiştirmenizi sağlar. (1, 1 punto büyütür, -1, 1 punto küçültür)"
+msgid ""
+"Configure the font size relative to skin size, so 1 increases by 1 point "
+"size, and -1 decreases by 1 point size."
+msgstr ""
+"Font boyunu, görsel-arayüz boyuna göre değiştirmenizi sağlar. (1, 1 punto "
+"büyütür, -1, 1 punto küçültür)"
 
 msgid "Configure the fourth audio language."
 msgstr "Dördüncü ses dilini yapılandırın."
@@ -2046,12 +2124,20 @@ msgstr "Geçiti yapılandırın"
 msgid "Configure the horizontal alignment of the subtitles."
 msgstr "Altyazının yatay hizalanmasını yapılandırın."
 
-msgid "Configure the initial fast forward speed. When you press the fast forward button, winding will start at this speed."
-msgstr "Başlangıç hızlı ileri sarma hızını belirleyin. Hızlı ileri tuşuna basınca sarma bu hızla başlıyacak."
+msgid ""
+"Configure the initial fast forward speed. When you press the fast forward "
+"button, winding will start at this speed."
+msgstr ""
+"Başlangıç hızlı ileri sarma hızını belirleyin. Hızlı ileri tuşuna basınca "
+"sarma bu hızla başlıyacak."
 
 #, fuzzy
-msgid "Configure the initial rewind speed. When you press the rewind button, rewinding will start at this speed."
-msgstr "Başlangıç geriye sarma hızını belirleyin. Geri sarma tuşuna basınca sarma bu hızla başlıyacak."
+msgid ""
+"Configure the initial rewind speed. When you press the rewind button, "
+"rewinding will start at this speed."
+msgstr ""
+"Başlangıç geriye sarma hızını belirleyin. Geri sarma tuşuna basınca sarma bu "
+"hızla başlıyacak."
 
 msgid "Configure the latitude of your location."
 msgstr "Konumunuzun enlemini belirtin."
@@ -2059,8 +2145,13 @@ msgstr "Konumunuzun enlemini belirtin."
 msgid "Configure the longitude of your location."
 msgstr "Konumunuzun boylamını belirtin."
 
-msgid "Configure the minimum amount of disk space to be available for recordings. When the amount of space drops below this value, deleted items will be removed from the trash can."
-msgstr "Kayıt için kullanılacak asgari disk alanını belirtin. Alan miktarı bu değerin altına düşünce silinmiş öğeler çöp kutusundan kaldırılacak."
+msgid ""
+"Configure the minimum amount of disk space to be available for recordings. "
+"When the amount of space drops below this value, deleted items will be "
+"removed from the trash can."
+msgstr ""
+"Kayıt için kullanılacak asgari disk alanını belirtin. Alan miktarı bu "
+"değerin altına düşünce silinmiş öğeler çöp kutusundan kaldırılacak."
 
 msgid "Configure the nameserver (DNS)."
 msgstr "Ad sunucu düzenleyin (DNS)"
@@ -2069,18 +2160,29 @@ msgid "Configure the netmask."
 msgstr "Ağ maskesini düzenleyin."
 
 #, fuzzy
-msgid "Configure the number of days after which items are automatically removed from the trash can."
-msgstr "Çöp kutusundaki öğelerin otomatik olarak atılacağı gün sayısını belirleyin."
+msgid ""
+"Configure the number of days after which items are automatically removed "
+"from the trash can."
+msgstr ""
+"Çöp kutusundaki öğelerin otomatik olarak atılacağı gün sayısını belirleyin."
 
-msgid "Configure the number of days old timers are kept before they are automatically removed from the timer list."
-msgstr "Eski zamanlayıcıların, zamanlayıcı listesinden atılmadan önce tutulacakları gün sayısını belirleyin."
+msgid ""
+"Configure the number of days old timers are kept before they are "
+"automatically removed from the timer list."
+msgstr ""
+"Eski zamanlayıcıların, zamanlayıcı listesinden atılmadan önce tutulacakları "
+"gün sayısını belirleyin."
 
 msgid "Configure the number of rows shown."
 msgstr "Gösterilen satır sayısını değiştirmenizi sağlar."
 
 #, fuzzy
-msgid "Configure the offline decoding delay (in milliseconds). The configured delay is observed at each control word parity change."
-msgstr "Çevrimdışı çözmeyi milisaniye olarak belirleyin. Belirlenen gecikme, her kontrol sözcüğü eşitliği bozulduğunda  gözlenecektir."
+msgid ""
+"Configure the offline decoding delay (in milliseconds). The configured delay "
+"is observed at each control word parity change."
+msgstr ""
+"Çevrimdışı çözmeyi milisaniye olarak belirleyin. Belirlenen gecikme, her "
+"kontrol sözcüğü eşitliği bozulduğunda  gözlenecektir."
 
 msgid "Configure the possible fast forward speeds."
 msgstr "Olası hızlı ileri sarma hızlarını belirleyin."
@@ -2118,8 +2220,12 @@ msgstr "'7'/'9' tuşlarının atlama zaman aralığını belirleyin."
 msgid "Configure the slow motion speeds."
 msgstr "Ağır çekim hızlarını belirleyin."
 
-msgid "Configure the speed of the background deletion process. Lower speed will consume less hard disk drive performance."
-msgstr "Arkaplan silme işleminin hızını belirleyin. Düşük hız,  daha az sabit disk sürücü performansı tüketecektir."
+msgid ""
+"Configure the speed of the background deletion process. Lower speed will "
+"consume less hard disk drive performance."
+msgstr ""
+"Arkaplan silme işleminin hızını belirleyin. Düşük hız,  daha az sabit disk "
+"sürücü performansı tüketecektir."
 
 msgid "Configure the subtitle delay when timing information is not available."
 msgstr "Zamanlama bilgisi olmadığında altyazı gecikmesini belirleyin."
@@ -2130,7 +2236,9 @@ msgstr "Üçüncü ses dilini belirleyin."
 msgid "Configure the third subtitle language."
 msgstr "Üçüncü altyazı dilini belirleyin."
 
-msgid "Configure the transparency of the black background of graphical DVB subtitles."
+msgid ""
+"Configure the transparency of the black background of graphical DVB "
+"subtitles."
 msgstr "Siyah grafik DVB altyazıların saydamlığını belirleyin."
 
 msgid "Configure the tuner mode."
@@ -2140,7 +2248,9 @@ msgstr "Tuner kipini belirleyin."
 msgid "Configure the type of status indication icons shown in the movie list."
 msgstr "Film listesindeki durum bildirme simgelerinin tipini belirleyin."
 
-msgid "Configure the vertical position of the subtitles, measured from the bottom of the screen."
+msgid ""
+"Configure the vertical position of the subtitles, measured from the bottom "
+"of the screen."
 msgstr "Altyazının, ekranın altından ölçülecek dikey konumunu belirleyin."
 
 msgid "Configure the width allocated to the picon."
@@ -2150,19 +2260,34 @@ msgid "Configure the width allocated to the service name."
 msgstr "Kanal ismine ayrılan boyutu ayarlayın."
 
 msgid "Configure to show the channel names, picons, or both in the EPG."
-msgstr "Kanal isimleri, pikonlar veya her ikisinin EPG de gösterilmesini belirleyin."
+msgstr ""
+"Kanal isimleri, pikonlar veya her ikisinin EPG de gösterilmesini belirleyin."
 
-msgid "Configure whether (and for how long) a second infobar will be shown when OK is pressed twice. The second infobar contains additional information about the current channel."
-msgstr "OK e çift basınca ikinci bilgi çubuğunun gösterilmesini ve süresini belirleyin. İkinci bilgi çubuğu, izlenen kanala ait ek bilgi içerir."
+msgid ""
+"Configure whether (and for how long) a second infobar will be shown when OK "
+"is pressed twice. The second infobar contains additional information about "
+"the current channel."
+msgstr ""
+"OK e çift basınca ikinci bilgi çubuğunun gösterilmesini ve süresini "
+"belirleyin. İkinci bilgi çubuğu, izlenen kanala ait ek bilgi içerir."
 
 msgid "Configure which color format should be used on the SCART output."
 msgstr "SCART çıkışında hangi renk formatının kullanılacağını belirleyin."
 
-msgid "Configure which tuner type will be preferred, when the same service is available on different types of tuners."
-msgstr "Aynı kanalların farklı tuner tiplerinde olması durumunda hangi tunerin yeğleneceğini belirleyin."
+msgid ""
+"Configure which tuner type will be preferred, when the same service is "
+"available on different types of tuners."
+msgstr ""
+"Aynı kanalların farklı tuner tiplerinde olması durumunda hangi tunerin "
+"yeğleneceğini belirleyin."
 
-msgid "Configure which tuner will be preferred, when more than one tuner is available. If set to 'auto' the system will give priority to the tuner having the lowest number of channels/satellites."
-msgstr "Birden fazla tuner varsa hangisinin yeğleneceğini belirlkeyin. 'auto' seçilirse sistem en az kanal/uydu sayısı olana öncelik verir."
+msgid ""
+"Configure which tuner will be preferred, when more than one tuner is "
+"available. If set to 'auto' the system will give priority to the tuner "
+"having the lowest number of channels/satellites."
+msgstr ""
+"Birden fazla tuner varsa hangisinin yeğleneceğini belirlkeyin. 'auto' "
+"seçilirse sistem en az kanal/uydu sayısı olana öncelik verir."
 
 #
 msgid "Configure your NTP server."
@@ -2248,8 +2373,11 @@ msgstr "Kesintisiz oynatma (döngü)"
 msgid "Contrast"
 msgstr "Kontrast"
 
-msgid "Control of the position how finished timers are shown in the Timer List."
-msgstr "Biten zamanlayıcıların zamanlayıcı listesinde hangi konumda nasıl gösterileceği kontrolu."
+msgid ""
+"Control of the position how finished timers are shown in the Timer List."
+msgstr ""
+"Biten zamanlayıcıların zamanlayıcı listesinde hangi konumda nasıl "
+"gösterileceği kontrolu."
 
 msgid "Convert ext3 filesystem to ext4"
 msgstr "ext3 dosya sistemini ext4'e dönüştür"
@@ -2589,7 +2717,11 @@ msgstr "dosya sil"
 msgid "Depth"
 msgstr "Derinlik"
 
-msgid "Descramble & record ECM' gives the option to descramble afterwards if descrambling on recording failed. 'Don't descramble, record ECM' save a scramble recording that can be descrambled on playback. 'Normal' means descramble the recording and don't record ECM."
+msgid ""
+"Descramble & record ECM' gives the option to descramble afterwards if "
+"descrambling on recording failed. 'Don't descramble, record ECM' save a "
+"scramble recording that can be descrambled on playback. 'Normal' means "
+"descramble the recording and don't record ECM."
 msgstr ""
 
 msgid "Descramble http streams"
@@ -2966,8 +3098,12 @@ msgstr "ECM zamanı"
 msgid "ECM avg"
 msgstr "ECM ortalaması"
 
-msgid "ECM data will be included in the stream. This enables a client receiver to decode it."
-msgstr "Akışa ECM verileri eklenecektir. Bu, bir müşteri alıcısının onu çözmesine olanak sağlar."
+msgid ""
+"ECM data will be included in the stream. This enables a client receiver to "
+"decode it."
+msgstr ""
+"Akışa ECM verileri eklenecektir. Bu, bir müşteri alıcısının onu çözmesine "
+"olanak sağlar."
 
 msgid "ECM last"
 msgstr "ECM son"
@@ -3119,8 +3255,12 @@ msgstr "Teletext önbelleğini etkinleştir"
 msgid "Enabled"
 msgstr "Etkin"
 
-msgid "Enables a feature so that the receiver can decrypt streams (if the ECM data is included in the stream and a valid card is available)."
-msgstr "Bir alıcının akışları çözebileceği bir özelliği etkinleştirir (akışa ECM verisi eklenmişse ve geçerli bir kart varsa)."
+msgid ""
+"Enables a feature so that the receiver can decrypt streams (if the ECM data "
+"is included in the stream and a valid card is available)."
+msgstr ""
+"Bir alıcının akışları çözebileceği bir özelliği etkinleştirir (akışa ECM "
+"verisi eklenmişse ve geçerli bir kart varsa)."
 
 #
 msgid "Encrypted: "
@@ -3560,7 +3700,8 @@ msgid ""
 "GUI needs a restart to apply a new skin\n"
 "Do you want to restart the GUI now?"
 msgstr ""
-"Yeni görsel-arayüzü etkinleştirmek için kullanıcı arayüzünü yeniden başlatmak gerekiyor\n"
+"Yeni görsel-arayüzü etkinleştirmek için kullanıcı arayüzünü yeniden "
+"başlatmak gerekiyor\n"
 "Kullanıcı arayüzünü yeniden başlatmak istiyor musunuz?"
 
 #
@@ -3838,8 +3979,12 @@ msgstr "Ikonlar"
 msgid "Idle Time: "
 msgstr "Atıl Zaman: "
 
-msgid "If enabled the output resolution of the box will try to match the resolution of the video contents resolution"
-msgstr "Etkinleştirilirse alıcının çıkış çözünürlüğü video içerik çözünürlüğüne uygun olmaya çalışacak"
+msgid ""
+"If enabled the output resolution of the box will try to match the resolution "
+"of the video contents resolution"
+msgstr ""
+"Etkinleştirilirse alıcının çıkış çözünürlüğü video içerik çözünürlüğüne "
+"uygun olmaya çalışacak"
 
 msgid "If enabled the video will always be de-interlaced."
 msgstr "Etkinleşirse video hep netleştirilir."
@@ -3857,14 +4002,20 @@ msgid "If set to 'yes' shows a small TV-screen in the EPG."
 msgstr "'evet' EPG'de küçük TV ekranı gösterir."
 
 #, fuzzy
-msgid "If set to 'yes' the EPG will always open at the first channel of bouquet. If set to 'no' the EPG will open on the current channel."
-msgstr "'evet' EPG daima ilk kanalda açılır. 'hayır' EPG o anki kanalda açılır."
+msgid ""
+"If set to 'yes' the EPG will always open at the first channel of bouquet. If "
+"set to 'no' the EPG will open on the current channel."
+msgstr ""
+"'evet' EPG daima ilk kanalda açılır. 'hayır' EPG o anki kanalda açılır."
 
 msgid "If set to 'yes' the bouquets will be shown each time you open the EPG."
 msgstr "'evet' EPG her açıldığında buketler görüntülenir."
 
-msgid "If set to 'yes' the channel list will be shown after switching between radio and TV modes."
-msgstr "'evet' Radyo ve TV kipleri arasındaki geçişlerde kanal listesi görüntülenir."
+msgid ""
+"If set to 'yes' the channel list will be shown after switching between radio "
+"and TV modes."
+msgstr ""
+"'evet' Radyo ve TV kipleri arasındaki geçişlerde kanal listesi görüntülenir."
 
 msgid "If set to 'yes' the channel number will be displayed in the infobar."
 msgstr "'evet' seçilirse bilgi çubuğunda kanal numarası görülür."
@@ -3878,19 +4029,35 @@ msgstr "'evet' Kanal değiştirildiğinde bilgi-çubuğu görüntülenir."
 msgid "If set to 'yes' you can preview channels in the EPG list."
 msgstr "'evet' EPG listesinde kanal önizlemesi görüntülenir."
 
-msgid "If set to 'yes' you can preview channels in the channel list. Press 'OK' to preview the selected channel, press a 2nd 'OK' to exit and zap to that channel, pressing 'EXIT' to return to the channel you started at."
-msgstr "'evet' Kanal listesinde kanal önizlemesi görüntülenir. Seçilen kanalın önizlemesi için OK'a basın, listeden çıkmak ve o kanalı izlemek için OK'a bir daha basın. Kanalı değiştirmek istemiyorsanız EXIT'e basın."
+msgid ""
+"If set to 'yes' you can preview channels in the channel list. Press 'OK' to "
+"preview the selected channel, press a 2nd 'OK' to exit and zap to that "
+"channel, pressing 'EXIT' to return to the channel you started at."
+msgstr ""
+"'evet' Kanal listesinde kanal önizlemesi görüntülenir. Seçilen kanalın "
+"önizlemesi için OK'a basın, listeden çıkmak ve o kanalı izlemek için OK'a "
+"bir daha basın. Kanalı değiştirmek istemiyorsanız EXIT'e basın."
 
 #, fuzzy
-msgid "If set to 'yes', allows you to use the seekbar to jump to a point within the event."
-msgstr "'Yes' seçilirse, arama çubuğunun, konu içindeki bir noktaya atlamasını sağlar."
+msgid ""
+"If set to 'yes', allows you to use the seekbar to jump to a point within the "
+"event."
+msgstr ""
+"'Yes' seçilirse, arama çubuğunun, konu içindeki bir noktaya atlamasını "
+"sağlar."
 
 #, fuzzy
-msgid "If set to 'yes', the infobar will be displayed when Fast Forwarding or Rewinding during media playback."
-msgstr "'evet' Ortam izlerken hızlı ileri/geri sarmada bilgi-çubuğu görüntülenir."
+msgid ""
+"If set to 'yes', the infobar will be displayed when Fast Forwarding or "
+"Rewinding during media playback."
+msgstr ""
+"'evet' Ortam izlerken hızlı ileri/geri sarmada bilgi-çubuğu görüntülenir."
 
-msgid "If the text is too long to be displayed on the front panel, it will be repeated (number of times):"
-msgstr "Ön panelde görüntülenecek metin çok uzunsa, tekrarlanır (tekrar sayısı):"
+msgid ""
+"If the text is too long to be displayed on the front panel, it will be "
+"repeated (number of times):"
+msgstr ""
+"Ön panelde görüntülenecek metin çok uzunsa, tekrarlanır (tekrar sayısı):"
 
 #
 msgid ""
@@ -3902,14 +4069,25 @@ msgstr ""
 
 #
 msgid ""
-"If your TV has a brightness or contrast enhancement, disable it. If there is something called \"dynamic\", set it to standard. Adjust the backlight level to a value suiting your taste. Turn down contrast on your TV as much as possible.\n"
-"Then turn the brightness setting as low as possible, but make sure that the two lowermost shades of gray stay distinguishable.\n"
-"Do not care about the bright shades now. They will be set up in the next step.\n"
+"If your TV has a brightness or contrast enhancement, disable it. If there is "
+"something called \"dynamic\", set it to standard. Adjust the backlight level "
+"to a value suiting your taste. Turn down contrast on your TV as much as "
+"possible.\n"
+"Then turn the brightness setting as low as possible, but make sure that the "
+"two lowermost shades of gray stay distinguishable.\n"
+"Do not care about the bright shades now. They will be set up in the next "
+"step.\n"
 "If you are happy with the result, press OK."
 msgstr ""
-"Eğer TV'nizde parlaklık ve kontrast geliştirme özelliğini kullanıyorsanız, devre dışı bırakın. TV ayarlarınızda \"dinamik\" ismiyle adlandırılan ayar aktifse, standart'a getirin. Arkaplan ışıklandırma (backlight) seviyesini ayarlayın.\n"
-"Kontrast oranını olabildiğince düşürün. Parlaklık seviyesini mümkün olduğunca düşürün, en alttaki iki gri tonuda ayırt edebilecek şekilde ayarlarınızı yapın.\n"
-"Parlak tonları şuan için dert etmeyin. Onları bir sonraki adımda ayarlayabilirsiniz.\n"
+"Eğer TV'nizde parlaklık ve kontrast geliştirme özelliğini kullanıyorsanız, "
+"devre dışı bırakın. TV ayarlarınızda \"dinamik\" ismiyle adlandırılan ayar "
+"aktifse, standart'a getirin. Arkaplan ışıklandırma (backlight) seviyesini "
+"ayarlayın.\n"
+"Kontrast oranını olabildiğince düşürün. Parlaklık seviyesini mümkün "
+"olduğunca düşürün, en alttaki iki gri tonuda ayırt edebilecek şekilde "
+"ayarlarınızı yapın.\n"
+"Parlak tonları şuan için dert etmeyin. Onları bir sonraki adımda "
+"ayarlayabilirsiniz.\n"
 "Sonuçtan memnunsanız, OK'a basın."
 
 msgid "Image Information"
@@ -3923,7 +4101,8 @@ msgid "Immediate shutdown"
 msgstr "hemen kapat"
 
 #
-msgid "In order to record a timer, the TV was switched to the recording service!\n"
+msgid ""
+"In order to record a timer, the TV was switched to the recording service!\n"
 msgstr "Zamanlanmış kayıt için, kayıdın yapıldığı kanala geçildi.!\n"
 
 #
@@ -4342,8 +4521,14 @@ msgstr "Hata ayıklama günlük boyutunu sınırla (MB)"
 msgid "Limit east"
 msgstr "Doğu limiti"
 
-msgid "Limit the characters that can be used in recording filenames to (7 bit) ascii. This ensures compatibility with operating systems or file systems with limited character sets."
-msgstr "Kayıt dosya isimlerinde kullanılabilecek karakterleri (7bit) ascii olarak sınırla. Bu, işletim sistemleri veya karakteri sınırlanmış dosya sistemleri ile uyum sağlar. "
+msgid ""
+"Limit the characters that can be used in recording filenames to (7 bit) "
+"ascii. This ensures compatibility with operating systems or file systems "
+"with limited character sets."
+msgstr ""
+"Kayıt dosya isimlerinde kullanılabilecek karakterleri (7bit) ascii olarak "
+"sınırla. Bu, işletim sistemleri veya karakteri sınırlanmış dosya sistemleri "
+"ile uyum sağlar. "
 
 #
 msgid "Limit west"
@@ -4820,7 +5005,8 @@ msgstr "NFI İmaj Flaşlama"
 
 #
 msgid "NFI image flashing completed. Press Yellow to Reboot!"
-msgstr "NFI imaj flaşlaması tamamlandı. Yeniden başlatmak için Sarı tuşa basın."
+msgstr ""
+"NFI imaj flaşlaması tamamlandı. Yeniden başlatmak için Sarı tuşa basın."
 
 msgid "NFS Setup"
 msgstr "NFS Yapılandırma"
@@ -5008,8 +5194,11 @@ msgid "No event info found, recording indefinitely."
 msgstr "Etkinlik bilgisi bulunamadı, süresiz kaydediliyor."
 
 #
-msgid "No fast winding possible yet.. but you can use the number buttons to skip forward/backward!"
-msgstr "İleri/geri hızlı sardırmayı kullanabilmek için rakam tuşlarını kullanın!"
+msgid ""
+"No fast winding possible yet.. but you can use the number buttons to skip "
+"forward/backward!"
+msgstr ""
+"İleri/geri hızlı sardırmayı kullanabilmek için rakam tuşlarını kullanın!"
 
 #
 msgid "No free index available"
@@ -5121,26 +5310,32 @@ msgstr "Kablosuz ağ bulunamadı! Aranıyor..."
 #
 msgid ""
 "No working local network adapter found.\n"
-"Please verify that you have attached a network cable and your network is configured correctly."
+"Please verify that you have attached a network cable and your network is "
+"configured correctly."
 msgstr ""
 "Çalışan yerel ağ donanımı bulunamadı.\n"
-"Lütfen ağ kablonuzun bağlı olduğundan ve ağ ayarlarınızın doğru yapılandırıldığından emin olun."
+"Lütfen ağ kablonuzun bağlı olduğundan ve ağ ayarlarınızın doğru "
+"yapılandırıldığından emin olun."
 
 #
 msgid ""
 "No working wireless network adapter found.\n"
-"Please verify that you have attached a compatible WLAN device and your network is configured correctly."
+"Please verify that you have attached a compatible WLAN device and your "
+"network is configured correctly."
 msgstr ""
 "Çalışan kablosuz ağ donanımı bulunamadı.\n"
-"Lütfen uyumlu WLAN USB donanımının takılı olduğundan ve ağ yapılandırmanızı doğru yaptığınızdan emin olun."
+"Lütfen uyumlu WLAN USB donanımının takılı olduğundan ve ağ yapılandırmanızı "
+"doğru yaptığınızdan emin olun."
 
 #
 msgid ""
 "No working wireless network interface found.\n"
-" Please verify that you have attached a compatible WLAN device or enable your local network interface."
+" Please verify that you have attached a compatible WLAN device or enable "
+"your local network interface."
 msgstr ""
 "Çalışan kablosuz ağ arayüzü bulunamadı.\n"
-" Lütfen uyumlu WLAN USB donanımının takılı olduğundan emin olun veya yerel ağ arayüzünü etkinleştirin."
+" Lütfen uyumlu WLAN USB donanımının takılı olduğundan emin olun veya yerel "
+"ağ arayüzünü etkinleştirin."
 
 #
 msgid "No, but restart from begin"
@@ -5190,8 +5385,12 @@ msgstr "İlişkilendirilmemiş"
 
 #
 #, python-format
-msgid "Not enough disk space. Please free up some disk space and try again. (%d MB required, %d MB available)"
-msgstr "Yeterli disk alanı yok. Lütfen gerekli disk alanını açın ve tekrar deneyin. (gereken: %d MB, kullanılabilen: %d MB)"
+msgid ""
+"Not enough disk space. Please free up some disk space and try again. (%d MB "
+"required, %d MB available)"
+msgstr ""
+"Yeterli disk alanı yok. Lütfen gerekli disk alanını açın ve tekrar deneyin. "
+"(gereken: %d MB, kullanılabilen: %d MB)"
 
 #, python-format
 msgid ""
@@ -5236,8 +5435,14 @@ msgstr "Şimdi"
 
 #
 #, fuzzy
-msgid "Now, use the contrast setting to turn up the brightness of the background as much as possible, but make sure that you can still see the difference between the two brightest levels of shades.If you have done that, press OK."
-msgstr "Şimdi, kontrast ayarlarını kullanarak arkaplan üzerinde, ekrandaki iki parlaklık tonunu ayırt edebilecek şekilde ve mümkün olduğunca parlaklık seviyesini arttırın. İşlemi tamamladıktan sonra OK'a basın."
+msgid ""
+"Now, use the contrast setting to turn up the brightness of the background as "
+"much as possible, but make sure that you can still see the difference "
+"between the two brightest levels of shades.If you have done that, press OK."
+msgstr ""
+"Şimdi, kontrast ayarlarını kullanarak arkaplan üzerinde, ekrandaki iki "
+"parlaklık tonunu ayırt edebilecek şekilde ve mümkün olduğunca parlaklık "
+"seviyesini arttırın. İşlemi tamamladıktan sonra OK'a basın."
 
 msgid "Number"
 msgstr "Sayı"
@@ -5294,8 +5499,12 @@ msgstr "Açık"
 msgid "On end of movie"
 msgstr "Film sonunda"
 
-msgid "On reaching the end of a file during playback, you can choose the box's behavior."
-msgstr "Playback sırasında bir dosyanın sonuna gelince, alıcının tavrını seçebilirsiniz."
+msgid ""
+"On reaching the end of a file during playback, you can choose the box's "
+"behavior."
+msgstr ""
+"Playback sırasında bir dosyanın sonuna gelince, alıcının tavrını "
+"seçebilirsiniz."
 
 msgid "Once per day"
 msgstr "Günde bir"
@@ -5487,7 +5696,9 @@ msgstr "Güncellemeden önce ayar yedeği al."
 msgid "Perform a settings backup,"
 msgstr "Ayar yedeği al,"
 
-msgid "Perform a settings backup, making a backup before updating is strongly advised."
+msgid ""
+"Perform a settings backup, making a backup before updating is strongly "
+"advised."
 msgstr "Güncellemeden önce yedek almak kuvvetle öneriliyorsa, ayar yedeği al."
 
 msgid "Perform an online update check in the background"
@@ -5616,15 +5827,18 @@ msgstr "Lütfen okuyucu seçin"
 
 #
 msgid ""
-"Please configure or verify your Nameservers by filling out the required values.\n"
+"Please configure or verify your Nameservers by filling out the required "
+"values.\n"
 "When you are ready press OK to continue."
 msgstr ""
-"Lütfen ad sunucu ayarlarınızı, gerekli alanları doldurarak yapılandırın veya kullanılabilir bilgileri doğrulayın.\n"
+"Lütfen ad sunucu ayarlarınızı, gerekli alanları doldurarak yapılandırın veya "
+"kullanılabilir bilgileri doğrulayın.\n"
 "Hazır olduğunuzda, devam etmek için OK'a basın."
 
 #
 msgid ""
-"Please configure your internet connection by filling out the required values.\n"
+"Please configure your internet connection by filling out the required "
+"values.\n"
 "When you are ready press OK to continue."
 msgstr ""
 "Lütfen internet bağlantınızı, gerekli alanları doldurarak yapılandırın.\n"
@@ -5673,7 +5887,9 @@ msgid "Please follow the instructions on the TV"
 msgstr "Lütfen TV'deki yönergeyi takip edin."
 
 #
-msgid "Please note that the previously selected media could not be accessed and therefore the default directory is being used instead."
+msgid ""
+"Please note that the previously selected media could not be accessed and "
+"therefore the default directory is being used instead."
 msgstr "Seçtiğiniz ortama erişilemedi, yerine varsayılan klasör kullanılıyor."
 
 #
@@ -5724,7 +5940,8 @@ msgstr "Lütfen film yolunu seçin..."
 
 #
 msgid ""
-"Please select the network interface that you want to use for your internet connection.\n"
+"Please select the network interface that you want to use for your internet "
+"connection.\n"
 "\n"
 "Please press OK to continue."
 msgstr ""
@@ -5759,7 +5976,8 @@ msgstr "Lütfen Tuner D'yi yapılandırın"
 
 #
 msgid ""
-"Please setup your user interface by adjusting the values till the edges of the blue box are touching the edges of your TV.\n"
+"Please setup your user interface by adjusting the values till the edges of "
+"the blue box are touching the edges of your TV.\n"
 "When you are ready press OK to continue."
 msgstr ""
 "Lütfen internet bağlantınızı, gerekli alanları doldurarak yapılandırın.\n"
@@ -5776,8 +5994,12 @@ msgstr ""
 "TV kipine dönmek için OK'a veya taşımayı iptal etmek için EXIT'e basın."
 
 #
-msgid "Please use the UP and DOWN keys to select your language. Afterwards press the OK button."
-msgstr "Lütfen dil seçiminizi yapmak için YUKARI ve AŞAĞI tuşlarını kullanın, sonrasında OK'a basın."
+msgid ""
+"Please use the UP and DOWN keys to select your language. Afterwards press "
+"the OK button."
+msgstr ""
+"Lütfen dil seçiminizi yapmak için YUKARI ve AŞAĞI tuşlarını kullanın, "
+"sonrasında OK'a basın."
 
 msgid "Please wait (downloading channel list)"
 msgstr "Bekleyin (kanal listesi indiriliyor)"
@@ -6429,7 +6651,8 @@ msgstr "Görüntü iyileştirme ayarınız, sistem varsayılanına döndürüls�
 
 #
 msgid "Reset video enhancement settings to your last configuration?"
-msgstr "Görüntü iyileştirme ayarlarınız, en son yapılandırmanıza döndürülsün mü?"
+msgstr ""
+"Görüntü iyileştirme ayarlarınız, en son yapılandırmanıza döndürülsün mü?"
 
 msgid "Reshare:"
 msgstr "Tekrar paylaş:"
@@ -6699,8 +6922,12 @@ msgstr "Dosyaları tara..."
 msgid "Scan wireless networks"
 msgstr "Kablosuz Ağları Tara"
 
-msgid "Scan your network for wireless access points and connect to them using your selected wireless device.\n"
-msgstr "Kablosuz erişim noktaları için ağınızı tarayın ve seçilen kablosuz aygıtı kullanarak bağlanın.\n"
+msgid ""
+"Scan your network for wireless access points and connect to them using your "
+"selected wireless device.\n"
+msgstr ""
+"Kablosuz erişim noktaları için ağınızı tarayın ve seçilen kablosuz aygıtı "
+"kullanarak bağlanın.\n"
 
 #, python-format
 msgid "Scanning %s..."
@@ -6724,8 +6951,11 @@ msgid "Scanning..."
 msgstr "Tarıyor..."
 
 #
-msgid "Scans default lamedbs sorted by satellite with a connected dish positioner"
-msgstr "Bağlı konumlayıcı üzerinden varsayılan lamedb dosyasıyla uydu sıralı tarama yapar"
+msgid ""
+"Scans default lamedbs sorted by satellite with a connected dish positioner"
+msgstr ""
+"Bağlı konumlayıcı üzerinden varsayılan lamedb dosyasıyla uydu sıralı tarama "
+"yapar"
 
 msgid "Scrolling Speed"
 msgstr "Kaydırma Hızı"
@@ -6869,8 +7099,12 @@ msgid "Select if you want the Subservice mode to be activated."
 msgstr "Alt servis kipinin etkinleştirilmesini seçin."
 
 #, fuzzy
-msgid "Select if you want to use the Obh colored buttons (set to 'no' if you want to use (Multi Quick Button)."
-msgstr "Obh renkli düğmelerini kullanmak istiorsanız seçin ('hayır' (Çoklu) Hızlı Düğme)."
+msgid ""
+"Select if you want to use the Obh colored buttons (set to 'no' if you want "
+"to use (Multi Quick Button)."
+msgstr ""
+"Obh renkli düğmelerini kullanmak istiorsanız seçin ('hayır' (Çoklu) Hızlı "
+"Düğme)."
 
 msgid "Select input device"
 msgstr "Giriş aygıtı seçin"
@@ -6899,7 +7133,9 @@ msgid "Select refresh rate"
 msgstr "Yenileme hızı seçin"
 
 msgid "Select seekbar to be activated by arrow L/R (long) or << >> (long)."
-msgstr "Arama çubuğunun Sağ/sol (uzun) oklarıyla veya << >> (uzun) tuşlarıyla etkinleşmesini seçin."
+msgstr ""
+"Arama çubuğunun Sağ/sol (uzun) oklarıyla veya << >> (uzun) tuşlarıyla "
+"etkinleşmesini seçin."
 
 #
 msgid "Select service to add..."
@@ -7063,8 +7299,12 @@ msgid "Services"
 msgstr "Kanallar"
 
 #, fuzzy
-msgid "Services may be grouped in bouquets. When enabled, you can use more than one bouquet."
-msgstr "Kanallar buket olarak gruplandırılabilir. Etkinleşince birden fazla buket kullanabilirsiniz."
+msgid ""
+"Services may be grouped in bouquets. When enabled, you can use more than one "
+"bouquet."
+msgstr ""
+"Kanallar buket olarak gruplandırılabilir. Etkinleşince birden fazla buket "
+"kullanabilirsiniz."
 
 msgid "Set System"
 msgstr "Sistemi ayarla"
@@ -7097,24 +7337,47 @@ msgstr "Kanalı bu zamanlayıcıya ayarla."
 msgid "Set the date the timer must start."
 msgstr "Zamanlayıcının başlaması gereken tarihi ayarla"
 
-msgid "Set the default location for your instant recordings. Press 'OK' to add new locations, select left/right to select an existing location."
-msgstr "Anlık kayıtlarınızın varsayılan konumunu belirtin. Yeni konumlar eklemek için 'OK' e basın, mevcut konumlardan birini seçmek için sağ/sol tuşlarını kullanın."
+msgid ""
+"Set the default location for your instant recordings. Press 'OK' to add new "
+"locations, select left/right to select an existing location."
+msgstr ""
+"Anlık kayıtlarınızın varsayılan konumunu belirtin. Yeni konumlar eklemek "
+"için 'OK' e basın, mevcut konumlardan birini seçmek için sağ/sol tuşlarını "
+"kullanın."
 
-msgid "Set the default location for your recordings. Press 'OK' to add new locations, select left/right to select an existing location."
-msgstr "Kayıtlarınızın varsayılan konumunu belirtin. Yeni konumlar eklemek için 'OK' e basın, mevcut konumlardan birini seçmek için sağ/sol tuşlarını kullanın."
+msgid ""
+"Set the default location for your recordings. Press 'OK' to add new "
+"locations, select left/right to select an existing location."
+msgstr ""
+"Kayıtlarınızın varsayılan konumunu belirtin. Yeni konumlar eklemek için 'OK' "
+"e basın, mevcut konumlardan birini seçmek için sağ/sol tuşlarını kullanın."
 
-msgid "Set the default location for your timers. Press 'OK' to add new locations, select left/right to select an existing location."
-msgstr "Zamanlayıcılarınızın varsayılan konumunu belirtin. Yeni konumlar eklemek için 'OK' e basın, mevcut konumlardan birini seçmek için sağ/sol tuşlarını kullanın."
+msgid ""
+"Set the default location for your timers. Press 'OK' to add new locations, "
+"select left/right to select an existing location."
+msgstr ""
+"Zamanlayıcılarınızın varsayılan konumunu belirtin. Yeni konumlar eklemek "
+"için 'OK' e basın, mevcut konumlardan birini seçmek için sağ/sol tuşlarını "
+"kullanın."
 
-msgid "Set the default location for your timeshift-files. Press 'OK' to add new locations, select left/right to select an existing location."
-msgstr "Zamankaydırma dosyalarınızın varsayılan konumunu belirtin. Yeni konumlar eklemek için 'OK' e basın, mevcut konumlardan birini seçmek için sağ/sol tuşlarını kullanın."
+msgid ""
+"Set the default location for your timeshift-files. Press 'OK' to add new "
+"locations, select left/right to select an existing location."
+msgstr ""
+"Zamankaydırma dosyalarınızın varsayılan konumunu belirtin. Yeni konumlar "
+"eklemek için 'OK' e basın, mevcut konumlardan birini seçmek için sağ/sol "
+"tuşlarını kullanın."
 
 msgid "Set the default sorting method."
 msgstr "Varsayılan sıralama yöntemini ayarla"
 
 #, fuzzy
-msgid "Set the delay time between repeated loops, this uses a software render in some skins."
-msgstr "Tekrarlanan döngüler arasındaki gecikme zamanını düzenleyin, bu bazı arayüzlerdeki yazılım işleyişini kullanır."
+msgid ""
+"Set the delay time between repeated loops, this uses a software render in "
+"some skins."
+msgstr ""
+"Tekrarlanan döngüler arasındaki gecikme zamanını düzenleyin, bu bazı "
+"arayüzlerdeki yazılım işleyişini kullanır."
 
 msgid "Set the description of the recording."
 msgstr "Kayıt tanımını ayarla."
@@ -7134,14 +7397,18 @@ msgid "Set the name the recording will get."
 msgstr "Kaydın alacağı adı belirleyin."
 
 #, fuzzy
-msgid "Set the scrolling speed of text on the front display, this uses a software render in some skins."
+msgid ""
+"Set the scrolling speed of text on the front display, this uses a software "
+"render in some skins."
 msgstr "Ön panelde metin kayma hızını ayarla."
 
 msgid "Set the scrolling speed of text on the front display."
 msgstr "Ön panelde metin kayma hızını ayarla."
 
 msgid "Set the time before checking video source for resolution infomation."
-msgstr "Çözünürlük bilgisi için video kaynağını kontrol etmeden önceki zamanı belirleyin."
+msgstr ""
+"Çözünürlük bilgisi için video kaynağını kontrol etmeden önceki zamanı "
+"belirleyin."
 
 #, fuzzy
 msgid "Set the time delay before hiding the infobar."
@@ -7153,7 +7420,8 @@ msgstr "Zamanlayıcının başlaması gereken saati ayarla"
 msgid "Set the time the timer must stop."
 msgstr "Zamanlayıcının durması gereken saati ayarla."
 
-msgid "Set the type of the progress indication in the channel selection screen."
+msgid ""
+"Set the type of the progress indication in the channel selection screen."
 msgstr "Kanal seçim ekranındaki ilerleme işaretinin tipini belirleyin."
 
 msgid "Set to the desired primetime (hour)."
@@ -7168,8 +7436,12 @@ msgstr "Tuşun eylemini seçin."
 msgid "Set voltage and 22KHz"
 msgstr ""
 
-msgid "Sets the root folder of movie list, to remove the '..' from benign shown in that folder."
-msgstr "Klasörün başında görünen '..' kaldırmak için, film listesinin kök klasörünü seçin."
+msgid ""
+"Sets the root folder of movie list, to remove the '..' from benign shown in "
+"that folder."
+msgstr ""
+"Klasörün başında görünen '..' kaldırmak için, film listesinin kök klasörünü "
+"seçin."
 
 #
 msgid "Settings"
@@ -7209,8 +7481,11 @@ msgstr "Zaman diliminizi kurun"
 
 #
 #, python-format
-msgid "Shall the USB stick wizard proceed and program the image file %s into flash memory?"
-msgstr "USB bellek sihirbazı başlayıp %s imaj dosyasını flaş belleğe programlasın mı?"
+msgid ""
+"Shall the USB stick wizard proceed and program the image file %s into flash "
+"memory?"
+msgstr ""
+"USB bellek sihirbazı başlayıp %s imaj dosyasını flaş belleğe programlasın mı?"
 
 msgid "Share Folder's"
 msgstr "Paylaşım Klasörünün"
@@ -7598,7 +7873,8 @@ msgstr "Görsel-arayüzler"
 msgid "Skip empty services"
 msgstr "Boş Kanalları atla"
 
-msgid "Skip internet connection check (disables automatic package installation)"
+msgid ""
+"Skip internet connection check (disables automatic package installation)"
 msgstr "İnternet bağlantısını atla (otomatik paket yüklemeyi engeller)"
 
 #
@@ -7698,8 +7974,13 @@ msgstr "Üzgünüz beslemeler bakım için kapalı"
 msgid "Sorry feeds are down for maintenance, please try again later."
 msgstr "eslemeler bakım için kapalı, sonra tekrar deneyin."
 
-msgid "Sorry feeds seem be in an unstable state, if you wish to use them please enable 'Allow unstable updates' in \"software update setup\"."
-msgstr "Üzgünüz, beslemeler kararsız görünüyor, kullanmak istiyorsanız çevrimiçi güncelleme kurulumunda 'Kararsız güncellemelere izin ver' seçeneğini etkinleştirin."
+msgid ""
+"Sorry feeds seem be in an unstable state, if you wish to use them please "
+"enable 'Allow unstable updates' in \"software update setup\"."
+msgstr ""
+"Üzgünüz, beslemeler kararsız görünüyor, kullanmak istiyorsanız çevrimiçi "
+"güncelleme kurulumunda 'Kararsız güncellemelere izin ver' seçeneğini "
+"etkinleştirin."
 
 msgid "Sorry uShare Config is Missing"
 msgstr "Üzgünüm, uShare Yapılandırması eksik"
@@ -7889,8 +8170,12 @@ msgid "Stopped"
 msgstr "Durduruldu"
 
 #, fuzzy
-msgid "Stops timeshift being used if a recording is in progress. (Advisable for USB sticks)"
-msgstr "Bir kayıt yürütülüyorsa zamankaydırma kullanımını durdurur. (USB bellekler için önerilir)"
+msgid ""
+"Stops timeshift being used if a recording is in progress. (Advisable for USB "
+"sticks)"
+msgstr ""
+"Bir kayıt yürütülüyorsa zamankaydırma kullanımını durdurur. (USB bellekler "
+"için önerilir)"
 
 #
 msgid "Storage devices"
@@ -8166,7 +8451,8 @@ msgid ""
 "Thank you for using the wizard. Your %s %s is now ready to use.\n"
 "Please press OK to start using your %s %s."
 msgstr ""
-"Sihirbazı kullandığınız için teşekkür ederiz. %s %s niz şimdi kullanıma hazır.\n"
+"Sihirbazı kullandığınız için teşekkür ederiz. %s %s niz şimdi kullanıma "
+"hazır.\n"
 "%s %s nizi kullanmaya başlamak için lütfen OK basınız."
 
 msgid "The %s %s reads the stored EPG data every (hours)."
@@ -8191,8 +8477,14 @@ msgstr ""
 
 #
 #, python-format
-msgid "The DVD standard doesn't support H.264 (HDTV) video streams. Do you want to create a %s %s format data DVD (which will not play in stand-alone DVD players) instead?"
-msgstr "Standart DVD biçimi H.264 (HDTV) görüntü akımını desteklemez. Bunun yerine %s %s'nun DVD biçiminde (standart DVD oynatıcılarda oynatamazsınız) oluşturmak ister misiniz?"
+msgid ""
+"The DVD standard doesn't support H.264 (HDTV) video streams. Do you want to "
+"create a %s %s format data DVD (which will not play in stand-alone DVD "
+"players) instead?"
+msgstr ""
+"Standart DVD biçimi H.264 (HDTV) görüntü akımını desteklemez. Bunun yerine "
+"%s %s'nun DVD biçiminde (standart DVD oynatıcılarda oynatamazsınız) "
+"oluşturmak ister misiniz?"
 
 msgid ""
 "The EPGSearch plugin is not installed!\n"
@@ -8349,12 +8641,19 @@ msgstr ""
 "Lütfen yükleyin."
 
 #
-msgid "The wizard can backup your current settings. Do you want to do a backup now?"
-msgstr "Bu sihirbaz geçerli ayarlarınızın yedeğini alacaktır. Yedeği şimdi almak istiyor musunuz?"
+msgid ""
+"The wizard can backup your current settings. Do you want to do a backup now?"
+msgstr ""
+"Bu sihirbaz geçerli ayarlarınızın yedeğini alacaktır. Yedeği şimdi almak "
+"istiyor musunuz?"
 
 #, python-format
-msgid "The wizard found a configuration backup. Do you want to restore your old settings from %s?"
-msgstr "Sihirbaz bir yapılandırma yedeği buldu. %s den eski ayarlarınızın geri yüklenmesini ister misiniz??"
+msgid ""
+"The wizard found a configuration backup. Do you want to restore your old "
+"settings from %s?"
+msgstr ""
+"Sihirbaz bir yapılandırma yedeği buldu. %s den eski ayarlarınızın geri "
+"yüklenmesini ister misiniz??"
 
 #
 msgid "The wizard is finished now."
@@ -8396,21 +8695,37 @@ msgid "This %s %s cannot decode %s streams!"
 msgstr "Bu %s %s, %s akışlarını çözemez!"
 
 #
-msgid "This DVD RW medium is already formatted - reformatting will erase all content on the disc."
-msgstr "DVD-RW ortamı zaten biçimlendirilmiş - yeniden biçimlendirme tüm disk içeriğini silecektir."
+msgid ""
+"This DVD RW medium is already formatted - reformatting will erase all "
+"content on the disc."
+msgstr ""
+"DVD-RW ortamı zaten biçimlendirilmiş - yeniden biçimlendirme tüm disk "
+"içeriğini silecektir."
 
-msgid "This allows you change the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size"
-msgstr "Font boyunu, görsel-arayüz boyuna göre değiştirmenizi sağlar. (1, 1 punto büyütür, -1, 1 punto küçültür)"
+msgid ""
+"This allows you change the font size relative to skin size, so 1 increases "
+"by 1 point size, and -1 decreases by 1 point size"
+msgstr ""
+"Font boyunu, görsel-arayüz boyuna göre değiştirmenizi sağlar. (1, 1 punto "
+"büyütür, -1, 1 punto küçültür)"
 
 #, fuzzy
-msgid "This allows you to change the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size"
-msgstr "Font boyunu, görsel-arayüz boyuna göre değiştirmenizi sağlar. (1, 1 punto büyütür, -1, 1 punto küçültür)"
+msgid ""
+"This allows you to change the font size relative to skin size, so 1 "
+"increases by 1 point size, and -1 decreases by 1 point size"
+msgstr ""
+"Font boyunu, görsel-arayüz boyuna göre değiştirmenizi sağlar. (1, 1 punto "
+"büyütür, -1, 1 punto küçültür)"
 
 msgid "This allows you to change the number of rows shown."
 msgstr "Gösterilen satır sayısını değiştirmenizi sağlar."
 
-msgid "This option allows to reduce the block-noise in the picture. Obviously this is at the cost of the picture's sharpness."
-msgstr "Bu seçenek resimdeki blok-gürültüyü azaltmayı sağlar. Doğal olarak resim keskinliği pahasına."
+msgid ""
+"This option allows to reduce the block-noise in the picture. Obviously this "
+"is at the cost of the picture's sharpness."
+msgstr ""
+"Bu seçenek resimdeki blok-gürültüyü azaltmayı sağlar. Doğal olarak resim "
+"keskinliği pahasına."
 
 msgid "This option allows to set the level of dynamic contrast of the picture."
 msgstr "Bu seçenek resmin dinamik kontrast düzeyini ayarlamanızı sağlar."
@@ -8419,15 +8734,24 @@ msgstr "Bu seçenek resmin dinamik kontrast düzeyini ayarlamanızı sağlar."
 msgid "This option allows you choose how to display elapsed time as + or -"
 msgstr "Bu seçenek geçen zamanı + veya - olarak seçmenizi sağlar"
 
-msgid "This option allows you choose how to display remaining time, or elapsed time, or both."
-msgstr "Kalan zaman, geçen zaman veya her ikisinin de gösterilme seçiminin yapılmasını sağlar."
+msgid ""
+"This option allows you choose how to display remaining time, or elapsed "
+"time, or both."
+msgstr ""
+"Kalan zaman, geçen zaman veya her ikisinin de gösterilme seçiminin "
+"yapılmasını sağlar."
 
 #, fuzzy
-msgid "This option allows you choose how to display the remaining/elapsed time for live TV."
-msgstr "Kalan/geçen zamanın canlı TV yayınlarında nasıl gösterileceğinin seçilmesini sağlar."
+msgid ""
+"This option allows you choose how to display the remaining/elapsed time for "
+"live TV."
+msgstr ""
+"Kalan/geçen zamanın canlı TV yayınlarında nasıl gösterileceğinin seçilmesini "
+"sağlar."
 
 #, fuzzy
-msgid "This option allows you choose the background color of transparent picons."
+msgid ""
+"This option allows you choose the background color of transparent picons."
 msgstr "Bu seçenek saydam pikonların arkaplan rengini seçmenizi sağlar."
 
 msgid "This option allows you set the layout view (Text or Graphics)."
@@ -8442,47 +8766,84 @@ msgstr "Bu seçenek resimdeki yeşil tonları arttırmanızı sağlar."
 msgid "This option allows you to bypass HDMI EDID check"
 msgstr "Bu seçenek  HDMI EDID kontrolunu atlamanızı yapılandırır"
 
-msgid "This option allows you to choose from the two channel lists that are available."
+msgid ""
+"This option allows you to choose from the two channel lists that are "
+"available."
 msgstr "İki kanal listesinden birini seçmenizi sağlar."
 
-msgid "This option allows you to choose how to display 1080p 24Hz on your TV. (as not all TV's support these resolutions)"
-msgstr "Bu seçenek 1080p 24Hz i TVnizde nasıl göstereceğinizi seçmenizi sağlar (her alıcı bunu desteklemez)"
+msgid ""
+"This option allows you to choose how to display 1080p 24Hz on your TV. (as "
+"not all TV's support these resolutions)"
+msgstr ""
+"Bu seçenek 1080p 24Hz i TVnizde nasıl göstereceğinizi seçmenizi sağlar (her "
+"alıcı bunu desteklemez)"
 
-msgid "This option allows you to choose how to display 1080p 25Hz on your TV. (as not all TV's support these resolutions)"
-msgstr "Bu seçenek 1080p 25Hz i TVnizde nasıl göstereceğinizi seçmenizi sağlar. (her alıcı bunu desteklemez)"
+msgid ""
+"This option allows you to choose how to display 1080p 25Hz on your TV. (as "
+"not all TV's support these resolutions)"
+msgstr ""
+"Bu seçenek 1080p 25Hz i TVnizde nasıl göstereceğinizi seçmenizi sağlar. (her "
+"alıcı bunu desteklemez)"
 
-msgid "This option allows you to choose how to display 1080p 30Hz on your TV. (as not all TV's support these resolutions)"
-msgstr "Bu seçenek 1080p 30Hz i TVnizde nasıl göstereceğinizi seçmenizi sağlar. (her alıcı bunu desteklemez)"
+msgid ""
+"This option allows you to choose how to display 1080p 30Hz on your TV. (as "
+"not all TV's support these resolutions)"
+msgstr ""
+"Bu seçenek 1080p 30Hz i TVnizde nasıl göstereceğinizi seçmenizi sağlar. (her "
+"alıcı bunu desteklemez)"
 
-msgid "This option allows you to choose how to display 720p 24Hz on your TV. (as not all TV's support these resolutions)"
-msgstr "Bu seçenek 720p 24Hz i TVnizde nasıl göstereceğinizi seçmenizi sağlar. (her alıcı bunu desteklemez)"
+msgid ""
+"This option allows you to choose how to display 720p 24Hz on your TV. (as "
+"not all TV's support these resolutions)"
+msgstr ""
+"Bu seçenek 720p 24Hz i TVnizde nasıl göstereceğinizi seçmenizi sağlar. (her "
+"alıcı bunu desteklemez)"
 
 #, fuzzy
 msgid "This option allows you to choose how to display elapsed time. As + or -"
 msgstr "Bu seçenek geçen zamanı + veya - olarak seçmenizi sağlar"
 
-msgid "This option allows you to choose how to display standard defintion video on your TV."
+msgid ""
+"This option allows you to choose how to display standard defintion video on "
+"your TV."
 msgstr "Bu seçenek SD videoyu TVnizde nasıl göstereceğinizi seçmenizi sağlar. "
 
 #, fuzzy
-msgid "This option allows you to choose how to display the remaining/elapsed time for Media playback."
-msgstr "Kalan/geçen zamanın ortam oynatımında nasıl gösterileceğinin seçilmesini sağlar."
+msgid ""
+"This option allows you to choose how to display the remaining/elapsed time "
+"for Media playback."
+msgstr ""
+"Kalan/geçen zamanın ortam oynatımında nasıl gösterileceğinin seçilmesini "
+"sağlar."
 
 #, fuzzy
-msgid "This option allows you to choose how to display the remaining/elapsed time for live TV."
-msgstr "Kalan/geçen zamanın canlı TV yayınlarında nasıl gösterileceğinin seçilmesini sağlar."
+msgid ""
+"This option allows you to choose how to display the remaining/elapsed time "
+"for live TV."
+msgstr ""
+"Kalan/geçen zamanın canlı TV yayınlarında nasıl gösterileceğinin seçilmesini "
+"sağlar."
 
 #, fuzzy
-msgid "This option allows you to choose how to display the remaining/elapsed time for media playback."
-msgstr "Kalan/geçen zamanın ortam oynatımında nasıl gösterileceğinin seçilmesini sağlar."
+msgid ""
+"This option allows you to choose how to display the remaining/elapsed time "
+"for media playback."
+msgstr ""
+"Kalan/geçen zamanın ortam oynatımında nasıl gösterileceğinin seçilmesini "
+"sağlar."
 
-msgid "This option allows you to choose what the first button press jumps to in channel list screen, (so pressing '2' jumps to 'A' or '2' first)"
-msgstr "Kanal listesinde basılan ilk tuşla nereye atlanacağını seçer (örn. '2', 'A' ya veya '2' ye)"
+msgid ""
+"This option allows you to choose what the first button press jumps to in "
+"channel list screen, (so pressing '2' jumps to 'A' or '2' first)"
+msgstr ""
+"Kanal listesinde basılan ilk tuşla nereye atlanacağını seçer (örn. '2', 'A' "
+"ya veya '2' ye)"
 
 msgid "This option allows you to disable sorting of the menus"
 msgstr "Menülerdeki sıralamanın kapatılmasını sağlar."
 
-msgid "This option allows you to disable sorting of the option in setting screens"
+msgid ""
+"This option allows you to disable sorting of the option in setting screens"
 msgstr "Ayar ekranlarındaki sıralamanın kapatılmasını sağlar."
 
 msgid "This option allows you to disable sorting of the plugin browser."
@@ -8496,14 +8857,18 @@ msgid "This option allows you to set the layout view (Text or Graphics)."
 msgstr "Bu seçenek düzen görünüşünü belirlemenizi sağlar (Metin veya grafik)."
 
 #, fuzzy
-msgid "This option allows you to show the SNR as a percentage (not all receivers support this)."
+msgid ""
+"This option allows you to show the SNR as a percentage (not all receivers "
+"support this)."
 msgstr "SNR'nin yüzde olarak görünmesini sağlar (her alıcı bunu desteklemez)"
 
 msgid "This option allows you to view the old and new settings side by side."
 msgstr "Bu seçenek eski ve yeni ayarları yan yana görmenizi sağlar."
 
-msgid "This option configures the general audio delay of Dolby Digital sound tracks."
-msgstr "Bu seçenek Dolby Digital ses izlerinin genel ses gecikmesini yapılandırır."
+msgid ""
+"This option configures the general audio delay of Dolby Digital sound tracks."
+msgstr ""
+"Bu seçenek Dolby Digital ses izlerinin genel ses gecikmesini yapılandırır."
 
 msgid "This option configures the general audio delay of stereo sound tracks."
 msgstr "Bu seçenek stereo ses izlerinin genel ses gecikmesini yapılandırır."
@@ -8527,10 +8892,16 @@ msgid "This option lets you show the option in the extension screen"
 msgstr "Genişletmeler ekranında seçeneğin görüntülenmesini sağlar"
 
 #, fuzzy
-msgid "This option moves the PVR status from the separate window into the Movie Player infobar."
-msgstr "PVR durumunun, tek pencereden MoviePlayer bilgi-çubuğuna taşınmasını sağlar."
+msgid ""
+"This option moves the PVR status from the separate window into the Movie "
+"Player infobar."
+msgstr ""
+"PVR durumunun, tek pencereden MoviePlayer bilgi-çubuğuna taşınmasını sağlar."
 
-msgid "This option set the level of surpression of musquito noise (Musquito Noise is random aliasing as a result of strong compression). Obviously this goes at the cost of picture details."
+msgid ""
+"This option set the level of surpression of musquito noise (Musquito Noise "
+"is random aliasing as a result of strong compression). Obviously this goes "
+"at the cost of picture details."
 msgstr ""
 
 msgid "This option sets  the picture contrast."
@@ -8551,26 +8922,44 @@ msgstr "Bu seçenek resim rengini ayarlar."
 msgid "This option sets the picture saturation."
 msgstr "Bu seçenek resim doygunluğunu ayarlar."
 
-msgid "This option sets the scaler sharpness, used when stretching picture from 4:3 to 16:9."
-msgstr "Bu seçenek ölçekleme keskinliğini ayarlar, resmi 4:3 ten 16:9 a uzat kullanılır."
+msgid ""
+"This option sets the scaler sharpness, used when stretching picture from 4:3 "
+"to 16:9."
+msgstr ""
+"Bu seçenek ölçekleme keskinliğini ayarlar, resmi 4:3 ten 16:9 a uzat "
+"kullanılır."
 
-msgid "This option sets the surpression of false digital contours, that are the result of a limited number of discrete values."
-msgstr "Bu seçenek, sınırlı sayıdaki ayrık değerlerin sonucu oluşan yanlış dijital şekillerin bastırılmasını ayarlar."
+msgid ""
+"This option sets the surpression of false digital contours, that are the "
+"result of a limited number of discrete values."
+msgstr ""
+"Bu seçenek, sınırlı sayıdaki ayrık değerlerin sonucu oluşan yanlış dijital "
+"şekillerin bastırılmasını ayarlar."
 
-msgid "This option sets up the picture sharpness, used when the picture is being upscaled."
-msgstr "Bu seçenek resim keskinliğini ayarlar, resim çözünürlüğü arttırılırken kullanılır."
+msgid ""
+"This option sets up the picture sharpness, used when the picture is being "
+"upscaled."
+msgstr ""
+"Bu seçenek resim keskinliğini ayarlar, resim çözünürlüğü arttırılırken "
+"kullanılır."
 
 #, python-format
 msgid ""
-"This plugin creates a USB stick which can be used to update the firmware of your %s %s without the need for a network or WLAN connection.\n"
+"This plugin creates a USB stick which can be used to update the firmware of "
+"your %s %s without the need for a network or WLAN connection.\n"
 "First, a USB stick needs to be prepared so that it becomes bootable.\n"
-"In the next step, an NFI image file can be downloaded from the update server and saved on the USB stick.\n"
-"If you already have a prepared bootable USB stick, please insert it now. Otherwise plug in a USB stick with a minimum size of 64 MB!"
+"In the next step, an NFI image file can be downloaded from the update server "
+"and saved on the USB stick.\n"
+"If you already have a prepared bootable USB stick, please insert it now. "
+"Otherwise plug in a USB stick with a minimum size of 64 MB!"
 msgstr ""
-"Bu eklenti, %s %s bellenim güncellenmesininde kullanılacak USB belleği hazırlar.\n"
+"Bu eklenti, %s %s bellenim güncellenmesininde kullanılacak USB belleği "
+"hazırlar.\n"
 "İlk önce, USB belleğinin önyüklenebilir olarak hazırlanması gerekir.\n"
-"Sonraki adımda, güncelleme sunucusundan bir NFI imajı indirilir ve USB belleği üzerine saklanır.\n"
-"Eğer daha önce, önyüklenebilir bir USB belleği hazırladıysanız, lütfen şimdi onu takın. Aksi halinde en az 64 MB kapasiteli bir USB belleği takın!"
+"Sonraki adımda, güncelleme sunucusundan bir NFI imajı indirilir ve USB "
+"belleği üzerine saklanır.\n"
+"Eğer daha önce, önyüklenebilir bir USB belleği hazırladıysanız, lütfen şimdi "
+"onu takın. Aksi halinde en az 64 MB kapasiteli bir USB belleği takın!"
 
 #
 msgid "This plugin is installed."
@@ -8591,12 +8980,15 @@ msgid ""
 "This test checks for configured nameservers.\n"
 "If you get a \"unconfirmed\" message:\n"
 "- please check your DHCP, cabling and adapter setup\n"
-"- if you configured your nameservers manually please verify your entries in the \"Nameserver\" configuration"
+"- if you configured your nameservers manually please verify your entries in "
+"the \"Nameserver\" configuration"
 msgstr ""
 "Bu işlem yapılandırdığınız ad sunucularını (DNS) test eder.\n"
 "\"doğrulanamadı\" mesajı alırsanız:\n"
-"- Lütfen DHCP servisini sağlayan donanımınızı, kabloyu ve ağ donanımınızı kontrol edin\n"
-"- Ad sunucuyu (DNS) el ile ayarladıysanız \"Ad sunucu (DNS)\" yapılandırmanızı gözden geçirin"
+"- Lütfen DHCP servisini sağlayan donanımınızı, kabloyu ve ağ donanımınızı "
+"kontrol edin\n"
+"- Ad sunucuyu (DNS) el ile ayarladıysanız \"Ad sunucu (DNS)\" "
+"yapılandırmanızı gözden geçirin"
 
 #
 msgid ""
@@ -8620,17 +9012,21 @@ msgstr ""
 "Bu işlem yerel ağ donanımınızın IP adresinin geçerliliğini test edecektir.\n"
 "\"doğrulanamadı\" mesajı alırsanız:\n"
 "- IP adresi hatalı/geçersizdir\n"
-"- lütfen DHCP servisini sağlayan donanımınızı, kabloyu ve ağ donanımınızın yapılandırmasını kontrol edin"
+"- lütfen DHCP servisini sağlayan donanımınızı, kabloyu ve ağ donanımınızın "
+"yapılandırmasını kontrol edin"
 
 msgid ""
-"This test checks whether your LAN adapter is set up for automatic IP address configuration with DHCP.\n"
+"This test checks whether your LAN adapter is set up for automatic IP address "
+"configuration with DHCP.\n"
 "If you get a \"disabled\" message:\n"
 " - then your LAN adapter is configured for manual IP setup\n"
-"- verify thay you have entered correct IP informations in the adapter setup dialog.\n"
+"- verify thay you have entered correct IP informations in the adapter setup "
+"dialog.\n"
 "If you get an \"enabled\" message:\n"
 "-verify that you have a configured and working DHCP server in your network."
 msgstr ""
-"Bu test LAN adaptörünüzün DHCP ile otomatik İP adres yapılandırmasına kurulduğunu sorgular.\n"
+"Bu test LAN adaptörünüzün DHCP ile otomatik İP adres yapılandırmasına "
+"kurulduğunu sorgular.\n"
 "\"disabled\" mesajı alırsanız:\n"
 " - LAN adaptörünüz elle İP kurulumuna yapılandırılmıştır\n"
 "-adaptör kurulum diyalogunda doğru İP bilgileri girdiğinizi doğrulayın.\n"
@@ -8642,10 +9038,12 @@ msgid "This test detects your configured LAN adapter."
 msgstr "Bu test tanımlanmış ağ dodanımınızı bulur."
 
 msgid ""
-"This will (re-)calculate all positions of your rotor and may remove previously memorised positions and fine-tuning!\n"
+"This will (re-)calculate all positions of your rotor and may remove "
+"previously memorised positions and fine-tuning!\n"
 "Are you sure?"
 msgstr ""
-"Bu, rotorunuzun bütün konumlarını (tekrar) hesaplayacak ve önceden kaydedilmiş konum ve ince ayarları silebilir!\n"
+"Bu, rotorunuzun bütün konumlarını (tekrar) hesaplayacak ve önceden "
+"kaydedilmiş konum ve ince ayarları silebilir!\n"
 "Emin misiniz?"
 
 #
@@ -8798,13 +9196,17 @@ msgstr "Başlıkseti kipi"
 #, python-format
 msgid ""
 "To update your %s %s firmware, please follow these steps:\n"
-"1) Turn off your box with the rear power switch and make sure the bootable USB stick is plugged in.\n"
-"2) Turn mains back on and hold the DOWN button on the front panel pressed for 10 seconds.\n"
+"1) Turn off your box with the rear power switch and make sure the bootable "
+"USB stick is plugged in.\n"
+"2) Turn mains back on and hold the DOWN button on the front panel pressed "
+"for 10 seconds.\n"
 "3) Wait for bootup and follow instructions of the wizard."
 msgstr ""
 "%s %s bellenim güncellemesi için lütfen bu adımları takibedin:\n"
-"1) Alıcınız arka güç anahtarından kapatın ve önyüklenebilir USB belleğini takın.\n"
-"2) Arka güç anahtarını açın ve ön paneldeki AŞAĞI tuşunu 10 saniye basılı tutun.\n"
+"1) Alıcınız arka güç anahtarından kapatın ve önyüklenebilir USB belleğini "
+"takın.\n"
+"2) Arka güç anahtarını açın ve ön paneldeki AŞAĞI tuşunu 10 saniye basılı "
+"tutun.\n"
 "3) Yüklemeyi bekleyin ve sihirbazın yönergesini takip edin."
 
 #
@@ -9179,13 +9581,20 @@ msgstr "Güç ölçümü kullan"
 msgid "Use slim screen"
 msgstr "İnce ekran kullan"
 
-msgid "Use the Left/Right buttons on your remote to adjust the size of the user interface. Left button decreases the size, Right increases the size."
-msgstr "OSD boyunu ayarlamak için Sol/Sağ tuşlarını kullanın. Sol tuş boyutu küçültür, Sağ tuş boyutu büyütür."
+msgid ""
+"Use the Left/Right buttons on your remote to adjust the size of the user "
+"interface. Left button decreases the size, Right increases the size."
+msgstr ""
+"OSD boyunu ayarlamak için Sol/Sağ tuşlarını kullanın. Sol tuş boyutu "
+"küçültür, Sağ tuş boyutu büyütür."
 
-msgid "Use the Left/Right buttons on your remote to move the user interface up/down"
+msgid ""
+"Use the Left/Right buttons on your remote to move the user interface up/down"
 msgstr "OSD Sola/Sağa kaydırmak için Sol/Sağ tuşlarını kullanın."
 
-msgid "Use the Left/Right buttons on your remote to move the user inyterface left/right"
+msgid ""
+"Use the Left/Right buttons on your remote to move the user inyterface left/"
+"right"
 msgstr "OSD Sola/Sağa kaydırmak için Sol/Sağ tuşlarını kullanın."
 
 msgid "Use the alternative or the conventional radio mode."
@@ -9202,8 +9611,12 @@ msgid "Use the network wizard to configure your Network\n"
 msgstr "Ağınızı yapılandırmak için Ağ sihirbazını kullanın\n"
 
 #
-msgid "Use the up/down keys on your remote control to select an option. After that, press OK."
-msgstr "Seçiminizi yapmak için yukarı/aşağı tuşlarıını kullanın, sonrasında OK'a basın."
+msgid ""
+"Use the up/down keys on your remote control to select an option. After that, "
+"press OK."
+msgstr ""
+"Seçiminizi yapmak için yukarı/aşağı tuşlarıını kullanın, sonrasında OK'a "
+"basın."
 
 msgid "Use the wizard to set up basic features"
 msgstr "Temel özellikleri düzenlemek için sihirbazı kullan"
@@ -9273,8 +9686,13 @@ msgstr "Eski profil kullanılıyor: "
 msgid "Using tuner %s"
 msgstr "Tuner %s kullanılıyor"
 
-msgid "Usually when the subtitle language is the same as the audio language, the subtitles will not be used. Enable this option to allow these subtitles to be used."
-msgstr "Altyazı dili ses diline eşitse genelde altyazı kullanılmaz. Bu altyazıların kullanılması için bu seçeneği etkinleştirin."
+msgid ""
+"Usually when the subtitle language is the same as the audio language, the "
+"subtitles will not be used. Enable this option to allow these subtitles to "
+"be used."
+msgstr ""
+"Altyazı dili ses diline eşitse genelde altyazı kullanılmaz. Bu altyazıların "
+"kullanılması için bu seçeneği etkinleştirin."
 
 #
 msgid "VCR scart"
@@ -9334,7 +9752,8 @@ msgstr "Görüntü ince ayarı"
 msgid ""
 "Video input selection\n"
 "\n"
-"Please press OK if you can see this page on your TV (or select a different input port).\n"
+"Please press OK if you can see this page on your TV (or select a different "
+"input port).\n"
 "\n"
 "The next input port will be automatically probed in 20 seconds."
 msgstr ""
@@ -9574,31 +9993,43 @@ msgstr "Ağırlıklı konum"
 msgid ""
 "Welcome to the cutlist editor.\n"
 "\n"
-"Seek to the start of the stuff you want to cut away. Press OK, select 'start cut'.\n"
+"Seek to the start of the stuff you want to cut away. Press OK, select 'start "
+"cut'.\n"
 "\n"
 "Then seek to the end, press OK, select 'end cut'. That's it."
 msgstr ""
 "Kesim listesi düzenleyiciye hoşgeldiniz.\n"
 "\n"
-"Kesmek istediğiniz bölümün başına konumlanın. OK'a basın ve 'buradan kes' deyin.\n"
+"Kesmek istediğiniz bölümün başına konumlanın. OK'a basın ve 'buradan kes' "
+"deyin.\n"
 "\n"
-"Sonrasında kesmek istediğiniz bölümün sonuna konumlanın. Tekrar OK'a basın ve 'kesimi burada bitir' deyin."
+"Sonrasında kesmek istediğiniz bölümün sonuna konumlanın. Tekrar OK'a basın "
+"ve 'kesimi burada bitir' deyin."
 
 #
-msgid "Welcome to the image upgrade wizard. The wizard will assist you in upgrading the firmware of your %s %s by providing a backup facility for your current settings and a short explanation of how to upgrade your firmware."
-msgstr "İmaj yükseltme sihirbazına hoş geldiniz. Bu sihirbaz, %s %s bellenim yükseltmesi esnasında, geçerli ayarlarınızın yedeğini almanıza imkan sağlayacak ve kısa açıklamalarla bellenimi nasıl yükselteceğinizi anlatacaktır."
+msgid ""
+"Welcome to the image upgrade wizard. The wizard will assist you in upgrading "
+"the firmware of your %s %s by providing a backup facility for your current "
+"settings and a short explanation of how to upgrade your firmware."
+msgstr ""
+"İmaj yükseltme sihirbazına hoş geldiniz. Bu sihirbaz, %s %s bellenim "
+"yükseltmesi esnasında, geçerli ayarlarınızın yedeğini almanıza imkan "
+"sağlayacak ve kısa açıklamalarla bellenimi nasıl yükselteceğinizi "
+"anlatacaktır."
 
 #
 msgid ""
 "Welcome.\n"
 "\n"
-"If you want to connect your %s %s to the Internet, this wizard will guide you through the basic network setup of your %s %s.\n"
+"If you want to connect your %s %s to the Internet, this wizard will guide "
+"you through the basic network setup of your %s %s.\n"
 "\n"
 "Press OK to start configuring your network"
 msgstr ""
 "Hoşgeldiniz.\n"
 "\n"
-"%s %s'yu internete bağlamak istiyorsanız, bu sihirbaz size ağınızı yapılandırmanız için rehberlik yapacaktır.\n"
+"%s %s'yu internete bağlamak istiyorsanız, bu sihirbaz size ağınızı "
+"yapılandırmanız için rehberlik yapacaktır.\n"
 "\n"
 "Ağ yapılandırmasına başlamak için OK'a basın."
 
@@ -9611,7 +10042,8 @@ msgid ""
 msgstr ""
 "Hoşgeldiniz.\n"
 "\n"
-"Bu başlangıç sihirbazı %s %s'nızın temel kurulumunda size rehberlik yapacaktır.\n"
+"Bu başlangıç sihirbazı %s %s'nızın temel kurulumunda size rehberlik "
+"yapacaktır.\n"
 "\n"
 "Sonraki adıma geçmek için kumandanızdaki  OK tuşuna basın."
 
@@ -9625,8 +10057,14 @@ msgstr "Batı limiti "
 msgid "What Day of week ?"
 msgstr "Haftanın hangi günü ?"
 
-msgid "What action is required on completion of the timer? 'Auto' lets the box return to the state it had when the timer started. 'Do nothing', 'Go to standby' and 'Go to deep standby' do ecaxtly that."
-msgstr "Zamanlama bitiminde hangi eylem gerekiyor? 'Auto': alıcı kayıt başladığındaki durumuna döner. 'Hiçbirşey yapma', 'Beklemeye geç' ve 'Derin uykuya geç' aynen uygulanır."
+msgid ""
+"What action is required on completion of the timer? 'Auto' lets the box "
+"return to the state it had when the timer started. 'Do nothing', 'Go to "
+"standby' and 'Go to deep standby' do ecaxtly that."
+msgstr ""
+"Zamanlama bitiminde hangi eylem gerekiyor? 'Auto': alıcı kayıt "
+"başladığındaki durumuna döner. 'Hiçbirşey yapma', 'Beklemeye geç' ve 'Derin "
+"uykuya geç' aynen uygulanır."
 
 msgid "What date of month ?"
 msgstr "Ayın hangi günü ?"
@@ -9635,86 +10073,140 @@ msgstr "Ayın hangi günü ?"
 msgid "What do you want to scan?"
 msgstr "Ne taramak istiyorsunuz?"
 
-msgid "When enabled the online checker will also check for experimental versions"
+msgid ""
+"When enabled the online checker will also check for experimental versions"
 msgstr "Etkinleşince deneme sürümleri de çevrimiçi aranır"
 
-msgid "When enabled, AIT data will be included in http streams. This allows a client receiver to use HbbTV."
-msgstr "Etkinleşince, AIT verileri http akışına eklenir. Bu, müşteri alıcısının HbbTV yi kullanmasını sağlar."
+msgid ""
+"When enabled, AIT data will be included in http streams. This allows a "
+"client receiver to use HbbTV."
+msgstr ""
+"Etkinleşince, AIT verileri http akışına eklenir. Bu, müşteri alıcısının "
+"HbbTV yi kullanmasını sağlar."
 
-msgid "When enabled, EIT data will be included in http streams. This allows a client receiver to show EPG."
-msgstr "Etkinleşince, http akışına EIT verileri eklenir. Bu, bir müşteri alıcısının EPG göstermesini sağlar."
+msgid ""
+"When enabled, EIT data will be included in http streams. This allows a "
+"client receiver to show EPG."
+msgstr ""
+"Etkinleşince, http akışına EIT verileri eklenir. Bu, bir müşteri alıcısının "
+"EPG göstermesini sağlar."
 
-msgid "When enabled, a popup message will be shown when a movie has finished and the next one will start."
-msgstr "Etkinleşince, bir film bitip diğeri başlıyacağı zaman pencere mesajı görülür."
+msgid ""
+"When enabled, a popup message will be shown when a movie has finished and "
+"the next one will start."
+msgstr ""
+"Etkinleşince, bir film bitip diğeri başlıyacağı zaman pencere mesajı görülür."
 
 msgid "When enabled, a popup message will be shown when a recording starts."
 msgstr "Etkinleşince, kayıt başlarken popup mesajı görünür."
 
 #, fuzzy
-msgid "When enabled, a recording is allowed to interrupt live TV, when there are no free tuners."
+msgid ""
+"When enabled, a recording is allowed to interrupt live TV, when there are no "
+"free tuners."
 msgstr "Etkinleşince,boş tuner yoksa, kayıt canlı tv yi durdurur."
 
-msgid "When enabled, a warning will be displayed and the user will get an option to stop or to continue the timeshift."
-msgstr "Etkinleşince, bir uyarı görünür, kullanıcı devam eder veya zamankaydırmayı durdurur."
+msgid ""
+"When enabled, a warning will be displayed and the user will get an option to "
+"stop or to continue the timeshift."
+msgstr ""
+"Etkinleşince, bir uyarı görünür, kullanıcı devam eder veya zamankaydırmayı "
+"durdurur."
 
 #, fuzzy
 msgid "When enabled, channel numbering will start at '1' for every bouquet."
 msgstr "Etkinleşince, her buketin kanal numarası '1' den başlar."
 
-msgid "When enabled, content with an aspect ratio of 4:3 will be stretched to fit the screen."
+msgid ""
+"When enabled, content with an aspect ratio of 4:3 will be stretched to fit "
+"the screen."
 msgstr "Etkinleşince 4:3 görüntü oranı ekranı dolduracak şekilde genişler."
 
 #, fuzzy
-msgid "When enabled, continue to the next bouquet when the last channel of the current bouquet is reached."
-msgstr "Etkinleşince, kanal değiştirerek bir buketin sonuna gelince sonraki bukete geçilir."
+msgid ""
+"When enabled, continue to the next bouquet when the last channel of the "
+"current bouquet is reached."
+msgstr ""
+"Etkinleşince, kanal değiştirerek bir buketin sonuna gelince sonraki bukete "
+"geçilir."
 
-msgid "When enabled, deleted recordings are moved to the trash can, instead of being deleted immediately."
-msgstr "Etkinleşince, silinen kayıtlar hemen silinmek yerine çöp sepetine taşınır."
+msgid ""
+"When enabled, deleted recordings are moved to the trash can, instead of "
+"being deleted immediately."
+msgstr ""
+"Etkinleşince, silinen kayıtlar hemen silinmek yerine çöp sepetine taşınır."
 
 #, fuzzy
-msgid "When enabled, external subtitles will always be turned on for movie playback."
+msgid ""
+"When enabled, external subtitles will always be turned on for movie playback."
 msgstr "Etkinleşince, film altyazıları hep açıktır."
 
-msgid "When enabled, graphical DVB subtitles are preferred over teletext subtitles, when both types are available."
-msgstr "Etkinleşince, her ikisinin de olması durumunda, grafik DVB altyazıları teletekst altyazılarına tercih edilir."
+msgid ""
+"When enabled, graphical DVB subtitles are preferred over teletext subtitles, "
+"when both types are available."
+msgstr ""
+"Etkinleşince, her ikisinin de olması durumunda, grafik DVB altyazıları "
+"teletekst altyazılarına tercih edilir."
 
 msgid "When enabled, graphical DVB subtitles will be centered horizontally."
 msgstr "Etkinleşince, grafik altyazıklar yatay olarak ortalanacaktır."
 
-msgid "When enabled, graphical DVB subtitles will be displayed at their original position."
+msgid ""
+"When enabled, graphical DVB subtitles will be displayed at their original "
+"position."
 msgstr "Etkinleşince, grafik altyazılar özgün konumlarında görünecektir."
 
-msgid "When enabled, graphical DVB subtitles will be displayed in yellow, instead of the original color."
+msgid ""
+"When enabled, graphical DVB subtitles will be displayed in yellow, instead "
+"of the original color."
 msgstr "Etkinleşince, grafik altyazılar özgün rengi yerine sarı olacaktır."
 
 #, fuzzy
 msgid "When enabled, it is possible to leave the Movie Player with exit."
 msgstr "Etkinleşince, 'exit' tuşu ile filmoynatıcıdan çıkılabilecektir."
 
-msgid "When enabled, measure power consumption to detect when the rotor stops turning (when supported by the tuner)."
-msgstr "Etkinleştirilince, (tuner destekliyorsa) rotor durduğunda güç tüketimi ölçülür."
+msgid ""
+"When enabled, measure power consumption to detect when the rotor stops "
+"turning (when supported by the tuner)."
+msgstr ""
+"Etkinleştirilince, (tuner destekliyorsa) rotor durduğunda güç tüketimi "
+"ölçülür."
 
 #, fuzzy
 msgid "When enabled, network trash cans are probed for cleaning."
 msgstr "Etkinleştirilince, boşaltmak için ağ çöp kutuları aranır."
 
-msgid "When enabled, pressing '0' will zap you to the first channel in your first bouquet and delete your zap-history."
-msgstr "Etkinleştirilince, \"0\" a basmak, zap geçmişini siler ve ilk buketteki ilk kanala zaplar."
+msgid ""
+"When enabled, pressing '0' will zap you to the first channel in your first "
+"bouquet and delete your zap-history."
+msgstr ""
+"Etkinleştirilince, \"0\" a basmak, zap geçmişini siler ve ilk buketteki ilk "
+"kanala zaplar."
 
 msgid "When enabled, show channel numbers in the channel selection screen."
 msgstr "Etkinleştirilince, kanal seçim ekranında, kanal numaraları gösterilir."
 
 msgid "When enabled, subtitles for the hearing impaired can be used."
-msgstr "Etkinleştirilince, işitme engilliler için olan altyazılar kullanılabilir."
+msgstr ""
+"Etkinleştirilince, işitme engilliler için olan altyazılar kullanılabilir."
 
-msgid "When enabled, subtitles for the hearing impaired will be preferred over normal subtitles, when both types are available."
-msgstr "Etkinleştirilince, ikisinin de olması durumunda, işitme engelliler için olan altyazılar normal altyazılara tercih edilecek."
+msgid ""
+"When enabled, subtitles for the hearing impaired will be preferred over "
+"normal subtitles, when both types are available."
+msgstr ""
+"Etkinleştirilince, ikisinin de olması durumunda, işitme engelliler için olan "
+"altyazılar normal altyazılara tercih edilecek."
 
 msgid "When enabled, teletext pages will be cached, allowing faster access."
-msgstr "Etkinleştirilince, teletekst sayfaları hızlı erişime izin verecek şekilde önbelleğe alınacak."
+msgstr ""
+"Etkinleştirilince, teletekst sayfaları hızlı erişime izin verecek şekilde "
+"önbelleğe alınacak."
 
-msgid "When enabled, teletext subtitles will be displayed at their original position."
-msgstr "Etkinleştirilince, teletekst altyazıları özgün konumlarında gösterilecek."
+msgid ""
+"When enabled, teletext subtitles will be displayed at their original "
+"position."
+msgstr ""
+"Etkinleştirilince, teletekst altyazıları özgün konumlarında gösterilecek."
 
 #, fuzzy
 msgid "When enabled, the PiP can be closed by the EXIT button."
@@ -9725,56 +10217,103 @@ msgid "When enabled, the VCR scart option will be shown in the main menu"
 msgstr "Etkinleştirilince, VCR scart seçeneği ana menüde gösterilecek"
 
 #, fuzzy
-msgid "When enabled, the length of each recording will be shown in the movielist (this might cause some additional loading time)."
-msgstr "Etkinleştirilince, her kaydın uzunluğu film listesinde gösterilecek (bu ek bir yükleme zamanı gerektirebilir)."
+msgid ""
+"When enabled, the length of each recording will be shown in the movielist "
+"(this might cause some additional loading time)."
+msgstr ""
+"Etkinleştirilince, her kaydın uzunluğu film listesinde gösterilecek (bu ek "
+"bir yükleme zamanı gerektirebilir)."
 
-msgid "When enabled, the original line breaks will be removed from the teletext subtitles."
-msgstr "Etkinleştirilince, özgün satır sonları, teletekst altyazılarından kaldırılacak."
+msgid ""
+"When enabled, the original line breaks will be removed from the teletext "
+"subtitles."
+msgstr ""
+"Etkinleştirilince, özgün satır sonları, teletekst altyazılarından "
+"kaldırılacak."
 
-msgid "When enabled, the receiver will automatically use the audio track which you selected before."
-msgstr "Etkinleştirilince, alıcı, önceden seçtiğiniz ses izini otomatik olarak kullanacak."
+msgid ""
+"When enabled, the receiver will automatically use the audio track which you "
+"selected before."
+msgstr ""
+"Etkinleştirilince, alıcı, önceden seçtiğiniz ses izini otomatik olarak "
+"kullanacak."
 
-msgid "When enabled, the receiver will automatically use the subtitles which you selected before."
-msgstr "Etkinleştirilince, alıcı, önceden seçtiğiniz altyazıyı otomatik olarak kullanacak."
+msgid ""
+"When enabled, the receiver will automatically use the subtitles which you "
+"selected before."
+msgstr ""
+"Etkinleştirilince, alıcı, önceden seçtiğiniz altyazıyı otomatik olarak "
+"kullanacak."
 
 msgid "When enabled, the receiver will select an AC3 track (when available)."
 msgstr "Etkinleştirilince, alıcı bir AC3 izi seçecek (varsa)."
 
 #, fuzzy
-msgid "When enabled, timeshift starts automatically in background after the specified time."
-msgstr "Etkinleştirilince, zaman kaydırma belirlenen zamandan sonra arkaplanda otomatik olarak başlar."
+msgid ""
+"When enabled, timeshift starts automatically in background after the "
+"specified time."
+msgstr ""
+"Etkinleştirilince, zaman kaydırma belirlenen zamandan sonra arkaplanda "
+"otomatik olarak başlar."
 
 msgid "When enabled, use DHCP for the IP configuration."
 msgstr "Etkinleştirilince, İP yapılandırması için DHCP kullanılır."
 
-msgid "When enabled, your receiver will detect activity on the VCR SCART input."
-msgstr "Etkinleştirilince, alıcınız VCR SCART girişindeki etkinliği algılayacak."
+msgid ""
+"When enabled, your receiver will detect activity on the VCR SCART input."
+msgstr ""
+"Etkinleştirilince, alıcınız VCR SCART girişindeki etkinliği algılayacak."
 
 #, fuzzy
-msgid "When maximum space for all logs is reached, the oldest logs will be deleted."
-msgstr "Günlükler, ayarlamış kullanım boyutunu aştığında eskileri silinecektir."
+msgid ""
+"When maximum space for all logs is reached, the oldest logs will be deleted."
+msgstr ""
+"Günlükler, ayarlamış kullanım boyutunu aştığında eskileri silinecektir."
 
-msgid "When nonzero, a recording will start earlier than the starting time indicated by the EPG."
-msgstr "Sıfırdan farklı ise, kayıt EPG de belirtilen başlangıç zamanından daha önce başlayacaktır."
+msgid ""
+"When nonzero, a recording will start earlier than the starting time "
+"indicated by the EPG."
+msgstr ""
+"Sıfırdan farklı ise, kayıt EPG de belirtilen başlangıç zamanından daha önce "
+"başlayacaktır."
 
-msgid "When nonzero, a recording will stop later than the ending time indicated by the EPG."
-msgstr "Sıfırdan farklı ise, kayıt EPG de belirtilen bitiş zamanından daha sonra duracaktır."
+msgid ""
+"When nonzero, a recording will stop later than the ending time indicated by "
+"the EPG."
+msgstr ""
+"Sıfırdan farklı ise, kayıt EPG de belirtilen bitiş zamanından daha sonra "
+"duracaktır."
 
-msgid "When set each folder will show the previous state used, when off the default values will be shown."
-msgstr "Ayarlandığında her klasör bir önceki durumda gösterilir, kapatıldığında varsayılan değerler görüntülenir."
+msgid ""
+"When set each folder will show the previous state used, when off the default "
+"values will be shown."
+msgstr ""
+"Ayarlandığında her klasör bir önceki durumda gösterilir, kapatıldığında "
+"varsayılan değerler görüntülenir."
 
 msgid "When set the PIG will return to live after a movie has stopped playing."
 msgstr "Ayarlanırsa, izlenen film durdurulduğunda PIG canlı yayına döner."
 
-msgid "When the content has an aspect ratio of 16:9, choose whether to scale/stretch the picture."
-msgstr "İçerik 16:9 görüntü oranındaysa, resmin uzatılıp uzatılmayacağını seçiniz."
+msgid ""
+"When the content has an aspect ratio of 16:9, choose whether to scale/"
+"stretch the picture."
+msgstr ""
+"İçerik 16:9 görüntü oranındaysa, resmin uzatılıp uzatılmayacağını seçiniz."
 
-msgid "When the content has an aspect ratio of 4:3, choose whether to scale/stretch the picture."
-msgstr "İçerik 4:3 görüntü oranındaysa, resmin uzatılıp uzatılmayacağını seçiniz."
+msgid ""
+"When the content has an aspect ratio of 4:3, choose whether to scale/stretch "
+"the picture."
+msgstr ""
+"İçerik 4:3 görüntü oranındaysa, resmin uzatılıp uzatılmayacağını seçiniz."
 
 #, fuzzy
-msgid "When tuned to a service the system will normally scan the transponder for any changes and save them. Only set to 'yes' if you're absolutely sure of what you're doing."
-msgstr "Kanal seçildiğinde; sistem, aktarıcıyı tarayacak ve varsa değişiklikleri saklayacak. Sadece ne yaptığınızdan kesinlikle eminseniz 'hayır' seçin."
+msgid ""
+"When tuned to a service the system will normally scan the transponder for "
+"any changes and save them. Only set to 'yes' if you're absolutely sure of "
+"what you're doing."
+msgstr ""
+"Kanal seçildiğinde; sistem, aktarıcıyı tarayacak ve varsa değişiklikleri "
+"saklayacak. Sadece ne yaptığınızdan kesinlikle eminseniz 'hayır' seçin."
 
 #
 #, python-format
@@ -9785,9 +10324,11 @@ msgid ""
 "\n"
 "Really do a factory reset?"
 msgstr ""
-"Fabrika ayarlarına geri döndüğünüzde, yapılandırma bilgilerinin hepsini kaybedeceksiniz\n"
+"Fabrika ayarlarına geri döndüğünüzde, yapılandırma bilgilerinin hepsini "
+"kaybedeceksiniz\n"
 "(buketler, kanallar, uydu verileri ve özel ayar dosyalarınız ...)\n"
-"Fabrika ayarlarına geri dönüldükten sonra, %s %s otomatik olarak yeniden başlatılacaktır!\n"
+"Fabrika ayarlarına geri dönüldükten sonra, %s %s otomatik olarak yeniden "
+"başlatılacaktır!\n"
 "\n"
 "Fabrika ayarlarına geri dönmek istediğinizden emin misiniz?"
 
@@ -9835,11 +10376,19 @@ msgid "With popup"
 msgstr ""
 
 #, fuzzy
-msgid "With this option set to 'yes' the channel list will always show you the list of bouquets. If set to 'no' the current bouquet will be opened."
-msgstr "'evet' ise, kanal listesi daima önce buket ekranını gösterir. 'hayır' ise, geçerli buket açılır."
+msgid ""
+"With this option set to 'yes' the channel list will always show you the list "
+"of bouquets. If set to 'no' the current bouquet will be opened."
+msgstr ""
+"'evet' ise, kanal listesi daima önce buket ekranını gösterir. 'hayır' ise, "
+"geçerli buket açılır."
 
-msgid "With this option you can hide Job Tasks from the extension screen (short blue button press)."
-msgstr "Görevlerin genişletmeler ekranında gizlenmesini sağlar (mavi tuşa kısa basış)."
+msgid ""
+"With this option you can hide Job Tasks from the extension screen (short "
+"blue button press)."
+msgstr ""
+"Görevlerin genişletmeler ekranında gizlenmesini sağlar (mavi tuşa kısa "
+"basış)."
 
 msgid "Without popup"
 msgstr ""
@@ -9986,23 +10535,38 @@ msgstr "Bunu silemezsiniz!"
 msgid "You didn't select a channel to record from."
 msgstr "Kayıt yapılacak kanalı seçmediniz."
 
-msgid "You have already sent this log, are you sure you want to resend this log:\n"
+msgid ""
+"You have already sent this log, are you sure you want to resend this log:\n"
 msgstr "Bu günlük gönderilmiş, tekrar gönderilsin mi?:\n"
 
 #
-msgid "You have chosen to backup your settings. Please press OK to start the backup now."
-msgstr "Ayarlarınızı yedeklemeyi seçtiniz. Lütfen yedeklemeyi başlatmak için OK'a basın."
+msgid ""
+"You have chosen to backup your settings. Please press OK to start the backup "
+"now."
+msgstr ""
+"Ayarlarınızı yedeklemeyi seçtiniz. Lütfen yedeklemeyi başlatmak için OK'a "
+"basın."
 
 #
-msgid "You have chosen to create a new .NFI flasher bootable USB stick. This will repartition the USB stick and therefore all data on it will be erased."
-msgstr "Önyükleme yapabilir .NFI flaşlayıcı USB bellek oluşturmayı seçtiniz. Bu işlem USB belleğin yeniden bölüntülenmesi gerektirdiğinden içeriğindeki tüm veriler silinecektir."
+msgid ""
+"You have chosen to create a new .NFI flasher bootable USB stick. This will "
+"repartition the USB stick and therefore all data on it will be erased."
+msgstr ""
+"Önyükleme yapabilir .NFI flaşlayıcı USB bellek oluşturmayı seçtiniz. Bu "
+"işlem USB belleğin yeniden bölüntülenmesi gerektirdiğinden içeriğindeki tüm "
+"veriler silinecektir."
 
 #
-msgid "You have chosen to restore your settings. Enigma2 will restart after restore. Please press OK to start the restore now."
-msgstr "Ayarlarınızı geri yüklemeyi seçtiniz. Geri yüklemeden sonra Enigma2 yeniden başlayacaktır. Lütfen geri yüklemeyi şimdi başlatmak için OK'a basın."
+msgid ""
+"You have chosen to restore your settings. Enigma2 will restart after "
+"restore. Please press OK to start the restore now."
+msgstr ""
+"Ayarlarınızı geri yüklemeyi seçtiniz. Geri yüklemeden sonra Enigma2 yeniden "
+"başlayacaktır. Lütfen geri yüklemeyi şimdi başlatmak için OK'a basın."
 
 msgid ""
-"You have chosen to save the current timeshift event, but the event has not yet finished\n"
+"You have chosen to save the current timeshift event, but the event has not "
+"yet finished\n"
 "What do you want to do ?"
 msgstr ""
 "Şimdiki zaman kaydırma programını seçtiniz, ama program henüz bitmedi\n"
@@ -10028,24 +10592,35 @@ msgstr "%s beklemelisiniz!"
 
 #
 msgid ""
-"You need a PC connected to your %s %s. If you need further instructions, please visit the website http://www.dm7025.de.\n"
-"Your %s %s will now be halted. After you have performed the update instructions from the website, your new firmware will ask you to restore your settings."
+"You need a PC connected to your %s %s. If you need further instructions, "
+"please visit the website http://www.dm7025.de.\n"
+"Your %s %s will now be halted. After you have performed the update "
+"instructions from the website, your new firmware will ask you to restore "
+"your settings."
 msgstr ""
-"%s %s'nun PC bağlantısına ihtiyacı var. Daha fazla açıklamaya ihtiyacınız varsa, lütfen http://www.dream-multimedia-tv.de adresini ziyaret edin.\n"
-"%s %s şimdi kapatılıyor. Web sitesinde belirtilen güncelleme yönergesini takip ettikten sonra yeni bellenim, ayarlarınızı geri yüklemek isteyip istemediğinizi soracaktır."
+"%s %s'nun PC bağlantısına ihtiyacı var. Daha fazla açıklamaya ihtiyacınız "
+"varsa, lütfen http://www.dream-multimedia-tv.de adresini ziyaret edin.\n"
+"%s %s şimdi kapatılıyor. Web sitesinde belirtilen güncelleme yönergesini "
+"takip ettikten sonra yeni bellenim, ayarlarınızı geri yüklemek isteyip "
+"istemediğinizi soracaktır."
 
 msgid "You seem to be in timeshift!"
 msgstr "Zaman kaydırmada görünüyorsunuz!"
 
 msgid "You seem to be in timeshift, Do you want to leave timeshift ?"
-msgstr "Zaman kaydırmada görünüyorsunuz, zaman kaydırmadan ayrılmak ister misiniz ?"
+msgstr ""
+"Zaman kaydırmada görünüyorsunuz, zaman kaydırmadan ayrılmak ister misiniz ?"
 
 msgid "You system does not support ext4"
 msgstr "Sisteminiz ext4 desteklemiyor"
 
 #, python-format
-msgid "Your %s %s is not connected to the internet, please check your network settings and try again."
-msgstr "%s %s niz internete bağlı değil, lütfen ağ ayarlarınızı kontrol edin ve tekrar deneyin."
+msgid ""
+"Your %s %s is not connected to the internet, please check your network "
+"settings and try again."
+msgstr ""
+"%s %s niz internete bağlı değil, lütfen ağ ayarlarınızı kontrol edin ve "
+"tekrar deneyin."
 
 #
 #, python-format
@@ -10087,8 +10662,12 @@ msgid "Your %s %s is shutting down. Please wait..."
 msgstr "%s %s kapatılıyor. Lütfen bekleyin..."
 
 #, python-format
-msgid "Your %s %s might be unusable now. Please consult the manual for further assistance before rebooting your %s %s."
-msgstr "%s %s nız kullanım dışı olabilir. %s %s nizi tekrar başlatmadan önce yardım için el kitabına bakın."
+msgid ""
+"Your %s %s might be unusable now. Please consult the manual for further "
+"assistance before rebooting your %s %s."
+msgstr ""
+"%s %s nız kullanım dışı olabilir. %s %s nizi tekrar başlatmadan önce yardım "
+"için el kitabına bakın."
 
 #, python-format
 msgid ""
@@ -10120,12 +10699,17 @@ msgid "Your STB will restart after pressing OK on your remote control."
 msgstr "OK'a bastığınızda alıcınız yeniden başlayacak."
 
 #
-msgid "Your backup succeeded. We will now continue to explain the further upgrade process."
+msgid ""
+"Your backup succeeded. We will now continue to explain the further upgrade "
+"process."
 msgstr "Yedek başarıyla alındı. Şimdi yükseltme işlemine devam edeceğiz."
 
 #
-msgid "Your collection exceeds the size of a single layer medium, you will need a blank dual layer DVD!"
-msgstr "Derlemeniz tek katman DVD'ye sığmıyor, çift katman DVD kullanmanız gerekiyor!"
+msgid ""
+"Your collection exceeds the size of a single layer medium, you will need a "
+"blank dual layer DVD!"
+msgstr ""
+"Derlemeniz tek katman DVD'ye sığmıyor, çift katman DVD kullanmanız gerekiyor!"
 
 #, python-format
 msgid ""
@@ -11582,3 +12166,716 @@ msgstr "Kanala git ve kaydet"
 msgid "zapped"
 msgstr "zapped"
 
+msgid "%a %e %b  %-H:%M"
+msgstr ""
+
+msgid "128 Mb"
+msgstr ""
+
+msgid "16 Mb"
+msgstr "16 Mb"
+
+msgid "256 Mb"
+msgstr ""
+
+msgid "30 Days"
+msgstr "30 Gün"
+
+msgid "32 Mb"
+msgstr "32 Mb"
+
+msgid "64 Mb"
+msgstr "64 Mb"
+
+msgid "8 Mb"
+msgstr "8 Mb"
+
+msgid "96 Mb"
+msgstr "96 Mb"
+
+msgid "A background update check is in progress, please wait for retry."
+msgstr ""
+"Arkaplan güncelleme kontrolu sürüyor, tekrar denemek için lütfen bekleyin."
+
+msgid "A backup has been detected."
+msgstr "Bir yedek bulundu."
+
+msgid "Active:"
+msgstr "Etkin:"
+
+msgid "Allows the softcam manager to be launched from extensions."
+msgstr "Softcam yöneticisinin uzantılardan indirilmesini sağlar."
+
+msgid ""
+"Allows the softcam to be checked if it stopped working, and restarted "
+"automatically if needed."
+msgstr ""
+"Softcamin çalışma kontrolunu, gerekirse tekrar otomatik olarak başlamasını "
+"sağlar."
+
+msgid "Allows you have the window close automatically."
+msgstr "Pencereyi otomatik olarak kapamanızı sağlar."
+
+msgid "Allows you schedule your backups."
+msgstr "Yedeklerinizi zamanlamanızı sağlar."
+
+msgid "Allows you schedule your image backups."
+msgstr "İmaj yedeklerinizi zamanlamanızı sağlar."
+
+msgid "Allows you to tag your backups to a box. (default is box name/type)"
+msgstr ""
+"İmaj yedeklerinizi bir alıcı ile ilişkilendirmenizi sağlar. (varsayılan, "
+"alıcı adı/tipi)"
+
+msgid ""
+"Allows you to tag your image backup to a box. (default is box name/type)"
+msgstr ""
+"İmaj yedeklerinizi bir alıcı ile ilişkilendirmenizi sağlar. (varsayılan, "
+"alıcı adı/tipi)"
+
+msgid "Are you ready to create a backup image ?"
+msgstr "Yedek imajı yaratmaya hazır mısınız?"
+
+msgid "Are you ready to install ?"
+msgstr "Yüklemeye hazır mısınız?"
+
+msgid ""
+"Are you sure you want to delete this backup:\n"
+" "
+msgstr ""
+"Bu yedeği silmek istediğinizden emin misiniz:\n"
+" "
+
+msgid ""
+"Are you sure you want to download this image:\n"
+" "
+msgstr ""
+"Bu imajı indirmek istediğinizden emin misiniz:\n"
+" "
+
+msgid ""
+"Are you sure you want to restore this backup:\n"
+" "
+msgstr ""
+"Bu yedeği geri yüklemek istediğinizden emin misiniz:\n"
+" "
+
+msgid ""
+"Are you sure you want to restore this image:\n"
+" "
+msgstr ""
+"Bu imajı geri yüklemek istediğinizden emin misiniz:\n"
+" "
+
+msgid "Backing up files..."
+msgstr "Dosyalar yedekleniyor..."
+
+msgid "Backup Complete..."
+msgstr "Yedekleme tamamlandı..."
+
+msgid "Backup Confirmation"
+msgstr "Yedekleme Onayı"
+
+msgid "Backup Created"
+msgstr "Yedek Oluşturuldu"
+
+msgid "Backup Location"
+msgstr "Yedek Konumu"
+
+msgid "Backup Manager Log"
+msgstr "Yedekleme Yönetici Günlüğü"
+
+msgid "Backup Manager Setup"
+msgstr "Yedekleme Yöneticisi Kurulumu"
+
+msgid ""
+"Backup failed - e. g. wrong backup destination or no space left on backup "
+"device"
+msgstr ""
+"Yedekleme başarısız - yanlış yedek konumu veya yedekleme ünitesinde yer "
+"kalmadı"
+
+msgid ""
+"Backup in progress,\n"
+"Please wait for it to finish, before trying again"
+msgstr ""
+"Yedekleniyor,\n"
+"Lütfen tekrar denemeden bitmesini bekleyin"
+
+msgid "Backup prefix"
+msgstr "Yedek öneki"
+
+msgid "CCcam can't run whilst MGcamd is running"
+msgstr "MGcamd çalışırken CCcam çalışamaz"
+
+msgid ""
+"Can't unmount partition, make sure it is not being used for swap or record/"
+"timeshift paths"
+msgstr ""
+"Bölüm çıkarılamıyor, swap veya kayıt/zaman kaydırma yollarında "
+"kullanılmadığından emin olun"
+
+msgid "Change Location"
+msgstr "Konum Değiştir"
+
+#, python-format
+msgid ""
+"Changes need a system restart to take effect.\n"
+"Restart your %s %s now?"
+msgstr ""
+"Değişikliklerin etkinleşmesi için sistemin yeniden başlaması gerekiyor.\n"
+"%s %s nız şimdi tekrar başlatılsın mı?"
+
+msgid "Checking Free RAM.."
+msgstr "Boş RAM denetleniyor..."
+
+msgid "Checking softcams..."
+msgstr "Softcams denetleniyor..."
+
+msgid "Choose Files"
+msgstr "Dosyaları Seçin"
+
+msgid "Choose local ipk's folder"
+msgstr "Yerel ipk dosyasını seç"
+
+msgid "Choose where to mount your devices to:"
+msgstr "Aygıtlarınızın bağlanacağı konumu seçin:"
+
+msgid "Close window on success"
+msgstr "Başarılı olunca pencereyi kapat"
+
+msgid "Comparing against backup..."
+msgstr "Yedek ile karşılaştırılıyor..."
+
+msgid "Create"
+msgstr "Yarat"
+
+msgid "Create and Manage your swapfiles."
+msgstr "Swap dosyalarınızı Yaratın ve Yönetin."
+
+msgid "Create and Restore complete images of the system."
+msgstr "Sistemin tüm imajlarını Yarat ve Yükle."
+
+msgid "Creating Backup Files..."
+msgstr "Yedek Dosyaları Yaratılıyor..."
+
+msgid "Creating Swap.."
+msgstr "Swap Yaratılıyor..."
+
+msgid "Creating list of installed plugins..."
+msgstr "Yüklenmiş eklentilerin listesi yaratılıyor..."
+
+msgid "Creating zip..."
+msgstr "Zip yaratılıyor..."
+
+msgid "Deactivate"
+msgstr "Kapat"
+
+msgid "Device: "
+msgstr "Aygıt:"
+
+msgid "Device: None available"
+msgstr "Aygıt: Yok"
+
+msgid "Disable Startup"
+msgstr "Başlamayı Engelle"
+
+msgid "Do you want to restart GUI now ?"
+msgstr "GUI yi şimdi tekrar başlatmak ister misiniz ?"
+
+msgid "Do you want to restore your Enigma2 plugins ?"
+msgstr "Enigma2 eklentilerinizi geri yüklemek istiyor musunuz?"
+
+msgid "Do you want to restore your Enigma2 settings ?"
+msgstr "Enigma2 ayarlarınızı geri yüklemek istiyor musunuz?"
+
+msgid "Download Confirmation"
+msgstr "İndirme Onayı"
+
+msgid "Downloading Image..."
+msgstr "İmaj İndiriliyor..."
+
+msgid "Downloads"
+msgstr "İndirilenler"
+
+msgid "Enable Startup"
+msgstr "Başlamayı Etkinleştir"
+
+msgid "Enable Swap at startup"
+msgstr "Başlangıçta Swapı Etkinleştir"
+
+msgid "Enable frozen check"
+msgstr "Donma kontrolunu etkinleştirin"
+
+msgid "Enough Retries, delaying till next schedule."
+msgstr "Yeterli yeniden deneme, sonraki zamanlamaya kadar erteleniyor."
+
+msgid "Exit the restore wizard"
+msgstr "Yeniden yükleme sihirbazından çık"
+
+msgid "Extra IPK's"
+msgstr "Ek IPK lar"
+
+msgid "Found none standard softcam, trying to start, this may fail"
+msgstr ""
+"Standart dışı softcam bulundu, başlatılmaya çalışılıyor, başarısız olabilir"
+
+msgid "Free space:"
+msgstr "Boş alan:"
+
+msgid "Frozen check interval"
+msgstr "Donma kontrolu aralığı"
+
+msgid "HARD DISK: "
+msgstr "HARD DISK: "
+
+msgid "IPK Installer"
+msgstr "IPK Yükleyici"
+
+msgid "Image Manager Setup"
+msgstr "İmaj Yöneticisi Kurulumu"
+
+msgid "Inactive"
+msgstr "Aktif değil"
+
+msgid "Install Confirmation"
+msgstr "Yükleme Onayı"
+
+msgid "Install IPK's from your tmp folder."
+msgstr "tmp klasöründen IPK'leri yükle."
+
+msgid "Installing..."
+msgstr "Yüklüyor..."
+
+msgid ""
+"It seems you have not setup a extra location, please setup in Backup Manager "
+"setup menu "
+msgstr ""
+"Ek bir konum belirlememişsiniz, lütfen Yedekleme Yöneticisi kurulum "
+"menüsünde belirleyin"
+
+msgid "Location of where backup should be saved."
+msgstr "Yedeğin kaydedileceği konum."
+
+msgid "Location of where image backup should be saved."
+msgstr "İmaj yedeğinin kaydedileceği konum."
+
+msgid "MGcamd can't run whilst CCcam is running"
+msgstr "CCcam çalışırken MGcamd çalışamaz"
+
+msgid "Manage you devices mountpoints."
+msgstr "Aygıtlarınızın bağlantı noktalarını yönetin."
+
+msgid "Manage your backups of your settings."
+msgstr "Ayarlarınızın yedeklerini yönetin."
+
+msgid "Mount Manager"
+msgstr "Bağlantı Yöneticisi"
+
+msgid "Mount failed"
+msgstr "Bağlantı başarısız"
+
+msgid "Mount: "
+msgstr "Bağlantı:"
+
+msgid "Moving to Backup Location..."
+msgstr "Yedekleme Konumuna taşıyor..."
+
+msgid "NO, do not restore plugins"
+msgstr "HAYIR, eklentileri geri yükleme"
+
+msgid "NO, do not restore settings"
+msgstr "HAYIR, ayarları geri yükleme"
+
+msgid "New Backup"
+msgstr "Yeni Yedek"
+
+msgid "Next Backup: "
+msgstr "Sonraki Yedek:"
+
+msgid ""
+"No config files found, please setup CCcam first\n"
+"in /etc/CCcam.cfg"
+msgstr ""
+"Yapılandırma dosyası bulunamadı, lütfen önce CCcam kurun\n"
+" konum: /etc/CCcam.cfg"
+
+msgid ""
+"No config files found, please setup Hypercam first\n"
+"in /etc/hypercam.cfg"
+msgstr ""
+"Yapılandırma dosyası bulunamadı, lütfen önce Hypercam kurun\n"
+" konum: /etc/hypercam.cfg"
+
+msgid ""
+"No config files found, please setup MGcamd first\n"
+"in /var/keys"
+msgstr ""
+"Yapılandırma dosyası bulunamadı, lütfen önce MGcamd kurun\n"
+" konum: /var/keys"
+
+msgid ""
+"No config files found, please setup Oscam first\n"
+"in /etc/tuxbox/config"
+msgstr ""
+"Yapılandırma dosyası bulunamadı, lütfen önce Oscam kurun\n"
+" konum: /etc/tuxbox/config"
+
+msgid "No plugins were needed to be installed"
+msgstr "Yüklenmesi gereken eklenti yok"
+
+msgid "Now skipping restore process"
+msgstr "Geri yükleme işlemi atlanıyor"
+
+msgid "OK, to perform a restore"
+msgstr "Geri yükleme için OK"
+
+msgid "Please copy the folder"
+msgstr "Lütfen dosyayı kopyalayın"
+
+msgid "Please enter a folder that contains some packages."
+msgstr "Bazı paketler içeren bir dosya girin."
+
+msgid "Please select device to use as swapfile location"
+msgstr "Lütfen swap dosyası konumu için kullanılacak aygıtı seçin"
+
+msgid "Please select the file to restore ?"
+msgstr "Lütfen geri yüklenecek dosyayı seçin."
+
+msgid "Please wait while gathers information..."
+msgstr "Bilgi toplarken lütfen bekleyin..."
+
+msgid "Please wait while plugins restore completes..."
+msgstr "Eklenti yüklemesi bitene kadar bekleyin..."
+
+msgid "Please wait while restore prepares"
+msgstr "Geri yükleme hazırlanırken lütfen bekleyin"
+
+msgid "Please wait while settings restore completes..."
+msgstr "Ayar geri yükleme bitene kadar bekleyin..."
+
+msgid "Please wait while starting\n"
+msgstr "Lütfen başlarken bekleyin\n"
+
+msgid "Please wait while stopping\n"
+msgstr "Lütfen dururken bekleyin\n"
+
+msgid "Please wait."
+msgstr "Lütfen bekleyin."
+
+msgid ""
+"Plugin Listing failed - e. g. wrong backup destination or no space left on "
+"backup device"
+msgstr ""
+"Eklenti Listeleme başarısız - yanlış yedek konumu veya yedekleme ünitesinde "
+"yer kalmadı"
+
+msgid "Preparing extra plugins..."
+msgstr "Ek eklentiler hazırlanıyor..."
+
+msgid "Rebooting..."
+msgstr "Yeniden başlıyor..."
+
+msgid "Removing temp mounts..."
+msgstr "Geçici bağlantılar kaldırılıyor..."
+
+msgid "Repeat how often"
+msgstr "Tekrarlama sıklığı"
+
+#, python-format
+msgid "Restart %s %s."
+msgstr "%s %s i tekrar başlat."
+
+msgid "Restart Enigma2."
+msgstr "Enigma2'yi yeniden başlat."
+
+msgid "Restore Confirmation"
+msgstr "Geri Yükleme Onayı"
+
+msgid "Restore Wizard"
+msgstr "Geri Yükleme Sihirbazı"
+
+msgid "Restoring backup..."
+msgstr "Yedek geri yükleniyor..."
+
+msgid "Restoring plugins, this can take a long time..."
+msgstr "Eklentiler geri yükleniyor, uzun zaman alabilir..."
+
+msgid "Restoring plugins..."
+msgstr "Eklentiler geri yükleniyor..."
+
+msgid "Run"
+msgstr "Çalıştır"
+
+msgid "Run your shell scripts."
+msgstr "Shell betiklerinizi çalıştırın."
+
+msgid "Schedule Backups"
+msgstr "Yedekleri Zamanla"
+
+msgid "Script Runner"
+msgstr "Komut Dizisi Çalıştırıcı"
+
+msgid "Script Runner Setup"
+msgstr "Komut Dizisi Çalıştırıcı  Kurulumu"
+
+msgid "Select a backup to Restore:"
+msgstr "Geri yüklenecek bir yedek seçin:"
+
+msgid "Select a package to install:"
+msgstr "Yüklenecek bir paket seçin:"
+
+msgid "Select an image to Download:"
+msgstr "İndirilecek bir imaj seçin:"
+
+msgid "Select an image to restore:"
+msgstr "Geri yüklenecek bir imaj seçin:"
+
+msgid "Select extra packages folder"
+msgstr "Ek paketler dosyasını seçin"
+
+msgid "Select folder that contains plugins"
+msgstr "Eklenti içeren dosyayı seçin"
+
+msgid "Select the Swap File Size:"
+msgstr "Swap Dosya Boyutunu seçin:"
+
+msgid "Select:"
+msgstr "Seç:"
+
+msgid "Set the interval to be checked in mins."
+msgstr "Kontrol aralığını dakika olarak ayarlayın."
+
+msgid "Set the repeat interval of backup schedule."
+msgstr "Yedekleme programının tekrarlanma aralığını belirleyin."
+
+msgid "Set the time of backup to start."
+msgstr "Yedeklemenin başlayacağı zamanı belirleyin."
+
+msgid "Setting Up..."
+msgstr "Kuruluyor..."
+
+msgid "Setup Mounts"
+msgstr "Bağlantıları Kur"
+
+msgid "Show in extensions"
+msgstr "Uzantılarda göster"
+
+msgid "Softcam Manager"
+msgstr "Softcam Yöneticisi"
+
+msgid "Softcam Manager Log"
+msgstr "Softcam Yönetici Günlüğü"
+
+msgid "Softcam Manager Setup"
+msgstr "Softcam Yöneticisi Kurulumu"
+
+msgid "Softcam Setup"
+msgstr "Softcam Kurulumu"
+
+msgid "Softcam Starting..."
+msgstr "Softcam Başlıyor..."
+
+msgid "Softcam Stopping..."
+msgstr "Softcam Durduruluyor..."
+
+msgid "Sorry Image Restore is not supported on the"
+msgstr "Üzgünüz,İmaj Geri yüklemeyi desteklemiyor"
+
+msgid ""
+"Sorry but location does exist or not setup, please setup in Backup Manager "
+"setup menu "
+msgstr ""
+"Üzgünüz, konum yok ya da belirlenmemiş, Yedekleme Yöneticisi kurulum "
+"menüsünde belirleyin"
+
+msgid "Sorry feeds are down for maintenance, Please try again later."
+msgstr "Beslemeler bakımda, sonra tekrar deneyin."
+
+msgid ""
+"Sorry feeds are down for maintenance, Please try using Backup Manager to "
+"restore plugins later."
+msgstr ""
+"Beslemeler bakımda, eklentileri geri yüklemek için yedekleme yöneticisini  "
+"sonra kullanmayı deneyin."
+
+#, python-format
+msgid "Sorry you %s %s is not yet compatible."
+msgstr "Üzgünüz, %s %s niz henüz uyumlu değil."
+
+msgid "Sorry, but the restore failed."
+msgstr "Üzgünüz, geri yükleme başarısız."
+
+msgid ""
+"Sorry, no physical devices that supports SWAP attached. Can't create "
+"Swapfile on network or fat32 filesystems"
+msgstr ""
+"Üzgünüm, SWAP destekleyen cihaz bağlı değil. Ağ veya fat32 dosya sistemi "
+"üzerinde Swap dosyası yaratılamaz"
+
+msgid ""
+"Sorry, not enough free ram found, and no physical devices that supports SWAP "
+"attached. Can't create Swapfile on network or fat32 filesystems, unable to "
+"make backup"
+msgstr ""
+"Üzgünüm, yeterli boş bellek yok ve SWAP destekleyen cihaz bağlı değil. Ağ "
+"veya fat32 dosya sistemi üzerinde Swap dosyası yaratılamaz, yedekleme "
+"yapılamıyor"
+
+msgid "Starting..."
+msgstr "Başlıyor..."
+
+msgid "Status:"
+msgstr "Durum:"
+
+msgid "Swap File not found. You have to create the file before to activate."
+msgstr ""
+"Swap dosyası bulunamadı. Etkinleştirmek için önce dosyayı yaratmalısınız."
+
+msgid "Swap Manager"
+msgstr "Swap Yöneticisi"
+
+msgid "Swap Place:"
+msgstr "Swap Konumu:"
+
+msgid "Swap Size:"
+msgstr "Swap Boyutu:"
+
+msgid "Temp Folder"
+msgstr "Geçici Klasör"
+
+msgid "The backup location does not have enough freespace."
+msgstr "Yedek konumunda yeterli boş yer yok."
+
+msgid "The chosen location does not exist, using /media/hdd"
+msgstr "Seçilen konum yok, /media/hdd kullanılıyor"
+
+msgid "The wizard is finished now, and will reboot"
+msgstr "Sihirbaz şimdi bitti, alıcı yeniden başlatılacak"
+
+msgid "This Device is already mounted as HDD."
+msgstr "Bu aygıt zaten HDD olarak bağlanmış."
+
+msgid "Time of Backup to start"
+msgstr "Yedeğin başlayacağı zaman"
+
+msgid "USB: "
+msgstr ""
+
+msgid "Updating mount locations."
+msgstr "Bağlantı konumları güncelleniyor."
+
+msgid "Use as HDD"
+msgstr "HDD olarak kullan"
+
+msgid "ViX"
+msgstr "ViX"
+
+msgid "ViX Backup Manager"
+msgstr "ViX Yedekleme Yöneticisi"
+
+msgid "ViX Image Manager"
+msgstr "ViX İmaj Yöneticisi"
+
+msgid "ViX Mount Manager"
+msgstr "ViX Bağlantı Yöneticisi"
+
+msgid "ViX Script Runner"
+msgstr "ViX Komut Yürütücü"
+
+msgid "ViX Swap Manager"
+msgstr "ViX Swap Yöneticisi"
+
+msgid "View Progress"
+msgstr "İşlemi izle"
+
+msgid "Wait please while creating swapfile..."
+msgstr "Lütfen Swap dosyası yaratılırken bekleyin..."
+
+msgid ""
+"Wait please while scanning\n"
+"for softcam's..."
+msgstr ""
+"Lütfen bekleyin\n"
+"softcamlar taranıyor..."
+
+#, python-format
+msgid "Wait please while scanning your %s %s devices..."
+msgstr "%s %s aygıtlarınız taranırken bekleyin..."
+
+msgid "Wait please while scanning..."
+msgstr "Lütfen incelenirken bekleyin..."
+
+msgid ""
+"Welcome to the restore wizard.\n"
+"\n"
+"A backup has been detected.\n"
+"You can use this wizard to restore your settings and any extra plugins that "
+"were installed when the backup was created.\n"
+msgstr ""
+"Geri yükleme sihirbazına hoşgeldiniz.\n"
+"\n"
+"Bir yedek bulundu.\n"
+"Ayarlarınızı ve eklentilerinizi geri yüklemek için bu sihirbazı "
+"kullanabilirsiniz.\n"
+
+msgid "YES, to restore plugins"
+msgstr "Eklentileri geri yüklemek için EVET"
+
+msgid "YES, to restore settings"
+msgstr "Ayarları geri yüklemek için EVET"
+
+msgid "You have no backup to delete."
+msgstr "Silinecek yedeğiniz yok."
+
+msgid "You have no backups to restore."
+msgstr "Geri yüklenecek yedeğiniz yok."
+
+msgid "You have no image to delete."
+msgstr "Silinecek imajınız yok."
+
+msgid "You have no image to download."
+msgstr "İndirilecek imajınız yok."
+
+msgid "You have no image to restore."
+msgstr "Geri yüklenecek imajınız yok."
+
+msgid "You have to create a Swap File before to activate the autostart."
+msgstr ""
+"Otomatik başlamayı etkinleştirmek için önce bir Swap dosyası yaratmalısınız."
+
+#, python-format
+msgid ""
+"Your %s %s is about to run a backup of your settings and detect your "
+"plugins,\n"
+"Do you want to allow this?"
+msgstr ""
+"%s %s' niz ayarlarınızı yedeklemek ve eklentilerinizi bulmak üzere,\n"
+"Buna izin veriyor musunuz?"
+
+#, python-format
+msgid ""
+"Your %s %s is about to run a full image backup, this can take about 6 "
+"minutes to complete,\n"
+"do you want to allow this?"
+msgstr ""
+"%s %s' niz tam imaj yedeklemek üzere, bitmesi 6 dakikja kadar sürebilir,\n"
+"buna izin veriyor musunuz"
+
+#, python-format
+msgid ""
+"Your %s %s is not connected to the internet, Please try using Backup Manager "
+"to restore plugins later."
+msgstr ""
+"%s %s'niz internete bağlı değil, eklentileri yüklemek için Yedekleme "
+"Yöneticisini kullanmayı sonra tekrar deneyin."
+
+msgid "echo 'Downloading Image.'"
+msgstr "echo 'İmaj İndiriliyor.'"
+
+msgid "there was a problem with this device, please reformat and try again."
+msgstr ""
+"Bu aygıtta bir problem var, lütfen tekrar biçimleyin ve yeniden deneyin."
+
+msgid "to a USB stick, place in front USB port of reciver and power on"
+msgstr "bir USB belleğe, alıcının ön USB girişine takıp gücü açın"

@@ -1110,8 +1110,8 @@ msgstr ""
 "Forefindes en \"dynamisk\" indstilling, sæt denne til standard. Juster "
 "baglysstyrke så den passer til din smag. Skru ned for din Kontrast så meget "
 "som muligt.\n"
-"Derefter skru din Lysstyrke så langt ned, så du stadig kan se skyggerne af de "
-"Grå bjælker.\n"
+"Derefter skru din Lysstyrke så langt ned, så du stadig kan se skyggerne af "
+"de Grå bjælker.\n"
 "Tænk ikke på de lyse skygger nu. De vil blive indstillet i næste trin.\n"
 "Hvis du er tilfreds med resultatet, tryk OK."
 
@@ -1504,8 +1504,8 @@ msgstr ""
 
 msgid ""
 "No working wireless network interface found.\n"
-" Please verify that you have attached a compatible WLAN device or enable your "
-"local network interface."
+" Please verify that you have attached a compatible WLAN device or enable "
+"your local network interface."
 msgstr ""
 "Der kunne ikke findes et trådløs netværks interface.\n"
 "Undersøg venligst, at du har tilsluttet en kompatibel WLAN enhed eller "
@@ -2470,7 +2470,8 @@ msgid "The PIN codes you entered are different."
 msgstr "PIN koderne du tastede er ikke ens."
 
 msgid "The backup failed. Please choose a different backup location."
-msgstr "Backup'en mislykkedes. Venligst vælg et anden sted at placere backupen."
+msgstr ""
+"Backup'en mislykkedes. Venligst vælg et anden sted at placere backupen."
 
 msgid "The following files were found..."
 msgstr "Følgende filer fandtes..."
@@ -2527,8 +2528,8 @@ msgstr ""
 "Vil du virkelig fortsætte?"
 
 msgid ""
-"This DVD RW medium is already formatted - reformatting will erase all content "
-"on the disc."
+"This DVD RW medium is already formatted - reformatting will erase all "
+"content on the disc."
 msgstr ""
 "Denne DVD RW er allerede formatteret - reformattering vil slette alt indhold "
 "på disken."
@@ -2843,8 +2844,8 @@ msgstr "Ugedag"
 msgid ""
 "Welcome.\n"
 "\n"
-"If you want to connect your %s %s to the Internet, this wizard will guide you "
-"through the basic network setup of your %s %s.\n"
+"If you want to connect your %s %s to the Internet, this wizard will guide "
+"you through the basic network setup of your %s %s.\n"
 "\n"
 "Press OK to start configuring your network"
 msgstr ""
@@ -2953,8 +2954,8 @@ msgstr ""
 "backuppen nu."
 
 msgid ""
-"You have chosen to restore your settings. Enigma2 will restart after restore. "
-"Please press OK to start the restore now."
+"You have chosen to restore your settings. Enigma2 will restart after "
+"restore. Please press OK to start the restore now."
 msgstr ""
 "Du har valgt at gendanne dine indstillinger. Enigma2 vil genstarte efter "
 "gendannelsen. Tryk venligst på OK for at starte gendannelsen nu."
@@ -2966,14 +2967,14 @@ msgid ""
 "You need a PC connected to your %s %s. If you need further instructions, "
 "please visit the website http://www.dm7025.de.\n"
 "Your %s %s will now be halted. After you have performed the update "
-"instructions from the website, your new firmware will ask you to restore your "
-"settings."
+"instructions from the website, your new firmware will ask you to restore "
+"your settings."
 msgstr ""
 "Du skal have en PC forbundet til din %s %s. Hvis du mangler yderligere "
 "Informationer, så gå til websiden http://www.dm7025.de.\n"
-"Din %s %s bliver nedlukket nu. Efter du har udført opdateringsinstruktionerne "
-"fra websiden, vil den nye firmware bede dig om at geninstallere, dine "
-"indstillinger."
+"Din %s %s bliver nedlukket nu. Efter du har udført "
+"opdateringsinstruktionerne fra websiden, vil den nye firmware bede dig om at "
+"geninstallere, dine indstillinger."
 
 msgid "Your %s %s is shutting down. Please wait..."
 msgstr "Din %s %s nedlukker nu. Vent venligst..."
@@ -2989,8 +2990,8 @@ msgid ""
 "Your collection exceeds the size of a single layer medium, you will need a "
 "blank dual layer DVD!"
 msgstr ""
-"Din kollektion overstiger størrelsen af et enkeltlags medium, du har brug for "
-"en tom dobbeltlags DVD!"
+"Din kollektion overstiger størrelsen af et enkeltlags medium, du har brug "
+"for en tom dobbeltlags DVD!"
 
 msgid ""
 "Your frontprocessor firmware must be upgraded.\n"
@@ -3473,3 +3474,719 @@ msgstr "skift"
 
 msgid "zapped"
 msgstr "skiftet"
+
+msgid "%a %e %b  %-H:%M"
+msgstr ""
+
+msgid "128 Mb"
+msgstr ""
+
+msgid "16 Mb"
+msgstr ""
+
+msgid "256 Mb"
+msgstr ""
+
+msgid "30 Days"
+msgstr ""
+
+msgid "32 Mb"
+msgstr ""
+
+msgid "64 Mb"
+msgstr ""
+
+msgid "8 Mb"
+msgstr ""
+
+msgid "96 Mb"
+msgstr ""
+
+msgid "A background update check is in progress, please wait for retry."
+msgstr ""
+
+msgid "A backup has been detected."
+msgstr ""
+
+msgid "Activate"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "Active:"
+msgstr ""
+
+msgid "Allows the softcam manager to be launched from extensions."
+msgstr ""
+
+msgid ""
+"Allows the softcam to be checked if it stopped working, and restarted "
+"automatically if needed."
+msgstr ""
+
+msgid "Allows you have the window close automatically."
+msgstr ""
+
+msgid "Allows you schedule your backups."
+msgstr ""
+
+msgid "Allows you schedule your image backups."
+msgstr ""
+
+msgid "Allows you to tag your backups to a box. (default is box name/type)"
+msgstr ""
+
+msgid ""
+"Allows you to tag your image backup to a box. (default is box name/type)"
+msgstr ""
+
+msgid "Are you ready to create a backup image ?"
+msgstr ""
+
+msgid "Are you ready to install ?"
+msgstr ""
+
+msgid ""
+"Are you sure you want to delete this backup:\n"
+" "
+msgstr ""
+
+msgid ""
+"Are you sure you want to download this image:\n"
+" "
+msgstr ""
+
+msgid ""
+"Are you sure you want to restore this backup:\n"
+" "
+msgstr ""
+
+msgid ""
+"Are you sure you want to restore this image:\n"
+" "
+msgstr ""
+
+msgid "Autostart"
+msgstr ""
+
+msgid "Backing up files..."
+msgstr ""
+
+msgid "Backup Complete..."
+msgstr ""
+
+msgid "Backup Confirmation"
+msgstr ""
+
+msgid "Backup Created"
+msgstr ""
+
+msgid "Backup Location"
+msgstr ""
+
+msgid "Backup Manager"
+msgstr ""
+
+msgid "Backup Manager Log"
+msgstr ""
+
+msgid "Backup Manager Setup"
+msgstr ""
+
+msgid ""
+"Backup failed - e. g. wrong backup destination or no space left on backup "
+"device"
+msgstr ""
+
+msgid ""
+"Backup in progress,\n"
+"Please wait for it to finish, before trying again"
+msgstr ""
+
+msgid "Backup prefix"
+msgstr ""
+
+msgid "CCcam can't run whilst MGcamd is running"
+msgstr ""
+
+msgid ""
+"Can't unmount partition, make sure it is not being used for swap or record/"
+"timeshift paths"
+msgstr ""
+
+msgid "Change Location"
+msgstr ""
+
+#, python-format
+msgid ""
+"Changes need a system restart to take effect.\n"
+"Restart your %s %s now?"
+msgstr ""
+
+msgid "Checking Free RAM.."
+msgstr ""
+
+msgid "Checking softcams..."
+msgstr ""
+
+msgid "Choose Files"
+msgstr ""
+
+msgid "Choose local ipk's folder"
+msgstr ""
+
+msgid "Choose where to mount your devices to:"
+msgstr ""
+
+msgid "Close window on success"
+msgstr ""
+
+msgid "Comparing against backup..."
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "Create and Manage your swapfiles."
+msgstr ""
+
+msgid "Create and Restore complete images of the system."
+msgstr ""
+
+msgid "Creating Backup Files..."
+msgstr ""
+
+msgid "Creating Swap.."
+msgstr ""
+
+msgid "Creating list of installed plugins..."
+msgstr ""
+
+msgid "Creating zip..."
+msgstr ""
+
+msgid "Current Status:"
+msgstr ""
+
+msgid "Daily"
+msgstr ""
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Device: "
+msgstr ""
+
+msgid "Device: None available"
+msgstr ""
+
+msgid "Disable Startup"
+msgstr ""
+
+msgid "Do you want to restore your Enigma2 plugins ?"
+msgstr ""
+
+msgid "Do you want to restore your Enigma2 settings ?"
+msgstr ""
+
+msgid "Download Confirmation"
+msgstr ""
+
+msgid "Downloading Image..."
+msgstr ""
+
+msgid "Downloads"
+msgstr ""
+
+msgid "Enable Startup"
+msgstr ""
+
+msgid "Enable Swap at startup"
+msgstr ""
+
+msgid "Enable frozen check"
+msgstr ""
+
+msgid "Enough Retries, delaying till next schedule."
+msgstr ""
+
+msgid "Exit the restore wizard"
+msgstr ""
+
+msgid "Extra IPK's"
+msgstr ""
+
+msgid "Found none standard softcam, trying to start, this may fail"
+msgstr ""
+
+msgid "Free space:"
+msgstr ""
+
+msgid "Frozen check interval"
+msgstr ""
+
+msgid "GB"
+msgstr ""
+
+msgid "HARD DISK: "
+msgstr ""
+
+msgid "IPK Installer"
+msgstr ""
+
+msgid "Image Manager"
+msgstr ""
+
+msgid "Image Manager Setup"
+msgstr ""
+
+msgid "Inactive"
+msgstr ""
+
+msgid "Install Confirmation"
+msgstr ""
+
+msgid "Install IPK's from your tmp folder."
+msgstr ""
+
+msgid "Installing..."
+msgstr ""
+
+msgid ""
+"It seems you have not setup a extra location, please setup in Backup Manager "
+"setup menu "
+msgstr ""
+
+msgid "Location of where backup should be saved."
+msgstr ""
+
+msgid "Location of where image backup should be saved."
+msgstr ""
+
+msgid "MB"
+msgstr ""
+
+msgid "MGcamd can't run whilst CCcam is running"
+msgstr ""
+
+msgid "Manage you devices mountpoints."
+msgstr ""
+
+msgid "Manage your backups of your settings."
+msgstr ""
+
+msgid "Mount"
+msgstr ""
+
+msgid "Mount Manager"
+msgstr ""
+
+msgid "Mount failed"
+msgstr ""
+
+msgid "Mount: "
+msgstr ""
+
+msgid "Moving to Backup Location..."
+msgstr ""
+
+msgid "NO, do not restore plugins"
+msgstr ""
+
+msgid "NO, do not restore settings"
+msgstr ""
+
+msgid "New Backup"
+msgstr ""
+
+msgid "Next Backup: "
+msgstr ""
+
+msgid ""
+"No config files found, please setup CCcam first\n"
+"in /etc/CCcam.cfg"
+msgstr ""
+
+msgid ""
+"No config files found, please setup Hypercam first\n"
+"in /etc/hypercam.cfg"
+msgstr ""
+
+msgid ""
+"No config files found, please setup MGcamd first\n"
+"in /var/keys"
+msgstr ""
+
+msgid ""
+"No config files found, please setup Oscam first\n"
+"in /etc/tuxbox/config"
+msgstr ""
+
+msgid "No plugins were needed to be installed"
+msgstr ""
+
+msgid "Now skipping restore process"
+msgstr ""
+
+msgid "OK, to perform a restore"
+msgstr ""
+
+msgid "Please copy the folder"
+msgstr ""
+
+msgid "Please enter a folder that contains some packages."
+msgstr ""
+
+msgid "Please select device to use as swapfile location"
+msgstr ""
+
+msgid "Please select the file to restore ?"
+msgstr ""
+
+msgid "Please wait while gathers information..."
+msgstr ""
+
+msgid "Please wait while plugins restore completes..."
+msgstr ""
+
+msgid "Please wait while restore prepares"
+msgstr ""
+
+msgid "Please wait while settings restore completes..."
+msgstr ""
+
+msgid "Please wait while starting\n"
+msgstr ""
+
+msgid "Please wait while stopping\n"
+msgstr ""
+
+msgid "Please wait."
+msgstr ""
+
+msgid ""
+"Plugin Listing failed - e. g. wrong backup destination or no space left on "
+"backup device"
+msgstr ""
+
+msgid "Preparing extra plugins..."
+msgstr ""
+
+msgid "Rebooting..."
+msgstr ""
+
+msgid "Remove Confirmation"
+msgstr ""
+
+msgid "Removing temp mounts..."
+msgstr ""
+
+msgid "Repeat how often"
+msgstr ""
+
+#, python-format
+msgid "Restart %s %s."
+msgstr ""
+
+msgid "Restart Enigma2."
+msgstr ""
+
+msgid "Restore Confirmation"
+msgstr ""
+
+msgid "Restore Wizard"
+msgstr ""
+
+msgid "Restoring backup..."
+msgstr ""
+
+msgid "Restoring plugins, this can take a long time..."
+msgstr ""
+
+msgid "Restoring plugins..."
+msgstr ""
+
+msgid "Run"
+msgstr ""
+
+msgid "Run your shell scripts."
+msgstr ""
+
+msgid "Schedule Backups"
+msgstr ""
+
+msgid "Script Runner"
+msgstr ""
+
+msgid "Script Runner Setup"
+msgstr ""
+
+msgid "Select a backup to Restore:"
+msgstr ""
+
+msgid "Select a package to install:"
+msgstr ""
+
+msgid "Select an image to Download:"
+msgstr ""
+
+msgid "Select an image to restore:"
+msgstr ""
+
+msgid "Select extra packages folder"
+msgstr ""
+
+msgid "Select folder that contains plugins"
+msgstr ""
+
+msgid "Select the Swap File Size:"
+msgstr ""
+
+msgid "Select:"
+msgstr ""
+
+msgid "Set the interval to be checked in mins."
+msgstr ""
+
+msgid "Set the repeat interval of backup schedule."
+msgstr ""
+
+msgid "Set the time of backup to start."
+msgstr ""
+
+msgid "Setting Up..."
+msgstr ""
+
+msgid "Setup Mounts"
+msgstr ""
+
+msgid "Show in extensions"
+msgstr ""
+
+msgid "Size: "
+msgstr ""
+
+msgid "Softcam Manager"
+msgstr ""
+
+msgid "Softcam Manager Log"
+msgstr ""
+
+msgid "Softcam Manager Setup"
+msgstr ""
+
+msgid "Softcam Setup"
+msgstr ""
+
+msgid "Softcam Starting..."
+msgstr ""
+
+msgid "Softcam Stopping..."
+msgstr ""
+
+msgid "SoftcamCheck"
+msgstr ""
+
+msgid "Sorry Image Restore is not supported on the"
+msgstr ""
+
+msgid ""
+"Sorry but location does exist or not setup, please setup in Backup Manager "
+"setup menu "
+msgstr ""
+
+msgid "Sorry feeds are down for maintenance, Please try again later."
+msgstr ""
+
+msgid ""
+"Sorry feeds are down for maintenance, Please try using Backup Manager to "
+"restore plugins later."
+msgstr ""
+
+#, python-format
+msgid "Sorry you %s %s is not yet compatible."
+msgstr ""
+
+msgid "Sorry, but the restore failed."
+msgstr ""
+
+msgid ""
+"Sorry, no physical devices that supports SWAP attached. Can't create "
+"Swapfile on network or fat32 filesystems"
+msgstr ""
+
+msgid ""
+"Sorry, not enough free ram found, and no physical devices that supports SWAP "
+"attached. Can't create Swapfile on network or fat32 filesystems, unable to "
+"make backup"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Status:"
+msgstr ""
+
+msgid "Swap File not found. You have to create the file before to activate."
+msgstr ""
+
+msgid "Swap Manager"
+msgstr ""
+
+msgid "Swap Place:"
+msgstr ""
+
+msgid "Swap Size:"
+msgstr ""
+
+msgid "TB"
+msgstr ""
+
+msgid "Temp Folder"
+msgstr ""
+
+msgid "The backup location does not have enough freespace."
+msgstr ""
+
+msgid "The chosen location does not exist, using /media/hdd"
+msgstr ""
+
+msgid "The wizard is finished now, and will reboot"
+msgstr ""
+
+msgid "This Device is already mounted as HDD."
+msgstr ""
+
+msgid "Time of Backup to start"
+msgstr ""
+
+msgid "Type: "
+msgstr ""
+
+msgid "USB: "
+msgstr ""
+
+msgid "Unmount"
+msgstr ""
+
+msgid "Updating mount locations."
+msgstr ""
+
+msgid "Use as HDD"
+msgstr ""
+
+msgid "ViX"
+msgstr ""
+
+msgid "ViX Backup Manager"
+msgstr ""
+
+msgid "ViX Image Manager"
+msgstr ""
+
+msgid "ViX Mount Manager"
+msgstr ""
+
+msgid "ViX Script Runner"
+msgstr ""
+
+msgid "ViX Swap Manager"
+msgstr ""
+
+msgid "View Progress"
+msgstr ""
+
+msgid "Wait please while creating swapfile..."
+msgstr ""
+
+msgid ""
+"Wait please while scanning\n"
+"for softcam's..."
+msgstr ""
+
+msgid "Wait please while scanning for devices..."
+msgstr ""
+
+#, python-format
+msgid "Wait please while scanning your %s %s devices..."
+msgstr ""
+
+msgid "Wait please while scanning..."
+msgstr ""
+
+msgid "Weekly"
+msgstr ""
+
+msgid ""
+"Welcome to the restore wizard.\n"
+"\n"
+"A backup has been detected.\n"
+"You can use this wizard to restore your settings and any extra plugins that "
+"were installed when the backup was created.\n"
+msgstr ""
+
+msgid "YES, to restore plugins"
+msgstr ""
+
+msgid "YES, to restore settings"
+msgstr ""
+
+msgid "You have no backup to delete."
+msgstr ""
+
+msgid "You have no backups to restore."
+msgstr ""
+
+msgid "You have no image to delete."
+msgstr ""
+
+msgid "You have no image to download."
+msgstr ""
+
+msgid "You have no image to restore."
+msgstr ""
+
+msgid "You have to create a Swap File before to activate the autostart."
+msgstr ""
+
+#, python-format
+msgid ""
+"Your %s %s is about to run a backup of your settings and detect your "
+"plugins,\n"
+"Do you want to allow this?"
+msgstr ""
+
+#, python-format
+msgid ""
+"Your %s %s is about to run a full image backup, this can take about 6 "
+"minutes to complete,\n"
+"do you want to allow this?"
+msgstr ""
+
+#, python-format
+msgid ""
+"Your %s %s is not connected to the internet, Please try using Backup Manager "
+"to restore plugins later."
+msgstr ""
+
+#, python-format
+msgid ""
+"Your %s %s is not connected to the internet, please check your network "
+"settings and try again."
+msgstr ""
+
+msgid "echo 'Downloading Image.'"
+msgstr ""
+
+msgid "there was a problem with this device, please reformat and try again."
+msgstr ""
+
+msgid "to a USB stick, place in front USB port of reciver and power on"
+msgstr ""
+
+msgid "unavailable"
+msgstr ""

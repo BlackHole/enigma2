@@ -8489,8 +8489,8 @@ msgstr "有些插件不可用:\n"
 
 msgid ""
 "Sorry feeds seem be in an unstable state, if you wish to use them please "
-"enable 'Allow unstable (experimental) updates' in \"Software update settings"
-"\"."
+"enable 'Allow unstable (experimental) updates' in \"Software update "
+"settings\"."
 msgstr ""
 "对不起，提供似乎处于不稳定状态，如果你想使用它们，请启用“允许不稳定的（实验性"
 "的）更新”。 \"软件更新设置\"."
@@ -12352,3 +12352,643 @@ msgstr "开关和记录"
 
 msgid "zapped"
 msgstr "转向"
+
+msgid "%a %e %b  %-H:%M"
+msgstr "%a %e %b  %-H:%M"
+
+msgid "128 Mb"
+msgstr "128 Mb"
+
+msgid "16 Mb"
+msgstr "16 Mb"
+
+msgid "256 Mb"
+msgstr "256 Mb"
+
+msgid "30 Days"
+msgstr "30天"
+
+msgid "32 Mb"
+msgstr "32 Mb"
+
+msgid "64 Mb"
+msgstr "64 Mb"
+
+msgid "8 Mb"
+msgstr "8 Mb"
+
+msgid "96 Mb"
+msgstr "96 Mb"
+
+msgid "A background update check is in progress, please try again."
+msgstr "在后台检查更新, 请稍后再试。"
+
+msgid "A backup has been detected."
+msgstr "备份已找到。"
+
+msgid "Allows the script runner to be launched from extensions."
+msgstr "允许从扩展启动脚本运行程序。"
+
+msgid "Allows you to close the window automatically."
+msgstr "允许您自动关闭窗口。"
+
+msgid "Allows you to schedule your backups."
+msgstr "允许您安装备份。"
+
+msgid "Allows you to schedule your image backups."
+msgstr "允许您安装图像备份。"
+
+msgid "Allows you to tag your backups to a box."
+msgstr "允许您为接收器创建备份。"
+
+msgid ""
+"Allows you to tag your image backup to a box. (default is box name/type)"
+msgstr "允许您将映像备份标记到一个框中。(默认为框名/类型)"
+
+msgid "Are you ready to install ?"
+msgstr "准备好安装了吗?"
+
+msgid "Are you sure you want to delete image slot %s ?"
+msgstr "您是否确定要删除图像插槽%s？"
+
+msgid ""
+"Are you sure you want to download this image:\n"
+" "
+msgstr ""
+"您确定要下载此固件:\n"
+" "
+
+msgid ""
+"Are you sure you want to restore this backup:\n"
+" "
+msgstr ""
+"您确定要恢复此备份:\n"
+" "
+
+msgid "Automatic settings backup"
+msgstr "自动保存设置"
+
+msgid "Backing up eMMC partitions for USB flash ..."
+msgstr "将 eMMC 分区复制到 USB 闪存..."
+
+msgid "Backing up eMMC partitions for USB flash..."
+msgstr "将 eMMC 分区复制到 USB 闪存..."
+
+msgid "Backing up files..."
+msgstr "正在备份文件..."
+
+msgid "Backing up kernel..."
+msgstr "备份内核。。。"
+
+msgid "Backing up root file system..."
+msgstr "备份根文件系统..."
+
+msgid "Backup complete."
+msgstr "备份完成。"
+
+msgid "Backup complete..."
+msgstr "备份完成 ..."
+
+msgid "Backup confirmation"
+msgstr "备份确认"
+
+msgid "Backup created"
+msgstr "备份已创建"
+
+msgid ""
+"Backup failed - e. g. wrong backup destination or no space left on backup "
+"device."
+msgstr ""
+"目的地错误或备份备份错误！ 目的地错误或备份设备上没有剩余空间。设备上没有剩余"
+"空间。"
+
+msgid ""
+"Backup in progress,\n"
+"Please wait for it to finish, before trying again."
+msgstr ""
+"备份正在进行中，\n"
+"请等待它完成，然后再尝试。"
+
+msgid "Backup location"
+msgstr "备份位置"
+
+msgid "Backup manager"
+msgstr "备份管理"
+
+msgid "Backup manager settings"
+msgstr "备份管理设置"
+
+msgid "Backup prefix"
+msgstr "复制前缀"
+
+msgid "Backups to keep"
+msgstr "要保留的备份"
+
+msgid "Change location"
+msgstr "更改地点"
+
+msgid "Checking free RAM.."
+msgstr "检查可用内存。"
+
+msgid "Choose files"
+msgstr "选择文件"
+
+msgid "Choose where to mount your devices to:"
+msgstr "选择设备的挂载点："
+
+msgid "Close window on success"
+msgstr "关闭成功窗口"
+
+msgid "Comparing against backup..."
+msgstr "与备份比较..."
+
+msgid "Create a settings backup before updating."
+msgstr "在更新之前创建设置备份。"
+
+msgid "Create and Manage your SWAP files."
+msgstr "创建和管理您的交换文件。"
+
+msgid "Creating SWAP.."
+msgstr "创建交换文件..."
+
+msgid "Creating list of installed plugins..."
+msgstr "创建已安装插件列表…"
+
+msgid "Creating zip..."
+msgstr "创建 ZIP 存档..."
+
+msgid "Current status:"
+msgstr "当前状态："
+
+msgid "Device: None available"
+msgstr "设备：不可用"
+
+msgid "Device: none available"
+msgstr "设备：不可用"
+
+msgid ""
+"Do you want to create a full image backup?\n"
+"This can take about 6 minutes to complete."
+msgstr ""
+"您是否要创建完整的图像备份？\n"
+"这可能需要大约 6 分钟才能完成。"
+
+msgid ""
+"Do you want to flash image\n"
+"%s"
+msgstr ""
+"是否要刷写新镜像?\n"
+"%s"
+
+msgid "Do you want to restart GUI now ?"
+msgstr "现在要重新启动GUI吗?"
+
+msgid "Do you want to restore your Enigma2 plugins ?"
+msgstr "想要恢复您的 Enigma2 插件吗？"
+
+msgid "Do you want to restore your Enigma2 settings ?"
+msgstr "想要恢复您的 Enigma2 设置吗？"
+
+msgid "Do you want to restore your enigma2 settings ?"
+msgstr "想要恢复您的 Enigma2 设置吗？"
+
+msgid "Download confirmation"
+msgstr "下载确认"
+
+msgid "Empty slot"
+msgstr "空位"
+
+msgid "Enable SWAP at startup"
+msgstr "启动时交换"
+
+msgid "Enough retries, delaying till next schedule."
+msgstr "足够的检索，推迟到下一个时间表。"
+
+msgid "Exit the restore wizard"
+msgstr "退出恢复向导"
+
+msgid "Extra IPK's"
+msgstr "附加IPK"
+
+msgid "Flash image unzip successful."
+msgstr "镜像已成功解压。"
+
+msgid "Free space:"
+msgstr "空闲内存："
+
+msgid "IPK installer"
+msgstr "安装IPK"
+
+msgid "Image manager settings"
+msgstr "图像管理器设置"
+
+msgid "Inactive"
+msgstr "未启用"
+
+msgid "Include machine name in backup name"
+msgstr "在备份名称中包含接收方名称"
+
+msgid "Install IPK's from your tmp folder."
+msgstr "从tmp目录中安装IPK。"
+
+msgid "Install confirmation"
+msgstr "安装确认"
+
+msgid "Installing..."
+msgstr "安装中..."
+
+msgid ""
+"It seems you have not setup an extra location. Please set it up in the "
+"Backup manager setup menu."
+msgstr "您似乎没有设置额外的位置。请将其设置在备份管理器设置菜单中。"
+
+msgid "Location of where backup should be saved."
+msgstr "应保存备份的位置。"
+
+msgid "Location of where the image backup should be saved."
+msgstr "应保存图像备份的位置。"
+
+msgid "Manage your devices mount points."
+msgstr "管理您的设备挂载点。"
+
+msgid "Max backups to keep (0==all)"
+msgstr "要保留的最大备份(0==all)"
+
+msgid "Max image backups to keep (0==all)"
+msgstr "要保留的最大图像备份(0==all)"
+
+msgid "Mount manager"
+msgstr "安装管理器"
+
+msgid "Mount: "
+msgstr "安装: "
+
+msgid "Moving to backup Location..."
+msgstr "移动到备份目录..."
+
+msgid "NO, do not restore plugins"
+msgstr "不，不要恢复插件"
+
+msgid "NO, do not restore settings"
+msgstr "不，不要还原设置"
+
+msgid "Next backup: "
+msgstr "下一个备份: "
+
+msgid "Note: slot list does not show current image or empty slots."
+msgstr "信息：插槽列表不显示当前图像或空插槽。"
+
+msgid "Now skipping restore process"
+msgstr "跳过恢复"
+
+msgid "OBH"
+msgstr "OBH"
+
+msgid "OK, to perform a restore"
+msgstr "确定恢复"
+
+msgid "Please enter a folder that contains some packages."
+msgstr "请输入一个包含一些软件包的文件夹。"
+
+msgid "Please select device to use as SWAP file location."
+msgstr "请选择设备作为交换文件位置使用。"
+
+msgid "Please select the file to restore."
+msgstr "请选择恢复文件。"
+
+msgid "Please wait while plugins restore completes..."
+msgstr "插件恢复完成，请稍候..."
+
+msgid "Please wait while scanning your %s %s devices..."
+msgstr "正在扫描设备%s%s，请稍候..."
+
+msgid "Please wait while settings restore completes..."
+msgstr "正在恢复设置，请稍候..."
+
+msgid "Please wait while the flash prepares."
+msgstr "正在准备固件，请稍候。"
+
+msgid "Please wait while the system gathers information..."
+msgstr "系统正在收集信息，请稍候……"
+
+msgid "Please wait."
+msgstr "请稍等。"
+
+msgid ""
+"Plugin listing failed - e. g. wrong backup destination or no space left on "
+"backup device."
+msgstr "添加插件失败！ 目的地错误或备份设备上没有剩余空间。"
+
+msgid "Preparing extra plugins..."
+msgstr "正在准备其他插件..."
+
+msgid "Query before backup starts"
+msgstr "备份开始前的请求"
+
+msgid "Query before image backup starts"
+msgstr "在启动映像备份之前进行请求"
+
+msgid "Query before starting backup."
+msgstr "开始备份前查询。"
+
+msgid "Query before starting image backup."
+msgstr "在开始映像备份之前进行查询。"
+
+msgid "Rebooting..."
+msgstr "重启..."
+
+msgid ""
+"Recording(s) are in progress or coming up in few seconds!\n"
+"Do you still want to flash image\n"
+"%s?"
+msgstr ""
+"正在录制或将在接下来的几秒钟内开始录制！\n"
+"你还想刷图吗\n"
+"%s？"
+
+msgid "Remove confirmation"
+msgstr "确认删除"
+
+msgid "Removing temp mounts..."
+msgstr "移除临时安装..."
+
+msgid "Repeat how often"
+msgstr "重复多久"
+
+msgid "Restart %s %s."
+msgstr "重新启动%s% s。"
+
+msgid "Restart GUI."
+msgstr "重启用户界面I."
+
+msgid "Restore Confirmation"
+msgstr "恢复确认"
+
+msgid "Restore wizard"
+msgstr "恢复向导"
+
+msgid "Restoring backup..."
+msgstr "正在恢复备份..."
+
+msgid "Restoring plugins, this can take a long time..."
+msgstr "恢复插件，这可能需要很长时间…"
+
+msgid "Restoring plugins..."
+msgstr "恢复插件…"
+
+msgid "Retrieving image slots - Please wait..."
+msgstr "正在检索镜像分区-请稍..."
+
+msgid "Run"
+msgstr "运行"
+
+msgid "Run your shell scripts."
+msgstr "运行您的shell脚本。"
+
+msgid ""
+"SWAP file not found. You have to create the file before you try to activate "
+"it."
+msgstr "找不到页面文件。 您必须先创建一个文件，然后才能尝试激活它。"
+
+msgid "SWAP manager"
+msgstr "页面文件管理"
+
+msgid "SWAP place:"
+msgstr "交换位置："
+
+msgid "SWAP size:"
+msgstr "交换大小："
+
+msgid "Schedule backups"
+msgstr "计划备份"
+
+msgid "Script runner"
+msgstr "运行脚本"
+
+msgid "Script runner settings"
+msgstr "脚本运行器设置"
+
+msgid "Select a backup to restore:"
+msgstr "选择要还原的副本："
+
+msgid "Select a package to install:"
+msgstr "选择要安装的软件包："
+
+msgid "Select an image to flash:"
+msgstr "选择固件映像："
+
+msgid "Select extra packages folder"
+msgstr "请选择一个插件文件夹"
+
+msgid "Select folder that contains plugins"
+msgstr "选择包含插件的文件夹"
+
+msgid "Select the SWAP file size:"
+msgstr "选择交换文件大小："
+
+msgid "Set the repeat interval of backup schedule."
+msgstr "设置备份计划的重复间隔。"
+
+msgid "Set the time of backup to start."
+msgstr "设置备份开始的时间。"
+
+msgid "Setting up..."
+msgstr "环境 ..."
+
+msgid "Setup mounts"
+msgstr "设置"
+
+msgid "Show in extensions"
+msgstr "在附加菜单中显示"
+
+msgid ""
+"Sorry but that location does not exist or is not setup. Please set it up in "
+"the Backup manager setup menu."
+msgstr "很抱歉，该位置不存在或未设置。请将其设置在备份管理器设置菜单中。"
+
+msgid "Sorry the feeds are down for maintenance. Please try again later."
+msgstr "很抱歉，源已关闭以进行维护。请稍后再试。"
+
+msgid ""
+"Sorry the feeds are down for maintenance. Please try using Backup manager to "
+"restore plugins later."
+msgstr "很抱歉，源已关闭以进行维护。请稍后尝试使用备份管理器恢复插件。"
+
+msgid ""
+"Sorry the feeds are down for maintenance. Please try using the Backup "
+"manager to restore plugins later."
+msgstr "抱歉，服务器停机维护。 要恢复插件，请稍后再试。"
+
+msgid "Sorry, but the file is not compatible with this image version."
+msgstr "抱歉，该文件与此版本的图像不兼容。"
+
+msgid "Sorry, but the restore failed."
+msgstr "抱歉，恢复失败。"
+
+msgid ""
+"Sorry, no physical devices that supports SWAP attached. Can't create SWAP "
+"file on network or fat32 file-systems."
+msgstr ""
+"对不起，没有物理设备，支持交换连接。无法在网络或fat32文件系统上创建交换文件。"
+
+msgid ""
+"Sorry, not enough free RAM found, and no physical devices that supports SWAP "
+"attached. Can't create SWAP file on network or fat32 file-systems, unable to "
+"make backup."
+msgstr ""
+"不幸的是，没有足够的可用 RAM 并且没有支持分页文件的设备。 无法创建备份."
+
+msgid "Starting..."
+msgstr "开始..."
+
+msgid "Status:"
+msgstr "状态："
+
+msgid "Temp folder"
+msgstr "临时文件夹"
+
+msgid "The backup location does not have enough free space."
+msgstr "备份存储中没有足够的可用空间。"
+
+msgid "The backup location does not have enough free space.\n"
+msgstr "备份位置没有足够的空闲空间。\n"
+
+msgid ""
+"The changes need a system restart to take effect.\n"
+"Restart your %s %s now?"
+msgstr ""
+"更改需要重新启动系统才能生效。\n"
+"现在重新启动您的%s %s ?"
+
+msgid "The chosen location does not exist, using /media/hdd."
+msgstr "使用/媒体/硬盘不存在所选位置。"
+
+msgid ""
+"The name of the receiver can be included in the backup filename, but makes "
+"the filename lengthy."
+msgstr "接收器的名称可以包含在备份文件名中，但会使名称稍长一些。"
+
+msgid "The wizard is finished now, and will reboot."
+msgstr "向导现已完成，并将重新启动。"
+
+msgid "There is a problem with this device. Please reformat it and try again."
+msgstr "这个设备有问题。 请格式化并重试。"
+
+msgid "There is no backup to restore."
+msgstr "没有备份来恢复。"
+
+msgid "There is no image to flash."
+msgstr "没有固件映像。"
+
+msgid "This device is already mounted as HDD."
+msgstr "此设备已安装为硬盘。"
+
+msgid "Time of backup to start"
+msgstr "开始备份的时间"
+
+msgid "Un-mount"
+msgstr "卸载"
+
+msgid ""
+"Unzip error (also sent to any debug log):\n"
+"%s"
+msgstr ""
+"解包错误（也在调试日志中):\n"
+"%s"
+
+msgid "Updating mount locations..."
+msgstr "更新安装位置。。。"
+
+msgid "Use as HDD"
+msgstr "作为硬盘使用"
+
+msgid "Use the cursor keys to select an installed image and then Erase button."
+msgstr "使用光标键选择设置的图像，然后使用删除按钮。"
+
+msgid "View progress"
+msgstr "执行过程"
+
+msgid "Wait please while creating SWAP file..."
+msgstr "正在创建交换文件，请稍候..."
+
+msgid "Wait please while scanning..."
+msgstr "正在扫描，请稍候..."
+
+msgid ""
+"Welcome to the restore wizard.\n"
+"\n"
+"A backup has been detected.\n"
+"You can use this wizard to restore your settings and any extra plugins that "
+"were installed when the backup was created.\n"
+msgstr ""
+"欢迎来到恢复向导。\n"
+"\n"
+"已检测到备份。\n"
+"您可以使用此向导来恢复已安装的设置和其他插件。\n"
+
+msgid "YES, to restore plugins"
+msgstr "是的，恢复插件"
+
+msgid "YES, to restore settings"
+msgstr "是的，恢复设置"
+
+msgid "You have decided not to flash image."
+msgstr "您拒绝闪烁图像。"
+
+msgid "You have to create a SWAP file before trying to activate the autostart."
+msgstr "在尝试激活自动启动之前，您必须创建一个交换文件。"
+
+msgid ""
+"Your %s %s could not connect to the plugin feeds at this time. Please try "
+"using the Backup manager to restore plugins later."
+msgstr "您的 %s%s 无法连接到您的提要。 要恢复插件，请稍后再试。"
+
+msgid ""
+"Your %s %s is about to create a full image backup, this can take about 6 "
+"minutes to complete.\n"
+"Do you want to allow this?"
+msgstr ""
+"您的%s %s即将创建完整的图像备份，这可能需要大约 6 分钟才能完成。\n"
+"你想允许吗？"
+
+msgid ""
+"Your %s %s is about to run a backup of your settings and to detect your "
+"plugins.\n"
+"Do you want to allow this?"
+msgstr ""
+"您的%s %s即将运行设置的备份并检测您的插件。\n"
+"你想允许吗？"
+
+msgid ""
+"Your %s %s is not connected to a network. Please check your network settings "
+"and try again."
+msgstr "您的%s %s未连接到网络。请检查您的网络设置并重试。"
+
+msgid ""
+"Your %s %s is not connected to a network. Please try using the Backup "
+"manager to restore plugins later when a network connection is available."
+msgstr "您的%s %s未连接到网络。请尝试使用备份管理器在网络连接可用后恢复插件。"
+
+msgid ""
+"Your %s %s is not connected to the Internet. Please check your network "
+"settings and try again."
+msgstr "您的%s %s未连接到互联网。请检查您的网络设置并重试。"
+
+msgid ""
+"Your %s %s is not connected to the Internet. Please try using Backup manager "
+"to restore plugins later."
+msgstr "您的%s %s未连接到互联网。请稍后尝试使用备份管理器恢复插件。"
+
+msgid ""
+"Your %s %s is not connected to the Internet. Please try using the Backup "
+"manager to restore plugins later."
+msgstr "您的%s %s未连接到互联网。请稍后尝试使用备份管理器恢复插件。"
+
+msgid "slot%s - %s"
+msgstr "插槽%s - %s"
+
+msgid "slot%s - %s "
+msgstr "插槽%s：%s%s "
+
+msgid "slot%s - %s (current image)"
+msgstr "插槽%s - %s（当前图像）"

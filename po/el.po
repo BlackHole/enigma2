@@ -567,7 +567,9 @@ msgstr "??"
 msgid "A"
 msgstr "A"
 
-msgid "A background update check is in progress, please wait a few minutes and try again."
+msgid ""
+"A background update check is in progress, please wait a few minutes and try "
+"again."
 msgstr ""
 
 #, python-format
@@ -673,15 +675,27 @@ msgstr ""
 "Τι θέλετε να γίνει;"
 
 #
-msgid "A recording is currently running. Please stop the recording before trying to configure the positioner."
-msgstr "Μια εγγραφή είναι σε εξέλιξη. Για να παραμετροποιήσετε τον positioner πρέπει να σταματήσετε την εγγραφή."
+msgid ""
+"A recording is currently running. Please stop the recording before trying to "
+"configure the positioner."
+msgstr ""
+"Μια εγγραφή είναι σε εξέλιξη. Για να παραμετροποιήσετε τον positioner πρέπει "
+"να σταματήσετε την εγγραφή."
 
-msgid "A recording is currently running. Please stop the recording before trying to scan."
-msgstr "Μια εγγραφή είναι σε εξέλιξη. Πρέπει να σταματήσετε την εγγραφή πριν από σάρωση."
+msgid ""
+"A recording is currently running. Please stop the recording before trying to "
+"scan."
+msgstr ""
+"Μια εγγραφή είναι σε εξέλιξη. Πρέπει να σταματήσετε την εγγραφή πριν από "
+"σάρωση."
 
 #
-msgid "A recording is currently running. Please stop the recording before trying to start the satfinder."
-msgstr "Μια εγγραφή είναι σε εξέλιξη. Για να ενεργοποιήσετε τον satfinder πρέπει να σταματήσετε την εγγραφή."
+msgid ""
+"A recording is currently running. Please stop the recording before trying to "
+"start the satfinder."
+msgstr ""
+"Μια εγγραφή είναι σε εξέλιξη. Για να ενεργοποιήσετε τον satfinder πρέπει να "
+"σταματήσετε την εγγραφή."
 
 msgid "A repeating timer or just once?"
 msgstr ""
@@ -796,7 +810,7 @@ msgid "Action on short power button press"
 msgstr ""
 
 msgid "Activate"
-msgstr ""
+msgstr "Ενεργοποίηση"
 
 #
 #
@@ -972,8 +986,15 @@ msgstr "Μεταβολή ρυθμίσεων 3D"
 
 #
 #
-msgid "Adjust the color settings so that all the color shades are distinguishable, but appear as saturated as possible. If you are happy with the result, press OK to close the video fine-tuning, or use the number keys to select other test screens."
-msgstr "Ρυθμίστε την ένταση των χρωμάτων έτσι που να διαφέρουν οι χρωματισμοί με τη μέγιστη φωτεινότητα. Όταν τελειώσετε, πιέστε ΟΚ για να κλείσει τη μικρορύθμιση ή πατήστε ένα νούμερο για να δείτε και άλλες οθόνες δοκιμών."
+msgid ""
+"Adjust the color settings so that all the color shades are distinguishable, "
+"but appear as saturated as possible. If you are happy with the result, press "
+"OK to close the video fine-tuning, or use the number keys to select other "
+"test screens."
+msgstr ""
+"Ρυθμίστε την ένταση των χρωμάτων έτσι που να διαφέρουν οι χρωματισμοί με τη "
+"μέγιστη φωτεινότητα. Όταν τελειώσετε, πιέστε ΟΚ για να κλείσει τη "
+"μικρορύθμιση ή πατήστε ένα νούμερο για να δείτε και άλλες οθόνες δοκιμών."
 
 #
 #
@@ -1061,10 +1082,14 @@ msgstr ""
 msgid "Allows the %s %s to store the EPG data regularly."
 msgstr ""
 
-msgid "Allows you to adjust the amount of time the resolution infomation display on screen."
+msgid ""
+"Allows you to adjust the amount of time the resolution infomation display on "
+"screen."
 msgstr ""
 
-msgid "Allows you to enable the debug logs. They contain very detailed information about everything the system does."
+msgid ""
+"Allows you to enable the debug logs. They contain very detailed information "
+"about everything the system does."
 msgstr ""
 
 msgid "Allows you to enable/disable displaying icons on the front panel."
@@ -1076,7 +1101,9 @@ msgstr ""
 msgid "Allows you to send a copy of the log to yourself."
 msgstr ""
 
-msgid "Allows you to set the maximum size (MB) of the individual debug logs. When that size is reached, a new file will be created."
+msgid ""
+"Allows you to set the maximum size (MB) of the individual debug logs. When "
+"that size is reached, a new file will be created."
 msgstr ""
 
 msgid "Allows you to setup the button to do what you choose."
@@ -1385,7 +1412,7 @@ msgid "Automatic scan"
 msgstr ""
 
 msgid "Automatic settings backup"
-msgstr ""
+msgstr "Αυτόματη εφεδρεία ρυθμίσεων"
 
 msgid "Automatically start timeshift after"
 msgstr ""
@@ -1400,7 +1427,7 @@ msgid "Automatically update Client/Server View?"
 msgstr ""
 
 msgid "Autostart"
-msgstr ""
+msgstr "Αυτόματη εκκίνηση"
 
 msgid "Autostart:"
 msgstr ""
@@ -1458,7 +1485,7 @@ msgid "Background delete speed"
 msgstr "Ταχύτητα διαγραφής στο παρασκήνιο"
 
 msgid "Backup Manager"
-msgstr ""
+msgstr "Διαχείριση Αντιγράφων Ασφαλείας"
 
 msgid "Backup completed."
 msgstr ""
@@ -1988,10 +2015,14 @@ msgstr ""
 msgid "Choose the location for crash and debug logs."
 msgstr ""
 
-msgid "Choose the location where the EPG data will be stored when the %s %s is shut down. The location must be available at boot time."
+msgid ""
+"Choose the location where the EPG data will be stored when the %s %s is shut "
+"down. The location must be available at boot time."
 msgstr ""
 
-msgid "Choose the name of the file that holds the EPG data when the %s %s is shut down. This can be handy to differentiate between several boxes."
+msgid ""
+"Choose the name of the file that holds the EPG data when the %s %s is shut "
+"down. This can be handy to differentiate between several boxes."
 msgstr ""
 
 msgid "Choose time interval to which the graphics will be rounded off."
@@ -2000,13 +2031,16 @@ msgstr ""
 msgid "Choose what you want the '0' button to do when PIP is active."
 msgstr ""
 
-msgid "Choose whether multi channel sound tracks should be downmixed to stereo."
+msgid ""
+"Choose whether multi channel sound tracks should be downmixed to stereo."
 msgstr ""
 
 msgid "Choose whether or not to show an icon when a motorised dish is moving."
 msgstr ""
 
-msgid "Choose which level of menu/settings to display. 'Expert' level shows all items."
+msgid ""
+"Choose which level of menu/settings to display. 'Expert' level shows all "
+"items."
 msgstr ""
 
 msgid "Choose which tuner to configure."
@@ -2197,16 +2231,21 @@ msgstr ""
 msgid "Configuration mode: %s"
 msgstr "Παραμετροποίηση"
 
-msgid "Configure an additional delay to improve external subtitle synchronisation."
+msgid ""
+"Configure an additional delay to improve external subtitle synchronisation."
 msgstr ""
 
 msgid "Configure an additional delay to improve subtitle synchronisation."
 msgstr ""
 
-msgid "Configure duration of inactivity before the hard disk drive goes to standby"
+msgid ""
+"Configure duration of inactivity before the hard disk drive goes to standby"
 msgstr ""
 
-msgid "Configure for how many minutes finished events should remain visible in the EPG. Useful when you need information about an event which has just finished, or has been delayed."
+msgid ""
+"Configure for how many minutes finished events should remain visible in the "
+"EPG. Useful when you need information about an event which has just "
+"finished, or has been delayed."
 msgstr ""
 
 msgid "Configure how recording filenames are constructed."
@@ -2243,7 +2282,9 @@ msgstr ""
 msgid "Configure the amount of time that will be presented."
 msgstr ""
 
-msgid "Configure the behavior of the 'pause' key when movie playback is already paused."
+msgid ""
+"Configure the behavior of the 'pause' key when movie playback is already "
+"paused."
 msgstr ""
 
 msgid "Configure the behavior when movie playback is manually stopped."
@@ -2252,19 +2293,27 @@ msgstr ""
 msgid "Configure the behavior when movie playback is started."
 msgstr ""
 
-msgid "Configure the behavior when reaching the end of a movie, during movie playback."
+msgid ""
+"Configure the behavior when reaching the end of a movie, during movie "
+"playback."
 msgstr ""
 
-msgid "Configure the border width of the subtitles. The dark border makes the subtitles easier to read on a light background."
+msgid ""
+"Configure the border width of the subtitles. The dark border makes the "
+"subtitles easier to read on a light background."
 msgstr ""
 
-msgid "Configure the brightness level of the front panel display for normal operation."
+msgid ""
+"Configure the brightness level of the front panel display for normal "
+"operation."
 msgstr ""
 
 msgid "Configure the brightness level of the front panel display for standby."
 msgstr ""
 
-msgid "Configure the color of the external subtitles, alternative (normal in white, italic in yellow, bold in cyan, underscore in green), white or yellow."
+msgid ""
+"Configure the color of the external subtitles, alternative (normal in white, "
+"italic in yellow, bold in cyan, underscore in green), white or yellow."
 msgstr ""
 
 msgid "Configure the color of the teletext subtitles."
@@ -2273,7 +2322,10 @@ msgstr ""
 msgid "Configure the contrast level of the front panel display."
 msgstr ""
 
-msgid "Configure the cursor behavior in the channel selection list. When opening the channel selection list you can remain on the current service or already select up/down and you are able to revert the B+/B- buttons."
+msgid ""
+"Configure the cursor behavior in the channel selection list. When opening "
+"the channel selection list you can remain on the current service or already "
+"select up/down and you are able to revert the B+/B- buttons."
 msgstr ""
 
 msgid "Configure the duration (in minutes) for the screensaver."
@@ -2288,7 +2340,9 @@ msgstr ""
 msgid "Configure the font size of the subtitles."
 msgstr ""
 
-msgid "Configure the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size."
+msgid ""
+"Configure the font size relative to skin size, so 1 increases by 1 point "
+"size, and -1 decreases by 1 point size."
 msgstr ""
 
 msgid "Configure the fourth audio language."
@@ -2312,10 +2366,14 @@ msgstr ""
 msgid "Configure the horizontal alignment of the subtitles."
 msgstr ""
 
-msgid "Configure the initial fast forward speed. When you press the fast forward button, winding will start at this speed."
+msgid ""
+"Configure the initial fast forward speed. When you press the fast forward "
+"button, winding will start at this speed."
 msgstr ""
 
-msgid "Configure the initial rewind speed. When you press the rewind button, rewinding will start at this speed."
+msgid ""
+"Configure the initial rewind speed. When you press the rewind button, "
+"rewinding will start at this speed."
 msgstr ""
 
 msgid "Configure the latitude of your location."
@@ -2324,7 +2382,10 @@ msgstr ""
 msgid "Configure the longitude of your location."
 msgstr ""
 
-msgid "Configure the minimum amount of disk space to be available for recordings. When the amount of space drops below this value, deleted items will be removed from the trash can."
+msgid ""
+"Configure the minimum amount of disk space to be available for recordings. "
+"When the amount of space drops below this value, deleted items will be "
+"removed from the trash can."
 msgstr ""
 
 msgid "Configure the nameserver (DNS)."
@@ -2333,16 +2394,22 @@ msgstr ""
 msgid "Configure the netmask."
 msgstr ""
 
-msgid "Configure the number of days after which items are automatically removed from the trash can."
+msgid ""
+"Configure the number of days after which items are automatically removed "
+"from the trash can."
 msgstr ""
 
-msgid "Configure the number of days old timers are kept before they are automatically removed from the timer list."
+msgid ""
+"Configure the number of days old timers are kept before they are "
+"automatically removed from the timer list."
 msgstr ""
 
 msgid "Configure the number of rows shown."
 msgstr ""
 
-msgid "Configure the offline decoding delay (in milliseconds). The configured delay is observed at each control word parity change."
+msgid ""
+"Configure the offline decoding delay (in milliseconds). The configured delay "
+"is observed at each control word parity change."
 msgstr ""
 
 msgid "Configure the possible fast forward speeds."
@@ -2387,7 +2454,9 @@ msgstr "Χρόνος μετάβασης για τα πλήκτρα '7'/'9'"
 msgid "Configure the slow motion speeds."
 msgstr ""
 
-msgid "Configure the speed of the background deletion process. Lower speed will consume less hard disk drive performance."
+msgid ""
+"Configure the speed of the background deletion process. Lower speed will "
+"consume less hard disk drive performance."
 msgstr ""
 
 msgid "Configure the subtitle delay when timing information is not available."
@@ -2399,7 +2468,9 @@ msgstr ""
 msgid "Configure the third subtitle language."
 msgstr ""
 
-msgid "Configure the transparency of the black background of graphical DVB subtitles."
+msgid ""
+"Configure the transparency of the black background of graphical DVB "
+"subtitles."
 msgstr ""
 
 msgid "Configure the tuner mode."
@@ -2408,7 +2479,9 @@ msgstr ""
 msgid "Configure the type of status indication icons shown in the movie list."
 msgstr ""
 
-msgid "Configure the vertical position of the subtitles, measured from the bottom of the screen."
+msgid ""
+"Configure the vertical position of the subtitles, measured from the bottom "
+"of the screen."
 msgstr ""
 
 msgid "Configure the width allocated to the picon."
@@ -2420,16 +2493,24 @@ msgstr ""
 msgid "Configure to show the channel names, picons, or both in the EPG."
 msgstr ""
 
-msgid "Configure whether (and for how long) a second infobar will be shown when OK is pressed twice. The second infobar contains additional information about the current channel."
+msgid ""
+"Configure whether (and for how long) a second infobar will be shown when OK "
+"is pressed twice. The second infobar contains additional information about "
+"the current channel."
 msgstr ""
 
 msgid "Configure which color format should be used on the SCART output."
 msgstr ""
 
-msgid "Configure which tuner type will be preferred, when the same service is available on different types of tuners."
+msgid ""
+"Configure which tuner type will be preferred, when the same service is "
+"available on different types of tuners."
 msgstr ""
 
-msgid "Configure which tuner will be preferred, when more than one tuner is available. If set to 'auto' the system will give priority to the tuner having the lowest number of channels/satellites."
+msgid ""
+"Configure which tuner will be preferred, when more than one tuner is "
+"available. If set to 'auto' the system will give priority to the tuner "
+"having the lowest number of channels/satellites."
 msgstr ""
 
 #
@@ -2532,7 +2613,8 @@ msgstr ""
 msgid "Contrast"
 msgstr "Αντίθεση"
 
-msgid "Control of the position how finished timers are shown in the Timer List."
+msgid ""
+"Control of the position how finished timers are shown in the Timer List."
 msgstr ""
 
 #
@@ -2664,7 +2746,7 @@ msgid "Current Event:"
 msgstr ""
 
 msgid "Current Status:"
-msgstr ""
+msgstr "Τρέχουσα Κατάσταση:"
 
 #
 msgid "Current device: "
@@ -2818,11 +2900,8 @@ msgstr "απόκρυψη player"
 msgid "DVD titlelist"
 msgstr "Λίστα τίτλων DVD"
 
-#
-#
-#, fuzzy
 msgid "Daily"
-msgstr "καθημερινά"
+msgstr "Καθημερινά"
 
 #
 msgid "Danish"
@@ -2958,7 +3037,11 @@ msgstr "διαγραφή αρχείου"
 msgid "Depth"
 msgstr "Βάθος"
 
-msgid "Descramble & record ECM' gives the option to descramble afterwards if descrambling on recording failed. 'Don't descramble, record ECM' save a scramble recording that can be descrambled on playback. 'Normal' means descramble the recording and don't record ECM."
+msgid ""
+"Descramble & record ECM' gives the option to descramble afterwards if "
+"descrambling on recording failed. 'Don't descramble, record ECM' save a "
+"scramble recording that can be descrambled on playback. 'Normal' means "
+"descramble the recording and don't record ECM."
 msgstr ""
 
 msgid "Descramble http streams"
@@ -3337,8 +3420,10 @@ msgstr "Χωρίς παύση τρέχοντος προγράμματος, αλ�
 #, fuzzy, python-format
 msgid "Done - Installed, upgraded or removed %d package (%s)"
 msgid_plural "Done - Installed, upgraded or removed %d packages (%s)"
-msgstr[0] "Τέλος - Εγκαταστάθηκαν, αναβαθμίστηκαν ή αφαιρέθηκαν %d πακέτα με %d σφάλματα"
-msgstr[1] "Τέλος - Εγκαταστάθηκαν, αναβαθμίστηκαν ή αφαιρέθηκαν %d πακέτα με %d σφάλματα"
+msgstr[0] ""
+"Τέλος - Εγκαταστάθηκαν, αναβαθμίστηκαν ή αφαιρέθηκαν %d πακέτα με %d σφάλματα"
+msgstr[1] ""
+"Τέλος - Εγκαταστάθηκαν, αναβαθμίστηκαν ή αφαιρέθηκαν %d πακέτα με %d σφάλματα"
 
 #
 #
@@ -3400,7 +3485,9 @@ msgstr ""
 msgid "ECM avg"
 msgstr ""
 
-msgid "ECM data will be included in the stream. This enables a client receiver to decode it."
+msgid ""
+"ECM data will be included in the stream. This enables a client receiver to "
+"decode it."
 msgstr ""
 
 msgid "ECM last"
@@ -3591,7 +3678,9 @@ msgstr "Ενεργοποίηση teletext caching"
 msgid "Enabled"
 msgstr "Ενεργοποιήθηκε"
 
-msgid "Enables a feature so that the receiver can decrypt streams (if the ECM data is included in the stream and a valid card is available)."
+msgid ""
+"Enables a feature so that the receiver can decrypt streams (if the ECM data "
+"is included in the stream and a valid card is available)."
 msgstr ""
 
 #
@@ -4121,7 +4210,7 @@ msgid "Fullview resolution"
 msgstr "Τοποθεσία ταινιών"
 
 msgid "GB"
-msgstr ""
+msgstr "GB"
 
 #
 #
@@ -4450,7 +4539,9 @@ msgstr "Εικονίδια"
 msgid "Idle Time: "
 msgstr ""
 
-msgid "If enabled the output resolution of the box will try to match the resolution of the video contents resolution"
+msgid ""
+"If enabled the output resolution of the box will try to match the resolution "
+"of the video contents resolution"
 msgstr ""
 
 msgid "If enabled the video will always be de-interlaced."
@@ -4468,13 +4559,17 @@ msgstr ""
 msgid "If set to 'yes' shows a small TV-screen in the EPG."
 msgstr ""
 
-msgid "If set to 'yes' the EPG will always open at the first channel of bouquet. If set to 'no' the EPG will open on the current channel."
+msgid ""
+"If set to 'yes' the EPG will always open at the first channel of bouquet. If "
+"set to 'no' the EPG will open on the current channel."
 msgstr ""
 
 msgid "If set to 'yes' the bouquets will be shown each time you open the EPG."
 msgstr ""
 
-msgid "If set to 'yes' the channel list will be shown after switching between radio and TV modes."
+msgid ""
+"If set to 'yes' the channel list will be shown after switching between radio "
+"and TV modes."
 msgstr ""
 
 msgid "If set to 'yes' the channel number will be displayed in the infobar."
@@ -4489,16 +4584,25 @@ msgstr ""
 msgid "If set to 'yes' you can preview channels in the EPG list."
 msgstr ""
 
-msgid "If set to 'yes' you can preview channels in the channel list. Press 'OK' to preview the selected channel, press a 2nd 'OK' to exit and zap to that channel, pressing 'EXIT' to return to the channel you started at."
+msgid ""
+"If set to 'yes' you can preview channels in the channel list. Press 'OK' to "
+"preview the selected channel, press a 2nd 'OK' to exit and zap to that "
+"channel, pressing 'EXIT' to return to the channel you started at."
 msgstr ""
 
-msgid "If set to 'yes', allows you to use the seekbar to jump to a point within the event."
+msgid ""
+"If set to 'yes', allows you to use the seekbar to jump to a point within the "
+"event."
 msgstr ""
 
-msgid "If set to 'yes', the infobar will be displayed when Fast Forwarding or Rewinding during media playback."
+msgid ""
+"If set to 'yes', the infobar will be displayed when Fast Forwarding or "
+"Rewinding during media playback."
 msgstr ""
 
-msgid "If the text is too long to be displayed on the front panel, it will be repeated (number of times):"
+msgid ""
+"If the text is too long to be displayed on the front panel, it will be "
+"repeated (number of times):"
 msgstr ""
 
 #
@@ -4513,21 +4617,31 @@ msgstr ""
 #
 #
 msgid ""
-"If your TV has a brightness or contrast enhancement, disable it. If there is something called \"dynamic\", set it to standard. Adjust the backlight level to a value suiting your taste. Turn down contrast on your TV as much as possible.\n"
-"Then turn the brightness setting as low as possible, but make sure that the two lowermost shades of gray stay distinguishable.\n"
-"Do not care about the bright shades now. They will be set up in the next step.\n"
+"If your TV has a brightness or contrast enhancement, disable it. If there is "
+"something called \"dynamic\", set it to standard. Adjust the backlight level "
+"to a value suiting your taste. Turn down contrast on your TV as much as "
+"possible.\n"
+"Then turn the brightness setting as low as possible, but make sure that the "
+"two lowermost shades of gray stay distinguishable.\n"
+"Do not care about the bright shades now. They will be set up in the next "
+"step.\n"
 "If you are happy with the result, press OK."
 msgstr ""
-"Εάν η TV σας έχει επιλογή βελτίωσης για φωτεινότητα ή αντίθεση, απενεργοποιήστε την. Εάν υπάρχει επιλογή με όνομα \"dynamic\", βάλτε τη σε θέση \"standard\". Ρυθμίστε τον φωτισμό με τα δικά σας δεδομένα. Κατεβάστε την αντίθεση όσο γίνετε. \n"
-"Κατεβάστε την φωτεινότητα τόσο ώστε μόλις να διακρίνονται οι δύο κατώτερες γκρί σκιές.\n"
-"Μην λαμβάνετε υπόψιν τις φωτεινές σκιές τώρα. Θα ρυθμιστούν στο επόμενο βήμα.\n"
+"Εάν η TV σας έχει επιλογή βελτίωσης για φωτεινότητα ή αντίθεση, "
+"απενεργοποιήστε την. Εάν υπάρχει επιλογή με όνομα \"dynamic\", βάλτε τη σε "
+"θέση \"standard\". Ρυθμίστε τον φωτισμό με τα δικά σας δεδομένα. Κατεβάστε "
+"την αντίθεση όσο γίνετε. \n"
+"Κατεβάστε την φωτεινότητα τόσο ώστε μόλις να διακρίνονται οι δύο κατώτερες "
+"γκρί σκιές.\n"
+"Μην λαμβάνετε υπόψιν τις φωτεινές σκιές τώρα. Θα ρυθμιστούν στο επόμενο "
+"βήμα.\n"
 "Εάν σας ικανοποιεί το αποτέλεσμα, πιέστε ΟΚ."
 
 msgid "Image Information"
 msgstr ""
 
 msgid "Image Manager"
-msgstr ""
+msgstr "Διαχείριση Image"
 
 #
 #
@@ -4537,7 +4651,8 @@ msgstr "άμεσος τερματισμός"
 
 #
 #
-msgid "In order to record a timer, the TV was switched to the recording service!\n"
+msgid ""
+"In order to record a timer, the TV was switched to the recording service!\n"
 msgstr "Για να εκτελεστεί μια εγγραφή, ο δέκτης άλλαξε στο κανάλι εγγραφής!\n"
 
 #
@@ -5035,7 +5150,10 @@ msgstr ""
 msgid "Limit east"
 msgstr "Ανατολικό όριο"
 
-msgid "Limit the characters that can be used in recording filenames to (7 bit) ascii. This ensures compatibility with operating systems or file systems with limited character sets."
+msgid ""
+"Limit the characters that can be used in recording filenames to (7 bit) "
+"ascii. This ensures compatibility with operating systems or file systems "
+"with limited character sets."
 msgstr ""
 
 #
@@ -5164,7 +5282,7 @@ msgid "LogManager"
 msgstr ""
 
 msgid "Logs"
-msgstr ""
+msgstr "Καταγραφές"
 
 msgid "Logs location"
 msgstr ""
@@ -5218,7 +5336,7 @@ msgid "MAC:"
 msgstr ""
 
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #
 #
@@ -5620,7 +5738,8 @@ msgstr "Εγκατάσταση λογισμικού NFI"
 
 #
 msgid "NFI image flashing completed. Press Yellow to Reboot!"
-msgstr "Η εγκατάσταση λογισμικού NFI τελείωσε. Πατήστε Κίτρινο για επανεκκίνηση!"
+msgstr ""
+"Η εγκατάσταση λογισμικού NFI τελείωσε. Πατήστε Κίτρινο για επανεκκίνηση!"
 
 msgid "NFS Setup"
 msgstr ""
@@ -5849,8 +5968,12 @@ msgstr ""
 
 #
 #
-msgid "No fast winding possible yet.. but you can use the number buttons to skip forward/backward!"
-msgstr "Δεν είναι δυνατή η γρήγορη μετάβαση... Χρησιμοποιήστε τα αριθμητικά πλήκτρα για μετακίνηση εμπρός/πίσω!"
+msgid ""
+"No fast winding possible yet.. but you can use the number buttons to skip "
+"forward/backward!"
+msgstr ""
+"Δεν είναι δυνατή η γρήγορη μετάβαση... Χρησιμοποιήστε τα αριθμητικά πλήκτρα "
+"για μετακίνηση εμπρός/πίσω!"
 
 #
 #
@@ -5980,7 +6103,8 @@ msgid ""
 msgstr ""
 "Άκυρο PIN ρύθμισης!\n"
 "Θέλετε να ορίσετε τώρα ένα PIN;\n"
-"Σε περίπτωση που πείτε \"Όχι\"' η προστασία των ρυθμίσεων θα μείνει απεργοποιήμενη!"
+"Σε περίπτωση που πείτε \"Όχι\"' η προστασία των ρυθμίσεων θα μείνει "
+"απεργοποιήμενη!"
 
 #
 msgid "No wireless networks found! Searching..."
@@ -5990,28 +6114,34 @@ msgstr "Δεν βρέθηκαν ασύρματα δίκτυα! Αναζήτησ�
 #
 msgid ""
 "No working local network adapter found.\n"
-"Please verify that you have attached a network cable and your network is configured correctly."
+"Please verify that you have attached a network cable and your network is "
+"configured correctly."
 msgstr ""
 "Δεν βρέθηκε ενεργή κάρτα δικτύου.\n"
-"Παρακαλώ επιβεβαιώστε ότι έχει συνδεθεί καλώδιο δικτύου και έχει ρυθμιστεί σωστά το δίκτυο."
+"Παρακαλώ επιβεβαιώστε ότι έχει συνδεθεί καλώδιο δικτύου και έχει ρυθμιστεί "
+"σωστά το δίκτυο."
 
 #
 #
 msgid ""
 "No working wireless network adapter found.\n"
-"Please verify that you have attached a compatible WLAN device and your network is configured correctly."
+"Please verify that you have attached a compatible WLAN device and your "
+"network is configured correctly."
 msgstr ""
 "Δεν βρέθηκε ενεργή συσκευή ασύρματου δικτύου.\n"
-"Παρακαλώ επιβεβαιώστε ότι έχει συνδεθεί συμβατή συσκευή WLAN και και έχει ρυθμιστεί σωστά το δίκτυο."
+"Παρακαλώ επιβεβαιώστε ότι έχει συνδεθεί συμβατή συσκευή WLAN και και έχει "
+"ρυθμιστεί σωστά το δίκτυο."
 
 #
 #
 msgid ""
 "No working wireless network interface found.\n"
-" Please verify that you have attached a compatible WLAN device or enable your local network interface."
+" Please verify that you have attached a compatible WLAN device or enable "
+"your local network interface."
 msgstr ""
 "Δεν βρέθηκε ενεργή διεπαφή ασύρματου δικτύου.\n"
-"Παρακαλώ επιβεβαιώστε ότι έχει συνδεθεί συμβατή συσκευή WLAN ή ενεργοποιήστε τη διεπαφή δικτύου."
+"Παρακαλώ επιβεβαιώστε ότι έχει συνδεθεί συμβατή συσκευή WLAN ή ενεργοποιήστε "
+"τη διεπαφή δικτύου."
 
 #
 #
@@ -6071,8 +6201,12 @@ msgstr "Ασύνδετα"
 #
 # , python-format
 #, fuzzy, python-format
-msgid "Not enough disk space. Please free up some disk space and try again. (%d MB required, %d MB available)"
-msgstr "Μη επαρκής χώρος δίσκου. Παρακαλώ ελευθερώστε χώρο και προσπαθήστε ξανά. (%d MB απαιτούνται, %d MB διαθέσιμα)"
+msgid ""
+"Not enough disk space. Please free up some disk space and try again. (%d MB "
+"required, %d MB available)"
+msgstr ""
+"Μη επαρκής χώρος δίσκου. Παρακαλώ ελευθερώστε χώρο και προσπαθήστε ξανά. (%d "
+"MB απαιτούνται, %d MB διαθέσιμα)"
 
 #, python-format
 msgid ""
@@ -6119,8 +6253,14 @@ msgstr ""
 #
 #
 #, fuzzy
-msgid "Now, use the contrast setting to turn up the brightness of the background as much as possible, but make sure that you can still see the difference between the two brightest levels of shades.If you have done that, press OK."
-msgstr "Χρησιμοποιείστε τις ρυθμίσεις αντίθεσης για να μεγιστοποιήσετε τη φωτεινότητα του φόντου, αλλά βεβαιωθείτε ότι μπορείτε να διακρίνετε τη διαφορά ανάμεσα στις δύο φωτεινότερες σκιές. Εάν το κάνατε, πιέστε ΟΚ."
+msgid ""
+"Now, use the contrast setting to turn up the brightness of the background as "
+"much as possible, but make sure that you can still see the difference "
+"between the two brightest levels of shades.If you have done that, press OK."
+msgstr ""
+"Χρησιμοποιείστε τις ρυθμίσεις αντίθεσης για να μεγιστοποιήσετε τη "
+"φωτεινότητα του φόντου, αλλά βεβαιωθείτε ότι μπορείτε να διακρίνετε τη "
+"διαφορά ανάμεσα στις δύο φωτεινότερες σκιές. Εάν το κάνατε, πιέστε ΟΚ."
 
 msgid "Number"
 msgstr ""
@@ -6182,7 +6322,9 @@ msgstr "Εντός"
 msgid "On end of movie"
 msgstr ""
 
-msgid "On reaching the end of a file during playback, you can choose the box's behavior."
+msgid ""
+"On reaching the end of a file during playback, you can choose the box's "
+"behavior."
 msgstr ""
 
 msgid "Once per day"
@@ -6399,7 +6541,9 @@ msgstr ""
 msgid "Perform a settings backup,"
 msgstr ""
 
-msgid "Perform a settings backup, making a backup before updating is strongly advised."
+msgid ""
+"Perform a settings backup, making a backup before updating is strongly "
+"advised."
 msgstr ""
 
 msgid "Perform an online update check in the background"
@@ -6557,19 +6701,23 @@ msgstr ""
 #
 #
 msgid ""
-"Please configure or verify your Nameservers by filling out the required values.\n"
+"Please configure or verify your Nameservers by filling out the required "
+"values.\n"
 "When you are ready press OK to continue."
 msgstr ""
-"Παρακαλώ ρυθμίστε ή επιβεβαιώστε τους Nameservers συμπλρώνοντας τα απαιτούμενα πεδία.\n"
+"Παρακαλώ ρυθμίστε ή επιβεβαιώστε τους Nameservers συμπλρώνοντας τα "
+"απαιτούμενα πεδία.\n"
 "Όταν είστε έτοιμος, πιέστε ΟΚ για συνέχεια."
 
 #
 #
 msgid ""
-"Please configure your internet connection by filling out the required values.\n"
+"Please configure your internet connection by filling out the required "
+"values.\n"
 "When you are ready press OK to continue."
 msgstr ""
-"Παρακαλώ ρυθμίστε τη σύνδεση διαδικτύου συμπληρώνοντας τα απαιτούμενα πεδία.\n"
+"Παρακαλώ ρυθμίστε τη σύνδεση διαδικτύου συμπληρώνοντας τα απαιτούμενα "
+"πεδία.\n"
 "Όταν είστε έτοιμος, πιέστε ΟΚ για συνέχεια."
 
 msgid "Please connect your receiver to the internet"
@@ -6627,8 +6775,12 @@ msgstr "Παρακαλώ ακολουθήστε τις οδηγίες στην �
 
 #
 #
-msgid "Please note that the previously selected media could not be accessed and therefore the default directory is being used instead."
-msgstr "Δεν υπάρχει πρόσβαση στο μέσο που επιλέχθηκε προηγουμένως. Θα χρησιμοποιηθεί ο αρχικός φάκελος."
+msgid ""
+"Please note that the previously selected media could not be accessed and "
+"therefore the default directory is being used instead."
+msgstr ""
+"Δεν υπάρχει πρόσβαση στο μέσο που επιλέχθηκε προηγουμένως. Θα χρησιμοποιηθεί "
+"ο αρχικός φάκελος."
 
 #
 #
@@ -6665,7 +6817,8 @@ msgid "Please select a subservice..."
 msgstr "Επιλέξτε μια υπό-υπηρεσία"
 
 msgid "Please select an NFI file and press green key to flash!"
-msgstr "Παρακαλώ επιλέξτε αρχείο NFI και πιέστε το πράσινο κουμπί για εγκατάσταση!"
+msgstr ""
+"Παρακαλώ επιλέξτε αρχείο NFI και πιέστε το πράσινο κουμπί για εγκατάσταση!"
 
 #
 #
@@ -6676,7 +6829,9 @@ msgstr "Παρακαλώ επιλέξετε μέσο για σάρωση"
 #
 #
 msgid "Please select medium to use as backup location"
-msgstr "Παρακαλώ επιλέξτε μέσο που θα χρησιμοποιηθεί ως προορισμός των αντιγράφων ασφαλείας"
+msgstr ""
+"Παρακαλώ επιλέξτε μέσο που θα χρησιμοποιηθεί ως προορισμός των αντιγράφων "
+"ασφαλείας"
 
 #
 #
@@ -6691,11 +6846,13 @@ msgstr "Παρακαλώ επιλέξτε φάκελο ταινιών..."
 #
 #
 msgid ""
-"Please select the network interface that you want to use for your internet connection.\n"
+"Please select the network interface that you want to use for your internet "
+"connection.\n"
 "\n"
 "Please press OK to continue."
 msgstr ""
-"Παρακαλώ επιλέξτε τη διεπαφή δικτύου που θέλετε να χρησιμοποιήσετε για το διαδίκτυο.\n"
+"Παρακαλώ επιλέξτε τη διεπαφή δικτύου που θέλετε να χρησιμοποιήσετε για το "
+"διαδίκτυο.\n"
 "\n"
 "Πιέστε ΟΚ για συνέχεια."
 
@@ -6732,10 +6889,12 @@ msgstr "Παρακαλώ παραμετροποιήσετε το tuner D"
 #
 #, fuzzy
 msgid ""
-"Please setup your user interface by adjusting the values till the edges of the blue box are touching the edges of your TV.\n"
+"Please setup your user interface by adjusting the values till the edges of "
+"the blue box are touching the edges of your TV.\n"
 "When you are ready press OK to continue."
 msgstr ""
-"Παρακαλώ ρυθμίστε τη σύνδεση διαδικτύου συμπληρώνοντας τα απαιτούμενα πεδία.\n"
+"Παρακαλώ ρυθμίστε τη σύνδεση διαδικτύου συμπληρώνοντας τα απαιτούμενα "
+"πεδία.\n"
 "Όταν είστε έτοιμος, πιέστε ΟΚ για συνέχεια."
 
 #
@@ -6751,8 +6910,12 @@ msgstr ""
 
 #
 #
-msgid "Please use the UP and DOWN keys to select your language. Afterwards press the OK button."
-msgstr "Χρησιμοποιήστε τα πλήκτρα ΠΑΝΩ και ΚΑΤΩ για επιλογή γλώσσας. Μετά πιέστε το ΟΚ."
+msgid ""
+"Please use the UP and DOWN keys to select your language. Afterwards press "
+"the OK button."
+msgstr ""
+"Χρησιμοποιήστε τα πλήκτρα ΠΑΝΩ και ΚΑΤΩ για επιλογή γλώσσας. Μετά πιέστε το "
+"ΟΚ."
 
 msgid "Please wait (downloading channel list)"
 msgstr ""
@@ -7409,11 +7572,8 @@ msgstr ""
 msgid "Remove"
 msgstr "Διαγραφή"
 
-#
-#
-#, fuzzy
 msgid "Remove Confirmation"
-msgstr "Εγκατάσταση tuner"
+msgstr "Αφαίρεση Επιβεβαίωσης"
 
 msgid "Remove Service"
 msgstr ""
@@ -7889,8 +8049,12 @@ msgstr "Αναζήτηση αρχείων"
 msgid "Scan wireless networks"
 msgstr "Σάρωση ασύρματων δικτύων"
 
-msgid "Scan your network for wireless access points and connect to them using your selected wireless device.\n"
-msgstr "Σάρωση του δικτύου για ασύρματα σημεία σύνδεσης και σύνδεση σε αυτά με την επιλεγμένη ασύρματη συσκευή.\n"
+msgid ""
+"Scan your network for wireless access points and connect to them using your "
+"selected wireless device.\n"
+msgstr ""
+"Σάρωση του δικτύου για ασύρματα σημεία σύνδεσης και σύνδεση σε αυτά με την "
+"επιλεγμένη ασύρματη συσκευή.\n"
 
 # , python-format
 #, python-format
@@ -7920,8 +8084,11 @@ msgstr "Σάρωση..."
 
 #
 #
-msgid "Scans default lamedbs sorted by satellite with a connected dish positioner"
-msgstr "Εκτελεί σάρωση αρχικής lamedb ταξινομημένης κατά δορυφόρο με συνδεδεμένο positioner"
+msgid ""
+"Scans default lamedbs sorted by satellite with a connected dish positioner"
+msgstr ""
+"Εκτελεί σάρωση αρχικής lamedb ταξινομημένης κατά δορυφόρο με συνδεδεμένο "
+"positioner"
 
 msgid "Scrolling Speed"
 msgstr ""
@@ -7973,7 +8140,8 @@ msgstr "Αναζήτηση για διαθέσιμες ενμερώσεις. Π�
 #
 #
 msgid "Searching for new installed or removed packages. Please wait..."
-msgstr "Αναζήτηση για νέα εγκατεστημένα ή διεγραμμένα πακέτα. Παρακαλώ περιμένετε..."
+msgstr ""
+"Αναζήτηση για νέα εγκατεστημένα ή διεγραμμένα πακέτα. Παρακαλώ περιμένετε..."
 
 #
 #
@@ -8093,7 +8261,9 @@ msgstr ""
 msgid "Select if you want the Subservice mode to be activated."
 msgstr ""
 
-msgid "Select if you want to use the Obh colored buttons (set to 'no' if you want to use (Multi Quick Button)."
+msgid ""
+"Select if you want to use the Obh colored buttons (set to 'no' if you want "
+"to use (Multi Quick Button)."
 msgstr ""
 
 #
@@ -8319,7 +8489,9 @@ msgstr ""
 msgid "Services"
 msgstr "Υπηρεσίες"
 
-msgid "Services may be grouped in bouquets. When enabled, you can use more than one bouquet."
+msgid ""
+"Services may be grouped in bouquets. When enabled, you can use more than one "
+"bouquet."
 msgstr ""
 
 msgid "Set System"
@@ -8359,22 +8531,32 @@ msgstr ""
 msgid "Set the date the timer must start."
 msgstr ""
 
-msgid "Set the default location for your instant recordings. Press 'OK' to add new locations, select left/right to select an existing location."
+msgid ""
+"Set the default location for your instant recordings. Press 'OK' to add new "
+"locations, select left/right to select an existing location."
 msgstr ""
 
-msgid "Set the default location for your recordings. Press 'OK' to add new locations, select left/right to select an existing location."
+msgid ""
+"Set the default location for your recordings. Press 'OK' to add new "
+"locations, select left/right to select an existing location."
 msgstr ""
 
-msgid "Set the default location for your timers. Press 'OK' to add new locations, select left/right to select an existing location."
+msgid ""
+"Set the default location for your timers. Press 'OK' to add new locations, "
+"select left/right to select an existing location."
 msgstr ""
 
-msgid "Set the default location for your timeshift-files. Press 'OK' to add new locations, select left/right to select an existing location."
+msgid ""
+"Set the default location for your timeshift-files. Press 'OK' to add new "
+"locations, select left/right to select an existing location."
 msgstr ""
 
 msgid "Set the default sorting method."
 msgstr ""
 
-msgid "Set the delay time between repeated loops, this uses a software render in some skins."
+msgid ""
+"Set the delay time between repeated loops, this uses a software render in "
+"some skins."
 msgstr ""
 
 #
@@ -8394,7 +8576,9 @@ msgstr ""
 msgid "Set the name the recording will get."
 msgstr ""
 
-msgid "Set the scrolling speed of text on the front display, this uses a software render in some skins."
+msgid ""
+"Set the scrolling speed of text on the front display, this uses a software "
+"render in some skins."
 msgstr ""
 
 msgid "Set the scrolling speed of text on the front display."
@@ -8412,7 +8596,8 @@ msgstr ""
 msgid "Set the time the timer must stop."
 msgstr ""
 
-msgid "Set the type of the progress indication in the channel selection screen."
+msgid ""
+"Set the type of the progress indication in the channel selection screen."
 msgstr ""
 
 msgid "Set to the desired primetime (hour)."
@@ -8427,7 +8612,9 @@ msgstr ""
 msgid "Set voltage and 22KHz"
 msgstr ""
 
-msgid "Sets the root folder of movie list, to remove the '..' from benign shown in that folder."
+msgid ""
+"Sets the root folder of movie list, to remove the '..' from benign shown in "
+"that folder."
 msgstr ""
 
 #
@@ -8474,8 +8661,12 @@ msgid "Setup your timezone."
 msgstr ""
 
 #, python-format
-msgid "Shall the USB stick wizard proceed and program the image file %s into flash memory?"
-msgstr "Να προχωρήσει ο Οδηγός Usb Stick και να εγκαταστήσει το λογισμικό %s στη μνήμη flash;"
+msgid ""
+"Shall the USB stick wizard proceed and program the image file %s into flash "
+"memory?"
+msgstr ""
+"Να προχωρήσει ο Οδηγός Usb Stick και να εγκαταστήσει το λογισμικό %s στη "
+"μνήμη flash;"
 
 msgid "Share Folder's"
 msgstr ""
@@ -8936,7 +9127,7 @@ msgid "Site longitude"
 msgstr "Γεωγρ. μήκος"
 
 msgid "Size: "
-msgstr ""
+msgstr "Μέγεθος: "
 
 msgid "Skin Setting"
 msgstr ""
@@ -8955,7 +9146,8 @@ msgstr "Θέματα"
 msgid "Skip empty services"
 msgstr "Προστασία υπηρεσιών"
 
-msgid "Skip internet connection check (disables automatic package installation)"
+msgid ""
+"Skip internet connection check (disables automatic package installation)"
 msgstr ""
 
 #
@@ -9016,11 +9208,8 @@ msgstr ""
 msgid "Softcam settings"
 msgstr ""
 
-#
-#
-#, fuzzy
 msgid "SoftcamCheck"
-msgstr "Λογισμικό"
+msgstr "Έλεγχος Softcam"
 
 #
 #
@@ -9076,7 +9265,9 @@ msgstr ""
 msgid "Sorry feeds are down for maintenance, please try again later."
 msgstr ""
 
-msgid "Sorry feeds seem be in an unstable state, if you wish to use them please enable 'Allow unstable updates' in \"software update setup\"."
+msgid ""
+"Sorry feeds seem be in an unstable state, if you wish to use them please "
+"enable 'Allow unstable updates' in \"software update setup\"."
 msgstr ""
 
 msgid "Sorry uShare Config is Missing"
@@ -9171,7 +9362,7 @@ msgid "Standby / restart"
 msgstr "Αναμονή / Επανεκκίνηση"
 
 msgid "Start"
-msgstr ""
+msgstr "Εκκίνηση"
 
 #
 #
@@ -9304,7 +9495,9 @@ msgstr ""
 msgid "Stopped"
 msgstr ""
 
-msgid "Stops timeshift being used if a recording is in progress. (Advisable for USB sticks)"
+msgid ""
+"Stops timeshift being used if a recording is in progress. (Advisable for USB "
+"sticks)"
 msgstr ""
 
 #
@@ -9529,7 +9722,7 @@ msgid "System: "
 msgstr ""
 
 msgid "TB"
-msgstr ""
+msgstr "TB"
 
 #
 #
@@ -9662,8 +9855,14 @@ msgstr ""
 #
 #
 #, fuzzy, python-format
-msgid "The DVD standard doesn't support H.264 (HDTV) video streams. Do you want to create a %s %s format data DVD (which will not play in stand-alone DVD players) instead?"
-msgstr "The DVD standard doesn't support H.264 (HDTV) video streams. Do you want to create a %s %s format data DVD (which will not play in stand-alone DVD players) instead?"
+msgid ""
+"The DVD standard doesn't support H.264 (HDTV) video streams. Do you want to "
+"create a %s %s format data DVD (which will not play in stand-alone DVD "
+"players) instead?"
+msgstr ""
+"The DVD standard doesn't support H.264 (HDTV) video streams. Do you want to "
+"create a %s %s format data DVD (which will not play in stand-alone DVD "
+"players) instead?"
 
 msgid ""
 "The EPGSearch plugin is not installed!\n"
@@ -9747,7 +9946,8 @@ msgid "The loopthrough setting is wrong."
 msgstr ""
 
 msgid "The md5sum validation failed, the file may be corrupted!"
-msgstr "Η επιβεβαίωση md5sum απέτυχε, το αρχείο ενδέχεται να είναι κατεστραμμένο!"
+msgstr ""
+"Η επιβεβαίωση md5sum απέτυχε, το αρχείο ενδέχεται να είναι κατεστραμμένο!"
 
 #
 #
@@ -9833,12 +10033,19 @@ msgstr ""
 
 #
 #
-msgid "The wizard can backup your current settings. Do you want to do a backup now?"
-msgstr "Ο Οδηγός μπορεί να κρατήσει αντίγραφο των ρυθμίσεων. Να κρατήσει αντίγραφο τώρα;"
+msgid ""
+"The wizard can backup your current settings. Do you want to do a backup now?"
+msgstr ""
+"Ο Οδηγός μπορεί να κρατήσει αντίγραφο των ρυθμίσεων. Να κρατήσει αντίγραφο "
+"τώρα;"
 
 #, python-format
-msgid "The wizard found a configuration backup. Do you want to restore your old settings from %s?"
-msgstr "Ο Οδηγός βρήκε αντίγραφο ασφαλείας των ρυθμίσεων. Θέλετε να αποκαταστήσετε τις παλιές ρυθμίσεις σας από το %s;"
+msgid ""
+"The wizard found a configuration backup. Do you want to restore your old "
+"settings from %s?"
+msgstr ""
+"Ο Οδηγός βρήκε αντίγραφο ασφαλείας των ρυθμίσεων. Θέλετε να αποκαταστήσετε "
+"τις παλιές ρυθμίσεις σας από το %s;"
 
 #
 #
@@ -9887,19 +10094,29 @@ msgstr "Αυτός ο δέκτης δε μπορεί να αποκωδικοπο
 
 #
 #
-msgid "This DVD RW medium is already formatted - reformatting will erase all content on the disc."
-msgstr "This DVD RW medium is already formatted - reformatting will erase all content on the disc."
+msgid ""
+"This DVD RW medium is already formatted - reformatting will erase all "
+"content on the disc."
+msgstr ""
+"This DVD RW medium is already formatted - reformatting will erase all "
+"content on the disc."
 
-msgid "This allows you change the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size"
+msgid ""
+"This allows you change the font size relative to skin size, so 1 increases "
+"by 1 point size, and -1 decreases by 1 point size"
 msgstr ""
 
-msgid "This allows you to change the font size relative to skin size, so 1 increases by 1 point size, and -1 decreases by 1 point size"
+msgid ""
+"This allows you to change the font size relative to skin size, so 1 "
+"increases by 1 point size, and -1 decreases by 1 point size"
 msgstr ""
 
 msgid "This allows you to change the number of rows shown."
 msgstr ""
 
-msgid "This option allows to reduce the block-noise in the picture. Obviously this is at the cost of the picture's sharpness."
+msgid ""
+"This option allows to reduce the block-noise in the picture. Obviously this "
+"is at the cost of the picture's sharpness."
 msgstr ""
 
 msgid "This option allows to set the level of dynamic contrast of the picture."
@@ -9908,13 +10125,18 @@ msgstr ""
 msgid "This option allows you choose how to display elapsed time as + or -"
 msgstr ""
 
-msgid "This option allows you choose how to display remaining time, or elapsed time, or both."
+msgid ""
+"This option allows you choose how to display remaining time, or elapsed "
+"time, or both."
 msgstr ""
 
-msgid "This option allows you choose how to display the remaining/elapsed time for live TV."
+msgid ""
+"This option allows you choose how to display the remaining/elapsed time for "
+"live TV."
 msgstr ""
 
-msgid "This option allows you choose the background color of transparent picons."
+msgid ""
+"This option allows you choose the background color of transparent picons."
 msgstr ""
 
 msgid "This option allows you set the layout view (Text or Graphics)."
@@ -9929,43 +10151,64 @@ msgstr ""
 msgid "This option allows you to bypass HDMI EDID check"
 msgstr ""
 
-msgid "This option allows you to choose from the two channel lists that are available."
+msgid ""
+"This option allows you to choose from the two channel lists that are "
+"available."
 msgstr ""
 
-msgid "This option allows you to choose how to display 1080p 24Hz on your TV. (as not all TV's support these resolutions)"
+msgid ""
+"This option allows you to choose how to display 1080p 24Hz on your TV. (as "
+"not all TV's support these resolutions)"
 msgstr ""
 
-msgid "This option allows you to choose how to display 1080p 25Hz on your TV. (as not all TV's support these resolutions)"
+msgid ""
+"This option allows you to choose how to display 1080p 25Hz on your TV. (as "
+"not all TV's support these resolutions)"
 msgstr ""
 
-msgid "This option allows you to choose how to display 1080p 30Hz on your TV. (as not all TV's support these resolutions)"
+msgid ""
+"This option allows you to choose how to display 1080p 30Hz on your TV. (as "
+"not all TV's support these resolutions)"
 msgstr ""
 
-msgid "This option allows you to choose how to display 720p 24Hz on your TV. (as not all TV's support these resolutions)"
+msgid ""
+"This option allows you to choose how to display 720p 24Hz on your TV. (as "
+"not all TV's support these resolutions)"
 msgstr ""
 
 msgid "This option allows you to choose how to display elapsed time. As + or -"
 msgstr ""
 
-msgid "This option allows you to choose how to display standard defintion video on your TV."
+msgid ""
+"This option allows you to choose how to display standard defintion video on "
+"your TV."
 msgstr ""
 
-msgid "This option allows you to choose how to display the remaining/elapsed time for Media playback."
+msgid ""
+"This option allows you to choose how to display the remaining/elapsed time "
+"for Media playback."
 msgstr ""
 
-msgid "This option allows you to choose how to display the remaining/elapsed time for live TV."
+msgid ""
+"This option allows you to choose how to display the remaining/elapsed time "
+"for live TV."
 msgstr ""
 
-msgid "This option allows you to choose how to display the remaining/elapsed time for media playback."
+msgid ""
+"This option allows you to choose how to display the remaining/elapsed time "
+"for media playback."
 msgstr ""
 
-msgid "This option allows you to choose what the first button press jumps to in channel list screen, (so pressing '2' jumps to 'A' or '2' first)"
+msgid ""
+"This option allows you to choose what the first button press jumps to in "
+"channel list screen, (so pressing '2' jumps to 'A' or '2' first)"
 msgstr ""
 
 msgid "This option allows you to disable sorting of the menus"
 msgstr ""
 
-msgid "This option allows you to disable sorting of the option in setting screens"
+msgid ""
+"This option allows you to disable sorting of the option in setting screens"
 msgstr ""
 
 msgid "This option allows you to disable sorting of the plugin browser."
@@ -9977,13 +10220,16 @@ msgstr ""
 msgid "This option allows you to set the layout view (Text or Graphics)."
 msgstr ""
 
-msgid "This option allows you to show the SNR as a percentage (not all receivers support this)."
+msgid ""
+"This option allows you to show the SNR as a percentage (not all receivers "
+"support this)."
 msgstr ""
 
 msgid "This option allows you to view the old and new settings side by side."
 msgstr ""
 
-msgid "This option configures the general audio delay of Dolby Digital sound tracks."
+msgid ""
+"This option configures the general audio delay of Dolby Digital sound tracks."
 msgstr ""
 
 msgid "This option configures the general audio delay of stereo sound tracks."
@@ -10007,10 +10253,15 @@ msgstr ""
 msgid "This option lets you show the option in the extension screen"
 msgstr ""
 
-msgid "This option moves the PVR status from the separate window into the Movie Player infobar."
+msgid ""
+"This option moves the PVR status from the separate window into the Movie "
+"Player infobar."
 msgstr ""
 
-msgid "This option set the level of surpression of musquito noise (Musquito Noise is random aliasing as a result of strong compression). Obviously this goes at the cost of picture details."
+msgid ""
+"This option set the level of surpression of musquito noise (Musquito Noise "
+"is random aliasing as a result of strong compression). Obviously this goes "
+"at the cost of picture details."
 msgstr ""
 
 msgid "This option sets  the picture contrast."
@@ -10031,26 +10282,38 @@ msgstr ""
 msgid "This option sets the picture saturation."
 msgstr ""
 
-msgid "This option sets the scaler sharpness, used when stretching picture from 4:3 to 16:9."
+msgid ""
+"This option sets the scaler sharpness, used when stretching picture from 4:3 "
+"to 16:9."
 msgstr ""
 
-msgid "This option sets the surpression of false digital contours, that are the result of a limited number of discrete values."
+msgid ""
+"This option sets the surpression of false digital contours, that are the "
+"result of a limited number of discrete values."
 msgstr ""
 
-msgid "This option sets up the picture sharpness, used when the picture is being upscaled."
+msgid ""
+"This option sets up the picture sharpness, used when the picture is being "
+"upscaled."
 msgstr ""
 
 #, fuzzy, python-format
 msgid ""
-"This plugin creates a USB stick which can be used to update the firmware of your %s %s without the need for a network or WLAN connection.\n"
+"This plugin creates a USB stick which can be used to update the firmware of "
+"your %s %s without the need for a network or WLAN connection.\n"
 "First, a USB stick needs to be prepared so that it becomes bootable.\n"
-"In the next step, an NFI image file can be downloaded from the update server and saved on the USB stick.\n"
-"If you already have a prepared bootable USB stick, please insert it now. Otherwise plug in a USB stick with a minimum size of 64 MB!"
+"In the next step, an NFI image file can be downloaded from the update server "
+"and saved on the USB stick.\n"
+"If you already have a prepared bootable USB stick, please insert it now. "
+"Otherwise plug in a USB stick with a minimum size of 64 MB!"
 msgstr ""
-"Αυτό το πρόσθετο δημιουργεί ένα usb stick που μπορεί να χρησιμοποιηθεί για αναβάθμιση του %s %s χωρίς ανάγκη ύπαρξης δικτύου.\n"
+"Αυτό το πρόσθετο δημιουργεί ένα usb stick που μπορεί να χρησιμοποιηθεί για "
+"αναβάθμιση του %s %s χωρίς ανάγκη ύπαρξης δικτύου.\n"
 "Καταρχήν, ένα usb stick πρέπει να προετοιμασθεί ώστε να είναι εκκινήσιμο.\n"
-"Στο επόμενο βήμα, ένα αρχείο NFI μπορεί να αποθηκευτεί σε αυτό από τον διακομιστή ενημερώσεων.\n"
-"Εάν έχετε ένα ήδη έτοιμο usb stick, παρακαλώ συνδέστε το τώρα. Αλλιώς συνδέστε ένα usb stick ελάχιστης χωρητικότητας 64MB!"
+"Στο επόμενο βήμα, ένα αρχείο NFI μπορεί να αποθηκευτεί σε αυτό από τον "
+"διακομιστή ενημερώσεων.\n"
+"Εάν έχετε ένα ήδη έτοιμο usb stick, παρακαλώ συνδέστε το τώρα. Αλλιώς "
+"συνδέστε ένα usb stick ελάχιστης χωρητικότητας 64MB!"
 
 #
 #
@@ -10079,12 +10342,14 @@ msgid ""
 "This test checks for configured nameservers.\n"
 "If you get a \"unconfirmed\" message:\n"
 "- please check your DHCP, cabling and adapter setup\n"
-"- if you configured your nameservers manually please verify your entries in the \"Nameserver\" configuration"
+"- if you configured your nameservers manually please verify your entries in "
+"the \"Nameserver\" configuration"
 msgstr ""
 "This test checks for configured Nameservers.\n"
 "If you get a \"unconfirmed\" message:\n"
 "- please check your DHCP, cabling and Adapter setup\n"
-"- if you configured your Nameservers manually please verify your entries in the \"Nameserver\" Configuration"
+"- if you configured your Nameservers manually please verify your entries in "
+"the \"Nameserver\" Configuration"
 
 #
 #
@@ -10115,10 +10380,12 @@ msgstr ""
 "- please check your DHCP, cabling and adapter setup"
 
 msgid ""
-"This test checks whether your LAN adapter is set up for automatic IP address configuration with DHCP.\n"
+"This test checks whether your LAN adapter is set up for automatic IP address "
+"configuration with DHCP.\n"
 "If you get a \"disabled\" message:\n"
 " - then your LAN adapter is configured for manual IP setup\n"
-"- verify thay you have entered correct IP informations in the adapter setup dialog.\n"
+"- verify thay you have entered correct IP informations in the adapter setup "
+"dialog.\n"
 "If you get an \"enabled\" message:\n"
 "-verify that you have a configured and working DHCP server in your network."
 msgstr ""
@@ -10130,7 +10397,8 @@ msgid "This test detects your configured LAN adapter."
 msgstr "Αυτός ο έλεγχος αναζητά την ρυθμισμένη κάρτα δικτύου."
 
 msgid ""
-"This will (re-)calculate all positions of your rotor and may remove previously memorised positions and fine-tuning!\n"
+"This will (re-)calculate all positions of your rotor and may remove "
+"previously memorised positions and fine-tuning!\n"
 "Are you sure?"
 msgstr ""
 
@@ -10322,8 +10590,10 @@ msgstr "Titleset mode"
 #, python-format
 msgid ""
 "To update your %s %s firmware, please follow these steps:\n"
-"1) Turn off your box with the rear power switch and make sure the bootable USB stick is plugged in.\n"
-"2) Turn mains back on and hold the DOWN button on the front panel pressed for 10 seconds.\n"
+"1) Turn off your box with the rear power switch and make sure the bootable "
+"USB stick is plugged in.\n"
+"2) Turn mains back on and hold the DOWN button on the front panel pressed "
+"for 10 seconds.\n"
 "3) Wait for bootup and follow instructions of the wizard."
 msgstr ""
 
@@ -10442,7 +10712,9 @@ msgstr "Προσπάθειες που απομένουν:"
 #
 #
 msgid "Try to find used transponders in cable network.. please wait..."
-msgstr "Αναζήτηση χρησιμοποιούμενων αναμεταδοτών στο καλωδιακό δίκτυο... Παρακαλώ περιμένετε..."
+msgstr ""
+"Αναζήτηση χρησιμοποιούμενων αναμεταδοτών στο καλωδιακό δίκτυο... Παρακαλώ "
+"περιμένετε..."
 
 #
 #
@@ -10539,7 +10811,7 @@ msgid "Type of scan"
 msgstr "Τύπος σάρωσης"
 
 msgid "Type: "
-msgstr ""
+msgstr "Τύπος: "
 
 #
 #
@@ -10764,13 +11036,18 @@ msgstr "Χρήση power measurement"
 msgid "Use slim screen"
 msgstr ""
 
-msgid "Use the Left/Right buttons on your remote to adjust the size of the user interface. Left button decreases the size, Right increases the size."
+msgid ""
+"Use the Left/Right buttons on your remote to adjust the size of the user "
+"interface. Left button decreases the size, Right increases the size."
 msgstr ""
 
-msgid "Use the Left/Right buttons on your remote to move the user interface up/down"
+msgid ""
+"Use the Left/Right buttons on your remote to move the user interface up/down"
 msgstr ""
 
-msgid "Use the Left/Right buttons on your remote to move the user inyterface left/right"
+msgid ""
+"Use the Left/Right buttons on your remote to move the user inyterface left/"
+"right"
 msgstr ""
 
 msgid "Use the alternative or the conventional radio mode."
@@ -10783,7 +11060,8 @@ msgstr ""
 #
 #, fuzzy
 msgid "Use the network wizard to configure selected network adapter"
-msgstr "Χρήση του Οδηγού Δικτύου για παραμετροποίηση επιλεγμένης κάρτας δικτύου"
+msgstr ""
+"Χρήση του Οδηγού Δικτύου για παραμετροποίηση επιλεγμένης κάρτας δικτύου"
 
 #
 #
@@ -10793,8 +11071,12 @@ msgstr "Χρήση Οδηγού Δικτύου για παραμετροποίη
 
 #
 #
-msgid "Use the up/down keys on your remote control to select an option. After that, press OK."
-msgstr "Πιέστε τα πλήκτρα Πάνω/Κάτω του τηλεχειριστηρίου για επιλογή. Μετά, πιέστε ΟΚ."
+msgid ""
+"Use the up/down keys on your remote control to select an option. After that, "
+"press OK."
+msgstr ""
+"Πιέστε τα πλήκτρα Πάνω/Κάτω του τηλεχειριστηρίου για επιλογή. Μετά, πιέστε "
+"ΟΚ."
 
 msgid "Use the wizard to set up basic features"
 msgstr ""
@@ -10873,7 +11155,10 @@ msgstr ""
 msgid "Using tuner %s"
 msgstr ""
 
-msgid "Usually when the subtitle language is the same as the audio language, the subtitles will not be used. Enable this option to allow these subtitles to be used."
+msgid ""
+"Usually when the subtitle language is the same as the audio language, the "
+"subtitles will not be used. Enable this option to allow these subtitles to "
+"be used."
 msgstr ""
 
 #
@@ -10948,7 +11233,8 @@ msgstr "Μικρορύθμιση οθόνης"
 msgid ""
 "Video input selection\n"
 "\n"
-"Please press OK if you can see this page on your TV (or select a different input port).\n"
+"Please press OK if you can see this page on your TV (or select a different "
+"input port).\n"
 "\n"
 "The next input port will be automatically probed in 20 seconds."
 msgstr ""
@@ -11221,10 +11507,8 @@ msgstr "Τετάρτη"
 msgid "Weekday"
 msgstr "Ημέρα εβδομάδος"
 
-#
-#, fuzzy
 msgid "Weekly"
-msgstr "εβδομαδιαία"
+msgstr "Εβδομαδιαία"
 
 #
 #
@@ -11238,34 +11522,45 @@ msgstr "Αποθηκευμένη θέση"
 msgid ""
 "Welcome to the cutlist editor.\n"
 "\n"
-"Seek to the start of the stuff you want to cut away. Press OK, select 'start cut'.\n"
+"Seek to the start of the stuff you want to cut away. Press OK, select 'start "
+"cut'.\n"
 "\n"
 "Then seek to the end, press OK, select 'end cut'. That's it."
 msgstr ""
 "Καλώς ορίσατε στο Διορθωτή Σημείων Αποκοπής.\n"
 "\n"
-"Αναζητήστε την αρχή του τμήματος που θέλετε να διαγράψετε. Πιέστε ΟΚ, επιλέξτε \"start cut\".\n"
+"Αναζητήστε την αρχή του τμήματος που θέλετε να διαγράψετε. Πιέστε ΟΚ, "
+"επιλέξτε \"start cut\".\n"
 "\n"
-"Στη συνέχεια αναζητήστε το τέλος του τμήματος, πιέστε ΟΚ, επιλέξτε \"end cut\". Αυτό είναι όλο."
+"Στη συνέχεια αναζητήστε το τέλος του τμήματος, πιέστε ΟΚ, επιλέξτε \"end "
+"cut\". Αυτό είναι όλο."
 
 #
 #
 #, fuzzy
-msgid "Welcome to the image upgrade wizard. The wizard will assist you in upgrading the firmware of your %s %s by providing a backup facility for your current settings and a short explanation of how to upgrade your firmware."
-msgstr "Καλώς ορίσατε στον Οδηγό αναβάθμισης λογισμικού. Ο Οδηγός θα σας βοηθήσει στην αναβάθμιση του λογισμικού του δέκτη παρέχοντας δυνατότητα αντιγράφου ασφαλείας των ρυθμίσεών σας και σύντομη επεξήγηση της διαδικασίας."
+msgid ""
+"Welcome to the image upgrade wizard. The wizard will assist you in upgrading "
+"the firmware of your %s %s by providing a backup facility for your current "
+"settings and a short explanation of how to upgrade your firmware."
+msgstr ""
+"Καλώς ορίσατε στον Οδηγό αναβάθμισης λογισμικού. Ο Οδηγός θα σας βοηθήσει "
+"στην αναβάθμιση του λογισμικού του δέκτη παρέχοντας δυνατότητα αντιγράφου "
+"ασφαλείας των ρυθμίσεών σας και σύντομη επεξήγηση της διαδικασίας."
 
 #
 #
 msgid ""
 "Welcome.\n"
 "\n"
-"If you want to connect your %s %s to the Internet, this wizard will guide you through the basic network setup of your %s %s.\n"
+"If you want to connect your %s %s to the Internet, this wizard will guide "
+"you through the basic network setup of your %s %s.\n"
 "\n"
 "Press OK to start configuring your network"
 msgstr ""
 "Καλώς ορίσατε.\n"
 "\n"
-"Εάν θέλετε να συνδέσετε το δέκτη στο διαδίκτυο, αυτό ο Οδηγός θα σας καθοδηγήσει στα βήματα της διαδικασίας ρύθμισης δικτύου του δέκτη.\n"
+"Εάν θέλετε να συνδέσετε το δέκτη στο διαδίκτυο, αυτό ο Οδηγός θα σας "
+"καθοδηγήσει στα βήματα της διαδικασίας ρύθμισης δικτύου του δέκτη.\n"
 "\n"
 "Πιέστε ΟΚ για εκκίνηση ρύθμισης του δικτύου."
 
@@ -11280,7 +11575,8 @@ msgid ""
 msgstr ""
 "Καλώς ορίσατε.\n"
 "\n"
-"Εάν θέλετε να συνδέσετε το δέκτη στο διαδίκτυο, αυτό ο Οδηγός θα σας καθοδηγήσει στα βήματα της διαδικασίας ρύθμισης δικτύου του δέκτη.\n"
+"Εάν θέλετε να συνδέσετε το δέκτη στο διαδίκτυο, αυτό ο Οδηγός θα σας "
+"καθοδηγήσει στα βήματα της διαδικασίας ρύθμισης δικτύου του δέκτη.\n"
 "\n"
 "Πιέστε ΟΚ για εκκίνηση ρύθμισης του δικτύου."
 
@@ -11298,7 +11594,10 @@ msgstr "Ορισμός ορίων"
 msgid "What Day of week ?"
 msgstr ""
 
-msgid "What action is required on completion of the timer? 'Auto' lets the box return to the state it had when the timer started. 'Do nothing', 'Go to standby' and 'Go to deep standby' do ecaxtly that."
+msgid ""
+"What action is required on completion of the timer? 'Auto' lets the box "
+"return to the state it had when the timer started. 'Do nothing', 'Go to "
+"standby' and 'Go to deep standby' do ecaxtly that."
 msgstr ""
 
 msgid "What date of month ?"
@@ -11309,64 +11608,92 @@ msgstr ""
 msgid "What do you want to scan?"
 msgstr "Τι θέλετε να σαρώσετε;"
 
-msgid "When enabled the online checker will also check for experimental versions"
+msgid ""
+"When enabled the online checker will also check for experimental versions"
 msgstr ""
 
-msgid "When enabled, AIT data will be included in http streams. This allows a client receiver to use HbbTV."
+msgid ""
+"When enabled, AIT data will be included in http streams. This allows a "
+"client receiver to use HbbTV."
 msgstr ""
 
-msgid "When enabled, EIT data will be included in http streams. This allows a client receiver to show EPG."
+msgid ""
+"When enabled, EIT data will be included in http streams. This allows a "
+"client receiver to show EPG."
 msgstr ""
 
-msgid "When enabled, a popup message will be shown when a movie has finished and the next one will start."
+msgid ""
+"When enabled, a popup message will be shown when a movie has finished and "
+"the next one will start."
 msgstr ""
 
 msgid "When enabled, a popup message will be shown when a recording starts."
 msgstr ""
 
-msgid "When enabled, a recording is allowed to interrupt live TV, when there are no free tuners."
+msgid ""
+"When enabled, a recording is allowed to interrupt live TV, when there are no "
+"free tuners."
 msgstr ""
 
-msgid "When enabled, a warning will be displayed and the user will get an option to stop or to continue the timeshift."
+msgid ""
+"When enabled, a warning will be displayed and the user will get an option to "
+"stop or to continue the timeshift."
 msgstr ""
 
 msgid "When enabled, channel numbering will start at '1' for every bouquet."
 msgstr ""
 
-msgid "When enabled, content with an aspect ratio of 4:3 will be stretched to fit the screen."
+msgid ""
+"When enabled, content with an aspect ratio of 4:3 will be stretched to fit "
+"the screen."
 msgstr ""
 
-msgid "When enabled, continue to the next bouquet when the last channel of the current bouquet is reached."
+msgid ""
+"When enabled, continue to the next bouquet when the last channel of the "
+"current bouquet is reached."
 msgstr ""
 
-msgid "When enabled, deleted recordings are moved to the trash can, instead of being deleted immediately."
+msgid ""
+"When enabled, deleted recordings are moved to the trash can, instead of "
+"being deleted immediately."
 msgstr ""
 
-msgid "When enabled, external subtitles will always be turned on for movie playback."
+msgid ""
+"When enabled, external subtitles will always be turned on for movie playback."
 msgstr ""
 
-msgid "When enabled, graphical DVB subtitles are preferred over teletext subtitles, when both types are available."
+msgid ""
+"When enabled, graphical DVB subtitles are preferred over teletext subtitles, "
+"when both types are available."
 msgstr ""
 
 msgid "When enabled, graphical DVB subtitles will be centered horizontally."
 msgstr ""
 
-msgid "When enabled, graphical DVB subtitles will be displayed at their original position."
+msgid ""
+"When enabled, graphical DVB subtitles will be displayed at their original "
+"position."
 msgstr ""
 
-msgid "When enabled, graphical DVB subtitles will be displayed in yellow, instead of the original color."
+msgid ""
+"When enabled, graphical DVB subtitles will be displayed in yellow, instead "
+"of the original color."
 msgstr ""
 
 msgid "When enabled, it is possible to leave the Movie Player with exit."
 msgstr ""
 
-msgid "When enabled, measure power consumption to detect when the rotor stops turning (when supported by the tuner)."
+msgid ""
+"When enabled, measure power consumption to detect when the rotor stops "
+"turning (when supported by the tuner)."
 msgstr ""
 
 msgid "When enabled, network trash cans are probed for cleaning."
 msgstr ""
 
-msgid "When enabled, pressing '0' will zap you to the first channel in your first bouquet and delete your zap-history."
+msgid ""
+"When enabled, pressing '0' will zap you to the first channel in your first "
+"bouquet and delete your zap-history."
 msgstr ""
 
 msgid "When enabled, show channel numbers in the channel selection screen."
@@ -11375,13 +11702,17 @@ msgstr ""
 msgid "When enabled, subtitles for the hearing impaired can be used."
 msgstr ""
 
-msgid "When enabled, subtitles for the hearing impaired will be preferred over normal subtitles, when both types are available."
+msgid ""
+"When enabled, subtitles for the hearing impaired will be preferred over "
+"normal subtitles, when both types are available."
 msgstr ""
 
 msgid "When enabled, teletext pages will be cached, allowing faster access."
 msgstr ""
 
-msgid "When enabled, teletext subtitles will be displayed at their original position."
+msgid ""
+"When enabled, teletext subtitles will be displayed at their original "
+"position."
 msgstr ""
 
 msgid "When enabled, the PiP can be closed by the EXIT button."
@@ -11390,52 +11721,77 @@ msgstr ""
 msgid "When enabled, the VCR scart option will be shown in the main menu"
 msgstr ""
 
-msgid "When enabled, the length of each recording will be shown in the movielist (this might cause some additional loading time)."
+msgid ""
+"When enabled, the length of each recording will be shown in the movielist "
+"(this might cause some additional loading time)."
 msgstr ""
 
-msgid "When enabled, the original line breaks will be removed from the teletext subtitles."
+msgid ""
+"When enabled, the original line breaks will be removed from the teletext "
+"subtitles."
 msgstr ""
 
-msgid "When enabled, the receiver will automatically use the audio track which you selected before."
+msgid ""
+"When enabled, the receiver will automatically use the audio track which you "
+"selected before."
 msgstr ""
 
-msgid "When enabled, the receiver will automatically use the subtitles which you selected before."
+msgid ""
+"When enabled, the receiver will automatically use the subtitles which you "
+"selected before."
 msgstr ""
 
 msgid "When enabled, the receiver will select an AC3 track (when available)."
 msgstr ""
 
-msgid "When enabled, timeshift starts automatically in background after the specified time."
+msgid ""
+"When enabled, timeshift starts automatically in background after the "
+"specified time."
 msgstr ""
 
 msgid "When enabled, use DHCP for the IP configuration."
 msgstr ""
 
-msgid "When enabled, your receiver will detect activity on the VCR SCART input."
+msgid ""
+"When enabled, your receiver will detect activity on the VCR SCART input."
 msgstr ""
 
-msgid "When maximum space for all logs is reached, the oldest logs will be deleted."
+msgid ""
+"When maximum space for all logs is reached, the oldest logs will be deleted."
 msgstr ""
 
-msgid "When nonzero, a recording will start earlier than the starting time indicated by the EPG."
+msgid ""
+"When nonzero, a recording will start earlier than the starting time "
+"indicated by the EPG."
 msgstr ""
 
-msgid "When nonzero, a recording will stop later than the ending time indicated by the EPG."
+msgid ""
+"When nonzero, a recording will stop later than the ending time indicated by "
+"the EPG."
 msgstr ""
 
-msgid "When set each folder will show the previous state used, when off the default values will be shown."
+msgid ""
+"When set each folder will show the previous state used, when off the default "
+"values will be shown."
 msgstr ""
 
 msgid "When set the PIG will return to live after a movie has stopped playing."
 msgstr ""
 
-msgid "When the content has an aspect ratio of 16:9, choose whether to scale/stretch the picture."
+msgid ""
+"When the content has an aspect ratio of 16:9, choose whether to scale/"
+"stretch the picture."
 msgstr ""
 
-msgid "When the content has an aspect ratio of 4:3, choose whether to scale/stretch the picture."
+msgid ""
+"When the content has an aspect ratio of 4:3, choose whether to scale/stretch "
+"the picture."
 msgstr ""
 
-msgid "When tuned to a service the system will normally scan the transponder for any changes and save them. Only set to 'yes' if you're absolutely sure of what you're doing."
+msgid ""
+"When tuned to a service the system will normally scan the transponder for "
+"any changes and save them. Only set to 'yes' if you're absolutely sure of "
+"what you're doing."
 msgstr ""
 
 #
@@ -11507,10 +11863,14 @@ msgstr "Κατάσταση ασύρματου δικτύου"
 msgid "With popup"
 msgstr ""
 
-msgid "With this option set to 'yes' the channel list will always show you the list of bouquets. If set to 'no' the current bouquet will be opened."
+msgid ""
+"With this option set to 'yes' the channel list will always show you the list "
+"of bouquets. If set to 'no' the current bouquet will be opened."
 msgstr ""
 
-msgid "With this option you can hide Job Tasks from the extension screen (short blue button press)."
+msgid ""
+"With this option you can hide Job Tasks from the extension screen (short "
+"blue button press)."
 msgstr ""
 
 msgid "Without popup"
@@ -11679,25 +12039,39 @@ msgstr "Δεν μπορετε να διαγράψτε αυτό!"
 msgid "You didn't select a channel to record from."
 msgstr "Δεν επιλέξατε κανάλι για εγγραφή."
 
-msgid "You have already sent this log, are you sure you want to resend this log:\n"
+msgid ""
+"You have already sent this log, are you sure you want to resend this log:\n"
 msgstr ""
 
 #
 #
-msgid "You have chosen to backup your settings. Please press OK to start the backup now."
-msgstr "Επιλέξατε να κρατηθεί αντίγραφο ασφαλείας των ρυθμίσεων. Πιέστε ΟΚ για να ξεκινήσει η διαδικασία τώρα."
+msgid ""
+"You have chosen to backup your settings. Please press OK to start the backup "
+"now."
+msgstr ""
+"Επιλέξατε να κρατηθεί αντίγραφο ασφαλείας των ρυθμίσεων. Πιέστε ΟΚ για να "
+"ξεκινήσει η διαδικασία τώρα."
 
 #
-msgid "You have chosen to create a new .NFI flasher bootable USB stick. This will repartition the USB stick and therefore all data on it will be erased."
-msgstr "Επιλέξατε να δημιουργήσετε νέο εκκινήσιμο Usb stick για εγκατάσταση NFI. Θα γίνει εκ νέου κατάτμηση του usb stick και όλα τα δεδομένα σε αυτό θα χαθούν."
+msgid ""
+"You have chosen to create a new .NFI flasher bootable USB stick. This will "
+"repartition the USB stick and therefore all data on it will be erased."
+msgstr ""
+"Επιλέξατε να δημιουργήσετε νέο εκκινήσιμο Usb stick για εγκατάσταση NFI. Θα "
+"γίνει εκ νέου κατάτμηση του usb stick και όλα τα δεδομένα σε αυτό θα χαθούν."
 
 #
 #
-msgid "You have chosen to restore your settings. Enigma2 will restart after restore. Please press OK to start the restore now."
-msgstr "Επιλέξατε αποκατάσταση των ρυθμίσεων. Το Enigma2 θα επανεκκινήσει μετά την αποκατάσταση. Πιέστε ΟΚ για να ξεκνήσει η διαδικασία τώρα."
+msgid ""
+"You have chosen to restore your settings. Enigma2 will restart after "
+"restore. Please press OK to start the restore now."
+msgstr ""
+"Επιλέξατε αποκατάσταση των ρυθμίσεων. Το Enigma2 θα επανεκκινήσει μετά την "
+"αποκατάσταση. Πιέστε ΟΚ για να ξεκνήσει η διαδικασία τώρα."
 
 msgid ""
-"You have chosen to save the current timeshift event, but the event has not yet finished\n"
+"You have chosen to save the current timeshift event, but the event has not "
+"yet finished\n"
 "What do you want to do ?"
 msgstr ""
 
@@ -11721,11 +12095,17 @@ msgstr "Περιμένετε για %s!"
 #
 #
 msgid ""
-"You need a PC connected to your %s %s. If you need further instructions, please visit the website http://www.dm7025.de.\n"
-"Your %s %s will now be halted. After you have performed the update instructions from the website, your new firmware will ask you to restore your settings."
+"You need a PC connected to your %s %s. If you need further instructions, "
+"please visit the website http://www.dm7025.de.\n"
+"Your %s %s will now be halted. After you have performed the update "
+"instructions from the website, your new firmware will ask you to restore "
+"your settings."
 msgstr ""
-"You need a PC connected to your %s %s. If you need further instructions, please visit the website http://www.dm7025.de.\n"
-"Your %s %s will now be halted. After you have performed the update instructions from the website, your new firmware will ask you to restore your settings."
+"You need a PC connected to your %s %s. If you need further instructions, "
+"please visit the website http://www.dm7025.de.\n"
+"Your %s %s will now be halted. After you have performed the update "
+"instructions from the website, your new firmware will ask you to restore "
+"your settings."
 
 msgid "You seem to be in timeshift!"
 msgstr ""
@@ -11737,8 +12117,12 @@ msgid "You system does not support ext4"
 msgstr "Το σύστημά σας δεν υποστηρίζει ext4"
 
 #, python-format
-msgid "Your %s %s is not connected to the internet, please check your network settings and try again."
+msgid ""
+"Your %s %s is not connected to the internet, please check your network "
+"settings and try again."
 msgstr ""
+"Ο %s %s σας δεν είναι συνδεδεμένος στο διαδίκτυο, ελέγξτε τις ρυθμίσεις "
+"δικτύου και προσπαθήστε ξανά."
 
 #
 #
@@ -11783,7 +12167,9 @@ msgid "Your %s %s is shutting down. Please wait..."
 msgstr "Ο δέκτης τερματίζεται. Παρακαλώ περιμένετε..."
 
 #, python-format
-msgid "Your %s %s might be unusable now. Please consult the manual for further assistance before rebooting your %s %s."
+msgid ""
+"Your %s %s might be unusable now. Please consult the manual for further "
+"assistance before rebooting your %s %s."
 msgstr ""
 
 #, python-format
@@ -11810,13 +12196,21 @@ msgstr ""
 
 #
 #
-msgid "Your backup succeeded. We will now continue to explain the further upgrade process."
-msgstr "Το αντίγραφο ασφαλείας ολοκληρώθηκε. Ση συνέχεια θα επεξηγηθεί η υπόλοιπη διαδικασία."
+msgid ""
+"Your backup succeeded. We will now continue to explain the further upgrade "
+"process."
+msgstr ""
+"Το αντίγραφο ασφαλείας ολοκληρώθηκε. Ση συνέχεια θα επεξηγηθεί η υπόλοιπη "
+"διαδικασία."
 
 #
 #
-msgid "Your collection exceeds the size of a single layer medium, you will need a blank dual layer DVD!"
-msgstr "Η συλλογή σας υπερβαίνει το μέγεθος ενός single layer DVD. Θα χρειαστείτε ένα κενό dual layer DVD!"
+msgid ""
+"Your collection exceeds the size of a single layer medium, you will need a "
+"blank dual layer DVD!"
+msgstr ""
+"Η συλλογή σας υπερβαίνει το μέγεθος ενός single layer DVD. Θα χρειαστείτε "
+"ένα κενό dual layer DVD!"
 
 #, python-format
 msgid ""
@@ -11853,7 +12247,8 @@ msgstr ""
 msgid ""
 "Your internet connection is not working!\n"
 "Please choose what you want to do next."
-msgstr "Η σύνδεση προς το διαδίκτυο δεν δουλεύει!Επιλέξτε τι θέλετε να ακολουθήσει."
+msgstr ""
+"Η σύνδεση προς το διαδίκτυο δεν δουλεύει!Επιλέξτε τι θέλετε να ακολουθήσει."
 
 #, python-format
 msgid "Your internet connection is working (ip: %s)"
@@ -11960,7 +12355,8 @@ msgstr "γραφικό περιβάλλον για ανάθεση υπηρεσι
 #
 #
 msgid "a gui to assign services/providers/caids to common interface modules"
-msgstr "γραφικό περιβάλλον για ανάθεση υπηρεσιών/παρόχων/caids σε κοινή διεπαφή"
+msgstr ""
+"γραφικό περιβάλλον για ανάθεση υπηρεσιών/παρόχων/caids σε κοινή διεπαφή"
 
 #
 #
@@ -13335,7 +13731,7 @@ msgid "uShare setup"
 msgstr ""
 
 msgid "unavailable"
-msgstr ""
+msgstr "μη διαθέσιμο"
 
 #
 #
@@ -13484,3 +13880,784 @@ msgstr "εγγραφή"
 msgid "zapped"
 msgstr "zapped"
 
+msgid "%a %e %b  %-H:%M"
+msgstr "%a %e %b  %-H:%M"
+
+msgid "128 Mb"
+msgstr "128 Mb"
+
+msgid "16 Mb"
+msgstr "16 Mb"
+
+msgid "256 Mb"
+msgstr "256 Mb"
+
+msgid "30 Days"
+msgstr "30 Ημέρες"
+
+msgid "32 Mb"
+msgstr "32 Mb"
+
+msgid "64 Mb"
+msgstr "64 Mb"
+
+msgid "8 Mb"
+msgstr "8 Mb"
+
+msgid "96 Mb"
+msgstr "96 Mb"
+
+msgid "A background update check is in progress, please try again."
+msgstr "Εκτελείται έλεγχος ενημέρωσης στο παρασκήνιο, παρακαλώ δοκιμάστε ξανά."
+
+msgid "A backup has been detected."
+msgstr "Εντοπίστηκε ένα αντίγραφο ασφαλείας."
+
+msgid "Active:"
+msgstr "Ενεργό:"
+
+msgid "Allows the script runner to be launched from extensions."
+msgstr "Επιτρέπει στην εκτέλεση script να εκτελείται από τις επεκτάσεις."
+
+msgid "Allows the softcam manager to be launched from extensions."
+msgstr "Επιτρέπει στη διαχείριση softcam να εκτελείται από τις επεκτάσεις."
+
+msgid ""
+"Allows the softcam to be checked if it stopped working, and restarted "
+"automatically if needed."
+msgstr ""
+"Επιτρέπει τον έλεγχο του softcam αν αυτό σταματήσει και την αυτόματη "
+"επανεκκίνησή του αν απαιτείται."
+
+msgid "Allows you have the window close automatically."
+msgstr "Επιτρέπει το αυτόματο κλείσιμο του παραθύρου."
+
+msgid "Allows you schedule your backups."
+msgstr "Επιτρέπει τον προγραμματισμό των εφεδρειών."
+
+msgid "Allows you schedule your image backups."
+msgstr "Επιτρέπει τον προγραμματισμό των εφεδρειών image."
+
+msgid "Allows you to tag your backups to a box. (default is box name/type)"
+msgstr ""
+"Επιτρέπει τις ετικέτες στα αντίγραφα ασφαλείας ενός δέκτη. (προεπιλογή όνομα "
+"δέκτη/τύπος)"
+
+msgid ""
+"Allows you to tag your image backup to a box. (default is box name/type)"
+msgstr ""
+"Επιτρέπει τις ετικέτες στο αντίγραφο ασφαλείας image ενός δέκτη. (προεπιλογή "
+"όνομα δέκτη/τύπος)"
+
+msgid "Are you ready to create a backup image ?"
+msgstr "Είστε έτοιμοι για τη δημιουργία ενός αντιγράφου ασφαλείας του image ;"
+
+msgid "Are you ready to install ?"
+msgstr "Είστε έτοιμοι για εγκατάσταση ;"
+
+msgid ""
+"Are you sure you want to delete this backup:\n"
+" "
+msgstr ""
+"Σίγουρα θέλετε να διαγραφεί αυτό το αντίγραφο ασφαλείας:\n"
+" "
+
+msgid ""
+"Are you sure you want to download this image:\n"
+" "
+msgstr ""
+"Σίγουρα θέλετε να γίνει λήψη αυτού του image:\n"
+" "
+
+msgid ""
+"Are you sure you want to restore this backup:\n"
+" "
+msgstr ""
+"Σίγουρα θέλετε να γίνει επαναφορά αυτού του αντίγραφου ασφαλείας:\n"
+" "
+
+msgid ""
+"Are you sure you want to restore this image:\n"
+" "
+msgstr ""
+"Σίγουρα θέλετε να γίνει επαναφορά αυτού του image:\n"
+" "
+
+msgid "Backing up Kernel..."
+msgstr "Εφεδρεία Kernel..."
+
+msgid "Backing up Root file system..."
+msgstr "Εφεδρεία του συστήματος αρχείων Ρίζας..."
+
+msgid "Backing up files..."
+msgstr "Εφεδρεία αρχείων..."
+
+msgid "Backup Complete..."
+msgstr "Ολοκλήρωση Εφεδρείας..."
+
+msgid "Backup Confirmation"
+msgstr "Επικύρωση Εφεδρείας"
+
+msgid "Backup Created"
+msgstr "Το αντίγραφο ασφαλείας δημιουργήθηκε"
+
+msgid "Backup Location"
+msgstr "Θέση αντιγράφων ασφαλείας"
+
+msgid ""
+"Backup failed - e. g. wrong backup destination or no space left on backup "
+"device"
+msgstr ""
+"Αποτυχία εφεδρείας - π.χ. λάθος διαδρομή εφεδρείας ή έλλειψη χώρου στη "
+"συσκευή"
+
+msgid ""
+"Backup in progress,\n"
+"Please wait for it to finish, before trying again"
+msgstr ""
+"Εφεδρεία σε εξέλιξη,\n"
+"Παρακαλώ περιμένετε να ολοκληρωθεί πριν ξαναπροσπαθήσετε"
+
+msgid "Backup prefix"
+msgstr "Πρόθεση αντιγράφου ασφαλείας"
+
+msgid "Backups to keep"
+msgstr "Αντίγραφα ασφαλείας για διατήρηση"
+
+msgid "CCcam can't run whilst MGcamd is running"
+msgstr "Το CCcam δεν μπορεί να εκτελεστεί καθώς εκτελείται το MGcamd"
+
+msgid ""
+"Can't un-mount the partition, make sure it is not being used for swap or "
+"record/timeshift paths"
+msgstr ""
+"Αδυναμία αποπροσάρτησης του διαμερίσματος, σιγουρευτείτε ότι δεν "
+"χρησιμοποιείται για swap ή διαδρομές εγγραφών/χρονομετατόπισης"
+
+msgid "Change Location"
+msgstr "Αλλαγή Τοποθεσίας"
+
+msgid "Checking Free RAM.."
+msgstr "Έλεγχος Ελεύθερης RAM..."
+
+msgid "Checking softcams..."
+msgstr "Έλεγχος softcams..."
+
+msgid "Choose Files"
+msgstr "Επιλογή αρχείων"
+
+msgid "Choose local ipk's folder"
+msgstr "Επιλογή φακέλου τοπικών ipk's"
+
+msgid "Choose where to mount your devices to:"
+msgstr "Επιλέξτε το σημείο προσάρτησης των συσκευών σας: "
+
+msgid "Close window on success"
+msgstr "Κλείσιμο παραθύρου μετά την επιτυχία"
+
+msgid "Comparing against backup..."
+msgstr "Σύγκριση με το αντίγραφο ασφαλείας..."
+
+msgid "Create"
+msgstr "Δημιουργία"
+
+msgid "Create and Manage your swap files."
+msgstr "Δημιουργία και Διαχείριση των αρχείων swap."
+
+msgid "Create and Restore complete images of your system."
+msgstr "Δημιουργία και Επαναφορά ολοκληρωμένων images στο σύστημά σας."
+
+msgid "Creating Swap.."
+msgstr "Δημιουργία Swap..."
+
+msgid "Creating list of installed plugins..."
+msgstr "Δημιουργία λίστας των εγκατεστημένων προσθέτων..."
+
+msgid "Creating zip..."
+msgstr "Δημιουργία zip..."
+
+msgid "Deactivate"
+msgstr "Απενεργοποίηση"
+
+msgid "Device: "
+msgstr "Συσκευή: "
+
+msgid "Device: None available"
+msgstr "Συσκευή: Καμία διαθέσιμη"
+
+msgid "Disable Startup"
+msgstr "Απενεργοποίηση Εκκίνησης"
+
+msgid "Do you want to restart GUI now ?"
+msgstr "Να γίνει επανεκκίνηση της επιφάνειας χρήστη τώρα ;"
+
+msgid "Do you want to restore your Enigma2 plugins ?"
+msgstr "Θέλετε να γίνει επαναφορά των προσθέτων Enigma2 ;"
+
+msgid "Do you want to restore your Enigma2 settings ?"
+msgstr "Θέλετε να γίνει επαναφορά των ρυθμίσεων του Enigma2 ;"
+
+msgid "Download Confirmation"
+msgstr "Επιβεβαίωση Λήψης"
+
+msgid "Downloading Image..."
+msgstr "Λήψη Image..."
+
+msgid "Downloads"
+msgstr "Λήψεις"
+
+msgid "Enable Startup"
+msgstr "Ενεργοποίηση Εκκίνησης"
+
+msgid "Enable Swap at startup"
+msgstr "Ενεργοποίηση Swap στην εκκίνηση"
+
+msgid "Enable frozen check"
+msgstr "Ενεργοποίηση ελέγχου παγώματος"
+
+msgid "Enough Retries, delaying till next schedule."
+msgstr ""
+"Αρκετές Επαναπροσπάθειες, καθυστέρηση μέχρι τον επόμενο προγραμματισμό."
+
+msgid "Exit the restore wizard"
+msgstr "Έξοδος από τον οδηγό επαναφοράς"
+
+msgid "Extra IPK's"
+msgstr "Επιπρόσθετα αρχεία IPK"
+
+msgid "Found non-standard softcam, trying to start, this may fail"
+msgstr ""
+"Βρέθηκε ένα μη στάνταρ softcam, προσπάθεια εκκίνησης, πιθανότητα αποτυχίας"
+
+msgid "Free space:"
+msgstr "Ελεύθερος χώρος:"
+
+msgid "Frozen check interval"
+msgstr "Μεσοδιάστημα ελέγχου παγώματος"
+
+msgid "HARD DISK: "
+msgstr "ΣΚΛΗΡΟΣ ΔΙΣΚΟΣ: "
+
+msgid "IPK Installer"
+msgstr "Εγκατάσταση IPK"
+
+msgid "Inactive"
+msgstr "Ανενεργό"
+
+msgid "Install Confirmation"
+msgstr "Επιβεβαίωση Εγκατάστασης"
+
+msgid "Install IPK's from your tmp folder."
+msgstr "Εγκατάσταση αρχείων IPK από το φάκελο tmp."
+
+msgid "Installing..."
+msgstr "Εγκατάσταση..."
+
+msgid ""
+"It seems you have not setup an extra location, please set it up in the "
+"Backup Manager setup menu "
+msgstr ""
+"Φαίνεται ότι δεν έχει ρυθμιστεί επιπρόσθετη τοποθεσία, παρακαλώ ρυθμίστε την "
+"στο μενού ρυθμίσεων της Διαχείρισης Εφεδρείας"
+
+msgid "Location of where backup should be saved."
+msgstr "Τοποθεσία αποθήκευσης του αντιγράφου ασφαλείας."
+
+msgid "Location of where image backup should be saved."
+msgstr "Τοποθεσία αποθήκευσης του αντιγράφου ασφαλείας του image."
+
+msgid "MGcamd can't run whilst CCcam is running"
+msgstr "Το MGcamd δεν μπορεί να εκτελεστεί καθώς εκτελείται το CCcam"
+
+msgid "Manage the backups of your settings."
+msgstr "Διαχείριση των αντιγράφων ασφαλείας των ρυθμίσεών σας."
+
+msgid "Manage your devices mount points."
+msgstr "Διαχείριση των σημείων προσάρτησης των συσκευών σας."
+
+msgid "Max backups to keep (0==all)"
+msgstr "Μέγιστα αντίγραφα ασφαλείας για διατήρηση (0==όλα)"
+
+msgid "Max image backups to keep (0==all)"
+msgstr "Μέγιστα αντίγραφα ασφαλείας image για διατήρηση (0==όλα)"
+
+msgid "Mount Manager"
+msgstr "Διαχείριση Προσαρτήσεων"
+
+msgid "Mount failed"
+msgstr "Αποτυχία προσάρτησης"
+
+msgid "Mount: "
+msgstr "Προσάρτηση: "
+
+msgid "Moving to Backup Location..."
+msgstr "Μετακίνηση στην Τοποθεσίας Εφεδρείας..."
+
+msgid "NO, do not restore plugins"
+msgstr "ΟΧΙ, να μη γίνει επαναφορά των προσθέτων"
+
+msgid "NO, do not restore settings"
+msgstr "ΟΧΙ, να μη γίνει επαναφορά των ρυθμίσεων"
+
+msgid "New Backup"
+msgstr "Νέα Εφεδρεία"
+
+msgid "Next Backup: "
+msgstr "Επόμενη Εφεδρεία: "
+
+msgid ""
+"No config files found, please setup CCcam first\n"
+"in /etc/CCcam.cfg"
+msgstr ""
+"Δεν βρέθηκαν αρχεία ρυθμίσεων, παρακαλώ ρυθμίστε το CCcam πρώτα\n"
+"στο /etc/CCcam.cfg"
+
+msgid ""
+"No config files found, please setup Hypercam first\n"
+"in /etc/hypercam.cfg"
+msgstr ""
+"Δεν βρέθηκαν αρχεία ρυθμίσεων, παρακαλώ ρυθμίστε το Hypercam πρώτα\n"
+"στο /etc/hypercam .cfg"
+
+msgid ""
+"No config files found, please setup MGcamd first\n"
+"in /usr/keys"
+msgstr ""
+"Δεν βρέθηκαν αρχεία ρυθμίσεων, παρακαλώ ρυθμίστε το MGcamd πρώτα\n"
+"στο /usr/keys"
+
+msgid ""
+"No config files found, please setup Oscam first\n"
+"in /etc/tuxbox/config"
+msgstr ""
+"Δεν βρέθηκαν αρχεία ρυθμίσεων, παρακαλώ ρυθμίστε το Oscam πρώτα\n"
+"στο /etc/tuxbox/config"
+
+msgid "No plugins were needed to be installed"
+msgstr "Χωρίς πρόσθετα για εγκατάσταση"
+
+msgid "Now skipping restore process"
+msgstr "Παράκαμψη τώρα της διαδικασίας επαναφοράς"
+
+msgid "OK, to perform a restore"
+msgstr "ΟΚ, να γίνει επαναφορά"
+
+msgid "Please enter a folder that contains some packages."
+msgstr "Παρακαλώ εισάγετε ένα φάκελο που περιέχει μερικά πακέτα."
+
+msgid "Please select device to use as swapfile location"
+msgstr "Επιλέξτε μία συσκευή για χρήση τοποθεσίας swap"
+
+msgid "Please select the file to restore ?"
+msgstr "Παρακαλώ επιλέξτε το αρχείο προς επαναφορά ;"
+
+msgid "Please wait while plugins restore completes..."
+msgstr "Παρακαλώ περιμένετε καθώς ολοκληρώνεται η επαναφορά των προσθέτων..."
+
+msgid "Please wait while scanning for devices..."
+msgstr "Παρακαλώ περιμένετε καθώς γίνεται ανίχνευση για συσκευές..."
+
+#, python-format
+msgid "Please wait while scanning your %s %s devices..."
+msgstr ""
+"Παρακαλώ περιμένετε καθώς γίνεται ανίχνευση του %s %s σας για συσκευές..."
+
+msgid "Please wait while settings restore completes..."
+msgstr "Παρακαλώ περιμένετε καθώς ολοκληρώνεται η επαναφορά των ρυθμίσεων..."
+
+msgid "Please wait while starting\n"
+msgstr "Παρακαλώ περιμένετε καθώς ξεκινά το\n"
+
+msgid "Please wait while stopping\n"
+msgstr "Παρακαλώ περιμένετε καθώς σταματά\n"
+
+msgid "Please wait while the restore prepares"
+msgstr "Παρακαλώ περιμένετε καθώς ετοιμάζεται η επαναφορά"
+
+msgid "Please wait while the system gathers information..."
+msgstr "Παρακαλώ περιμένετε καθώς το σύστημα συλλέγει πληροφορίες..."
+
+msgid "Please wait."
+msgstr "Παρακαλώ περιμένετε."
+
+msgid ""
+"Plugin listing failed - e. g. wrong backup destination or no space left on "
+"backup device"
+msgstr ""
+"Αποτυχία δημιουργίας λίστας προσθέτων - π.χ. λάθος διαδρομή εφεδρείας ή "
+"έλλειψη χώρου στη συσκευή"
+
+msgid "Preparing extra plugins..."
+msgstr "Προετοιμασία επιπρόσθετων προσθέτων..."
+
+msgid "Query before backup starts"
+msgstr "Ερώτηση πριν την εκκίνηση της εφεδρείας"
+
+msgid "Query before image backup starts"
+msgstr "Ερώτηση πριν την εκκίνηση της εφεδρείας image"
+
+msgid "Query before starting backup."
+msgstr "Ερώτηση πριν την εκκίνηση της εφεδρείας."
+
+msgid "Query before starting image backup."
+msgstr "Ερώτηση πριν την εκκίνηση της εφεδρείας του image."
+
+msgid "Rebooting..."
+msgstr "Επανεκκίνηση..."
+
+msgid "Removing temp mounts..."
+msgstr "Αφαίρεση προσωρινών προσαρτήσεων..."
+
+msgid "Repeat how often"
+msgstr "Επανάληψη πόσο συχνά"
+
+#, python-format
+msgid "Restart %s %s."
+msgstr "Επανεκκίνηση του %s %s."
+
+msgid "Restart Enigma2."
+msgstr "Επανεκκίνηση Enigma2."
+
+msgid "Restore Confirmation"
+msgstr "Επιβεβαίωση Επαναφοράς"
+
+msgid "Restore Wizard"
+msgstr "Οδηγός Επαναφοράς"
+
+msgid "Restoring backup..."
+msgstr "Επαναφορά αντιγράφου ασφαλείας..."
+
+msgid "Restoring plugins, this can take a long time..."
+msgstr "Επαναφορά προσθέτων, αυτό μπορεί να διαρκέσει αρκετά..."
+
+msgid "Restoring plugins..."
+msgstr "Επαναφορά προσθέτων..."
+
+msgid "Run"
+msgstr "Εκτέλεση"
+
+msgid "Run your shell scripts."
+msgstr "Εκτέλεση script κελύφους."
+
+msgid "Schedule Backups"
+msgstr "Προγραμματισμός Εφεδρείας"
+
+msgid "Script Runner"
+msgstr "Εκτέλεση Script"
+
+msgid "Select a backup to Restore:"
+msgstr "Επιλογή ενός αντιγράφου ασφαλείας προς Επαναφορά:"
+
+msgid "Select a package to install:"
+msgstr "Επιλογή πακέτου για εγκατάσταση:"
+
+msgid "Select an image to Download:"
+msgstr "Επιλογή ενός image για Λήψη:"
+
+msgid "Select an image to restore:"
+msgstr "Επιλογή ενός image για επαναφορά:"
+
+msgid "Select extra packages folder"
+msgstr "Επιλογή φακέλου επιπρόσθετων πακέτων"
+
+msgid "Select folder that contains plugins"
+msgstr "Επιλογή φακέλου που περιέχει πρόσθετα"
+
+msgid "Select the Swap File Size:"
+msgstr "Επιλογή Μεγέθους Αρχείου Swap: "
+
+msgid "Select:"
+msgstr "Επιλογή:"
+
+msgid "Set the interval to be checked in mins."
+msgstr "Ορισμός μεσοδιαστήματος ελέγχου σε λεπτά."
+
+msgid "Set the repeat interval of backup schedule."
+msgstr "Ορισμός του μεσοδιαστήματος επανάληψης του προγραμματισμού εφεδρείας."
+
+msgid "Set the time of backup to start."
+msgstr "Ορισμός ώρας έναρξης εφεδρείας."
+
+msgid "Setting Up..."
+msgstr "Ρύθμιση..."
+
+msgid "Setup Mounts"
+msgstr "Ρυθμίσεις Προσαρτήσεων"
+
+msgid "Show in extensions"
+msgstr "Εμφάνιση στις επεκτάσεις"
+
+msgid "SoftCam and CI"
+msgstr "SoftCam και CI"
+
+msgid "Softcam Manager"
+msgstr "Διαχείριση Softcam"
+
+msgid "Softcam Starting..."
+msgstr "Εκκίνηση Softcam..."
+
+msgid "Softcam Stopping..."
+msgstr "Σταμάτημα Softcam..."
+
+msgid ""
+"Sorry but that location does not exist or is not setup, please set it up in "
+"the Backup Manager setup menu "
+msgstr ""
+"Λυπούμαστε, αλλά αυτή η τοποθεσία δεν υπάρχει ή δεν έχει ρυθμιστεί, παρακαλώ "
+"ρυθμίστε την στο μενού της Διαχείρισης Εφεδρείας"
+
+msgid "Sorry feeds are down for maintenance, Please try again later."
+msgstr ""
+"Λυπούμαστε, οι πηγές δεν είναι διαθέσιμες λόγω συντήρησης, δοκιμάστε "
+"αργότερα."
+
+msgid ""
+"Sorry the feeds are down for maintenance, Please try using Backup Manager to "
+"restore plugins later."
+msgstr ""
+"Λυπούμαστε, οι πηγές δεν είναι διαθέσιμες λόγω συντήρησης, δοκιμάστε να "
+"χρησιμοποιήσετε τη Διαχείριση Εφεδρείας για την επαναφορά των προσθέτων "
+"αργότερα."
+
+msgid ""
+"Sorry the feeds are down for maintenance, Please try using the Backup "
+"Manager to restore plugins later."
+msgstr ""
+"Λυπούμαστε, οι πηγές δεν είναι διαθέσιμες λόγω συντήρησης, δοκιμάστε να "
+"χρησιμοποιήσετε τη Διαχείριση Εφεδρείας για την επαναφορά των προσθέτων "
+"αργότερα."
+
+msgid "Sorry, But this machine is not supported yet."
+msgstr "Λυπούμαστε, αλλά αυτή η συσκευή δεν υποστηρίζεται ακόμα."
+
+msgid "Sorry, but the file is not compatible with this image version."
+msgstr ""
+"Λυπούμαστε, αλλά αυτό το αρχείο δεν είναι συμβατό με αυτή την έκδοση του "
+"image."
+
+msgid "Sorry, but the restore failed."
+msgstr "Λυπούμαστε, αλλά η επαναφορά απέτυχε."
+
+msgid ""
+"Sorry, no physical devices that supports SWAP attached. Can't create "
+"Swapfile on network or fat32 filesystems"
+msgstr ""
+"Λυπούμαστε, δεν έχουν συνδεθεί συσκευές που υποστηρίζουν το SWAP. Αδυναμία "
+"δημιουργίας αρχείου Swap στο δίκτυο ή σε συστήματα αρχείων fat32"
+
+msgid ""
+"Sorry, not enough free ram found, and no physical devices that supports SWAP "
+"attached. Can't create Swapfile on network or fat32 filesystems, unable to "
+"make backup"
+msgstr ""
+"Λυπούμαστε, μη επαρκής μνήμη ram, και δεν έχουν συνδεθεί συσκευές που "
+"υποστηρίζουν το SWAP. Αδυναμία δημιουργίας αρχείου swap στο δίκτυο ή σε "
+"συστήματα αρχείων fat32, αδυναμία εφεδρείας"
+
+msgid "Starting..."
+msgstr "Εκκίνηση..."
+
+msgid "Status:"
+msgstr "Κατάσταση:"
+
+msgid "Swap File not found. You have to create the file before to activate."
+msgstr ""
+"Το αρχείο swap δεν βρέθηκε. Πρέπει να δημιουργήστε το αρχείο πριν το "
+"ενεργοποιήσετε."
+
+msgid "Swap Manager"
+msgstr "Διαχείριση Swap"
+
+msgid "Swap Place:"
+msgstr "Τοποθεσία Swap: "
+
+msgid "Swap Size:"
+msgstr "Μέγεθος Swap:"
+
+msgid "Temp Folder"
+msgstr "Προσωρινός Φάκελος"
+
+msgid "The backup location does not have enough free space."
+msgstr "Η τοποθεσία της εφεδρείας δεν διαθέτει αρκετό ελεύθερο χώρο."
+
+msgid "The backup location does not have enough free space.\n"
+msgstr "Η τοποθεσία της εφεδρείας δεν διαθέτει αρκετό ελεύθερο χώρο.\n"
+
+#, python-format
+msgid ""
+"The changes need a system restart to take effect.\n"
+"Restart your %s %s now?"
+msgstr ""
+"Απαιτείται επανεκκίνηση συστήματος για να εφαρμοστούν οι αλλαγές.\n"
+"Επανεκκίνηση του %s %s σας τώρα;"
+
+msgid "The chosen location does not exist, using /media/hdd"
+msgstr "Η επιλεγμένη τοποθεσία δεν υπάρχει, χρήση του /media/hdd"
+
+msgid "The wizard is finished now, and will reboot"
+msgstr "Ο οδηγός ολοκληρώθηκε και θα γίνει επανεκκίνηση"
+
+msgid "This Device is already mounted as HDD."
+msgstr "Αυτή η Συσκευή έχει ήδη προσαρτηθεί ως HDD."
+
+msgid "Time of Backup to start"
+msgstr "Ώρα έναρξης Εφεδρείας"
+
+msgid "USB: "
+msgstr "USB: "
+
+msgid "Updating mount locations."
+msgstr "Ενημέρωση τοποθεσιών προσάρτησης."
+
+msgid "Use as HDD"
+msgstr "Χρήση ως HDD"
+
+msgid "ViX"
+msgstr "ViX"
+
+msgid "ViX Backup Manager"
+msgstr "ViX Διαχείριση Εφεδρείας"
+
+msgid "ViX Image Manager"
+msgstr "ViX Διαχείριση Image"
+
+msgid "ViX Mount Manager"
+msgstr "ViX Διαχείριση Προσαρτήσεων"
+
+msgid "ViX Script Runner"
+msgstr "ViX Εκτέλεση Script"
+
+msgid "ViX Swap Manager"
+msgstr "ViX Διαχείριση Swap"
+
+msgid "View Progress"
+msgstr "Επισκόπηση Προόδου"
+
+msgid "Wait please while creating swapfile..."
+msgstr "Παρακαλώ περιμένετε καθώς δημιουργείται το αρχείο swap..."
+
+msgid ""
+"Wait please while scanning\n"
+"for softcam's..."
+msgstr ""
+"Παρακαλώ περιμένετε για την ανίχνευση\n"
+"για softcam's..."
+
+msgid "Wait please while scanning..."
+msgstr "Παρακαλώ περιμένετε καθώς γίνεται ανίχνευση..."
+
+msgid ""
+"Welcome to the restore wizard.\n"
+"\n"
+"A backup has been detected.\n"
+"You can use this wizard to restore your setting and any extra plugins that "
+"where installed when the backup was created.\n"
+msgstr ""
+"Καλωσήρθατε στον οδηγό επαναφοράς.\n"
+"\n"
+"Έχει εντοπιστεί ένα αντίγραφο ασφαλείας.\n"
+"Μπορείτε να χρησιμοποιήσετε αυτό τον οδηγό για την επαναφορά των ρυθμίσεών "
+"σας και όλα τα επιπρόσθετα πρόσθετα που ήταν εγκατεστημένα κατά την "
+"εφεδρεία.\n"
+
+msgid "YES, to restore plugins"
+msgstr "ΝΑΙ, για επαναφορά προσθέτων"
+
+msgid "YES, to restore settings"
+msgstr "ΝΑΙ, για επαναφορά ρυθμίσεων"
+
+msgid "You have no backup to delete."
+msgstr "Δεν υπάρχουν αντίγραφα ασφαλείας για διαγραφή."
+
+msgid "You have no backups to restore."
+msgstr "Δεν υπάρχουν αντίγραφα ασφαλείας για επαναφορά."
+
+msgid "You have no image to delete."
+msgstr "Δεν υπάρχει image για διαγραφή."
+
+msgid "You have no image to download."
+msgstr "Δεν υπάρχει image για λήψη."
+
+msgid "You have no image to restore."
+msgstr "Δεν υπάρχει image για επαναφορά."
+
+msgid "You have to create a Swap File before to activate the autostart."
+msgstr "Πρέπει να δημιουργήσετε ένα αρχείο Swap πριν την αυτόματη εκκίνηση."
+
+#, python-format
+msgid ""
+"Your %s %s is about to run a backup of your settings and detect your "
+"plugins,\n"
+"Do you want to allow this?"
+msgstr ""
+"Ο %s %s σας θα εκτελέσει εφεδρεία των ρυθμίσεών σας και εντοπισμό των "
+"προσθέτων σας,\n"
+"Θέλετε να επιτραπεί αυτό;"
+
+#, python-format
+msgid ""
+"Your %s %s is about to run a full image backup, this can take about 6 "
+"minutes to complete,\n"
+"do you want to allow this?"
+msgstr ""
+"Ο %s %s σας θα εκτελέσει πλήρη εφεδρεία του image σας, αυτό θα χρειαστεί "
+"περίπου 6 λεπτά για να ολοκληρωθεί,\n"
+"θέλετε να επιτραπεί αυτό;"
+
+#, python-format
+msgid ""
+"Your %s %s is not connected to the internet, Please try using Backup Manager "
+"to restore plugins later."
+msgstr ""
+"Ο %s %s σας δεν είναι συνδεδεμένος στο διαδίκτυο, παρακαλώ χρησιμοποιήστε τη "
+"Διαχείριση Εφεδρείας για επαναφορά των προσθέτων αργότερα."
+
+#, python-format
+msgid ""
+"Your %s %s is not connected to the internet, Please try using the Backup "
+"Manager to restore plugins later."
+msgstr ""
+"Ο %s %s σας δεν είναι συνδεδεμένος στο διαδίκτυο, παρακαλώ χρησιμοποιήστε τη "
+"Διαχείριση Εφεδρείας για επαναφορά των προσθέτων αργότερα."
+
+msgid "echo 'Downloading Image.'"
+msgstr "echo 'Λήψη Image.'"
+
+msgid "there is a problem with this device, please reformat and try again."
+msgstr ""
+"υπάρχει πρόβλημα με αυτή τη συσκευή, παρακαλώ επαναμορφοποιήστε την και "
+"ξαναπροσπαθήστε."
+
+msgid ""
+"Can't unmount the partition, make sure it is not being used for swap or "
+"record/timeshift paths"
+msgstr ""
+"Partition aushängen nicht möglich. Bitte sicher stellen das sie nicht für "
+"Swap/Aufnahme/TimeShift benutzt wird."
+
+msgid ""
+"It seems you have not setup an extra location, please setup in Backup "
+"Manager setup menu "
+msgstr ""
+"Es sieht so aus als wenn kein Extra Ort konfiguriert wurde. Bitte in den "
+"Einstellungen vom Backup-Manager einstellen."
+
+msgid "Please wait while gathers information... A"
+msgstr "Bitte warten Informationen werden gesammelt... A"
+
+msgid "Please wait while gathers information... B"
+msgstr "Bitte warten Informationen werden gesammelt... B"
+
+msgid "Sorry Image Restore is not supported on the "
+msgstr ""
+"Tut uns leid aber Image Wiederherstellung wird nicht unterstützt bei der "
+
+msgid ""
+"Sorry but that location does not exist or is not setup, please setup in "
+"Backup Manager setup menu "
+msgstr ""
+"Tut uns leid aber der Ort ist nicht vorhanden oder nicht konfiguriert. Bitte "
+"in den Einstellungen vom Backup-Manager einstellen."
+
+msgid "The backup location does not have enough freespace.\n"
+msgstr "Das Sicherungs Verzeichnis hat nicht genug freien Speicher.\n"
