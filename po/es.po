@@ -2,22 +2,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: enigma2\n"
+"Project-Id-Version: enigma2 3.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-01-30 22:11+0100\n"
-"PO-Revision-Date: 2014-01-22 23:31+0100\n"
-"Last-Translator: Andy Blackburn <andyblac@icloud.com>\n"
+"PO-Revision-Date: 2023-09-01 23:31+0100\n"
+"Last-Translator: David Almudévar\n"
 "Language-Team: www.CostaBlancaTranslations.com "
-"<maria@CostaBlancaTranslations.com>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.4\n"
-"X-Poedit-SourceCharset: iso-8859-1\n"
 
-#
 msgid ""
 "\n"
 "Advanced options and settings."
@@ -25,22 +22,21 @@ msgstr ""
 "\n"
 "Opciones avanzadas y configuración."
 
-#
 msgid ""
 "\n"
 "After pressing OK, please wait!"
 msgstr ""
 "\n"
-"Después de pulsar 'OK', espera."
+"Después de pulsar 'OK', espera!"
 
-#
 #, fuzzy, python-format
 msgid ""
 "\n"
 "Backup your %s %s settings."
-msgstr "Configuración del sistema de copias de seguridad."
+msgstr ""
+"\n"
+"Hacer copia de Seguridad de tus %s %s opciones."
 
-#
 msgid ""
 "\n"
 "Edit the upgrade source address."
@@ -48,7 +44,6 @@ msgstr ""
 "\n"
 "Editar la ubicación de la actualización."
 
-#
 #, fuzzy, python-format
 msgid ""
 "\n"
@@ -57,7 +52,6 @@ msgstr ""
 "\n"
 "Gestiona las extensiones o complementos de tu %s %s."
 
-#
 #, fuzzy, python-format
 msgid ""
 "\n"
@@ -66,7 +60,6 @@ msgstr ""
 "\n"
 "Actualización online de tu software %s %s."
 
-#
 msgid ""
 "\n"
 "Press OK on your remote control to continue."
@@ -74,14 +67,20 @@ msgstr ""
 "\n"
 "Pulsa 'OK' en el mando para continuar."
 
-#
+#, fuzzy
+msgid ""
+"\n"
+"Recording in progress."
+msgstr "Grabación en progreso."
+
 #, fuzzy, python-format
 msgid ""
 "\n"
 "Restore your %s %s settings."
-msgstr "Configuración del sistema de restauración"
+msgstr ""
+"\n"
+"Restaura tus %s %s configuraciones."
 
-#
 #, fuzzy, python-format
 msgid ""
 "\n"
@@ -90,7 +89,6 @@ msgstr ""
 "\n"
 "Restaura la %s %s con un nuevo Firmware."
 
-#
 msgid ""
 "\n"
 "Restore your backups by date."
@@ -98,15 +96,13 @@ msgstr ""
 "\n"
 "Restaura las copias de seguridad por fecha."
 
-#
 msgid ""
 "\n"
 "Scan for local extensions and install them."
 msgstr ""
 "\n"
-"Busca extensiones locales y las instala."
+"Busca extensiones locales e instalalas"
 
-#
 msgid ""
 "\n"
 "Select your backup device.\n"
@@ -116,13 +112,20 @@ msgstr ""
 "Selecciona tu dispositivo de copias de seguridad.\n"
 "Dispositivo actual:"
 
-#
 msgid ""
 "\n"
 "View, install and remove available or installed packages."
 msgstr ""
 "\n"
 "Ver, instalar y eliminar paquetes disponibles o instalados."
+
+#, fuzzy, python-format
+msgid " (Channel %s)"
+msgstr "Lista de Canales"
+
+#, python-format
+msgid " (Partition %d)"
+msgstr " (Partición %d)"
 
 msgid " (PiP)"
 msgstr " (PiP)"
@@ -133,16 +136,40 @@ msgstr " (Radio)"
 msgid " (TV)"
 msgstr " (TV)"
 
+#, fuzzy
+msgid " (disabled)"
+msgstr "desactivado"
+
+msgid " (higher than any auto)"
+msgstr " (mayor qye cualquier auto)"
+
+msgid " (higher than rotor any auto)"
+msgstr " (mayor que el rotor cualquier auto)"
+
+msgid " (lower than any auto)"
+msgstr " (menor que cualquier auto)"
+
 msgid " and"
 msgstr "y"
 
-#
 msgid "%-H:%M"
 msgstr "%-H:%M"
 
 #, python-format
+msgid "%.0f GB"
+msgstr "%.0f GB"
+
+#, python-format
+msgid "%.0f MB"
+msgstr "%.0f MB"
+
+#, python-format
 msgid "%02d.%02d - %02d.%02d (%s%d min)"
-msgstr ""
+msgstr "%02d.%02d - %02d.%02d (%s%d min)"
+
+#, fuzzy, python-format
+msgid "%02d:%02d"
+msgstr "%2d:%02d"
 
 #. TRANSLATORS: short time representation hour:minute
 #, python-format
@@ -165,7 +192,6 @@ msgstr "%A %e %B %Y"
 msgid "%A %e %b"
 msgstr "%A %e %b"
 
-#
 msgid "%H:%M"
 msgstr "%H:%M"
 
@@ -180,6 +206,10 @@ msgstr "%a %e/%m"
 #. TRANSLATORS: long date representation short dayname daynum short monthname hour:minute in strftime() format! See 'man strftime'
 msgid "%a %e/%m  %-H:%M"
 msgstr "%a %e/%m  %-H:%M"
+
+#, fuzzy
+msgid "%d %B %Y"
+msgstr "%d.%B %Y"
 
 #, python-format
 msgid "%d GB"
@@ -203,7 +233,6 @@ msgid_plural "%d Mins"
 msgstr[0] "%d min"
 msgstr[1] "%d mins"
 
-#
 #. TRANSLATORS: Intermediate scanning result, '%d' channel(s) have been found so far
 #, python-format
 msgid "%d channel found"
@@ -217,14 +246,12 @@ msgid_plural "%d hours"
 msgstr[0] "%d hora"
 msgstr[1] "%d horas"
 
-#
 #, python-format
 msgid "%d job is running in the background!"
 msgid_plural "%d jobs are running in the background!"
 msgstr[0] "%d acción ejecutándose en segundo plano."
 msgstr[1] "%d acciones ejecutándose en segundo plano."
 
-#
 #, python-format
 msgid "%d jobs are running in the background!"
 msgstr "¡%d acciones están ejecutándose en segundo plano!"
@@ -233,7 +260,6 @@ msgstr "¡%d acciones están ejecutándose en segundo plano!"
 msgid "%d kB"
 msgstr "%d kB"
 
-#
 #, python-format
 msgid "%d min"
 msgstr "%d min"
@@ -249,19 +275,27 @@ msgid "%d minutes"
 msgstr "%d minutos"
 
 #, python-format
+msgid "%d pixel wide"
+msgid_plural "%d pixels wide"
+msgstr[0] "%d pixel de ancho"
+msgstr[1] "%d pixeles de ancho"
+
+#, python-format
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] "%d segundo"
 msgstr[1] "%d segundos"
 
-#
 #, python-format
 msgid "%d wireless network found!"
 msgid_plural "%d wireless networks found!"
 msgstr[0] "¡%d red wifi encontrada!"
 msgstr[1] "¡%d redes wifi encontradas!"
 
-#
+#, fuzzy, python-format
+msgid "%d.%02d. %02d:%02d"
+msgstr "%2d:%02d:%02d"
+
 msgid "%d.%B %Y"
 msgstr "%d.%B %Y"
 
@@ -273,34 +307,30 @@ msgstr "%k:%M %e/%m"
 msgid "%s %s advanced remote control (native)"
 msgstr "Mando avanzando de %s %s (nativo)."
 
-#
 #, fuzzy, python-format
 msgid "%s %s format data DVD (HDTV compatible)"
 msgstr "Formato %s %s DVD (HDTV compatible)."
 
 #, python-format
 msgid "%s %s front panel"
-msgstr ""
+msgstr "%s %s panel frontal"
 
-#
 #, fuzzy, python-format
 msgid "%s %s ir keyboard"
-msgstr "Teclado virtual"
+msgstr "%s %s Teclado ir"
 
 #, python-format
 msgid "%s %s ir mouse"
-msgstr ""
+msgstr "%s %s ratón ir"
 
 #, fuzzy, python-format
 msgid "%s %s remote control (native)"
 msgstr "Mando %s %s (nativo)"
 
-#
 #, fuzzy, python-format
 msgid "%s %s software because updates are available."
 msgstr "Hay actualizaciones disponibles del software de %s %s."
 
-#
 #, python-format
 msgid "%s (%s)\n"
 msgstr "%s (%s)\n"
@@ -313,17 +343,20 @@ msgstr "%s ya no se utiliza. ¿Quieres borrarlo?"
 #, python-format
 msgid "%s updated package available"
 msgid_plural "%s updated packages available"
-msgstr[0] "%s paquete reciente disponible."
-msgstr[1] "%s paquetes recientes disponibles."
+msgstr[0] "%s actualización disponible."
+msgstr[1] "%s actualizaciones disponibles."
 
-#
 #, fuzzy, python-format
 msgid "%s%d min"
-msgstr "%d min"
+msgstr "%s%d min"
 
 #, python-format
 msgid "%s/%s: %s"
 msgstr "%s/%s: %s"
+
+#, python-format
+msgid "%s:%s"
+msgstr ""
 
 #, python-format
 msgid "'%s' contains %d file(s) and %d sub-directories.\n"
@@ -335,95 +368,82 @@ msgstr "(Todos los lectores)"
 msgid "(Show only reader:"
 msgstr "(Mostrar sólo lector:"
 
-#
 msgid "(ZAP)"
 msgstr "(ZAPEAR)"
 
-#
 msgid "(empty)"
 msgstr "(vacío)"
 
-#
 msgid "(show optional DVD audio menu)"
 msgstr "(Ver menú opcional de audio de DVD)"
 
 msgid "* = Restart Required"
 msgstr "* = Reinicio obligatorio"
 
-#
 msgid "* Only available if more than one interface is active."
 msgstr "* Sólo disponible si hay más de una interfaz activa."
 
-msgid "/s"
-msgstr ""
+#, fuzzy
+msgid "* current animation"
+msgstr "Activar configuración actual"
 
-#
+msgid "/s"
+msgstr "/s"
+
 msgid "1.0"
 msgstr "1.0"
 
-#
 msgid "1.1"
 msgstr "1.1"
 
-#
 msgid "1.2"
 msgstr "1.2"
 
 msgid "1080i"
-msgstr ""
+msgstr "1080i"
 
 msgid "1080p 24Hz"
-msgstr ""
+msgstr "1080p 24Hz"
 
 msgid "1080p 25Hz"
-msgstr ""
+msgstr "1080p 25Hz"
 
 msgid "1080p 30Hz"
-msgstr ""
+msgstr "1080p 30Hz"
 
 msgid "1080p 50Hz"
-msgstr ""
+msgstr "1080p 50Hz"
 
 msgid "1080p 60Hz"
-msgstr ""
+msgstr "1080p 60Hz"
 
-#
 msgid "12V output"
 msgstr "12V salida"
 
-#
 msgid "12V output."
 msgstr "12V salida"
 
-#
 msgid "13 V"
 msgstr "13 V"
 
-#
 msgid "16:10"
 msgstr "16:10"
 
-#
 msgid "16:10 Letterbox"
 msgstr "16:10 Buzón"
 
-#
 msgid "16:10 PanScan"
 msgstr "16:10 PanScan"
 
-#
 msgid "16:9"
 msgstr "16:9"
 
-#
 msgid "16:9 Letterbox"
 msgstr "16:9 Buzón"
 
-#
 msgid "16:9 always"
 msgstr "Siempre 16:9"
 
-#
 msgid "18 V"
 msgstr "18 V"
 
@@ -433,14 +453,32 @@ msgstr "1X"
 msgid "1st Infobar timeout"
 msgstr "Duración de la 1ª barra de información"
 
+#, fuzzy
+msgid "2160p 24Hz"
+msgstr "720p 24Hz"
+
+#, fuzzy
+msgid "2160p 25Hz"
+msgstr "1080p 25Hz"
+
+#, fuzzy
+msgid "2160p 30Hz"
+msgstr "1080p 30Hz"
+
+#, fuzzy
+msgid "2160p 50Hz"
+msgstr "1080p 50Hz"
+
+#, fuzzy
+msgid "2160p 60Hz"
+msgstr "1080p 60Hz"
+
 msgid "23.976"
 msgstr "23.976"
 
-#
 msgid "24"
 msgstr "24"
 
-#
 msgid "25"
 msgstr "25"
 
@@ -450,17 +488,17 @@ msgstr "29.97"
 msgid "2X"
 msgstr "2X"
 
-#
 msgid "30"
 msgstr "30"
 
 msgid "3D Mode"
 msgstr "Modo 3D"
 
-#
-#, fuzzy
 msgid "3D Surround"
-msgstr "Sonido"
+msgstr "3D Surround"
+
+msgid "3D Surround Speaker Position"
+msgstr "Posición del Altavoz 3D Surround"
 
 msgid "3D setup"
 msgstr "Configuración 3D"
@@ -468,18 +506,16 @@ msgstr "Configuración 3D"
 msgid "3X"
 msgstr "3X"
 
-msgid "3d mode"
-msgstr "Modo 3D"
+#, fuzzy
+msgid "480p 24Hz"
+msgstr "1080p 24Hz"
 
-#
 msgid "4:3"
 msgstr "4:3"
 
-#
 msgid "4:3 Letterbox"
 msgstr "4:3 Buzón"
 
-#
 msgid "4:3 PanScan"
 msgstr "4:3 PanScan"
 
@@ -487,51 +523,68 @@ msgid "4X"
 msgstr "4X"
 
 msgid "720p"
-msgstr ""
+msgstr "720p"
 
 msgid "720p 24Hz"
-msgstr ""
+msgstr "720p 24Hz"
 
-#
+#, fuzzy
+msgid "< Default >"
+msgstr "Por defecto"
+
+#, fuzzy
+msgid "< Default with Picon >"
+msgstr "<Por defecto con Picon>"
+
 msgid "<Current movielist location>"
 msgstr "<Ubicación actual de la lista de películas>"
 
-#
 msgid "<Default movie location>"
 msgstr "<Ubicación de películas por defecto>"
 
-#
 msgid "<Last timer location>"
 msgstr "<Ubicación de la última grabación>"
 
-#
 msgid "<unknown>"
 msgstr "<Desconocido>"
 
-#
 msgid "??"
 msgstr "??"
 
-#
 msgid "A"
 msgstr "A"
+
+#, fuzzy
+msgid ""
+"A background update check is in progress,\n"
+"please wait a few minutes and try again."
+msgstr ""
+"Hay una comprobación de actualización en curso de fondo,\n"
+"Espera unos minutos y vuelve a intentarlo."
+
+#, fuzzy
+msgid ""
+"A background update check is in progress, please wait a few minutes and then "
+"try again."
+msgstr ""
+"Una comprobación de actualización está en proceso, por favor, espera unos minutos "
+"y vuelvelo a probar."
 
 msgid ""
 "A background update check is in progress, please wait a few minutes and try "
 "again."
 msgstr ""
-"Comprobación de actualización de fondo en curso. Espera unos minutos y "
-"vuelve a intentarlo."
+"Una comprobación de actualización está en proceso, por favor, espera unos minutos "
+"y vuelvelo a probar."
 
 #, python-format
 msgid ""
 "A configuration file (%s) has been modified since it was installed.\n"
 "Do you want to keep your modifications?"
 msgstr ""
-"Se ha modificado un archivo de configuración(%s) desde su instalación.\n"
+"Se ha modificado un archivo de configuración (%s) desde su instalación.\n"
 "¿Quieres mantener las modificaciones?"
 
-#
 #, python-format
 msgid ""
 "A configuration file (%s) was modified since Installation.\n"
@@ -540,68 +593,60 @@ msgstr ""
 "El fichero de configuración (%s) se ha modificado desde la instalación.\n"
 "¿Quieres conservar tu versión?"
 
-#
 #, fuzzy, python-format
 msgid ""
 "A finished power timer wants to shut down\n"
 "your %s %s. Shutdown now?"
 msgstr ""
-"Una grabación terminada quiere desconectar\n"
+"Un temporizador finalizado quiere apagar\n"
 " la %s %s. ¿Apagar ahora?"
 
-#
 #, fuzzy, python-format
 msgid ""
 "A finished powertimer wants to reboot your %s %s.\n"
 "Do that now?"
 msgstr ""
-"Una grabación desconectada quiere poner la\n"
-"%s %s en modo espera. ¿Hacerlo ahora?"
+"Un temporizador finalizado quiere reiniciar tu %s %s.\n"
+"¿Hacerlo ahora?"
 
-#
-#, fuzzy
 msgid ""
 "A finished powertimer wants to restart the user interface.\n"
 "Do that now?"
 msgstr ""
-"La %s %s quiere reinciar la interfaz de usuario.\n"
+"Un temporizador finalizado quiere reinciar la interfaz de usuario.\n"
 "¿Hacerlo ahora?"
 
-#
 #, fuzzy, python-format
 msgid ""
 "A finished powertimer wants to set your\n"
 "%s %s to standby. Do that now?"
 msgstr ""
-"Una grabación desconectada quiere poner la\n"
+"Un temporizador finalizado quiere poner el\n"
 "%s %s en modo espera. ¿Hacerlo ahora?"
 
-#
 #, fuzzy, python-format
 msgid ""
 "A finished powertimer wants to shutdown your %s %s.\n"
 "Do that now?"
 msgstr ""
-"Una grabación terminada quiere desconectar\n"
-" la %s %s. ¿Apagar ahora?"
+"Un temporizador finalizado quiere apagar tu %s %s.\n"
+"¿Apagar ahora?"
 
-#
 #, fuzzy, python-format
 msgid ""
 "A finished record timer wants to set your\n"
 "%s %s to standby. Do that now?"
 msgstr ""
-"Una grabación terminada quiere poner la \n"
+"Una grabación terminada quiere poner tu \n"
 "%s %s en modo espera. ¿Hacerlo ahora?"
 
-#
 #, fuzzy, python-format
 msgid ""
 "A finished record timer wants to shut down\n"
 "your %s %s. Shutdown now?"
 msgstr ""
-"Una grabación terminada quiere desconectar\n"
-" la %s %s. ¿Apagarla ahora?"
+"Una grabación terminada quiere apagar\n"
+"tu %s %s. ¿Apagarla ahora?"
 
 #, python-format
 msgid ""
@@ -611,48 +656,31 @@ msgstr ""
 "Se ha iniciado una grabación:\n"
 "%s"
 
-#
+#, fuzzy
 msgid ""
-"A recording is currently running.\n"
+"A recording is currently in progress.\n"
 "What do you want to do?"
 msgstr ""
 "Hay una grabación en curso.\n"
 "¿Qué quieres hacer?"
 
-#
-msgid ""
-"A recording is currently running. Please stop the recording before trying to "
-"configure the positioner."
-msgstr ""
-"Hay una grabación curso. Detén la grabación antes de configurar el motor."
-
 msgid ""
 "A recording is currently running. Please stop the recording before trying to "
 "scan."
 msgstr ""
-"Hay una grabación en curso. Detén la grabación antes de iniciar la búsqueda."
-
-#
-msgid ""
-"A recording is currently running. Please stop the recording before trying to "
-"start the satfinder."
-msgstr ""
-"Hay una grabación en curso. Detén la grabación antes de iniciar el buscador "
-"de satélites."
+"Una grabación está en progreso. Por favor, detenla antes de intentar la "
+"busqueda."
 
 msgid "A repeating timer or just once?"
-msgstr "¿De repetición o solo una vez?"
+msgstr "¿Recurrente o solo una vez?"
 
-#
 #, python-format
 msgid "A required tool (%s) was not found."
-msgstr "No se ha encontrado una herramienta necesaria (%s)."
+msgstr "No se ha encontrado la herramienta necesaria (%s)."
 
-#
 msgid "A search for available updates is currently in progress."
 msgstr "Hay una búsqueda de actualizaciones disponibles en curso."
 
-#
 msgid ""
 "A second configured interface has been found.\n"
 "\n"
@@ -662,29 +690,25 @@ msgstr ""
 "\n"
 "¿Quieres desabilitar la segunda interfaz de red?"
 
-#
 #, fuzzy, python-format
 msgid ""
 "A sleep timer wants to set your\n"
-"%s %s to standby. Do that now?"
+"%s %s to standby. Proceed?"
 msgstr ""
-"Un temporizador nocturno quiere poner la\n"
+"Un temporizador quiere poner tu\n"
 "%s %s en modo espera. ¿Hacerlo ahora?"
 
-#
 #, fuzzy, python-format
 msgid ""
 "A sleep timer wants to shut down\n"
 "your %s %s. Shutdown now?"
 msgstr ""
-"Un temporizador nocturno quiere apagar\n"
-"la %s %s. ¿Hacerlo ahora?"
+"Un temporizador quiere apagar\n"
+"tu %s %s. ¿Apagar ahora?"
 
-#
 msgid "A small overview of the available icon states and actions."
 msgstr "Un vistazo a los estados y acciones disponibles de los iconos."
 
-#
 msgid ""
 "A timer failed to record!\n"
 "Disable TV and try again?\n"
@@ -692,23 +716,18 @@ msgstr ""
 "Un temporizador no ha conseguido grabar.\n"
 "¿Quieres desactivar la televisión e intentarlo otra vez?\n"
 
-msgid "A/V settings"
-msgstr "Ajustes A/V"
+msgid "AAC downmix"
+msgstr "AAC downmix"
 
-#
-msgid "AA"
-msgstr "AA"
+msgid "AAC transcoding"
+msgstr "AAC transcoding"
 
 #, fuzzy
-msgid "AAC downmix"
-msgstr "Mezcla digital"
-
-#
-msgid "AB"
-msgstr "AB"
+msgid "AC3"
+msgstr "DAC"
 
 msgid "ACQUIRING TSID/ONID"
-msgstr ""
+msgstr "LOCALIZANDO TSID/ONID"
 
 msgid "AFP Setup"
 msgstr "Configuración AFP"
@@ -720,55 +739,66 @@ msgstr "Configuración AFP"
 msgid "AV aspect is %s."
 msgstr "El aspecto AV es %s."
 
-#
-msgid "Abort"
-msgstr "Abortar"
+#, fuzzy
+msgid "AV settings"
+msgstr "Configuración A/V"
 
-#
+msgid "Abort"
+msgstr "Cancelar"
+
+#, fuzzy
+msgid "Abort alternatives edit"
+msgstr "Cancelar la edición de alternativas"
+
+#, fuzzy
+msgid "Abort bouquet edit"
+msgstr "Cancelar Edición del bouquet"
+
+#, fuzzy
+msgid "Abort favourites edit"
+msgstr "Cancelar edición de favoritos"
+
 msgid "About"
 msgstr "Acerca de"
 
-#
 msgid "About..."
 msgstr "Acerca de..."
 
-#
 msgid "Accesspoint:"
 msgstr "Punto de acceso:"
-
-#, fuzzy
-msgid "Action on long power button press"
-msgstr "Acción con pulsación larga de la tecla de encendido."
-
-#, fuzzy
-msgid "Action on short power button press"
-msgstr "Acción con pulsación corta de la tecla de encendido."
 
 msgid "Activate"
 msgstr "Activar"
 
-#
+msgid "Activate HbbTV (RedButton)"
+msgstr "Activar HbbTV (Botón Rojo)"
+
 #, fuzzy
 msgid "Activate MAC-address configuration"
-msgstr "Activar configuración actual."
+msgstr "Activar configuración de la dirección MAC"
 
-msgid "Activate PiP"
-msgstr "Activar PiP"
-
-#
 msgid "Activate Picture in Picture"
 msgstr "Activar Picture in Picture"
 
-#
 msgid "Activate current configuration"
 msgstr "Activar configuración actual."
 
-#
+#, fuzzy
+msgid "Activate network adapter configuration"
+msgstr "Activar la configuración del adaptador de red"
+
 msgid "Activate network settings"
 msgstr "Activar ajustes de red."
 
 msgid "Activate the configured network settings."
 msgstr "Activar los ajustes configurados de red."
+
+#, fuzzy
+msgid "Activate timeshift end"
+msgstr "Activar finalización del timeshift"
+
+msgid "Activate timeshift end and pause"
+msgstr "Activar finalización del timeshift y pausar"
 
 msgid "Active"
 msgstr "Activo"
@@ -776,66 +806,70 @@ msgstr "Activo"
 msgid "Active clients"
 msgstr "Clientes activos"
 
-#
 msgid "Adapter settings"
 msgstr "Configuración del adaptador"
 
-#
 msgid "Add"
 msgstr "Añadir"
 
 msgid "Add AutoTimer"
-msgstr "Añadir autotemporizador"
+msgstr "Añadir Temporizador Auto"
 
 msgid "Add Timer"
 msgstr "Añadir temporizador"
 
 msgid "Add a auto timer for current event"
-msgstr "Añadir autotemporizador para el programa actual."
+msgstr "Añadir temporizador para el programa actual."
 
-#
 msgid "Add a mark"
 msgstr "Añadir marca"
 
-#
 msgid "Add a nameserver entry"
 msgstr "Añadir entrada en el servidor de nombres."
 
-#
 msgid "Add a new title"
 msgstr "Añadir un nuevo título."
 
-#, fuzzy
 msgid "Add a record timer"
-msgstr "Añadir un temporizador de grabación para el programa actual."
+msgstr "Añadir un temporizador de grabación"
 
 msgid "Add a record timer for current event"
 msgstr "Añadir un temporizador de grabación para el programa actual."
 
 msgid "Add a zap timer for current event"
-msgstr "Añadir un temporizador de zapping para el programa actual."
+msgstr "Añadir un temporizador de cambio de canal para el programa actual."
+
+msgid "Add a zap timer for next event"
+msgstr "Añadir un temporizador de cambio de canal para el siguiente programa."
 
 #, fuzzy
-msgid "Add a zap timer for next event"
-msgstr "Añadir un temporizador de zapping para el programa actual."
+msgid "Add alternatives"
+msgstr "Añadir alternativas"
 
-#
 msgid "Add bookmark"
 msgstr "Añadir marcador"
 
-#
+#, fuzzy
+msgid "Add bouquet"
+msgstr "Añadir grupo"
+
+#, fuzzy
+msgid "Add bouquet to parental protection"
+msgstr "Añadir bouquet a la protección de control parental"
+
 msgid "Add directory to playlist"
 msgstr "Añadir el directorio a la lista de reproducción."
 
-#
 msgid "Add file to playlist"
 msgstr "Añadir el archivo a la lista de reproducción."
 
-#
 msgid "Add files to playlist"
 msgstr "Añadir archivos a la lista de reproducción."
 
-#
+#, fuzzy
+msgid "Add marker"
+msgstr "Añadir marcador"
+
 msgid "Add provider"
 msgstr "Añadir proveedor"
 
@@ -851,25 +885,32 @@ msgstr "Añadir grabación (indefinida)."
 msgid "Add recording (stop after current event)"
 msgstr "Añadir grabación (detener después del programa actual)."
 
-#
 msgid "Add service"
 msgstr "Añadir canal"
 
-#
+#, fuzzy
+msgid "Add service to bouquet"
+msgstr "Añadir canal al grupo"
+
+#, fuzzy
+msgid "Add service to favourites"
+msgstr "Añadir canal a favoritos"
+
 msgid "Add timer"
 msgstr "Añadir temporizador"
 
-#
 msgid "Add title"
 msgstr "Añadir título"
 
-#
 msgid "Add to bouquet"
 msgstr "Añadir al grupo"
 
-#
 msgid "Add to favourites"
 msgstr "Añadir a favoritos"
+
+#, fuzzy
+msgid "Add to parental protection"
+msgstr "Añadir al control parental"
 
 msgid "Add/Remove timer for current event"
 msgstr "Añadir/eliminar temporizador para el programa actual."
@@ -883,10 +924,6 @@ msgstr "Información adicional"
 msgid "Address"
 msgstr "Dirección"
 
-msgid "Adjust 3D settings"
-msgstr "Ajustar configuración 3D"
-
-#
 msgid ""
 "Adjust the color settings so that all the color shades are distinguishable, "
 "but appear as saturated as possible. If you are happy with the result, press "
@@ -898,61 +935,69 @@ msgstr ""
 "pulsa 'OK' para cerrar el ajuste de vídeo fino, o usa una tecla numérica "
 "para seleccionar otras pantallas de prueba."
 
-#
+#, fuzzy
+msgid "Advanced"
+msgstr "Avanzado
+
 msgid "Advanced options"
 msgstr "Opciones avanzadas"
 
-#
 msgid "Advanced restore"
 msgstr "Restauración avanzada"
 
-#
 msgid "Advanced software"
 msgstr "Software avanzado"
 
-#
 msgid "Advanced software plugin"
 msgstr "Complemento de sofware avanzado"
 
-#
 msgid "Advanced video enhancement setup"
 msgstr "Configuración mejorada de vídeo avanzado"
 
-msgid "Advanced video setup"
-msgstr "Configuración avanzada de vídeo"
-
-#
 msgid "After event"
 msgstr "Después del programa"
 
-#
 msgid "Album"
 msgstr "Álbum"
 
 msgid "Alias"
 msgstr "Alias"
 
-#
 msgid "All"
 msgstr "Todo"
 
 msgid "All ages"
 msgstr "Todas las edades"
 
-#
 #, fuzzy
-msgid "All resolutions"
-msgstr "Resolución"
+msgid "All frequency"
+msgstr "Todas las frecuencias"
 
-msgid "All satellites"
-msgstr "Todos los satélites"
+msgid "All resolutions"
+msgstr "Todas las reoluciones"
+
+#, fuzzy
+msgid "All satellites 1 (USALS)"
+msgstr "Todos los satelites 1 (USALS)"
+
+#, fuzzy
+msgid "All satellites 2 (USALS)"
+msgstr "Todos los satelites 2 (USALS)"
+
+#, fuzzy
+msgid "All satellites 3 (USALS)"
+msgstr "Todos los satelites 3 (USALS)"
+
+#, fuzzy
+msgid "All satellites 4 (USALS)"
+msgstr "Todos los satelites 4 (USALS)"
 
 msgid "Allocate"
 msgstr "Asignar"
 
 msgid "Allocate unused memory index"
 msgstr "Asignar índice de memoria no utilizada."
-
+######
 msgid "Allow subtitle language to equal audio language"
 msgstr "Igualar el idioma de subtítulos al de audio"
 
