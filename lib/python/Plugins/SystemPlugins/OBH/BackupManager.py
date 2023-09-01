@@ -293,7 +293,7 @@ class OpenBhBackupManager(Screen):
 				self["lab1"].setText(_("Device: ") + config.backupmanager.backuplocation.value + "\n" + _("There is a problem with this device. Please reformat it and try again."))
 
 	def createSetup(self):
-		self.session.openWithCallback(self.setupDone, OpenBhBackupManagerMenu, 'openbhbackupmanager', 'SystemPlugins/OBH', PluginLanguageDomain)
+		self.session.openWithCallback(self.setupDone, OpenBhBackupManagerMenu, 'openbhbackupmanager', 'SystemPlugins/OBH')
 
 	def showLog(self):
 		self.sel = self["list"].getCurrent()

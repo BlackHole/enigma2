@@ -1821,7 +1821,7 @@ class ImageManagerDownload(Screen):
 
 class ImageManagerSetup(Setup):
 	def __init__(self, session):
-		Setup.__init__(self, session=session, setup="openbhimagemanager", plugin="SystemPlugins/OBH", PluginLanguageDomain=PluginLanguageDomain)
+		Setup.__init__(self, session=session, setup="openbhimagemanager", plugin="SystemPlugins/OBH")
 
 	def keySave(self):
 		if config.imagemanager.folderprefix.value == "":

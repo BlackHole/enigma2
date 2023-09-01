@@ -54,7 +54,7 @@ class OpenBhScriptRunner(IpkgInstaller):
 									  }, -1)
 
 	def createSetup(self):
-		self.session.open(Setup, "openbhscriptrunner", "SystemPlugins/OBH", PluginLanguageDomain)
+		self.session.open(Setup, "openbhscriptrunner", "SystemPlugins/OBH")
 
 	def install(self):
 		list = self.list.getSelectionsList()
