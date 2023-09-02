@@ -997,45 +997,39 @@ msgstr "Asignar"
 
 msgid "Allocate unused memory index"
 msgstr "Asignar índice de memoria no utilizada."
-######
+
 msgid "Allow subtitle language to equal audio language"
 msgstr "Igualar el idioma de subtítulos al de audio"
 
 msgid "Allow subtitles for hearing impaired"
 msgstr "Permitir subtítulos para sordos"
 
-#, fuzzy
 msgid "Allow unstable (experimental) updates"
 msgstr "Permitir actualizaciones inestables (no probadas)"
-
-#, fuzzy
-msgid "Allows more detailed information to be in the crash log"
-msgstr "Permite más detalles en el historial de caídas"
 
 msgid "Allows the %s %s to read the stored EPG data regularly."
 msgstr "Permite que la %s %s lea los datos grabados en el EPG periódicamente."
 
 msgid "Allows the %s %s to store the EPG data regularly."
-msgstr "Permite que la %s %s lea los datos grabados en el EPG periódicamente."
+msgstr "Permite que la %s %s grabe los datos grabados del EPG periódicamente."
 
 msgid ""
 "Allows you to adjust the amount of time the resolution infomation display on "
 "screen."
 msgstr ""
+"Te permite ajustar la cantidad de tiempo que la información de resolución "
+"se muestra en pantalla."
 
 #, fuzzy
 msgid ""
 "Allows you to enable the debug logs. They contain very detailed information "
-"about everything the system does."
+"about everything the system does. Reboot required to enable this!"
 msgstr ""
 "Te permite habilitar el historial de depuración. Contiene información muy "
-"detallada de todo lo que hace el sistema."
+"detallada de todo lo que hace el sistema. Obligatorio reiniciar para activarlo!"
 
-#, fuzzy
 msgid "Allows you to enable/disable displaying icons on the front panel."
-msgstr ""
-"Te permite habilitar/deshabilitar la visualización de iconos en el panel "
-"frontal."
+msgstr "Permite activar/desactivar el mostrar o no iconos en el panel frontal."
 
 msgid "Allows you to hide the extensions of known file types."
 msgstr "Te permite ocultar extensiones de tipos de archivo conocidos."
@@ -1043,7 +1037,6 @@ msgstr "Te permite ocultar extensiones de tipos de archivo conocidos."
 msgid "Allows you to send a copy of the log to yourself."
 msgstr "Te permite enviarte una copia del historial."
 
-#, fuzzy
 msgid ""
 "Allows you to set the maximum size (MB) of the individual debug logs. When "
 "that size is reached, a new file will be created."
@@ -1054,27 +1047,25 @@ msgstr ""
 msgid "Allows you to setup the button to do what you choose."
 msgstr "Permite configurar la tecla para que haga lo que quieras."
 
-#, fuzzy
 msgid "Allows you to show/hide CCcam Info in extensions (blue button)."
-msgstr "Te permite mostrar/ocultar CCcam en extensiones (tecla azul)."
+msgstr "Te permite mostrar/ocultar la información CCcam en extensiones (tecla azul)."
 
 msgid "Allows you to show/hide Log Manager in extensions (blue button)."
-msgstr ""
-"Te permite mostrar/ocultar el administrador de historiales en extensiones "
-"(tecla azul)."
+msgstr "Te permite mostrar/ocultar el administrador de historiales en extensiones (tecla azul)."
 
-#, fuzzy
 msgid "Allows you to show/hide OScam Info in extensions (blue button)."
-msgstr "Te permite mostrar/ocultar OScam en extensiones (tecla azul)."
+msgstr "Te permite mostrar/ocultar la infromación OScam en extensiones (tecla azul)."
 
-#
 msgid "Alpha"
 msgstr "Alfa"
 
 msgid "Alphanumeric"
 msgstr "Alfanumérico"
 
-#
+#, fuzzy
+msgid "Also on standby"
+msgstr "Tambien en espera"
+
 msgid "Alternative"
 msgstr "Alternativa"
 
@@ -1084,7 +1075,6 @@ msgstr "Modo de numeración alternativo"
 msgid "Alternative radio mode"
 msgstr "Modo radio alternativo"
 
-#
 msgid "Alternative services tuner priority"
 msgstr "Prioridad de sintonizadores alternativa"
 
@@ -1092,37 +1082,49 @@ msgid "Always ask"
 msgstr "Preguntar siempre"
 
 msgid "Always hide infobar"
-msgstr ""
+msgstr "Esconder siempre la barra de información"
 
 msgid "Always show bouquets"
-msgstr "Visualizar grupos siempre"
+msgstr "Visualizar siempre los grupos"
 
-#
 msgid "An empty filename is illegal."
 msgstr "El nombre del fichero no puede estar vacío."
 
 msgid "An error occurred while downloading the packetlist. Please try again."
-msgstr ""
-"Ha ocurrido un erorr durante la descarga de la lista de paquetes. Vuelve a "
-"intentarlo."
+msgstr "Ha ocurrido un error durante la descarga de la lista de paquetes. Vuelve a intentarlo."
 
-#
 msgid "An unknown error occurred!"
-msgstr "Se ha producido un error desconocido."
+msgstr "Se ha producido un error desconocido!"
+
+#, fuzzy
+msgid "Animation Setup"
+msgstr "Configuración de la animación"
+
+#, fuzzy
+msgid "Animation Speed"
+msgstr "Velocidad de la animación"
+
+#, fuzzy
+msgid "Animations"
+msgstr "Animaciones"
 
 msgid "Any activity"
 msgstr "Cualquier actividad"
 
-#
 msgid "Arabic"
 msgstr "Árabe"
 
-#
-#, fuzzy
-msgid "Are you sure to remove this entry?"
-msgstr "¿Seguro que quieres salir de este asistente?"
+#, fuzzy, python-format
+msgid "Are you ready to install \"%s\" ?"
+msgstr "Preparado para instalar \"%s\" ?"
 
-#
+#, fuzzy, python-format
+msgid "Are you ready to remove \"%s\" ?"
+msgstr "Preparado para borrar \"%s\" ?"
+
+msgid "Are you sure to remove this entry?"
+msgstr "¿Seguro que quieres borrar esta entrada?"
+
 msgid ""
 "Are you sure you want to activate this network configuration?\n"
 "\n"
@@ -1135,30 +1137,52 @@ msgid ""
 "the following backup:\n"
 msgstr ""
 "¿Seguro que quires borrar\n"
-"la siguiente copia?\n"
+"la siguiente copia?:\n"
 
-msgid "Are you sure you want to delete all selected logs:\n"
-msgstr "¿Seguro que quieres borrar todos los historiales seleccionados?\n"
+#, fuzzy
+msgid "Are you sure you want to delete all the selected logs:\n"
+msgstr "¿Seguro que quieres borrar todos los historiales seleccionados?:\n"
+
+#, fuzzy
+msgid "Are you sure you want to delete the EPG data from:\n"
+msgstr "Seguro que quieres borrar los datos EPG desde:\n"
 
 msgid "Are you sure you want to delete this log:\n"
 msgstr "¿Seguro que quieres borrar este historial?\n"
 
-#
 msgid ""
 "Are you sure you want to delete this:\n"
 " "
 msgstr ""
-"¿Seguro que quieres borrar esto?\n"
+"¿Seguro que quieres borrar esto?:\n"
 " "
 
-#
 msgid "Are you sure you want to exit this wizard?"
 msgstr "¿Seguro que quieres salir de este asistente?"
 
-msgid "Are you sure you want to reload the EPG data from:\n"
-msgstr "¿Seguro que quieres volver a cargar los datos EPG de...?\n"
+#, fuzzy
+msgid "Are you sure you want to purge all deleted user bouquets?"
+msgstr "Seguro que quieres eliminar definitivamente todos los grupos de usuario ?"
 
-#
+msgid "Are you sure you want to reload the EPG data from:\n"
+msgstr "¿Seguro que quieres volver a cargar los datos EPG de?:\n"
+
+#, fuzzy, python-format
+msgid "Are you sure you want to remove all %d.%d%s%s services?"
+msgstr "Seguro que quieres borrar todos los %d.%d%s%s canales?"
+
+#, fuzzy
+msgid "Are you sure you want to remove all cable services?"
+msgstr "Seguro que quieres borrar todos los canales de cable?"
+
+#, fuzzy
+msgid "Are you sure you want to remove all terrestrial services?"
+msgstr "Seguro que quieres borrar todos los canales TDT?"
+
+#, fuzzy
+msgid "Are you sure you want to remove this entry?"
+msgstr "¿Seguro que quieres borrar esta entrada?"
+
 msgid ""
 "Are you sure you want to restart your network interfaces?\n"
 "\n"
@@ -1186,34 +1210,36 @@ msgstr ""
 "Tu receptor se reiniciará cuando se restaure la copia de seguridad."
 
 msgid "Are you sure you want to save the EPG Cache to:\n"
-msgstr "¿Seguro que quieres guardar el Caché EPG en...?\n"
+msgstr "¿Seguro que quieres guardar el Caché EPG en?:\n"
 
 msgid "Are you sure you want to send this log:\n"
 msgstr "¿Seguro que quieres enviar este historial?\n"
 
 #, fuzzy, python-format
 msgid "Are you sure you want to update your %s %s ?"
-msgstr "¿Seguro que quieres actualizar la %s %s?"
+msgstr "¿Seguro que quieres actualizar tu %s %s?"
 
-#
 msgid "Artist"
 msgstr "Artista"
 
 msgid "Arts/Culture"
 msgstr "Arte y cultura"
 
-#
 msgid "Ask user"
 msgstr "Preguntar al usuario"
 
-msgid "Aspect ratio"
-msgstr "Aspecto"
+msgid "Ask user (with default as 'no')"
+msgstr "Preguntar al usuario (por defecto 'no')"
 
-#
+msgid "Ask user (with default as 'yes')"
+msgstr "Preguntar al usuario (por defecto 'si')"
+
+msgid "Aspect ratio"
+msgstr "Ratio de Aspecto"
+
 msgid "Assigned CAIds:"
 msgstr "CAIds asignados:"
 
-#
 msgid "Assigned services/provider:"
 msgstr "Canales/proveedor asignados:"
 
@@ -1222,6 +1248,13 @@ msgstr "Al final:"
 
 msgid "Attach a file"
 msgstr "Adjuntar archivo"
+
+msgid "Attention, this is repeated timer!\n"
+msgstr "Atención! este temporizador está repetido!\n"
+
+#, fuzzy
+msgid "Audio"
+msgstr "Audio"
 
 msgid "Audio PID"
 msgstr "Audio PID"
@@ -1241,42 +1274,39 @@ msgstr "Selección de idioma de audio 4"
 msgid "Audio options..."
 msgstr "Opciones de audio..."
 
-#
 #, python-format
 msgid "Audio track (%s) format"
 msgstr "Formato de pista de audio (%s)"
 
-#
 #, python-format
 msgid "Audio track (%s) language"
 msgstr "Idioma de pista de audio (%s)"
 
-#
 msgid "Author: "
-msgstr "Autor:"
+msgstr "Autor: "
 
-#
 msgid "Authoring mode"
 msgstr "Modo de autorización"
 
-#
 #. TRANSLATORS: (aspect ratio policy: always try to display as fullscreen, when there is no content (black bars) on left/right, even if this breaks the aspect.
 msgid "Auto"
 msgstr "Auto"
 
-#
 msgid "Auto Deep Standby"
 msgstr "Hibernación automática"
 
-#
+msgid "Auto EXIF Orientation rotation/flipping"
+msgstr "Orientación vertical/horizontal automática por EXIF"
+
 msgid "Auto Standby"
 msgstr "Modo de espera automático"
 
-#
+msgid "Auto Volume Level"
+msgstr "Nivel de Volumen Automático"
+
 msgid "Auto chapter split every ? minutes (0=never)"
 msgstr "División automática de capítulos cada ? minutos (0=nunca)."
 
-#
 msgid "Auto flesh"
 msgstr "Auto flesh"
 
@@ -1284,36 +1314,38 @@ msgid "Auto focus"
 msgstr "Autoenfoque"
 
 msgid "Auto focus commencing ..."
-msgstr "Autoenfoque empezando"
+msgstr "Autoenfoque empezando ..."
 
 msgid "Auto language selection"
 msgstr "Selección automática de idioma"
 
-#
+msgid "Auto play blu-ray file"
+msgstr "Inicio Automático del blu-ray"
+
 msgid "Auto scart switching"
 msgstr "Cambio automático de SCART"
 
-#
+#, fuzzy
+msgid "AutoTimer overview"
+msgstr "Descripción general del temporizador"
+
 msgid "Automatic"
 msgstr "Automático"
 
-#
 msgid "Automatic Scan"
 msgstr "Búsqueda automática"
 
 msgid "Automatic image backup"
-msgstr "Copia automática de Image"
+msgstr "Copia automática de Imagen"
 
 msgid "Automatic refresh"
-msgstr "Reinicio automático"
+msgstr "Actualización automática"
 
-#, fuzzy
 msgid "Automatic resolution"
-msgstr "Búsqueda automática"
+msgstr "Resolución automática"
 
-#, fuzzy
 msgid "Automatic resolution label"
-msgstr "Búsqueda automática"
+msgstr "Etiqueta de resolución automática"
 
 msgid "Automatic save"
 msgstr "Guardado automático"
@@ -1325,11 +1357,10 @@ msgid "Automatic settings backup"
 msgstr "Copia de configuración automática"
 
 msgid "Automatically start timeshift after"
-msgstr ""
+msgstr "Iniciar automáticamente el timeshift despues"
 
-#, fuzzy
 msgid "Automatically turn on external subtitles"
-msgstr "Subtítulos externos en amarillo"
+msgstr "Encender automáticamente los subtítulos externos"
 
 msgid "Automatically update Client/Server View?"
 msgstr "¿Actualizar automáticamente la visualización de cliente/servidor?"
@@ -1340,37 +1371,30 @@ msgstr "Autoinicio"
 msgid "Autostart:"
 msgstr "Autoinicio:"
 
-#
 msgid "Available format variables"
 msgstr "Variables de formato disponibles"
 
 msgid "Available shares:"
-msgstr "Intercambios disponibles"
+msgstr "Intercambios disponibles:"
 
-#
 msgid "B"
 msgstr "B"
 
-#
-msgid "BA"
-msgstr "BA"
+msgid "BER:"
+msgstr "BER:"
 
-#
-msgid "BB"
-msgstr "BB"
-
-#
 msgid "Back"
 msgstr "Atrás"
 
-#
+msgid "Back/Recall"
+msgstr "Atras/Reclamar"
+
 msgid "Background"
 msgstr "Fondo"
 
 msgid "Background check"
 msgstr "Búsqueda de fondo"
 
-#
 msgid "Background color"
 msgstr "Color de fondo"
 
@@ -1386,58 +1410,48 @@ msgstr "Administrador de copias de seguridad"
 msgid "Backup completed."
 msgstr "Copia de seguridad terminada."
 
-#
 msgid "Backup failed."
 msgstr "Copia de seguridad fallida."
 
-#
 msgid "Backup is running..."
 msgstr "Copia de seguridad en curso..."
 
-#
 msgid "Backup system settings"
 msgstr "Configuración del sistema de copias de seguridad."
 
-#
 msgid "Band"
 msgstr "Banda"
 
-#
 msgid "Bandwidth"
 msgstr "Ancho de banda"
 
-#
 msgid "Base time"
 msgstr "Hora de inicio"
 
 msgid "Basque"
 msgstr "Euskera"
 
-#
 msgid "Begin time"
 msgstr "Hora de inicio"
 
-#
 msgid "Behavior of 'pause' when paused"
-msgstr "Comportamiento de \"pausa\" en pausa."
+msgstr "Comportamiento de 'pausa' en pausa."
 
-#
 msgid "Behavior of 0 key in PiP-mode"
 msgstr "Comportamiento de la tecla '0' en modo PiP."
 
-#
 msgid "Behavior when a movie is started"
 msgstr "Comportamiento cuando ha empezado una película."
 
-#
 msgid "Behavior when a movie is stopped"
 msgstr "Comportamiento cuando se ha parado una película."
 
-#
 msgid "Behavior when a movie reaches the end"
-msgstr "Comportamiento cuando una película está llegando al final."
+msgstr "Comportamiento cuando una película acaba."
 
-#
+msgid "Big PiP"
+msgstr "PiP Grande"
+
 msgid "Bitrate:"
 msgstr "Bitrate:"
 
@@ -1450,14 +1464,16 @@ msgstr "Pantalla negra"
 msgid "Black screen till locked"
 msgstr "Pantalla negra hasta el bloqueo"
 
-#
 msgid "Block noise reduction"
 msgstr "Reducción de bloque de ruido"
 
 msgid "Blue"
 msgstr "Azul"
 
-#
+#, fuzzy
+msgid "Blue long"
+msgstr "Azul largo"
+
 msgid "Bookmarks"
 msgstr "Marcadores"
 
@@ -1470,7 +1486,6 @@ msgstr "Reforzar verde"
 msgid "Bouquet List"
 msgstr "Lista de grupos"
 
-#
 msgid "Brightness"
 msgstr "Brillo"
 
@@ -1480,12 +1495,16 @@ msgstr "Brillo (normal)"
 msgid "Brightness (Standby)"
 msgstr "Brillo (modo de espera)"
 
+#, python-format
+msgid "Buffering %d%%"
+msgstr "Almacenando Búfer: %d%%"
+
 msgid "Buffers:"
-msgstr "Buffers:"
+msgstr "Búfers:"
 
 #, fuzzy, python-format
-msgid "Build:\t%s"
-msgstr "Compilación: %s"
+msgid "Build:\t%s.%s%s (%s)\n"
+msgstr "Compilación:\t%s.%s%s (%s)\n"
 
 #, python-format
 msgid "Build: %s"
@@ -1494,23 +1513,19 @@ msgstr "Compilación: %s"
 msgid "Bulgarian"
 msgstr "Búlgaro"
 
-#
 msgid "Burn DVD"
 msgstr "Grabar DVD"
 
-#
 #, python-format
 msgid "Burn audio track (%s)"
 msgstr "Grabar pista de audio (%s)"
 
-#
 msgid "Burn existing image to DVD"
 msgstr "Graba la imagen actual en DVD"
 
 msgid "Burn to DVD"
 msgstr "Grabar a DVD..."
 
-#
 msgid "Bus: "
 msgstr "Bus: "
 
@@ -1520,11 +1535,19 @@ msgstr "Tecla"
 msgid "Button setup"
 msgstr "Configuración de teclas"
 
+#, fuzzy
+msgid "Button setup for"
+msgstr "Configuración de tecla para"
+
+#, fuzzy
+msgid "ButtonSetup"
+msgstr "Configuración de Tecla"
+
 msgid "By Team BH"
-msgstr "Por el equipo de Obh"
+msgstr "Por el equipo de BH"
 
 msgid "Bypass HDMI EDID Check"
-msgstr ""
+msgstr "Omitir verificación HDMI EDID"
 
 msgid "Bytes received:"
 msgstr "Bytes recibidos:"
@@ -1532,7 +1555,6 @@ msgstr "Bytes recibidos:"
 msgid "Bytes sent:"
 msgstr "Bytes enviados:"
 
-#
 msgid "C-Band"
 msgstr "Banda-C"
 
@@ -1576,10 +1598,10 @@ msgid "CCcam Remote Info"
 msgstr "Información remota CCcam"
 
 msgid "CCcam Server Info"
-msgstr "Información de servidor CCcam"
+msgstr "Información del servidor CCcam"
 
 msgid "CCcam Share Info"
-msgstr "Info de intercambios de CCcam"
+msgstr "Info de intercambio de CCcam"
 
 msgid "CCcam Shares Info"
 msgstr "Info de intercambios de CCcam"
@@ -1588,34 +1610,42 @@ msgid "CCcam info"
 msgstr "Información CCcam"
 
 msgid "CH"
-msgstr ""
+msgstr "CH"
+
+#, python-format
+msgid "CH%s"
+msgstr "CH%s"
 
 msgid "CHANGE BOUQUET"
 msgstr "CAMBIAR GRUPO"
 
-#
+#, fuzzy
+msgid "CI (Common Interface) Setup"
+msgstr "Configuración CI (Interfaz común)"
+
 msgid "CI assignment"
 msgstr "Asignación CI"
 
-#, python-format
-msgid "CPU:\t%s"
-msgstr ""
+#, fuzzy, python-format
+msgid "CPU speed:\t%s\n"
+msgstr "Velocidad CPU:\t%s"
 
-#
+#, fuzzy, python-format
+msgid "CPU:\t%s\n"
+msgstr "CPU:\t%s\n"
+
 msgid "CVBS"
 msgstr "CVBS"
 
 msgid "CaID: "
-msgstr "CaID:"
+msgstr "CaID: "
 
-#
 msgid "Cable"
 msgstr "Cable"
 
 msgid "Cable Scan"
 msgstr "Búsqueda de cable"
 
-#
 msgid "Cache thumbnails"
 msgstr "Caché de miniaturas"
 
@@ -1626,10 +1656,10 @@ msgid "Calculate"
 msgstr "Calcular"
 
 msgid "Calculate all positions"
-msgstr "Calcular todos las posiciones"
+msgstr "Calcular todas las posiciones"
 
 msgid "Calculation complete"
-msgstr "."
+msgstr "Cálculo finalizado"
 
 msgid "Calibrate"
 msgstr "Calibrar"
@@ -1637,11 +1667,9 @@ msgstr "Calibrar"
 msgid "Can be used for different fps between external subtitles and video."
 msgstr "Puede usarse para distintas fps entre subtítulos externos y vídeos."
 
-#
 msgid "Cancel"
 msgstr "Cancelar"
 
-#, fuzzy
 msgid "Cancel save timeshift as movie"
 msgstr "No guardar Timeshift como película"
 
@@ -1652,12 +1680,16 @@ msgid "Cannot determine"
 msgstr "No se puede determinar"
 
 msgid "Cannot find any signal ..., aborting !"
-msgstr "Ningún señal encontrado... se abandona!"
+msgstr "No encuentro señal alguna..., cancelando!"
 
+#, fuzzy
 msgid "Cannot move to trash can"
 msgstr "No se puede mover a la papelera"
 
-#
+#, fuzzy
+msgid "Capabilities: "
+msgstr "Capacidades: "
+
 msgid "Capacity: "
 msgstr "Capacidad: "
 
@@ -1668,7 +1700,7 @@ msgid "Cards:"
 msgstr "Tarjetas:"
 
 msgid "Cards: "
-msgstr "Tarjetas:"
+msgstr "Tarjetas: "
 
 msgid "Cards: 0"
 msgstr "Tarjetas: 0"
@@ -1676,62 +1708,48 @@ msgstr "Tarjetas: 0"
 msgid "Cardserial"
 msgstr "Nº serie de tarjeta"
 
+#, fuzzy
+msgid "Cascade PiP"
+msgstr "PiP en cascada"
+
 msgid "Center DVB subtitles"
 msgstr "Centrar subtítulos DVB"
 
-#
+#, fuzzy
+msgid "Change PIN"
+msgstr "Cambiar PIN"
+
 msgid "Change bouquets in quickzap"
-msgstr "Cambiar de lista en zapping rápido"
+msgstr "Cambiar de grupos en zapping rápido"
+
+msgid "Change next timer"
+msgstr "Cambiar siguiente temporizador"
 
 #, fuzzy
-msgid "Change next timer"
-msgstr "Hora actual:"
-
-#
-msgid "Change pin code"
-msgstr "Cambiar código pin"
+msgid "Change recording (add time)"
+msgstr "Cambiar grabación (añadir tiempo)"
 
 msgid "Change recording (duration)"
 msgstr "Cambiar grabación (duración)"
 
+#, fuzzy
 msgid "Change recording (endtime)"
-msgstr "Cambiar grabación (fin)"
+msgstr "Cambiar grabación (hora de finalización)"
 
 msgid "Change repeat and delay settings?"
 msgstr "¿Cambiar ajustes de repetición y retraso?"
 
-msgid "Change service PIN"
-msgstr "Cambiar el PIN de canal"
-
-msgid "Change service PINs"
-msgstr "Cambiar los PIN de canal"
-
-msgid "Change setup PIN"
-msgstr "Cambiar el PIN de configuración"
-
-#
 msgid "Change step size"
 msgstr "Cambiar tamaño del salto"
 
-#
-#, fuzzy
 msgid "Change timer"
-msgstr "Cambiar tamaño del salto"
+msgstr "Cambiar temporizador"
 
-#
-#, fuzzy
 msgid "Change to bouquet"
-msgstr "Añadir al grupo"
+msgstr "Cambiar al grupo"
 
-msgid "Changelog"
-msgstr "Cambios de historial"
-
-#
 msgid "Channel"
 msgstr "Canal"
-
-msgid "Channel +/- button mode"
-msgstr "Modo de tecla de canal +/-"
 
 msgid "Channel 1 at start"
 msgstr "Canal 1 al inicio"
@@ -1742,10 +1760,17 @@ msgstr "Información de canal"
 msgid "Channel List"
 msgstr "Lista de canales"
 
+#, fuzzy
+msgid "Channel down"
+msgstr "Bajar Canal"
+
+#, fuzzy
+msgid "Channel info"
+msgstr "Información de canal"
+
 msgid "Channel list context menu"
 msgstr "Menú de contexto de lista de canales"
 
-#, fuzzy
 msgid "Channel list cursor behavior"
 msgstr "Previsualiación de la lista de canales"
 
@@ -1761,43 +1786,37 @@ msgstr "Modo de servicio de la lista de canales*"
 msgid "Channel list type"
 msgstr "Tipo de lista de canales"
 
-#
 msgid "Channel not in services list"
 msgstr "El canal no está en la lista."
 
 msgid "Channel preview mode"
 msgstr "Modo de previsualización de canales"
 
-#
 msgid "Channel selection"
 msgstr "Selección de canal"
 
-#
-#, fuzzy
 msgid "Channel selection settings"
-msgstr "Ajustes de la colección"
+msgstr "Ajustes de selección de canal"
 
-#
+#, fuzzy
+msgid "Channel up"
+msgstr "Subir Canal"
+
 msgid "Channel:"
 msgstr "Canal:"
 
-#
 msgid "ChannelEPG settings"
 msgstr "Ajustes de canal EPG"
 
-#
 msgid "Chap."
 msgstr "Cap."
 
-#
 msgid "Chapter"
 msgstr "Capítulo"
 
-#
 msgid "Chapter:"
 msgstr "Capítulo:"
 
-#
 msgid "Check"
 msgstr "Comprobar"
 
@@ -1810,13 +1829,9 @@ msgstr "Comprobar la conexión a internet"
 msgid "Check the internet connection again"
 msgstr "Volver a comprobar la conexión a internet"
 
-msgid "Checking Feeds"
-msgstr "Comprobando fuentes"
-
 msgid "Checking Logs..."
 msgstr "Comprobando historiales..."
 
-#
 msgid "Checking filesystem..."
 msgstr "Comprobando el sistema de archivos..."
 
@@ -1826,20 +1841,20 @@ msgstr "Comprobando actualizaciones..."
 msgid "Checking the internet connection"
 msgstr "Comprobando la conexión a internet"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
-"Checking tuner %d\n"
+"Checking tuner %s\n"
 "DiSEqC port %s for %s"
 msgstr ""
-"Comprobando el sintonizador %d\n"
+"Comprobando el sintonizador %s\n"
 "Puerto DiSEqC %s para %s"
 
 msgid "Children/Youth"
 msgstr "Niños y adolescentes"
 
 #, fuzzy, python-format
-msgid "Chipset:\tBCM%s"
-msgstr "Chipset: BCM%s"
+msgid "Chipset:\tBCM%s\n"
+msgstr "Chipset:\tBCM%s\n"
 
 #, python-format
 msgid "Chipset: BCM%s"
@@ -1852,49 +1867,56 @@ msgid "Choose a tag for easy finding a recording."
 msgstr "Elige una etiqueta para encontrar fácilmente una grabación."
 
 msgid "Choose between Daily, Weekly, Weekdays or user defined."
-msgstr "Elige: diario, semanal, entre semana o autodefinido."
+msgstr "Elige: diario, semanal, entre semana o definido por el usuario."
 
 #, fuzzy
 msgid "Choose the location for crash and debug logs."
-msgstr "Elegir la ubicación de los historiales de fallo y depuración"
+msgstr "Elige la ubicación de los historiales de fallos y depuración"
 
 msgid ""
 "Choose the location where the EPG data will be stored when the %s %s is shut "
 "down. The location must be available at boot time."
 msgstr ""
-"Elegir la ubicación donde se guardarán los datos EPG cuando se apaga la %s "
-"%s. La ubicación deberá estar disponible durante el reinicio."
+"Elige la ubicación donde se guardarán los datos EPG cuando se apaga la %s %s."
+"La ubicación deberá estar disponible durante el reinicio."
 
 msgid ""
 "Choose the name of the file that holds the EPG data when the %s %s is shut "
 "down. This can be handy to differentiate between several boxes."
 msgstr ""
-"Elegir el nombre del archivo que contiene los datos EPG cuando se apaga la "
+"Elige el nombre del archivo que contiene los datos EPG cuando se apaga la "
 "%s %s. Puede ser útil para distinguir entre varios receptores."
 
 msgid "Choose time interval to which the graphics will be rounded off."
-msgstr "Elegir el intervalo de tiempo en el que se redondean los gráficos."
+msgstr "Elige el intervalo de tiempo en el que se redondean los gráficos."
+
+msgid "Choose what you want the '0' button to do when PIP is active."
+msgstr "Elige qué quieres que haga la tecla '0' cuando PIP esté activo."
 
 #, fuzzy
-msgid "Choose what you want the '0' button to do when PIP is active."
-msgstr "Elige qué quieres que haga la tecla \"0\" cuando PIP esté activo."
+msgid "Choose whether AAC sound tracks should be transcoded."
+msgstr ""
+"Elige si las pistas AAC deben transcodificarse."
 
 msgid ""
 "Choose whether multi channel sound tracks should be downmixed to stereo."
-msgstr "Elige si las pistas de audio multicanal deben mezclarse a estéreo."
-
-#, fuzzy
-msgid "Choose whether or not to show an icon when a motorised dish is moving."
 msgstr ""
-"Elegir si se muestra o no un icono cuando se mueve una antena motorizada."
+"Elige si las pistas de audio multicanal deben mezclarse a estéreo."
 
 #, fuzzy
+msgid "Choose whether multi channel sound tracks should be output as PCM."
+msgstr ""
+"Elige si las pistas multicanal deben emitirse como PCM."
+
+msgid "Choose whether or not to show an icon when a motorised dish is moving."
+msgstr "Elegir si se muestra o no un icono cuando se mueve una antena motorizada."
+
 msgid ""
 "Choose which level of menu/settings to display. 'Expert' level shows all "
 "items."
 msgstr ""
-"Elegir qué nivel de menú y ajustes mostrar. El nivel \"experto\" muestra "
-"todos los conceptos."
+"Elige qué nivel de menú y ajustes mostrar. El nivel 'experto' muestra "
+"todos los items."
 
 msgid "Choose which tuner to configure."
 msgstr "Elegir qué sintonizador configurar."
@@ -1902,64 +1924,58 @@ msgstr "Elegir qué sintonizador configurar."
 msgid "Chose between record and ZAP."
 msgstr "Elegir entre grabar y zapear."
 
-#
+#, fuzzy
+msgid "Circular LNB"
+msgstr "LNB Circular"
+
 msgid "Circular left"
 msgstr "Izquierda circular"
 
-#
 msgid "Circular right"
 msgstr "Derecha circular"
 
-#, fuzzy
 msgid "Clean network trash cans"
-msgstr "No se puede mover a la papelera"
+msgstr "Limpiar papeleras de red"
 
 msgid "Cleaning Trashes"
 msgstr "Vaciando papeleras"
 
-#
 msgid "Cleanup"
 msgstr "Limpiar"
 
-#
 msgid "Clear"
-msgstr "Despejar"
+msgstr "Limpio"
 
-#
 msgid "Clear before scan"
 msgstr "Limpiar antes de buscar"
 
 msgid "Clear fixed"
-msgstr "Clear Fixed"
+msgstr "Limpiar Fijos"
 
-#
 msgid "Clear log"
 msgstr "Borrar historial"
 
-#
 msgid "Clear playlist"
 msgstr "Limpiar la lista de reproducción"
 
 msgid "Clients"
 msgstr "Clientes"
 
-#
+msgid "Clone TV screen to LCD"
+msgstr "Clonar la pantalla de TV al LCD"
+
 msgid "Close"
 msgstr "Cerrar"
 
-#
-#, fuzzy
 msgid "Close PiP on exit"
-msgstr "Guardar la lista al salir"
+msgstr "Cerrar PiP al salir"
 
-#, fuzzy
 msgid "Close bouquet list."
-msgstr "Abrir lista de grupos"
+msgstr "Cerrar lista de grupos"
 
 msgid "Close dialog"
-msgstr ""
+msgstr "Cerrar dialogo"
 
-#
 msgid "Close title selection"
 msgstr "Cerrar selección de título"
 
@@ -1969,26 +1985,22 @@ msgstr "Velocidad de código HP"
 msgid "Code rate LP"
 msgstr "Velocidad de código LP"
 
-#
 msgid "Coderate HP"
 msgstr "Velocidad de código HP"
 
-#
 msgid "Coderate LP"
 msgstr "Velocidad de código LP"
 
-#
 msgid "Collection name"
 msgstr "Nombre de la colección"
 
-#
 msgid "Collection settings"
 msgstr "Ajustes de la colección"
 
 msgid "Color format"
 msgstr "Formato de color"
 
-#
+###########################
 msgid "Color space"
 msgstr "Espacio de color"
 
