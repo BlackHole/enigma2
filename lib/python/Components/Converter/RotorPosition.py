@@ -22,7 +22,7 @@ class RotorPosition(Converter):
 		config.misc.lastrotorposition.addNotifier(self.forceChanged, initial_call=False)
 		config.misc.showrotorposition.addNotifier(self.show_hide, initial_call=False)
 		self.sec = eDVBSatelliteEquipmentControl.getInstance()
-		self.colors = parameters.get("RotorPositionColors", (0x0000f0f0, 0x00f0f0f0))  # tuner letter, nim_text
+		self.colors = parameters.get("RotorPositionColors", (0x0000ffff, 0x00f0f0f0))  # tuner letter, nim_text
 
 	@cached
 	def getText(self):
@@ -41,7 +41,7 @@ class RotorPosition(Converter):
 					saved_text = frontendRotorPosition(int(value))
 					if saved_text:
 						nim_text = saved_text
-				return "%s:%s" % (Hex2strColor(self.colors[0]) + chr(ord("A") + int(value)), Hex2strColor(self.colors[1]) + nim_text)
+				return "%s: %s" % (Hex2strColor(self.colors[0]) + chr(ord("A") + int(value)), Hex2strColor(self.colors[1]) + nim_text)
 			elif value == "all":
 				all_text = ""
 				for x in nimmanager.nim_slots:
@@ -52,18 +52,18 @@ class RotorPosition(Converter):
 							rotorposition = x.config.lastsatrotorposition.value
 							if rotorposition.isdigit():
 								nim_text = orbpos(int(rotorposition))
-						all_text += "%s:%s " % (Hex2strColor(self.colors[0]) + chr(ord("A") + x.slot), Hex2strColor(self.colors[1]) + nim_text)
+						all_text += "%s: %s " % (Hex2strColor(self.colors[0]) + chr(ord("A") + x.slot), Hex2strColor(self.colors[1]) + nim_text)
 				return all_text
 			self.LastRotorPos = config.misc.lastrotorposition.value
 			(rotor, tuner) = self.isMotorizedTuner()
 			if rotor:
 				self.actualizeCfgLastRotorPosition()
 				if value == "withtext":
-					return _("Rotor: ") + orbpos(config.misc.lastrotorposition.value)
+					return _("Motor Position: ") + orbpos(config.misc.lastrotorposition.value)
 				if value == "tunername":
 					active_tuner = self.getActiveTuner()
 					if tuner != active_tuner:
-						return "%s:%s" % (Hex2strColor(self.colors[0]) + chr(ord("A") + tuner), Hex2strColor(self.colors[1]) + orbpos(config.misc.lastrotorposition.value))
+						return "%s: %s" % (Hex2strColor(self.colors[0]) + chr(ord("A") + tuner), Hex2strColor(self.colors[1]) + orbpos(config.misc.lastrotorposition.value))
 					return ""
 				return orbpos(config.misc.lastrotorposition.value)
 		return ""
