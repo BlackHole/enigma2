@@ -2000,50 +2000,36 @@ msgstr "Ajustes de la colección"
 msgid "Color format"
 msgstr "Formato de color"
 
-###########################
 msgid "Color space"
 msgstr "Espacio de color"
 
-#
 msgid "Command To Run"
 msgstr "Comando a ejecutar"
 
-#
 msgid "Command order"
 msgstr "Orden de comando"
 
-#
 msgid "Command type"
 msgstr "Tipo de comando"
 
-#
-msgid "Committed DiSEqC command"
-msgstr "Comando DISEqC 1.0"
-
-#
 msgid "Common Interface"
 msgstr "Interfaz común"
 
-#
 msgid "Common Interface Assignment"
 msgstr "Asignación de interfaz común"
 
-#
 msgid "Common Interface assignment"
 msgstr "Asignación de interfaz común"
 
 msgid "Common interface"
 msgstr "Interfaz común"
 
-#
 msgid "Communication"
 msgstr "Comunicación"
 
-#
 msgid "Complete"
 msgstr "Completado"
 
-#
 msgid "Complex (allows mixing audio tracks and aspects)"
 msgstr "Complejo (permite mexclar pistas de audio y aspectos)"
 
@@ -2064,16 +2050,15 @@ msgstr "Modo de configuración: %s"
 msgid ""
 "Configure an additional delay to improve external subtitle synchronisation."
 msgstr ""
-"Configuar retraso adicional para mejorar la sincronización de subtítulos "
-"externos."
+"Configuar retraso adicional para mejorar la sincronización de subtítulos externos."
 
 msgid "Configure an additional delay to improve subtitle synchronisation."
-msgstr ""
-"Configuar retraso adicional para mejorar la sincronización de subtítulos."
+msgstr "Configurar retraso adicional para mejorar la sincronización de subtítulos."
 
 msgid ""
 "Configure duration of inactivity before the hard disk drive goes to standby"
 msgstr ""
+"Configurar la duración de inactividad antes de que el disco duro se ponga en reposo"
 
 msgid ""
 "Configure for how many minutes finished events should remain visible in the "
@@ -2088,25 +2073,47 @@ msgid "Configure how recording filenames are constructed."
 msgstr "Configura cómo se construyen los nombres de archivo de grabación."
 
 #, fuzzy
+msgid ""
+"Configure if and how crypto icons will be shown in the channel selection "
+"list."
+msgstr "Configura si y como los iconos de criptografia deben verse en la lista de canales."
+
 msgid "Configure if and how service type icons will be shown."
-msgstr "Configura el conector de salida de vídeo que se va a utilizar."
+msgstr "Configura si y como deben verse los iconos de tipo de canal."
 
 #, fuzzy
-msgid "Configure if picons will be shown in the service list."
-msgstr "Configura el conector de salida de vídeo que se va a utilizar."
+msgid ""
+"Configure if and how the record indicator will be shown in the channel "
+"selection list."
+msgstr "Configurar si el indicador de grabación debe mostrarse en la selección de canales."
 
-#
+#, fuzzy
+msgid ""
+"Configure if and how wide the service name column will be shown in the "
+"channel selection list."
+msgstr "Configura el ancho del nombre se la columna mostrada en la lista de selcción de canales"
+
+#, fuzzy
+msgid "Configure if behind the subtitles a background is shown."
+msgstr "Configura si debe verse fondo detras de los subtitulos."
+
+msgid "Configure if picons will be shown in the service list."
+msgstr "Configura si los piconos se muestran en la lista de canales."
+
+msgid ""
+"Configure if the subtitle should switch between normal, italic, bold and "
+"bolditalic"
+msgstr "Configura si el subtitulo se puede cambiar entre normal, itálica, negrita y negrita/itálica"
+
 msgid "Configure interface"
 msgstr "Configurar interfaz"
 
-#
 msgid "Configure nameservers"
 msgstr "Configurar servidores de nombre"
 
 msgid "Configure on which devices the background delete option should be used."
 msgstr ""
-"Configurar en qué dispositivos debe usarse la opción de borrar copias de "
-"seguridad."
+"Configurar en qué dispositivos debe usarse la opción de borrado de fondo."
 
 msgid "Configure remote control type"
 msgstr "Configurar el tipo de mando a distancia."
@@ -2124,17 +2131,14 @@ msgid ""
 "Configure the behavior of the 'pause' key when movie playback is already "
 "paused."
 msgstr ""
-"Configurar el comportamiento de la tecla \"pausa\" cuando la reproducción de "
+"Configurar el comportamiento de la tecla 'pausa' cuando la reproducción de "
 "películas ya está en pausa."
 
 msgid "Configure the behavior when movie playback is manually stopped."
-msgstr ""
-"Configurar el comportamiento cuando la reproducción de películas se para "
-"manualmente."
+msgstr "Configurar el comportamiento cuando la reproducción de películas se para manualmente."
 
 msgid "Configure the behavior when movie playback is started."
-msgstr ""
-"Configurar el comportamiento cuando empieza la reproducción de películas."
+msgstr "Configurar el comportamiento cuando empieza la reproducción de películas."
 
 msgid ""
 "Configure the behavior when reaching the end of a movie, during movie "
@@ -2150,14 +2154,13 @@ msgstr ""
 "Configurar el ancho del borde de los subtítulos. Un borde oscuro sobre fondo "
 "claro facilita la lectura."
 
-#, fuzzy
 msgid ""
 "Configure the brightness level of the front panel display for normal "
 "operation."
 msgstr ""
-"Configurar el nivel de brillo del panel frontal durante la operación normal."
+"Configurar el nivel de brillo del panel frontal durante el modo de "
+"operación normal."
 
-#, fuzzy
 msgid "Configure the brightness level of the front panel display for standby."
 msgstr "Configurar el nivel de brillo del panel frontal en espera."
 
@@ -2165,6 +2168,8 @@ msgid ""
 "Configure the color of the external subtitles, alternative (normal in white, "
 "italic in yellow, bold in cyan, underscore in green), white or yellow."
 msgstr ""
+"Configurar el color de los subtitulos externos, alternativo (normal en blanco, "
+"itálica en amarillo, negrita en cyan, subrallado en verde), blanco o amarillo."
 
 msgid "Configure the color of the teletext subtitles."
 msgstr "Configurar el color de los subtítulos del teletexto."
@@ -2177,16 +2182,18 @@ msgid ""
 "the channel selection list you can remain on the current service or already "
 "select up/down and you are able to revert the B+/B- buttons."
 msgstr ""
+"Configurar el comportamiento del cursor en la lista de selección de canales. "
+"Cuando se abre la lista, puedes permanecer en el actual canal o "
+"cambiar directamente, y te permite invertir los botones B+/B-"
 
-#, fuzzy
 msgid "Configure the duration (in minutes) for the screensaver."
-msgstr "Configurar la proporción de la pantalla"
+msgstr "Configurar la duración (en minutos) del salvapantallas."
 
 msgid "Configure the first audio language (highest priority)."
-msgstr "Configurar el primer idioma de audio (primera prioridad)."
+msgstr "Configurar el primer idioma de audio (prioridad mas alta)."
 
 msgid "Configure the first subtitle language (highest priority)."
-msgstr "Configurar el primer idioma de los subtítulos (primera prioridad)."
+msgstr "Configurar el primer idioma de los subtítulos (prioridad mas alta)."
 
 msgid "Configure the font size of the subtitles."
 msgstr "Configurar el tamaño de letra de los subtítulos."
@@ -2195,22 +2202,14 @@ msgid ""
 "Configure the font size relative to skin size, so 1 increases by 1 point "
 "size, and -1 decreases by 1 point size."
 msgstr ""
-"Configurar el tamaño de letra respecto a Skin. 1 aumenta 1 punto y -1 "
-"disminuye 1 punto."
+"Configurar el tamaño de letra respecto al Skin, 1 aumenta 1 punto y -1 "
+"disminuye 1 punto el tamaño."
 
 msgid "Configure the fourth audio language."
 msgstr "Configurar el cuarto idioma de audio."
 
 msgid "Configure the fourth subtitle language."
 msgstr "Configurar el cuarto idioma de subtítulos."
-
-#, fuzzy
-msgid "Configure the function of a long press of the power button."
-msgstr "Configurar la función de una pulsación larga de la tecla de encendido."
-
-#, fuzzy
-msgid "Configure the function of a short press of the power button."
-msgstr "Configurar la función de una pulsación corta de la tecla de encendido."
 
 msgid "Configure the function of the <  > buttons."
 msgstr "Configurar la función de las teclas '<' y '>'."
@@ -2221,20 +2220,23 @@ msgstr "Configurar la puerta de enlace."
 msgid "Configure the horizontal alignment of the subtitles."
 msgstr "Configurar la alineación horizontal de los subtítulos."
 
+#, fuzzy
+msgid "Configure the infobar fading speed"
+msgstr "Configurar la velocidad de ocultación de la barra de información"
+
 msgid ""
 "Configure the initial fast forward speed. When you press the fast forward "
 "button, winding will start at this speed."
 msgstr ""
 "Configurar la velocidad inicial de avance rápido. Cuando pulses la tecla de "
-"avance rápido, empezará a esa velocidad."
+"avance rápido, el movimiento empezará a esa velocidad."
 
-#, fuzzy
 msgid ""
 "Configure the initial rewind speed. When you press the rewind button, "
 "rewinding will start at this speed."
 msgstr ""
 "Configurar la velocidad inicial de rebobinado. Cuando pulses la tecla de "
-"rebobinado, empezará a esa velocidad."
+"rebobinado, el movimiento empezará a esa velocidad."
 
 msgid "Configure the latitude of your location."
 msgstr "Configurar la latitud de tu ubicación."
@@ -2251,8 +2253,13 @@ msgstr ""
 "espacio caiga por debajo de ese valor, los programas borrados se eliminarán "
 "de la papelera."
 
+msgid ""
+"Configure the minimum width before showing the 'i' icon, '0' is equal to not "
+"showing the icon at all."
+msgstr "Configura el el ancho mínimo ante de mostrar el icono 'i', 0 = no se muestra icono."
+
 msgid "Configure the nameserver (DNS)."
-msgstr "Configurar el nombre de servidor (DNS)."
+msgstr "Configurar el servidor de nombres (DNS)."
 
 msgid "Configure the netmask."
 msgstr "Configurar la máscara de red."
@@ -2260,29 +2267,28 @@ msgstr "Configurar la máscara de red."
 #, fuzzy
 msgid ""
 "Configure the number of days after which items are automatically removed "
-"from the trash can."
+"from the trash can.\n"
+"A setting of 0 disables this."
 msgstr ""
-"Configurar los días pasados los cuales se eliminan automáticamente los "
-"programas de la papelera."
+"Configurar los días pasados los cuales, se eliminan automáticamente los "
+"programas de la papelera.\n Usar 0 desactiva esto."
 
 msgid ""
 "Configure the number of days old timers are kept before they are "
 "automatically removed from the timer list."
 msgstr ""
 "Configurar los días en que se guardan los temporizadores antiguos antes de "
-"eliminarlos automáticamente de la lista."
+"eliminarlos automáticamente de la lista de temporizadores."
 
 msgid "Configure the number of rows shown."
-msgstr "Configurar el número de filas mostradas."
+msgstr "Configura el número de filas mostradas."
 
-#, fuzzy
 msgid ""
 "Configure the offline decoding delay (in milliseconds). The configured delay "
 "is observed at each control word parity change."
 msgstr ""
-"Configurar el retraso de descodificación online en milisegundos. El retraso "
-"configurado se mantendrá en todos los cambios de paridad de palabras de "
-"control."
+"Configurar el retraso de descodificación offline en milisegundos. El retraso "
+"configurado se mantendrá en todos los cambios de paridad de palabras de control."
 
 msgid "Configure the possible fast forward speeds."
 msgstr "Configurar las velocidades de avance posibles."
@@ -2293,8 +2299,10 @@ msgstr "Configurar las velocidades de rebobinado posibles."
 msgid "Configure the primary EPG language."
 msgstr "Configurar el idioma principal del EPG."
 
-msgid "Configure the refresh rate of the screen."
-msgstr "Configurar la velocidad de actualización de la pantalla."
+msgid ""
+"Configure the refresh rate of the screen. Multi means refresh rate depends "
+"on the source 24/50/60Hz"
+msgstr "Configurar la velocidad de actualización de la pantalla. Multi siginifica que la tasa de refresco depende del origen 24/50/60Hz"
 
 msgid "Configure the second audio language."
 msgstr "Configurar el segundo idioma de audio."
@@ -2305,15 +2313,12 @@ msgstr "Configurar el segundo idioma de subtítulos."
 msgid "Configure the secondary EPG language."
 msgstr "Configurar el idioma secundario del EPG."
 
-#, fuzzy
 msgid "Configure the skip time interval for the 1 and 3 buttons."
 msgstr "Configurar el intervalo de salto de las teclas '1' y '3'."
 
-#, fuzzy
 msgid "Configure the skip time interval for the 4 and 6 buttons."
 msgstr "Configurar el intervalo de salto de las teclas '4' y '6'."
 
-#, fuzzy
 msgid "Configure the skip time interval for the 7 and 9 buttons."
 msgstr "Configurar el intervalo de salto de las teclas '7' y '9'."
 
@@ -2321,16 +2326,20 @@ msgid "Configure the slow motion speeds."
 msgstr "Configurar las velocidades a cámara lenta."
 
 msgid ""
+"Configure the source of the frontend data as shown on the infobars. "
+"'Settings' is as stored on the settings. 'Tuner' is as reported by the tuner."
+msgstr "Configura el origen de los datos mostrados en las barras de información. "
+"'Opciones' se graba en opciones. 'Sintonizador' es tal como lo informa el sintonizador."
+
+msgid ""
 "Configure the speed of the background deletion process. Lower speed will "
 "consume less hard disk drive performance."
 msgstr ""
 "Configurar la velocidad del proceso de borrado de fondo. Una velocidad más "
-"lenta consume menos disco duro."
+"lenta consume menos recursos del disco duro."
 
 msgid "Configure the subtitle delay when timing information is not available."
-msgstr ""
-"Configurar el retraso de los subtítulos cuando no haya datos de "
-"sincronización."
+msgstr "Configurar el retraso de los subtítulos cuando no haya datos de sincronización."
 
 msgid "Configure the third audio language."
 msgstr "Configurar el tercer idioma de audio."
@@ -2345,13 +2354,10 @@ msgstr ""
 "Configurar la transparencia del fondo negro de los subtítulos gráficos DVB."
 
 msgid "Configure the tuner mode."
-msgstr "Configurar el modo de sintonizador."
+msgstr "Configurar el modo del sintonizador."
 
-#, fuzzy
 msgid "Configure the type of status indication icons shown in the movie list."
-msgstr ""
-"Configurar el tipo de iconos de indicación de estado en la lista de "
-"películas."
+msgstr "Configurar el tipo de iconos de indicación de estado mostrados en la lista de películas."
 
 msgid ""
 "Configure the vertical position of the subtitles, measured from the bottom "
@@ -2361,14 +2367,13 @@ msgstr ""
 "inferior de la pantalla."
 
 msgid "Configure the width allocated to the picon."
-msgstr "Configurar la anchura asignada a Picon."
+msgstr "Configurar la anchura asignada al Picon."
 
 msgid "Configure the width allocated to the service name."
 msgstr "Configurar la anchura asignada al nombre de canal."
 
 msgid "Configure to show the channel names, picons, or both in the EPG."
-msgstr ""
-"Configurar la visualización de nombres de canal, Picon o ambos en el EPG."
+msgstr "Configura la visualización de nombres de canal, Picon o ambos en el EPG."
 
 msgid ""
 "Configure whether (and for how long) a second infobar will be shown when OK "
@@ -2376,17 +2381,28 @@ msgid ""
 "the current channel."
 msgstr ""
 "Configurar si (y por cuánto tiempo) aparece una segunda barra de información "
-"al pulsar dos veces ¡OK'. La segunda barra contiene información adicional "
+"al pulsar dos veces 'OK'. La segunda barra contiene información adicional "
 "sobre el canal actual."
+
+msgid "Configure whether or not an rotor position will be displayed on infobar"
+msgstr "Configura si la posición del rotor se muestra en la barra de información"
 
 msgid "Configure which color format should be used on the SCART output."
 msgstr "Configurar qué formato de color utilizar en la salida SCART."
+
+#, fuzzy
+msgid ""
+"Configure which tuner for recordings will be preferred, when more than one "
+"tuner is available."
+msgstr ""
+"Configura que sintonizador será elegido cuando haya mas de un sintonizador "
+"disponible."
 
 msgid ""
 "Configure which tuner type will be preferred, when the same service is "
 "available on different types of tuners."
 msgstr ""
-"Configurar qué tipo de sintonizador será el favorito cuando el mismo canal "
+"Configura qué tipo de sintonizador será el elegido cuando el mismo canal "
 "esté disponible en sintonizadores diferentes."
 
 msgid ""
@@ -2398,77 +2414,68 @@ msgstr ""
 "disponibles. Si se ajusta en 'auto', el sistema dará prioridad al "
 "sintonizador con el menor número de canales/satélites."
 
-#
 msgid "Configure your NTP server."
 msgstr "Configurar el servidor NTP."
 
-#
 msgid "Configure your internal LAN"
-msgstr "Configurar LAN interno"
+msgstr "Configurar LAN interna"
 
-#
 msgid "Configure your network again"
 msgstr "Volver a configurar la red"
 
 msgid "Configure your network settings, and press OK to start the scan"
 msgstr "Configura los ajustes de red. Pulsa OK para iniciar la búsqueda."
 
-#
 msgid "Configure your wireless LAN again"
 msgstr "Volver a configurar la red inalámbrica."
 
 msgid "Configures which video output connector will be used."
 msgstr "Configura el conector de salida de vídeo que se va a utilizar."
 
-#
 msgid "Configuring"
 msgstr "Configurando"
 
-#
 msgid "Conflicting timer"
 msgstr "Conflicto de temporizadores"
 
-#
 msgid "Connect"
 msgstr "Conectar"
 
-#
 msgid "Connect to a wireless network"
-msgstr "Conectar a red inalámbrica"
+msgstr "Conectar a una red inalámbrica"
 
 msgid "Connected clients"
 msgstr "Clientes conectados"
 
-#
+#, fuzzy
+msgid "Connected satellites"
+msgstr "Satelites conectados"
+
 msgid "Connected to"
 msgstr "Conectado a"
-
-#
-msgid "Connected!"
-msgstr "¡Conectado!"
 
 msgid "Connected: "
 msgstr "Conectado:"
 
-#
 msgid "Constellation"
 msgstr "Constelación"
 
 msgid "Content"
 msgstr "Contenido"
 
-#
 msgid "Content does not fit on DVD!"
-msgstr "El contenido no caben en un DVD."
+msgstr "El contenido no cabe en un DVD."
 
-#
+#, fuzzy
+msgid "Context"
+msgstr "Contexto"
+
 msgid "Continue"
 msgstr "Continuar"
 
 msgid "Continue playback"
 msgstr "Continuar reproducción"
 
-#
 msgid "Continue playing"
 msgstr "Continuar reproducción"
 
@@ -2478,15 +2485,13 @@ msgstr "Sigue"
 msgid "Continues play (loop)"
 msgstr "Reproducción continua (bucle)"
 
-#
 msgid "Contrast"
 msgstr "Contraste"
 
 msgid ""
 "Control of the position how finished timers are shown in the Timer List."
 msgstr ""
-"Controla la posición del temporizador terminado en la lista de "
-"temporizadores."
+"Controla la posición en la qu se muestra los temporizadores terminados en la lista de temporizadores."
 
 msgid "Convert ext3 filesystem to ext4"
 msgstr "Convertir sistema de archivos ext3 a ext4."
@@ -2506,32 +2511,29 @@ msgstr "Guía Cool TV"
 msgid "Copy"
 msgstr "Copia"
 
+#, fuzzy
+msgid "Copy to bouquets"
+msgstr "Copiar a grupos"
+
 msgid "Copying files"
 msgstr "Copiando archivos"
 
 #, python-format
-msgid "Cores:\t%s"
-msgstr ""
-
-#
-#, fuzzy, python-format
-msgid "Could not connect to %s %s .NFI image feed server:"
-msgstr "No se ha podido conectar al servidor de imágenes .NFI de %s %s:"
+msgid "Cores:\t%s\n"
+msgstr "Nucleos:\t%s\n"
 
 msgid "Could not find installed channel list."
 msgstr "No se ha podido encontrar la lista de canales instalados."
 
-#
 msgid "Could not load medium! No disc inserted?"
 msgstr "No se ha podido cargar el medio. ¿Hay algún disco insertado?"
 
-#
 msgid "Could not open Picture in Picture"
 msgstr "No se ha podido abrir Picture in Picture."
 
 #, python-format
 msgid "Could not open the file %s!"
-msgstr "No se ha podido abrir el archivo %s."
+msgstr "No se ha podido abrir el archivo %s!."
 
 #, python-format
 msgid "Could not record due to conflicting timer %s"
@@ -2539,50 +2541,42 @@ msgstr "No se ha podido grabar por un conflicto de temporizadores %s."
 
 #, python-format
 msgid "Could not record due to invalid service %s"
-msgstr "No se ha podido grabar por servicio nulo %s."
+msgstr "No se ha podido grabar por un servicio %s invalido."
 
 #, python-format
 msgid "Could not save configfile %s!"
-msgstr "No se ha podido grabar el archivo de configuración %s."
+msgstr "No se ha podido grabar el archivo de configuración %s!"
 
 msgid "Crash Logs"
 msgstr "Historiales de fallo"
 
-#
 msgid "Create DVD-ISO"
 msgstr "Crear DVD-ISO"
 
-#
 msgid "Create directory"
 msgstr "Crear directorio"
-
-msgid "Create more detailed crash log"
-msgstr "Crear historial de fallo más detallado."
 
 msgid "Creating AP and SC Files"
 msgstr "Creando archivos AP y SC."
 
 msgid "Creating Hardlink to Timeshift file failed!"
-msgstr "Ha fallado la creación de Hardlink en el archivo Timeshift."
+msgstr "Ha fallado la creación de Hardlink al archivo Timeshift."
 
-#
 #, python-format
 msgid "Creating directory %s failed."
 msgstr "Ha fallado la creación del directorio %s."
 
-#
 msgid "Creating filesystem"
 msgstr "Creando sistema de archivos."
 
 msgid "Creating partition"
-msgstr "Creando partición..."
+msgstr "Creando partición"
 
-#
 msgid "Croatian"
 msgstr "Croata"
 
 msgid "Cron Manager"
-msgstr "Administrador de Cron"
+msgstr "Administrador Cron"
 
 msgid "CronTimers"
 msgstr "Temporizadores Cron"
@@ -2599,68 +2593,59 @@ msgstr "Estado actual:"
 msgid "Current device: "
 msgstr "Dispositivo actual:"
 
-#
+#, fuzzy, python-format
+msgid "Current mode: %s \n"
+msgstr "Modo actual: %s \n"
+
+#, fuzzy
+msgid "Current rotor position: "
+msgstr "Posicion actual del rotor: "
+
 msgid "Current settings:"
 msgstr "Configuración actual:"
 
 msgid "Current time"
-msgstr "Hora actual:"
+msgstr "Hora actual"
 
-#
 msgid "Current transponder"
 msgstr "Transpondedor actual"
 
-#
 msgid "Current value: "
-msgstr "Valor actual:"
+msgstr "Valor actual: "
 
-#
 msgid "Current version:"
 msgstr "Versión actual:"
 
-msgid "Currently installed image"
-msgstr "Imagen actualmente instalada"
-
-#
 msgid "Custom"
 msgstr "Personalizado"
 
-#
-#, fuzzy
 msgid "Custom skip time for '1''3' buttons"
 msgstr "Personalizar el intervalo de salto de las teclas '1'/'3'."
 
-#
 msgid "Custom skip time for '4'/'6' buttons"
 msgstr "Personalizar el intervalo de salto de las teclas '4'/'6'."
 
-#
 msgid "Custom skip time for '7'/'9' buttons"
 msgstr "Personalizar el intervalo de salto de las teclas '7'/'9'."
 
-#
 msgid "Customize"
-msgstr "Configurar"
+msgstr "Personalizar"
 
-#
 msgid "Cut"
 msgstr "Cortar"
 
 msgid "Cutlist editor"
-msgstr "Editor de Cutlist"
+msgstr "Editor de Listas"
 
-#
 msgid "Cutlist editor..."
-msgstr "Editor de listas de corte..."
+msgstr "Editor de listas..."
 
-#
 msgid "Czech"
 msgstr "Checo"
 
 msgid "DAC"
-msgstr ""
+msgstr "DAC"
 
-#
 msgid "DHCP"
 msgstr "DHCP"
 
@@ -2672,6 +2657,9 @@ msgstr "DMM avanzado"
 
 msgid "DMM normal"
 msgstr "DMM normal"
+
+msgid "DTS"
+msgstr "DTS"
 
 msgid "DUAL LAYER DVD"
 msgstr "DVD DOBLE CAPA"
@@ -2689,7 +2677,6 @@ msgstr "DVB-C ANEXO C"
 msgid "DVB-S"
 msgstr "DVB-S"
 
-#
 msgid "DVB-S2"
 msgstr "DVB-S2"
 
@@ -2702,78 +2689,122 @@ msgstr "DVB-T2"
 msgid "DVD data format"
 msgstr "Formato de datos DVD"
 
-#
 msgid "DVD file browser"
 msgstr "Navegador de archivos DVD"
 
-#
 msgid "DVD media toolbox"
 msgstr "Caja de herramientas de medios DVD"
 
-#
 msgid "DVD player"
 msgstr "Reproductor DVD"
 
-#
 msgid "DVD titlelist"
 msgstr "Lista de títulos de DVD"
 
-#
 msgid "Daily"
 msgstr "Diario"
 
-#
 msgid "Danish"
 msgstr "Danés"
 
-#
 msgid "Date"
 msgstr "Fecha"
+
+#, fuzzy
+msgid "De-select"
+msgstr "Deseleccionar"
 
 msgid "Debug Logs"
 msgstr "Historiales de depuración"
 
-#
 msgid "Deep Standby"
 msgstr "Hibernar"
 
 msgid "Deep standby"
 msgstr "Hibernar"
 
-#
 msgid "Default"
 msgstr "Por defecto"
 
-#
 msgid "Default movie location"
 msgstr "Ubicación por defecto de películas"
 
-#, fuzzy
 msgid "Default recording type"
-msgstr "Tipo de grabación"
+msgstr "Tipo de grabación por defecto"
 
-#
 msgid "Default settings"
 msgstr "Ajustes por defecto"
 
 msgid "Defaults"
 msgstr "Por defecto"
 
+msgid "Delay after change voltage before switch command"
+msgstr "Retraso después de cambiar el voltaje antes de la orden de cambio"
+
+msgid "Delay after continuous tone disable before diseqc"
+msgstr "Retraso despues de desactivación continuada de tono antes disecq"
+
+msgid "Delay after diseqc peripherial poweron command"
+msgstr "Retraso después de encender los perifericos disecq"
+
+msgid "Delay after diseqc reset command"
+msgstr "Retraso después de la orden de reiniciar disecq"
+
+msgid "Delay after enable voltage before motor command"
+msgstr "Retraso después de activar el voltaje antes de la orden motor"
+
+msgid "Delay after enable voltage before switch command"
+msgstr "Retraso después de activar el voltaje antes de la orden de cambio"
+
+msgid "Delay after final continuous tone change"
+msgstr "Retraso después de un cambio continuado de tono final"
+
+msgid "Delay after last diseqc command"
+msgstr "Retraso después de la última orden disecq"
+
+msgid "Delay after last voltage change"
+msgstr "Retraso después del último cambio de voltaje"
+
+msgid "Delay after motor stop command"
+msgstr "Retraso después de la orden de parar motor"
+
+msgid "Delay after set voltage before measure motor power"
+msgstr "Retraso después de poner el voltaje antes de medir la potencia del motor"
+
+msgid "Delay after toneburst"
+msgstr "Retraso después de toneburst"
+
+msgid "Delay after voltage change before motor command"
+msgstr "Retraso después de un cambio de voltaje antes de una orden motor"
+
 msgid "Delay before key repeat starts:"
 msgstr "Retrasar antes del inicio de la repetición de tecla:"
+
+#, fuzzy
+msgid "Delay before sequence repeat"
+msgstr "Retraso antes de repetir secuencia!
+
+msgid "Delay between diseqc commands"
+msgstr "Retraso entre ordenes disecq"
+
+msgid "Delay between switch and motor command"
+msgstr "Retraso entre el cambio y la orden del motor"
 
 msgid "Delay for external subtitles"
 msgstr "Retraso para subtítulos externos"
 
-#
-#, fuzzy
+msgid "Delay in miliseconds after finish scrolling text on display."
+msgstr "Retraso en milisegundos después de acabar el desplazamiento del texto en pantalla."
+
+msgid "Delay in miliseconds before start of scrolling text on display."
+msgstr "Retraso en milisegundos antes de empezar el desplazamiento del texto en pantalla."
+
 msgid "Delay time"
-msgstr "Hora de inicio"
+msgstr "Tiempo retrasado"
 
 msgid "Delay:"
 msgstr "Retraso:"
 
-#
 msgid "Delete"
 msgstr "Borrar"
 
@@ -2782,36 +2813,29 @@ msgid "Delete %s?"
 msgstr "¿Borrar %s?"
 
 msgid "Delete Confirmation"
-msgstr "Borrar confirmación"
+msgstr "Confirmación del Borrado"
 
-#
+#, fuzzy
+msgid "Delete EPG"
+msgstr "Borrar EPG"
+
 msgid "Delete entry"
 msgstr "Borrar entrada"
 
-#
 msgid "Delete failed!"
-msgstr "No se ha podido eliminar."
+msgstr "No se ha podido eliminar!"
 
-#
 msgid "Delete file"
 msgstr "Borrar archivo"
 
-#
 msgid "Delete playlist entry"
 msgstr "Borrar entrada en la lista de reproducción."
 
-#
 msgid "Delete saved playlist"
 msgstr "Borrar lista de reproducción guardada"
 
-#
-#, fuzzy
 msgid "Delete timer"
-msgstr "Borrar archivo"
-
-#
-msgid "Delete..."
-msgstr "Borrar..."
+msgstr "Borrar Temporizador"
 
 msgid "Deleted"
 msgstr "Borrado"
@@ -2823,7 +2847,6 @@ msgstr "¡%s borrado!"
 msgid "Deleted items"
 msgstr "Elementos borrados"
 
-#
 msgid "Deleting files"
 msgstr "Borrando archivos"
 
@@ -2836,34 +2859,35 @@ msgid ""
 "scramble recording that can be descrambled on playback. 'Normal' means "
 "descramble the recording and don't record ECM."
 msgstr ""
-"\"Descifrar y grabar ECM\" te da la opción de descifrar después si ha "
-"fallado el descifrado de la grabación. \"No descifrar, grabar ECM\" permite "
-"guardar una grabación cifrada, descifrable en la reproducción. \"Normal\" "
+"'Descifrar y grabar ECM' te da la opción de descifrar después si ha "
+"fallado el descifrado de la grabación. 'No descifrar, grabar ECM' permite "
+"guardar una grabación cifrada, descifrable en la reproducción. 'Normal' "
 "sirve para descifrar la grabación y no grabar el ECM."
 
-msgid "Descramble http streams"
-msgstr "Descodificar flujos http"
+#, fuzzy
+msgid "Descramble receiving http streams"
+msgstr "Descodificar flujos recibidos http"
 
-#
+#, fuzzy
+msgid "Descramble sending http streams"
+msgstr "Descodificar flujos enviados http"
+
 msgid "Description"
 msgstr "Descripción"
 
-#
 msgid "Deselect"
 msgstr "Deseleccionar"
 
 msgid "Details for plugin: "
-msgstr "Detalles del complemento:"
+msgstr "Detalles del complemento: "
 
+#, fuzzy
 msgid "Detected Devices:"
 msgstr "Dispositivos detectados:"
 
-#
-msgid "Detected NIMs:"
-msgstr "NIMs detectados:"
-
-msgid "Device Information"
-msgstr "Información del dispositivo:"
+#, fuzzy
+msgid "Detected tuners:"
+msgstr "Sintonizadores detectados:"
 
 msgid "Device mounts"
 msgstr "Montajes de dispositivo"
@@ -2877,19 +2901,27 @@ msgstr "Nombre del dispositivo:"
 msgid "Devices"
 msgstr "Dispositivos"
 
-#
 msgid "DiSEqC"
 msgstr "DiSEqC"
 
-#
+#, fuzzy
+msgid "DiSEqC 1.0 command"
+msgstr "Comando DiSEqC 1.0"
+
+#, fuzzy
+msgid "DiSEqC 1.1 command"
+msgstr "Comando DiSEqC 1.1"
+
+#, fuzzy
+msgid "DiSEqC 1.1 repeats"
+msgstr "repeticiones DiSEqC 1.1"
+
 msgid "DiSEqC A/B"
 msgstr "DiSEqC A/B"
 
-#
 msgid "DiSEqC A/B/C/D"
 msgstr "DiSEqC A/B/C/D"
 
-#
 msgid "DiSEqC mode"
 msgstr "Modo DiSEqC"
 
@@ -2897,85 +2929,67 @@ msgstr "Modo DiSEqC"
 msgid "DiSEqC port %s: %s"
 msgstr "Puerto DiSEqC %s: %s"
 
-#
-msgid "DiSEqC repeats"
-msgstr "Repetir DiSEqC"
-
-#
 msgid "DiSEqC-tester settings"
 msgstr "Configuración de DiSEqC-Tester"
 
-#
-msgid "Dialing:"
-msgstr "Marcando:"
+#, fuzzy
+msgid "Diction"
+msgstr "Dicción"
 
-#
 msgid "Digital contour removal"
 msgstr "Borrar contorno digital"
 
 msgid "Digital downmix"
 msgstr "Mezcla digital"
 
-#
 msgid "Direct playback of linked titles without menu"
 msgstr "Reproduce los títulos enlazados sin menú"
 
 msgid "Directory"
 msgstr "Directorio"
 
-#
 #, python-format
 msgid "Directory %s does not exist."
 msgstr "El directorio %s no existe."
 
-#
 msgid "Directory browser"
 msgstr "Examinar directorios"
 
-#
 msgid "Disable"
 msgstr "Deshabilitar"
 
-#
+#, fuzzy
+msgid "Disable Animations"
+msgstr "Desactivar Animaciones"
+
 msgid "Disable Picture in Picture"
 msgstr "Deshabilitar Picture in Picture"
 
 msgid "Disable background scanning"
 msgstr "Deshabilitar la búsqueda de fondo"
 
-#
 #, fuzzy
-msgid "Disable timer"
-msgstr "Borrar archivo"
+msgid "Disable move mode"
+msgstr "Deactivar modo movimiento"
 
-#
+msgid "Disable timer"
+msgstr "Desactivar temporizador"
+
 msgid "Disabled"
 msgstr "Desactivado"
-
-#
-msgid "Disconnect"
-msgstr "Desconectar"
 
 msgid "Disk space to reserve for recordings (in GB)"
 msgstr "Espacio en disco reservado para grabaciones (en GB)"
 
-#, fuzzy
-msgid "Display"
-msgstr "Ajustes de visualización"
-
-#
 msgid "Display 16:9 content as"
 msgstr "Visualizar los contenidos 16:9 como"
 
-#
 msgid "Display 4:3 content as"
 msgstr "Visualizar los contenidos 4:3 como"
 
-#
 msgid "Display >16:9 content as"
 msgstr "Visualizar los contenido >16:9 como"
 
-#
 msgid "Display and user interface"
 msgstr "Pantalla e interfaz de usuario"
 
@@ -2983,9 +2997,9 @@ msgid "Display message before playing next movie"
 msgstr "Mostrar un mensaje antes de reproducir la siguiente película"
 
 msgid "Display the EIT now/next eventdata in infobar."
-msgstr "Visualizar datos actuales/siguientes EIT en la barra de información."
+msgstr "Visualizar datos EIT actuales/siguientes en la barra de información."
 
-#
+##############################################
 msgid "Do not change"
 msgstr "No cambiar"
 
