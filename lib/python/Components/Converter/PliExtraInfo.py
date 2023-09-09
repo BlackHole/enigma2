@@ -60,6 +60,12 @@ codec_data = {
 	40: "AVS2",
 }
 
+# patch stream type for Exteplayer3 and GSTplayer
+codec_data_patch = {
+#	"5001": "unknown",
+	"5002": "HEVC H.265"
+}
+
 # Dynamic range ("gamma") value to text
 gamma_data = {
 	#0: " SDR",
@@ -607,7 +613,12 @@ class PliExtraInfo(Poll, Converter, object):
 		return "%sx%s%s%s" % (xres, yres, mode, fps)
 
 	def createVideoCodec(self, info):
-		return codec_data.get(info.getInfo(iServiceInformation.sVideoType), _("N/A"))
+		refstr = info.getInfoString(iServiceInformation.sServiceref)
+		xres = int(open("/proc/stb/vmpeg/0/xres", "r").read(), 16)
+		if refstr.lower().split(":")[0] in codec_data_patch.keys() and xres >=3000 and info.getInfo(iServiceInformation.sVideoType) == -1:
+			return codec_data_patch.get(refstr.lower().split(":")[0], _("N/A"))
+		else:
+			return codec_data.get(info.getInfo(iServiceInformation.sVideoType), _("N/A"))
 
 	def createServiceRef(self, info):
 		return info.getInfoString(iServiceInformation.sServiceref)
