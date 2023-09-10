@@ -1,5 +1,4 @@
 from boxbranding import getImageVersion, getImageBuild, getImageDevBuild, getImageType, getImageDistro, getMachineBrand, getMachineName, getMachineBuild
-from gettext import dgettext
 
 from enigma import eTimer, eDVBDB
 
@@ -53,13 +52,18 @@ class UpdateChoices(ChoiceBox):
 		ChoiceBox.__init__(self, session, title, list, keys, selection, skin_name, text, reorderConfig, var)
 		print('title:', title)
 
-		if var and var in ('unstable', 'updating', 'stable', 'unknown'):
+		self.var = None
+		if var and var in ("unstable", "updating", "stable", "unknown"):
 			self.var = var
-			self['feedStatusMSG'] = Label()
-			self['tl_off'] = Pixmap()
-			self['tl_red'] = Pixmap()
-			self['tl_yellow'] = Pixmap()
-			self['tl_green'] = Pixmap()
+		self['feedStatusMSG'] = Label()
+		self['tl_off'] = Pixmap()
+		self['tl_red'] = Pixmap()
+		self['tl_yellow'] = Pixmap()
+		self['tl_green'] = Pixmap()
+		self['tl_off'].hide()
+		self['tl_red'].hide()
+		self['tl_yellow'].hide()
+		self['tl_green'].hide()
 
 		self.onShown.append(self.onshow)
 
@@ -75,7 +79,7 @@ class UpdateChoices(ChoiceBox):
 			self['tl_red'].hide()
 			self['tl_yellow'].hide()
 			self['tl_green'].hide()
-			if self.var == 'unstable':
+			if self.var in ("unstable"):
 				self['tl_red'].show()
 			elif self.var == 'updating':
 				self['tl_yellow'].show()
@@ -146,17 +150,17 @@ class UpdatePlugin(Screen, ProtectedScreen):
 			self['feedStatusMSG'].setText(status_text)
 		if self.trafficLight == 'stable':
 			self['tl_green'].show()
-		elif self.trafficLight in ("unstable", "alien"):
+		elif self.trafficLight in ("unstable"):
 			self['tl_red'].show()
 		elif self.trafficLight == 'updating':
 			self['tl_yellow'].show()
 		else:
 			self['tl_off'].show()
-		if (getImageType() != 'release' and self.trafficLight not in ("unknown", "alien")) or (getImageType() == 'release' and self.trafficLight not in ("stable", "unstable", "alien")):
+		if (getImageType() != 'release' and self.trafficLight not in ("unknown")) or (getImageType() == 'release' and self.trafficLight not in ("stable", "unstable")):
 			self.session.openWithCallback(self.close, MessageBox, feedsstatuscheck.getFeedsErrorMessage(), type=MessageBox.TYPE_INFO, timeout=30, close_on_any_key=True)
 			return
 		else:
-			if getImageType() != 'release' or (config.softwareupdate.updateisunstable.value == '1' and config.softwareupdate.updatebeta.value) or config.softwareupdate.updateisunstable.value == '0':
+			if getImageType() != 'release' or (config.softwareupdate.updateisunstable.value == 1 and config.softwareupdate.updatebeta.value) or config.softwareupdate.updateisunstable.value == 0:
 				if kernelMismatch():
 					self.session.openWithCallback(self.close, MessageBox, _("The Linux kernel has changed, an update is not permitted. \nInstall latest image using USB stick or Image Manager."), type=MessageBox.TYPE_INFO, timeout=30, close_on_any_key=True)
 					return
@@ -255,15 +259,18 @@ class UpdatePlugin(Screen, ProtectedScreen):
 				self.ipkg.startCmd(IpkgComponent.CMD_UPGRADE_LIST)
 			elif self.ipkg.currentCommand == IpkgComponent.CMD_UPGRADE_LIST:
 				self.total_packages = None
-				if getImageType() != 'release' or (config.softwareupdate.updateisunstable.value == '1' and config.softwareupdate.updatebeta.value):
+				if (getImageType() != 'release' or (config.softwareupdate.updateisunstable.value == 1 and config.softwareupdate.updatebeta.value)) or config.softwareupdate.updateisunstable.value == 0:
 					self.total_packages = len(self.ipkg.getFetchedList())
-					message = _("The current update may be unstable") + "\n" + _("Are you sure you want to update your %s %s ?") % (getMachineBrand(), getMachineName()) + "\n(" + (ngettext("%s updated package available", "%s updated packages available", self.total_packages) % self.total_packages) + ")"
-				elif config.softwareupdate.updateisunstable.value == '0':
-					self.total_packages = len(self.ipkg.getFetchedList())
-					message = _("Do you want to update your %s %s ?") % (getMachineBrand(), getMachineName()) + "\n(" + (ngettext("%s updated package available", "%s updated packages available", self.total_packages) % self.total_packages) + ")"
-				if self.total_packages is not None and self.total_packages > 150:
-					message += " " + _("Reflash recommended!")
+					packagesMsg = "\n(" + (ngettext("%s updated package available", "%s updated packages available", self.total_packages) % self.total_packages) + ")"
+					if getImageType() != 'release' or (config.softwareupdate.updateisunstable.value == 1 and config.softwareupdate.updatebeta.value):
+						message = _("The current update may be unstable.") + "\n" + _("Are you sure you want to update your %s %s?") % (getMachineBrand(), getMachineName()) + packagesMsg
+					elif config.softwareupdate.updateisunstable.value == 0:
+						message = _("Do you want to update your %s %s?") % (getMachineBrand(), getMachineName()) + packagesMsg
 				if self.total_packages:
+					if self.total_packages > 150:
+						message += " " + _("Reflash recommended!")
+					if isPluginInstalled("OBH") and not config.softwareupdate.autosettingsbackup.value and config.backupmanager.backuplocation.value:
+						message += "\n" + _("Making a settings backup before updating is highly recommended.")
 					global ocram
 					ocram = ''
 					for package_tmp in self.ipkg.getFetchedList():
@@ -340,14 +347,16 @@ class UpdatePlugin(Screen, ProtectedScreen):
 			return
 
 		if answer[1] == "menu":
-			if config.softwareupdate.updateisunstable.value == '1':
-				message = _("The current update may be unstable") + "\n" + _("Are you sure you want to update your %s %s ?") % (getMachineBrand(), getMachineName()) + "\n(%s " % self.total_packages + _("Packages") + ")"
-			elif config.softwareupdate.updateisunstable.value == '0':
-				message = _("Do you want to update your %s %s ?") % (getMachineBrand(), getMachineName()) + "\n(%s " % self.total_packages + _("Packages") + ")"
+			packagesMsg = "\n(%s " % self.total_packages + _("Packages") + ")"
+			if config.softwareupdate.updateisunstable.value == 1:
+				message = _("The current update may be unstable.") + "\n" + _("Are you sure you want to update your %s %s?") % (getMachineBrand(), getMachineName()) + packagesMsg
+			elif config.softwareupdate.updateisunstable.value == 0:
+				message = _("Do you want to update your %s %s?") % (getMachineBrand(), getMachineName()) + packagesMsg
 			choices = [(_("View the changes"), "changes"),
 				(_("Upgrade and reboot system"), "cold")]
 			if not self.SettingsBackupDone and not config.softwareupdate.autosettingsbackup.value and config.backupmanager.backuplocation.value:
-				choices.append((_("Perform a settings backup, making a backup before updating is strongly advised."), "backup"))
+				choices.append((_("Perform a settings backup"), "backup"))
+				message += "\n" + _("Making a settings backup before updating is highly recommended.")
 			if not self.ImageBackupDone and not config.softwareupdate.autoimagebackup.value and config.imagemanager.backuplocation.value:
 				choices.append((_("Perform a full image backup"), "imagebackup"))
 			choices.append((_("Update channel list only"), "channels"))
@@ -376,13 +385,12 @@ class UpdatePlugin(Screen, ProtectedScreen):
 		self.ipkg.write(res and "N" or "Y")
 
 	def doSettingsBackup(self):
-		backup = None
 		from Plugins.SystemPlugins.OBH.BackupManager import BackupFiles
 		self.BackupFiles = BackupFiles(self.session, backuptype=BackupFiles.TYPE_SOFTWAREUPDATE)
 		Components.Task.job_manager.AddJob(self.BackupFiles.createBackupJob())
 		Components.Task.job_manager.in_background = False
 		for job in Components.Task.job_manager.getPendingJobs():
-			if job.name == dgettext('obh', 'Backup manager'):
+			if job.name == _('Backup manager'):
 				break
 		self.showJobView(job)
 
@@ -393,7 +401,7 @@ class UpdatePlugin(Screen, ProtectedScreen):
 		Components.Task.job_manager.AddJob(self.ImageBackup.createBackupJob())
 		Components.Task.job_manager.in_background = False
 		for job in Components.Task.job_manager.getPendingJobs():
-			if job.name == dgettext('obh', 'Image manager'):
+			if job.name == _('Image manager'):
 				break
 		self.showJobView(job)
 
@@ -408,9 +416,9 @@ class UpdatePlugin(Screen, ProtectedScreen):
 			self.close()
 
 	def showJobView(self, job):
-		if job.name == dgettext('obh', 'Image manager'):
+		if job.name == _('Image manager'):
 			self.ImageBackupDone = True
-		elif job.name == dgettext('obh', 'Backup manager'):
+		elif job.name == _('Backup manager'):
 			self.SettingsBackupDone = True
 		from Screens.TaskView import JobView
 		Components.Task.job_manager.in_background = False
