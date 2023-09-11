@@ -98,10 +98,12 @@ class Menu(Screen, HelpableScreen, ProtectedScreen):
 					return
 			elif not SystemInfo.get(requires, False):
 				return
+		conditional = node.get("conditional")
+		if conditional and not eval(conditional):
+			return
 		menu_text = _(x) if (x := node.get("text")) else "* fix me *"
 		weight = node.get("weight", 50)
-		description = node.get("description", "") or None
-		description = description and _(description)
+		description = _(x) if (x := node.get("description", "")) else None
 		menupng = MenuEntryPixmap(key, self.png_cache)
 		x = node.get("flushConfigOnClose")
 		if x:
@@ -138,8 +140,7 @@ class Menu(Screen, HelpableScreen, ProtectedScreen):
 			return
 		item_text = _(x) if (x := node.get("text")) else "* fix me *"
 		weight = node.get("weight", 50)
-		description = node.get("description", "") or None
-		description = description and _(description)
+		description = _(x) if (x := node.get("description", "")) else None
 		menupng = MenuEntryPixmap(key, self.png_cache)
 		for x in node:
 			if x.tag == 'screen':
@@ -313,7 +314,7 @@ class Menu(Screen, HelpableScreen, ProtectedScreen):
 					for y in bhorder:
 						if y[0] == plugin_menuid:
 							weight = y[1]
-				description = ""  # plugins.getDescriptionForMenuEntryID(self.menuID, plugin_menuid) # commented out as it is super slow
+				description = None  # plugins.getDescriptionForMenuEntryID(self.menuID, plugin_menuid) # commented out as it is super slow
 				menupng = MenuEntryPixmap(l[2], self.png_cache)
 				self.list.append((l[0], boundFunction(l[1], self.session, close=self.close), l[2], weight or 50, description, menupng))
 

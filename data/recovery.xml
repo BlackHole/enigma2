@@ -9,6 +9,14 @@
 		Arguments must be comma seperated (will be fed to eval), and can
 			use stuff from module.
 		(Of course you must specify at least one of module, screen.)
+	<plugin [extensions/system="pluginname"] [screen="classname"]>[arguments]</plugin>
+		Either "extensions" or "system" must be used. "extensions" is for
+		Plugin.Extensions plugins and "system" is for Plugins.SystemPlugins.
+	<plugin [extensions="pluginname"] [screen="classname"]>[arguments]</plugin>
+		Executes Screen called "classname" from module "Plugins.Extensions.pluginname.plugin".
+		If no screen is given, "pluginname" is used as screen class name.
+		Arguments must be comma seperated (will be fed to eval), and can
+			use stuff from module.
 	<setup id="id" />
 		Opens a setup with specified id.
 	<code> .. code .. </code>
@@ -21,7 +29,7 @@
 	<!-- Menu / MultiBoot Image Selector -->
 	<menu key="recovery_multiboot" level="0" text="MultiBoot Image Selector" weight="1">
 
-		<item key="multiboot" level="0" text="MultiBoot Image Selector" requires="canMultiBoot"><screen module="MultiBootSelector" screen="MultiBootSelector">1</screen></item>
+		<item key="multiboot" level="0" text="MultiBoot Image Selector" requires="canMultiBoot"><screen module="MultiBootSelector">1</screen></item>
 	</menu>
 
 	<!-- Menu / Image Manager -->
@@ -58,7 +66,7 @@ self.session.open(OpenBhImageManager)
 			<menu key="system" level="0" text="System" weight="98">
 				<menu key="logs_menu" level="2" text="Logs" weight="2">
 					<item key="logs_setup" level="2" text="Settings"><setup id="logs" /></item>
-					<item key="logs_man" level="2" text="Log Manager"><screen module="LogManager" screen="LogManager" /></item>
+					<item key="logs_man" level="2" text="Log Manager"><screen module="LogManager" /></item>
 				</menu>
 				<!-- Menu / Software Update -->
 				<menu weight="3" level="0" text="Software Update" key="softwareupdatemenu">
@@ -70,23 +78,23 @@ self.session.open(OpenBhImageManager)
 
 		<!-- Menu / Information -->
 		<menu key="information" level="0" text="Information" weight="6">
-			<item key="about_screen" level="0" text="About"><screen module="About" screen="About" /></item>
+			<item key="about_screen" level="0" text="About"><screen module="About" /></item>
 			<item key="device_screen" level="0" text="Devices"><screen module="About" screen="Devices" /></item>
 			<item key="memory_screen" level="0" text="Memory"><screen module="About" screen="SystemMemoryInfo" /></item>
 			<item key="network_screen" level="0" text="Network"><screen module="About" screen="SystemNetworkInfo" /></item>
-			<item key="boxinfo_screen" level="2" text="BoxInfo"><screen module="AboutBoxInfo" screen="AboutBoxInfo" /></item>
+			<item key="boxinfo_screen" level="2" text="BoxInfo"><screen module="AboutBoxInfo" /></item>
 		</menu>
 
 		<!-- Menu / Standby and Restart -->
 		<menu key="shutdown" text="Standby &amp; Restart" weight="99">
-		<item key="standby" level="0" text="Standby"><screen module="Standby" screen="Standby" /></item>
-		<item key="deep_standby" level="0" text="Deep Standby" requires="DeepstandbySupport"><screen module="Standby" screen="TryQuitMainloop">1</screen></item>
-		<item key="deep_standby" level="0" text="Shut Down" requires="!DeepstandbySupport"><screen module="Standby" screen="TryQuitMainloop">1</screen></item>
-		<item key="multiboot" level="0" text="MultiBoot Image Selector" requires="canMultiBoot"><screen module="MultiBootSelector" screen="MultiBootSelector">1</screen></item>
-		<item key="android_mode" level="0" text="Android Mode" requires="AndroidMode"><screen module="Standby" screen="TryQuitMainloop">12</screen></item>
-		<item key="H9SDswap" level="0" text="H9SDroot" requires="HasH9SD"><screen module="H9SDswap" screen="H9SDswap">1</screen></item>
-		<item key="restart" level="0" text="Reboot"><screen module="Standby" screen="TryQuitMainloop">2</screen></item>
-		<item key="restart_enigma" level="0" text="Restart Enigma2"><screen module="Standby" screen="TryQuitMainloop">3</screen></item>
+			<item key="standby" level="0" text="Standby"><screen module="Standby" /></item>
+			<item key="deep_standby" level="0" text="Deep Standby" requires="DeepstandbySupport"><screen module="Standby" screen="TryQuitMainloop">1</screen></item>
+			<item key="deep_standby" level="0" text="Shut Down" requires="!DeepstandbySupport"><screen module="Standby" screen="TryQuitMainloop">1</screen></item>
+			<item key="multiboot" level="0" text="MultiBoot Image Selector" requires="canMultiBoot"><screen module="MultiBootSelector">1</screen></item>
+			<item key="android_mode" level="0" text="Android Mode" requires="AndroidMode"><screen module="Standby" screen="TryQuitMainloop">12</screen></item>
+			<item key="H9SDswap" level="0" text="H9SDroot" requires="HasH9SD"><screen module="H9SDswap">1</screen></item>
+			<item key="restart" level="0" text="Reboot"><screen module="Standby" screen="TryQuitMainloop">2</screen></item>
+			<item key="restart_enigma" level="0" text="Restart Enigma2"><screen module="Standby" screen="TryQuitMainloop">3</screen></item>
 		</menu>
 	</menu>
 </menu>
