@@ -303,7 +303,7 @@ class Menu(Screen, HelpableScreen, ProtectedScreen):
 					bhorder.append(res)
 					file.close()
 
-			for l in plugins.getPluginsForMenu(self.menuID):
+			for l, description in plugins.getPluginsForMenuWithDescription(self.menuID):
 				# check if a plugin overrides an existing menu
 				plugin_menuid = l[2]
 				for x in self.list:
@@ -314,7 +314,6 @@ class Menu(Screen, HelpableScreen, ProtectedScreen):
 					for y in bhorder:
 						if y[0] == plugin_menuid:
 							weight = y[1]
-				description = None  # plugins.getDescriptionForMenuEntryID(self.menuID, plugin_menuid) # commented out as it is super slow
 				menupng = MenuEntryPixmap(l[2], self.png_cache)
 				self.list.append((l[0], boundFunction(l[1], self.session, close=self.close), l[2], weight or 50, description, menupng))
 
