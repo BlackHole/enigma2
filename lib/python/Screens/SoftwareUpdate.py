@@ -53,7 +53,7 @@ class UpdateChoices(ChoiceBox):
 		print('title:', title)
 
 		self.var = None
-		if var and var in ("unstable", "updating", "stable", "unknown"):
+		if var and var in ("unstable", "updating", "stable", "unknown", "alien", "developer"):
 			self.var = var
 		self['feedStatusMSG'] = Label()
 		self['tl_off'] = Pixmap()
@@ -79,7 +79,7 @@ class UpdateChoices(ChoiceBox):
 			self['tl_red'].hide()
 			self['tl_yellow'].hide()
 			self['tl_green'].hide()
-			if self.var in ("unstable"):
+			if self.var in ("unstable", "alien", "developer"):
 				self['tl_red'].show()
 			elif self.var == 'updating':
 				self['tl_yellow'].show()
@@ -150,13 +150,13 @@ class UpdatePlugin(Screen, ProtectedScreen):
 			self['feedStatusMSG'].setText(status_text)
 		if self.trafficLight == 'stable':
 			self['tl_green'].show()
-		elif self.trafficLight in ("unstable"):
+		elif self.trafficLight in ("unstable", "alien", "developer"):
 			self['tl_red'].show()
 		elif self.trafficLight == 'updating':
 			self['tl_yellow'].show()
 		else:
 			self['tl_off'].show()
-		if (getImageType() != 'release' and self.trafficLight not in ("unknown")) or (getImageType() == 'release' and self.trafficLight not in ("stable", "unstable")):
+		if (getImageType() != 'release' and self.trafficLight not in ("unknown", "alien", "developer")) or (getImageType() == 'release' and self.trafficLight not in ("stable", "unstable", "alien", "developer")):
 			self.session.openWithCallback(self.close, MessageBox, feedsstatuscheck.getFeedsErrorMessage(), type=MessageBox.TYPE_INFO, timeout=30, close_on_any_key=True)
 			return
 		else:
