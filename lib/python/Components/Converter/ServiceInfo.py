@@ -127,7 +127,7 @@ class ServiceInfo(Poll, Converter):
 			f.close()
 			if val >= 2 ** 31:
 				val -= 2 ** 32
-		except Exception as e:
+		except:
 			pass
 		return val
 
