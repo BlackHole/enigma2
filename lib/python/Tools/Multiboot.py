@@ -1,12 +1,11 @@
 from datetime import datetime
 import glob
-import shutil
 import subprocess
 import tempfile
 from os import mkdir, path, rmdir, rename, remove, sep, stat
 import struct
 
-from boxbranding import getMachineBuild, getMachineMtdRoot
+from boxbranding import getMachineMtdRoot
 from Components.Console import Console
 from Components.SystemInfo import SystemInfo, BoxInfo as BoxInfoRunningInstance, BoxInformation
 from Tools.Directories import fileHas, fileExists

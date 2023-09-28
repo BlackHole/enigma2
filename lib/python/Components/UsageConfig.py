@@ -115,7 +115,7 @@ def InitUsageConfig():
 	except Exception as err:
 		print("[UsageConfig] Error loading 'SecondInfoBarSimple' skin parameter! (%s)" % err)
 		SystemInfo["SecondInfoBarSimple"] = False
-	config.usage.second_infobar_simple = ConfigBoolean(descriptions={False: _("Standard"), True: _("Alternative")}, graphic=False)
+	config.usage.second_infobar_simple = ConfigBoolean(descriptions={False: _("Standard"), True: _("Simple")}, graphic=False)
 
 	config.usage.infobar_frontend_source = ConfigSelection(default="tuner", choices=[("settings", _("Settings")), ("tuner", _("Tuner"))])
 
@@ -314,16 +314,16 @@ def InitUsageConfig():
 	config.usage.serviceitems_per_page = ConfigSelection(default=0, choices=choices)
 	config.usage.show_servicelist = ConfigYesNo(default=True)
 	config.usage.servicelist_mode = ConfigSelection(default="standard", choices=[
-		("standard", _("Standard")),
-		("simple", _("Alternative"))])
+					("standard", _("Standard")),
+					("simple", _("Slim"))])
 	config.usage.servicelistpreview_mode = ConfigYesNo(default=False)
 	config.usage.tvradiobutton_mode = ConfigSelection(default="BouquetList", choices=[
 					("ChannelList", _("Channel List")),
 					("BouquetList", _("Bouquet List")),
 					("MovieList", _("Movie List"))])
 	config.usage.okbutton_mode = ConfigSelection(default="0", choices=[
-						("0", _("InfoBar")),
-						("1", _("Channel List"))])
+					("0", _("InfoBar")),
+					("1", _("Channel List"))])
 	config.usage.channelbutton_mode = ConfigSelection(default="0", choices=[
 					("0", _("Just change channels")),
 					("1", _("Channel List")),
@@ -334,11 +334,11 @@ def InitUsageConfig():
 					("1", _("Channel List"))])
 	config.usage.show_bouquetalways = ConfigYesNo(default=False)
 	config.usage.show_event_progress_in_servicelist = ConfigSelection(default='barleft', choices=[
-		('barleft', _("Progress bar left")),
-		('barright', _("Progress bar right")),
-		('percleft', _("Percentage left")),
-		('percright', _("Percentage right")),
-		('no', _("No"))])
+					('barleft', _("Progress bar left")),
+					('barright', _("Progress bar right")),
+					('percleft', _("Percentage left")),
+					('percright', _("Percentage right")),
+					('no', _("No"))])
 	config.usage.show_channel_numbers_in_servicelist = ConfigYesNo(default=True)
 	config.usage.show_channel_jump_in_servicelist = ConfigSelection(default="alpha", choices=[
 					("quick", _("Quick Actions")),

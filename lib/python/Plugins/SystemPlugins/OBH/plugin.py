@@ -1,7 +1,7 @@
 from os import listdir, path, stat
 
 from Plugins.Plugin import PluginDescriptor
-from Components.config import config, ConfigBoolean, configfile
+from Components.config import config
 from Components.SystemInfo import SystemInfo
 
 from .BackupManager import BackupManagerautostart
@@ -9,14 +9,12 @@ from .ImageManager import ImageManagerautostart
 from .IPKInstaller import IpkgInstaller
 from .ScriptRunner import ScriptRunnerAutostart
 from .SwapManager import SwapAutostart
-from .IPKInstaller import IpkgInstaller
 
 
-#	On plugin initialisation (called by StartEnigma). language will be assigned as follows if config.misc.firstrun.value:
-#	Default language en_GB (OpenBh) is set by SetupDevices called by StartEnigma
-#	If no backup, the languagewizard will be inserted by Plugin into the wizards.
-#	If backup, then language will be set here from config.osd.language if in backup, else default language
-#
+# On plugin initialisation (called by StartEnigma). language will be assigned as follows if config.misc.firstrun.value:
+# Default language en_GB (OpenBh) is set by SetupDevices called by StartEnigma
+# If no backup, the languagewizard will be inserted by Plugin into the wizards.
+# If backup, then language will be set here from config.osd.language if in backup, else default language
 
 def setLanguageFromBackup(backupfile):
 	print("[OBH plugin][setLanguageFromBackup] backupfile", backupfile)
@@ -155,14 +153,15 @@ def filescan_open(list, session, **kwargs):
 
 def filescan(**kwargs):
 	from Components.Scanner import Scanner, ScanPath
-	return Scanner(mimetypes=["application/x-debian-package"],
-				paths_to_scan=[
-					ScanPath(path="ipk", with_subdirs=True),
-					ScanPath(path="", with_subdirs=False),
-				],
-				name="Ipkg",
-				description=_("Install extensions."),
-				openfnc=filescan_open)
+	return Scanner(
+		mimetypes=["application/x-debian-package"],
+		paths_to_scan=[
+			ScanPath(path="ipk", with_subdirs=True),
+			ScanPath(path="", with_subdirs=False),
+		],
+		name="Ipkg",
+		description=_("Install extensions."),
+		openfnc=filescan_open)
 
 
 def Plugins(**kwargs):

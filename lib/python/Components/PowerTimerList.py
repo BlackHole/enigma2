@@ -1,5 +1,5 @@
-from enigma import eListboxPythonMultiContent, eListbox, gFont, getDesktop, \
-	RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_VALIGN_TOP, RT_VALIGN_BOTTOM
+from enigma import eListboxPythonMultiContent, eListbox, gFont, \
+	RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_VALIGN_BOTTOM
 
 from Components.GUIComponent import GUIComponent
 from skin import parseFont, parseScale
@@ -11,12 +11,11 @@ from PowerTimer import AFTEREVENT, TIMERTYPE
 
 
 class PowerTimerList(GUIComponent):
-#
-#  | <Service>     <Name of the Timer>  |
-#  | <start, end>              <state>  |
-#
+	#
+	#  | <Service>     <Name of the Timer>  |
+	#  | <start, end>              <state>  |
+	#
 	def buildTimerEntry(self, timer, processed):
-		screenwidth = getDesktop(0).size().width()
 		timertype = {
 			TIMERTYPE.WAKEUP: _("Wake Up"),
 			TIMERTYPE.WAKEUPTOSTANDBY: _("Wake Up To Standby"),

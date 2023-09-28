@@ -6,7 +6,7 @@ import struct
 
 from boxbranding import getBoxType, getImageType, getImageDistro, getImageVersion, getImageBuild, getImageDevBuild, getImageFolder, getImageFileSystem, getBrandOEM, getMachineBrand, getMachineName, getMachineBuild, getMachineMake, getMachineMtdRoot, getMachineRootFile, getMachineMtdKernel, getMachineKernelFile, getMachineMKUBIFS, getMachineUBINIZE
 from enigma import eTimer, fbClass
-from os import path, stat, system, mkdir, makedirs, listdir, remove, rename, rmdir, sep as ossep, statvfs, chmod, walk, symlink, unlink
+from os import path, stat, system, mkdir, makedirs, listdir, remove, rename, rmdir, sep as ossep, statvfs, chmod, walk
 from shutil import copy, copyfile, move, rmtree
 from time import localtime, time, strftime, mktime
 
@@ -27,7 +27,6 @@ from Screens.Setup import Setup
 from Screens.Standby import TryQuitMainloop
 from Screens.TaskView import JobView
 from Screens.TextBox import TextBox
-from Tools.BoundFunction import boundFunction
 from Tools.Directories import fileExists, pathExists, fileHas
 import Tools.CopyFiles
 from Tools.HardwareInfo import HardwareInfo
@@ -124,7 +123,6 @@ def ImageManagerautostart(reason, session=None, **kwargs):
 	"""called with reason=1 to during /sbin/shutdown.sysvinit, with reason=0 at startup?"""
 	global autoImageManagerTimer
 	global _session
-	now = int(time())
 	if reason == 0:
 		print("[ImageManager] AutoStart Enabled")
 		if session is not None:
@@ -590,9 +588,9 @@ class OpenBhImageManager(Screen):
 			else:
 				MAINDEST = "%s/%s" % (self.TEMPDESTROOT, getImageFolder())
 				if pathExists("%s/SDAbackup" % MAINDEST) and self.multibootslot != 1:
-						self.session.open(MessageBox, _("Multiboot only able to restore this backup to mmc slot1"), MessageBox.TYPE_INFO, timeout=20)
-						print("[ImageManager] SF8008 mmc restore to SDcard failed:\n", end=' ')
-						self.close()
+					self.session.open(MessageBox, _("Multiboot only able to restore this backup to mmc slot1"), MessageBox.TYPE_INFO, timeout=20)
+					print("[ImageManager] SF8008 mmc restore to SDcard failed:\n", end=' ')
+					self.close()
 				else:
 					self.keyRestore6(0)
 		else:
@@ -631,9 +629,9 @@ class OpenBhImageManager(Screen):
 						copyfile("/boot/STARTUP_%s" % self.multibootslot, "/boot/STARTUP")
 				elif SystemInfo["HasKexecMultiboot"]:
 					if SystemInfo["HasKexecUSB"] and "mmcblk" not in self.MTDROOTFS:
-						   CMD = "/usr/bin/ofgwrite -r%s -kzImage -s'%s/linuxrootfs' -m%s '%s'" % (self.MTDROOTFS, getBoxType()[2:], self.multibootslot, MAINDEST)
+						CMD = "/usr/bin/ofgwrite -r%s -kzImage -s'%s/linuxrootfs' -m%s '%s'" % (self.MTDROOTFS, getBoxType()[2:], self.multibootslot, MAINDEST)
 					else:
-						   CMD = "/usr/bin/ofgwrite -r%s -kzImage -m%s '%s'" % (self.MTDROOTFS, self.multibootslot, MAINDEST)
+						CMD = "/usr/bin/ofgwrite -r%s -kzImage -m%s '%s'" % (self.MTDROOTFS, self.multibootslot, MAINDEST)
 					print("[ImageManager] running commnd:%s slot = %s" % (CMD, self.multibootslot))
 				else:
 					CMD = "/usr/bin/ofgwrite -r -k -m%s '%s'" % (self.multibootslot, MAINDEST)  # Normal multiboot
@@ -855,7 +853,6 @@ class AutoImageManagerTimer:
 		now = int(time())
 		wake = self.getBackupTime()
 		# If we're close enough, we're okay...
-		atLeast = 0
 		if wake - now < 60:
 			print("[ImageManager] Backup onTimer occured at", strftime("%c", localtime(now)))
 			from Screens.Standby import inStandby
@@ -1199,7 +1196,7 @@ class ImageBackup(Screen):
 		print("[ImageManager] Stage1: Making Kernel Image.")
 		if "bin" or "uImage" in self.KERNELFILE:
 			if SystemInfo["HasKexecMultiboot"]:
-#				boot = "boot" if slot > 0 and slot < 4 else "dev/%s/%s"  %(self.MTDROOTFS, self.ROOTFSSUBDIR)
+				# boot = "boot" if slot > 0 and slot < 4 else "dev/%s/%s"  %(self.MTDROOTFS, self.ROOTFSSUBDIR)
 				boot = "boot"
 				self.command = "dd if=/%s/%s of=%s/vmlinux.bin" % (boot, SystemInfo["canMultiBoot"][slot]["kernel"].rsplit("/", 1)[1], self.WORKDIR) if slot != 0 else "dd if=/dev/%s of=%s/vmlinux.bin" % (self.MTDKERNEL, self.WORKDIR)
 			else:
@@ -1566,7 +1563,6 @@ class ImageBackup(Screen):
 		print("[ImageManager] Stage5: Complete.")
 
 	def doBackup6(self):
-		zipfolder = path.split(self.MAINDESTROOT)
 		self.commands = []
 		if SystemInfo["HasRootSubdir"]:
 			self.commands.append("7za a -r -bt -bd %s/%s-%s-%s-%s-%s%s_mmc.zip %s/*" % (self.BackupDirectory, self.IMAGEDISTRO, self.DISTROVERSION, self.DISTROBUILD, self.MODEL, self.BackupDate, self.VuSlot0, self.MAINDESTROOT))
