@@ -13,7 +13,7 @@ from Plugins.Plugin import PluginDescriptor
 from Components.SystemInfo import SystemInfo
 
 profile("LOAD:enigma")
-import enigma
+import enigma  # noqa: E402
 
 profile("LOAD:InfoBarGenerics")
 from Screens.InfoBarGenerics import InfoBarShowHide, \
@@ -24,17 +24,17 @@ from Screens.InfoBarGenerics import InfoBarShowHide, \
 	InfoBarServiceNotifications, InfoBarPVRState, InfoBarCueSheetSupport, InfoBarBuffer, \
 	InfoBarSummarySupport, InfoBarMoviePlayerSummarySupport, InfoBarTimeshiftState, InfoBarTeletextPlugin, InfoBarExtensions, \
 	InfoBarSubtitleSupport, InfoBarPiP, InfoBarPlugins, InfoBarServiceErrorPopupSupport, InfoBarJobman, InfoBarZoom, \
-	InfoBarHdmi, setResumePoint, delResumePoint
-from Screens.ButtonSetup import InfoBarButtonSetup
+	InfoBarHdmi, setResumePoint, delResumePoint  # noqa: E402
+from Screens.ButtonSetup import InfoBarButtonSetup  # noqa: E402
 
 profile("LOAD:InitBar_Components")
-from Components.ActionMap import HelpableActionMap
-from Components.Timeshift import InfoBarTimeshift
-from Components.config import config
-from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
+from Components.ActionMap import HelpableActionMap  # noqa: E402
+from Components.Timeshift import InfoBarTimeshift  # noqa: E402
+from Components.config import config  # noqa: E402
+from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase  # noqa: E402
 
 profile("LOAD:HelpableScreen")
-from Screens.HelpMenu import HelpableScreen
+from Screens.HelpMenu import HelpableScreen  # noqa: E402
 
 
 class InfoBar(InfoBarBase, InfoBarShowHide,
@@ -71,22 +71,26 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 		self.radioTV = 0
 		self.allowPiP = True
 
-		for x in HelpableScreen, \
-				InfoBarBase, InfoBarShowHide, \
-				InfoBarNumberZap, InfoBarChannelSelection, InfoBarMenu, InfoBarEPG, InfoBarRdsDecoder, \
-				InfoBarInstantRecord, InfoBarAudioSelection, InfoBarVideoSetup, InfoBarRedButton, InfoBarTimerButton, InfoBarUnhandledKey, InfoBarLongKeyDetection, InfoBarVmodeButton,\
-				InfoBarAdditionalInfo, InfoBarNotifications, InfoBarDish, InfoBarSubserviceSelection, InfoBarResolutionSelection, InfoBarAspectSelection, InfoBarBuffer, \
-				InfoBarTimeshift, InfoBarSeek, InfoBarCueSheetSupport, InfoBarSummarySupport, InfoBarTimeshiftState, \
-				InfoBarTeletextPlugin, InfoBarExtensions, InfoBarPiP, InfoBarSubtitleSupport, InfoBarJobman, InfoBarZoom, \
-				InfoBarHdmi, InfoBarPlugins, InfoBarServiceErrorPopupSupport, InfoBarButtonSetup:
+		for x in (
+			HelpableScreen, InfoBarBase, InfoBarShowHide, InfoBarNumberZap, InfoBarChannelSelection, InfoBarMenu,
+			InfoBarEPG, InfoBarRdsDecoder, InfoBarInstantRecord, InfoBarAudioSelection, InfoBarVideoSetup,
+			InfoBarRedButton, InfoBarTimerButton, InfoBarUnhandledKey, InfoBarLongKeyDetection, InfoBarVmodeButton,
+			InfoBarAdditionalInfo, InfoBarNotifications, InfoBarDish, InfoBarSubserviceSelection,
+			InfoBarResolutionSelection, InfoBarAspectSelection, InfoBarBuffer, InfoBarTimeshift, InfoBarSeek,
+			InfoBarCueSheetSupport, InfoBarSummarySupport, InfoBarTimeshiftState, InfoBarTeletextPlugin,
+			InfoBarExtensions, InfoBarPiP, InfoBarSubtitleSupport, InfoBarJobman, InfoBarZoom, InfoBarHdmi,
+			InfoBarPlugins, InfoBarServiceErrorPopupSupport, InfoBarButtonSetup,
+		):
 			x.__init__(self)
 
 		self.helpList.append((self["actions"], "InfobarActions", [("showMovies", _("Watch recordings"))]))
 		self.helpList.append((self["actions"], "InfobarActions", [("showRadio", _("Listen to the radio"))]))
 
-		self.__event_tracker = ServiceEventTracker(screen=self, eventmap={
+		self.__event_tracker = ServiceEventTracker(screen=self,
+			eventmap={
 				enigma.iPlayableService.evUpdatedEventInfo: self.__eventInfoChanged
-			})
+			}
+		)
 
 		self.current_begin_time = 0
 		if type(self) is InfoBar:
@@ -134,12 +138,12 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 				if old_begin_time and old_begin_time != self.current_begin_time:
 					self.doShow()
 
-	def serviceStarted(self):  #override from InfoBarShowHide
+	def serviceStarted(self):  # override from InfoBarShowHide
 		new = self.servicelist.newServicePlayed()
 		if self.execing:
 			InfoBarShowHide.serviceStarted(self)
 			self.current_begin_time = 0
-		elif not self.__checkServiceStarted in self.onShown and new:
+		elif self.__checkServiceStarted not in self.onShown and new:
 			self.onShown.append(self.__checkServiceStarted)
 
 	def __checkServiceStarted(self):
@@ -267,10 +271,10 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 
 
 class MoviePlayer(InfoBarBase, InfoBarShowHide, InfoBarLongKeyDetection, InfoBarMenu, InfoBarEPG,
-				  InfoBarSeek, InfoBarShowMovies, InfoBarInstantRecord, InfoBarAudioSelection, InfoBarVideoSetup, HelpableScreen, InfoBarNotifications,
-				  InfoBarServiceNotifications, InfoBarPVRState, InfoBarCueSheetSupport,
-				  InfoBarMoviePlayerSummarySupport, InfoBarSubtitleSupport, Screen, InfoBarTeletextPlugin,
-				  InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarPlugins, InfoBarPiP, InfoBarZoom, InfoBarHdmi, InfoBarButtonSetup):
+				InfoBarSeek, InfoBarShowMovies, InfoBarInstantRecord, InfoBarAudioSelection, InfoBarVideoSetup, HelpableScreen, InfoBarNotifications,
+				InfoBarServiceNotifications, InfoBarPVRState, InfoBarCueSheetSupport,
+				InfoBarMoviePlayerSummarySupport, InfoBarSubtitleSupport, Screen, InfoBarTeletextPlugin,
+				InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarPlugins, InfoBarPiP, InfoBarZoom, InfoBarHdmi, InfoBarButtonSetup):
 
 	ENABLE_RESUME_SUPPORT = True
 	ALLOW_SUSPEND = True
@@ -312,13 +316,15 @@ class MoviePlayer(InfoBarBase, InfoBarShowHide, InfoBarLongKeyDetection, InfoBar
 
 		self.allowPiP = True
 
-		for x in HelpableScreen, InfoBarShowHide, InfoBarLongKeyDetection, InfoBarMenu, InfoBarEPG, \
-				InfoBarBase, InfoBarSeek, InfoBarShowMovies, InfoBarInstantRecord, \
-				InfoBarAudioSelection, InfoBarVideoSetup, InfoBarNotifications, \
-				InfoBarServiceNotifications, InfoBarPVRState, InfoBarCueSheetSupport, \
-				InfoBarMoviePlayerSummarySupport, InfoBarSubtitleSupport, \
-				InfoBarTeletextPlugin, InfoBarServiceErrorPopupSupport, InfoBarExtensions, \
-				InfoBarPlugins, InfoBarPiP, InfoBarZoom, InfoBarButtonSetup:
+		for x in (
+			HelpableScreen, InfoBarShowHide, InfoBarLongKeyDetection, InfoBarMenu, InfoBarEPG,
+			InfoBarBase, InfoBarSeek, InfoBarShowMovies, InfoBarInstantRecord,
+			InfoBarAudioSelection, InfoBarVideoSetup, InfoBarNotifications,
+			InfoBarServiceNotifications, InfoBarPVRState, InfoBarCueSheetSupport,
+			InfoBarMoviePlayerSummarySupport, InfoBarSubtitleSupport,
+			InfoBarTeletextPlugin, InfoBarServiceErrorPopupSupport, InfoBarExtensions,
+			InfoBarPlugins, InfoBarPiP, InfoBarZoom, InfoBarButtonSetup
+		):
 			x.__init__(self)
 
 		self.onChangedEntry = []

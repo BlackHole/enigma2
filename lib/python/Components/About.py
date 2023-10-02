@@ -139,12 +139,12 @@ def getCpuCoresInt():
 def getCpuCoresString():
 	cores = getCpuCoresInt()
 	return {
-			0: _("Unavailable"),
-			1: _("Single Core"),
-			2: _("Dual Core"),
-			4: _("Quad Core"),
-			8: _("Octo Core")
-			}.get(cores, _("%d cores") % cores)
+		0: _("Unavailable"),
+		1: _("Single core"),
+		2: _("Dual core"),
+		4: _("Quad core"),
+		8: _("Octo core")
+	}.get(cores, _("%d cores") % cores)
 
 
 def _ifinfo(sock, addr, ifname):
