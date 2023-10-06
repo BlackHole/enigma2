@@ -2,9 +2,9 @@ from datetime import datetime
 import glob
 import subprocess
 import tempfile
-from os import mkdir, path, rmdir, rename, remove, sep, stat
-import struct
+from os import path, rmdir, rename, remove, sep, stat
 
+import struct
 from boxbranding import getMachineMtdRoot
 from Components.Console import Console
 from Components.SystemInfo import SystemInfo, BoxInfo as BoxInfoRunningInstance, BoxInformation
@@ -38,7 +38,7 @@ def getMultibootslots():
 		print("[multiboot*****][getMultibootslots]00 device, bootslots", device, "   ", bootslots)
 		if len(bootslots) != 0:
 			break
-#		print("[multiboot*****][getMultibootslots]0 device = ", device)
+		# print("[multiboot*****][getMultibootslots]0 device = ", device)
 		if path.exists(device):
 			print("[multiboot*****][getMultibootslots]path found for device = ", device)
 			Console(binary=True).ePopen("mount %s %s" % (device, tmpname))
@@ -64,7 +64,7 @@ def getMultibootslots():
 					print("[multiboot] [getMultibootslots3] slot = %s file = %s" % (slotnumber, slotname))
 					if slotnumber.isdigit() and slotnumber not in bootslots:
 						line = open(file).read().replace("'", "").replace('"', "").replace("\n", " ").replace("ubi.mtd", "mtd").replace("bootargs=", "")
-#						print("[Multiboot][getMultibootslots]6 readlines = %s " % line)
+						# print("[Multiboot][getMultibootslots]6 readlines = %s " % line)
 						slot = dict([(x.split("=", 1)[0].strip(), x.split("=", 1)[1].strip()) for x in line.strip().split(" ") if "=" in x])
 						if slotnumber == "0":
 							slot["slotType"] = ""
@@ -96,7 +96,7 @@ def getMultibootslots():
 
 								if "kernel" not in slot.keys():
 									slot["kernel"] = "%sp%s" % (slot["root"].split("p")[0], int(slot["root"].split("p")[1]) - 1)  # oldstyle MB kernel = root-1
-	#							print("[multiboot] [getMultibootslots]7a HasMultibootMTD, kernel, root, SystemInfo['HasRootSubdir'] ", SystemInfo["HasMultibootMTD"], "   ", slot["kernel"], "   ", slot["root"], "   ", SystemInfo["HasRootSubdir"])
+									# print("[multiboot] [getMultibootslots]7a HasMultibootMTD, kernel, root, SystemInfo['HasRootSubdir'] ", SystemInfo["HasMultibootMTD"], "   ", slot["kernel"], "   ", slot["root"], "   ", SystemInfo["HasRootSubdir"])
 							else:
 								continue
 							bootslots[int(slotnumber)] = slot
@@ -109,7 +109,7 @@ def getMultibootslots():
 	if not path.ismount(tmp.dir):
 		rmdir(tmp.dir)
 	if bootslots:
-#		print("[Multiboot] Bootslots found:", bootslots)
+		# print("[Multiboot] Bootslots found:", bootslots)
 		bootArgs = open("/sys/firmware/devicetree/base/chosen/bootargs", "r").read()
 		print("[Multiboot][MultiBootSlot] bootArgs:", bootArgs)
 		if fileHas("/proc/cmdline", "kexec=1") and SystemInfo["HasRootSubdir"]:							# Kexec Vu+ receiver
@@ -118,8 +118,8 @@ def getMultibootslots():
 			SystemInfo["MultiBootSlot"] = int(rootsubdir[0].rsplit(char, 1)[1][11:])
 			SystemInfo["VuUUIDSlot"] = (UUID, UUIDnum) if UUIDnum != 0 else ""
 			print("[Multiboot][MultiBootSlot]0 current slot used:", SystemInfo["MultiBootSlot"])
-#			print("[Multiboot][MultiBootSlot]0 UID, UUIDnum:", SystemInfo["VuUUIDSlot"], "   ", SystemInfo["VuUUIDSlot"][0], "   ", SystemInfo["VuUUIDSlot"][1])
-		elif SystemInfo["HasMultibootFlags"]:
+			# print("[Multiboot][MultiBootSlot]0 UID, UUIDnum:", SystemInfo["VuUUIDSlot"], "   ", SystemInfo["VuUUIDSlot"][0], "   ", SystemInfo["VuUUIDSlot"][1])
+		elif SystemInfo["HasMultibootFlags"]:  # Qviart Dual 4K
 			with open('/dev/block/by-name/flag', 'rb') as f:
 				struct_fmt = "B"
 				flag = f.read(struct.calcsize(struct_fmt))
@@ -143,12 +143,12 @@ def getMultibootslots():
 
 
 def getUUIDtoSD(UUID):  # returns None on failure
-#	print("[multiboot][getUUIDtoSD2] UUID = ", UUID)
+	# print("[multiboot][getUUIDtoSD2] UUID = ", UUID)
 	check = "/sbin/blkid"
 	if fileExists(check):
 		lines = subprocess.check_output([check]).decode(encoding="utf8", errors="ignore").split("\n")
 		for line in lines:
-#			print("[Multiboot][getUUIDtoSD2] line", line)
+			# print("[Multiboot][getUUIDtoSD2] line", line)
 			if UUID in line.replace('"', ''):
 				return line.split(":")[0].strip()
 	else:
@@ -186,15 +186,15 @@ def GetImagelist(Recovery=None):
 			else:
 				Console(binary=True).ePopen("mount %s %s" % (SystemInfo["canMultiBoot"][slot]["root"], tmpname))
 			imagedir = sep.join([_f for _f in [tmpname, SystemInfo["canMultiBoot"][slot].get("rootsubdir", "")] if _f])
-#		print("[multiboot] [GetImagelist]0 isfile = %s" % (path.join(imagedir, "usr/bin/enigma2")))
+		# print("[multiboot] [GetImagelist]0 isfile = %s" % (path.join(imagedir, "usr/bin/enigma2")))
 		if path.isfile(path.join(imagedir, "usr/bin/enigma2")):
-#			print("[multiboot] [GetImagelist]1 Slot = %s imagedir = %s" % (slot, imagedir))
+			# print("[multiboot] [GetImagelist]1 Slot = %s imagedir = %s" % (slot, imagedir))
 			if path.isfile(path.join(imagedir, "usr/lib/enigma.info")):
 				print("[multiboot] [BoxInfo] using BoxInfo")
 				BuildVersion = createInfo(slot, imagedir=imagedir)
-#				print("[multiboot] [BoxInfo]  slot=%s, BuildVersion=%s" % (slot, BuildVersion))
+				# print("[multiboot] [BoxInfo]  slot=%s, BuildVersion=%s" % (slot, BuildVersion))
 			else:
-#				print("[multiboot] [BoxInfo] using BoxBranding")
+				# print("[multiboot] [BoxInfo] using BoxBranding")
 				print("[multiboot] [GetImagelist] 2 slot = %s imagedir = %s" % (slot, imagedir))
 				Creator = open("%s/etc/issue" % imagedir).readlines()[-2].capitalize().strip()[:-6]
 				print("[multiboot] [GetImagelist] Creator = %s imagedir = %s" % (Creator, imagedir))
@@ -209,12 +209,12 @@ def GetImagelist(Recovery=None):
 					BuildVersion = "%s %s %s %s (%s)" % (Creator, BuildType[0:3], Build, Dev, date)
 				elif fileHas("/proc/cmdline", "kexec=1") and path.isfile(path.join(imagedir, "etc/vtiversion.info")):
 					Vti = open(path.join(imagedir, "etc/vtiversion.info")).read()
-#					print("[BootInfo]6 vti = ", Vti)
+					# print("[BootInfo]6 vti = ", Vti)
 					date = VerDate(imagedir)
 					Creator = Vti[0:3]
 					Build = Vti[-8:-1]
 					BuildVersion = "%s %s (%s) " % (Creator, Build, date)
-#					print("[BootInfo]8 BuildVersion  = ", BuildVersion )
+					# print("[BootInfo]8 BuildVersion  = ", BuildVersion )
 				else:
 					date = VerDate(imagedir)
 					Creator = Creator.replace("-release", " ")
@@ -372,7 +372,6 @@ class boxbranding_reader:  # Many thanks to Huevos for creating this reader - we
 		if output:
 			for att in list(self.output.keys()):
 				self.output[att] = output[att]
-			# print("[readBrandingFile1] self.output = %s" % self.output)
 
 	def addBrandingMethods(self):  # This creates reader.getBoxType(), reader.getImageDevBuild(), etc
 		loc = {}
