@@ -193,7 +193,7 @@ def streamrelayChecker(playref):
 			playrefmod[6] = ("%x" % (int(playrefmod[6], 16) + 1)).upper()
 		playrefmod = ":".join(playrefmod)
 		url = "http://%s:%s/" % (config.misc.softcam_streamrelay_url.getHTML(), config.misc.softcam_streamrelay_port.value)
-		playref = eServiceReference("%s%s%s:%s" % (playrefmod, url.replace(":", "%3a"), playrefstring.replace(":", "%3a"), ServiceReference(playref).getServiceName()))
+		playref = eServiceReference("%s%s%s:%s" % (playrefmod, url.replace(":", "%3a"), "%3a".join(["1", "0", "1"] + playrefstring.split(":")[3:]), ServiceReference(playref).getServiceName()))
 		print("[Whitelist_StreamRelay] Play service via streamrelay as it is whitelisted as such", playref.toString())
 	return playref
 
