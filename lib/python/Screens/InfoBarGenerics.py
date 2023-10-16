@@ -177,8 +177,6 @@ reload_whitelist_vbi()
 
 
 def reload_streamrelay():
-	if not fileExists("/etc/enigma2/whitelist_streamrelay"):
-		open('/etc/enigma2/whitelist_streamrelay', 'w').write('\n'.join(whitelist.streamrelay))
 	whitelist.streamrelay = [line.strip() for line in open('/etc/enigma2/whitelist_streamrelay', 'r').readlines()] if os.path.isfile('/etc/enigma2/whitelist_streamrelay') else []
 
 
