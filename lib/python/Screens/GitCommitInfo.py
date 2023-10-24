@@ -187,7 +187,7 @@ class CommitInfo(Screen):
 				"down": self["AboutScrollLabel"].pageDown,
 				"left": self.left,
 				"right": self.right
-			}
+			}  # noqa: E123
 		)
 
 		self["key_red"] = Button(_("Cancel"))

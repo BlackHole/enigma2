@@ -1734,7 +1734,7 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 		self.callLater(self.enablePathSelect)
 
 	def updateTitle(self):
-		separatorChar = parameters.get("MovieSelectionTitleSeparatorChar", "-")
+		separatorChar = parameters.get("MovieSelectionTitleSeparatorChar", " - ")
 		title = []
 		if config.usage.setup_level.index >= 2:  # expert+
 			title.append(config.movielist.last_videodir.value)
@@ -1742,7 +1742,7 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 			title.append(','.join(self.selected_tags))
 		if self.collectionName:
 			title.append(self.collectionName)
-		self.title = (" %s " % separatorChar).join(title)
+		self.title = separatorChar.join(title)
 
 	def enablePathSelect(self):
 		self.pathselectEnabled = True
@@ -2084,7 +2084,7 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 				else:
 					metafile = open(meta, "r+")
 					sid = metafile.readline()
-					oldtitle = metafile.readline()  #noqa: F841 # local variable 'oldtitle' is assigned to but never used. Must be to skip a line.
+					oldtitle = metafile.readline()  # noqa: F841 # local variable 'oldtitle' is assigned to but never used. Must be to skip a line.
 					rest = metafile.read()
 					metafile.seek(0)
 					metafile.write("%s%s\n%s" % (sid, newname, rest))

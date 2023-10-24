@@ -227,7 +227,7 @@ class OpenBhDevicesPanel(Screen):
 		140, 0, 140, 40, 20,
 		280, 0, 140, 40, 20,
 		420, 0, 140, 40, 20,
-	]
+			]  # noqa: E124
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
@@ -378,7 +378,7 @@ class DeviceMountSetup(Screen, ConfigListScreen):
 		140, 0, 140, 40, 20,
 		0, 50, 560, 275, 26, 20,  # config
 		0, 365, 560, 20, 18,
-	]
+			]  # noqa: E124
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
