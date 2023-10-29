@@ -130,7 +130,7 @@ class PliExtraInfo(Poll, Converter, object):
 			"ServiceInfo": (
 				"ProviderName",
 				"TunerSystem",
-				"TransponderFrequency",
+				"TransponderFrequencyMHz",
 				"TransponderPolarization",
 				"TransponderSymbolRate",
 				"TransponderFEC",
