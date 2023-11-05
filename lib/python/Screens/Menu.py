@@ -17,7 +17,7 @@ from Screens.ParentalControlSetup import ProtectedScreen
 from Screens.Screen import Screen, ScreenSummary
 
 from Tools.BoundFunction import boundFunction
-from Tools.Directories import fileExists, resolveFilename, SCOPE_SKINS, SCOPE_GUISKIN
+from Tools.Directories import fileExists, resolveFilename, SCOPE_SKINS, SCOPE_CURRENT_SKIN
 from Tools.LoadPixmap import LoadPixmap
 
 from enigma import eTimer
