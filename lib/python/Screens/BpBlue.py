@@ -424,7 +424,7 @@ class BhsysInfo(Screen):
 
 class BhsysInfo2(Screen):
 	skin = """
-	<screen position="0,0" size="1280,720" title="OpenBh System Info" flags="wfNoBorder">
+	<screen position="0,0" size="1920,1080" title="OpenBh System Info" flags="wfNoBorder">
 		<ePixmap pixmap="skin_default/background_system.png" position="0,0" size="1280,720" alphatest="on"  />
 		<widget name="ramg" position="94,80" size="100,100" zPosition="1" borderColor="#f23d21" transparent="1" />
 		<widget name="swapg" position="212,80" size="100,100" zPosition="1" borderColor="#f23d21" transparent="1" />
@@ -524,10 +524,10 @@ class BhsysInfo2(Screen):
 		self["smallmon"].setText(self.smallmontxt)
 		self["smallmon"].show()
 
-# start position:644,350 end size 560,560 position 364,80
+# start position:966,525 end size 840,840 changed to 1920x1080
 	def moniShow(self):
-		self.x = 644
-		self.y = 350
+		self.x = 966
+		self.y = 525
 		self.w = 0
 		self.h = 0
 		self.moniTimer.start(10)
