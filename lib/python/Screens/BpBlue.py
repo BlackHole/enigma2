@@ -9,6 +9,7 @@ from Components.Label import Label
 from Components.ScrollLabel import ScrollLabel
 from Components.MenuList import MenuList
 from Components.Sources.List import List
+from Components.Sources.StaticText import StaticText
 from Components.Gauge import Gauge
 from Components.Pixmap import Pixmap, MultiPixmap
 from Components.About import about
@@ -481,6 +482,11 @@ class BhsysInfo2(Screen):
 		self["smallmon"].hide()
 		self["monipix"].hide()
 		self["moni2"].hide()
+
+		self["key_red"] = StaticText(_("Memory"))
+		self["key_green"] = StaticText(_("Space"))
+		self["key_yellow"] = StaticText(_("Cpu"))
+		self["key_blue"] = StaticText(_("Process"))
 
 		self["actions"] = ActionMap(["WizardActions", "ColorActions", "NumberActions"],
 		{
