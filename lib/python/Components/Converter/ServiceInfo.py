@@ -162,7 +162,7 @@ class ServiceInfo(Poll, Converter):
 			"IsHLG": (self.IS_HLG, (iPlayableService.evVideoGammaChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
 			"IsVideoMPEG2": (self.IS_VIDEO_MPEG2, (iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
 			"IsVideoAVC": (self.IS_VIDEO_AVC, (iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
-			"IsVideoHEVC": (self.IS_VIDEO_HEVC, (iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"IsVideoHEVC": (self.IS_VIDEO_HEVC, (iPlayableService.evUpdatedInfo, iPlayableService.evVideoSizeChanged)),
 		}[type]
 
 	def isVideoService(self, info):
