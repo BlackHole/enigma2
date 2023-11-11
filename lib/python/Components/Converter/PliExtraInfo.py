@@ -613,7 +613,6 @@ class PliExtraInfo(Poll, Converter, object):
 
 	def createVideoCodec(self, info):
 		refstr = info.getInfoString(iServiceInformation.sServiceref)
-		xres = int(open("/proc/stb/vmpeg/0/xres", "r").read(), 16)
 		if refstr.lower().split(":")[0] in codec_data_patch.keys() and info.getInfo(iServiceInformation.sVideoType) == -1:
 			return codec_data_patch.get(refstr.lower().split(":")[0], _("N/A"))
 		else:
