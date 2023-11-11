@@ -194,7 +194,7 @@ def streamrelayChecker(playref):
 		else:
 			playrefmod = playrefstring
 		playref = eServiceReference("%s%s%s:%s" % (playrefmod, url.replace(":", "%3a"), playrefstring.replace(":", "%3a"), ServiceReference(playref).getServiceName()))
-		print("[Whitelist_StreamRelay] Play service via streamrelay as it is whitelisted as such", playref.toString())
+		print("[Whitelist_StreamRelay] Play service via streamrelay as it is whitelisted", playref.toString())
 	return playref
 
 
@@ -1061,8 +1061,9 @@ class InfoBarShowHide(InfoBarScreenSaver):
 				whitelist.streamrelay.remove(servicestring)
 			else:
 				whitelist.streamrelay.append(servicestring)
-				if self.session.nav.getCurrentlyPlayingServiceReference() == service:
-					self.session.nav.restartService()
+			if self.session.nav.getCurrentlyPlayingServiceReference() == service:
+				self.session.nav.restartService()
+			whitelist.streamrelay.sort(key=lambda ref: ((x := ref.split(":"))[6], x[5], x[4], x[3]))
 			open('/etc/enigma2/whitelist_streamrelay', 'w').write('\n'.join(whitelist.streamrelay))
 
 	def queueChange(self):
