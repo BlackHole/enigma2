@@ -666,7 +666,7 @@ class PliExtraInfo(Poll, Converter, object):
 			elif field == "TransponderModulationFEC":
 				val = self.createModulation(fedata) + ' ' + self.createFEC(fedata, feraw)
 			elif field == "TransponderName":
-				val = self.createTransponderName(feraw)
+				val = self.createTransponderName(feraw, info)
 			elif field == "ProviderName":
 				val = self.createProviderName(info)
 			elif field in ("NewLine", "NL"):
@@ -683,9 +683,8 @@ class PliExtraInfo(Poll, Converter, object):
 	def createStreamURLInfo(self, info):
 		refstr = info.getInfoString(iServiceInformation.sServiceref)
 		if "%3a//" in refstr.lower():
-			return refstr.split(":")[10].replace('%3a', ':').replace('http://', '').replace('https://', '').split('/1:0:')[0].split('//')[0].split('/')[0].split('@')[-1]
-		else:
-			return ""
+			return refstr.replace("%3a", ":").replace("%3A", ":").split("://")[1].split("/")[0].split('@')[-1]
+		return ""
 
 	def createFrequency(self, fedata):
 		frequency = fedata.get("frequency")
@@ -740,24 +739,42 @@ class PliExtraInfo(Poll, Converter, object):
 	def createTunerSystem(self, fedata):
 		return fedata.get("system") or ""
 
-	def createOrbPos(self, feraw):
-		orbpos = feraw.get("orbital_position")
-		if orbpos is not None:
+	def formatOrbPos(self, orbpos):
+		if isinstance(orbpos, int) and 0 <= orbpos <= 3600:  # sanity
 			if orbpos > 1800:
 				return str((float(3600 - orbpos)) / 10.0) + "\xb0" + "W"
-			elif orbpos > 0:
+			else:
 				return str((float(orbpos)) / 10.0) + "\xb0" + "E"
 		return ""
 
-	def createOrbPosOrTunerSystem(self, fedata, feraw):
-		orbpos = self.createOrbPos(feraw)
+	def getOrbPosFromInfo(self, info):
+		if "%3a//127" in info.getInfoString(iServiceInformation.sServiceref).lower():
+			return (x:=info.getInfo(iServiceInformation.sNamespace)) and (x & 0xFFFFFFFF) >> 16
+
+	def createOrbPosFromInfo(self, info):
+		if (orbpos:=self.getOrbPosFromInfo(info)) is not None:
+			return self.formatOrbPos(orbpos)
+		else:
+			return ""
+
+	def createOrbPos(self, feraw, info):
+		orbpos = feraw.get("orbital_position")
+		if orbpos is not None:
+			return self.formatOrbPos(orbpos)
+		else:
+			return self.createOrbPosFromInfo(info)
+
+	def createOrbPosOrTunerSystem(self, fedata, feraw, info):
+		orbpos = self.createOrbPos(feraw, info)
 		if orbpos != "":
 			return orbpos
 		return self.createTunerSystem(fedata)
 
-	def createTransponderName(self, feraw):
+	def createTransponderName(self, feraw, info):
 		orbpos = feraw.get("orbital_position")
 		if orbpos is None:  # Not satellite
+			orbpos = self.getOrbPosFromInfo(info)  # if internal stream try to get pos
+		if orbpos is None:
 			return ""
 		freq = feraw.get("frequency")
 		if freq and freq < 10700000:  # C-band
@@ -860,15 +877,15 @@ class PliExtraInfo(Poll, Converter, object):
 
 		if orbpos in sat_names:
 			return sat_names[orbpos]
-		elif orbpos > 1800:
-			return str((float(3600 - orbpos)) / 10.0) + "W"
 		else:
-			return str((float(orbpos)) / 10.0) + "E"
+			return self.formatOrbPos(orbpos)
 
 	def createProviderName(self, info):
 		refstr = info.getInfoString(iServiceInformation.sServiceref)
-		if "%3a//" in refstr.lower() and not "127.0.0.1" in refstr and not "0.0.0.0" in refstr and not "localhost" in refstr:
+		if "%3a//" in refstr.lower() and "127.0.0.1" not in refstr and "0.0.0.0" not in refstr and "localhost" not in refstr:
 			return ""
+		elif "%3a//127" in refstr and "17999" in refstr:
+			return {282: "BSkyB  DVB-S", 192: "SKY  DVB-S2", 130: "SkyItalia  DVB-S2"}.get((pos:=self.getOrbPosFromInfo(info)), self.formatOrbPos(pos))
 		else:
 			return info.getInfoString(iServiceInformation.sProvider)
 
@@ -1103,7 +1120,7 @@ class PliExtraInfo(Poll, Converter, object):
 			return self.createModulation(fedata)
 
 		if textType == "OrbitalPosition":
-			return self.createOrbPos(feraw)
+			return self.createOrbPos(feraw, info)
 
 		if textType == "TunerType":
 			return self.createTunerType(feraw)
@@ -1112,7 +1129,7 @@ class PliExtraInfo(Poll, Converter, object):
 			return self.createTunerSystem(fedata)
 
 		if self.type == "OrbitalPositionOrTunerSystem":
-			return self.createOrbPosOrTunerSystem(fedata, feraw)
+			return self.createOrbPosOrTunerSystem(fedata, feraw, info)
 
 		if textType == "TerrestrialChannelNumber":
 			return self.createChannelNumber(fedata, feraw)
