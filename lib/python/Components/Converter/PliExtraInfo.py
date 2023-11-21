@@ -1063,13 +1063,11 @@ class PliExtraInfo(Poll, Converter, object):
 			feinfo = service.frontendInfo()
 			if feinfo:
 				self.feraw = feinfo.getAll(config.usage.infobar_frontend_source.value == "settings")
-				if self.feraw:
-					self.fedata = ConvertToHumanReadable(self.feraw)
-				else:
+				if not self.feraw:
 					serviceref = SessionObject().session.nav.getCurrentlyPlayingServiceReference()
 					self.feraw = serviceref and eServiceCenter.getInstance().info(serviceref).getInfoObject(serviceref, iServiceInformation.sTransponderData)
-					if self.feraw:
-						self.fedata = ConvertToHumanReadable(self.feraw)
+				if self.feraw:
+					self.fedata = ConvertToHumanReadable(self.feraw)
 
 		feraw = self.feraw
 		if not feraw:
