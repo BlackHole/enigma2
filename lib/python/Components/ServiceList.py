@@ -84,10 +84,12 @@ class ServiceList(GUIComponent):
 		self.progressPercentWidth = 0
 		self.fieldMargins = 10
 		self.sidesMargin = 0
-		self.ItemHeight = 0
+		self.ItemHeight = applySkinFactor(28)
 		self.ItemHeightTwoLine = applySkinFactor(58)
-		self.ItemHeightSkin = 0
+		self.ItemHeightSkin = applySkinFactor(28)
 		self.ItemHeightTwoLineSkin = applySkinFactor(58)
+		self.selectionPixmapSingle = None
+		self.selectionPixmapDouble = None
 
 		self.onSelectionChanged = []
 
@@ -216,11 +218,11 @@ class ServiceList(GUIComponent):
 		def textSeparator(value):
 			self.l.setTextSeparator(value)
 
+		def selectionPixmap(value):
+			self.selectionPixmapSingle = value
+
 		def selectionPixmapLarge(value):
-			two_lines_val = int(config.usage.servicelist_twolines.value)
-			if two_lines_val:
-				pic = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, value))
-				pic and self.l.setSelectionPicture(pic)
+			self.selectionPixmapDouble = value
 
 		def itemHeightTwoLine(value):
 			self.ItemHeightTwoLine = parseScale(value)
@@ -239,7 +241,10 @@ class ServiceList(GUIComponent):
 		def markerTextAlignment(value):
 			self.l.setMarkerTextAlignment(value)
 
-		for (attrib, value) in self.skinAttributes[:]:
+		def serviceItemHeight(value):  # for legacy support
+			itemHeight(value)
+
+		for (attrib, value) in sorted(self.skinAttributes, key=lambda x: 1 if x[0] == "itemHeight" else 0):
 			try:
 				locals().get(attrib)(value)
 				self.skinAttributes.remove((attrib, value))
@@ -367,7 +372,7 @@ class ServiceList(GUIComponent):
 		numberOfRows = config.usage.serviceitems_per_page.value
 		two_lines_val = int(config.usage.servicelist_twolines.value)
 		if two_lines_val == 1:
-			numberOfRows = numberOfRows // 2
+			numberOfRows = int(numberOfRows / ((self.ItemHeightTwoLineSkin / self.ItemHeightSkin)) if self.ItemHeightSkin and self.ItemHeightTwoLineSkin else 2)
 		itemHeight = self.ItemHeightSkin if not two_lines_val else self.ItemHeightTwoLineSkin
 		if numberOfRows > 0:
 			itemHeight = self.listHeight // numberOfRows
@@ -482,6 +487,16 @@ class ServiceList(GUIComponent):
 		two_lines_val = int(config.usage.servicelist_twolines.value)
 		self.l.setItemHeight(self.ItemHeight if two_lines_val == 0 else self.ItemHeightTwoLine)
 		self.l.setVisualMode(eListboxServiceContent.visModeComplex if two_lines_val == 0 else eListboxServiceContent.visSkinDefined)
+
+		pic = None
+		if two_lines_val:
+			if self.selectionPixmapDouble:
+				pic = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, self.selectionPixmapDouble))
+		else:
+			if self.selectionPixmapSingle:
+				pic = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, self.selectionPixmapSingle))
+
+		pic and hasattr(self.l, "setSelectionPicture") and self.l.setSelectionPicture(pic)
 
 		if config.usage.service_icon_enable.value:
 			self.l.setGetPiconNameFunc(getPiconName)
