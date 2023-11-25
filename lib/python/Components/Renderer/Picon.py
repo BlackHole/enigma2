@@ -97,8 +97,8 @@ class PiconLocator:
 			name = re.sub("[^a-z0-9]", "", name.replace("&", "and").replace("+", "plus").replace("*", "star").lower())
 			if len(name) > 0:
 				pngname = self.findPicon(name)
-				if not pngname and len(name) > 2 and name.endswith("hd"):
-					pngname = self.findPicon(name[:-2])
+				if not pngname and len(name) > 2 :
+					pngname = self.findPicon(re.sub("(fhd|uhd|hd|sd|4k)$", "", name))
 				if not pngname and len(name) > 6:
 					series = re.sub(r"s[0-9]*e[0-9]*$", "", name)
 					pngname = self.findPicon(series)
