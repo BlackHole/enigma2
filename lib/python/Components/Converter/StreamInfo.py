@@ -22,9 +22,7 @@ class StreamInfo(Converter):
 		if playref:
 			refstr = playref.toString()
 			strtype = refstr.replace('%3a', ':')
-			if refstr in whitelist.streamrelay:
-				return 'Stream Relay'
-			elif strtype.startswith('1:0:'):
+			if strtype.startswith('1:0:'):
 				if bool([1 for x in ('0.0.0.0:', '127.0.0.1:', 'localhost:') if x in strtype]):
 					return 'Stream Relay'
 				elif '%3a' in refstr:
