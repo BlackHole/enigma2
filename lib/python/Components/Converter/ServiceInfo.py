@@ -230,7 +230,10 @@ class ServiceInfo(Poll, Converter):
 		elif self.type == self.EDITMODE:
 			return hasattr(self.source, "editmode") and not not self.source.editmode
 		elif self.type == self.IS_STREAM:
-			return service.streamed() is not None
+			refstr = info.getInfoString(iServiceInformation.sServiceref)
+			if "%3a//" in refstr.lower() and "127.0.0.1" not in refstr and "localhost" not in refstr:
+				return service.streamed() is not None
+			return False
 		elif self.isVideoService(info):
 			if self.type == self.IS_WIDESCREEN:
 				return video_aspect in WIDESCREEN
