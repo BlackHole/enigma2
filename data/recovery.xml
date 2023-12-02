@@ -32,14 +32,6 @@
 		<item key="multiboot" level="0" text="MultiBoot Image Selector" requires="canMultiBoot"><screen module="MultiBootSelector">1</screen></item>
 	</menu>
 
-	<!-- Menu / Image Manager -->
-	<item key="image" level="0" text="Image Manager" weight="2">
-		<code>
-from Plugins.SystemPlugins.OBH.ImageManager import OpenBhImageManager
-self.session.open(OpenBhImageManager)
-		</code>
-	</item>
-
 	<!-- Menu / Other -->
 	<menu key="recovery_other" level="0" text="Other" weight="2">
 
