@@ -111,11 +111,6 @@ def InitUsageConfig():
 			SystemInfo["InfoBarEpg"] = False
 	config.usage.show_second_infobar.addNotifier(showsecondinfobarChanged)
 
-	try:
-		SystemInfo["SecondInfoBarSimple"] = skin.parameters.get("SecondInfoBarSimple", 0) > 0
-	except Exception as err:
-		print("[UsageConfig] Error loading 'SecondInfoBarSimple' skin parameter! (%s)" % err)
-		SystemInfo["SecondInfoBarSimple"] = False
 	config.usage.second_infobar_simple = ConfigBoolean(descriptions={False: _("Standard"), True: _("Simple")}, graphic=False)
 
 	config.usage.infobar_frontend_source = ConfigSelection(default="tuner", choices=[("settings", _("Settings")), ("tuner", _("Tuner"))])
@@ -140,6 +135,7 @@ def InitUsageConfig():
 		print("[UserConfig] DEBUG: The 'show_menupath' setting of '%s' has been transferred to 'showScreenPath'." % config.usage.showScreenPath.value)
 	# End of temporary code.
 	config.usage.show_spinner = ConfigYesNo(default=True)
+	config.usage.enable_blinking = ConfigYesNo(default=True)
 	config.usage.enable_tt_caching = ConfigYesNo(default=True)
 	config.usage.sort_settings = ConfigYesNo(default=False)
 	config.usage.sort_pluginlist = ConfigYesNo(default=True)
