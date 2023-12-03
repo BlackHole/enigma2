@@ -1,6 +1,6 @@
 from Components.Converter.Converter import Converter
 from Components.Element import cached
-from Screens.InfoBarGenerics import whitelist
+from Screens.InfoBarGenerics import streamrelay
 import NavigationInstance
 from enigma import iPlayableService
 
