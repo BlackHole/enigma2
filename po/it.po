@@ -17,8 +17,482 @@ msgid "TRANSLATOR_INFO"
 msgstr ""
 "Traduzione italiana enigma2\n"
 "a cura di @AlexWilmac / @insanity \n"
-"Aggiornamento 30 agosto 2022\n"
+"Aggiornamento 3 dicembre 2023\n"
 "Supporto: www.openbh.net"
+
+#2023-12-03 new lines
+
+
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minuto"
+msgstr[1] "%d minuti"
+
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] "%d secondo"
+msgstr[1] "%d secondi"
+
+msgid "30 Days"
+msgstr "30 giorni"
+
+msgid "Allows you to show/hide CCcam Info in extensions -blue button."
+msgstr ""
+"Visualizza / Nasconde le informazioni sulla CCcam nelle estensioni - Tasto blu."
+
+msgid "Allows you to show/hide OScam/Ncam Info in extensions -blue button."
+msgstr ""
+"Visualizza / Nasconde le informazioni sulla OScam/Ncam nelle estensioni - "
+"Tasto blu"
+
+msgid "Alphabetical under headings"
+msgstr "Alfabetico sotto le intestazioni"
+
+msgid "Boot Logo Identification"
+msgstr "Identificazione del boot logo"
+
+msgid "Bluetooth Setup"
+msgstr "Configurazione Bluetooth"
+
+msgid "Choose the order in which items are displayed in Help windows"
+msgstr ""
+"Scegli l'ordine in cui gli elementi vengono visualizzati nelle finestre "
+"della guida"
+
+msgid ""
+"Choose the display formatting style for dates. 'D' and 'M' do not have "
+"leading zeros for single digit values, 'DD' and 'MM' do have leading zeros "
+"for single digit values. The screen display will be based on your choice but "
+"can be influenced by the skin."
+msgstr ""
+"Scegli lo stile delle date. 'DD' e 'MM' hanno gli zeri iniziali "
+"per valori a cifra singola. "
+"Lo stile di data scelto potrà però essere influenzato anche "
+"dalla skin utilizzata."
+
+msgid "Choose the option to correct invalid EPG data."
+msgstr "Scegliere l'opzione per correggere i dati EPG non validi."
+
+msgid "Correct invalid EPG data"
+msgstr "Correggere dati EPG non validi"
+
+msgid "D Month Year"
+msgstr "Giorno Mese Anno"
+
+msgid "D-Month-Year"
+msgstr "Giorno-Mese-Anno"
+
+msgid "D. Month Year"
+msgstr "Giorno. Mese Anno"
+
+msgid "D.M.Year"
+msgstr "Giorno.Mese.Anno"
+
+msgid "D.MM.Year"
+msgstr "Giorno.MM.Anno"
+
+msgid "D/M/Year"
+msgstr "Giorno/Mese/Anno"
+
+msgid "D/MM/Year"
+msgstr "Giorno/MM/Anno"
+
+msgid "DD Month Year"
+msgstr "GG Mese Anno"
+
+msgid "DD-Month-Year"
+msgstr "Giorno-Mese-Anno"
+
+msgid "DD. Month Year"
+msgstr "GG. Mese Anno"
+
+msgid "DD.M.Year"
+msgstr "GG.Mese.Anno"
+
+msgid "DD.MM.Year"
+msgstr "GG.MM.Anno"
+
+msgid "DD/M/Year"
+msgstr "GG/Mese/Anno"
+
+msgid "DD/MM/Year"
+msgstr "GG/MM/Anno"
+
+msgid ""
+"Define additional delay in milliseconds before start of http(s) streams, e."
+"g. to connect a remote tuner, you use a complex system of DiSEqC."
+msgstr ""
+"Definire un ritardo aggiuntivo in millisecondi prima dell'avvio dei flussi "
+"http(s), ad esempio per collegare un sintonizzatore remoto, se si utilizza "
+"un sistema complesso DISEqC."
+
+msgid "Disable FCC during recordings"
+msgstr "Disabilita FCC durante le registrazioni"
+
+msgid "Do you want to install plugins"
+msgstr "Vuoi installare i plugin"
+
+msgid "Ecm Statistics"
+msgstr "Statistiche Ecm"
+
+msgid "Enable new GStreamer playback"
+msgstr "Abilita la nuova riproduzione GStreamer"
+
+msgid "FCC enabled"
+msgstr "Abilita cambio canale rapido (FCC)"
+
+msgid "Factory Reset: Clearing data"
+msgstr "Ripristino di fabbrica: cancellazione dei dati"
+
+msgid "Fast Channel Change"
+msgstr "Cambio canale rapido (FCC)"
+
+msgid "Fast Channel Change Setup"
+msgstr "Configurazione FCC (cambio canale rapido)"
+
+msgid "Fix CEC address setting, default is 1.0.0.0"
+msgstr ""
+"Correggi l'impostazione dell'indirizzo CEC, il valore predefinito è 1.0.0.0"
+
+msgid ""
+"Force receiver to send volume keys to all devices on hdmi when no response "
+"to audio channel requiest."
+msgstr ""
+"Forza il ricevitore a inviare il volume a tutti i dispositivi HDMI quando "
+"non risponde alla richiesta del canale audio."
+
+msgid "Force volume keys"
+msgstr "Forzare i tasti del volume"
+
+msgid "GUI Skin"
+msgstr "Interfaccia Skin"
+
+msgid "Graphics Grid EPG"
+msgstr "Griglia grafica EPG"
+
+msgid "History Prev/Next"
+msgstr "Cronologia precedente/successiva"
+
+msgid "HI cleanup for external subtitles"
+msgstr "Pulizia dei sottotitoli esterni"
+
+msgid "Http(s) stream start delay"
+msgstr "Ritardo avvio flusso Http(s)"
+
+msgid "Identify image version on bootlogo.mvi."
+msgstr "Identifica la versione dell'immagine nella schermata di avvio."
+
+msgid "If enabled, the new GStreamer playback engine will be used."
+msgstr ""
+"Se abilitato, verrà utilizzato il nuovo motore di riproduzione GStreamer."
+
+msgid ""
+"If set to 'yes', allows you to use timeshift with alternative audio plugins."
+msgstr ""
+"Se impostato su 'SÌ', consente di utilizzare timeshift con plugin audio alternativi"
+
+msgid "Max channels"
+msgstr "Numero massimo di canali"
+
+msgid "M/D/Year"
+msgstr "Mese/Giorno/Anno"
+
+msgid "M/DD/Year"
+msgstr "Mese/GG/Anno"
+
+msgid "MM/D/Year"
+msgstr "MM/Giorno/Anno"
+
+msgid "MM/DD/Year"
+msgstr "MM/GG/Anno"
+
+msgid "Make settings backup"
+msgstr "Eseguire un backup delle configurazioni"
+
+msgid "Menu style"
+msgstr "Stile dei menu"
+msgid "Month D Year"
+msgstr "Mese G Anno"
+
+msgid "Month DD Year"
+msgstr "Mese GG Anno"
+
+msgid "Month-D-Year"
+msgstr "Mese-G-Anno"
+
+msgid "Month-DD-Year"
+msgstr "Mese-GG-Anno"
+
+msgid "OSD position"
+msgstr "Posizione OSD"
+
+msgid "OScam Info - Configuration"
+msgstr "Informazioni OScam - Configurazione"
+
+msgid "OScam Info - Main Menu"
+msgstr "Informazioni OScam - Menu principale"
+
+msgid "On Screen Display"
+msgstr "Display OSD"
+
+msgid ""
+"Please set your time options.\n"
+"\n"
+"Press Left/Right buttons to set the time zone via geolocation."
+msgstr ""
+"Impostare le opzioni dell'orario.\n"
+"\n"
+"Premere i tasti SX/DX per impostare il fuso orario tramite geolocalizzazione."
+
+msgid "Preparing extra plugins..."
+msgstr "Preparazione plugin aggiuntivi..."
+
+msgid "Read Userdata from oscam.conf"
+msgstr "Leggi i dati utente da oscam.conf"
+
+msgid ""
+"Recording 4097, 5001 and 5002 streams not possible with external players, so "
+"convert recordings to servicetype 1."
+msgstr ""
+"Registrazione di flussi 4097,5001 e 5002 non possibile con lettori esterni: "
+"convertire le registrazioni in servicetype1."
+
+msgid "Recordings - convert IPTV servicetypes to 1"
+msgstr "Registrazioni - converti tipo di servizio IPTV in 1"
+
+msgid ""
+"Remove text for the hearing impaired from external subtitles (instrumental "
+"music or environmental sounds, e.g., when a doorbell rings or a gun shot is "
+"heard)."
+msgstr ""
+"Rimuove i testi per non udenti dai sottotitoli esterni (musica strumentale, "
+"suoni ambientali, ad esempio il suono di un campanello, un colpo o altro..."
+
+msgid ""
+"Select 'Standard' to display the standard vertical menu layout, or "
+"'Horizontal' to display the menu items in a row."
+msgstr ""
+"Selezionare \"Standard\" per visualizzare l'aspetto del menu standard o "
+"\"Orizzontale\" per visualizzare le voci del menu in una riga."
+
+msgid ""
+"Select 'Yes' to make a settings backup before wiping the current "
+"configuration."
+msgstr ""
+"Selezionare \"SÌ\" per eseguire un backup delle configurazioni prima di "
+"cancellare la configurazione corrente."
+
+msgid ""
+"Select how to activate the Infobar Single EPG. This will affect Infobar "
+"behaviour"
+msgstr ""
+"Seleziona come attivare l'EPG singolo nella Infobar. Questo influenzerà il "
+"comportamento della Infobar"
+
+msgid "Show CCcam Info in extensions?"
+msgstr "Mostra informazioni CCcam nelle estensioni?"
+
+msgid "Show ECM info"
+msgstr "Mostra informazioni ECM"
+
+msgid "Show OScam/Ncam Info in extensions?"
+msgstr "Mostra informazioni OScam/Ncam nelle estensioni?"
+
+msgid "Skin Selection"
+msgstr "Selezione Skin"
+
+msgid "Skin display"
+msgstr "Visualizzazione della Skin"
+
+msgid "Skip jumping to live TV while timeshifting with plugins"
+msgstr "Evita di passare alla TV 'LIVE' durante il timeshift con plugin"
+
+msgid "Softcam settings"
+msgstr "Configurazioni Softcam"
+
+msgid "Sort order for help screen"
+msgstr "Ordinamento per schermata di aiuto"
+
+msgid "Start Wizard - Screen Alignment"
+msgstr "Procedura guidata - Allineamento schermo"
+
+msgid "Text Grid EPG"
+msgstr "Griglia testo EPG"
+
+msgid ""
+"The IP address of the streamrelay server that is used to descramble services "
+"that can only be decrypted via streamrelay"
+msgstr ""
+"Indirizzo IP del server streamrelay utilizzato per decodificare i servizi "
+"che possono essere decodificati solo tramite streamrelay"
+
+msgid ""
+"The port of the streamrelay server that is used to descramble services that "
+"can only be decrypted via streamrelay"
+msgstr ""
+"La porta del server di streamrelay utilizzata per decodificare i servizi che "
+"possono essere decodificati solo tramite streamrelay"
+
+msgid "This option allows you to switch audio to bluetooth speakers."
+msgstr ""
+"Quest'opzione consente di commutare l'audio sugli altoparlanti bluetooth."
+
+msgid ""
+"This will permanently delete the current configuration. If necessary it "
+"should be possible to restore the current configuration by restoring the "
+"settings backup. Are you certain you want to continue with a factory reset?"
+msgstr ""
+"Questo eliminerà definitivamente la configurazione corrente. Se necessario, "
+"dovrebbe essere possibile ripristinare le configurazioni tramite un "
+"backup. Sei sicuro di voler continuare con un ripristino delle impostazioni "
+"di fabbrica?"
+
+msgid ""
+"This will permanently delete the current configuration. It would be a good "
+"idea to make a backup before taking this drastic action. Are you certain you "
+"want to continue with a factory reset?"
+msgstr ""
+"Questo comando eliminerà definitivamente la configurazione corrente. Sarebbe "
+"opportuno fare un backup prima di procedere. Sei sicuro di voler continuare "
+"con un ripristino delle impostazioni di fabbrica?"
+
+msgid "Use skin default"
+msgstr "Utilizza skin predefinita"
+
+msgid "User installed plugins"
+msgstr "Plugin installati dall'utente"
+
+msgid "Welcome..."
+msgstr "Benvenuto..."
+
+msgid "Year Month D"
+msgstr "Anno Mese G"
+
+msgid "Year Month DD"
+msgstr "Anno Mese GG"
+
+msgid "Year-Month-D"
+msgstr "Anno-Mese-G"
+
+msgid "Year-Month-DD"
+msgstr "Anno Mese GG"
+
+msgid "Year/M/D"
+msgstr "Anno/M/G"
+
+msgid "Year/M/DD"
+msgstr "Anno/M/GG"
+
+msgid "Year/MM/D"
+msgstr "Anno/MM/G"
+
+msgid "Year/MM/DD"
+msgstr "Anno/MM/GG"
+
+msgid "Zap Up/Down"
+msgstr "Zap SU/GIÙ"
+
+msgid "minutes"
+msgstr "minuti"
+
+msgid "seconds"
+msgstr "secondi"
+
+msgid "don't convert"
+msgstr "non convertire"
+
+
+msgid ""
+"Before sending the command to switch the TV to standby, the receiver tests "
+"if all the other devices plugged into TV are in standby. If they are not, "
+"the 'sourceactive' command will be sent to the TV instead of the 'standby' "
+"command."
+msgstr ""
+"Prima di inviare il comando per porre la TV in Standby, controlla se tutti "
+"gli altri dispositivi collegati alla TV sono già in questo stato. Se non è "
+"così, viene inviato alla TV il comando 'sorgente attiva' e NON quello di "
+"Standby."
+
+msgid "Number or SMS style data entry"
+msgstr "Numero o tipo di SMS per inserire dati"
+
+msgid "Show picons in the movie list."
+msgstr "Visualizza le picon nell'elenco delle registrazioni."
+
+msgid ""
+"This option sets up the picture sharpness, used when the picture is being "
+"upscaled."
+msgstr ""
+"Consente di impostare la nitidezza dell'immagine quando questa viene "
+"«upscalata»."
+
+msgid ""
+"This setting depends on your cable provider and location. If you don't know "
+"the correct setting refer to the menu in the official cable receiver, or get "
+"it from your cable provider, or seek help via internet forum."
+msgstr ""
+"Questa impostazione dipende dal vostro gestore via cavo o dalla posizione. "
+"Se non conoscete i settaggi corretti, fate riferimento al vostro gestore o "
+"aiutatevi cercandoli su Internet."
+
+
+
+
+#########
+#DA CORREGGERE-/SOSTITUIRE DIRETTAMENTE NEL FILES PO MSGID, ERRATA SOPRA-/ESATTA SOTTO
+#########
+#msgid "Connect your usb storage to your box\n"
+#msgstr "Connettere il dispositivo USB al ricevitore\n"
+msgid "Connect your usb storage to your stb\n"
+msgstr "Collega la tua unità USB al box\n"
+
+#attenzione
+msgid "Main Menu"
+msgstr "Menu principale"
+
+msgid "OpenBh Settings"
+msgstr "Impostazioni ambiente OpenBlackHole"
+
+msgid ""
+"Please make sure your usb drive is NOT CONNECTED to your box before you "
+"continue.\n"
+msgstr ""
+"Controllare che il dispositivo USB NON SIA COLLEGATA al box prima di "
+"continuare.\n"
+"\n"
+
+"Please use the UP and DOWN keys to select your language. Afterwards press "
+"the OK button."
+msgstr ""
+"Selezionare la propria lingua utilizzando i tasti SU/GIÙ. Premere OK per "
+"confermare."
+
+msgid "Set fixed CEC address"
+msgstr "Imposta indirizzo CEC statico"
+
+"Welcome to OpenBh!\n"
+"\n"
+"NOTE: This section of the wizard is intended for people who cannot disable "
+"overscan on their television / display.  Please first try to disable "
+"overscan before using this feature.\n"
+"\n"
+"USAGE: If you continue adjust the screen size and position settings so that "
+"the shaded user interface layer *just* covers the test pattern in the "
+"background.\n"
+"\n"
+"Select Yes to change these settings or No to skip this step."
+msgstr ""
+"Benvenuto in OpenBlackHole! \n"
+"\n"
+"NOTA: Questa funzionalità è destinata a persone che non possono disattivare "
+"l'overscan sui loro TV o monitor. In ogni caso prova a disattivare "
+"l'overscan prima di utilizzare questa caratteristica.\n"
+"\n"
+"UTILIZZO: Regola le dimensioni dello schermo e le impostazioni di posizione "
+"in modo che la zona di interfaccia-utente ombreggiata copra solo il modello "
+"di test in secondo piano\n"
+"\n"
+"Selezionare SÌ per continuare oppure NO per uscire."
 
 # 2022-08-31 new lines cutlist editor
 msgid "preserve bookmarks in cuts"
