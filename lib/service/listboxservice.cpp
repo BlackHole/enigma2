@@ -57,7 +57,7 @@ bool compareServices(const eServiceReference &ref1, const eServiceReference &ref
 	} else {
 		if (ref_s == s_s) return true;
 	}
-	// Check is it having a localhost in the service reference. If it do probably a stream relay
+	// If "127.0.0.1" is in the service reference this is probably a stream relay
 	// so use partial matching logic
 	if (ref2.toString().find("127.0.0.1") != std::string::npos) {
 		std::string url_sr = s_split[s_split.size() - 2];
