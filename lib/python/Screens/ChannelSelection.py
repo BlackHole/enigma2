@@ -2548,6 +2548,8 @@ class ChannelSelection(ChannelSelectionEdit, ChannelSelectionBase, ChannelSelect
 			self.setHistoryPath()
 
 	def cancel(self):
+		if self.movemode:
+			self.toggleMoveMode()
 		if self.revertMode is None:
 			self.restoreRoot()
 			if self.dopipzap:
