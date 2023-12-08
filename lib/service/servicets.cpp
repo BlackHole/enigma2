@@ -258,7 +258,7 @@ RESULT eServiceTS::start()
 	m_streamthread = new eStreamThread();
 	CONNECT(m_streamthread->m_event, eServiceTS::recv_event);
 	m_decoder->pause();
-	if (unpause() != 0) 
+	if (unpause() != 0)
 		return -1;
 	m_event(this, evStart);
 	return 0;
@@ -334,7 +334,7 @@ RESULT eServiceTS::unpause()
 		if (tmp_fd == 0)
 		{
 			::close(tmp_fd);
-			tmp_fd = -1;	
+			tmp_fd = -1;
 			fd0lock = ::open("/dev/null", O_RDONLY | O_CLOEXEC);
 			/* eDebug("[servicets] opening null fd returned: %d", fd0lock); */
 		}
