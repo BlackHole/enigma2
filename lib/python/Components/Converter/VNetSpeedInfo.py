@@ -53,7 +53,7 @@ class VNetSpeedInfo(Poll, Converter):
 
 	def __init__(self, type, update_interval=1000):
 		Poll.__init__(self)
-		self.poll_interval = 1500
+		self.poll_interval = 1000
 		self.poll_enabled = True
 		self.lanreceivetotal = 0
 		self.lanreceivetotalout = 0
@@ -261,13 +261,13 @@ class VNetSpeedInfo(Poll, Converter):
 			self.receivemb = self.receive / 8
 			self.transmitmb = self.transmit / 8
 		if self.type == self.RCL:
-			return "%3.1fMb/s" % self.lanreceive
+			return "%3.2fMb/s" % self.lanreceive
 		elif self.type == self.TML:
-			return "%3.1fMb/s" % self.lantransmit
+			return "%3.2fMb/s" % self.lantransmit
 		elif self.type == self.RCW:
-			return "%3.1fMb/s" % self.wlanreceive
+			return "%3.2fMb/s" % self.wlanreceive
 		elif self.type == self.TMW:
-			return "%3.1fMb/s" % self.wlantransmit
+			return "%3.2fMb/s" % self.wlantransmit
 		elif self.type == self.RCLT:
 			return "%d" % self.lanreceivetotalout
 		elif self.type == self.TMLT:
@@ -277,25 +277,25 @@ class VNetSpeedInfo(Poll, Converter):
 		elif self.type == self.TMWT:
 			return "%d" % self.wlantransmittotalout
 		elif self.type == self.RCL_MB:
-			return "%3.1fMb/s" % self.lanreceivemb
+			return "%3.2fMb/s" % self.lanreceivemb
 		elif self.type == self.TML_MB:
-			return "%3.1fMb/s" % self.lantransmitmb
+			return "%3.2fMb/s" % self.lantransmitmb
 		elif self.type == self.RCW_MB:
-			return "%3.1fMb/s" % self.wlanreceivemb
+			return "%3.2fMb/s" % self.wlanreceivemb
 		elif self.type == self.TMW_MB:
-			return "%3.1fMb/s" % self.wlantransmitmb
+			return "%3.2fMb/s" % self.wlantransmitmb
 		elif self.type == self.RC:
-			return "%3.1fMb/s" % self.receive
+			return "%3.2fMb/s" % self.receive
 		elif self.type == self.TM:
-			return "%3.1fMb/s" % self.transmit
+			return "%3.2fMb/s" % self.transmit
 		elif self.type == self.RCT:
 			return "%d" % self.receivetotalout
 		elif self.type == self.TMT:
 			return "%d" % self.transmittotalout
 		elif self.type == self.RC_MB:
-			return "%3.1fMb/s" % self.receivemb
+			return "%3.2fMb/s" % self.receivemb
 		elif self.type == self.TM_MB:
-			return "%3.1fMb/s" % self.transmitmb
+			return "%3.2fMb/s" % self.transmitmb
 		elif self.type == self.NET_TYP:
 			return "%s" % self.nettyp
 		elif self.type == self.ERR_RCL:
