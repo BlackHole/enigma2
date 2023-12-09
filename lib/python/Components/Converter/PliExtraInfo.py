@@ -8,27 +8,29 @@ from Tools.Transponder import ConvertToHumanReadable
 from Tools.GetEcmInfo import GetEcmInfo
 from Tools.Hex2strColor import Hex2strColor
 from Components.Converter.Poll import Poll
+from Tools.Directories import pathExists
 from skin import parameters
 
 caid_data = (
-	("0x1700", "0x17ff", "BetaCrypt", "B", True),
-	("0x600", "0x6ff", "Irdeto", "I", True),
-	("0x1800", "0x18ff", "Nagravision", "N", True),
-	("0x100", "0x1ff", "Seca Mediaguard", "S", True),
-	("0x1000", "0x10ff", "Tandberg", "T", True),
-	("0x500", "0x5ff", "Viaccess", "V", True),
-	("0x2600", "0x2600", "Biss", "BI", True),
-	("0x4aee", "0x4aee", "BulCrypt", "BU", True),
-	("0x5581", "0x5581", "BulCrypt", "BU", False),
-	("0xb00", "0xbff", "Conax", "CO", True),
-	("0xd00", "0xdff", "CryptoWorks", "CW", True),
-	("0x2700", "0x2710", "DRE-Crypt3", "DC", False),
-	("0x4ae0", "0x4ae1", "DRE-Crypt", "DC", False),
-	("0x900", "0x9ff", "NDS Videoguard", "ND", True),
-	("0x4afc", "0x4afc", "Panaccess", "PA", False),
-	("0xe00", "0xeff", "PowerVu", "PV", True),
-	("0x4a02", "0x4a02", "Tongfang", "TF", False),
-	("0x5601", "0x5604", "Verimatrix", "VM", True)
+	("0x1700", "0x17ff", "BetaCrypt", "B", "BETA", True),
+	("0x600", "0x6ff", "Irdeto", "I", "IRD", True),
+	("0x1800", "0x18ff", "Nagravision", "N", "NAGRA", True),
+	("0x100", "0x1ff", "Seca Mediaguard", "S", "SECA", True),
+	("0x1000", "0x10ff", "Tandberg", "T", "TAND", True),
+	("0x500", "0x5ff", "Viaccess", "V", "VIA", True),
+	("0x2600", "0x2601", "Biss", "BI", "BISS", True),
+	("0x2602", "0x2602", "Biss2", "BI", "BISS2", False),
+	("0x4aee", "0x4aee", "BulCrypt", "BU", "BUL1", True),
+	("0x5581", "0x5581", "BulCrypt", "BU", "BUL2", False),
+	("0xb00", "0xbff", "Conax", "CO", "CONAX", True),
+	("0xd00", "0xdff", "CryptoWorks", "CW", "CRW", True),
+	("0x2700", "0x2710", "DRE-Crypt3", "DC", "DRE3", False),
+	("0x4ae0", "0x4ae1", "DRE-Crypt", "DC", "DRE", False),
+	("0x900", "0x9ff", "NDS Videoguard", "ND", "NDS", True),
+	("0x4afc", "0x4afc", "Panaccess", "PA", "PAN", False),
+	("0xe00", "0xeff", "PowerVu", "PV", "PV", True),
+	("0x4a02", "0x4a02", "Tongfang", "TF", "TONG", False),
+	("0x5601", "0x5604", "Verimatrix", "VM", "VM", True)
 )
 
 # stream type to codec map
@@ -186,6 +188,7 @@ class PliExtraInfo(Poll, Converter, object):
 			("CryptoCaidTandbergAvailable", "T", False),
 			("CryptoCaidViaAvailable", "V", False),
 			("CryptoCaidBissAvailable", "BI", False),
+			("CryptoCaidBiss2Available", "BI", False),
 			("CryptoCaidBulCrypt1Available", "BU", False),
 			("CryptoCaidBulCrypt2Available", "BU", False),
 			("CryptoCaidConaxAvailable", "CO", False),
@@ -204,6 +207,7 @@ class PliExtraInfo(Poll, Converter, object):
 			("CryptoCaidTandbergSelected", "T", True),
 			("CryptoCaidViaSelected", "V", True),
 			("CryptoCaidBissSelected", "BI", True),
+			("CryptoCaidBiss2Selected", "BI", True),
 			("CryptoCaidBulCrypt1Selected", "BU", True),
 			("CryptoCaidBulCrypt2Selected", "BU", True),
 			("CryptoCaidConaxSelected", "CO", True),
@@ -255,12 +259,22 @@ class PliExtraInfo(Poll, Converter, object):
 				except:
 					pass
 
-			if color != Hex2strColor(colors[2]) or caid_entry[4]:
+			if color != Hex2strColor(colors[2]) or caid_entry[5]:
 				if res:
 					res += " "
 				res += color + caid_entry[3]
 
 		res += Hex2strColor(colors[3])  # white (this acts like a color "reset" for following strings
+		return res
+
+	def createCurrentCaidLabel(self):
+		res = ""
+		if not pathExists("/tmp/ecm.info"):
+			return "FTA"
+		for caid_entry in caid_data:
+			if int(caid_entry[0], 16) <= int(self.current_caid, 16) <= int(caid_entry[1], 16):
+				res = caid_entry[4]
+
 		return res
 
 	def createCryptoSeca(self, info):
@@ -473,13 +487,29 @@ class PliExtraInfo(Poll, Converter, object):
 
 	def createCryptoBiss(self, info):
 		available_caids = info.getInfoObject(iServiceInformation.sCAIDs)
-		if int('0x2600', 16) <= int(self.current_caid, 16) <= int('0x26ff', 16):
+		if int('0x2600', 16) <= int(self.current_caid, 16) <= int('0x2601', 16):
 			color = Hex2strColor(self.cryptocolors[0])
 		else:
 			color = Hex2strColor(self.cryptocolors[1])
 			try:
 				for caid in available_caids:
-					if int('0x2600', 16) <= caid <= int('0x26ff', 16):
+					if int('0x2600', 16) <= caid <= int('0x2601', 16):
+						color = Hex2strColor(self.cryptocolors[2])
+			except:
+				pass
+		res = color + 'BI'
+		res += Hex2strColor(self.cryptocolors[3])
+		return res
+
+	def createCryptoBiss2(self, info):
+		available_caids = info.getInfoObject(iServiceInformation.sCAIDs)
+		if int('0x2602', 16) <= int(self.current_caid, 16) <= int('0x26ff', 16):
+			color = Hex2strColor(self.cryptocolors[0])
+		else:
+			color = Hex2strColor(self.cryptocolors[1])
+			try:
+				for caid in available_caids:
+					if int('0x2602', 16) <= caid <= int('0x26ff', 16):
 						color = Hex2strColor(self.cryptocolors[2])
 			except:
 				pass
@@ -901,6 +931,13 @@ class PliExtraInfo(Poll, Converter, object):
 		if not info:
 			return ""
 
+		if textType == "CurrentCrypto":
+			if int(config.usage.show_cryptoinfo.value) > 0:
+				self.getCryptoInfo(info)
+				return self.createCurrentCaidLabel()
+			else:
+				return ""
+
 		if textType == "CryptoBar":
 			if int(config.usage.show_cryptoinfo.value) > 0:
 				self.getCryptoInfo(info)
@@ -979,6 +1016,13 @@ class PliExtraInfo(Poll, Converter, object):
 				return ""
 
 		if textType == "CryptoBiss":
+			if int(config.usage.show_cryptoinfo.value) > 0:
+				self.getCryptoInfo(info)
+				return self.createCryptoBiss(info)
+			else:
+				return ""
+
+		if textType == "CryptoBiss2":
 			if int(config.usage.show_cryptoinfo.value) > 0:
 				self.getCryptoInfo(info)
 				return self.createCryptoBiss(info)
