@@ -13,9 +13,9 @@ import Components.Harddisk
 class TimeshiftSettings(Setup):
 	def __init__(self, session):
 		self.buildChoices("TimeshiftPath", config.usage.timeshift_path, None)
+		self.errorItem = -1
 		Setup.__init__(self, session=session, setup="timeshift")
 		self.greenText = self["key_green"].text
-		self.errorItem = -1
 		if self.getCurrentItem() is config.usage.timeshift_path:
 			self.pathStatus(self.getCurrentValue())
 
@@ -108,7 +108,6 @@ class TimeshiftSettings(Setup):
 			Setup.selectionChanged(self)
 		else:
 			self["config"].setCurrentIndex(self.errorItem)
-			self.errorMsg()
 
 	def changedEntry(self):
 		if self.getCurrentItem() is config.usage.timeshift_path:
@@ -121,11 +120,6 @@ class TimeshiftSettings(Setup):
 		else:
 			Setup.keySelect(self)
 
-	def errorMsg(self):
-		self.session.open(MessageBox, "%s\n\n%s" % (self.footnote, _("Please select a valid directory.")), type=MessageBox.TYPE_ERROR)
-
 	def keySave(self):
 		if self.errorItem == -1:
 			Setup.keySave(self)
-		else:
-			self.errorMsg()
