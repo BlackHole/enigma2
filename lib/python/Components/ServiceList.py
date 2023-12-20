@@ -82,6 +82,8 @@ class ServiceList(GUIComponent):
 		self.ServiceInfoFontSize = 18
 		self.ServiceNextInfoFontName = "Regular"
 		self.ServiceNextInfoFontSize = 15
+		self.ServiceRemainingInfoFontName = "Regular"
+		self.ServiceRemainingInfoFontSize = 18
 		self.progressBarWidth = 52
 		self.progressPercentWidth = 0
 		self.fieldMargins = 10
@@ -120,6 +122,9 @@ class ServiceList(GUIComponent):
 		def foregroundColorNextEvent(value):
 			self.l.setColor(eListboxServiceContent.eventNextForeground, parseColor(value))
 
+		def foregroundColorEventRemaining(value):
+			self.l.setColor(eListboxServiceContent.eventRemainingForeground, parseColor(value))
+
 		def colorServiceDescription(value):
 			self.l.setColor(eListboxServiceContent.eventForeground, parseColor(value))
 
@@ -128,6 +133,9 @@ class ServiceList(GUIComponent):
 
 		def foregroundColorEventNextSelected(value):
 			self.l.setColor(eListboxServiceContent.eventNextForegroundSelected, parseColor(value))
+
+		def foregroundColorEventRemainingSelected(value):
+			self.l.setColor(eListboxServiceContent.eventRemainingForegroundSelected, parseColor(value))
 
 		def colorServiceDescriptionSelected(value):
 			self.l.setColor(eListboxServiceContent.eventForegroundSelected, parseColor(value))
@@ -171,6 +179,12 @@ class ServiceList(GUIComponent):
 		def colorServiceNextDescriptionSelectedFallback(value):
 			self.l.setColor(eListboxServiceContent.eventNextForegroundSelectedFallback, parseColor(value))
 
+		def colorServiceRemainingDescriptionFallback(value):
+			self.l.setColor(eListboxServiceContent.eventRemainingForegroundFallback, parseColor(value))
+
+		def colorServiceRemainingDescriptionSelectedFallback(value):
+			self.l.setColor(eListboxServiceContent.eventRemainingForegroundSelectedFallback, parseColor(value))
+
 		def picServiceEventProgressbar(value):
 			pic = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, value))
 			pic and self.l.setPixmap(self.l.picServiceEventProgressbar, pic)
@@ -187,6 +201,11 @@ class ServiceList(GUIComponent):
 			font = parseFont(value, ((5, 6), (1, 1)))
 			self.ServiceNextInfoFontName = font.family
 			self.ServiceNextInfoFontSize = font.pointSize
+
+		def serviceRemainingInfoFont(value):
+			font = parseFont(value, ((1, 1), (1, 1)))
+			self.ServiceRemainingInfoFontName = font.family
+			self.ServiceRemainingInfoFontSize = font.pointSize
 
 		def serviceNumberFont(value):
 			font = parseFont(value, ((1, 1), (1, 1)))
@@ -390,14 +409,18 @@ class ServiceList(GUIComponent):
 		return self.listWidth + self.instance.position().x(), sely
 
 	def setFontsize(self):
-		self.ServiceNumberFont = gFont(self.ServiceNameFontName, self.ServiceNameFontSize + config.usage.servicenum_fontsize.value)
+		self.ServiceNumberFont = gFont(self.ServiceNumberFontName, self.ServiceNumberFontSize + config.usage.servicenum_fontsize.value)
 		self.ServiceNameFont = gFont(self.ServiceNameFontName, self.ServiceNameFontSize + config.usage.servicename_fontsize.value)
 		self.ServiceInfoFont = gFont(self.ServiceInfoFontName, self.ServiceInfoFontSize + config.usage.serviceinfo_fontsize.value)
 		self.ServiceNextInfoFont = gFont(self.ServiceNextInfoFontName, self.ServiceNextInfoFontSize + config.usage.serviceinfo_fontsize.value)
+		self.ServiceRemainingInfoFont = gFont(self.ServiceRemainingInfoFontName, self.ServiceRemainingInfoFontSize + config.usage.serviceinfo_fontsize.value)
 		self.l.setElementFont(self.l.celServiceName, self.ServiceNameFont)
 		self.l.setElementFont(self.l.celServiceNumber, self.ServiceNumberFont)
 		self.l.setElementFont(self.l.celServiceInfo, self.ServiceInfoFont)
 		self.l.setElementFont(self.l.celServiceNextInfo, self.ServiceNextInfoFont)
+		self.l.setElementFont(self.l.celServiceInfoRemainingTime, self.ServiceRemainingInfoFont)
+		if "perc" in config.usage.show_event_progress_in_servicelist.value:
+			self.l.setElementFont(self.l.celServiceEventProgressbar, self.ServiceInfoFont)
 
 	def postWidgetCreate(self, instance):
 		instance.setWrapAround(True)
@@ -506,13 +529,7 @@ class ServiceList(GUIComponent):
 
 		self.l.setElementPosition(self.l.celServiceEventProgressbar, eRect(0, 0, progressWidth, self.ItemHeight))
 
-		self.l.setElementFont(self.l.celServiceName, self.ServiceNameFont)
-		self.l.setElementFont(self.l.celServiceNumber, self.ServiceNumberFont)
-		self.l.setElementFont(self.l.celServiceInfo, self.ServiceInfoFont)
-		self.l.setElementFont(self.l.celServiceNextInfo, self.ServiceNextInfoFont)
-
-		if "perc" in config.usage.show_event_progress_in_servicelist.value:
-			self.l.setElementFont(self.l.celServiceEventProgressbar, self.ServiceInfoFont)
+		self.setFontsize()
 
 		self.l.setHideNumberMarker(config.usage.hide_number_markers.value)
 		self.l.setServiceTypeIconMode(int(config.usage.servicetype_icon_mode.value))
