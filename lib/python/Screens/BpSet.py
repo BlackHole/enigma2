@@ -100,10 +100,8 @@ class DeliteSettings(Screen):
 		elif self.sel == 13:
 			self.session.open(Setup, "epgsettings")
 		elif self.sel == 14:
-			self.session.open(Setup, "recording")
-		elif self.sel == 15:
-			from Screens.RecordPaths import RecordPathsSettings
-			self.session.open(RecordPathsSettings)
+			from Screens.Recordings import RecordingSettings
+			self.session.open(RecordingSettings)
 		elif self.sel == 16:
 			self.session.open(Setup, "subtitlesetup")
 		elif self.sel == 17:
