@@ -243,7 +243,7 @@ class RemoteControlType(ConfigListScreen, Screen):
 		("24", _("Axas E4HD Ultra")),
 		("25", _("Zgemma H9/I55Plus old Model")),
 		("26", _("Protek 4K UHD/HD61")),
-		("27", _("HD60")),
+		("27", _("HD60/Multiboxpro")),
 		("28", _("H7/H9/H9COMBO/H10 new Model")),
 		("30", _("PULSe 4K/4K Mini"))
 	]
@@ -284,6 +284,7 @@ class RemoteControlType(ConfigListScreen, Screen):
 		("protek4k", 26),
 		("hd61", 26),
 		("hd60", 27),
+		("multiboxpro", 27),
 		("h7", 28),  # new model
 		("h9", 28),  # new model
 		("h9combo", 28),
