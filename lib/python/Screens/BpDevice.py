@@ -54,7 +54,7 @@ class DeliteDevicesPanel(Screen):
 		rc = system("blkid > /tmp/blkid.log")
 		f = open("/tmp/blkid.log", 'r')
 		for line in f.readlines():
-			if getMachineBuild() in ("h9s", "h9combo", "h9combose", "h9twin", "h11", "pulse4k", "pulse4kmini", "sx988"):
+			if getMachineBuild() in ("h9s", "h9combo", "h9combose", "h9twin", "h11", "pulse4k", "pulse4kmini", "sx988", "multiboxpro"):
 				if line.find('/dev/sd') == -1 and line.find('mmcblk1p1') == -1:
 					continue
 			else:
