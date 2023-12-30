@@ -1169,7 +1169,7 @@ def InitUsageConfig():
 		if softcam.lower().startswith("ncam_cccam"):
 			config.cccaminfo.showInExtensions = ConfigYesNo(default=True)
 			SystemInfo["CCcamInstalled"] = True
-		elif softcam.lower().startswith('ncam_oscam') or softcam.lower().startswith('ncam_ncam'):
+		elif softcam.lower().startswith(('ncam_oscam', 'ncam_ncam')):
 			config.oscaminfo.showInExtensions = ConfigYesNo(default=True)
 			SystemInfo["OScamInstalled"] = True
 

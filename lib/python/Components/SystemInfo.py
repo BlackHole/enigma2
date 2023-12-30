@@ -1,4 +1,5 @@
 from os import listdir
+from hashlib import md5
 from os.path import isfile, join as pathjoin
 from boxbranding import getBoxType, getBrandOEM, getDisplayType, getHaveAVJACK, getHaveHDMIinFHD, getHaveHDMIinHD, getHaveRCA, getHaveSCART, getHaveSCARTYUV, getHaveYUV, getImageType, getMachineBrand, getMachineBuild, getMachineMtdRoot, getMachineName
 from enigma import Misc_Options, eDVBCIInterfaces, eDVBResourceManager
@@ -17,26 +18,27 @@ class BoxInformation:
 		self.boxInfo = {}
 		file = root + pathjoin(resolveFilename(SCOPE_LIBDIR), "enigma.info")
 		self.boxInfo["overrideactive"] = False  # not currently used by us
+		self.boxInfo["checksumerror"] = True
 		lines = fileReadLines(file)
 		if lines:
 			for line in lines:
-				if line.startswith("#") or line.strip() == "" or line.strip().lower().startswith("checksum") or "=" not in line:
+				if line.startswith("#") or line.strip() == "" or "=" not in line:
 					continue
 				item, value = [x.strip() for x in line.split("=", 1)]
-				if item:
+				if item.lower() == "checksum":
+					self.boxInfo["checksumerror"] = (i := lines.index(line)) < 1 or md5(bytearray("\n".join(lines[:i]) + "\n", "UTF-8", errors="ignore")).hexdigest() != value
+				elif item:
 					self.immutableList.append(item)
-					# Temporary fix: some items that look like floats are not floats and should be handled as strings, e.g. python "3.10" should not be processed as "3.1".
-					if not (value.startswith("\"") or value.startswith("'")) and item in ("python", "imageversion", "imgversion"):
-						value = '"' + value + '"'  # wrap it so it is treated as a string
 					self.boxInfo[item] = self.processValue(value)
-			# print("[SystemInfo] Enigma information file data loaded into BoxInfo.")
+			if self.boxInfo["checksumerror"]:
+				 print("[BoxInfo] Data integrity of %s could not be verified." % file)
+			# else:
+				# print("[SystemInfo] Enigma information file data loaded into BoxInfo.")
 		else:
 			print("[BoxInfo] ERROR: %s is not available!  The system is unlikely to boot or operate correctly." % file)
 
 	def processValue(self, value):
-		if value is None:
-			pass
-		elif (value.startswith("\"") or value.startswith("'")) and value.endswith(value[0]):
+		if len(value) > 1 and value[0] in ("\"", "'") and value[-1] == value[0]):
 			value = value[1:-1]
 		elif value.startswith("(") and value.endswith(")"):
 			data = []
@@ -48,20 +50,20 @@ class BoxInformation:
 			for item in [x.strip() for x in value[1:-1].split(",")]:
 				data.append(self.processValue(item))
 			value = list(data)
-		elif value.upper() == "NONE":
-			value = None
 		elif value.upper() in ("FALSE", "NO", "OFF", "DISABLED"):
 			value = False
 		elif value.upper() in ("TRUE", "YES", "ON", "ENABLED"):
 			value = True
+		elif value.upper() == "NONE":
+			value = None
 		elif value.isdigit() or ((value[0:1] == "-" or value[0:1] == "+") and value[1:].isdigit()):
 			if value[0] != "0":  # if this is zero padded it must be a string, so skip
 				value = int(value)
-		elif value.startswith("0x") or value.startswith("0X"):
+		elif value.lower().startswith("0x"):
 			value = int(value, 16)
-		elif value.startswith("0o") or value.startswith("0O"):
+		elif value.lower().startswith("0o"):
 			value = int(value, 8)
-		elif value.startswith("0b") or value.startswith("0B"):
+		elif value.lower().startswith("0b"):
 			value = int(value, 2)
 		else:
 			try:
@@ -81,12 +83,10 @@ class BoxInformation:
 
 	def getItem(self, item, default=None):
 		if item in self.boxInfo:
-			value = self.boxInfo[item]
+			return self.boxInfo[item]
 		elif item in SystemInfo:
-			value = SystemInfo[item]
-		else:
-			value = default
-		return value
+			return SystemInfo[item]
+		return default
 
 	def setItem(self, item, value, immutable=False, forceOverride=False):
 		if item in self.immutableList and not forceOverride:

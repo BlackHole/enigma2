@@ -2305,7 +2305,7 @@ class InfoBarSeek:
 			@staticmethod
 			def generateSkipHelp(context):
 				skipHelp = []
-				for action in [act for ctx, act in getKeyBindingKeys(filterfn=lambda key: key[0] == context and (key[1].startswith("seek:") or key[1].startswith("seekdef:")))]:
+				for action in [act for ctx, act in getKeyBindingKeys(filterfn=lambda key: key[0] == context and (key[1].startswith(("seek:", "seekdef:"))))]:
 					if action.startswith("seekdef:"):
 						skipTime = boundFunction(InfoBarSeekActionMap.seekTime, action)
 					else:
@@ -3007,7 +3007,7 @@ class InfoBarExtensions:
 		if pathExists('/usr/camscript/'):
 			softcams = os.listdir('/usr/camscript/')
 		for softcam in softcams:
-			if (softcam.lower().startswith('ncam_oscam') or softcam.lower().startswith('ncam_ncam')) and config.oscaminfo.showInExtensions.value:
+			if softcam.lower().startswith(('ncam_oscam', 'ncam_ncam')) and config.oscaminfo.showInExtensions.value:
 				return [((boundFunction(self.getOSname), boundFunction(self.openOScamInfo), lambda: True), None)] or []
 		else:
 			return []
