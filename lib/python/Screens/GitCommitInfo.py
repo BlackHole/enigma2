@@ -2,10 +2,10 @@ from Components.ActionMap import ActionMap
 from Components.Button import Button
 from Components.Label import Label
 from Components.ScrollLabel import ScrollLabel
+from Components.SystemInfo import SystemInfo
 from Screens.Screen import Screen
 
 from enigma import eTimer
-from boxbranding import getImageBuild, getImageDevBuild, getImageType
 from sys import modules
 from datetime import datetime
 from json import loads
@@ -13,10 +13,11 @@ from json import loads
 from urllib.request import urlopen, Request  # raises ImportError in Python 2
 from urllib.error import HTTPError, URLError  # raises ImportError in Python 2
 
-if getImageType() != 'developer':
-	ImageVer = "%03d" % int(getImageBuild())
+
+if SystemInfo["imagetype"] != 'developer':
+	ImageVer = "%03d" % int(SystemInfo["imagebuild"])
 else:
-	ImageVer = "%s.%s" % (getImageBuild(), getImageDevBuild())
+	ImageVer = "%s.%s" % (SystemInfo["imagebuild"], SystemInfo["imagedevbuild"])
 	ImageVer = float(ImageVer)
 
 E2Branches = {
@@ -28,7 +29,7 @@ E2Branches = {
 project = 0
 projects = [
 	("https://api.github.com/repos/oe-alliance/oe-alliance-core/commits?sha=5.3", "OE-A Core"),
-	("https://api.github.com/repos/BlackHole/enigma2/commits?sha=%s" % getattr(E2Branches, getImageType(), "Python3.11"), "Enigma2"),
+	("https://api.github.com/repos/BlackHole/enigma2/commits?sha=%s" % getattr(E2Branches, SystemInfo["imagetype"], "Python3.11"), "Enigma2"),
 	("https://api.github.com/repos/BlackHole/skins/commits", "OpenBh Skins"),
 	("https://api.github.com/repos/oe-alliance/oe-alliance-plugins/commits", "OE-A Plugins"),
 	("https://api.github.com/repos/oe-alliance/AutoBouquetsMaker/commits", "AutoBouquetsMaker"),
@@ -54,15 +55,15 @@ def readGithubCommitLogsSoftwareUpdate():
 					continue
 			if c['commit']['message'].startswith('openbh:'):
 				gitstart = False
-				if getImageType() != 'developer' and c['commit']['message'].startswith('openbh: developer'):
+				if SystemInfo["imagetype"] != 'developer' and c['commit']['message'].startswith('openbh: developer'):
 					print('[GitCommitLog] Skipping developer line')
 					continue
-				elif getImageType() == 'developer' and c['commit']['message'].startswith('openbh: release') or c['commit']['message'].startswith('openbh: community'):
+				elif SystemInfo["imagetype"]  == 'developer' and c['commit']['message'].startswith('openbh: release') or c['commit']['message'].startswith('openbh: community'):
 					print('[GitCommitLog] Skipping release/community line')
 					continue
 				tmp = c['commit']['message'].split(' ')[2].split('.')
 				if len(tmp) > 2:
-					if getImageType() != 'developer':
+					if SystemInfo["imagetype"] != 'developer':
 						releasever = tmp[2]
 						releasever = "%03d" % int(releasever)
 					else:
@@ -113,15 +114,15 @@ def readGithubCommitLogs():
 			if c['commit']['message'].startswith('openbh:'):
 				blockstart = False
 				gitstart = False
-				if getImageType() != 'developer' and c['commit']['message'].startswith('openbh: developer'):
+				if SystemInfo["imagetype"] != 'developer' and c['commit']['message'].startswith('openbh: developer'):
 					print('[GitCommitLog] Skipping developer line')
 					continue
-				elif getImageType() == 'developer' and c['commit']['message'].startswith('openbh: release') or c['commit']['message'].startswith('openbh: community'):
+				elif SystemInfo["imagetype"] == 'developer' and c['commit']['message'].startswith('openbh: release') or c['commit']['message'].startswith('openbh: community'):
 					print('[GitCommitLog] Skipping release/community line')
 					continue
 				tmp = c['commit']['message'].split(' ')[2].split('.')
 				if len(tmp) > 2:
-					if getImageType() != 'developer':
+					if SystemInfo["imagetype"] != 'developer':
 						releasever = tmp[2]
 						releasever = "%03d" % int(releasever)
 					else:

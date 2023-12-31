@@ -9,7 +9,7 @@ from Components.Label import Label
 from Components.Pixmap import Pixmap
 from Components.ConfigList import ConfigListScreen
 from Components.config import getConfigListEntry, ConfigSelection, NoSave
-from boxbranding import getMachineBuild
+from Components.SystemInfo import SystemInfo
 from Tools.LoadPixmap import LoadPixmap
 from Tools.Directories import fileExists, pathExists, createDir, resolveFilename, SCOPE_CURRENT_SKIN
 from os import system, listdir, remove as os_remove, rename as os_rename, stat as os_stat
@@ -54,7 +54,7 @@ class DeliteDevicesPanel(Screen):
 		rc = system("blkid > /tmp/blkid.log")
 		f = open("/tmp/blkid.log", 'r')
 		for line in f.readlines():
-			if getMachineBuild() in ("h9s", "h9combo", "h9combose", "h9twin", "h11", "pulse4k", "pulse4kmini", "sx988", "multiboxpro"):
+			if SystemInfo["model"] in ("h9s", "h9combo", "h9combose", "h9twin", "h11", "pulse4k", "pulse4kmini", "sx988", "multiboxpro"):
 				if line.find('/dev/sd') == -1 and line.find('mmcblk1p1') == -1:
 					continue
 			else:
