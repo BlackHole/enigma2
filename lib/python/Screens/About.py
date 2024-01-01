@@ -27,9 +27,9 @@ class AboutBase(TextBox):
 		if labels:
 			self["lab1"] = StaticText(_("OpenBh"))
 			self["lab2"] = StaticText(_("From the OpenBh Team"))
-			if getImageType() == "release":
+			if SystemInfo["imagetype"] == "release":
 				self["lab3"] = StaticText(_("Support at") + " www.openbh.net")
-			elif getImageType() == "community":
+			elif SystemInfo["imagetype"] == "community":
 				self["lab3"] = StaticText(_("Support at") + " blackhole-community.com")
 
 	def createSummary(self):
