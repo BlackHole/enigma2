@@ -335,8 +335,6 @@ class Nab_downArea(Screen):
 			os_remove(downfile)
 
 		if self.url == "feeds":
-#			from Plugins.SystemPlugins.SoftwareManager.plugin import PluginManager
-#			self.session.open(PluginManager, "/usr/lib/enigma2/python/Plugins/SystemPlugins/SoftwareManager")
 			from Screens.PluginBrowser import PluginDownloadBrowser
 			self.session.open(PluginDownloadBrowser)
 		else:

@@ -3,13 +3,13 @@ from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 from Screens.About import About
 from Screens.ServiceInfo import ServiceInfo
-from boxbranding import getMachineBrand, getImageBuild, getMachineName, getImageVersion, getImageType
 from Components.ActionMap import ActionMap
 from Components.Label import Label
 from Components.ScrollLabel import ScrollLabel
 from Components.MenuList import MenuList
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
+from Components.SystemInfo import SystemInfo
 from Components.Gauge import Gauge
 from Components.Pixmap import Pixmap, MultiPixmap
 from Components.About import about
@@ -372,8 +372,8 @@ class BhsysInfo(Screen):
 
 	def updateInfo(self):
 		rc = system("df -h > /tmp/syinfo.tmp")
-		text = _("STB \n") + _("Brand:") + "\t%s\n" % getMachineBrand()
-		text += _("Model:\t%s \n") % (getMachineName())
+		text = _("STB \n") + _("Brand:") + "\t%s\n" % SystemInfo["displaybrand"]()
+		text += _("Model:\t%s \n") % (SystemInfo["machinename"])
 		text += _("Chipset:\t%s \n") % about.getChipSetString().upper() + "\n"
 		text += _("MEMORY\n")
 		memTotal = memFree = swapTotal = swapFree = 0
@@ -416,7 +416,7 @@ class BhsysInfo(Screen):
 		os_remove("/tmp/syinfo.tmp")
 
 		text += "\n" + _("SOFTWARE") + "\n"
-		text += "Image:\t" + "OpenBh %s.%s (%s)\n" % (getImageVersion(), getImageBuild(), getImageType().title())
+		text += "Image:\t" + "OpenBh %s.%s (%s)\n" % (SystemInfo["imageversion"], SystemInfo["imagebuild"], SystemInfo["imagetype"].title())
 		text += "Enigma2: \t" + about.getEnigmaVersionString() + "\n"
 		text += "Kernel: \t" + about.getKernelVersionString() + "\n"
 		self["lab1"].setText(text)

@@ -87,14 +87,14 @@ DISTRO = 0
 URL = 1
 ACTION = 2
 
-if getImageType() == "release":
+if SystemInfo["imagetype"] == "release":
 	FEED_URLS = [
 	("OpenBh", "https://images.openbh.net/json/%s", "getMachineMake"),
 	("OpenViX", "https://www.openvix.co.uk/json/%s", "getMachineMake"),
 	("OpenATV", "https://images.mynonpublic.com/openatv/json/%s", "getMachineMake"),
 	("OpenPLi", "http://downloads.openpli.org/json/%s", "HardwareInfo"),
 ]
-elif getImageType() == "community":
+elif SystemInfo["imagetype"] == "community":
 	FEED_URLS = [
 	("OpenBh", "https://images.blackhole-community.com/json/%s", "getMachineMake"),
 	("OpenViX", "https://www.openvix.co.uk/json/%s", "getMachineMake"),
@@ -1643,7 +1643,7 @@ class ImageManagerDownload(Screen):
 		self.setIndex = 0
 		self.expanded = []
 		self["list"] = ChoiceList(list=[ChoiceEntryComponent("", ((_("No images found on the selected download server...if password check validity")), "Waiter"))])
-		self.SystemInfo["distro"]
+		self.getImageDistro()
 
 	def showError(self):
 		self.session.open(MessageBox, self.msg, MessageBox.TYPE_ERROR)
@@ -1750,7 +1750,7 @@ class ImageManagerDownload(Screen):
 				self.expanded.remove(currentSelected[0][0])
 			else:
 				self.expanded.append(currentSelected[0][0])
-			self.SystemInfo["distro"]
+			self.getImageDistro()
 
 		elif currentSelected[0][1] != "Waiter":
 			self.sel = currentSelected[0][0]
