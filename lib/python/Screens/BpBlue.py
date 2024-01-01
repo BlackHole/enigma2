@@ -372,7 +372,7 @@ class BhsysInfo(Screen):
 
 	def updateInfo(self):
 		rc = system("df -h > /tmp/syinfo.tmp")
-		text = _("STB \n") + _("Brand:") + "\t%s\n" % SystemInfo["displaybrand"]()
+		text = _("STB \n") + _("Brand:") + "\t%s\n" % (SystemInfo["displaybrand"].capitalize())
 		text += _("Model:\t%s \n") % (SystemInfo["machinename"])
 		text += _("Chipset:\t%s \n") % about.getChipSetString().upper() + "\n"
 		text += _("MEMORY\n")

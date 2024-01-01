@@ -57,7 +57,7 @@ class About(AboutBase):
 
 	def populate(self):
 		AboutText = ""
-		AboutText += _("Model:\t%s %s\n") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"])
+		AboutText += _("Model:\t%s %s\n") % (SystemInfo["MachineBrand"].capitalize(), SystemInfo["MachineName"])
 
 		if about.getChipSetString() != _("unavailable"):
 			if SystemInfo["HasHiSi"]:
