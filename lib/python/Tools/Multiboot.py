@@ -4,6 +4,7 @@ import subprocess
 import tempfile
 from os import path, rmdir, rename, sep, stat
 
+import struct
 from Components.Console import Console
 from Components.SystemInfo import SystemInfo, BoxInfo as BoxInfoRunningInstance, BoxInformation
 from Tools.Directories import fileHas, fileExists
