@@ -180,12 +180,6 @@ self.session.open(SABnzbdSetupScreen)
 			<!-- Menu / Software Update -->
 			<menu weight="3" level="0" text="Software Update" key="softwareupdatemenu">
 				<item key="onlineupdate_setup" level="0" text="Settings" weight="1"><setup id="softwareupdate"/></item>
-				<item key="package_manager" level="1" text="Package Manager" weight="2">
-					<code>
-from Plugins.SystemPlugins.OBH.PackageManager import PackageManager
-self.session.open(PackageManager)
-					</code>
-				</item>
 				<item key="software_update" level="0" text="Software Update" weight="3"><screen module="SoftwareUpdate" screen="UpdatePlugin"/></item>
 			</menu>
 			<item key="input_device_setup" level="1" text="Input Devices" weight="4"><screen module="InputDeviceSetup" screen="InputDeviceSelection" /></item>
