@@ -245,7 +245,7 @@ class Harddisk:
 		if data is None:
 			print("[Harddisk] Error: Failed to get model!%s:" % msg)
 			return "Unknown"
-		return data
+		return "(" + data + ")".replace("((", "(").replace("))", ")")
 
 	def free(self, dev=None):
 		if dev is None:

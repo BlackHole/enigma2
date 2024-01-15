@@ -287,7 +287,7 @@ class Devices(Screen):
 				hdd = self.hddlist[count][1]
 				hddp = self.hddlist[count][0]
 				if "ATA" or "USB" in hddp:
-					hddp = hddp.replace("ATA ", "").replace("Internal", "ATA Bus").replace("USB ", "")
+					hddp = hddp.replace("ATA ", "").replace("Internal", "ATA Bus").replace("USB ", "").replace(" (SD", "(SD")
 				free = hdd.Totalfree()
 				if free >= 1:
 					free *= 1000000 # convert MB to bytes
@@ -298,7 +298,7 @@ class Devices(Screen):
 					freeline = _("\n") + ("Free: ") + _("Full")
 				line = "%s      %s" % (hddp, freeline)
 				self.list.append(line)
-		self.list = "\n".join(self.list)
+		self.list = "\n".join(self.list).replace("((", "(").replace("))", ")")
 		self["hdd"].setText(self.list)
 
 		self.Console.ePopen("df -mh | grep -v '^Filesystem'", self.Stage1Complete)
