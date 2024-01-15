@@ -46,7 +46,7 @@ def checkConfigBackup():
 	backups = []
 	for dir in ["/media/%s/backup" % media for media in listdir("/media/") if path.isdir(path.join("/media/", media))]:
 		try:
-			backups += [{"name": f, "mtime": stat(f).st_mtime} for x in listdir(dir) if (f := path.join(dir, x)) and path.isfile(f) and f.endswith(".tar.gz") and "vix" in f.lower()]
+			backups += [{"name": f, "mtime": stat(f).st_mtime} for x in listdir(dir) if (f := path.join(dir, x)) and path.isfile(f) and f.endswith(".tar.gz") and "obh" in f.lower()]
 		except FileNotFoundError:  # e.g. /media/autofs/xxx will crash listdir if "xxx" is inactive
 			pass
 	if backups:
@@ -85,6 +85,18 @@ def RestoreWizard(*args, **kwargs):
 def LanguageWizard(*args, **kwargs):
 	from Screens.LanguageSelection import LanguageWizard
 	return LanguageWizard(*args, **kwargs)
+
+
+def PackageManagerMenu(session, **kwargs):
+	from .PackageManager import PackageManager
+	session.open(PackageManager)
+
+
+def PackageManagerSetup(menuid):
+	if config.usage.setup_level.index > 1 and menuid == "softwareupdatemenu":
+		return [(_("Package Manager"), PackageManagerMenu, "packagemanager", 2)]
+	return []
+
 
 def BackupManager(session):
 	from .BackupManager import OpenBhBackupManager
@@ -171,7 +183,8 @@ def Plugins(**kwargs):
 			plist.append(PluginDescriptor(name=_("Vu+ ImageManager wizard"), where=PluginDescriptor.WHERE_WIZARD, needsRestart=False, fnc=(30, ImageManager)))
 		return plist
 
-	plist = [PluginDescriptor(needsRestart=False, fnc=startSetup)]
+	plist = [PluginDescriptor(needsRestart=False, fnc=startSetup),
+		PluginDescriptor(where=PluginDescriptor.WHERE_MENU, fnc=PackageManagerSetup)]
 	if config.scriptrunner.showinextensions.value:
 		plist.append(PluginDescriptor(name=_("Script runner"), where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=ScriptRunnerMenu))
 	plist.append(PluginDescriptor(where=PluginDescriptor.WHERE_AUTOSTART, fnc=SwapAutostart))
