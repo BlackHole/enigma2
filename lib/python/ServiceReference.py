@@ -131,3 +131,6 @@ class ServiceReference(eServiceReference):
 			eServiceReference.__init__(self, reftype, flags, path)
 		elif not isinstance(ref, eServiceReference):
 			eServiceReference.__init__(self, ref or "")
+
+def hdmiInServiceRef():
+	return eServiceReference(eServiceReference('8192:0:1:0:0:0:0:0:0:0:'))

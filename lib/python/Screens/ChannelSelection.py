@@ -40,7 +40,7 @@ from Screens.RdsDisplay import RassInteractive
 from Screens.ServiceInfo import ServiceInfo
 from Screens.TimerEntry import TimerEntry, addTimerFromEventSilent
 from Screens.VirtualKeyBoard import VirtualKeyBoard
-from ServiceReference import ServiceReference
+from ServiceReference import ServiceReference, hdmiInServiceRef
 from Tools.Alternatives import GetWithAlternative
 from Tools.BoundFunction import boundFunction
 from Tools.Directories import sanitizeFilename
@@ -352,7 +352,9 @@ class ChannelContextMenu(Screen):
 				else:
 					_append_when_current_valid(current, menu, actions, (_("End alternatives edit"), self.bouquetMarkEnd), level=0, key="bullet")
 					_append_when_current_valid(current, menu, actions, (_("Abort alternatives edit"), self.bouquetMarkAbort), level=0, key="bullet")
-		menu.append(ChoiceEntryComponent(key="green", text=(_("Reload Services"), self.reloadServices)))
+		menu.append(ChoiceEntryComponent(text=(_("Reload Services"), self.reloadServices), key="bullet"))
+		if SystemInfo["HasHDMIin"]:
+						_append_when_current_valid(current, menu, actions, (_("Add HDMI-IN To Bouquet"), self.showHDMIInInputBox), level=0, key="bullet")
 		self["actions"] = ActionMap(["OkCancelActions", "ColorActions", "NumberActions", "MenuActions"], actions)
 
 	def set3DMode(self, value):
@@ -637,6 +639,14 @@ class ChannelContextMenu(Screen):
 
 	def copyCurrentToBouquetList(self):
 		self.csel.copyCurrentToBouquetList()
+		self.close()
+
+	def showHDMIInInputBox(self):
+		self.session.openWithCallback(self.hdmiInputCallback, VirtualKeyBoard, title=_("Please enter a name for the HDMI-IN"), text="HDMI-IN", maxSize=False, visible_width=56, type=Input.TEXT)
+
+	def hdmiInputCallback(self, marker):
+		if marker is not None:
+			self.csel.addHDMIIn(marker)
 		self.close()
 
 	def showMarkerInputBox(self):
@@ -990,6 +1000,16 @@ class ChannelSelectionEdit:
 				self.servicelist.removeCurrent()
 				if not self.servicelist.atEnd():
 					self.servicelist.moveUp()
+
+	def addHDMIIn(self, name):
+		current = self.servicelist.getCurrent()
+		mutableList = self.getMutableList()
+		ref = hdmiInServiceRef()
+		ref.setName(name)
+		if mutableList and current and current.valid():
+			if not mutableList.addService(ref, current):
+				self.servicelist.addService(ref, True)
+				mutableList.flushChanges()
 
 	def addMarker(self, name):
 		current = self.servicelist.getCurrent()
