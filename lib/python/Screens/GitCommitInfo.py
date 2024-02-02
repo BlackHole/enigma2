@@ -21,19 +21,18 @@ else:
 	ImageVer = float(ImageVer)
 
 E2Branches = {
-	'developer': 'Python3.11',
-	'release': 'Python3.11',
-	'community': 'Python3.11'
+	'developer': 'Python3.12',
+	'release': 'Python3.12',
+	'community': 'Python3.12'
 	}
 
 project = 0
 projects = [
-	("https://api.github.com/repos/oe-alliance/oe-alliance-core/commits?sha=5.3", "OE-A Core"),
-	("https://api.github.com/repos/BlackHole/enigma2/commits?sha=%s" % getattr(E2Branches, SystemInfo["imagetype"], "Python3.11"), "Enigma2"),
+	("https://api.github.com/repos/oe-alliance/oe-alliance-core/commits?sha=5.4", "OE-A Core"),
+	("https://api.github.com/repos/BlackHole/enigma2/commits?sha=%s" % getattr(E2Branches, SystemInfo["imagetype"], "Python3.12"), "Enigma2"),
 	("https://api.github.com/repos/BlackHole/skins/commits", "OpenBh Skins"),
 	("https://api.github.com/repos/oe-alliance/oe-alliance-plugins/commits", "OE-A Plugins"),
 	("https://api.github.com/repos/oe-alliance/AutoBouquetsMaker/commits", "AutoBouquetsMaker"),
-	("https://api.github.com/repos/oe-alliance/branding-module/commits", "Branding Module"),
 ]
 cachedProjects = {}
 
