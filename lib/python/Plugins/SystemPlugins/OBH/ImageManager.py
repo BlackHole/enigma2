@@ -594,7 +594,8 @@ class OpenBhImageManager(Screen):
 			self.close()
 
 	def keyRestore6(self, ret):
-		MAINDEST = "%s/%s" % (self.TEMPDESTROOT, SystemInfo["imagedir"])
+		# MAINDEST = "%s/%s" % (self.TEMPDESTROOT, SystemInfo["imagedir"])
+		MAINDEST = "%s" % self.TEMPDESTROOT  # Dual 4K
 		print("[ImageManager] MAINDEST=%s" % MAINDEST)
 		def findImageFiles(path):
 			for path, subDirs, files in walk(path):
