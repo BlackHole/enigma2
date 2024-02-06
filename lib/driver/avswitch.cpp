@@ -501,7 +501,7 @@ void eAVSwitch::setPolicy169(const std::string &newPolicy, int flags) const
 }
 
 // set VideoSize
-// param top, left, width, height 
+// param top, left, width, height
 void eAVSwitch::setVideoSize(int top, int left, int width, int height, int flags) const
 {
 

@@ -46,14 +46,14 @@ public:
 	void setPolicy169(const std::string &newPolicy, int flags = 0) const;
 	void setVideoSize(int top, int left, int width, int height, int flags = 0) const;
 	bool isActive();
-	
+
 	enum
 	{
 		FLAGS_DEBUG = 1,
 		FLAGS_SUPPRESS_NOT_EXISTS = 2,
 		FLAGS_SUPPRESS_READWRITE_ERROR = 4
 	};
-	
+
 	PSignal1<void, int> vcr_sb_notifier;
 };
 
