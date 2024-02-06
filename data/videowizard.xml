@@ -43,7 +43,7 @@ self.selectKey("DOWN")
 	</step>
 	<step id="end">
 		<code>
-from Components.AVSwitch import iAVSwitch as avSwitch		
+from Components.AVSwitch import iAVSwitch as avSwitch
 avSwitch.saveMode(self.port, self.mode, self.rate)
 from Components.config import configfile
 configfile.save()
