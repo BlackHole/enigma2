@@ -4010,7 +4010,8 @@ class InfoBarAspectSelection:
 		]
 		keys = ["green", "", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 		from Components.AVSwitch import AVSwitch
-		aspect = AVSwitch.getAspectRatioSetting()
+		iAVSwitch = AVSwitch()
+		aspect = iAVSwitch.getAspectRatioSetting()
 		selection = 0
 		for item in range(len(aspectList)):
 			if aspectList[item][1] == aspect:
@@ -4027,7 +4028,8 @@ class InfoBarAspectSelection:
 					self.ExGreen_toggleGreen()
 				else:
 					from Components.AVSwitch import AVSwitch
-					AVSwitch.setAspectRatio(int(aspect[1]))
+					iAVSwitch = AVSwitch()
+					iAVSwitch.setAspectRatio(int(aspect[1]))
 					self.ExGreen_doHide()
 		else:
 			self.ExGreen_doHide()
