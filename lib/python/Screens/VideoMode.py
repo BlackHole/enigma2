@@ -107,7 +107,7 @@ class VideoSetup(Setup):
 					self.list.append(getConfigListEntry(_("Show 2160p 24fps as"), config.av.fixres_2160p24, _("This option allows you to choose how to display 2160p 24Hz on your TV. (as not all TVs support these resolutions)")))
 					self.list.append(getConfigListEntry(_("Show 2160p 25fps as"), config.av.fixres_2160p25, _("This option allows you to choose how to display 2160p 25Hz on your TV. (as not all TVs support these resolutions)")))
 					self.list.append(getConfigListEntry(_("Show 2160p 30fps as"), config.av.fixres_2160p30, _("This option allows you to choose how to display 2160p 30Hz on your TV. (as not all TVs support these resolutions)")))
-		if config.av.fixres.value in ("all", "hd") or config.av.videorate[config.av.videomode[config.av.videoport.value].value].value == "multi":
+		if config.av.fixres.value in ("all", "hd") and config.av.videorate[config.av.videomode[config.av.videoport.value].value].value == "multi":
 			self.list.append(getConfigListEntry(_("Delay time"), config.av.fixres_delay, _("Set the time before checking video source for resolution/refresh rate infomation.")))
 		if level >= 1:
 			if SystemInfo["CanDownmixAC3"]:
