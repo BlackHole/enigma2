@@ -21,6 +21,7 @@ from Components.Timeshift import InfoBarTimeshift
 
 from Screens.Screen import Screen
 from Screens.AudioSelection import getAVDict
+from Screens.BpGreen import DeliteGreenPanel
 from Screens.HelpMenu import HelpableScreen
 from Screens import ScreenSaver
 from Screens.ChannelSelection import ChannelSelection, PiPZapSelection, BouquetSelector, EpgBouquetSelector, service_types_tv
@@ -253,42 +254,28 @@ def getPossibleSubservicesForCurrentChannel(current_service):
 	return []
 
 
-def getActiveSubservicesForCurrentChannel(service):
-	info = service and service.info()
-	sRef = info and info.getInfoString(iServiceInformation.sServiceref)
-	url = "http://%s:%s/" % (config.misc.softcam_streamrelay_url.getHTML(), config.misc.softcam_streamrelay_port.value)
-	splittedRef = sRef.split(url.replace(":", "%3a"))
-	if len(splittedRef) > 1:
-		sRef = splittedRef[1].split(":")[0].replace("%3a", ":")
-	current_service = ':'.join(sRef.split(':')[:11])
-	if info:
-		if current_service:
-			possibleSubservices = getPossibleSubservicesForCurrentChannel(current_service)
-			activeSubservices = []
-			epgCache = eEPGCache.getInstance()
-			for subservice in possibleSubservices:
-				events = epgCache.lookupEvent(['BDTS', (subservice, 0, -1)])
-				if events and len(events) == 1:
-					event = events[0]
-					title = event[2]
-					if title and "Sendepause" not in title:
-						starttime = datetime.datetime.fromtimestamp(event[0]).strftime('%H:%M')
-						endtime = datetime.datetime.fromtimestamp(event[0] + event[1]).strftime('%H:%M')
-						current_show_name = "%s %s-%s" % (title, str(starttime), str(endtime))
-						activeSubservices.append((current_show_name, subservice))
-	if not activeSubservices:
-		subservices = service and service.subServices()
-		if subservices:
-			for idx in range(0, subservices.getNumberOfSubservices()):
-				subservice = subservices.getSubservice(idx)
-				print("     ---->", subservice.toString())
-				activeSubservices.append((subservice.getName(), subservice.toString()))
-	return activeSubservices
+def getActiveSubservicesForCurrentChannel(current_service):
+	if current_service:
+		possibleSubservices = getPossibleSubservicesForCurrentChannel(current_service)
+		activeSubservices = []
+		epgCache = eEPGCache.getInstance()
+		for subservice in possibleSubservices:
+			events = epgCache.lookupEvent(['BDTS', (subservice, 0, -1)])
+			if events and len(events) == 1:
+				event = events[0]
+				title = event[2]
+				if title and "Sendepause" not in title:
+					starttime = datetime.datetime.fromtimestamp(event[0]).strftime('%H:%M')
+					endtime = datetime.datetime.fromtimestamp(event[0] + event[1]).strftime('%H:%M')
+					servicename = eServiceReference(subservice).getServiceName()
+					schedule = str(starttime) + "-" + str(endtime)
+					activeSubservices.append((servicename + " " + schedule + " " + title, subservice))
+		return activeSubservices
 
 
-def hasActiveSubservicesForCurrentChannel(service):
-	activeSubservices = getActiveSubservicesForCurrentChannel(service)
-	return bool(activeSubservices and len(activeSubservices))
+def hasActiveSubservicesForCurrentChannel(current_service):
+	activeSubservices = getActiveSubservicesForCurrentChannel(current_service)
+	return bool(activeSubservices and len(activeSubservices) > 1)
 
 
 class InfoBarDish:
@@ -3832,24 +3819,19 @@ class InfoBarSubserviceSelection:
 
 	def _helpGreenPressed(self):
 		if not config.obhsettings.Subservice.value:
-			return _("Show the list of timers")
+			return _("Show Green Panel")
 		else:
 			return _("Show subservice selection list")
 
 	def GreenPressed(self):
 		if not config.obhsettings.Subservice.value:
-			try:
-				from Screens.BpGreen import DeliteGreenPanel
-				self.session.open(DeliteGreenPanel)
-			except:
-				pass
+			self.session.open(DeliteGreenPanel)
 		else:
 			self.subserviceSelection()
 
 	def checkSubservicesAvail(self):
 		serviceRef = self.session.nav.getCurrentlyPlayingServiceReference()
-		service = self.session.nav.getCurrentService()
-		if not serviceRef or not hasActiveSubservicesForCurrentChannel(service):
+		if not serviceRef or not hasActiveSubservicesForCurrentChannel(serviceRef.toString()):
 			self["SubserviceQuickzapAction"].setEnabled(False)
 			self.bouquets = self.bsel = self.selectedSubservice = None
 
@@ -3879,14 +3861,9 @@ class InfoBarSubserviceSelection:
 	def subserviceSelection(self):
 		serviceRef = self.session.nav.getCurrentlyPlayingServiceReference()
 		if serviceRef:
-			service = self.session.nav.getCurrentService()
-			subservices = getActiveSubservicesForCurrentChannel(service)
-			if subservices and len(subservices) > 1 and (serviceRef.toString() in [x[1] for x in subservices] or service.subServices()):
-				try:
-					selection = [x[1] for x in subservices].index(serviceRef.toString())
-				except:
-					selection = 0
-
+			subservices = getActiveSubservicesForCurrentChannel(serviceRef.toString())
+			if subservices and len(subservices) > 1 and serviceRef.toString() in [x[1] for x in subservices]:
+				selection = [x[1] for x in subservices].index(serviceRef.toString())
 				self.bouquets = self.servicelist and self.servicelist.getBouquetList()
 				if self.bouquets and len(self.bouquets):
 					keys = ["red", "blue", "", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"] + [""] * (len(subservices) - 10)
@@ -3900,6 +3877,8 @@ class InfoBarSubserviceSelection:
 					keys = ["red", "", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"] + [""] * (len(subservices) - 10)
 					selection += 2
 				self.session.openWithCallback(self.subserviceSelected, ChoiceBox, title=_("Please select a sub service"), list=tlist, selection=selection, keys=keys, skin_name="SubserviceSelection")
+			else:
+				self.session.open(DeliteGreenPanel)
 
 	def subserviceSelected(self, service):
 		if service and len(service) > 1:
