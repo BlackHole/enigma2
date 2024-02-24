@@ -1,10 +1,10 @@
-from Components.Converter.Converter import Converter
 from enigma import iServiceInformation, iPlayableService
-from Screens.InfoBarGenerics import hasActiveSubservicesForCurrentChannel
-from Components.Element import cached
+
+from Components.Converter.Converter import Converter
 from Components.Converter.Poll import Poll
 from Components.Converter.VAudioInfo import StdAudioDesc
-from Components.config import config
+from Components.Element import cached
+from Screens.InfoBarGenerics import hasActiveSubservicesForCurrentChannel
 from Tools.Transponder import ConvertToHumanReadable
 
 
