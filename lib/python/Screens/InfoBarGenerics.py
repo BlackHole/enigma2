@@ -62,7 +62,7 @@ from keyids import KEYFLAGS, KEYIDS, KEYIDNAMES
 
 from time import time, localtime, strftime
 from bisect import insort
-from os import listdir, path as ospath
+from os import listdir, path as ospath, rename as osrename, system as ossystem
 from sys import maxsize
 import itertools
 import datetime
@@ -1055,7 +1055,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 			out.write(line)
 		out.close()
 		inme.close()
-		os.rename("/etc/BhCamConf.tmp", "/etc/BhCamConf")
+		osrename("/etc/BhCamConf.tmp", "/etc/BhCamConf")
 
 		f = open(new, 'r')
 		for line in f.readlines():
@@ -1068,7 +1068,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		out.write(camname)
 		out.close()
 		cmd = "cp -f " + new + " /usr/bin/StartBhCam"
-		os.system(cmd)
+		ossystem(cmd)
 
 		client_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 		client_socket.connect("/tmp/Blackhole.socket")
@@ -2992,7 +2992,7 @@ class InfoBarExtensions:
 	def getCCcamInfo(self):
 		softcams = []
 		if pathExists('/usr/camscript/'):
-			softcams = os.listdir('/usr/camscript/')
+			softcams = listdir('/usr/camscript/')
 		for softcam in softcams:
 			if softcam.lower().startswith('ncam_cccam') and config.cccaminfo.showInExtensions.value:
 				return [((boundFunction(self.getCCname), boundFunction(self.openCCcamInfo), lambda: True), None)] or []
@@ -3005,7 +3005,7 @@ class InfoBarExtensions:
 	def getOScamInfo(self):
 		softcams = []
 		if pathExists('/usr/camscript/'):
-			softcams = os.listdir('/usr/camscript/')
+			softcams = listdir('/usr/camscript/')
 		for softcam in softcams:
 			if softcam.lower().startswith(('ncam_oscam', 'ncam_ncam')) and config.oscaminfo.showInExtensions.value:
 				return [((boundFunction(self.getOSname), boundFunction(self.openOScamInfo), lambda: True), None)] or []
