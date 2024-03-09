@@ -88,9 +88,9 @@ class PowerTimerEntry(TimerEntry):
 			TIMERTYPE.RESTART: "restart"
 		}[self.timerType]
 		if not self.disabled:
-			return f"PowerTimerEntry(type={timertype}, begin={ctime(self.begin)})"
+			return "PowerTimerEntry(type=%s, begin=%s)" % (timertype, ctime(self.begin))
 		else:
-			return f"PowerTimerEntry(type={timertype}, begin={ctime(self.begin)} Disabled)"
+			return "PowerTimerEntry(type=%s, begin=%s Disabled)" % (timertype, ctime(self.begin))
 
 	def log(self, code, msg):
 		self.log_entries.append((int(time()), code, msg))
@@ -107,7 +107,7 @@ class PowerTimerEntry(TimerEntry):
 			self.backoff *= 2
 			if self.backoff > 1800:
 				self.backoff = 1800
-		self.log(10, f"backoff: retry in {int(self.backoff) / 60} minutes")
+		self.log(10, "backoff: retry in %d minutes" % (int(self.backoff) / 60))
 		#
 		# If this is the first backoff of a repeat timer remember the original
 		# begin/end times, so that we can use *these* when setting up the repeat.
@@ -124,7 +124,7 @@ class PowerTimerEntry(TimerEntry):
 
 	def activate(self):
 		next_state = self.state + 1
-		self.log(5, f"activating state {next_state}")
+		self.log(5, "activating state %d" % next_state)
 
 		if next_state == self.StatePrepared and (self.timerType == TIMERTYPE.AUTOSTANDBY or self.timerType == TIMERTYPE.AUTODEEPSTANDBY):
 			# This is the first action for an auto* timer.
@@ -349,7 +349,7 @@ class PowerTimerEntry(TimerEntry):
 		self.backoff = 0
 
 		if int(old_prepare) > 60 and int(old_prepare) != int(self.start_prepare):
-			self.log(15, f"time changed, start prepare is now: {ctime(self.start_prepare)}")
+			self.log(15, "time changed, start prepare is now: %s" % ctime(self.start_prepare))
 
 
 def createTimer(xml):
@@ -480,7 +480,7 @@ class PowerTimer(Timer):
 				checkit = False  # at moment it is enough when the message is displayed one time
 
 	def saveTimer(self):
-		timerTypes = {  # noqa: F841
+		timerTypes = {
 			TIMERTYPE.WAKEUP: "wakeup",
 			TIMERTYPE.WAKEUPTOSTANDBY: "wakeuptostandby",
 			TIMERTYPE.AUTOSTANDBY: "autostandby",
@@ -490,7 +490,7 @@ class PowerTimer(Timer):
 			TIMERTYPE.REBOOT: "reboot",
 			TIMERTYPE.RESTART: "restart"
 		}
-		afterEvents = {  # noqa: F841
+		afterEvents = {
 			AFTEREVENT.NONE: "nothing",
 			AFTEREVENT.WAKEUPTOSTANDBY: "wakeuptostandby",
 			AFTEREVENT.STANDBY: "standby",
@@ -503,21 +503,30 @@ class PowerTimer(Timer):
 				continue
 			list.append(
 				'<timer'
-				' timertype=f"{timerTypes[timer.timerType]}"'
-				' begin=f"{int(timer.begin)}"'
-				' end=f"{int(timer.end)}"'
-				' repeated=f"{int(timer.repeated)}"'
-				' afterevent=f"{afterEvents[timer.afterEvent]}"'
-				' disabled=f"{int(timer.disabled)}"'
-				' autosleepinstandbyonly=f"{timer.autosleepinstandbyonly}"'
-				' autosleepdelay=f"{timer.autosleepdelay}"'
-				' autosleeprepeat=f"{timer.autosleeprepeat)}"')
+				' timertype="%s"'
+				' begin="%d"'
+				' end="%d"'
+				' repeated="%d"'
+				' afterevent="%s"'
+				' disabled="%d"'
+				' autosleepinstandbyonly="%s"'
+				' autosleepdelay="%s"'
+				' autosleeprepeat="%s"' % (
+				timerTypes[timer.timerType],  # noqa: E122
+				int(timer.begin),  # noqa: E122
+				int(timer.end),  # noqa: E122
+				int(timer.repeated),  # noqa: E122
+				afterEvents[timer.afterEvent],  # noqa: E122
+				int(timer.disabled),  # noqa: E122
+				timer.autosleepinstandbyonly,  # noqa: E122
+				timer.autosleepdelay,  # noqa: E122
+				timer.autosleeprepeat))  # noqa: E122
 
 			if len(timer.log_entries) == 0:
 				list.append('/>\n')
 			else:
 				for log_time, code, msg in timer.log_entries:
-					list.append(f'>\n<log code="{code}" time="{log_time}">{stringToXML(msg)}</log')
+					list.append('>\n<log code="%d" time="%d">%s</log' % (code, log_time, stringToXML(msg)))
 				list.append('>\n</timer>\n')
 
 		list.append('</timers>\n')
