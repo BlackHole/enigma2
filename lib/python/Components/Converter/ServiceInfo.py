@@ -66,7 +66,7 @@ def getProgressive(info):
 	return getValInt("/proc/stb/vmpeg/0/progressive", info, iServiceInformation.sProgressive, default=0)
 
 
-def getProgressiveStr(info, convert=lambda x: "" if x else "i", instance=None):
+def getProgressiveStr(info, convert=lambda x: "p" if x else "i", instance=None):
 	return getValStr("/proc/stb/vmpeg/0/progressive", info, iServiceInformation.sProgressive, convert=convert, instance=instance)
 
 
@@ -342,12 +342,7 @@ class ServiceInfo(Poll, Converter):
 		elif self.type == self.VIDEO_INFO:
 			progressive = getProgressiveStr(info, instance=self)
 			fieldrate = getFrameRate(info)
-			if fieldrate > 0:
-				if progressive == 'i':
-					fieldrate *= 2
-				fieldrate = "%dHz" % ((fieldrate + 500) // 1000,)
-			else:
-				fieldrate = ""
+			fieldrate = "%dfps" % ((fieldrate + 500) // 1000,)
 			return "%sx%s%s %s" % (getVideoWidthStr(info, instance=self), getVideoHeightStr(info, instance=self), progressive, fieldrate)
 		return ""
 
