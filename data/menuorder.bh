@@ -12,3 +12,5 @@ cablescan 25
 #Epg Menu
 crossepg 2
 epgimporter 3
+NowNext_blacklist 5
+NowNext_whitelist 6
