@@ -1100,21 +1100,18 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 		self.show()
 		self.reloadList(self.selectedmovie, home=True)
 		del self.selectedmovie
-		# if config.movielist.show_live_tv_in_movielist.value:
-		# 	self.LivePlayTimer.start(100)
+		if config.movielist.show_live_tv_in_movielist.value:
+			self.LivePlayTimer.start(100)
 
 	def hidewaitingtext(self):
 		self.hidewaitingTimer.stop()
 		self["waitingtext"].hide()
 
 	def LivePlay(self):
-		if self.session.nav.getCurrentlyPlayingServiceReference():
-			if ':0:/' not in self.session.nav.getCurrentlyPlayingServiceReference().toString():
-				config.movielist.curentlyplayingservice.setValue(self.session.nav.getCurrentlyPlayingServiceReference().toString())
-		checkplaying = self.session.nav.getCurrentlyPlayingServiceReference()
-		if checkplaying:
-			checkplaying = checkplaying.toString()
-		if checkplaying is None or (config.movielist.curentlyplayingservice.value != checkplaying and ':0:/' not in self.session.nav.getCurrentlyPlayingServiceReference().toString()):
+		checkplaying = self.session.nav.getCurrentlyPlayingServiceReference() and self.session.nav.getCurrentlyPlayingServiceReference().toString()
+		if checkplaying and ':0:/' not in checkplaying:
+			config.movielist.curentlyplayingservice.value = checkplaying
+		if checkplaying is None or (config.movielist.curentlyplayingservice.value != checkplaying and ':0:/' not in checkplaying):
 			self.session.nav.playService(eServiceReference(config.movielist.curentlyplayingservice.value))
 
 		self.LivePlayTimer.stop()
@@ -1580,6 +1577,7 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 			return
 
 		self.saveconfig()
+		# This is commented out because we don't see any obvious reason for stopping the service on exit
 		# from Screens.InfoBar import InfoBar
 		# infobar = InfoBar.instance
 		# if self.session.nav.getCurrentlyPlayingServiceReference():
@@ -1601,9 +1599,10 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 				"movieoff": config.usage.on_movie_eof.value})
 			self.saveLocalSettings()
 			self._updateButtonTexts()
-			self["list"].setItemsPerPage()
-			self["list"].setFontsize()
 			self.reloadList()
+			self["list"].setFontsize()
+			self["list"].setItemsPerPage()
+			self["list"].refreshDisplay()
 			self.updateDescription()
 
 	def can_sortby(self, item):
