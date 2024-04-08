@@ -862,7 +862,7 @@ def InitUsageConfig():
 
 	config.network.AFP_autostart = ConfigYesNo(default=True)
 	config.network.NFS_autostart = ConfigYesNo(default=True)
-	config.network.OpenVPN_autostart = ConfigYesNo(default=True)
+	config.network.OpenVPN_autostart = ConfigYesNo(default=False)
 	config.network.Samba_autostart = ConfigYesNo(default=True)
 	config.network.Inadyn_autostart = ConfigYesNo(default=True)
 	config.network.uShare_autostart = ConfigYesNo(default=True)
