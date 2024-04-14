@@ -36,6 +36,7 @@ class GetEcmInfo:
 		elif "emulator" in current_device.lower():
 			return _("Emulator") if isLong else "EMU"
 
+
 	def pollEcmData(self):
 		global data
 		global old_ecm_time
@@ -95,13 +96,15 @@ class GetEcmInfo:
 					# CCcam
 					if using == 'fta':
 						self.textvalue = _("Free To Air")
-					elif using == 'emu':
-						self.textvalue = "EMU (%ss)" % (info.get('ecm time', '?'))
+					elif protocol == 'emu':
+						self.textvalue = "Emu (%ss)" % (info.get('ecm time', '?'))
+					elif protocol == 'constcw':
+						self.textvalue = "Constcw (%ss)" % (info.get('ecm time', '?'))
 					else:
 						if info.get('address', None):
 							address = info.get('address', '').capitalize()
 						elif info.get('from', None):
-							address = info.get('from', '').capitalize()
+							address = info.get('from', '').replace(":0", "").replace("cache", "cache ").capitalize()
 							if "Local" in address:
 								from_arr = address.split("-")
 								address = from_arr[0].strip()
@@ -125,10 +128,12 @@ class GetEcmInfo:
 						if info.get('address', None):
 							address += info.get('address', '').capitalize()
 						elif info.get('from', None):
-							address = info.get('from', '').capitalize().replace("1:0", "1").replace("2:0", "2").replace("3:0", "3")
+							address = info.get('from', '').replace(":0", "").replace("cache", "cache ").capitalize()
+							if "constant" in address:
+								address = "Constcw"
 							if "Local" in address:
 								from_arr = address.split("-")
-								address = from_arr[0].strip()
+								address = from_arr[0].strip().replace("Local", "")
 								if len(from_arr) > 1:
 									device = from_arr[1].strip()
 						protocol = _('Protocol:') + ' '
@@ -145,7 +150,7 @@ class GetEcmInfo:
 						if info.get('ecm time', None):
 							ecm += info.get('ecm time', '')
 						device_str = self.createCurrentDevice(device, True)
-						self.textvalue = address + ((" - " + device_str) if device else "") + '\n' + protocol + '  ' + hops + '  ' + ecm
+						self.textvalue = address + ((device_str) if device else "") + '\n' + protocol + '  ' + hops + '  ' + ecm
 			else:
 				decode = info.get('decode', None)
 				if decode:
