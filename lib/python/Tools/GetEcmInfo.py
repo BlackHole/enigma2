@@ -33,6 +33,8 @@ class GetEcmInfo:
 			return _("USB Reader 4") if isLong else "USB 4"
 		elif "/ttyusb4" in current_device.lower():
 			return _("USB Reader 5") if isLong else "USB 5"
+		elif "emulator" in current_device.lower():
+			return _("Emulator") if isLong else "EMU"
 
 	def pollEcmData(self):
 		global data
@@ -131,9 +133,9 @@ class GetEcmInfo:
 									device = from_arr[1].strip()
 						protocol = _('Protocol:') + ' '
 						if info.get('protocol', None):
-							protocol += info.get('protocol', '').replace("internal", "Internal").replace("none", "None").replace("cccam", "CCcam").replace("mgcamd", "Mgcamd").replace("gbox", "Gbox").replace("-s2s", "-S2s").replace("ext", "Ext").replace("mcs", "Mcs")
+							protocol += info.get('protocol', '').capitalize().replace("-s2s", "-S2s").replace("ext", "Ext").replace("mcs", "Mcs").replace("Cccam", "CCcam")
 						elif info.get('using', None):
-							protocol += info.get('using', '').replace("internal", "Internal").replace("none", "None").replace("cccam", "CCcam").replace("mgcamd", "Mgcamd").replace("gbox", "Gbox").replace("-s2s", "-S2s").replace("ext", "Ext").replace("mcs", "Mcs")
+							protocol += info.get('using', '').capitalize().replace("-s2s", "-S2s").replace("ext", "Ext").replace("mcs", "Mcs").replace("Cccam", "CCcam")
 
 						hops = _('Hops:') + ' '
 						if info.get('hops', None):
