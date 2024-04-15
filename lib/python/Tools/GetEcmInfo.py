@@ -35,6 +35,8 @@ class GetEcmInfo:
 			return _("USB Reader 5") if isLong else "USB 5"
 		elif "emulator" in current_device.lower():
 			return _("Emulator") if isLong else "EMU"
+		elif "const" in current_device.lower():
+			return _("Constcw") if isLong else "CCW"
 
 
 	def pollEcmData(self):
@@ -129,8 +131,10 @@ class GetEcmInfo:
 							address += info.get('address', '').capitalize()
 						elif info.get('from', None):
 							address = info.get('from', '').replace(":0", "").replace("cache", "cache ").capitalize()
-							if "constant" in address:
-								address = "Constcw"
+							if "const" in protocol.lower():
+								device = "constcw"
+							if "const" in address.lower():
+								address = ""
 							if "Local" in address:
 								from_arr = address.split("-")
 								address = from_arr[0].strip().replace("Local", "")
@@ -151,6 +155,42 @@ class GetEcmInfo:
 							ecm += info.get('ecm time', '')
 						device_str = self.createCurrentDevice(device, True)
 						self.textvalue = address + ((device_str) if device else "") + '\n' + protocol + '  ' + hops + '  ' + ecm
+
+				elif config.usage.show_cryptoinfo.value == '3':
+					# CCcam
+					if using == 'fta':
+						self.textvalue = _("Free To Air")
+					else:
+						address = ' '
+						if info.get('reader', None):
+							address += info.get('reader', '').capitalize()
+						elif info.get('from', None):
+							address = info.get('from', '').replace(":0", "").replace("cache", "cache ").capitalize()
+							if "const" in protocol.lower():
+								device = "constcw"
+							if "const" in address.lower():
+								address = ""
+							if "Local" in address:
+								from_arr = address.split("-")
+								address = from_arr[0].strip().replace("Local", "")
+								if len(from_arr) > 1:
+									device = from_arr[1].strip()
+						protocol = _('Protocol:') + ' '
+						if info.get('protocol', None):
+							protocol += info.get('protocol', '').capitalize().replace("-s2s", "-S2s").replace("ext", "Ext").replace("mcs", "Mcs").replace("Cccam", "CCcam")
+						elif info.get('using', None):
+							protocol += info.get('using', '').capitalize().replace("-s2s", "-S2s").replace("ext", "Ext").replace("mcs", "Mcs").replace("Cccam", "CCcam")
+
+						hops = _('Hops:') + ' '
+						if info.get('hops', None):
+							hops += info.get('hops', '')
+
+						ecm = _('Ecm:') + ' '
+						if info.get('ecm time', None):
+							ecm += info.get('ecm time', '')
+						device_str = self.createCurrentDevice(device, True)
+						self.textvalue = address + ((device_str) if device else "") + '\n' + protocol + '  ' + hops + '  ' + ecm
+
 			else:
 				decode = info.get('decode', None)
 				if decode:

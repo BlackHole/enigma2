@@ -65,7 +65,11 @@ class CryptoInfo(Poll, Converter):
 									# port
 									port = from_splitted[1].strip() if len(from_splitted) > 1 else ""
 									# source
-									if from_splitted[0].strip() == "local":
+									if protocol == "emu":
+										source = "emu"
+									elif protocol == "constcw":
+										source = "constcw"
+									elif from_splitted[0].strip() == "local":
 										source = "sci"
 									else:
 										source = "net"
@@ -78,7 +82,9 @@ class CryptoInfo(Poll, Converter):
 									# reader
 									reader = ecm_info.get("reader", "")
 									if source == "emu":
-										textvalue = f"{source} - {caid} ({caid}:{prov})"
+										textvalue = f"{source} - {caid} ({caid}:{prov})- {reader} - {ecm_time.replace('msec', 'ms')}"
+									elif source == "constcw":
+										textvalue = f"{source} - {caid} ({caid}:{prov})- {reader} - {ecm_time.replace('msec', 'ms')}"
 									# new oscam ecm.info with port parametr
 									elif reader != "" and source == "net" and port != "":
 										textvalue = f"{source} - {caid}:{prov} - {reader}, {protocol} ({server}:{port}@{hops}) - {ecm_time.replace('msec', 'ms')}"
