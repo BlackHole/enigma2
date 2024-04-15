@@ -79,6 +79,8 @@ to generate HTML."""
 			else:
 				self.__index = index
 			self.selectionChanged(index)
+		if self.connectedGuiElement is not None:
+			self.connectedGuiElement.moveSelection(index)
 
 	@cached
 	def getIndex(self):

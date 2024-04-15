@@ -46,7 +46,9 @@ class MainMenu(GUIAddon):
 		self.textRenderer.text = text
 		return self.textRenderer.instance.calculateSize().width()
 
-	def buildEntry(self, item_text, function, key, weight, description, menupng):
+	def buildEntry(self, *args):
+		item_text = args[0]
+		menupng = args[5]
 		xPos = 17
 		yPos = 5
 
@@ -68,6 +70,10 @@ class MainMenu(GUIAddon):
 				backcolor=None, backcolor_sel=None))
 
 		return res
+
+	def moveSelection(self, index):
+		if self.instance is not None:
+			self.instance.moveSelectionTo(index)
 
 	def selectionChanged(self):
 		if self.instance and hasattr(self, "source"):
