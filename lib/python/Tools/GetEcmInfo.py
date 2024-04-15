@@ -20,9 +20,9 @@ class GetEcmInfo:
 		if not current_device:
 			return ""
 		if "/sci0" in current_device.lower():
-			return _("Card Reader 1") if isLong else "CRD 1"
+			return _("Card Reader 1") if isLong else "CARD1"
 		elif "/sci1" in current_device.lower():
-			return _("Card Reader 2") if isLong else "CRD 2"
+			return _("Card Reader 2") if isLong else "CARD2"
 		elif "/ttyusb0" in current_device.lower():
 			return _("USB Reader 1") if isLong else "USB 1"
 		elif "/ttyusb1" in current_device.lower():
@@ -120,13 +120,15 @@ class GetEcmInfo:
 							hops = ' @' + hops
 						else:
 							hops = ''
-						self.textvalue = address + hops + " (%ss)" % info.get('ecm time', '?')
+						device_str = self.createCurrentDevice(device, False)
+						self.textvalue = ((device_str) if device else (address)) + hops + " (%ss)" % info.get('ecm time', '?')
+
 				elif config.usage.show_cryptoinfo.value == '2':
 					# CCcam
 					if using == 'fta':
 						self.textvalue = _("Free To Air")
 					else:
-						address = _('Server:') + ' '
+						address = 'Server: '
 						if info.get('address', None):
 							address += info.get('address', '').capitalize()
 						elif info.get('from', None):
@@ -154,14 +156,14 @@ class GetEcmInfo:
 						if info.get('ecm time', None):
 							ecm += info.get('ecm time', '')
 						device_str = self.createCurrentDevice(device, True)
-						self.textvalue = address + ((device_str) if device else "") + '\n' + protocol + '  ' + hops + '  ' + ecm
+						self.textvalue = "Server: " + address + ((device_str) if device else "") + '\n' + protocol + '  ' + hops + '  ' + ecm
 
 				elif config.usage.show_cryptoinfo.value == '3':
 					# CCcam
 					if using == 'fta':
 						self.textvalue = _("Free To Air")
 					else:
-						address = ' '
+						address = 'Reader: '
 						if info.get('reader', None):
 							address += info.get('reader', '').capitalize()
 						elif info.get('from', None):
