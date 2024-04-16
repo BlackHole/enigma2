@@ -20,9 +20,9 @@ class GetEcmInfo:
 		if not current_device:
 			return ""
 		if "/sci0" in current_device.lower():
-			return _("Card Reader 1") if isLong else "CARD1"
+			return _("Card Reader 1") if isLong else "CARD 1"
 		elif "/sci1" in current_device.lower():
-			return _("Card Reader 2") if isLong else "CARD2"
+			return _("Card Reader 2") if isLong else "CARD 2"
 		elif "/ttyusb0" in current_device.lower():
 			return _("USB Reader 1") if isLong else "USB 1"
 		elif "/ttyusb1" in current_device.lower():
@@ -37,7 +37,6 @@ class GetEcmInfo:
 			return _("Emulator") if isLong else "EMU"
 		elif "const" in current_device.lower():
 			return _("Constcw") if isLong else "CCW"
-
 
 	def pollEcmData(self):
 		global data
@@ -86,172 +85,111 @@ class GetEcmInfo:
 
 	def getText(self):
 		global ecm
+		address = ""
+		device = ""
 		try:
-			# info is dictionary
 			using = info.get("using", "")
 			protocol = info.get("protocol", "")
-			device = ""
+			alt = config.usage.show_cryptoinfo.value in ("2", "4")
 			if using or protocol:
 				if config.usage.show_cryptoinfo.value == "0":
-					self.textvalue = " "
-				elif config.usage.show_cryptoinfo.value == "1":
+					self.textvalue = ""
+				elif using == "fta":
+					self.textvalue = _("Free To Air")
+				elif config.usage.show_cryptoinfo.value in ("1", "2"):  # "One line" or "One line Alt"
 					# CCcam
-					if using == "fta":
-						self.textvalue = _("Free To Air")
-					elif protocol == "emu":
-						self.textvalue = "Emu (%ss)" % (info.get("ecm time", "?"))
+					if protocol == "emu":
+						self.textvalue = (x := info.get("ecm time", "")) and "Emu (%ss)" % x
 					elif protocol == "constcw":
-						self.textvalue = "Constcw (%ss)" % (info.get("ecm time", "?"))
+						self.textvalue = (x := info.get("ecm time", "")) and "Constcw (%ss)" % x
 					else:
-						if info.get("address", None):
-							address = info.get("address", "").capitalize()
-						elif info.get("from", None):
-							address = info.get("from", "").replace(":0", "").replace("cache", "cache ").capitalize()
-							if "Local" in address:
+						if x := (info.get("reader") if alt else info.get("address")) or info.get("from", None):
+							address = x.replace(":0", "").replace("cache", "cache ").capitalize()
+							if "local" in address.lower():
 								from_arr = address.split("-")
-								address = from_arr[0].strip()
+								address = from_arr[0].strip().replace("Local", "")
 								if len(from_arr) > 1:
 									device = from_arr[1].strip()
-						else:
+						hops = (x := info.get("hops", "")) and x != "0" and "@" + x or ""
+						ecm = (x := info.get("ecm time", "")) and "(%ss)" % x
+						devtext = self.createCurrentDevice(device, False) if device else address
+						self.textvalue = " ".join([x for x in (devtext, hops, ecm) if x])
+
+				elif config.usage.show_cryptoinfo.value in ("3", "4"):  # "Two lines" or "Two lines Alt"
+					# CCcam
+					if x := (info.get("reader") if alt else info.get("address")) or info.get("from"):
+						address = (_("Reader:") if alt else _("Server:")) + " " + x.replace(":0", "").replace("cache", "cache ").capitalize()
+						if "const" in protocol.lower():
+							device = "constcw"
+						if "const" in address.lower():
 							address = ""
-							device = ""
-						hops = info.get("hops", None)
-						if hops and hops != "0":
-							hops = " @" + hops
+						if "emu" in protocol.lower():
+							device = "emulator"
+						if "emu" in address.lower():
+							address = ""
+						if "local" in address.lower():
+							from_arr = address.split("-")
+							address = from_arr[0].strip().replace("Local", "")
+							if len(from_arr) > 1:
+								device = from_arr[1].strip()
+					protocol = (x := info.get("protocol", "")) and _("Protocol:") + " " + x.capitalize().replace("-s2s", "-S2s").replace("ext", "Ext").replace("mcs", "Mcs").replace("Cccam", "CCcam")
+					hops = (x := info.get("hops", "")) and _("Hops:") + " " + x
+					ecm = (x := info.get("ecm time", "")) and _("Ecm:") + " " + x
+					devtext = self.createCurrentDevice(device, True) if device else ""
+					self.textvalue = "".join([x for x in (address, devtext) if x]) + "\n" + " ".join([x for x in (protocol, hops, ecm) if x])
+
+			elif info.get("decode"):
+				# gbox (untested)
+				if info["decode"] == "Network":
+					cardid = "id:" + info.get("prov", "")
+					try:
+						share = open("/tmp/share.info", "r").readlines()
+						for line in share:
+							if cardid in line:
+								self.textvalue = line.strip()
+								break
 						else:
-							hops = ""
-						device_str = self.createCurrentDevice(device, False)
-						self.textvalue = ((device_str) if device else (address)) + hops + " (%ss)" % info.get("ecm time", "?")
+							self.textvalue = cardid
+					except:
+						self.textvalue = info["decode"]
+				else:
+					self.textvalue = info["decode"]
+				if ecm[1].startswith("SysID"):
+					info["prov"] = ecm[1].strip()[6:]
+				if "response" in info:
+					self.textvalue += " (0.%ss)" % info["response"]
+					info["caid"] = ecm[0][ecm[0].find("CaID 0x") + 7:ecm[0].find(",")]
+					info["pid"] = ecm[0][ecm[0].find("pid 0x") + 6:ecm[0].find(" =")]
+					info["provid"] = info.get("prov", "0")[:4]
 
-				elif config.usage.show_cryptoinfo.value == "2":
-					# CCcam
-					if using == "fta":
-						self.textvalue = _("Free To Air")
-					else:
-						address = "Server: "
-						if info.get("address", None):
-							address += info.get("address", "").capitalize()
-						elif info.get("from", None):
-							address = info.get("from", "").replace(":0", "").replace("cache", "cache ").capitalize()
-							if "const" in protocol.lower():
-								device = "constcw"
-							if "const" in address.lower():
-								address = ""
-							if "Local" in address:
-								from_arr = address.split("-")
-								address = from_arr[0].strip().replace("Local", "")
-								if len(from_arr) > 1:
-									device = from_arr[1].strip()
-						protocol = _("Protocol:") + " "
-						if info.get("protocol", None):
-							protocol += info.get("protocol", "").capitalize().replace("-s2s", "-S2s").replace("ext", "Ext").replace("mcs", "Mcs").replace("Cccam", "CCcam")
-						elif info.get("using", None):
-							protocol += info.get("using", "").capitalize().replace("-s2s", "-S2s").replace("ext", "Ext").replace("mcs", "Mcs").replace("Cccam", "CCcam")
+			elif info.get("source", None):
+				# wicardd - type 2 / mgcamd
+				caid = info.get("caid", None)
+				if caid:
+					info["caid"] = info["caid"][2:]
+					info["pid"] = info["pid"][2:]
+				info["provid"] = info["prov"][2:]
+				time = ""
+				for line in ecm:
+					if "msec" in line:
+						line = line.split(" ")
+						if line[0]:
+							time = " (%ss)" % (float(line[0]) / 1000)
+							break
+				self.textvalue = info["source"] + time
 
-						hops = _("Hops:") + " "
-						if info.get("hops", None):
-							hops += info.get("hops", "")
+			elif info.get("reader", ""):
+				hops = (x := info.get("hops", "")) and x != "0" and " @" + x or ""
+				ecm = (x := info.get("ecm time", "")) and " (%ss)" % x
+				self.textvalue = info["reader"] + hops + ecm
 
-						ecm = _("Ecm:") + " "
-						if info.get("ecm time", None):
-							ecm += info.get("ecm time", "")
-						device_str = self.createCurrentDevice(device, True)
-						self.textvalue = "Server: " + address + ((device_str) if device else "") + "\n" + protocol + "  " + hops + "  " + ecm
-
-				elif config.usage.show_cryptoinfo.value == "3":
-					# CCcam
-					if using == "fta":
-						self.textvalue = _("Free To Air")
-					else:
-						address = "Reader: "
-						if info.get("reader", None):
-							address += info.get("reader", "").capitalize()
-						elif info.get("from", None):
-							address = info.get("from", "").replace(":0", "").replace("cache", "cache ").capitalize()
-							if "const" in protocol.lower():
-								device = "constcw"
-							if "const" in address.lower():
-								address = ""
-							if "Local" in address:
-								from_arr = address.split("-")
-								address = from_arr[0].strip().replace("Local", "")
-								if len(from_arr) > 1:
-									device = from_arr[1].strip()
-						protocol = _("Protocol:") + " "
-						if info.get("protocol", None):
-							protocol += info.get("protocol", "").capitalize().replace("-s2s", "-S2s").replace("ext", "Ext").replace("mcs", "Mcs").replace("Cccam", "CCcam")
-						elif info.get("using", None):
-							protocol += info.get("using", "").capitalize().replace("-s2s", "-S2s").replace("ext", "Ext").replace("mcs", "Mcs").replace("Cccam", "CCcam")
-
-						hops = _("Hops:") + " "
-						if info.get("hops", None):
-							hops += info.get("hops", "")
-
-						ecm = _("Ecm:") + " "
-						if info.get("ecm time", None):
-							ecm += info.get("ecm time", "")
-						device_str = self.createCurrentDevice(device, True)
-						self.textvalue = address + ((device_str) if device else "") + "\n" + protocol + "  " + hops + "  " + ecm
+			elif response := info.get("response time", None):
+				response = response.split(" ")
+				self.textvalue = "%s (%ss)" % (response[4], float(response[0]) / 1000)
 
 			else:
-				decode = info.get("decode", None)
-				if decode:
-					# gbox (untested)
-					if info["decode"] == "Network":
-						cardid = "id:" + info.get("prov", "")
-						try:
-							share = open("/tmp/share.info", "r").readlines()
-							for line in share:
-								if cardid in line:
-									self.textvalue = line.strip()
-									break
-							else:
-								self.textvalue = cardid
-						except:
-							self.textvalue = decode
-					else:
-						self.textvalue = decode
-					if ecm[1].startswith("SysID"):
-						info["prov"] = ecm[1].strip()[6:]
-					if "response" in info:
-						self.textvalue += " (0.%ss)" % info["response"]
-						info["caid"] = ecm[0][ecm[0].find("CaID 0x") + 7:ecm[0].find(",")]
-						info["pid"] = ecm[0][ecm[0].find("pid 0x") + 6:ecm[0].find(" =")]
-						info["provid"] = info.get("prov", "0")[:4]
-				else:
-					source = info.get("source", None)
-					if source:
-						# wicardd - type 2 / mgcamd
-						caid = info.get("caid", None)
-						if caid:
-							info["caid"] = info["caid"][2:]
-							info["pid"] = info["pid"][2:]
-						info["provid"] = info["prov"][2:]
-						time = ""
-						for line in ecm:
-							if "msec" in line:
-								line = line.split(" ")
-								if line[0]:
-									time = " (%ss)" % (float(line[0]) / 1000)
-									continue
-						self.textvalue = source + time
-					else:
-						reader = info.get("reader", "")
-						if reader:
-							hops = info.get("hops", None)
-							if hops and hops != "0":
-								hops = " @" + hops
-							else:
-								hops = ""
-							self.textvalue = reader + hops + " (%ss)" % info.get("ecm time", "?")
-						else:
-							response = info.get("response time", None)
-							if response:
-								# wicardd - type 1
-								response = response.split(" ")
-								self.textvalue = "%s (%ss)" % (response[4], float(response[0]) / 1000)
-							else:
-								self.textvalue = ""
+				self.textvalue = ""
+
 			decCI = info.get("caid", info.get("CAID", "0"))
 			provid = info.get("provid", info.get("prov", info.get("Provider", "0")))
 			ecmpid = info.get("pid", info.get("ECM PID", "0"))
