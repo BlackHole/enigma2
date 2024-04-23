@@ -220,10 +220,10 @@ class DeliteBluePanel(Screen):
 		if fileExists("/tmp/ecm.info"):
 			f = open("/tmp/ecm.info", 'r')
 			for line in f.readlines():
-				mytext = mytext + line.strip() + "\n"
+				mytext = mytext + line.strip().replace("caid", "Caid").replace("pid", "Pid").replace("prov", "Prov").replace("chid", "Chid").replace("reader", "Reader").replace("from", "From").replace("protocol", "Protocol").replace("hops", "Hops").replace("ecm time", "Ecm Time").replace("cw", "CW ").replace("local", "Local").replace("internal", "Internal") + "\n"
 			f.close()
 		if len(mytext) < 5:
-			mytext = "\n\n    " + _("Ecm Info not available.")
+			mytext = "\n\n    " + _("Ecm Info Not Available.")
 
 		self["activecam"].setText(self.defCamname)
 		self["Ecmtext"].setText(mytext)
