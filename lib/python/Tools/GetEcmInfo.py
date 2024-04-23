@@ -104,7 +104,7 @@ class GetEcmInfo:
 						self.textvalue = (x := info.get("ecm time", "")) and "Constcw (%ss)" % x
 					else:
 						if x := (info.get("reader") if alt else info.get("address")) or info.get("from", None):
-							address = x.replace(":0", "").replace("cache", "cache ").capitalize()
+							address = x.replace(":0", "").replace("cache", "cache ").title()
 							if "local" in address.lower():
 								from_arr = address.split("-")
 								address = from_arr[0].strip().replace("Local", "")
@@ -118,7 +118,7 @@ class GetEcmInfo:
 				elif config.usage.show_cryptoinfo.value in ("3", "4"):  # "Two lines" or "Two lines Alt"
 					# CCcam
 					if x := (info.get("reader") if alt else info.get("address")) or info.get("from"):
-						address = (_("Reader:") if alt else _("Server:")) + " " + x.replace(":0", "").replace("cache", "cache ").capitalize()
+						address = (_("Reader:") if alt else _("Server:")) + " " + x.replace(":0", "").replace("cache", "cache ").title()
 						if "const" in protocol.lower():
 							device = "constcw"
 						if "const" in address.lower() or "emu" in address.lower():
@@ -130,7 +130,7 @@ class GetEcmInfo:
 							address = from_arr[0].strip().replace("Local", "")
 							if len(from_arr) > 1:
 								device = from_arr[1].strip()
-					protocol = (x := info.get("protocol", "")) and _("Protocol:") + " " + x.capitalize().replace("-s2s", "-S2s").replace("ext", "Ext").replace("mcs", "Mcs").replace("Cccam", "CCcam")
+					protocol = (x := info.get("protocol", "")) and _("Protocol:") + " " + x.title().replace("Cccam", "CCcam")
 					hops = (x := info.get("hops", "")) and _("Hops:") + " " + x
 					ecm = (x := info.get("ecm time", "")) and _("Ecm:") + " " + x
 					devtext = self.createCurrentDevice(device, True) if device else ""
