@@ -577,7 +577,7 @@ msgid ""
 "Allows the softcam to be checked if it stopped working, and restarted "
 "automatically if needed."
 msgstr ""
-"Umożliwia sprawdzenie, czy kamera przestała działać, i ponowne uruchomienie "
+"Umożliwia sprawdzenie, czy Softcam przestał działać, i ponowne uruchomienie "
 "automatycznie, jeśli zajdzie taka potrzeba."
 
 msgid "Allows unstable (experimental) updates"
@@ -1238,7 +1238,7 @@ msgid "Checking free RAM.."
 msgstr "Sprawdzam wolną pamięć RAM.."
 
 msgid "Checking softcams..."
-msgstr "Sprawdzam softkamery..."
+msgstr "Sprawdzam softcam..."
 
 msgid "Checking the internet connection"
 msgstr "Sprawdzanie połączenia internetowego"
@@ -2762,7 +2762,7 @@ msgid "Format"
 msgstr "Format"
 
 msgid "Found none standard softcam, trying to start, this may fail"
-msgstr "Nie znaleziono żadnej standardowej kamery programowej. Próba uruchomienia może się nie powieść"
+msgstr "Nie znaleziono standardowego softcam. Próba uruchomienia może się nie powieść"
 
 msgid "Forward volume keys"
 msgstr "Przekazuj klawisze głośności"
@@ -6395,22 +6395,22 @@ msgid "Smooth"
 msgstr "Wygładzanie"
 
 msgid "Softcam Manager"
-msgstr "Ustawienia Softcam"
+msgstr "Menedżer Softcam"
 
 msgid "Softcam Manager Log"
-msgstr "Dziennik menedżera Softcam"
+msgstr "Logi menedżera Softcam"
 
 msgid "Softcam Manager Setup"
 msgstr "Konfiguracja menedżera Softcam"
 
 msgid "Softcam Starting..."
-msgstr "Uruchamianie Softcamu..."
+msgstr "Uruchamianie Softcam..."
 
 msgid "Softcam Stopping..."
 msgstr "Zatrzymywanie Softcam..."
 
 msgid "SoftcamCheck"
-msgstr "Kontrola Softcamu"
+msgstr "Kontrola Softcam"
 
 msgid "Software Update"
 msgstr "Aktualizacja oprogramowania"
