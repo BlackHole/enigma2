@@ -216,7 +216,7 @@ RESULT eDVBService::getName(const eServiceReference &ref, std::string &name)
 
 	if (!res_provider.empty() && m_provider_name.empty()) {
 		m_provider_name = res_provider;
-	} 
+	}
 
 	return 0;
 }
@@ -281,7 +281,7 @@ int eDVBService::isPlayable(const eServiceReference &ref, const eServiceReferenc
 				if (pModule != NULL)
 				{
 					pFunc = PyObject_GetAttrString(pModule, "isPlayable");
-					if (pFunc) 
+					if (pFunc)
 					{
 						pArgs = PyTuple_New(1);
 						pArg = PyUnicode_FromString(ref.toString().c_str());
@@ -451,7 +451,7 @@ void eDVBService::setCacheEntry(cacheID id, int pid)
 				case cacheID::cAC4PID:
 					it->aac4_pid = pid_val;
 					break;
-				case cacheID::cAACHEAPID:
+				case cacheID::cHEAACAPID:
 					it->aaach_pid = pid_val;
 					break;
 				case cacheID::cAACAPID:
@@ -480,7 +480,7 @@ void eDVBService::setCacheEntry(cacheID id, int pid)
 			std::string ref_s = ref.toReferenceString();
 			int pid_val = pid > 0 ? pid : -1;
 			eIPTVDBItem item(ref_s, id == cacheID::cMPEGAPID ? pid_val : -1, id == cacheID::cAC3PID ? pid_val : -1, id == cacheID::cAC4PID ? pid_val : -1,
-							id == cacheID::cDDPPID ? pid_val : -1, id == cacheID::cAACHEAPID ? pid_val : -1, id == cacheID::cAACAPID ? pid_val : -1,
+							id == cacheID::cDDPPID ? pid_val : -1, id == cacheID::cHEAACAPID ? pid_val : -1, id == cacheID::cAACAPID ? pid_val : -1,
 							id == cacheID::cDRAAPID ? pid_val : -1, id == cacheID::cSUBTITLE ? pid_val : -1, id == cacheID::cVPID ? pid_val : -1);
 			iptv_services.push_back(item);
 		}
@@ -551,7 +551,7 @@ void eDVBDB::parseServiceData(ePtr<eDVBService> s, std::string str)
 					s->setCacheEntry(eDVBService::cacheID::cDDPPID, it->addp_pid);
 				}
 				if (it->aaach_pid != -1) {
-					s->setCacheEntry(eDVBService::cacheID::cAACHEAPID, it->aaach_pid);
+					s->setCacheEntry(eDVBService::cacheID::cHEAACAPID, it->aaach_pid);
 				}
 				if (it->aaac_pid != -1) {
 					s->setCacheEntry(eDVBService::cacheID::cAACAPID, it->aaac_pid);
@@ -959,7 +959,7 @@ void eDVBDB::saveServicelist(const char *file)
 					if (g)
 						fprintf(g, ",MIS/PLS:%d:%d:%d", sat.is_id, sat.pls_code & 0x3FFFF, sat.pls_mode & 3);
 				}
-				// Old lamedb format cannot have multiple optional values so we must pad lamedb with default multistream 
+				// Old lamedb format cannot have multiple optional values so we must pad lamedb with default multistream
 				// values if they will be followed by t2mi values. In lamedb5 format this is not necessary.
 				else if (static_cast<unsigned int>(sat.t2mi_plp_id) != eDVBFrontendParametersSatellite::No_T2MI_PLP_Id)
 				{
@@ -1425,7 +1425,7 @@ eDVBDB::eDVBDB()
 	: m_numbering_mode(false), m_load_unlinked_userbouquets(true)
 {
 	instance = this;
-	
+
 	iptv_services.clear();
 	std::ifstream iptv_services_store_file;
 	iptv_services_store_file.open("/etc/enigma2/config_av");
@@ -1434,22 +1434,22 @@ eDVBDB::eDVBDB()
 	{
 		line = replace_all(line, "\n", "");
 		char buffer [256];
-		int service_type = 1, service_bit = 0, service_res = -1, service_id = -1, dvb_namespace, transport_stream_id = -1, 
-		original_network_id = -1, service_tsid = -1, service_number = -1, source_id = 0, ampeg_pid = -1, aac3_pid = -1, 
+		int service_type = 1, service_bit = 0, service_res = -1, service_id = -1, dvb_namespace, transport_stream_id = -1,
+		original_network_id = -1, service_tsid = -1, service_number = -1, source_id = 0, ampeg_pid = -1, aac3_pid = -1,
 		aac4_pid = -1, addp_pid = -1, aaach_pid = -1,aaac_pid = -1, adra_pid = -1, subtitle_pid = -1, video_pid = -1;
 
-		sscanf(line.c_str(), "%d:%d:%x:%x:%x:%x:%x:%d:%d:%x|%d|%d|%d|%d|%d|%d|%d|%d|%d", &service_type, &service_bit, &service_res, &service_id, 
-					  &dvb_namespace, &transport_stream_id, &original_network_id, &service_tsid, &service_number, &source_id, &video_pid, 
+		sscanf(line.c_str(), "%d:%d:%x:%x:%x:%x:%x:%d:%d:%x|%d|%d|%d|%d|%d|%d|%d|%d|%d", &service_type, &service_bit, &service_res, &service_id,
+					  &dvb_namespace, &transport_stream_id, &original_network_id, &service_tsid, &service_number, &source_id, &video_pid,
 					  &ampeg_pid, &aac3_pid, &aac4_pid, &addp_pid, &aaach_pid, &aaac_pid, &adra_pid, &subtitle_pid);
-		
-		sprintf(buffer, "%d:%d:%x:%x:%x:%x:%x:%d:%d:%x", service_type, service_bit, service_res, service_id, 
+
+		sprintf(buffer, "%d:%d:%x:%x:%x:%x:%x:%d:%d:%x", service_type, service_bit, service_res, service_id,
 					  dvb_namespace, transport_stream_id, original_network_id, service_tsid, service_number, source_id);
 
 		std::string s_ref = buffer;
 		makeUpper(s_ref);
 
 		eDebug("[eDVBDB] Readed from config_av ref: %s", s_ref.c_str());
-		
+
 		eIPTVDBItem iptvDBItem(s_ref, ampeg_pid, aac3_pid, aac4_pid, addp_pid, aaach_pid, aaac_pid, adra_pid, subtitle_pid, video_pid);
 		iptv_services.push_back(iptvDBItem);
 		line = "";
@@ -1969,7 +1969,7 @@ PyObject *eDVBDB::readTerrestrials(ePyObject ter_list, ePyObject tp_dict)
 
 			Py_DECREF(tplist);
 		}
-		else if (ter_flags || ter_countrycode) 
+		else if (ter_flags || ter_countrycode)
 		{
 			if (ter_flags)
 			{
