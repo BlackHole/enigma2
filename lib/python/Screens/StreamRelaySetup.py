@@ -88,6 +88,18 @@ class StreamRelaySetup(Setup):
 		Setup.keySave(self)
 		self.close()
 
+	def keyRight(self):  # use key as page down for service items
+		if isinstance(self.getCurrentItem(), ConfigNothing):
+			self.keyPageDown()
+		else:
+			Setup.keyRight(self)
+
+	def keyLeft(self):  # use key as page up for service items
+		if isinstance(self.getCurrentItem(), ConfigNothing):
+			self.keyPageUp()
+		else:
+			Setup.keyLeft(self)
+
 	def getOrbPos(self, sref):
 		orbpos = 0
 		try:
