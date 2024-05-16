@@ -269,7 +269,7 @@ class ServiceInfo(Poll, Converter):
 			elif self.type == self.IS_480:
  				return video_width > 1 and video_width <= 1024 and video_height > 1 and video_height <= 480
 			elif self.type == self.IS_4K:
-				return video_height >= 1460
+				return video_width >= 1921 and video_height >= 1440
 			elif self.type == self.PROGRESSIVE and not isRef:
 				return bool(self._getProgressive(info))
 			elif self.type == self.IS_SDR and not isRef:
