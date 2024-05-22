@@ -667,7 +667,10 @@ class PliExtraInfo(Poll, Converter, object):
 
 	def createResolution(self, info):
 		avSwitch = eAVSwitch.getInstance()
-		return f"{avSwitch.getResolutionX(0)}x{avSwitch.getResolutionY(0)}{'p' if avSwitch.getProgressive() else 'i'}{(avSwitch.getFrameRate(0) + 500) // 1000}"
+		if avSwitch.getResolutionX(0) > 0:
+			return f"{avSwitch.getResolutionX(0)}x{avSwitch.getResolutionY(0)}{'p' if avSwitch.getProgressive() else 'i'}{(avSwitch.getFrameRate(0) + 500) // 1000}"
+		else:
+			return ""
 
 	def createVideoCodec(self, info):
 		refstr = info.getInfoString(iServiceInformation.sServiceref)
