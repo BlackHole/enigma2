@@ -1,5 +1,6 @@
 from enigma import eDVBDB, getLinkedSlotID, eDVBResourceManager
 from Screens.Screen import Screen
+from Screens.Setup import Setup
 from Components.SystemInfo import SystemInfo
 from Components.ActionMap import ActionMap
 from Components.NimManager import nimmanager
@@ -14,7 +15,6 @@ from Screens.MessageBox import MessageBox
 from Screens.ChoiceBox import ChoiceBox
 from Screens.ServiceStopScreen import ServiceStopScreen
 from Screens.AutoDiseqc import AutoDiseqc
-from Screens.Setup import Setup
 from Tools.BoundFunction import boundFunction
 from Tools.Directories import fileExists
 
