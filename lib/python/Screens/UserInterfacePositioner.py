@@ -1,15 +1,16 @@
-from Screens.MessageBox import MessageBox
-from Screens.Screen import Screen
+from os import access, R_OK
+import traceback
+from enigma import getDesktop
+
 from Components.ActionMap import ActionMap
 from Components.config import config, configfile, getConfigListEntry, ConfigSelectionNumber, ConfigSelection, ConfigSlider, ConfigYesNo, NoSave, ConfigNumber
 from Components.ConfigList import ConfigListScreen
-from Components.SystemInfo import SystemInfo
-from Components.Sources.StaticText import StaticText
 from Components.Console import Console
+from Components.Sources.StaticText import StaticText
+from Components.SystemInfo import SystemInfo
+from Screens.Screen import Screen
+from Screens.MessageBox import MessageBox
 from Tools.Directories import fileCheck, fileExists
-from enigma import getDesktop
-from os import access, R_OK
-import traceback
 
 
 def getFilePath(setting):

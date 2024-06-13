@@ -1,9 +1,10 @@
-from sys import modules, version_info
-from os import path as ospath
-from time import time
-import socket
 import fcntl
+import socket
 import struct
+
+from os import path as ospath
+from sys import modules, version_info
+from time import time
 
 from enigma import getEnigmaVersionString
 
