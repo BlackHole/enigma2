@@ -304,12 +304,6 @@ class OpenBhBackupManager(Screen):
 			self.session.open(OpenBhBackupManagerLogView, filename)
 
 	def setupDone(self, test=None):
-		if config.backupmanager.folderprefix.value == "":
-			config.backupmanager.folderprefix.value = defaultprefix
-			config.backupmanager.folderprefix.save()
-		if not config.backupmanager.folderprefix.value.startswith(defaultprefix):  # If the prefix doesn't start with the defaultprefix it is a tag...
-			config.backupmanager.folderprefix.value = defaultprefix + "-" + config.backupmanager.folderprefix.value
-			config.backupmanager.folderprefix.save()
 		self.populate_List()
 		self.doneConfiguring()
 
@@ -946,6 +940,16 @@ class OpenBhBackupManagerMenu(Setup):
 		config.backupmanager.backupdirs.save()
 		config.backupmanager.save()
 		config.save()
+
+	def keySave(self):
+		if " " in config.backupmanager.folderprefix.value:
+			config.backupmanager.folderprefix.value = config.backupmanager.folderprefix.value.replace(" ", "")
+		if config.backupmanager.folderprefix.value == "":
+			config.backupmanager.folderprefix.value = defaultprefix
+		if not config.backupmanager.folderprefix.value.startswith(defaultprefix):  # If the prefix doesn't start with the defaultprefix it is a tag...
+			config.backupmanager.folderprefix.value = defaultprefix + "-" + config.backupmanager.folderprefix.value
+		Setup.keySave(self)
+		
 
 
 class OpenBhBackupManagerLogView(TextBox):
