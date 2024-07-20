@@ -172,7 +172,10 @@ def GetImagelist(Recovery=None):
 				BuildVersion = createInfo(slot, imagedir=imagedir)
 			else:
 				print("[multiboot] [GetImagelist] using BoxInfo")
-				Creator = open(f"{imagedir}/etc/issue").readlines()[-2].capitalize().strip()[:-6]
+				try:
+					Creator = open(f"{imagedir}/etc/issue").readlines()[-2].capitalize().strip()[:-6]
+				except IndexError:  # /etc/issue no standard file content
+					Creator = _("Unknown image")
 				if SystemInfo["HasKexecMultiboot"] and path.isfile(path.join(imagedir, "etc/vtiversion.info")):
 					Vti = open(path.join(imagedir, "etc/vtiversion.info")).read()
 					date = VerDate(imagedir)
@@ -199,13 +202,13 @@ def GetImagelist(Recovery=None):
 
 def createInfo(slot, imagedir="/"):
 	BoxInfo = BoxInformation(root=imagedir) if SystemInfo["MultiBootSlot"] != slot else BoxInfoRunningInstance
-	Creator = BoxInfo.getItem("distro", " ").capitalize()
+	Creator = BoxInfo.getItem("distro", "").capitalize()
 	BuildImgVersion = BoxInfo.getItem("imgversion")
-	BuildType = BoxInfo.getItem("imagetype", " ")[0:3]
+	BuildType = BoxInfo.getItem("imagetype", "")[0:3]
 	BuildVer = BoxInfo.getItem("imagebuild")
 	BuildDate = VerDate(imagedir)
-	BuildDev = str(BoxInfo.getItem("imagedevbuild")).zfill(3) if BuildType == "developer" else ""
-	return " ".join([str(x) for x in (Creator, BuildImgVersion, BuildType, BuildVer, BuildDev, "(%s)" % BuildDate) if x])
+	BuildDev = str(idb).zfill(3) if BuildType and BuildType == "developer" and (idb := BoxInfo.getItem("imagedevbuild")) else ""
+	return " ".join([str(x).strip() for x in (Creator, BuildImgVersion, BuildType, BuildVer, BuildDev, "(%s)" % BuildDate) if x and str(x).strip()])
 
 
 def VerDate(imagedir):
