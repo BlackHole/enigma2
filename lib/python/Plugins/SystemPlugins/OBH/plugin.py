@@ -3,6 +3,7 @@ from os import listdir, path, stat
 from Plugins.Plugin import PluginDescriptor
 from Components.config import config
 from Components.SystemInfo import SystemInfo
+from Tools.BoundFunction import boundFunction
 
 from .BackupManager import BackupManagerautostart
 from .ImageManager import ImageManagerautostart

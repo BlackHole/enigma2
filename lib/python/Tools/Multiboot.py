@@ -171,19 +171,18 @@ def GetImagelist(Recovery=None):
 				print("[multiboot] [GetImagelist] using enigma.info")
 				BuildVersion = createInfo(slot, imagedir=imagedir)
 			else:
-				print("[multiboot] [GetImagelist] using BoxInfo")
+				print("[multiboot] [GetImagelist] using etc/issue")
+				date = VerDate(imagedir)
 				try:
 					Creator = open(f"{imagedir}/etc/issue").readlines()[-2].capitalize().strip()[:-6]
 				except IndexError:  # /etc/issue no standard file content
 					Creator = _("Unknown image")
 				if SystemInfo["HasKexecMultiboot"] and path.isfile(path.join(imagedir, "etc/vtiversion.info")):
 					Vti = open(path.join(imagedir, "etc/vtiversion.info")).read()
-					date = VerDate(imagedir)
 					Creator = Vti[0:3]
 					Build = Vti[-8:-1]
 					BuildVersion = f"{Creator} {Build} ({date}) "
 				else:
-					date = VerDate(imagedir)
 					Creator = Creator.replace("-release", " ")
 					BuildVersion = f"{Creator} ({date})"
 			if SystemInfo["HasKexecMultiboot"] and Recovery and config.usage.bootlogo_identify.value:
@@ -205,22 +204,19 @@ def createInfo(slot, imagedir="/"):
 	Creator = BoxInfo.getItem("distro", "").capitalize()
 	BuildImgVersion = BoxInfo.getItem("imgversion")
 	BuildType = BoxInfo.getItem("imagetype", "")[0:3]
-	BuildVer = BoxInfo.getItem("imagebuild")
-	BuildDate = VerDate(imagedir)
-	BuildDev = str(idb).zfill(3) if BuildType and BuildType == "developer" and (idb := BoxInfo.getItem("imagedevbuild")) else ""
+	BuildVer = BoxInfo.getItem("imagebuild", "")
+	try:
+		BuildDate = datetime.strptime(BoxInfo.getItem("compiledate"), '%Y%m%d').strftime("%d-%m-%Y")
+	except (TypeError, ValueError):  # sanity for enigma.info containing bad/no entry
+		BuildDate = VerDate(imagedir)
+	BuildDev = str(idb).zfill(3) if BuildType and not BuildType.lower().startswith("dev") and (idb := BoxInfo.getItem("imagedevbuild")) else ""
 	return " ".join([str(x).strip() for x in (Creator, BuildImgVersion, BuildType, BuildVer, BuildDev, "(%s)" % BuildDate) if x and str(x).strip()])
 
 
 def VerDate(imagedir):
-	date1 = date2 = date3 = "00000000"
-	if fileExists(path.join(imagedir, "var/lib/opkg/status")):
-		date1 = datetime.fromtimestamp(stat(path.join(imagedir, "var/lib/opkg/status")).st_mtime).strftime("%Y-%m-%d")
-	date2 = datetime.fromtimestamp(stat(path.join(imagedir, "usr/bin/enigma2")).st_mtime).strftime("%Y-%m-%d")
-	if fileExists(path.join(imagedir, "usr/share/bootlogo.mvi")):
-		date3 = datetime.fromtimestamp(stat(path.join(imagedir, "usr/share/bootlogo.mvi")).st_mtime).strftime("%Y-%m-%d")
-	date = max(date1, date2, date3)  # this is comparing strings
-	date = datetime.strptime(date, '%Y-%m-%d').strftime("%d-%m-%Y")
-	return date
+	def mtime(fpath):
+		return fileExists(file := path.join(imagedir, fpath)) and int(stat(file).st_mtime) or 0
+	return datetime.fromtimestamp(max(mtime("var/lib/opkg/status"), mtime("usr/bin/enigma2"), mtime("usr/share/bootlogo.mvi"))).strftime("%d-%m-%Y")
 
 
 def emptySlot(slot):
