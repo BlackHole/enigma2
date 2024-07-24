@@ -3,7 +3,7 @@ import locale
 import os
 import skin
 
-from enigma import eDVBDB, eEPGCache, setTunerTypePriorityOrder, setPreferredTuner, setSpinnerOnOff, setEnableTtCachingOnOff, eEnv, Misc_Options, eBackgroundFileEraser, eServiceEvent, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, RT_WRAP
+from enigma import eDVBDB, eEPGCache, setTunerTypePriorityOrder, setPreferredTuner, setSpinnerOnOff, setEnableTtCachingOnOff, eEnv, Misc_Options, eBackgroundFileEraser, eServiceEvent, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, RT_WRAP, eAISettings
 
 from Components.Harddisk import harddiskmanager
 from Components.config import config, ConfigBoolean, ConfigDictionarySet, ConfigDirectory, ConfigInteger, ConfigIP, ConfigLocations, ConfigNumber, ConfigPassword, ConfigSelection, ConfigSelectionNumber, ConfigSet, ConfigSlider, ConfigSubsection, ConfigText, ConfigYesNo, NoSave
@@ -1000,6 +1000,35 @@ def InitUsageConfig():
 	config.usage.historymode = ConfigSelection(default="1", choices=[("0", _("Just zap")), ("1", _("Show menu"))])
 
 	config.subtitles = ConfigSubsection()
+	# AI Start
+	def setAiEnabled(configElement):
+		eAISettings.setAiEnabled(configElement.value)
+
+	config.subtitles.ai_enabled = ConfigYesNo(default=False)
+	config.subtitles.ai_enabled.addNotifier(setAiEnabled)
+
+	def setAiSubscriptionCode(configElement):
+		eAISettings.setAiSubscriptionCode(str(configElement.value))
+
+	config.subtitles.ai_subscription_code = ConfigNumber(default=15)
+	config.subtitles.ai_subscription_code.addNotifier(setAiSubscriptionCode)
+
+	def setAiSubtitleColors(configElement):
+		eAISettings.setAiSubtitleColors(configElement.value)
+
+	config.subtitles.ai_subtitle_colors = ConfigSelection(default=1, choices=[
+		(0, _("Original")),
+		(1, _("White")),
+		(2, _("Yellow"))
+	])
+	config.subtitles.ai_subtitle_colors.addNotifier(setAiSubtitleColors)
+
+	def setAiTranslateTo(configElement):
+		eAISettings.setAiTranslateTo(configElement.value)
+
+	config.subtitles.ai_translate_to = ConfigSelection(default="en", choices=[("sq", _("Albanian")),("ar", _("Arabic")),("hy", _("Armenian")),("az", _("Azerbaijani")),("be", _("Belarusian")),("bs", _("Bosnian")),("bg", _("Bulgarian")),("ca", _("Catalan")),("zh-CN", _("Chinese (Simplified)")),("hr", _("Croatian")),("cs", _("Czech")),("da", _("Danish")),("nl", _("Dutch")),("en", _("English")),("et", _("Estonian")),("fi", _("Finnish")),("fr", _("French")),("ka", _("Georgian")),("de", _("German")),("el", _("Greek")),("hu", _("Hungarian")),("it", _("Italian")),("ckb", _("Kurdish (Sorani)")),("lv", _("Latvian")),("lt", _("Lithuanian")),("mk", _("Macedonian")),("no", _("Norwegian")),("fa", _("Persian")),("pl", _("Polish")),("pt", _("Portuguese (Portugal, Brazil)")),("ro", _("Romanian")),("ru", _("Russian")),("sr", _("Serbian")),("sk", _("Slovak")),("sl", _("Slovenian")),("es", _("Spanish")),("sv", _("Swedish")),("tr", _("Turkish")),("uk", _("Ukrainian")),("ur", _("Urdu"))])
+	config.subtitles.ai_translate_to.addNotifier(setAiTranslateTo)
+	# AI End
 	config.subtitles.ttx_subtitle_colors = ConfigSelection(default="1", choices=[
 		("0", _("original")),
 		("1", _("white")),
