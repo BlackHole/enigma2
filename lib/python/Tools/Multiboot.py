@@ -209,7 +209,7 @@ def createInfo(slot, imagedir="/"):
 		BuildDate = datetime.strptime(BoxInfo.getItem("compiledate"), '%Y%m%d').strftime("%d-%m-%Y")
 	except (TypeError, ValueError):  # sanity for enigma.info containing bad/no entry
 		BuildDate = VerDate(imagedir)
-	BuildDev = str(idb).zfill(3) if BuildType and not BuildType.lower().startswith("dev") and (idb := BoxInfo.getItem("imagedevbuild")) else ""
+	BuildDev = str(idb).zfill(3) if BuildType and BuildType.lower().startswith("dev") and (idb := BoxInfo.getItem("imagedevbuild")) else ""
 	return " ".join([str(x).strip() for x in (Creator, BuildImgVersion, BuildType, BuildVer, BuildDev, "(%s)" % BuildDate) if x and str(x).strip()])
 
 
