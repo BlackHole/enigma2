@@ -1017,7 +1017,6 @@ def InitUsageConfig():
 		eAISettings.setAiSubtitleColors(configElement.value)
 
 	config.subtitles.ai_subtitle_colors = ConfigSelection(default=1, choices=[
-		(0, _("Original")),
 		(1, _("White")),
 		(2, _("Yellow"))
 	])
