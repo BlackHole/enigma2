@@ -17,6 +17,7 @@ def getFilePath(setting):
 	return "/proc/stb/fb/dst_%s" % (setting)
 
 
+
 def setPositionParameter(parameter, configElement):
 	f = open(getFilePath(parameter), "w")
 	f.write('%08X\n' % configElement.value)
