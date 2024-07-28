@@ -41,7 +41,9 @@ class StreamInfo(Converter):
 			refstr = playref.toString()
 			if '0.0.0.0' in refstr or '127.0.0.1' in refstr or 'localhost' in refstr:
 				return ''
-			elif '%3a' in refstr:
+			elif '.mpd' in refstr:
+				return 'DRM'
+			elif '%3a' in refstr and "127.0.0.1" not in refstr:
 				strurl = refstr.split(':')
 				streamurl = strurl[10].replace('%3a', ':').replace('http://', '').replace('https://', '').split('/1:0:')[0].split('//')[0].split('/')[0].split('@')[-1]
 				return streamurl
