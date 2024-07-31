@@ -1,0 +1,44 @@
+<menu key="openbhmenu" level="0" text="OpenBh">
+		<item key="backup_manager" level="0" text="Backup manager" description="Manage settings backup.">
+			<code>
+from Plugins.SystemPlugins.OBH.BackupManager import OpenBhBackupManager
+self.session.open(OpenBhBackupManager)
+			</code>
+		</item>
+		<item key="image_manager" level="0" text="Image manager" description="Backup/Flash/ReBoot system image.">
+			<code>
+from Plugins.SystemPlugins.OBH.ImageManager import OpenBhImageManager
+self.session.open(OpenBhImageManager)
+			</code>
+		</item>
+		<item key="ipkg_install" level="0" text="Install local extension" description="Install IPK's from your tmp folder.">
+			<code>
+from Plugins.SystemPlugins.OBH.IPKInstaller import OpenBhIPKInstaller
+self.session.open(OpenBhIPKInstaller)
+			</code>
+		</item>
+		<item key="mount_manager" level="0" text="Mount manager" description="Manage your devices mount points.">
+			<code>
+from Plugins.SystemPlugins.OBH.MountManager import OpenBhDevicesPanel
+self.session.open(OpenBhDevicesPanel)
+			</code>
+		</item>
+		<item key="script_runner" level="0" text="Script runner" description="Run your shell scripts.">
+			<code>
+from Plugins.SystemPlugins.OBH.ScriptRunner import OpenBhScriptRunner
+self.session.open(OpenBhScriptRunner)
+			</code>
+		</item>
+		<item key="swap_manager" level="0" text="Swap manager" description="Create and Manage your SWAP files.">
+			<code>
+from Plugins.SystemPlugins.OBH.SwapManager import OpenBhSwap
+self.session.open(OpenBhSwap)
+			</code>
+		</item>
+		<item key="h9sdcard_manager" level="0" text="H9SDcard Manager" description="Move Nand root to SD card" requires="HasH9SD">
+			<code>
+from Plugins.SystemPlugins.OBH.H9SDmanager import H9SDmanager
+self.session.open(H9SDmanager)
+			</code>
+		</item>
+</menu>

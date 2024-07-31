@@ -68,7 +68,7 @@ class PluginDescriptor():
 	# or return a function which is called with session and the interface name for extended setup of this interface
 	WHERE_NETWORKMOUNTS = 17
 
-	WHERE_OBHMENU = 18
+	WHERE_OPENBHMENU = 18
 
 	WHERE_SATCONFIGCHANGED = 19
 
