@@ -913,6 +913,18 @@ void eDVBScan::channelDone()
 							T2DeliverySystemDescriptor &d = (T2DeliverySystemDescriptor&)**desc;
 							t2transponder.set(d);
 
+							// fetch T2 namespace for LCN output, where frequency data may not be in SI table
+							ePtr<iDVBFrontend> fe;
+							ePtr<iDVBTransponderData> trdata;
+							if (!m_channel->getFrontend(fe))
+							{
+								fe->getTransponderData(trdata, true);
+								int freq = trdata->getFrequency();
+								long hash = 0xEEEE0000;
+								hash |= (freq/1000000)&0xFFFF;
+								ns = buildNamespace(onid, tsid, hash);  // used in case LOGICAL_CHANNEL_DESCRIPTOR
+							}  // end fetch T2 namespace
+
 							for (T2CellConstIterator cell = d.getCells()->begin();
 								cell != d.getCells()->end(); ++cell)
 							{
@@ -981,7 +993,7 @@ void eDVBScan::channelDone()
 								if (ch->getVisibleServiceFlag())
 								{
 									addLcnToDB(ns, onid, tsid, eServiceID(ch->getServiceId()), ch->getLogicalChannelNumber(), signal);
-									SCAN_eDebug("NAMESPACE: %08x TSID: %04x ONID: %04x SID: %04x LCN: %05d SIGNAL: %08d", ns.get(), onid.get(), tsid.get(), ch->getServiceId(), ch->getLogicalChannelNumber(), signal);
+									SCAN_eDebug("NAMESPACE: %08x ONID: %04x TSID: %04x SID: %04x LCN: %05d SIGNAL: %08d", ns.get(), onid.get(), tsid.get(), ch->getServiceId(), ch->getLogicalChannelNumber(), signal);
 								}
 							}
 							break;
