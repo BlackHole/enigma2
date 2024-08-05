@@ -42,7 +42,7 @@ class TerrestrialBouquet:
 
 	def getAllowedTypes(self, mode):
 		return self.VIDEO_ALLOWED_TYPES if mode == MODE_TV else self.AUDIO_ALLOWED_TYPES  # tv (live and NVOD) and radio allowed service types
-	
+
 	def readLcnDb(self):
 		try:  # may not exist
 			f = open(self.lcndb)
@@ -59,8 +59,8 @@ class TerrestrialBouquet:
 
 	def rebuild(self):
 		if not self.config.enabled.value:
-			return _("TerrestrialBouquet plugin is not enabled.")
-		msg = _("Try running a manual scan of terrestrial frequencies. If this fails maybe there is no lcn data available in your area.") 
+			return _("Terrestrial Bouquet plugin is not enabled.")
+		msg = _("Try running a manual scan of terrestrial frequencies. If this fails maybe there is no lcn data available in your area.")
 		self.services.clear()
 		if not (LCNs := self.readLcnDb()):
 			return self.lcndb + _("empty or missing.") + " " +  msg
@@ -112,7 +112,7 @@ class TerrestrialBouquet:
 		sections = providers[self.config.providers.value].get("sections", {})
 		active_sections = [max((x for x in list(sections.keys()) if int(x) <= key)) for key in list(lcnindex.keys())] if sections else []
 		bouquet_list = []
-		bouquet_list.append("#NAME %s\n" % self.bouquetName)
+		bouquet_list.append("#NAME %s\n" % providers[self.config.providers.value].get("bouquetname", self.bouquetName))
 		for number in range(1, (highestLCN + len(duplicates)) // 1000 * 1000 + 1001):   # ceil bouquet length to nearest 1000, range needs + 1
 			if number in active_sections:
 				bouquet_list.append(self.bouquetMarker(sections[number]))
@@ -130,7 +130,7 @@ class TerrestrialBouquet:
 
 	def bouquetServiceLine(self, service):
 		return "#SERVICE 1:0:%x:%x:%x:%x:%x:0:0:0:\n" % (service["type"], service["sid"], service["tsid"], service["onid"], service["namespace"])
-	
+
 	def bouquetMarker(self, text):
 		return "#SERVICE 1:64:0:0:0:0:0:0:0:0:\n#DESCRIPTION %s\n" % text
 
@@ -150,7 +150,7 @@ class PluginSetup(Setup, TerrestrialBouquet):
 	def __init__(self, session):
 		TerrestrialBouquet.__init__(self)
 		Setup.__init__(self, session, blue_button={'function': self.startrebuild, 'helptext': _("Build/rebuild terrestrial bouquet now based on the last scan.")})
-		self.title = _("TerrestrialBouquet setup")
+		self.title = _("Terrestrial Bouquet setup")
 		self.updatebluetext()
 
 	def createSetup(self):
@@ -169,20 +169,20 @@ class PluginSetup(Setup, TerrestrialBouquet):
 
 	def updatebluetext(self):
 		self["key_blue"].text = _("Rebuild bouquet") if self.config.enabled.value else ""
-	
+
 	def startrebuild(self):
 		if self.config.enabled.value:
 			self.saveAll()
 			if msg := self.rebuild():
 				mb = self.session.open(MessageBox, msg, MessageBox.TYPE_ERROR)
-				mb.setTitle(_("TerrestrialBouquet Error"))
+				mb.setTitle(_("Terrestrial Bouquet Error"))
 			else:
 				mb = self.session.open(MessageBox, _("Terrestrial bouquet successfully rebuilt."), MessageBox.TYPE_INFO)
-				mb.setTitle(_("TerrestrialBouquet"))
+				mb.setTitle(_("Terrestrial Bouquet"))
 				self.closeRecursive()
 
 
-def PluginCallback(close, answer):
+def PluginCallback(close, answer=None):
 	if close and answer:
 		close(True)
 
@@ -190,8 +190,8 @@ def PluginMain(session, close=None, **kwargs):
 	session.openWithCallback(boundFunction(PluginCallback, close), PluginSetup)
 
 def PluginStart(menuid, **kwargs):
-	return menuid == "scan" and [(_("TerrestrialBouquet"), PluginMain, "PluginMain", 1)] or []
+	return menuid == "scan" and [(_("Terrestrial Bouquet"), PluginMain, "PluginMain", 76)] or []
 
 def Plugins(**kwargs):
 	from Components.NimManager import nimmanager
-	return [PluginDescriptor(name=_("TerrestrialBouquet"), description=_("Create an ordered bouquet of terrestrial services based on LCN data from your local transmitter."), where=PluginDescriptor.WHERE_MENU, needsRestart=False, fnc=PluginStart),] if nimmanager.hasNimType("DVB-T") else []
+	return [PluginDescriptor(name=_("Terrestrial Bouquet"), description=_("Create an ordered bouquet of terrestrial services based on LCN data from your local transmitter."), where=PluginDescriptor.WHERE_MENU, needsRestart=False, fnc=PluginStart),] if nimmanager.hasNimType("DVB-T") else []
