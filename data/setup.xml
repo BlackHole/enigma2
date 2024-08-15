@@ -179,10 +179,6 @@
 		</if>
 	</setup>
 	<setup key="subtitlesetup" title="Subtitles">
-		<item level="2" text="AI-Powered translation enabled" description="Enable AI-Powered translation for all teletext and DVB subtitles." requires="AiSubtitles"> config.subtitles.ai_enabled</item>
-		<item level="2" text="AI-Powered translation language" description="Configure the AI-Powered translation language." requires="AiSubtitles">config.subtitles.ai_translate_to</item>
-		<item level="2" text="AI-Powered translation subscription code" description="Enter your subscription code, the unified code for trail is 15." requires="AiSubtitles">config.subtitles.ai_subscription_code</item>
-		<item level="2" text="AI-Powered translation color" description="Configure the color of the AI-Powered translations." requires="AiSubtitles">config.subtitles.ai_subtitle_colors</item>
 		<item level="2" text="Teletext subtitle color" description="Configure the color of the teletext subtitles.">config.subtitles.ttx_subtitle_colors</item>
 		<item level="2" text="Use original teletext position" description="When enabled, teletext subtitles will be displayed at their original position.">config.subtitles.ttx_subtitle_original_position</item>
 		<item level="2" text="Rewrap subtitles" description="When enabled, reformat subtitles to match the width of the screen.">config.subtitles.subtitle_rewrap</item>

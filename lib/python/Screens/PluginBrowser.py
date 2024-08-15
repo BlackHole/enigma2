@@ -23,7 +23,7 @@ from Screens.Screen import Screen, ScreenSummary
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_CURRENT_SKIN
 from Tools.LoadPixmap import LoadPixmap
 
-categories = ("bootlogos", "display", "drivers", "extensions", "kernel", "picons", "po", "security", "settings", "skin", "softcams", "subscription", "systemplugins")
+categories = ("bootlogos", "display", "drivers", "extensions", "kernel", "picons", "po", "security", "settings", "skin", "softcams", "systemplugins")
 
 # Note: "config.pluginbrowser" is also used in this module, it set in Components.UsageConfig and accessible via setup.xml.
 config.misc.pluginbrowser = ConfigSubsection()
