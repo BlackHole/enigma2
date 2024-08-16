@@ -16,10 +16,12 @@
 void eRCDeviceInputDev::handleCode(long rccode)
 {
 	struct input_event *ev = (struct input_event *)rccode;
-	eDebug("[eInputDeviceInit0] %x %x (%u) %x", ev->value, ev->code, ev->code, ev->type);
+
 	if (ev->type != EV_KEY)
 		return;
 		
+	eDebug("[eInputDeviceInit] %x %x (%u) %x", ev->value, ev->code, ev->code, ev->type);
+
 	int km = iskeyboard ? input->getKeyboardMode() : eRCInput::kmNone;
 
 	switch (ev->code)
