@@ -839,7 +839,10 @@ def InitAVSwitch():
 				open("/proc/stb/vmpeg/0/pep_apply", "w").write("1")
 			except (IOError, OSError):
 				print("[AVSwitch] couldn't write pep_scaler_sharpness")
-		config.av.scaler_sharpness = ConfigSlider(default=13, limits=(0, 26))
+		if SystemInfo["boxtype"] in ("gbquad", "gbquadplus"):
+			config.av.scaler_sharpness = ConfigSlider(default=5, limits=(0, 26))
+		else:
+			config.av.scaler_sharpness = ConfigSlider(default=13, limits=(0, 26))
 		config.av.scaler_sharpness.addNotifier(setScaler_sharpness)
 	else:
 		config.av.scaler_sharpness = NoSave(ConfigNothing())
