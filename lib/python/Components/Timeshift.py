@@ -676,9 +676,6 @@ class InfoBarTimeshift:
 					except:
 						print("[Timeshift][TimeShift] Using default filename")
 
-					ptsfilename = sanitizeFilename(ptsfilename)
-
-					# print("[Timeshift]ptsfilename", ptsfilename)
 					fullname = getRecordingFilename(ptsfilename, config.usage.default_path.value)
 					# print("[Timeshift]fullname", fullname)
 					oslink("%s%s" % (config.usage.timeshift_path.value, savefilename), "%s.ts" % fullname)
@@ -706,8 +703,6 @@ class InfoBarTimeshift:
 								ptsfilename = "%s - %s" % (strftime("%Y%m%d", localtime(int(begintime))), eventname)
 					except:
 						print("[Timeshift][TimeShift] Using default filename")
-
-					ptsfilename = sanitizeFilename(ptsfilename)
 
 					fullname = getRecordingFilename(ptsfilename, config.usage.default_path.value)
 					oslink("%s%s" % (config.usage.timeshift_path.value, timeshiftfile), "%s.ts" % fullname)
