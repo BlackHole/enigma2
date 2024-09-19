@@ -4,8 +4,8 @@ SUBDIRS = PositionerSetup Satfinder CableScan \
 	VideoTune Hotplug OpentvZapper \
 	DefaultServicesScanner CommonInterfaceAssignment \
 	VideoClippingSetup VideoEnhancement OBH \
-	WirelessLan NetworkWizard SABnzbdSetup \
-	FastScan SatelliteEquipmentControl DiseqcTester
+	WirelessLan SABnzbdSetup FastScan \
+	SatelliteEquipmentControl DiseqcTester
 
 if HAVE_LIBVUGLES2
 SUBDIRS += AnimationSetup

@@ -7,6 +7,7 @@ dist_pkgdata_DATA = \
 	menu.xml \
 	menuorder.bh \
 	black.mvi \
+	networkwizard.xml \
 	rcpositions.xml \
 	recovery.xml \
 	setup.xml \
