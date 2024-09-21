@@ -400,6 +400,11 @@ def parseScale(s):
 	return val
 
 
+def mergeScale(s1, s2):
+	#  merge ((w, w), (h, h)) with ((x, x), (y, y))
+	return ((s1[0][0] * s2[0][0], s1[0][1] * s2[0][1]), (s1[1][0] * s2[1][0], s1[1][1] * s2[1][1]))
+
+
 def parseScrollbarMode(s):
 	from enigma import eListbox
 	try:
@@ -477,7 +482,12 @@ class AttributeParser:
 			print("[Skin] Attribute '%s' with wrong (or unknown) value '%s' in object of type '%s'!" % (attrib, value, self.guiObject.__class__.__name__))
 
 	def applyAll(self, attrs):
-		attrs.sort(key=lambda a: {"pixmap": 1}.get(a[0], 0))  # For svg pixmap scale required the size, so sort pixmap last
+		attrs.sort(key=lambda a: {"pixmap": 1, "scale": -1}.get(a[0], 0))  # For svg pixmap scale required the size, so sort pixmap last (and scale first)
+
+		# if skin attribute "screen.resolution" is set, graphics should be scaled, so force that here
+		if attrs and attrs[-1][0] == "pixmap" and (self.scaleTuple[0][0] != self.scaleTuple[0][1] or self.scaleTuple[1][0] != self.scaleTuple[1][1]) and attrs[0][0] != "scale":
+			attrs.insert(0, ("scale", "1"))
+
 		for attrib, value in attrs:
 			self.applyOne(attrib, value)
 
