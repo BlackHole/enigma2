@@ -463,7 +463,7 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	eDebug("[eServiceMP3] Init start %s", ref.toString().c_str());
 	if (!sref.empty())
 	{
-		eDebug("[eServiceMP3] Init start !sref.empty()");	
+		eDebug("[eServiceMP3] Init start !sref.empty()");
 		std::vector<eIPTVDBItem> &iptv_services = eDVBDB::getInstance()->iptv_services;
 		for(std::vector<eIPTVDBItem>::iterator it = iptv_services.begin(); it != iptv_services.end(); ++it)
 		{
@@ -472,7 +472,7 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 				m_currentAudioStream = it->ampeg_pid;
 				m_currentSubtitleStream = it->subtitle_pid;
 				m_cachedSubtitleStream = m_currentSubtitleStream;
-				eDebug("[eServiceMP3] Init start iptv_service use sref pid's A: %d; S: %d", m_currentAudioStream, it->subtitle_pid);				
+				eDebug("[eServiceMP3] Init start iptv_service use sref pid's A: %d; S: %d", m_currentAudioStream, it->subtitle_pid);
 			}
 		}
 	}
@@ -2162,7 +2162,7 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 					{
 						audioStream a = m_audioStreams[i];
 						audioStream b = m_audioStreams_temp[i];
-						if (a.type != b.type || a.language_code != b.language_code || a.codec != b.codec) 
+						if (a.type != b.type || a.language_code != b.language_code || a.codec != b.codec)
 						{
 							eTrace("[eServiceMP3] audio stream difference -- stream=%i language=%s codec=%s", i, a.language_code.c_str(), a.codec.c_str());
 							hasChanges = true;
@@ -2178,7 +2178,7 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 						{
 							subtitleStream a = m_subtitleStreams[i];
 							subtitleStream b = m_subtitleStreams_temp[i];
-							if (a.type != b.type || a.language_code != b.language_code) 
+							if (a.type != b.type || a.language_code != b.language_code)
 							{
 								eTrace("[eServiceMP3] subtitle stream difference -- stream=%i language=%s", i, a.language_code.c_str());
 								hasChanges = true;
@@ -2188,19 +2188,19 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 					}
 				}
 			}
-			
+
 
 			if (hasChanges)
 			{
 				eTrace("[eServiceMP3] audio or subtitle stream difference -- re enumerating");
 				m_audioStreams.clear();
 				m_subtitleStreams.clear();
-				for (auto it = std::begin(m_audioStreams_temp); it != std::end(m_audioStreams_temp); ++it) 
+				for (auto it = std::begin(m_audioStreams_temp); it != std::end(m_audioStreams_temp); ++it)
 				{
 					audioStream stream = *it;
 					m_audioStreams.push_back(stream);
 				}
-				for (auto it = std::begin(m_subtitleStreams_temp); it != std::end(m_subtitleStreams_temp); ++it) 
+				for (auto it = std::begin(m_subtitleStreams_temp); it != std::end(m_subtitleStreams_temp); ++it)
 				{
 					subtitleStream stream = *it;
 					m_subtitleStreams.push_back(stream);
