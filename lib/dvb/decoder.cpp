@@ -806,7 +806,7 @@ eDVBPCR::~eDVBPCR()
 DEFINE_REF(eDVBTText);
 
 eDVBTText::eDVBTText(eDVBDemux *demux, int dev)
-    :m_demux(demux), m_dev(dev)
+	:m_demux(demux), m_dev(dev)
 {
 	char filename[128] = {};
 	sprintf(filename, "/dev/dvb/adapter%d/demux%d", demux->adapter, demux->demux);

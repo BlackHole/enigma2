@@ -93,7 +93,7 @@ eFBCTunerManager::eFBCTunerManager(ePtr<eDVBResourceManager> res_mgr)
 	eSmartPtrList<eDVBRegisteredFrontend> &frontends = m_res_mgr->m_frontend;
 	eSmartPtrList<eDVBRegisteredFrontend> &frontends_simulate = m_res_mgr->m_simulate_frontend;
 	tuner_t	tuner;
-	int		fe_id, fbc_prev_set_id;
+	int fe_id, fbc_prev_set_id;
 
 	if(!m_instance)
 		m_instance = this;
