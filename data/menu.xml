@@ -116,7 +116,7 @@ self.session.openWithCallback(msgClosed, EpgDeleteMsg)
 		</menu>
 
 		<!-- Menu / Setup / Recording, Playback & Timeshift -->
-		<menu key="rec" level="1" text="Recording, Playback &amp; Timeshift" weight="11">
+		<menu key="rec" level="1" text="Recording, Playback &amp; Timeshift" weight="7">
 			<item key="recording_setup" level="0" text="Recording" weight="10"><screen module="Recordings" screen="RecordingSettings" /></item>
 			<item key="playback_setup" level="0" text="Playback" weight="12"><setup id="playback" /></item>
 			<item key="timshift_setup" level="0" text="Timeshift" weight="15"><screen module="Timeshift" screen="TimeshiftSettings" /></item>
