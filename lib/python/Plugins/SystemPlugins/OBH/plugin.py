@@ -50,7 +50,7 @@ def checkConfigBackup():
 	backups = []
 	for dir in ["/media/%s/backup" % media for media in listdir("/media/") if path.isdir(path.join("/media/", media))]:
 		try:
-			backups += [{"name": f, "mtime": stat(f).st_mtime} for x in listdir(dir) if (f := path.join(dir, x)) and path.isfile(f) and f.endswith(".tar.gz") and "obh" in f.lower()]
+			backups += [{"name": f, "mtime": stat(f).st_mtime} for x in listdir(dir) if (f := path.join(dir, x)) and path.isfile(f) and f.endswith(".tar.gz") and "bh" in f.lower()]
 		except FileNotFoundError:  # e.g. /media/autofs/xxx will crash listdir if "xxx" is inactive
 			pass
 	if backups:
