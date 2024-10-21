@@ -2090,6 +2090,7 @@ class ChannelSelection(ChannelSelectionEdit, ChannelSelectionBase, ChannelSelect
 				"ok": self.channelSelected,
 				"keyRadio": self.keyRadio,
 				"keyTV": self.keyTV,
+				"toggleTvRadio": self.toggleTvRadio,
 			})  # noqa: E123
 
 		self.__event_tracker = ServiceEventTracker(screen=self, eventmap={
@@ -2161,17 +2162,17 @@ class ChannelSelection(ChannelSelectionEdit, ChannelSelectionBase, ChannelSelect
 
 	def keyTV(self):
 		if SystemInfo["toggleTvRadioButtonEvents"]:
-			self.toogleTvRadio()
+			self.toggleTvRadio()
 		else:
 			self.setModeTv()
 
 	def keyRadio(self):
 		if SystemInfo["toggleTvRadioButtonEvents"]:
-			self.toogleTvRadio()
+			self.toggleTvRadio()
 		else:
 			self.setModeRadio()
 
-	def toogleTvRadio(self):
+	def toggleTvRadio(self):
 		if self.radioTV:
 			self.setModeTv()
 		else:
@@ -2953,8 +2954,9 @@ class SimpleChannelSelection(ChannelSelectionBase):
 			{
 				"cancel": self.close,
 				"ok": self.channelSelected,
-				"keyRadio": self.setModeRadio,
-				"keyTV": self.setModeTv,
+				"keyRadio": self.keyRadio,
+				"keyTV": self.keyTV,
+				"toggleTvRadio": self.toggleTvRadio,
 			})  # noqa: E123
 		self.bouquet_mark_edit = OFF
 		self.title = title
@@ -2987,17 +2989,17 @@ class SimpleChannelSelection(ChannelSelectionBase):
 
 	def keyTV(self):
 		if SystemInfo["toggleTvRadioButtonEvents"]:
-			self.toogleTvRadio()
+			self.toggleTvRadio()
 		else:
 			self.setModeTv()
 
 	def keyRadio(self):
 		if SystemInfo["toggleTvRadioButtonEvents"]:
-			self.toogleTvRadio()
+			self.toggleTvRadio()
 		else:
 			self.setModeRadio()
 
-	def toogleTvRadio(self):
+	def toggleTvRadio(self):
 		if self.radioTV:
 			self.setModeTv()
 		else:
