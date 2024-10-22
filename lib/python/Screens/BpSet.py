@@ -73,9 +73,6 @@ class DeliteSettings(Screen):
 		elif self.sel == 5:
 			from Screens.UserInterfacePositioner import UserInterfacePositioner
 			self.session.open(UserInterfacePositioner)
-		elif self.sel == 6:
-			from Screens.UserInterfacePositioner import OSD3DSetupScreen
-			self.session.open(OSD3DSetupScreen)
 		elif self.sel == 7:
 			from Screens.BpFormat import Bp_UsbFormat
 			self.session.open(Bp_UsbFormat)
@@ -161,13 +158,6 @@ class DeliteSettings(Screen):
 		png = LoadPixmap(mypixmap)
 		name = _("Osd Position setup")
 		idx = 5
-		res = (name, png, idx)
-		self.list.append(res)
-
-		mypixmap = mypath + "icons/infopanel_osd.png"
-		png = LoadPixmap(mypixmap)
-		name = _("Osd 3D setup")
-		idx = 6
 		res = (name, png, idx)
 		self.list.append(res)
 
