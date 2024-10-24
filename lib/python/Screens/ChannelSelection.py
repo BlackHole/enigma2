@@ -364,6 +364,7 @@ class ChannelContextMenu(Screen):
 					_append_when_current_valid(current, menu, actions, (_("Purge deleted user bouquets"), self.purgeDeletedBouquets), level=0, key="bullet")
 					_append_when_current_valid(current, menu, actions, (_("Restore deleted user bouquets"), self.restoreDeletedBouquets), level=0, key="bullet")
 		menu.append(ChoiceEntryComponent(text=(_("Reload Services"), self.reloadServices), key="9"))
+		actions["9"] = self.reloadServices  # add key="9" action here because "_append_when_current_valid" is not used above
 		if self.inBouquet:  # current list is editable?
 			if csel.bouquet_mark_edit == OFF:
 				if csel.movemode:
