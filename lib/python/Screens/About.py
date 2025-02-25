@@ -58,8 +58,14 @@ class About(AboutBase):
 	def populate(self):
 		Brands = {"bcm": "Broadcom", "hisi": "Hisilicon"}
 		AboutText = ""
-		AboutText += _("Model:\t%s %s\n") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"])
-		AboutText += _("Chipset:\t%s %s\n") % (Brands.get(SOC_BRAND, SOC_BRAND), CHIPSET)
+		AboutText += _("Model:\t%s %s\n") % (SystemInfo["MachineBrand"].capitalize(), SystemInfo["MachineName"])
+		if about.getChipSetString() != _("unavailable"):
+			if SystemInfo["HasHiSi"]:
+				AboutText += _("Chipset:\tHiSilicon %s\n") % about.getChipSetString().upper()
+			elif about.getIsBroadcom():
+				AboutText += _("Chipset:\tBroadcom %s\n") % about.getChipSetString().upper()
+			else:
+				AboutText += _("Chipset:\t%s\n") % about.getChipSetString().upper()
 
 		AboutText += _("CPU:\t%s %s %s\n") % (about.getCPUArch(), about.getCPUSpeedString(), about.getCpuCoresString())
 
