@@ -417,7 +417,7 @@ class BhsysInfo(Screen):
 
 		text += "\n" + _("SOFTWARE") + "\n"
 		text += "Image:\t" + "OpenBh %s.%s (%s)\n" % (SystemInfo["imageversion"], SystemInfo["imagebuild"], SystemInfo["imagetype"].title())
-		text += "Enigma2: \t" + about.getEnigmaVersionString() + "\n"
+		text += "Python: \t" + about.getPythonVersionString() + "\n"
 		text += "Kernel: \t" + about.getKernelVersionString() + "\n"
 		self["lab1"].setText(text)
 
