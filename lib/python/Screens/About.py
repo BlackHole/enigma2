@@ -168,7 +168,7 @@ class About(AboutBase):
 		bootloader = ""
 		if SystemInfo["boxtype"] in ("gbquad4k", "gbue4k", "gbquad4kpro"):
 			with open("/sys/firmware/devicetree/base/bolt/tag") as f:
-				AboutText += _("Bolt:%s\n") % f.read().strip()[0:4]
+				AboutText += _("Bolt:\t%s\n") % f.read().strip()[0:4]
 		else:
 			if path.exists('/sys/firmware/devicetree/base/bolt/tag'):
 				f = open('/sys/firmware/devicetree/base/bolt/tag', 'r')
