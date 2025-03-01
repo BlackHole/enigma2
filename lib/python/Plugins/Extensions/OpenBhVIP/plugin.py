@@ -8,7 +8,7 @@ from Plugins.Plugin import PluginDescriptor
 from Components.ConfigList import ConfigListScreen
 from Components.ActionMap import ActionMap, NumberActionMap, HelpableActionMap, HelpableNumberActionMap
 import os
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, quote, unquote
 
 class openbhVipMain(Setup): # ConfigListScreen):
 	def __init__(self, session):
@@ -19,8 +19,8 @@ class openbhVipMain(Setup): # ConfigListScreen):
 				for line in f.readlines():
 					token = line.split()
 					if len(token) == 3:
-						username = urlsplit(token[2]).username
-						password = urlsplit(token[2]).password
+						username = unquote(urlsplit(token[2]).username)
+						password = unquote(urlsplit(token[2]).password)
 
 		if username == None:
 			username = ""
@@ -59,7 +59,7 @@ class openbhVipMain(Setup): # ConfigListScreen):
 
 	def okbuttonClick(self):
 		with open("/etc/opkg/vip-feed.conf", "w") as f:
-			f.write(f"src/gz openbh-vip https://{self.username.value}:{self.password.value}@feeds.openbh.net/vip\n")
+			f.write(f"src/gz openbh-vip https://{quote(self.username.value)}:{quote(self.password.value)}@feeds.openbh.net/vip\n")
 		self.close()
 
 	def createSetup(self):
