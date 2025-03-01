@@ -171,12 +171,11 @@ static std::unordered_map<std::string, std::string> HardwareDB{
 	{"/devices/f0481000.xhci/usb2/2-2/2-2:1.0", "Rear Upper USB 3.0"},
 	{"/devices/f0480500.ehci/usb4/4-1/4-1:1.0", "Upper USB"},
 	{"/devices/f0480300.ehci/usb3/3-1/3-1:1.0", "Lower USB"}
-#elif HWVUUNO4K // NOT CHECKED
-	{"/devices/platform/rdb/f045a000.sata/ata1", "SATA"},
-	{"/devices/platform/rdb/f0470300.ehci_v2/usb3/3-1/3-1", "Rear Lower USB"},
-	{"/devices/platform/rdb/f0471000.xhci_v2/usb2/2-1/2-1", "Rear Lower USB 3.0"},
-	{"/devices/platform/rdb/f0470500.ehci_v2/usb4/4-1/4-1", "Rear Upper USB"},
-	{"/devices/platform/rdb/f0471000.xhci_v2/usb2/2-2/2-2", "Rear Upper USB 3.0"}
+#elif HWVUUNO4K // CHECKED
+	{"/devices/rdb.4/f0470500.ehci_v2/usb4/4-1/4-1:1.0", "Rear USB"},
+	{"/devices/rdb.4/f0471000.xhci_v2/usb2/2-2/2-2:1.0", "Rear USB 3.0"},
+	{"/devices/rdb.4/f0470300.ehci_v2/usb3/3-1/3-1:1.0", "Left Side USB"},
+	{"/devices/rdb.4/f0471000.xhci_v2/usb2/2-1/2-1:1.0", "Left Side USB 3.0"}
 #elif HWVUUNO4KSE // CHECKED
 	{"/devices/platform/rdb/f045a000.sata/ata1", "SATA"},
 	{"/devices/platform/rdb/f0470300.ehci_v2/usb3/3-1/3-1", "Rear Lower USB"},
