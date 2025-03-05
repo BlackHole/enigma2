@@ -440,9 +440,9 @@ class PluginDownloadBrowser(Screen):
 					return
 				self.install_settings_name = self["list"].getCurrent()[0].name
 				self.install_bootlogo_name = self["list"].getCurrent()[0].name
-				if self["list"].getCurrent()[0].name.startswith('settings-'):
+				if self["list"].getCurrent()[0].name.startswith('settings-') or self["list"].getCurrent()[0].name.startswith('vip-vip-settings-'):
 					self.check_settings = True
-					self.startIpkgListInstalled(self.PLUGIN_PREFIX + 'settings-*')
+					self.startIpkgListInstalled(self.PLUGIN_PREFIX + '*settings-*')
 				elif self["list"].getCurrent()[0].name.startswith('bootlogos-'):
 					self.check_bootlogo = True
 					self.startIpkgListInstalled(self.PLUGIN_PREFIX + 'bootlogos-*')
@@ -524,7 +524,7 @@ class PluginDownloadBrowser(Screen):
 				self.pluginlist.remove(plugin)
 				break
 		self.plugins_changed = True
-		if self["list"].getCurrent()[0].name.startswith("settings-"):
+		if self["list"].getCurrent()[0].name.startswith("settings-") or self["list"].getCurrent()[0].name.startswith("vip-vip-settings-"):
 			self.reload_settings = True
 		self.expanded = []
 		self.updateList()
