@@ -1,6 +1,7 @@
 from os import listdir, path as ospath, popen
 from re import search
 from sys import version_info
+from enigma import eTimer, getDesktop, getEnigmaLastCommitDate, getEnigmaLastCommitHash
 from Components.About import about
 from Components.ActionMap import ActionMap
 from Components.Button import Button
