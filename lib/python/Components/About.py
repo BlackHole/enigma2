@@ -8,9 +8,7 @@ from time import time
 
 
 def getCPUArch(MODEL):
-	if MODEL.startswith("osmio4k"):
-		CPUArch = "ARM V7"
-	elif "ARM" in getCPUString():
+	if "ARM" in getCPUString():
 		CPUArch = getCPUString()
 	else:
 		CPUArch = _("Mipsel")
