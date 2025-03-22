@@ -4,8 +4,6 @@ from Components.Button import Button
 from Components.ActionMap import HelpableActionMap, ActionMap, HelpableNumberActionMap
 from Components.ChoiceList import ChoiceList, ChoiceEntryComponent
 from Components.MovieList import MovieList, expandCollections, getItemDisplayName, resetMoviePlayState, AUDIO_EXTENSIONS, DVD_EXTENSIONS, IMAGE_EXTENSIONS
-from Components.DiskInfo import DiskInfo
-from Tools.Trashcan import TrashInfo
 from Components.Pixmap import Pixmap, MultiPixmap
 from Components.Label import Label
 from Components.PluginComponent import plugins
@@ -161,6 +159,27 @@ def canDelete(item):
 	if not item[0] or not item[1]:
 		return False
 	return True
+
+
+def diskFreeSpace():
+	try:
+		stat = os.statvfs(config.movielist.last_videodir.value)
+		percent = f"({100 * stat.f_bavail // stat.f_blocks}%)"
+		free = Components.Harddisk.bytesToHumanReadable(stat.f_bfree * stat.f_bsize)
+		text = " ".join((free, percent, _("free diskspace")))
+	except:
+		text = ""
+	return text
+
+
+def trashcanSize(path):
+	if not path.startswith("/media/autofs"):
+		try:
+			if size := Tools.Trashcan.get_size(Tools.Trashcan.getTrashFolder(path)):
+				return _("Trashcan:") + " " + Components.Harddisk.bytesToHumanReadable(size)
+		except Exception:
+			pass
+	return ""
 
 
 canCopy = canMove
@@ -641,8 +660,8 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 		self["movie_sort"] = MultiPixmap()
 		self["movie_sort"].hide()
 
-		self["freeDiskSpace"] = self.diskinfo = DiskInfo(config.movielist.last_videodir.value, DiskInfo.FREE, update=False)
-		self["TrashcanSize"] = self.trashinfo = TrashInfo(config.movielist.last_videodir.value, TrashInfo.USED, update=False)
+		self["freeDiskSpace"] = Label("")
+		self["TrashcanSize"] = Label("")
 
 		self["InfobarActions"] = HelpableActionMap(self, "InfobarActions",
 			{
@@ -1704,10 +1723,9 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 			config.movielist.last_videodir.value = path
 			config.movielist.last_videodir.save()
 			self.setCurrentRef(path)
-			self["freeDiskSpace"].path = path
-			self["TrashcanSize"].update(path)
+			self["TrashcanSize"].setText(trashcanSize(path))
 		else:
-			self["TrashcanSize"].update(config.movielist.last_videodir.value)
+			self["TrashcanSize"].setText(trashcanSize(config.movielist.last_videodir.value))
 		if self.reload_sel is None:
 			self.reload_sel = self.getCurrent()
 		if config.usage.movielist_trashcan.value and os.access(config.movielist.last_videodir.value, os.W_OK):
@@ -1721,7 +1739,8 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 		if not (self.reload_sel and self["list"].moveTo(self.reload_sel)):
 			if self.reload_home:
 				self["list"].moveToFirstMovie()
-		self["freeDiskSpace"].update()
+		text = diskFreeSpace()
+		self["freeDiskSpace"].setText(text)
 		self["waitingtext"].visible = False
 		self.createPlaylist()
 		if self.playGoTo:
@@ -1794,8 +1813,7 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 				config.movielist.last_videodir.save()
 				self.loadLocalSettings()
 				self.setCurrentRef(res)
-				self["freeDiskSpace"].path = res
-				self["TrashcanSize"].update(res)
+				self["TrashcanSize"].setText(trashcanSize(res))
 				if selItem:
 					self.reloadList(home=True, sel=selItem)
 				else:
@@ -2470,17 +2488,18 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 		else:
 			self.feedbackTimer.stop()
 		self.feedbackTimer.start(3000, 1)
-		self.diskinfo.setText(text)
+		self["freeDiskSpace"].setText(text)
 
 	def hideActionFeedback(self):
 		markedCount = self.list.countMarked()
 		if markedCount > 0:
-			self.diskinfo.setText(ngettext(_("%d marked item"), _("%d marked items"), markedCount) % markedCount)
+			self["freeDiskSpace"].setText(ngettext(_("%d marked item"), _("%d marked items"), markedCount) % markedCount)
 		else:
-			self.diskinfo.update()
+			text = diskFreeSpace()
+			self["freeDiskSpace"].setText(text)
 			current = self.getCurrent()
 			if current is not None:
-				self.trashinfo.update(current.getPath())
+				self["TrashcanSize"].setText(trashcanSize(current.getPath()))
 
 	def can_gohome(self, item):
 		return True
