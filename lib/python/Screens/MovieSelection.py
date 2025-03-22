@@ -1834,12 +1834,6 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 		config.movielist.last_videocollection.save()
 		self.reloadList(sel=eServiceReference.fromDirectory(config.movielist.last_videodir.value))
 
-	def pinEntered(self, res, selItem, result):
-		if result:
-			from Components.ParentalControl import parentalControl
-			parentalControl.setSessionPinCached()
-			self.gotFilename(res, selItem, False)
-
 	def showAll(self):
 		self.selected_tags_ele = None
 		self.selected_tags = None
