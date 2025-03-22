@@ -22,7 +22,7 @@ def getCPUArch(MODEL):
 	return [CPUArch, getCPUSpeedString(MODEL), getCpuCoresString()]
 
 
-def getChipSetString(MODEL):
+def getChipSetString():
 	try:
 		return str(open("/proc/stb/info/chipset").read().lower().replace("\n", "").replace("brcm", "").replace("bcm", ""))
 	except:
