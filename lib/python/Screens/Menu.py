@@ -376,6 +376,8 @@ class Menu(Screen, HelpableScreen, ProtectedScreen):
 				return True
 			elif config.ParentalControl.config_sections.standby_menu.value and self.menuID == "shutdown":
 				return True
+			#elif config.ParentalControl.config_sections.obhmenu.value and self.menuID == "obhmenu":
+				#return True
 
 	def keyBlue(self):
 		if "user" in config.usage.menu_sort_mode.value:
