@@ -2,7 +2,7 @@ from os import listdir, path as ospath, popen
 from re import search
 from sys import version_info
 from enigma import eTimer, getDesktop, getEnigmaLastCommitDate, getEnigmaLastCommitHash
-from Components.About import about
+from Components.About import getBoxUptime, getCPUArch, getEnigmaUptime, getIfConfig, getIfTransferredData
 from Components.ActionMap import ActionMap
 from Components.Button import Button
 from Components.config import config
@@ -46,7 +46,6 @@ def _formatDate(Date):
 	# expected input = "YYYYMMDD"
 	if len(Date) != 8 or not Date.isnumeric():
 		return _("unknown")
-	from Components.config import config
 	return config.usage.date.dateFormatAbout.value % {"year": Date[0:4], "month": Date[4:6], "day": Date[6:8]}
 
 
@@ -141,7 +140,7 @@ class About(AboutBase):
 		AboutText = ""
 		AboutText += _("Model:\t%s %s\n") % (SystemInfo["MachineBrand"].replace("qv", "Qv"), SystemInfo["MachineName"])
 		AboutText += _("Chipset:\t%s %s\n") % (Brands.get(SOC_BRAND, SOC_BRAND), CHIPSET.replace("hi", "HI").replace("cv", "CV").replace("mv", "MV"))
-		CPUArch = about.getCPUArch(MODEL)
+		CPUArch = getCPUArch(MODEL)
 		AboutText += _("CPU:\t%s %s %s\n") % (CPUArch[0], CPUArch[1], CPUArch[2])
 		# AboutText += _("SoC:\t%s\n") % SystemInfo["socfamily"].upper()
 
@@ -201,10 +200,10 @@ class About(AboutBase):
 		AboutText += _("Python:\t%s.%s.%s\n") % (version_info.major, version_info.minor, version_info.micro)
 		AboutText += _("Last E2 Update:\t%s (%s)\n") % (getLastCommitHash(), getLastCommitDate())
 		AboutText += _("E2 (Re)starts:\t%s\n") % config.misc.startCounter.value
-		uptime = about.getBoxUptime()
+		uptime = getBoxUptime()
 		if uptime:
 			AboutText += _("Uptime:\t%s\n") % uptime
-		e2uptime = about.getEnigmaUptime()
+		e2uptime = getEnigmaUptime()
 		if e2uptime:
 			AboutText += _("Enigma2 Uptime:\t%s\n") % e2uptime
 		AboutText += _("Skin:\t%s") % config.skin.primary_skin.value[0:-9] + _("  (%s x %s)") % (skinWidth, skinHeight) + "\n"
@@ -477,7 +476,7 @@ class SystemNetworkInfo(AboutBase):
 	def createscreen(self):
 		self.AboutText = ""
 		self.iface = "eth0"
-		eth0 = about.getIfConfig("eth0")
+		eth0 = getIfConfig("eth0")
 		if "addr" in eth0:
 			self.AboutText += _("IP:") + "\t" + eth0["addr"] + "\n"
 			if "netmask" in eth0:
@@ -486,7 +485,7 @@ class SystemNetworkInfo(AboutBase):
 				self.AboutText += _("MAC:") + "\t" + eth0["hwaddr"] + "\n"
 			self.iface = "eth0"
 
-		eth1 = about.getIfConfig("eth1")
+		eth1 = getIfConfig("eth1")
 		if "addr" in eth1:
 			self.AboutText += _("IP:") + "\t" + eth1["addr"] + "\n"
 			if "netmask" in eth1:
@@ -495,7 +494,7 @@ class SystemNetworkInfo(AboutBase):
 				self.AboutText += _("MAC:") + "\t" + eth1["hwaddr"] + "\n"
 			self.iface = "eth1"
 
-		ra0 = about.getIfConfig("ra0")
+		ra0 = getIfConfig("ra0")
 		if "addr" in ra0:
 			self.AboutText += _("IP:") + "\t" + ra0["addr"] + "\n"
 			if "netmask" in ra0:
@@ -504,7 +503,7 @@ class SystemNetworkInfo(AboutBase):
 				self.AboutText += _("MAC:") + "\t" + ra0["hwaddr"] + "\n"
 			self.iface = "ra0"
 
-		wlan0 = about.getIfConfig("wlan0")
+		wlan0 = getIfConfig("wlan0")
 		if "addr" in wlan0:
 			self.AboutText += _("IP:") + "\t" + wlan0["addr"] + "\n"
 			if "netmask" in wlan0:
@@ -513,7 +512,7 @@ class SystemNetworkInfo(AboutBase):
 				self.AboutText += _("MAC:") + "\t" + wlan0["hwaddr"] + "\n"
 			self.iface = "wlan0"
 
-		wlan3 = about.getIfConfig("wlan3")
+		wlan3 = getIfConfig("wlan3")
 		if "addr" in wlan3:
 			self.AboutText += _("IP:") + "\t" + wlan3["addr"] + "\n"
 			if "netmask" in wlan3:
