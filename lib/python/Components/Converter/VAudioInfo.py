@@ -12,7 +12,7 @@ _acedits = (
 	("MPEG-4 AAC audio", "AAC"),
 	("MPEG-4 AAC", "AAC"),
 	("MPEG/L3", "MP2"),
-	("Free Lossless Audio Codec(FLAC)", "FLAC"),
+	("Free Lossless Audio Codec (FLAC)", "FLAC"),
 	("private1-lpcm", "AAC"),
 	("-", ""),
 	("A_", ""),
@@ -28,8 +28,7 @@ _acedits = (
 	("WMA/PRO", "WMA Pro"),
 	("audio/x-", ""),
 	(" audio", ""),
-	("audio/x-true-hd", "Dolby TrueHD"),
-	("raw", "Dolby TrueHD"),
+	("raw", "TrueHD"),
 	("HEAAC", "HE-AAC"),
 	("MPEG1", ""),
 	(" Layer 2 (MP2)", "MP2"),
@@ -68,7 +67,7 @@ class VAudioInfo(Poll, Converter, object):
 			"10_pcm": ("pcm",),
 			"11_aac": ("aac",),
 			"12_he-aac": ("he-aac",),
-			"13_truehd": ("truehd",),
+			"13_dolbytruehd": ("truehd",),
 			"14_aacplus": ("aac+",),
 			"15_ipcm": ("ipcm",),
 			"16_wma-pro": ("wma pro",),
@@ -78,9 +77,10 @@ class VAudioInfo(Poll, Converter, object):
 			"20_mp2": ("mp2",),
 		}
 		self.codec_info = {
-			"dolbydigitalplus": ("51", "20", "71"),
-			"dolbydigital": ("51", "20", "71"),
-			"wma": ("8", "9"),
+			"dolbydigitalplus": ("51", "20", "71",),
+			"dolbydigital": ("51", "20", "71",),
+			"dolbytruehd": ("51", "20", "71",),
+			"wma": ("8", "9",),
 		}
 		self.type, self.interesting_events = {
 			"AudioIcon": (self.GET_AUDIO_ICON, (iPlayableService.evUpdatedInfo,)),
