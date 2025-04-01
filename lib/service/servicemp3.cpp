@@ -2572,7 +2572,7 @@ audiotype_t eServiceMP3::gstCheckAudioPad(GstStructure* structure)
 
 	else if ( gst_structure_has_name (structure, "audio/x-ac3") || gst_structure_has_name (structure, "audio/x-eac3") ||
 			  gst_structure_has_name (structure, "audio/ac3") || gst_structure_has_name (structure, "audio/eac3") ||
-			  gst_structure_has_name (structure, "audio/x-raw") || gst_structure_has_name (structure, "audio/x-true-hd") )
+			  gst_structure_has_name (structure, "audio/x-raw") || gst_structure_has_name (structure, "audio/x-truehd") )
 		return atAC3;
 	else if ( gst_structure_has_name (structure, "audio/x-dts") || gst_structure_has_name (structure, "audio/dts") )
 		return atDTS;

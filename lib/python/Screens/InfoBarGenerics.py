@@ -4369,7 +4369,7 @@ class InfoBarCueSheetSupport:
 		if r[0]:
 			return None
 		pos = int(r[1]) if r[1] else 0
-		return 0 if pos < 0 else pos 
+		return 0 if pos < 0 else pos
 
 	def cueGetEndCutPosition(self):
 		ret = False
