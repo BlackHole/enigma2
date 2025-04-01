@@ -521,7 +521,7 @@ class SystemNetworkInfo(AboutBase):
 				self.AboutText += _("MAC:") + "\t" + wlan3["hwaddr"] + "\n"
 			self.iface = "wlan3"
 
-		rx_bytes, tx_bytes = about.getIfTransferredData(self.iface)
+		rx_bytes, tx_bytes = getIfTransferredData(self.iface)
 		self.AboutText += "\n" + _("Bytes received:") + "\t" + bytesToHumanReadable(int(rx_bytes)) + "\n"
 		self.AboutText += _("Bytes sent:") + "\t" + bytesToHumanReadable(int(tx_bytes)) + "\n"
 		for line in popen("ethtool %s |grep Speed" % self.iface, "r"):
