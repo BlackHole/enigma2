@@ -828,13 +828,14 @@ class InfoBarShowHide(InfoBarScreenSaver):
 			self.onShowHideNotifiers.remove(fnc)
 
 	def doFixMovieStart(self):
-		self.jumpPreviousNextMark(lambda x: -x - 5 * 90000, start=True)
+		if hasattr(self, "jumpPreviousNextMark"):
+			self.jumpPreviousNextMark(lambda x: -x - 5 * 90000, start=True)
 
 	def serviceStarted(self):
 		# For seekable services sometimes video starts playing from last marker
 		# Start timer to seek it to the beginning
 		self.movieStartFixer.stop()
-		self.movieStartFixer.start(250, True)
+		self.movieStartFixer.start(500, True)
 		if self.execing:
 #Blackhole
 			if self.autocamTimer_active == 1:
