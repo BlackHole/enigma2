@@ -1071,8 +1071,8 @@ eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *serv
 	m_subtitle_sync_timer(eTimer::create(eApp)),
 	m_nownext_timer(eTimer::create(eApp))
 {
-#ifdef PASSTHROUGHT_FIX
-	m_passthrought_fix_timer = eTimer::create(eApp);
+#ifdef PASSTHROUGH_FIX
+	m_passthrough_fix_timer = eTimer::create(eApp);
 #endif
 //	m_is_streamx = m_is_stream;	// sets to false if looking at fallback url at this point as m_is_stream(ref.path.find("://") is false.
 	eDebug("[servicedvb][eDVBServicePlay] now running: m_is_streamx set by m_is_stream %d", m_is_streamx);
@@ -1083,8 +1083,8 @@ eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *serv
 	CONNECT(m_event_handler.m_eit_changed, eDVBServicePlay::gotNewEvent);
 	CONNECT(m_subtitle_sync_timer->timeout, eDVBServicePlay::checkSubtitleTiming);
 	CONNECT(m_nownext_timer->timeout, eDVBServicePlay::updateEpgCacheNowNext);
-#ifdef PASSTHROUGHT_FIX
-	CONNECT(m_passthrought_fix_timer->timeout, eDVBServicePlay::forcePassthrough);
+#ifdef PASSTHROUGH_FIX
+	CONNECT(m_passthrough_fix_timer->timeout, eDVBServicePlay::forcePassthrough);
 #endif
 }
 
@@ -1117,7 +1117,7 @@ eDVBServicePlay::~eDVBServicePlay()
 }
 
 
-#ifdef PASSTHROUGHT_FIX
+#ifdef PASSTHROUGH_FIX
 void eDVBServicePlay::forcePassthrough()
 {
 	eDebug("[eDVBServicePlay] Setting 'passthrough' to force correct operation");
@@ -2084,7 +2084,7 @@ int eDVBServicePlay::getInfo(int w)
 		// use origiginal namespace
 		if (m_reference.isStreamRelay){
 			eServiceReferenceDVB m_parsed_ref = eServiceReferenceDVB(m_reference.compareSref);
-			if (m_parsed_ref.valid()) 
+			if (m_parsed_ref.valid())
 			{
 				return ((const eServiceReferenceDVB&)m_parsed_ref).getDVBNamespace().get();
 			}
@@ -2315,13 +2315,14 @@ int eDVBServicePlay::selectAudioStream(int i)
 		return -4;
 	}
 
-#ifdef PASSTHROUGHT_FIX
+#ifdef PASSTHROUGH_FIX
 	if (apidtype == eDVBPMTParser::audioStream::atAC3 || apidtype == eDVBPMTParser::audioStream::atAAC || apidtype == eDVBPMTParser::audioStream::atDDP) {
 		std::string pass = CFile::read("/proc/stb/audio/ac3");
 		if (replace_all(replace_all(pass, "\r", ""), "\n", "") == "passthrough")
 		{
-			m_passthrought_fix_timer->stop();
-			m_passthrought_fix_timer->start(100, true);
+			int shortAudioDelay = eConfigManager::getConfigIntValue("config.av.passthrough_fix_short", 100);
+			m_passthrough_fix_timer->stop();
+			m_passthrough_fix_timer->start(shortAudioDelay, true);
 		}
 	}
 #endif

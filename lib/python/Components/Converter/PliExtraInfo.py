@@ -39,7 +39,7 @@ caid_data = (
 
 # stream type to codec map
 codec_data = {
-	-1: "N/A",
+	-1: "",
 	0: "MPEG2 H.262",
 	1: "MPEG4 H.264",
 	2: "H263",
