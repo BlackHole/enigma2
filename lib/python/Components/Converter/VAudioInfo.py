@@ -26,7 +26,7 @@ _acedits = (
 	("AAC_PLUS", "AAC+"),
 	("AAC_LATM", "AAC"),
 	("WMA/PRO", "WMA Pro"),
-	("audio/x-", ""),
+	("audio/x", ""),
 	(" audio", ""),
 	("raw", "TrueHD"),
 	("HEAAC", "HE-AAC"),
