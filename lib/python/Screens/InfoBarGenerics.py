@@ -678,11 +678,6 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		self.hideTimer.callback.append(self.doTimerHide)
 		self.hideTimer.start(5000, True)
 
-		# For seekable services sometimes video starts playing from last marker
-		# Use this timer to seek it to the beginning
-		self.movieStartFixer = eTimer()
-		self.movieStartFixer.callback.append(self.doFixMovieStart)
-
 		self.onShow.append(self.__onShow)
 		self.onHide.append(self.__onHide)
 
@@ -827,15 +822,7 @@ class InfoBarShowHide(InfoBarScreenSaver):
 		if fnc in self.onShowHideNotifiers:
 			self.onShowHideNotifiers.remove(fnc)
 
-	def doFixMovieStart(self):
-		if hasattr(self, "jumpPreviousNextMark"):
-			self.jumpPreviousNextMark(lambda x: -x - 5 * 90000, start=True)
-
 	def serviceStarted(self):
-		# For seekable services sometimes video starts playing from last marker
-		# Start timer to seek it to the beginning
-		self.movieStartFixer.stop()
-		self.movieStartFixer.start(500, True)
 		if self.execing:
 #Blackhole
 			if self.autocamTimer_active == 1:
@@ -3843,6 +3830,7 @@ class InfoBarSubserviceSelection:
 					selection = [x[1] for x in subservices].index(serviceRef.toString())
 				except:
 					selection = 0
+
 				self.bouquets = self.servicelist and self.servicelist.getBouquetList()
 				if self.bouquets and len(self.bouquets):
 					keys = ["red", "blue", "", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"] + [""] * (len(subservices) - 10)
@@ -4242,6 +4230,8 @@ class InfoBarCueSheetSupport:
 		self.__blockDownloadCuesheet = False
 		self.__recording = None
 		self.__recordingCuts = []
+		self.resumeTimer = eTimer()
+		self.resumeTimer.callback.append(self.triggerResumeLogic)
 
 	def __evStopped(self):
 		if isMoviePlayerInfoBar(self):
@@ -4271,25 +4261,7 @@ class InfoBarCueSheetSupport:
 		iRecordableService.evGstRecordEnded,
 	)
 
-	def __gotRecordEvent(self, record, event):
-		if record.getPtrString() != self.__recording.getPtrString():
-			return
-		if event in self.__endEvents:
-			if self.__gotRecordEvent in NavigationInstance.instance.record_event:
-				NavigationInstance.instance.record_event.remove(self.__gotRecordEvent)
-
-			# When the recording ends, the mapping of
-			# cut points from time to file offset changes
-			# slightly. Upload the recording cut marks to
-			# catch these changes.
-
-			self.updateFromRecCuesheet()
-
-			self.__recording = None
-		elif event == iRecordableService.evNewEventInfo:
-			self.updateFromRecCuesheet()
-
-	def __serviceStarted(self):
+	def triggerResumeLogic(self):
 		if self.is_closing:
 			return
 
@@ -4324,6 +4296,28 @@ class InfoBarCueSheetSupport:
 					Notifications.AddNotificationWithCallback(self.playLastCB, MessageBox, _("Do you want to resume playback?") + "\n" + (_("Resume position at %s") % ("%d:%02d:%02d" % (x / 3600, x % 3600 / 60, x % 60))), timeout=30, default="yes" in config.usage.on_movie_start.value)
 				elif config.usage.on_movie_start.value == "resume":
 					Notifications.AddNotificationWithCallback(self.playLastCB, MessageBox, _("Resuming playback"), timeout=2, type=MessageBox.TYPE_INFO)
+
+	def __gotRecordEvent(self, record, event):
+		if record.getPtrString() != self.__recording.getPtrString():
+			return
+		if event in self.__endEvents:
+			if self.__gotRecordEvent in NavigationInstance.instance.record_event:
+				NavigationInstance.instance.record_event.remove(self.__gotRecordEvent)
+
+			# When the recording ends, the mapping of
+			# cut points from time to file offset changes
+			# slightly. Upload the recording cut marks to
+			# catch these changes.
+
+			self.updateFromRecCuesheet()
+
+			self.__recording = None
+		elif event == iRecordableService.evNewEventInfo:
+			self.updateFromRecCuesheet()
+
+	def __serviceStarted(self):
+		self.resumeTimer.stop()
+		self.resumeTimer.start(config.av.passthrought_fix_long.value + 1000, True)
 
 	def __findRecording(self):
 		if isMoviePlayerInfoBar(self):
