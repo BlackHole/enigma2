@@ -341,7 +341,7 @@ iAVSwitch = AVSwitch()
 
 
 def InitAVSwitch():
-	delay_choices = [(i, ngettext("%d milisecond", "%d miliseconds", i) % i) for i in list(range(0, 3000, 100))]  # noqa: F821
+	delay_choices = [(i, ngettext("%d ms", "%d ms", i) % i) for i in list(range(0, 3000, 100))]  # noqa: F821
 	config.av.passthrough_fix_long = ConfigSelection(choices=delay_choices, default=300)
 	config.av.passthrough_fix_short = ConfigSelection(choices=delay_choices, default=100)
 	config.av.yuvenabled = ConfigBoolean(default=True)
@@ -358,7 +358,7 @@ def InitAVSwitch():
 		"4_3_letterbox": _("4:3 Letterbox"),
 		"4_3_panscan": _("4:3 PanScan"),
 		"16_9": _("16:9"),
-		"16_9_always": _("16:9 always"),
+		"16_9_always": _("16:9 Always"),
 		"16_10_letterbox": _("16:10 Letterbox"),
 		"16_10_panscan": _("16:10 PanScan"),
 		"16_9_letterbox": _("16:9 Letterbox")
@@ -371,8 +371,8 @@ def InitAVSwitch():
 	}, default="16:9")
 	policy2_choices = {
 		"letterbox": _("Letterbox"),					# TRANSLATORS: (aspect ratio policy: black bars on top/bottom) in doubt, keep english term.
-		"panscan": _("Pan&scan"),					# TRANSLATORS: (aspect ratio policy: cropped content on left/right) in doubt, keep english term
-		"scale": _("Just scale")					# TRANSLATORS: (aspect ratio policy: display as fullscreen, even if this breaks the aspect)
+		"panscan": _("Pan&Scan"),					# TRANSLATORS: (aspect ratio policy: cropped content on left/right) in doubt, keep english term
+		"scale": _("Just Scale")					# TRANSLATORS: (aspect ratio policy: display as fullscreen, even if this breaks the aspect)
 	}
 	if path.exists("/proc/stb/video/policy2_choices"):
 		f = open("/proc/stb/video/policy2_choices")
@@ -382,7 +382,7 @@ def InitAVSwitch():
 	config.av.policy_169 = ConfigSelection(choices=policy2_choices, default="letterbox")
 	policy_choices = {
 		"panscan": _("Pillarbox"),					# TRANSLATORS: (aspect ratio policy: black bars on left/right) in doubt, keep english term.
-		"letterbox": _("Pan&scan"),					# TRANSLATORS: (aspect ratio policy: cropped content on left/right) in doubt, keep english term
+		"letterbox": _("Pan&Scan"),					# TRANSLATORS: (aspect ratio policy: cropped content on left/right) in doubt, keep english term
 		# "nonlinear": _("Nonlinear"),					# TRANSLATORS: (aspect ratio policy: display as fullscreen, with stretching the left/right)
 		"bestfit": _("Just scale")					# TRANSLATORS: (aspect ratio policy: display as fullscreen, even if this breaks the aspect)
 	}
