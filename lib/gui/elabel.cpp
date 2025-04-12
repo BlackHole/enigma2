@@ -110,7 +110,7 @@ int eLabel::event(int event, void *data, void *data2)
 			if (!m_nowrap)
 				flags |= gPainter::RT_WRAP;
 
-			if (m_blend)
+			if (isGradientSet() || m_blend)
 				flags |= gPainter::RT_BLEND;
 
 				/* if we don't have shadow, m_shadow_offset will be 0,0 */
@@ -251,7 +251,7 @@ eSize eLabel::calculateSize()
 
 eSize eLabel::calculateTextSize(gFont* font, const std::string &string, eSize targetSize, bool nowrap)
 {
-	// Calculate text size for a piece of text without creating an eLabel instance 
+	// Calculate text size for a piece of text without creating an eLabel instance
 	// this avoids the side effect of "invalidate" being called on the parent container
 	// during the setup of the font and text on the eLabel
 	eTextPara para(eRect(0, 0, targetSize.width(), targetSize.height()));

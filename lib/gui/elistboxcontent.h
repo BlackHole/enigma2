@@ -21,7 +21,7 @@ public:
 	void invalidate();
 	eSize getItemSize() { return m_itemsize; }
 	int getMaxItemTextWidth();
-	void setSeparatorLineColor(const gRGB &col) { 
+	void setSeparatorLineColor(const gRGB &col) {
 		m_sepline_color = col;
 		m_sepline_color_set = 1;
 	}
@@ -74,7 +74,7 @@ public:
 	void setSeperation(int sep) { m_seperation = sep; }
 	int currentCursorSelectable();
 	void setSlider(int height, int space) { m_slider_height = height; m_slider_space = space; }
-	void setSeparatorLineColor(const gRGB &col) { 
+	void setSeparatorLineColor(const gRGB &col) {
 		m_sepline_color = col;
 		m_sepline_color_set = 1;
 	}
@@ -93,7 +93,7 @@ class eListboxPythonMultiContent: public eListboxPythonStringContent
 public:
 	eListboxPythonMultiContent();
 	~eListboxPythonMultiContent();
-	enum { TYPE_TEXT, TYPE_PROGRESS, TYPE_PIXMAP, TYPE_PIXMAP_ALPHATEST, TYPE_PIXMAP_ALPHABLEND, TYPE_PROGRESS_PIXMAP };
+	enum { TYPE_TEXT, TYPE_PROGRESS, TYPE_PIXMAP, TYPE_PIXMAP_ALPHATEST, TYPE_PIXMAP_ALPHABLEND, TYPE_PROGRESS_PIXMAP, TYPE_LINEAR_GRADIENT, TYPE_LINEAR_GRADIENT_ALPHABLEND };
 	void paint(gPainter &painter, eWindowStyle &style, const ePoint &offset, int selected);
 	int currentCursorSelectable();
 	void setList(SWIG_PYOBJECT(ePyObject) list);
@@ -137,6 +137,10 @@ private:
 #define BT_VALIGN_CENTER 64
 #define BT_VALIGN_BOTTOM 128
 #define BT_ALIGN_CENTER BT_HALIGN_CENTER | BT_VALIGN_CENTER
+
+#define GRADIENT_OFF 0
+#define GRADIENT_VERTICAL 1
+#define GRADIENT_HORIZONTAL 2
 
 #define RADIUS_TOP_LEFT 1
 #define RADIUS_TOP_RIGHT 2
