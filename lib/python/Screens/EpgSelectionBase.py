@@ -283,8 +283,6 @@ class EPGSelectionBase(Screen, HelpableScreen):
 			self.session.open(MessageBox, self.noAutotimer, type=MessageBox.TYPE_INFO, timeout=10)
 
 	def setupKeyPlayButtonDisplay(self, stime, service):
-		if "key_play" not in self:
-			return
 		if self["list"].detectCatchupAvailable(stime, service) and callable(self.catchupPlayerFunc):
 			self["key_play"].setText(_("PLAY"))
 		else:
@@ -450,7 +448,8 @@ class EPGSelectionBase(Screen, HelpableScreen):
 		timer = self.session.nav.RecordTimer.getTimerForEvent(service, event)
 		self.setActionButtonText("addEditTimer", _("Change Timer") if timer is not None else _("Add Timer"))
 		self.setActionButtonText("addEditAutoTimer", _("Edit AutoTimer") if timer is not None and timer.autoTimerId else _("Add AutoTimer"))
-		self.setupKeyPlayButtonDisplay(event.getBeginTime(), service)
+		if "key_play" in self:  # protect against plugins that inherit this class but do not instanciate it
+			self.setupKeyPlayButtonDisplay(event.getBeginTime(), service)
 
 	def closeEventViewDialog(self):
 		if self.eventviewDialog:
