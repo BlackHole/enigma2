@@ -28,7 +28,6 @@ from Screens.TaskView import JobView
 from Screens.TextBox import TextBox
 from Tools.Directories import fileExists, pathExists, fileHas
 import Tools.CopyFiles
-from Tools.HardwareInfo import HardwareInfo
 from Tools.Multiboot import GetImagelist
 from Tools.Notifications import AddPopupWithCallback
 
@@ -55,6 +54,15 @@ def __onPartitionChange(*args, **kwargs):
 	global choices
 	choices = getMountChoices()
 	config.imagemanager.backuplocation.setChoices(choices=choices, default=getMountDefault(choices))
+
+
+def PLiDevice():
+	try:
+		with open("/proc/stb/info/model", "r") as fd:
+			device_name = fd.readline().strip()
+		return device_name
+	except:
+		return "Unknown"
 
 
 defaultprefix = SystemInfo["distro"]
@@ -426,7 +434,7 @@ class OpenBhImageManager(Screen):
 			return model in filename or "-" + device_name + "-" in filename
 
 		model = SystemInfo["machinebuild"]
-		device_name = HardwareInfo().get_device_name()
+		device_name = PLiDevice()
 		imagesFound = []
 		if config.imagemanager.extensive_location_search.value:
 			mediaList = ['/media/%s' % x for x in listdir('/media')] + (['/media/net/%s' % x for x in listdir('/media/net')] if path.isdir('/media/net') else []) + (['/media/autofs/%s' % x for x in listdir('/media/autofs')] if path.isdir('/media/autofs') else [])
@@ -1619,7 +1627,7 @@ class ImageManagerDownload(Screen):
 				return
 		boxtype = SystemInfo["machinebuild"]
 		if self.imagefeed[ACTION] == "HardwareInfo":
-			boxtype = HardwareInfo().get_device_name()
+			boxtype = PLiDevice()
 			print("[ImageManager1] boxtype:%s" % (boxtype))
 			if "dm800" in boxtype:
 				boxtype = SystemInfo["machinebuild"]
