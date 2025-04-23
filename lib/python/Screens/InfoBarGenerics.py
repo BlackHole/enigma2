@@ -4026,7 +4026,7 @@ class InfoBarResolutionSelection:
 					video = "%sHz" % videoMode
 				resList.append((video, videoMode))
 		videoMode = fileReadLine("/proc/stb/video/videomode", "Unknown")
-		keys = ["green", "yellow", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+		keys = ["red", "green"]
 		selection = 0
 		for item in range(len(resList)):
 			if resList[item][1] == videoMode:
