@@ -992,7 +992,7 @@ class VirtualKeyBoard(Screen, HelpableScreen):
 					if highlight is None:
 						xHighlight += self.width * width
 					else:
-						res.append(MultiContentEntryText(pos=(xHighlight+self.cell_border_width, self.cell_border_width), size=((self.width * width) - (self.cell_border_width * 2), self.height - (self.cell_border_width * 2)), font=1, text=" ", color=self.cell_ok_color, border_width=self.cell_border_highlight_width, border_color=highlight))
+						res.append(MultiContentEntryText(pos=(xHighlight + self.cell_border_width, self.cell_border_width), size=((self.width * width) - (self.cell_border_width * 2), self.height - (self.cell_border_width * 2)), font=1, text=" ", color=self.cell_ok_color, border_width=self.cell_border_highlight_width, border_color=highlight))
 						xHighlight += self.width * width
 				if self.alignment[0] == 1:  # Determine the cell alignment.
 					alignH = RT_HALIGN_LEFT
@@ -1062,7 +1062,7 @@ class VirtualKeyBoard(Screen, HelpableScreen):
 			w = self.sel_r.size().width()
 			self.list[self.selectedKey // self.keyboardWidth].append(MultiContentEntryPixmapAlphaBlend(pos=(x, 0), size=(w, self.height), png=self.sel_r))
 		else:
-			self.list[self.selectedKey // self.keyboardWidth].append(MultiContentEntryText(pos=(x+self.cell_border_width, self.cell_border_width), size=((self.width * width) - (self.cell_border_width * 2), self.height - (self.cell_border_width * 2)), font=1, text=" ", color=self.cell_ok_color, border_width=self.cell_border_highlight_width, border_color=self.cell_select_color))
+			self.list[self.selectedKey // self.keyboardWidth].append(MultiContentEntryText(pos=(x + self.cell_border_width, self.cell_border_width), size=((self.width * width) - (self.cell_border_width * 2), self.height - (self.cell_border_width * 2)), font=1, text=" ", color=self.cell_ok_color, border_width=self.cell_border_highlight_width, border_color=self.cell_select_color))
 		self.previousSelectedKey = self.selectedKey
 		self["list"].setList(self.list)
 
