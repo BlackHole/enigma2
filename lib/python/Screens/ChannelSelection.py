@@ -904,15 +904,21 @@ class ChannelSelectionEPG(InfoBarButtonSetup, HelpableScreen):
 		self["ChannelSelectBaseActions"].setEnabled(False)
 		self["helpActions"].setEnabled(False)
 		self['dialogactions'].setEnabled(True)
-		for action in ("okActions", "cancelActions", "colorActions", "selectionActions", "navigationActions"):
-			self.ChoiceBoxDialog[action].execBegin()
+		if isinstance(self.ChoiceBoxDialog, ChoiceBox):
+			for action in ("okActions", "cancelActions", "colorActions", "selectionActions", "navigationActions"):
+				self.ChoiceBoxDialog[action].execBegin()
+		else:  # MessageBox
+			self.ChoiceBoxDialog["actions"].execBegin()
 		self.ChoiceBoxDialog.show()
 
 	def closeChoiceBoxDialog(self):
 		self['dialogactions'].setEnabled(False)
 		if self.ChoiceBoxDialog:
-			for action in ("okActions", "cancelActions", "colorActions", "selectionActions", "navigationActions"):
-				self.ChoiceBoxDialog[action].execEnd()
+			if isinstance(self.ChoiceBoxDialog, ChoiceBox):
+				for action in ("okActions", "cancelActions", "colorActions", "selectionActions", "navigationActions"):
+					self.ChoiceBoxDialog[action].execEnd()
+			else:  # MessageBox
+				self.ChoiceBoxDialog["actions"].execEnd()
 			self.session.deleteDialog(self.ChoiceBoxDialog)
 		self['actions'].setEnabled(True)
 		self['recordingactions'].setEnabled(True)

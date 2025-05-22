@@ -310,23 +310,17 @@ class Devices(AboutBase):
 		nims = nimmanager.nimList()
 		if len(nims) > 4:
 			desc_list = []
-			cur_idx = -1
 			for nim in nims:
 				data = nim.split(":")
 				idx = data[0].strip(_("Tuner")).strip()
 				desc = data[1].strip()
-				if desc_list and desc_list[cur_idx]["desc"] == desc:
-					desc_list[cur_idx]["end"] = idx
+				if desc_list and desc_list[-1]["desc"] == desc:
+					desc_list[-1]["end"] = idx
 				else:
 					desc_list.append({"desc": desc, "start": idx, "end": idx})
-					cur_idx += 1
-
 			nims = []
-			for count in range(len(desc_list)):
-				if desc_list[count]["start"] == desc_list[count]["end"]:
-					nims.append("%s %s: %s" % (_("Tuner"), desc_list[count]["start"], desc_list[count]["desc"]))
-				else:
-					nims.append("%s %s-%s: %s" % (_("Tuner"), desc_list[count]["start"], desc_list[count]["end"], desc_list[count]["desc"]))
+			for nim in desc_list:
+				nims.append(f'%s {nim["start"]}{"-%s" % nim["end"] if nim["start"] != nim["end"] else ""}: {nim["desc"]}' % _("Tuner"))
 
 		hddlist = harddiskmanager.HDDList()
 		devicelist = []
@@ -335,7 +329,7 @@ class Devices(AboutBase):
 		if hddlist:
 			print("[About] hddlist = %s" % (hddlist))
 			for i in range(len(hddlist)):
-				hdd = hddlist[i][0]
+				hdd = hddlist[i][0].replace("/dev/mmcblk0", "/dev/mmcblk0p3")  # dm9x0:mmcblk0p3 multiboot root & storage
 				hddsplit = hdd.split("/", 1)  # hddsplit[0]:description hddsplit[1]:device and space
 				hddDescription = hddsplit[0]  # device description
 				if "ATA" in hddDescription:
