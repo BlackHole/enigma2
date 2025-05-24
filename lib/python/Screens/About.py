@@ -1,5 +1,6 @@
 from os import listdir, path as ospath, popen, statvfs
 from re import search
+from requests import get
 from sys import version_info
 from enigma import eTimer, getDesktop, getEnigmaLastCommitDate, getEnigmaLastCommitHash
 from skin import parameters
@@ -459,6 +460,8 @@ class SystemNetworkInfo(AboutBase):
 			self.resetList()
 			self.onClose.append(self.cleanup)
 		self.onLayoutFinish.append(self.updateStatusbar)
+		self.timer = eTimer()
+		self.timer.callback.append(self.getWanIP)
 
 	def createscreen(self):
 		self.AboutText = ""
@@ -622,6 +625,16 @@ class SystemNetworkInfo(AboutBase):
 			iNetwork.getLinkState(self.iface, self.dataAvail)
 			self["devicepic"].setPixmapNum(0)
 		self["devicepic"].show()
+		self.timer.start(10, 1)
+
+	def getWanIP(self):
+		try:
+			r = get("http://ipecho.net/plain", timeout=1)
+			r.raise_for_status()
+			self.AboutText += _("Wan IP:") + "\t" + r.content.decode() + "\n"
+			self["AboutScrollLabel"].setText(self.AboutText)
+		except Exception as err:
+			print("[SystemNetworkInfo][getWanIP] error fetching Wan IP:\n", err, "\n")
 
 	def dataAvail(self, data):
 		self.LinkState = None
