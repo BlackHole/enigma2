@@ -602,6 +602,7 @@ class OpenBhImageManager(Screen):
 
 		CMD = "/usr/bin/ofgwrite -r -k '%s'" % MAINDEST							# normal non multiboot receiver
 		if SystemInfo["canMultiBoot"]:
+			rootsubdir = None if not SystemInfo["HasRootSubdir"] else SystemInfo["canMultiBoot"][self.multibootslot]["rootsubdir"]
 			if self.multibootslot == 0 and SystemInfo["HasKexecMultiboot"]:		# reset Vu Multiboot slot0
 				kz0 = SystemInfo["mtdkernel"]
 				rz0 = SystemInfo["mtdrootfs"]
