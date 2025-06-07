@@ -425,7 +425,6 @@ class SystemMemoryInfo(AboutBase):
 	def __init__(self, session):
 		AboutBase.__init__(self, session, labels=True)
 		self.setTitle(_("Memory"))
-		self.skinName = ["SystemMemoryInfo", "AboutOE"]
 		out_lines = open("/proc/meminfo").readlines()  # output is in kiB so multiply by 1024
 		self.AboutText = self.addColor(_("RAM")) + "\n"
 		for lidx in range(len(out_lines) - 1):
