@@ -7,7 +7,7 @@ from Components.ChoiceList import ChoiceEntryComponent, ChoiceList
 from Components.Console import Console
 from Components.Harddisk import Harddisk
 from Components.Sources.StaticText import StaticText
-from Components.SystemInfo import SystemInfo
+from Components.SystemInfo import SystemInfo, getBoxDisplayName, BOXTYPE, KERNEL, MTDROOTFS
 from Screens.HelpMenu import HelpableScreen
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen, ScreenSummary
@@ -182,7 +182,7 @@ class MultiBootSelector(Screen, HelpableScreen):
 		if answer is False:
 			self.close()
 		else:
-			boxmodel = SystemInfo["boxtype"][2:]
+			boxmodel = BOXTYPE[2:]
 			for usbslot in range(hiKey + 1, hiKey + 5):
 				STARTUP_usbslot = "kernel=%s/linuxrootfs%d/zImage root=%s rootsubdir=%s/linuxrootfs%d" % (boxmodel, usbslot, SystemInfo["VuUUIDSlot"][0], boxmodel, usbslot)  # /STARTUP_<n>
 				if boxmodel in ("duo4k"):
@@ -196,7 +196,7 @@ class MultiBootSelector(Screen, HelpableScreen):
 
 	def KexecMountRet(self, result=None, retval=None, extra_args=None):
 		self.device_uuid = "UUID=" + result.split("UUID=")[1].split(" ")[0].replace('"', '')
-		boxmodel = SystemInfo["boxtype"][2:]
+		boxmodel = BOXTYPE[2:]
 		# using UUID	 kernel=/linuxrootfs1/boot/zImage root=UUID="12c2025e-2969-4bd1-9e0c-da08b97d40ce" rootsubdir=linuxrootfs1
 		# using dev = "kernel=/linuxrootfs4/zImage root=/dev/%s rootsubdir=linuxrootfs4" % hdd[0] 	# /STARTUP_4
 

@@ -3,7 +3,7 @@ from os import path
 from enigma import eAVSwitch, eDVBVolumecontrol, getDesktop
 
 from Components.config import ConfigBoolean, ConfigEnableDisable, ConfigNothing, ConfigSelection, ConfigSelectionNumber, ConfigSlider, ConfigSubDict, ConfigSubsection, ConfigYesNo, NoSave, config
-from Components.SystemInfo import SystemInfo
+from Components.SystemInfo import SystemInfo, BOXTYPE, MODEL
 from Tools.CList import CList
 from Tools.Directories import isPluginInstalled
 
@@ -509,7 +509,7 @@ def InitAVSwitch():
 					("10bit", _("10bit")),
 					("12bit", _("12bit"))]
 		default = "auto"
-		if SystemInfo["boxtype"] == "gbquad4kpro" and config.av.videomode[config.av.videoport.value].value == "2160p":
+		if BOXTYPE == "gbquad4kpro" and config.av.videomode[config.av.videoport.value].value == "2160p":
 			choices = [("10bit", "10bit"), ("12bit", "12bit")]
 			default = "10bit"
 		elif SystemInfo["havehdmicolordepthchoices"] and SystemInfo["CanProc"]:

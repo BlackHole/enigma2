@@ -7,7 +7,7 @@ from Components.Sources.List import List
 from Components.config import config, ConfigYesNo, getConfigListEntry, ConfigSelection
 from Components.ConfigList import ConfigListScreen
 from Components.ActionMap import HelpableActionMap
-from Components.SystemInfo import SystemInfo
+from Components.SystemInfo import BOXTYPE, DISPLAYBRAND, MACHINENAME
 from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
 from Tools.LoadPixmap import LoadPixmap
 
@@ -128,7 +128,7 @@ class InputDeviceSetup(ConfigListScreen, Screen):
 		self["introduction"] = StaticText()
 
 		# for generating strings into .po only
-		devicenames = [_("%s %s front panel") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"]), _("%s %s remote control (native)") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"]), _("%s %s advanced remote control (native)") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"]), _("%s %s ir keyboard") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"]), _("%s %s ir mouse") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"])]  # noqa: F841
+		devicenames = [_("%s %s front panel") % (DISPLAYBRAND, MACHINENAME), _("%s %s remote control (native)") % (DISPLAYBRAND, MACHINENAME), _("%s %s advanced remote control (native)") % (DISPLAYBRAND, MACHINENAME), _("%s %s ir keyboard") % (DISPLAYBRAND, MACHINENAME), _("%s %s ir mouse") % (DISPLAYBRAND, MACHINENAME)]  # noqa: F841
 
 		self.createSetup()
 		self.onLayoutFinish.append(self.layoutFinished)
@@ -217,7 +217,7 @@ class InputDeviceSetup(ConfigListScreen, Screen):
 
 class RemoteControlType(ConfigListScreen, Screen):
 	odinRemote = "OdinM9"
-	if SystemInfo["boxtype"] == "maram9":
+	if BOXTYPE == "maram9":
 		odinRemote = "MaraM9"
 
 	rcList = [
@@ -310,7 +310,7 @@ class RemoteControlType(ConfigListScreen, Screen):
 		self.getDefaultRcType()
 
 	def getDefaultRcType(self):
-		boxtype = SystemInfo["model"]
+		boxtype = BOXTYPE
 		procBoxtype = iRcTypeControl.getBoxType()
 		print("[InputDevice] procBoxtype = %s, self.boxType = %s" % (procBoxtype, boxtype))
 		for x in self.defaultRcList:

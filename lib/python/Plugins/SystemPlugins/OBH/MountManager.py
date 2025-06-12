@@ -11,7 +11,8 @@ from Components.ConfigList import ConfigListScreen
 from Components.config import getConfigListEntry, ConfigSelection, NoSave
 from Components.Console import Console
 from Components.Sources.List import List
-from Components.SystemInfo import SystemInfo
+from Components.SystemInfo import SystemInfo, DISPLAYBRAND, MACHINENAME, MODEL
+
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.Standby import QUIT_REBOOT, TryQuitMainloop
@@ -54,9 +55,8 @@ def getProcPartitions(partitionList):
 			devMajor = int(devmajor)
 			if devMajor in blacklistedDisks:  # Ignore all blacklisted devices.
 				continue
-			if devMajor == 179:
-				if not SystemInfo["HasSDnomount"]:  # Only interested in h9/i55/h9combo(+dups) mmc partitions.  h9combo(+dups) uses mmcblk1p[0-3].
-					continue
+			if device != "mmcblk0p3":
+				continue
 				if SystemInfo["HasH9SD"]:
 					if not re.search("mmcblk0p1", device):  # h9/i55 only mmcblk0p1 mmc partition
 						continue
@@ -388,7 +388,7 @@ class DeviceMountSetup(ConfigListScreen, Screen):
 		self.setconfTimer()
 
 	def setconfTimer(self, result=None, retval=None, extra_args=None):
-		scanning = _("Please wait while scanning your %s %s devices...") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"])
+		scanning = _("Please wait while scanning your %s %s devices...") % (DISPLAYBRAND, MACHINENAME)
 		self["lab1"].setText(scanning)
 		self.activityTimer.start(10)
 
@@ -414,9 +414,9 @@ class DeviceMountSetup(ConfigListScreen, Screen):
 		ybox.setTitle(_("Please wait."))
 
 	def delay(self, val):
-		message = _("The changes need a system restart to take effect.\nRestart your %s %s now?") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"])
+		message = _("The changes need a system restart to take effect.\nRestart your %s %s now?") % (DISPLAYBRAND, MACHINENAME)
 		ybox = self.session.openWithCallback(self.restartBox, MessageBox, message, MessageBox.TYPE_YESNO)
-		ybox.setTitle(_("Restart %s %s.") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"]))
+		ybox.setTitle(_("Restart %s %s.") % (DISPLAYBRAND, MACHINENAME))
 
 	def addconfFstab(self, result=None, retval=None, extra_args=None):
 		# print("[MountManager] RESULT:", result)

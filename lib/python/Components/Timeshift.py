@@ -37,7 +37,7 @@ from enigma import eBackgroundFileEraser, eTimer, eServiceCenter, iServiceInform
 from Components.ActionMap import ActionMap, HelpableActionMap
 from Components.config import config
 from Components.ServiceEventTracker import ServiceEventTracker
-from Components.SystemInfo import SystemInfo
+from Components.SystemInfo import SystemInfo, MODEL
 from Components.Task import job_manager as JobManager
 from RecordTimer import RecordTimerEntry, parseEvent
 from Screens.ChoiceBox import ChoiceBox
@@ -550,7 +550,7 @@ class InfoBarTimeshift:
 		self.stopTimeshiftcheckTimeshiftRunningCallback(True)
 		ts = self.getTimeshift()
 		if ts and not ts.startTimeshift():
-			if (SystemInfo["boxtype"] == "vuuno" or SystemInfo["boxtype"] == "vuduo") and ospath.exists("/proc/stb/lcd/symbol_timeshift"):
+			if (MODEL == "vuuno" or MODEL == "vuduo") and ospath.exists("/proc/stb/lcd/symbol_timeshift"):
 				if self.session.nav.RecordTimer.isRecording():
 					f = open("/proc/stb/lcd/symbol_timeshift", "w")
 					f.write("0")

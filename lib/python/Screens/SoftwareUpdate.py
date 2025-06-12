@@ -9,7 +9,7 @@ from Components.Label import Label
 from Components.ScrollLabel import ScrollLabel  # noqa: F401
 from Components.Sources.StaticText import StaticText
 from Components.Slider import Slider
-from Components.SystemInfo import SystemInfo
+from Components.SystemInfo import SystemInfo, DISPLAYBRAND, MACHINENAME
 import Components.Task
 from Screens.ChoiceBox import ChoiceBox
 from Screens.GitCommitInfo import CommitInfo, gitcommitinfo
@@ -274,9 +274,9 @@ class UpdatePlugin(Screen, ProtectedScreen):
 					self.total_packages = len(self.ipkg.getFetchedList())
 					packagesMsg = "\n(" + (ngettext("%s updated package available", "%s updated packages available", self.total_packages) % self.total_packages) + ")"
 					if SystemInfo["imagetype"] != 'release' or (config.softwareupdate.updateisunstable.value == 1 and config.softwareupdate.updatebeta.value):
-						message = _("The current update may be unstable.") + "\n" + _("Are you sure you want to update your %s %s?") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"]) + packagesMsg
+						message = _("The current update may be unstable.") + "\n" + _("Are you sure you want to update your %s %s?") % (DISPLAYBRAND, MACHINENAME) + packagesMsg
 					elif config.softwareupdate.updateisunstable.value == 0:
-						message = _("Do you want to update your %s %s?") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"]) + packagesMsg
+						message = _("Do you want to update your %s %s?") % (DISPLAYBRAND, MACHINENAME) + packagesMsg
 				if self.total_packages:
 					if self.total_packages > 150:
 						message += " " + _("Reflash recommended!")
@@ -329,14 +329,14 @@ class UpdatePlugin(Screen, ProtectedScreen):
 			else:
 				self.activityTimer.stop()
 				self.activityslider.setValue(0)
-				error = _("Your %s %s might be unusable now. Please consult the manual for further assistance before rebooting your %s %s.") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"], SystemInfo["MachineBrand"], SystemInfo["MachineName"])
+				error = _("Your receiver might be unusable now. Please consult the manual for further assistance before rebooting your %s %s.") % (DISPLAYBRAND, MACHINENAME)
 				if self.packages == 0:
 					if self.error != 0:
 						error = _("Problem retrieving update list.\nIf this issue persists please check/report on forum")
 					else:
 						error = _("A background update check is in progress,\nplease wait a few minutes and try again.")
 				if self.updating:
-					error = _("Update failed. Your %s %s does not have a working internet connection.") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"])
+					error = _("Update failed. Your %s %s does not have a working internet connection.") % (DISPLAYBRAND, MACHINENAME)
 				self.status.setText(_("Error") + " - " + error)
 				self["actions"].setEnabled(True)
 		elif event == IpkgComponent.EVENT_LISTITEM:
@@ -361,9 +361,9 @@ class UpdatePlugin(Screen, ProtectedScreen):
 		if answer[1] == "menu":
 			packagesMsg = "\n(%s " % self.total_packages + _("Packages") + ")"
 			if config.softwareupdate.updateisunstable.value == 1:
-				message = _("The current update may be unstable.") + "\n" + _("Are you sure you want to update your %s %s?") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"]) + packagesMsg
+				message = _("The current update may be unstable.") + "\n" + _("Are you sure you want to update your %s %s?") % (DISPLAYBRAND, MACHINENAME) + packagesMsg
 			elif config.softwareupdate.updateisunstable.value == 0:
-				message = _("Do you want to update your %s %s?") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"]) + packagesMsg
+				message = _("Do you want to update your %s %s?") % (DISPLAYBRAND, MACHINENAME) + packagesMsg
 			choices = [(_("View the changes"), "changes"),
 				(_("Upgrade and reboot system"), "cold")]
 			if not self.SettingsBackupDone and not config.softwareupdate.autosettingsbackup.value and config.backupmanager.backuplocation.value:
@@ -446,7 +446,7 @@ class UpdatePlugin(Screen, ProtectedScreen):
 	def exit(self):
 		if not self.ipkg.isRunning():
 			if self.packages != 0 and self.error == 0 and self.channellist_only == 0:
-				self.session.openWithCallback(self.exitAnswer, MessageBox, _("Upgrade finished.") + " " + _("Do you want to reboot your %s %s") % (SystemInfo["MachineBrand"], SystemInfo["MachineName"]))
+				self.session.openWithCallback(self.exitAnswer, MessageBox, _("Upgrade finished.") + " " + _("Do you want to reboot your %s %s") % (DISPLAYBRAND, MACHINENAME))
 			else:
 				self.close()
 		else:
