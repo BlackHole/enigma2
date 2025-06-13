@@ -172,7 +172,7 @@ SystemInfo["HasMultibootFlags"] = False  # This needs to be here so it can be re
 SystemInfo["resetMBoot"] = False  # Kexec kernel issue-this needs to be here so it can be reset by getMultibootslots if required!
 SystemInfo["HasKexecUSB"] = False  # This needs to be here so it can be reset by getMultibootslots!
 SystemInfo["HasKexecMultiboot"] = fileHas("/proc/cmdline", "kexec=1")  # This needs to be here so it can be tested by getMultibootslots!
-from Tools.Multiboot import getMultibootslots, isFat32  # noqa: E402  This import needs to be here to avoid a SystemInfo load loop!
+from Tools.Multiboot import getMultibootslots  # noqa: E402  This import needs to be here to avoid a SystemInfo load loop!
 SystemInfo["HasHiSi"] = pathExists("/proc/hisi") and BOXTYPE not in ("viper4kv40", "sfx6008", "sfx6018")  # This needs to be for later checks
 SystemInfo["canMultiBoot"] = getMultibootslots()
 # SystemInfo["MBbootdevice"] = device set in Tools/Multiboot.py
