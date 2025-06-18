@@ -20,7 +20,6 @@ from Screens.Screen import Screen
 from Screens.TextBox import TextBox
 from Screens.Standby import TryQuitMainloop, QUIT_REBOOT, QUIT_UPGRADE_PROGRAM
 from Tools.BoundFunction import boundFunction
-from Tools.Directories import isPluginInstalled
 
 ocram = ''
 
@@ -280,7 +279,7 @@ class UpdatePlugin(Screen, ProtectedScreen):
 				if self.total_packages:
 					if self.total_packages > 150:
 						message += " " + _("Reflash recommended!")
-					if isPluginInstalled("OBH") and not config.softwareupdate.autosettingsbackup.value and config.backupmanager.backuplocation.value:
+					if not config.softwareupdate.autosettingsbackup.value and hasattr(config, "backupmanager") and config.backupmanager.backuplocation.value:
 						message += "\n" + _("Making a settings backup before updating is highly recommended.")
 					global ocram
 					ocram = ''
@@ -292,11 +291,10 @@ class UpdatePlugin(Screen, ProtectedScreen):
 					config.softwareupdate.updatefound.setValue(True)
 					choices = [(_("View the changes"), "changes"),
 						(_("Upgrade and reboot system"), "cold")]
-					if isPluginInstalled("OBH"):
-						if not config.softwareupdate.autosettingsbackup.value and config.backupmanager.backuplocation.value:
-							choices.append((_("Perform a settings backup"), "backup"))
-						if not config.softwareupdate.autoimagebackup.value and config.imagemanager.backuplocation.value:
-							choices.append((_("Perform a full image backup"), "imagebackup"))
+					if not config.softwareupdate.autosettingsbackup.value and hasattr(config, "backupmanager") and config.backupmanager.backuplocation.value:
+						choices.append((_("Perform a settings backup"), "backup"))
+					if not config.softwareupdate.autoimagebackup.value and hasattr(config, "imagemanager") and config.imagemanager.backuplocation.value:
+						choices.append((_("Perform a full image backup"), "imagebackup"))
 					choices.append((_("Update channel list only"), "channels"))
 					choices.append((_("Show packages to be updated"), "showlist"))
 					choices.append((_("Cancel"), ""))
@@ -366,10 +364,10 @@ class UpdatePlugin(Screen, ProtectedScreen):
 				message = _("Do you want to update your %s %s?") % (DISPLAYBRAND, MACHINENAME) + packagesMsg
 			choices = [(_("View the changes"), "changes"),
 				(_("Upgrade and reboot system"), "cold")]
-			if not self.SettingsBackupDone and not config.softwareupdate.autosettingsbackup.value and config.backupmanager.backuplocation.value:
+			if not self.SettingsBackupDone and not config.softwareupdate.autosettingsbackup.value and hasattr(config, "backupmanager") and config.backupmanager.backuplocation.value:
 				choices.append((_("Perform a settings backup"), "backup"))
 				message += "\n" + _("Making a settings backup before updating is highly recommended.")
-			if not self.ImageBackupDone and not config.softwareupdate.autoimagebackup.value and config.imagemanager.backuplocation.value:
+			if not self.ImageBackupDone and not config.softwareupdate.autoimagebackup.value and hasattr(config, "imagemanager") and config.imagemanager.backuplocation.value:
 				choices.append((_("Perform a full image backup"), "imagebackup"))
 			choices.append((_("Update channel list only"), "channels"))
 			choices.append((_("Show packages to be updated"), "showlist"))
@@ -391,7 +389,7 @@ class UpdatePlugin(Screen, ProtectedScreen):
 			self.slider.setValue(1)
 			self.ipkg.startCmd(IpkgComponent.CMD_LIST, args={'installed_only': True})
 		elif answer[1] == "cold":
-			if (config.softwareupdate.autosettingsbackup.value and config.backupmanager.backuplocation.value) or (config.softwareupdate.autoimagebackup.value and config.imagemanager.backuplocation.value):
+			if (config.softwareupdate.autosettingsbackup.value and hasattr(config, "backupmanager") and config.backupmanager.backuplocation.value) or (config.softwareupdate.autoimagebackup.value and hasattr(config, "imagemanager") and config.imagemanager.backuplocation.value):
 				self.doAutoBackup()
 			else:
 				self.session.open(TryQuitMainloop, retvalue=QUIT_UPGRADE_PROGRAM)
@@ -423,9 +421,9 @@ class UpdatePlugin(Screen, ProtectedScreen):
 
 	def doAutoBackup(self, val=False):
 		self.autobackuprunning = True
-		if config.softwareupdate.autosettingsbackup.value and config.backupmanager.backuplocation.value and not self.SettingsBackupDone:
+		if config.softwareupdate.autosettingsbackup.value and hasattr(config, "backupmanager") and config.backupmanager.backuplocation.value and not self.SettingsBackupDone:
 			self.doSettingsBackup()
-		elif config.softwareupdate.autoimagebackup.value and config.imagemanager.backuplocation.value and not self.ImageBackupDone:
+		elif config.softwareupdate.autoimagebackup.value and hasattr(config, "imagemanager") and config.imagemanager.backuplocation.value and not self.ImageBackupDone:
 			self.doImageBackup()
 		else:
 			self.session.open(TryQuitMainloop, retvalue=QUIT_UPGRADE_PROGRAM)

@@ -31,6 +31,7 @@ caid_data = (
 	("0x2700", "0x2710", "DRE-Crypt3", "DC", "DRE3", False),
 	("0x4ae0", "0x4ae1", "DRE-Crypt", "DC", "DRE", False),
 	("0x900", "0x9ff", "NDS Videoguard", "ND", "NDS", True),
+	("0x4aea", "0x4aea", "Cryptoguard", "CG", "CG", False),
 	("0x4afc", "0x4afc", "Panaccess", "PA", "PAN", False),
 	("0xe00", "0xeff", "PowerVu", "PV", "PV", True),
 	("0x4a02", "0x4a02", "Tongfang", "TF", "TONG", False),
@@ -251,6 +252,7 @@ class PliExtraInfo(Poll, Converter, object):
 			("CryptoCaidDre3Available", "DC", False),
 			("CryptoCaidDreAvailable", "DC", False),
 			("CryptoCaidNDSAvailable", "ND", False),
+			("CryptoCaidCryptoguardAvailable", "CG", False),
 			("CryptoCaidPanaccessAvailable", "PA", False),
 			("CryptoCaidPowerVuAvailable", "PV", False),
 			("CryptoCaidTongfangAvailable", "TF", False),
@@ -270,6 +272,7 @@ class PliExtraInfo(Poll, Converter, object):
 			("CryptoCaidDre3Selected", "DC", True),
 			("CryptoCaidDreSelected", "DC", True),
 			("CryptoCaidNDSSelected", "ND", True),
+			("CryptoCaidCryptoguardSelected", "CG", True),
 			("CryptoCaidPanaccessSelected", "PA", True),
 			("CryptoCaidPowerVuSelected", "PV", True),
 			("CryptoCaidTongfangSelected", "TF", True),
@@ -420,6 +423,22 @@ class PliExtraInfo(Poll, Converter, object):
 			except:
 				pass
 		res = color + 'CW'
+		res += Hex2strColor(self.cryptocolors[3])
+		return res
+
+	def createCryptoCryptoGuard(self, info):
+		available_caids = info.getInfoObject(iServiceInformation.sCAIDs)
+		if int('0x4aea', 16) <= int(self.current_caid, 16) <= int('0x4aea', 16):
+			color = Hex2strColor(self.cryptocolors[0])
+		else:
+			color = Hex2strColor(self.cryptocolors[1])
+			try:
+				for caid in available_caids:
+					if int('0x4aea', 16) <= caid <= int('0x4aea', 16):
+						color = Hex2strColor(self.cryptocolors[2])
+			except:
+				pass
+		res = color + 'CG'
 		res += Hex2strColor(self.cryptocolors[3])
 		return res
 
@@ -1088,6 +1107,13 @@ class PliExtraInfo(Poll, Converter, object):
 				if int(config.usage.show_cryptoinfo.value) > 0:
 					self.getCryptoInfo(info)
 					return self.createCryptoTandberg(info)
+				else:
+					return ""
+
+			if textType == "CryptoCryptoGuard":
+				if int(config.usage.show_cryptoinfo.value) > 0:
+					self.getCryptoInfo(info)
+					return self.CryptoCryptoGuard(info)
 				else:
 					return ""
 
