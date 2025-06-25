@@ -93,7 +93,7 @@ class Pager(GUIAddon):
 					textWidth = self._calcTextWidth(textBubble, font=self.font, size=eSize(self.getDesktopWith() // 3, 0))
 					res.append(MultiContentEntryText(
 						pos=(xPos, 0),
-						size =(textWidth + self.bubbletext_padding * 2, height),
+						size=(textWidth + self.bubbletext_padding * 2, height),
 						font=0, flags=RT_HALIGN_CENTER | RT_VALIGN_CENTER,
 						text=" ",
 						corner_radius=self.bubbletext_corner_radius,
