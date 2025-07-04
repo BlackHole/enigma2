@@ -509,7 +509,7 @@ class OpenBhImageManager(Screen):
 	def keyRestore1(self):
 		self.HasSDmmc = False
 		self.multibootslot = 1
-		elf.MTDKERNEL = MTDKERNEL
+		self.MTDKERNEL = MTDKERNEL
 		self.MTDROOTFS = MTDROOTFS
 		recordings = self.session.nav.getRecordings()
 		if not recordings:
