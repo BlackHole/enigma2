@@ -329,7 +329,6 @@ private:
 	bool m_paused;
 	bool m_clear_buffers;
 	bool m_initial_start;
-	bool m_send_ev_start;
 	bool m_seek_paused;
 	bool m_autoturnon;
 	/* cuesheet load check */
