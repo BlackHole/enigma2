@@ -101,7 +101,9 @@ ButtonSetupKeys = [(_("Red"), "red", "Infobar/activateRedButton"),
 	(_("WWW"), "www", ""),
 	(_("WWW long"), "www_long", ""),
 	(_("YouTube"), "youtube", ""),
-	(_("YouTube long"), "youtube_long", "")]
+	(_("YouTube long"), "youtube_long", ""),
+	(_("Archive"), "archive", ""),
+	(_("Archive long"), "archive_long", "")]
 
 config.misc.ButtonSetup = ConfigSubsection()
 config.misc.ButtonSetup.additional_keys = ConfigYesNo(default=True)
