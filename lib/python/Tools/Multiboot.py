@@ -6,13 +6,13 @@ import tempfile
 from os import path, rmdir, rename, sep, stat
 
 from Components.Console import Console
-from Components.SystemInfo import SystemInfo, BoxInfo as BoxInfoRunningInstance, BoxInformation, BOXTYPE, MODEL, MTDROOTFS
+from Components.SystemInfo import SystemInfo, BoxInfo as BoxInfoRunningInstance, BoxInformation, BOXTYPE, MODEL, MTDROOTFS, UBIMB
 from Tools.Directories import copyfile, fileExists, fileReadLine
 
 if SystemInfo["HasKexecMultiboot"]:
 	from PIL import Image, ImageDraw, ImageFont
 
-MbootList1 = ("/dev/mmcblk0p1", "/dev/mmcblk1p1", "/dev/mmcblk0p3", "/dev/mmcblk0p4", "/dev/mtdblock2", "/dev/block/by-name/bootoptions")
+MbootList1 = ("/dev/mmcblk0p1", "/dev/mmcblk1p1", "/dev/mmcblk0p3", "/dev/mmcblk0p4", "/dev/mtdblock2", "/dev/block/by-name/bootoptions", "/dev/block/by-name/others", "/dev/block/by-name/startup")
 
 
 class tmp:
@@ -33,6 +33,7 @@ def getMultibootslots():
 	for device in MbootList:
 		if len(bootslots) != 0:
 			break
+		print(f"[multiboot][getMultibootslots]device:{device}")
 		if path.exists(device):
 			Console(binary=True).ePopen(f"mount {device} {tmpname}")
 			if path.isfile(path.join(tmpname, "STARTUP")):  # Multiboot receiver
@@ -62,30 +63,35 @@ def getMultibootslots():
 							SystemInfo["RecoveryMode"] = True
 							slotnumber = "0"
 							SystemInfo["RecoveryMode"] = True if BOXTYPE != "gbquad4kpro" else False
+						if "STARTUP_FLASH" in file:
+							slotnumber = "0"
 						if slotnumber.isdigit() and slotnumber not in bootslots:
 							line = open(file).read().replace("'", "").replace('"', "").replace("\n", " ").replace("ubi.mtd", "mtd").replace("bootargs=", "")
 							slot = dict([(x.split("=", 1)[0].strip(), x.split("=", 1)[1].strip()) for x in line.strip().split(" ") if "=" in x])
+							print(f"[Multiboot][[getMultibootslots]3 slotnumber:{slotnumber} slot:{slot}")
 							if slotnumber == "0":
-								slot["slotType"] = ""
+								slot["slotType"] = "" if not UBIMB else "eMMC"
 								slot["startupfile"] = path.basename(file)
 							else:
 								slot["slotType"] = "eMMC" if "mmc" in slot["root"] else "USB"
+							print(f"[Multiboot][[getMultibootslots]4 slotnumber:{slotnumber} slotType:{slot["slotType"]}")
 							if SystemInfo["HasKexecMultiboot"] and int(slotnumber) > 3:
 								SystemInfo["HasKexecUSB"] = True
 							if "root" in slot.keys():
 								if "UUID=" in slot["root"]:
 									slotx = getUUIDtoSD(slot["root"])
-									UUID = slot["root"]
-									UUIDnum += 1
 									if slotx is not None:
 										slot["root"] = slotx
-									slot["kernel"] = f"/linuxrootfs{slotnumber}/zImage"
-								if path.exists(slot["root"]) or slot["root"] == "ubi0:ubifs":
+									if not UBIMB:
+										UUID = slot["root"]
+										UUIDnum += 1
+										slot["kernel"] = f"/linuxrootfs{slotnumber}/zImage"
+								if path.exists(slot["root"]) or slot["root"] in ("ubi0:ubifs", "ubi0:rootfs"):
 									slot["startupfile"] = path.basename(file)
 									slot["slotname"] = slotname
-									SystemInfo["HasMultibootMTD"] = slot.get("mtd")
-									SystemInfo["HasMultibootFlags"] = path.exists("/dev/block/by-name/flag")
-									if not SystemInfo["HasKexecMultiboot"] and "sda" in slot["root"]:		# Not Kexec Vu+ receiver -- sf8008 type receiver with sd card, reset value as SD card slot has no rootsubdir
+									SystemInfo["HasMultibootMTD"] = slot.get("mtd") and not UBIMB
+									SystemInfo["HasMultibootFlags"] = path.exists("/dev/block/by-name/flag") and not UBIMB
+									if not SystemInfo["HasKexecMultiboot"] and not UBIMB and "sda" in slot["root"]:		# Not Kexec Vu+ receiver -- sf8008 type receiver with sd card, reset value as SD card slot has no rootsubdir
 										slot["rootsubdir"] = None
 										slot["slotType"] = "SDCARD"
 									elif "STARTUP_RECOVERY" not in file:
@@ -156,7 +162,9 @@ def GetImagelist(Recovery=None):
 	from Components.config import config		# here to prevent boot loop
 	for slot in sorted(list(SystemInfo["canMultiBoot"].keys())):
 		if slot == 0:
-			if not Recovery:		# called by ImageManager
+			if UBIMB:
+				continue
+			elif not Recovery:		# called by ImageManager
 				continue
 			else:					# called by MultiBootSelector
 				Imagelist[slot] = {"imagename": _("Recovery Mode")}

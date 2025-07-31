@@ -177,6 +177,7 @@ SystemInfo["HasHiSi"] = pathExists("/proc/hisi") and BOXTYPE not in ("viper4kv40
 SystemInfo["canMultiBoot"] = getMultibootslots()
 # SystemInfo["MBbootdevice"] = device set in Tools/Multiboot.py
 # SystemInfo["MultiBootSlot"] = current slot set in Tools/Multiboot.py
+SystemInfo["MTDBLACK"] = ""  # HDD device set in Harddisk.py
 
 
 def getNumVideoDecoders():

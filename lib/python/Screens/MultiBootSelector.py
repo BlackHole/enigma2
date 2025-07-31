@@ -4,17 +4,24 @@ import struct
 
 from Components.ActionMap import HelpableActionMap
 from Components.ChoiceList import ChoiceEntryComponent, ChoiceList
+from Components.config import ConfigSelection
 from Components.Console import Console
-from Components.Harddisk import Harddisk
+from Components.Harddisk import Harddisk, harddiskmanager
+from Components.Label import Label
 from Components.Sources.StaticText import StaticText
-from Components.SystemInfo import SystemInfo, getBoxDisplayName, BOXTYPE, KERNEL, MTDROOTFS
+from Components.SystemInfo import SystemInfo, getBoxDisplayName, BOXTYPE, KERNEL, MACHINEBUILD, MTDKERNEL, MTDROOTFS, UBIMB
+from Screens.Console import Console as ConsoleScreen
 from Screens.HelpMenu import HelpableScreen
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen, ScreenSummary
 from Screens.Standby import QUIT_REBOOT, QUIT_RESTART, TryQuitMainloop
+from Screens.Setup import Setup
 from Tools.BoundFunction import boundFunction
-from Tools.Directories import copyfile
+from Tools.Directories import copyfile, fileReadLine, fileReadLines, fileWriteLine
 from Tools.Multiboot import emptySlot, GetImagelist, GetCurrentImageMode, restoreSlots
+
+ACTION_SELECT = 0
+ACTION_CREATE = 1
 
 
 class MultiBootSelector(Screen, HelpableScreen):
@@ -256,6 +263,180 @@ class MultiBootSelector(Screen, HelpableScreen):
 
 	def createSummary(self):
 		return MultiBootSelectorSummary
+
+
+	def UBIMBInit(self):
+		print(f"[MultiBootSelector][UBIMBInit]")
+		self.session.open(UBISlotManager)
+
+
+class UBISlotManager(Setup):
+	def __init__(self, session):
+		def getGreenHelpText():
+			return {
+				ACTION_SELECT: _("Select a device to create multiboot slots"),
+				ACTION_CREATE: _("Create slots for the selected device")
+			}.get(self.green, _("Help text uninitialized"))
+
+		self.UBISlotManagerLocation = ConfigSelection(default=None, choices=[(_("Select Green to start slot creation"), _("Select Green to action"))])
+		self.UBISlotManagerDevice = None
+		Setup.__init__(self, session=session, setup="UBISlotManager")
+		self.setTitle(_("Slot Manager"))
+		self["fullUIActions"] = HelpableActionMap(self, ["CancelSaveActions"], {
+			"cancel": (self.keyCancel, _("Cancel any changed settings and exit")),
+			"close": (self.closeRecursive, _("Cancel any changed settings and exit all menus"))
+		}, prio=0, description=_("Common Setup Actions"))  # Override the ConfigList "fullUIActions" action map so that we can control the GREEN button here.
+		self["actions"] = HelpableActionMap(self, ["ColorActions"], {
+			"green": (self.keyGreen, getGreenHelpText)
+		}, prio=-1, description=_("Slot Manager Actions"))
+		self.console = Console()
+		self.deviceData = {}
+		self.green = ACTION_SELECT
+
+	def layoutFinished(self):
+		Setup.layoutFinished(self)
+		self.readDevices()
+
+	def selectionChanged(self):
+		Setup.selectionChanged(self)
+		self.updateStatus()
+
+	def changedEntry(self):
+		Setup.changedEntry(self)
+		self.updateStatus()
+
+	def keySelect(self):
+		if self.getCurrentItem() == self.UBISlotManagerLocation:
+			self.showDeviceSelection()
+		else:
+			Setup.keySelect(self)
+
+	def keyGreen(self):
+		if self.UBISlotManagerDevice:
+			self.createSlots()
+		else:
+			self.showDeviceSelection()
+
+	def createSlots(self):
+		print("[UBISlotManager] createSlots DEBUG")
+		if not self.UBISlotManagerDevice:
+			self.showDeviceSelection()
+			return
+
+		TARGET = self.deviceData[self.UBISlotManagerDevice][0].split("/")[-1]
+		TARGET_DEVICE = f"/dev/{TARGET}"
+		PART_SUFFIX = "p" if "mmcblk" in TARGET else ""
+		PART = lambda n: f"{TARGET_DEVICE}{PART_SUFFIX}{n}"
+		MOUNTPOINT = "/tmp/boot"
+		print(f"[UBISlotManager] createSlots TARGET:{TARGET} TARGET_DEVICE:{TARGET_DEVICE} Mountpoint:{MOUNTPOINT}")
+		if exists(TARGET_DEVICE):
+			cmdlist = []
+			cmdlist.append(f"for n in {TARGET_DEVICE}* ; do umount -lf $n > /dev/null 2>&1 ; done")
+			cmdlist.append(f"/usr/sbin/sgdisk -z {TARGET_DEVICE}")
+			cmdlist.append(f"/bin/touch /dev/nomount.{TARGET} > /dev/null 2>&1")
+			cmdlist.append(f"/usr/sbin/parted --script {TARGET_DEVICE} mklabel gpt")
+			cmdlist.append(f"/usr/sbin/partprobe {TARGET_DEVICE}")
+			cmdlist.append(f"/usr/sbin/parted --script {TARGET_DEVICE} mkpart startup fat32 8192s 5MB")
+			cmdlist.append(f"/usr/sbin/parted --script {TARGET_DEVICE} mkpart rootfs ext4 5MB 100%")
+			cmdlist.append(f"/usr/sbin/partprobe {TARGET_DEVICE}")
+			cmdlist.append(f"/usr/sbin/mkfs.vfat -F 32 -n STARTUP {PART(1)}")
+			cmdlist.append(f"/sbin/mkfs.ext4 -F -L rootfs {PART(2)}")
+			# cmdlist.append(f"/sbin/mkfs.ext4 -O ^64bit,^extent,^flex_bg,^huge_file,^dir_nlink,^extra_isize,^metadata_csum -F -L rootfs {PART(2)}")
+			cmdlist.append(f"/bin/mkdir -p {MOUNTPOINT}")
+			cmdlist.append(f"/bin/umount {MOUNTPOINT} > /dev/null 2>&1")
+			cmdlist.append(f"/bin/mount {PART(1)} {MOUNTPOINT}")
+			self.session.openWithCallback(self.formatDeviceCallback, ConsoleScreen, title=self.getTitle(), cmdlist=cmdlist)
+
+	def formatDeviceCallback(self):
+		def closeStartUpCallback(answer):
+			if answer:
+				self.session.open(TryQuitMainloop, QUIT_REBOOT)
+		print("[UBISlotManager] formatDeviceCallback ")
+		MOUNTPOINT = "/tmp/boot"
+		mtdRootFs = MTDROOTFS
+		mtdKernel = MTDKERNEL
+		device = self.UBISlotManagerDevice
+		PART_SUFFIX = "p" if "mmcblk" in device else ""
+		uuidRootFS = fileReadLine(f"/dev/uuid/{device}{PART_SUFFIX}2", default=None)
+		diskSize = self.partitionSizeGB(f"/dev/{device}")
+
+		rootfsName = "rootfs"
+		startupContent = f"kernel=/dev/{mtdKernel} ubi.mtd=rootfs root=ubi0:{rootfsName} flash=1 rootfstype=ubifs\n"
+
+		with open(f"{MOUNTPOINT}/STARTUP", "w") as fd:
+			fd.write(startupContent)
+		with open(f"{MOUNTPOINT}/STARTUP_FLASH", "w") as fd:
+			fd.write(startupContent)
+		count = min(diskSize, 15)
+		for i in range(1, count + 1):
+			startupContent = f"kernel=/dev/{mtdKernel} root=UUID={uuidRootFS} rootsubdir=linuxrootfs{i} rootfstype=ext4\n"
+			with open(f"{MOUNTPOINT}/STARTUP_{i}", "w") as fd:
+				fd.write(startupContent)
+		Console().ePopen(["/bin/sync"])
+		Console().ePopen(["/bin/umount", "/bin/umount", f"{MOUNTPOINT}"])
+		self.session.openWithCallback(closeStartUpCallback, MessageBox, _("%d slots have been created on the device.\n") % count, type=MessageBox.TYPE_INFO, close_on_any_key=True, timeout=10)
+
+	def showDeviceSelection(self):
+		def readDevicesCallback():
+			choiceList = [(_("Cancel"), None)]
+			for device_id, (path, name) in self.deviceData.items():
+				choiceList.append(("%s (%s)" % (name, path), device_id))
+			self.session.openWithCallback(self.deviceSelectionCallback, MessageBox, text=_("Select device and then Slot Creation"), list=choiceList, title=self.getTitle())
+		self.readDevices(readDevicesCallback)
+
+	def deviceSelectionCallback(self, selection):
+		# print(f"[UBISlotManager] deviceSelectionCallback: entered selection:{selection}")
+		if not selection:
+			return
+
+		print(f"[UBISlotManager] deviceSelectionCallback: selected device ID = {selection}")
+		self.UBISlotManagerDevice = selection
+		path = self.deviceData[selection][0]
+		name = self.deviceData[selection][1]
+		locations = self.UBISlotManagerLocation.getChoices()
+		print(f"[UBISlotManager] deviceSelectionCallback1: locations:{locations} path:{path} name:{name}")
+		if (path, path) not in locations:
+			locations.append((path, path))
+			# print(f"[UBISlotManager] deviceSelectionCallback: locations:{locations}")
+			self.UBISlotManagerLocation.setChoices(default=None, choices=locations)
+			self.UBISlotManagerLocation.value = path
+		self.updateStatus("Selected device: %s" % self.deviceData[selection][1])
+
+	def partitionSizeGB(self, dev):
+		try:
+			base = dev.replace("/dev/", "")
+			path = f"/sys/class/block/{base}/size"
+			path = path if exists(path) else f"/sys/block/{base}/size"
+			with open(path) as fd:
+				blocks = int(fd.read().strip())
+				return (blocks * 512) // (1024 * 1024 * 1024)
+		except Exception as e:
+			return 0
+
+	def readDevices(self, callback=None):
+		def readDevicesCallback(output=None, retVal=None, extraArgs=None):
+			print("[UBISlotManager] readDevicesCallback DEBUG: retVal=%s, output='%s'." % (retVal, output))
+			self.deviceData = {}
+			for (name, hdd) in harddiskmanager.HDDList():
+				MTDBLACK = SystemInfo["MTDBLACK"]
+				MTDBLACK = "mmcblk0" if MTDBLACK.startswith("mmcblk0") else MTDBLACK
+				if MTDBLACK in (hdd.dev_path.replace("/dev/", "")) or hdd.dev_path.startswith("/dev/romblock"):
+					continue
+				deviceID = hdd.dev_path.split("/")[-1]
+				self.deviceData[deviceID] = (hdd.dev_path, name)
+				print("[UBISlotManager] readDevices: deviceID=%s, hdd.dev_path='%s' name = %s ." % (deviceID, hdd.dev_path, name))
+			self.updateStatus()
+			if callback and callable(callback):
+				callback()
+
+		self.console.ePopen(["/sbin/blkid", "/sbin/blkid"], callback=readDevicesCallback)
+
+	def updateStatus(self, footnote=None):
+		self.green = ACTION_CREATE if self.UBISlotManagerDevice else ACTION_SELECT
+		self["key_green"].setText({
+			ACTION_SELECT: _("Select Device"),
+			ACTION_CREATE: _("Create Slots")
+		}.get(self.green, _("Invalid")))
 
 
 class MultiBootSelectorSummary(ScreenSummary):

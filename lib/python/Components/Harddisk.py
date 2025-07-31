@@ -838,9 +838,11 @@ class HarddiskManager:
 						# print(f"[Harddisk][enumerateBlockDevices]  Partition(mountpoint={self.getMountpoint(device)}, description={description}, force_mounted=True, device={device}")
 						for partition in partitions:
 							description = self.getUserfriendlyDeviceName(partition, physicalDevice)
-							print(f"[Harddisk][enumerateBlockDevices] Found partition '{partition}', description='{description}', device='{physicalDevice}'.")
-							# part = Partition(mountpoint=self.getMountpoint(partition), description=description, force_mounted=True, device=partition)
-							part = Partition(mountpoint=self.getMountpoint(partition, skiproot=True), description=description, force_mounted=True, device=partition)
+							print(f"[Harddisk][enumerateBlockDevices]### Found partition '{partition}', description='{description}', device='{physicalDevice}' mountpoint={self.getMountpoint(partition)}.")
+							if self.getMountpoint(partition) == "/media/hdd/" and partition.startswith("sd") or partition.startswith("mmcblk0"):
+								SystemInfo["MTDBLACK"] = partition
+								print(f"[Harddisk][enumerateBlockDevices]### MTDBLACK:{SystemInfo['MTDBLACK']}")
+								part = Partition(mountpoint=self.getMountpoint(partition, skiproot=True), description=description, force_mounted=True, device=partition)
 							self.partitions.append(part)
 							# print(f"[Harddisk][enumerateBlockDevices]  Partition(mountpoint = {self.getMountpoint(partition)}, description = {description}, force_mounted = True, device = {partition})")
 							self.on_partition_list_change("add", part)
