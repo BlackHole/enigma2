@@ -136,15 +136,6 @@ def ImageManagerStart(menuid, **kwargs):
 	return []
 
 
-def H9SDmanager(session):
-	from .H9SDmanager import H9SDmanager
-	return H9SDmanager(session)
-
-
-def H9SDmanagerMenu(session, **kwargs):
-	session.open(H9SDmanager)
-
-
 def MountManager(session):
 	from .MountManager import OpenBhDevicesPanel
 	return OpenBhDevicesPanel(session)
