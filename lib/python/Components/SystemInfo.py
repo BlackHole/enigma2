@@ -101,6 +101,7 @@ DISPLAYTYPE = BoxInfo.getItem("displaytype")
 DISPLAYMODEL = BoxInfo.getItem("displaymodel")
 DISPLAYBRAND = BoxInfo.getItem("displaybrand")
 MACHINEBUILD = BoxInfo.getItem("machinebuild")
+UBIMB = BoxInfo.getItem("hasUBIMB")
 OEA = split(r'(\d.*)', BoxInfo.getItem("oe"))[1]
 
 
