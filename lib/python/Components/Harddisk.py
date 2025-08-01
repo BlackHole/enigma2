@@ -842,6 +842,9 @@ class HarddiskManager:
 							if self.getMountpoint(partition) == "/media/hdd/" and partition.startswith("sd") or partition.startswith("mmcblk0"):
 								SystemInfo["MTDBLACK"] = partition
 								print(f"[Harddisk][enumerateBlockDevices]### MTDBLACK:{SystemInfo['MTDBLACK']}")
+							if partition == "mmcblk0p3" and self.getMountpoint(partition) is None:
+								part = Partition(mountpoint, description=description, force_mounted=True, device=partition)
+							else:
 								part = Partition(mountpoint=self.getMountpoint(partition, skiproot=True), description=description, force_mounted=True, device=partition)
 							self.partitions.append(part)
 							# print(f"[Harddisk][enumerateBlockDevices]  Partition(mountpoint = {self.getMountpoint(partition)}, description = {description}, force_mounted = True, device = {partition})")
