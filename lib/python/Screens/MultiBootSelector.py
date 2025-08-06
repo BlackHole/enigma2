@@ -1,4 +1,6 @@
-from os import path, rmdir
+from os import rmdir
+from os.path import exists, ismount, join
+from math import ceil
 import tempfile
 import struct
 
@@ -33,7 +35,7 @@ class MultiBootSelector(Screen, HelpableScreen):
 		self.onChangedEntry = []
 		self.tmp_dir = None
 		self.fromInit = True
-		usbIn = SystemInfo["HasUsbhdd"].keys() and SystemInfo["HasKexecMultiboot"]
+		usbIn = (SystemInfo["HasUsbhdd"].keys() and SystemInfo["HasKexecMultiboot"]) or UBIMB
 		# print("[MultiBootSelector] usbIn, SystemInfo['HasUsbhdd'], SystemInfo['HasKexecMultiboot'], SystemInfo['HasKexecUSB']", usbIn, "   ", SystemInfo["HasUsbhdd"], "   ", SystemInfo["HasKexecMultiboot"], "   ", SystemInfo["HasKexecUSB"])
 		self["config"] = ChoiceList(list=[ChoiceEntryComponent(text=((_("Retrieving image slots - Please wait...")), "Queued"))])
 		self["description"] = StaticText(_("Press GREEN (Reboot) to switch images, YELLOW (Delete) to erase an image or BLUE (Restore) to restore all deleted images."))
@@ -109,16 +111,16 @@ class MultiBootSelector(Screen, HelpableScreen):
 		boxmode = currentSelected[0][1][1]
 		if SystemInfo["canMode12"]:
 			if "BOXMODE" in SystemInfo["canMultiBoot"][slot]['startupfile']:
-				startupfile = path.join(self.tmp_dir, "%s_%s" % (SystemInfo["canMultiBoot"][slot]['startupfile'].rsplit('_', 1)[0], boxmode))
-				copyfile(startupfile, path.join(self.tmp_dir, "STARTUP"))
+				startupfile = join(self.tmp_dir, "%s_%s" % (SystemInfo["canMultiBoot"][slot]['startupfile'].rsplit('_', 1)[0], boxmode))
+				copyfile(startupfile, join(self.tmp_dir, "STARTUP"))
 			else:
-				f = open(path.join(self.tmp_dir, SystemInfo["canMultiBoot"][slot]['startupfile']), "r").read()
+				f = open(join(self.tmp_dir, SystemInfo["canMultiBoot"][slot]['startupfile']), "r").read()
 				if boxmode == 12:
 					f = f.replace("boxmode=1'", "boxmode=12'").replace("%s" % SystemInfo["canMode12"][0], "%s" % SystemInfo["canMode12"][1])
-				open(path.join(self.tmp_dir, "STARTUP"), "w").write(f)
+				open(join(self.tmp_dir, "STARTUP"), "w").write(f)
 		else:
-			copyfile(path.join(self.tmp_dir, SystemInfo["canMultiBoot"][slot]["startupfile"]), path.join(self.tmp_dir, "STARTUP"))
-		if SystemInfo["HasMultibootMTD"] or SystemInfo["HasMultibootFlags"]:
+			copyfile(join(self.tmp_dir, SystemInfo["canMultiBoot"][slot]["startupfile"]), join(self.tmp_dir, "STARTUP"))
+		if SystemInfo["HasMultibootMTD"]:
 			with open('/dev/block/by-name/flag', 'wb') as f:
 				f.write(struct.pack("B", int(slot)))
 		self.cancel(QUIT_REBOOT)
@@ -180,14 +182,22 @@ class MultiBootSelector(Screen, HelpableScreen):
 
 		else:
 			hiKey = sorted(SystemInfo["canMultiBoot"].keys(), reverse=True)[0]
-			self.session.openWithCallback(self.addSTARTUPs, MessageBox, _("Add 4 more Vu+ Multiboot USB slots after slot %s ?") % hiKey, MessageBox.TYPE_YESNO, timeout=30)
+			self.session.openWithCallback(self.addSTARTUPs, MessageBox, _("Add 4 more Multiboot USB slots after slot %s ?") % hiKey, MessageBox.TYPE_YESNO, timeout=30)
 
 	def addSTARTUPs(self, answer):
 		hiKey = sorted(SystemInfo["canMultiBoot"].keys(), reverse=True)[0]
-		hiUUIDkey = SystemInfo["VuUUIDSlot"][1]
-		print("[MultiBootSelector]1 answer, hiKey,  hiUUIDkey", answer, "   ", hiKey, "   ", hiUUIDkey)
+		UUIDkey = SystemInfo["VuUUIDSlot"][0]
+		print(f"[MultiBootSelector]1 answer:{answer} hiKey:{hiKey} UUIDkey:{UUIDkey}")
 		if answer is False:
 			self.close()
+		elif UBIMB:
+			UUIDValue = SystemInfo["VuUUIDSlot"][2]
+			for usbslot in range(hiKey + 1, hiKey + 5):
+				STARTUP_usbslot = f"kernel=/dev/{MTDKERNEL} root={UUIDValue} rootsubdir=linuxrootfs{usbslot} rootfstype=ext4\n"
+				# print(f"[MultiBootSelector]1 STARTUP_usbslot:{STARTUP_usbslot} UUIDkey:{UUIDkey} UUIDValue:{UUIDValue}")
+				with open("/%s/STARTUP_%d" % (self.tmp_dir, usbslot), 'w') as f:
+					f.write(STARTUP_usbslot)
+			self.session.open(TryQuitMainloop, QUIT_RESTART)
 		else:
 			boxmodel = BOXTYPE[2:]
 			for usbslot in range(hiKey + 1, hiKey + 5):
@@ -216,13 +226,15 @@ class MultiBootSelector(Screen, HelpableScreen):
 			print("[MultiBootSelector] STARTUP_%d --> %s, self.tmp_dir: %s" % (usbslot, STARTUP_usbslot, self.tmp_dir))
 			with open("/%s/STARTUP_%d" % (self.tmp_dir, usbslot), 'w') as f:
 				f.write(STARTUP_usbslot)
-
 		SystemInfo["HasKexecUSB"] = True
+		Console().ePopen("umount %s" % self.tmp_dir)
+		if not ismount(self.tmp_dir):
+			rmdir(self.tmp_dir)
 		self.session.open(TryQuitMainloop, QUIT_RESTART)
 
 	def cancel(self, value=None):
 		Console().ePopen("umount %s" % self.tmp_dir)
-		if not path.ismount(self.tmp_dir):
+		if not ismount(self.tmp_dir):
 			rmdir(self.tmp_dir)
 		if value == QUIT_REBOOT:
 			self.session.open(TryQuitMainloop, QUIT_REBOOT)
@@ -334,6 +346,7 @@ class UBISlotManager(Setup):
 			cmdlist.append(f"for n in {TARGET_DEVICE}* ; do umount -lf $n > /dev/null 2>&1 ; done")
 			cmdlist.append(f"/usr/sbin/sgdisk -z {TARGET_DEVICE}")
 			cmdlist.append(f"/bin/touch /dev/nomount.{TARGET} > /dev/null 2>&1")
+			cmdlist.append(f"/bin/touch /dev/nomount.{TARGET}1 > /dev/null 2>&1")
 			cmdlist.append(f"/usr/sbin/parted --script {TARGET_DEVICE} mklabel gpt")
 			cmdlist.append(f"/usr/sbin/partprobe {TARGET_DEVICE}")
 			cmdlist.append(f"/usr/sbin/parted --script {TARGET_DEVICE} mkpart startup fat32 8192s 5MB")
@@ -367,7 +380,7 @@ class UBISlotManager(Setup):
 			fd.write(startupContent)
 		with open(f"{MOUNTPOINT}/STARTUP_FLASH", "w") as fd:
 			fd.write(startupContent)
-		count = min(diskSize, 15)
+		count = min(diskSize, 4)
 		for i in range(1, count + 1):
 			startupContent = f"kernel=/dev/{mtdKernel} root=UUID={uuidRootFS} rootsubdir=linuxrootfs{i} rootfstype=ext4\n"
 			with open(f"{MOUNTPOINT}/STARTUP_{i}", "w") as fd:
@@ -409,7 +422,7 @@ class UBISlotManager(Setup):
 			path = path if exists(path) else f"/sys/block/{base}/size"
 			with open(path) as fd:
 				blocks = int(fd.read().strip())
-				return (blocks * 512) // (1024 * 1024 * 1024)
+				return ceil((blocks * 512) / (1024 * 1024 * 1024))
 		except Exception as e:
 			return 0
 

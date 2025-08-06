@@ -25,6 +25,8 @@ from Tools.Hex2strColor import Hex2strColor
 from Tools.Multiboot import GetCurrentImageMode
 from Tools.StbHardware import getFPVersion
 
+from twisted.internet import threads
+
 
 def getFlashDateString():
 	if ospath.isfile('/etc/install'):
@@ -514,8 +516,6 @@ class SystemNetworkInfo(AboutBase):
 			self.resetList()
 			self.onClose.append(self.cleanup)
 		self.onLayoutFinish.append(self.updateStatusbar)
-		self.timer = eTimer()
-		self.timer.callback.append(self.getWanIP)
 
 	def createscreen(self):
 		self.AboutText = ""
@@ -679,7 +679,7 @@ class SystemNetworkInfo(AboutBase):
 			iNetwork.getLinkState(self.iface, self.dataAvail)
 			self["devicepic"].setPixmapNum(0)
 		self["devicepic"].show()
-		self.timer.start(10, 1)
+		threads.deferToThread(self.getWanIP)
 
 	def getWanIP(self):
 		try:
