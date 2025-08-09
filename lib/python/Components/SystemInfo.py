@@ -1,6 +1,6 @@
 from ast import literal_eval
 from hashlib import md5
-from os import listdir
+from os import listdir, access, R_OK
 from os.path import isfile, join as pathjoin
 from re import split
 from enigma import Misc_Options, eDVBCIInterfaces, eDVBResourceManager
@@ -200,6 +200,9 @@ def hasInitCam():
 
 
 
+SystemInfo["CanChangeOsdAlpha"] = access('/proc/stb/video/alpha', R_OK) and True or False
+SystemInfo["CanChangeOsdPosition"] = (access('/proc/stb/fb/dst_left', R_OK) or access('/proc/stb/vmpeg/0/dst_left', R_OK)) and True or False
+SystemInfo["OsdSetup"] = SystemInfo["CanChangeOsdPosition"]
 SystemInfo["CanKexecVu"] = MODEL in ("vusolo4k", "vuduo4k", "vuduo4kse", "vuultimo4k", "vuuno4k", "vuuno4kse", "vuzero4k") and not SystemInfo["HasKexecMultiboot"]
 SystemInfo["HasUsbhdd"] = {}
 SystemInfo["ArchIsARM"] = ARCHITECTURE.startswith(("arm", "cortex"))

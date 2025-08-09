@@ -43,10 +43,6 @@ def InitOsd():
 	config.av.osd_alpha = NoSave(ConfigNumber(default=255))
 
 def InitOsdPosition():
-	SystemInfo["CanChangeOsdAlpha"] = access('/proc/stb/video/alpha', R_OK) and True or False
-	SystemInfo["CanChangeOsdPosition"] = access('/proc/stb/fb/dst_left', R_OK) and True or False
-	SystemInfo["OsdSetup"] = SystemInfo["CanChangeOsdPosition"]
-
 	if SystemInfo["CanChangeOsdAlpha"] is True or SystemInfo["CanChangeOsdPosition"] is True:
 		SystemInfo["OsdMenu"] = True
 	else:
