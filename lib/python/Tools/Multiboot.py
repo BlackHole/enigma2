@@ -48,11 +48,9 @@ def getMultibootslots():
 							Creator = ""
 						if Creator in ("openbh", "openvix"):
 							copyfile("/etc/init.d/kexec-multiboot-recovery", dest)
-				SystemInfo["MBbootdevice"] = device
-				device2 = device.rsplit("/", 1)[1]
-				#print(f"[Multiboot][[getMultibootslots]1 *** Bootdevice found: {device2}")
-				SystemInfo["BootDevice"] = device2
-				if path.exists("/sys/firmware/devicetree/base/chosen/bootargs"):  # check no kernel corruption
+				SystemInfo["MBbootdevice"] = resolveDevice(device)  # used in SystemInfo
+				SystemInfo["BootDevice"] = SystemInfo["MBbootdevice"].rsplit("/", 1)[1]  # used by About
+				if path.exists("/sys/firmware/devicetree/base/chosen/bootargs"):  # check validity for multiboot
 					for file in glob.glob(path.join(tmpname, "STARTUP_*")):
 						slotnumber = file.rsplit("_", 3 if "BOXMODE" in file else 1)[1]
 						slotname = file.rsplit("_", 3 if "BOXMODE" in file else 1)[0]
@@ -63,7 +61,6 @@ def getMultibootslots():
 							SystemInfo["AndroidMode"] = True
 							continue
 						if "STARTUP_RECOVERY" in file:
-							SystemInfo["RecoveryMode"] = True
 							slotnumber = "0"
 							SystemInfo["RecoveryMode"] = True if BOXTYPE != "gbquad4kpro" else False
 						if "STARTUP_FLASH" in file:
@@ -96,7 +93,7 @@ def getMultibootslots():
 									if not UBIMB:
 										SystemInfo["HasMultibootMTD"] = slot.get("mtd")
 										SystemInfo["HasMultibootFlags"] = path.exists("/dev/block/by-name/flag")
-									if not SystemInfo["HasKexecMultiboot"] and "sda" in slot["root"]:		# Not Kexec Vu+ receiver -- sf8008 type receiver with sd card, reset value as SD card slot has no rootsubdir
+									if not SystemInfo["HasKexecMultiboot"] and not UBIMB and "sda" in slot["root"]:		# Not Kexec Vu+ receiver -- sf8008 type receiver with sd card, reset value as SD card slot has no rootsubdir
 										slot["rootsubdir"] = None
 										slot["slotType"] = "SDCARD"
 									elif "STARTUP_RECOVERY" not in file:
@@ -111,7 +108,7 @@ def getMultibootslots():
 							else:
 								continue
 				else:  # kernel corruption set corruption flag
-					print(f"[multiboot][getMultibootslots]3 bootargs?: {path.exists("/sys/firmware/devicetree/base/chosen/bootargs")}")
+					# print(f"[multiboot][getMultibootslots]3 bootargs?: {path.exists("/sys/firmware/devicetree/base/chosen/bootargs")}")
 					SystemInfo["resetMBoot"] = True
 					bootslots = {}
 			Console(binary=True).ePopen(f"umount {tmpname}")
@@ -160,6 +157,13 @@ def getUUIDtoSD(UUID):  # returns None on failure
 				return line.split(":")[0].strip()
 	else:
 		return None
+
+
+def resolveDevice(devicepath):
+	if path.islink(devicepath):
+		return path.realpath(devicepath)
+	else:
+		return devicepath
 
 
 def GetCurrentImageMode():
