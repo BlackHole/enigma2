@@ -18,7 +18,7 @@ from Components.Harddisk import harddiskmanager, getProcMounts, bytesToHumanRead
 from Components.Label import Label
 from Components.MenuList import MenuList
 from Components.Sources.StaticText import StaticText
-from Components.SystemInfo import SystemInfo, BOXTYPE, DISPLAYBRAND, IMAGETYPE, MACHINEBUILD, MACHINENAME, MODEL, MTDKERNEL, MTDROOTFS, UBIMB
+from Components.SystemInfo import SystemInfo, BOXTYPE, CHKROOTMB, DISPLAYBRAND, IMAGETYPE, MACHINEBUILD, MACHINENAME, MODEL, MTDKERNEL, MTDROOTFS, UBIMB
 import Components.Task
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
@@ -592,7 +592,7 @@ class OpenBhImageManager(Screen):
 	def keyRestore6(self, ret):
 		# MAINDEST = "%s/%s" % (self.TEMPDESTROOT, SystemInfo["imagedir"])
 		MAINDEST = "%s" % self.TEMPDESTROOT  # Dual 4K
-		print(f"[ImageManager] MAINDEST={MAINDEST} UBIMB:{UBIMB}")
+		print(f"[ImageManager] MAINDEST={MAINDEST} UBIMB:{UBIMB} CHKROOTMB:{CHKROOTMB}")
 		def findImageFiles(path):
 			for path, subDirs, files in walk(path):
 				if not subDirs and files:
@@ -625,6 +625,7 @@ class OpenBhImageManager(Screen):
 		elif SystemInfo["HasH9SD"]:
 			if path.exists("%s/rootfs.tar.bz2" % MAINDEST):  # h9 no SD card - build has both roots causes ofgwrite issue
 				rename("%s/rootfs.tar.bz2" % MAINDEST, "%s/xx.txt" % MAINDEST)
+		print(f"[ImageManager] running command:{CMD} root:{getattr(self, 'MTDROOTFS', 'not set')}")
 		self.Console.ePopen(CMD, self.ofgwriteResult)
 		fbClass.getInstance().lock()
 
