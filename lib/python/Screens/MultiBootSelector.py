@@ -249,6 +249,8 @@ class MultiBootSelector(Screen, HelpableScreen):
 		self.updateKeys()
 
 	def updateKeys(self):
+		if UBIMB and SystemInfo["MultiBootSlot"] == 0:
+			return
 		currentSelected = self["config"].getCurrent()
 		if currentSelected[0][1] == "Queued":  # list not loaded yet so abort
 			return
@@ -436,11 +438,13 @@ class UBISlotManager(Setup):
 			cmdlist.append(f"/usr/sbin/parted --script {TARGET_DEVICE} mklabel gpt")
 			cmdlist.append(f"/usr/sbin/partprobe {TARGET_DEVICE}")
 			cmdlist.append(f"/usr/sbin/parted --script {TARGET_DEVICE} mkpart startup fat32 8192s 5MB")
-			cmdlist.append(f"/usr/sbin/parted --script {TARGET_DEVICE} mkpart rootfs ext4 5MB 100%")
+			cmdlist.append(f"/usr/sbin/parted --script {TARGET_DEVICE} unit MiB mkpart rootfs ext4 5MiB -- -256MiB")
+			cmdlist.append(f"/usr/sbin/parted --script {TARGET_DEVICE} unit MiB mkpart swap linux-swap -- -256MiB 100%")
 			cmdlist.append(f"/usr/sbin/partprobe {TARGET_DEVICE}")
 			cmdlist.append(f"/usr/sbin/mkfs.vfat -F 32 -n STARTUP {PART(1)}")
-			cmdlist.append(f"/sbin/mkfs.ext4 -F -L rootfs {PART(2)}")
 			# cmdlist.append(f"/sbin/mkfs.ext4 -O ^64bit,^extent,^flex_bg,^huge_file,^dir_nlink,^extra_isize,^metadata_csum -F -L rootfs {PART(2)}")
+			cmdlist.append(f"/sbin/mkfs.ext4 -F -L rootfs {PART(2)}")
+			cmdlist.append(f"/sbin/mkswap -L swap {PART(3)}")
 			cmdlist.append(f"/bin/mkdir -p {MOUNTPOINT}")
 			cmdlist.append(f"/bin/umount {MOUNTPOINT} > /dev/null 2>&1")
 			cmdlist.append(f"/bin/mount {PART(1)} {MOUNTPOINT}")
