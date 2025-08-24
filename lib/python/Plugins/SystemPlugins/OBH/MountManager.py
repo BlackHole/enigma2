@@ -4,7 +4,6 @@ import re
 
 from enigma import getDeviceDB, eTimer
 
-
 from Components.ActionMap import ActionMap
 from Components.Label import Label
 from Components.ConfigList import ConfigListScreen
@@ -56,19 +55,27 @@ def getProcPartitions(partitionList):
 				continue
 			if device != "mmcblk0p3":
 				continue
-				if SystemInfo["HasH9SD"]:
-					if not re.search("mmcblk0p1", device):  # h9/i55 only mmcblk0p1 mmc partition
+			else:
+				if devMajor == 179:
+					if not SystemInfo["HasSDnomount"]:  # Only interested in h9/h9combo(+dups) mmc partitions.  h9combo(+dups) uses mmcblk1p[0-3].
 						continue
-					if SystemInfo["HasMMC"]:  # With h9/i55 reject mmcblk0p1 mmc partition if root device.
+					if SystemInfo["HasH9SD"]:
+						if not re.search("mmcblk0p1", device):  # h9 only mmcblk0p1 mmc partition
+							continue
+						if SystemInfo["HasMMC"]:  # With h9 reject mmcblk0p1 mmc partition if root device.
+							continue
+					if SystemInfo["HasSDnomount"][0] and not re.search("mmcblk1p[0-3]", device):  # h9combo(+dups) uses mmcblk1p[0-3] include
 						continue
-				if SystemInfo["HasSDnomount"][0] and not re.search("mmcblk1p[0-3]", device):  # h9combo(+dups) uses mmcblk1p[0-3] include
-					continue
-			if devMajor == 8:
-				if not re.search("sd[a-z][1-9]", device):  # If storage use partitions only.
-					continue
-				if SystemInfo["HasHiSi"] and path.exists("/dev/sda4") and re.search("sd[a][1-4]", device):  # Sf8008 using SDcard for slots ---> exclude
-					continue
+				if devMajor == 8:
+					if not re.search("sd[a-z][1-9]", device):  # If storage use partitions only.
+						continue
+					if SystemInfo["HasHiSi"] and path.exists("/dev/sda4") and re.search("sd[a][1-4]", device):  # Sf8008 using SDcard for slots ---> exclude
+						continue
 			if device in partitions:  # If device is already in partition list ignore it.
+				continue
+			if UBIMB and SystemInfo["canMultiBoot"] and SystemInfo["BootDevice"][0:3] == device[0:3]:  # don,t show boot device
+				partitions.append(device)
+				# print(f"[MountManager]3 device={device} device[0:3]:{device[0:3]}")
 				continue
 			buildPartitionInfo(device, partitionList)
 			partitions.append(device)
@@ -144,12 +151,8 @@ def buildPartitionInfo(partition, partitionList):
 						_format = res.stdout.decode().strip()
 				rw = parts[3]			# read/write
 				break
-	print("[MountManager1][buildPartitionInfo] mediamount", mediamount)
+	print(f"[MountManager1][buildPartitionInfo] mediamount:{mediamount}")
 	if mediamount == "/" and SystemInfo["HasKexecMultiboot"]:
-		return
-	if mediamount == "/" and UBIMB:
-		return
-	if UBIMB and SystemInfo["BootDevice"][0:3] in mediamount:  # don,t show boot device
 		return
 	if mediamount == _("None") or mediamount is None:
 		description = _("Size: ") + _("unavailable")

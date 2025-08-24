@@ -33,6 +33,7 @@ setups = {}  # Dictionary of images associated with setup menus.
 switchPixmap = {}  # Dictionary of switch images.
 scrollbarStyle = None  # When set, a dictionary of scrollbar styles
 windowStyles = {}  # Dictionary of window styles for each screen ID.
+subtitleFonts = {}  # Dictionary of predefined external text subtitle folnts.
 xres = 720
 yres = 576
 
@@ -907,7 +908,7 @@ def reloadWindowStyles():
 def loadSingleSkinData(desktop, screenID, domSkin, pathSkin, scope=SCOPE_CURRENT_SKIN):
 	"""Loads skin data like colors, windowstyle etc."""
 	assert domSkin.tag == "skin", "root element in skin must be 'skin'!"
-	global colors, fonts, menus, menuicons, parameters, screens, setups, switchPixmap, scrollbarStyle, xres, yres
+	global colors, fonts, menus, menuicons, parameters, screens, setups, switchPixmap, scrollbarStyle, xres, yres, subtitleFonts
 	for tag in domSkin.findall("output"):
 		scrnID = int(tag.attrib.get("id", GUI_SKIN_ID))
 		if scrnID == GUI_SKIN_ID:
@@ -1120,6 +1121,19 @@ def loadSingleSkinData(desktop, screenID, domSkin, pathSkin, scope=SCOPE_CURRENT
 				borderWidth = 3  # Default: Use a subtitle border.
 			else:
 				borderWidth = int(borderwidth)
+			font_data = {}
+			font_str = substyle.attrib.get("font")
+			font_split = font_str.split(";")
+			font_face = font_split[0].strip()
+			font_size = 0
+			if len(font_split) > 1:
+				font_size = int(font_split[1])
+			font_data["font_face"] = font_face
+			font_data["font_size"] = font_size
+			font_data["foregroundColor"] = foregroundColor
+			font_data["borderColor"] = borderColor
+			font_data["borderWidth"] = borderWidth
+			subtitleFonts[substyle.attrib.get("name")] = font_data
 			face = eSubtitleWidget.__dict__[substyle.attrib.get("name")]
 			eSubtitleWidget.setFontStyle(face, font, haveColor, foregroundColor, borderColor, borderWidth)
 	for tag in domSkin.findall("windowstyle"):
