@@ -374,7 +374,7 @@ class UBISlotManager(Setup):
 	def __init__(self, session):
 		def getGreenHelpText():
 			return {
-				ACTION_SELECT: _("Select a device to create multiboot slots"),
+				ACTION_SELECT: _("Select Device for FORMAT!! & Creation of multiboot slots"),
 				ACTION_CREATE: _("Create slots for the selected device")
 			}.get(self.green, _("Help text uninitialized"))
 
@@ -523,7 +523,8 @@ class UBISlotManager(Setup):
 			for (name, hdd) in harddiskmanager.HDDList():
 				MTDBLACK = SystemInfo["MTDBLACK"]
 				MTDBLACK = "mmcblk0" if MTDBLACK.startswith("mmcblk0") else MTDBLACK
-				if MTDBLACK in (hdd.dev_path.replace("/dev/", "")) or hdd.dev_path.startswith("/dev/romblock"):
+				print(f"[UBISlotManager] readDevices: MTDBLACK:{MTDBLACK} hddevpath:{hdd.dev_path} hddevpathnodev:{hdd.dev_path.replace("/dev/", "")[0:3]}")
+				if MTDBLACK[0:3] == hdd.dev_path.replace("/dev/", "")[0:3] or hdd.dev_path.startswith("/dev/romblock"):
 					continue
 				deviceID = hdd.dev_path.split("/")[-1]
 				self.deviceData[deviceID] = (hdd.dev_path, name)

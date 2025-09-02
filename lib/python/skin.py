@@ -548,6 +548,9 @@ class AttributeParser:
 	def applyVerticalScale(self, value):
 		return int(value) if self.scaleTuple[0][0] == self.scaleTuple[0][1] else int(int(value) * self.scaleTuple[1][0] / self.scaleTuple[1][1])
 
+	def alphaBlend(self, value):
+		self.guiObject.setWidgetAlphaBlend(parseBoolean("alphablend", value))
+
 	def conditional(self, value):
 		pass
 
