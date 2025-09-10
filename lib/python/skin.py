@@ -396,7 +396,7 @@ def parseGradient(value):
 			"vertical": eWidget.GRADIENT_VERTICAL,
 		}
 		direction = parseOptions(options, "gradient", data[index], eWidget.GRADIENT_VERTICAL)
-		alphaBlend = 1 if argCount > 1 and parseBoolean("alphablend", data[index + 1]) else 0
+		alphaBlend = int(argCount > 1 and parseBoolean("alphablend", data[index + 1]))
 	else:
 		direction = eWidget.GRADIENT_VERTICAL
 		alphaBlend = 0
@@ -665,8 +665,7 @@ class AttributeParser:
 			print("[Skin] Error: Invalid alphatest '%s'!  Must be one of 'on', 'off' or 'blend'." % value)
 
 	def scale(self, value):
-		value = 1 if value.lower() in ("1", "enabled", "on", "scale", "true", "yes") else 0
-		self.guiObject.setScale(value)
+		self.guiObject.setScale(int(parseBoolean("scale", value)))
 
 	def scaleFlags(self, value):
 		base = BT_SCALE | BT_KEEP_ASPECT_RATIO
@@ -797,10 +796,10 @@ class AttributeParser:
 		self.guiObject.setShadowColor(parseColor(value))
 
 	def selectionDisabled(self, value):
-		self.guiObject.setSelectionEnable(0)
+		self.guiObject.setSelectionEnable(int(not parseBoolean("selectiondisabled", value)))
 
 	def transparent(self, value):
-		self.guiObject.setTransparent(int(value))
+		self.guiObject.setTransparent(int(parseBoolean("transparent", value)))
 
 	def borderColor(self, value):
 		self.guiObject.setBorderColor(parseColor(value))
@@ -828,8 +827,7 @@ class AttributeParser:
 		self.guiObject.setScrollbarMode(parseScrollbarMode(value))
 
 	def enableWrapAround(self, value):
-		value = True if value.lower() in ("1", "enabled", "enablewraparound", "on", "true", "yes") else False
-		self.guiObject.setWrapAround(value)
+		self.guiObject.setWrapAround(parseBoolean("enablewraparound", value))
 
 	def pointer(self, value):
 		(name, pos) = value.split(":")
@@ -847,8 +845,7 @@ class AttributeParser:
 		self.guiObject.setShadowOffset(parsePosition(value, self.scaleTuple))
 
 	def noWrap(self, value):
-		value = 1 if value.lower() in ("1", "enabled", "nowrap", "on", "true", "yes") else 0
-		self.guiObject.setNoWrap(value)
+		self.guiObject.setNoWrap(int(parseBoolean("nowrap", value)))
 
 	def split(self, value):
 		pass
@@ -1420,7 +1417,7 @@ def readSkin(screen, skin, names, desktop):
 					raise SkinError("For connection '%s' a renderer must be defined with a 'render=' attribute" % wconnection)
 			for converter in widget.findall("convert"):
 				ctype = converter.get("type")
-				nostrip = converter.get("nostrip") and converter.get("nostrip").lower() in ("1", "enabled", "nostrip", "on", "true", "yes")
+				nostrip = converter.get("nostrip") and parseBoolean(converter.get("nostrip"), value)
 				assert ctype, "[Skin] The 'convert' tag needs a 'type' attribute!"
 				# print("[Skin] DEBUG: Converter='%s'." % ctype)
 				try:
