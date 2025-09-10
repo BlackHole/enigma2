@@ -344,6 +344,7 @@ class AutoScheduleTimer:
 		else:
 			print("[%s][AutoScheduleTimer] Schedule Disabled at" % self.schedulename, strftime("%c", localtime(now)))
 			self.scheduleactivityTimer.stop()
+		self.addNetworkTimeCallback()
 
 		assert AutoScheduleTimer.instance is None, "class AutoScheduleTimer is a singleton class and just one instance of this class is allowed!"
 		AutoScheduleTimer.instance = self
@@ -458,3 +459,12 @@ class AutoScheduleTimer:
 		else:
 			scheduletext = ""
 		return scheduletext
+
+	def addNetworkTimeCallback(self):
+		from Components.NetworkTime import ntpsyncpoller
+		ntpsyncpoller.addTimeUpdatedCallback(self.timeCallback)
+
+	def timeCallback(self):
+		print("[OpentvZapper-Scheduler][timeCallback] Clock update detected; updating timers")
+		if AutoScheduleTimer.instance is not None:
+			AutoScheduleTimer.instance.doneConfiguring()
