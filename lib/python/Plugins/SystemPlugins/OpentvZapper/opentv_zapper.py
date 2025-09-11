@@ -344,10 +344,11 @@ class AutoScheduleTimer:
 		else:
 			print("[%s][AutoScheduleTimer] Schedule Disabled at" % self.schedulename, strftime("%c", localtime(now)))
 			self.scheduleactivityTimer.stop()
-		self.addNetworkTimeCallback()
 
 		assert AutoScheduleTimer.instance is None, "class AutoScheduleTimer is a singleton class and just one instance of this class is allowed!"
 		AutoScheduleTimer.instance = self
+
+		self.addNetworkTimeCallback()
 
 	def __onClose(self):
 		AutoScheduleTimer.instance = None
