@@ -20,13 +20,13 @@ else:
 	ImageVer = float(ImageVer)
 
 E2Branches = {
-    'developer': 'Python3.12',
-    'release': 'Python3.12',
-    'community': 'Python3.12'
+    'developer': 'Python3.13',
+    'release': 'Python3.13',
+    'community': 'Python3.13'
 }
 CommitLogs = [
 	(f"https://api.github.com/repos/oe-alliance/oe-alliance-core/commits?sha={OEA}", "OE-A Core"),
-	("https://api.github.com/repos/BlackHole/enigma2/commits?sha=%s" % getattr(E2Branches, SystemInfo["imagetype"], "Python3.12"), "Enigma2"),
+	("https://api.github.com/repos/BlackHole/enigma2/commits?sha=%s" % getattr(E2Branches, SystemInfo["imagetype"], "Python3.13"), "Enigma2"),
 	("https://api.github.com/repos/BlackHole/skins/commits", "OpenBh Skins"),
 	("https://api.github.com/repos/oe-alliance/oe-alliance-plugins/commits", "OE-A Plugins"),
 	("https://api.github.com/repos/oe-alliance/AutoBouquetsMaker/commits", "AutoBouquetsMaker"),
