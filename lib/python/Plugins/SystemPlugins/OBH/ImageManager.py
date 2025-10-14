@@ -145,6 +145,10 @@ class tmp:
 	dir = None
 
 
+def checkImageFiles(files):
+	return len([x for x in files if "kernel" in x and ".bin" in x or x in ("zImage", "uImage", "root_cfe_auto.bin", "root_cfe_auto.jffs2", "oe_kernel.bin", "oe_rootfs.bin", "e2jffs2.img", "rootfs.tar.bz2", "rootfs.ubi", "rootfs.bin")]) >= 2
+
+
 BackupTime = 0
 
 
