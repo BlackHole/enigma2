@@ -396,7 +396,7 @@ class HdmiCec:
 			msgaddress = message.getAddress()  # 0 = TV, 5 = receiver 15 = broadcast
 			if CECcmd != "<Polling Message>":
 				print(f"[HdmiCEC][messageReceived0]: msgaddress={msgaddress}  CECcmd={CECcmd}, cmd={cmd:02X}, ctrl0={ctrl0}, datalength={length}")
-				if config.hdmicec.debug.value in ["2", "3", "4"]:
+				if config.hdmicec.debug.value != "0":
 					self.debugRx(length, cmd, ctrl0)
 				if msgaddress > 15:  # workaround for wrong address from driver (e.g. hd51, message comes from tv -> address is only sometimes 0, dm920, same tv -> address is always 0)
 					print("[HdmiCEC][messageReceived1a]: msgaddress > 15 reset to 0")
@@ -568,7 +568,7 @@ class HdmiCec:
 					self.wait.start(int(config.hdmicec.minimum_send_interval.value), True)
 			else:
 				eHdmiCEC.getInstance().sendMessage(msgaddress, cmd, data, len(data))
-			if config.hdmicec.debug.value in ["2", "4"]:
+			if config.hdmicec.debug.value in ["1", "3"]:
 				self.debugTx(msgaddress, cmd, data)
 
 	def sendMsgQ(self):
@@ -703,7 +703,7 @@ class HdmiCec:
 							eHdmiCEC.getInstance().sendMessage(5, cmd, data, len(data))
 						else:
 							eHdmiCEC.getInstance().sendMessage(self.volumeForwardingDestination, cmd, data, len(data))
-					if config.hdmicec.debug.value in ["3", "4"]:
+					if config.hdmicec.debug.value in ["2", "3"]:
 						self.debugTx(self.volumeForwardingDestination, cmd, data)
 					return 1
 				else:
