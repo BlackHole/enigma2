@@ -14,7 +14,7 @@ from Components.Harddisk import harddiskmanager, bytesToHumanReadable
 from Components.Label import Label
 from Components.MenuList import MenuList
 from Components.Sources.StaticText import StaticText
-from Components.SystemInfo import SystemInfo, DISPLAYBRAND, IMAGETYPE, KERNEL, MACHINENAME
+from Components.SystemInfo import SystemInfo, DISPLAYBRAND, IMAGETYPE, MACHINENAME
 import Components.Task
 from Components.UserInstalledPackages import UserInstalledPackages
 from Screens.MessageBox import MessageBox
@@ -491,7 +491,7 @@ class OpenBhBackupManager(Screen):
 		print("[BackupManager] Restoring Stage 3: Feeds Checks")
 		if self.feeds == "OK":
 			print("[BackupManager] Restoring Stage 3: Feeds are OK")
-			self.Console.ePopen("opkg list-installed", self.Stage3Complete)
+			self.Console.ePopen("opkg list", self.Stage3Part2)
 		elif self.feeds == "NONETWORK":
 			print("[BackupManager] Restoring Stage 3: No network connection, plugin restore not possible")
 			AddPopupWithCallback(
@@ -523,36 +523,27 @@ class OpenBhBackupManager(Screen):
 			print("[BackupManager] Restoring Stage 3: Feeds state is unknown aborting")
 			self.Stage6()
 
+	def Stage3Part2(self, result, retval, extra_args):
+		self.opkg_available_packages = {p.split()[0] for line in result.split("\n") if (p := line.strip())}  # list of all packages available from the feeds
+		self.Console.ePopen("opkg list-installed", self.Stage3Complete)
+
 	def Stage3Complete(self, result, retval, extra_args):
-		plugins = []
+		opkg_installed_packages = {p.split()[0] for line in result.split("\n") if (p := line.strip())}
 		if path.exists("/tmp/ExtraInstalledPlugins"):
-			self.pluginslist = []
-			for line in result.split("\n"):
-				if line:
-					parts = line.strip().split()
-					plugins.append(parts[0])
 			with open("/tmp/ExtraInstalledPlugins", "r") as fd:
-				tmppluginslist = fd.readlines()
-			for line in tmppluginslist:
-				if line:
-					parts = line.strip().split()
-					if len(parts) > 0 and parts[0] not in plugins:
-						self.pluginslist.append(parts[0])
+				self.pluginslist = [p for line in fd.readlines() if (p := line.strip()) and p in self.opkg_available_packages and p not in opkg_installed_packages]
 
 		if path.exists("/tmp/3rdPartyPlugins"):
 			self.pluginslist2 = []
 			self.plugfiles = []
 			self.thirdpartyPluginsLocation = " "
 			if config.backupmanager.xtraplugindir.value:
-				self.thirdpartyPluginsLocation = config.backupmanager.xtraplugindir.value
-				self.thirdpartyPluginsLocation = self.thirdpartyPluginsLocation.replace(" ", "%20")
+				self.thirdpartyPluginsLocation = config.backupmanager.xtraplugindir.value.replace(" ", "%20")
 				self.plugfiles = self.thirdpartyPluginsLocation.split("/", 3)
 			elif path.exists("/tmp/3rdPartyPluginsLocation"):
 				with open("/tmp/3rdPartyPluginsLocation", "r") as fd:
 					self.thirdpartyPluginsLocation = fd.readlines()
-				self.thirdpartyPluginsLocation = "".join(self.thirdpartyPluginsLocation)
-				self.thirdpartyPluginsLocation = self.thirdpartyPluginsLocation.replace("\n", "")
-				self.thirdpartyPluginsLocation = self.thirdpartyPluginsLocation.replace(" ", "%20")
+				self.thirdpartyPluginsLocation = "".join(self.thirdpartyPluginsLocation).replace("\n", "").replace(" ", "%20")
 				self.plugfiles = self.thirdpartyPluginsLocation.split("/", 3)
 			print("[BackupManager] thirdpartyPluginsLocation split = %s" % self.plugfiles)
 			with open("/tmp/3rdPartyPlugins", "r") as fd:
@@ -561,7 +552,7 @@ class OpenBhBackupManager(Screen):
 			for line in tmppluginslist2:
 				if line:
 					parts = line.strip().split("_")
-					if parts[0] not in plugins:
+					if parts[0] not in opkg_installed_packages:
 						ipk = parts[0]
 						if path.exists(self.thirdpartyPluginsLocation):
 							available = listdir(self.thirdpartyPluginsLocation)
@@ -818,7 +809,6 @@ class OpenBhBackupManagerMenu(Setup):
 		self.session.open(XtraPluginsSelection)
 
 	def backupfiles_choosen(self, ret):
-		self.backupdirs = " ".join(config.backupmanager.backupdirs.value)
 		config.backupmanager.backupdirs.save()
 		config.backupmanager.save()
 		config.save()
@@ -989,7 +979,6 @@ class BackupFiles(Screen):
 		self.Stage2Completed = False
 		self.Stage3Completed = False
 		self.Stage4Completed = False
-		self.Stage5Completed = False
 
 	def createBackupJob(self):
 		job = Components.Task.Job(_("Backup manager"))
@@ -1010,28 +999,20 @@ class BackupFiles(Screen):
 		task.check = lambda: self.Stage2Completed
 		task.weighting = 1
 
-		task = Components.Task.PythonTask(job, _("Backing up files..."))
+		task = Components.Task.PythonTask(job, _("Preparing extra plugins..."))
 		task.work = self.Stage3
 		task.weighting = 1
 
-		task = Components.Task.ConditionTask(job, _("Backing up files..."), timeoutCount=600)
+		task = Components.Task.ConditionTask(job, _("Preparing extra plugins..."), timeoutCount=600)
 		task.check = lambda: self.Stage3Completed
 		task.weighting = 1
 
-		task = Components.Task.PythonTask(job, _("Preparing extra plugins..."))
+		task = Components.Task.PythonTask(job, _("Backing up files..."))
 		task.work = self.Stage4
 		task.weighting = 1
 
-		task = Components.Task.ConditionTask(job, _("Preparing extra plugins..."), timeoutCount=600)
-		task.check = lambda: self.Stage4Completed
-		task.weighting = 1
-
-		task = Components.Task.PythonTask(job, _("Backing up files..."))
-		task.work = self.Stage5
-		task.weighting = 1
-
 		task = Components.Task.ConditionTask(job, _("Backing up files..."), timeoutCount=600)
-		task.check = lambda: self.Stage5Completed
+		task.check = lambda: self.Stage4Completed
 		task.weighting = 1
 
 		task = Components.Task.PythonTask(job, _("Backup complete..."))
@@ -1042,54 +1023,33 @@ class BackupFiles(Screen):
 
 	def JobStart(self):
 		self.selectedFiles = config.backupmanager.backupdirs.value
-		if path.exists("/etc/udev/known_devices") and "/etc/udev/known_devices" not in self.selectedFiles:
-			self.selectedFiles.append("/etc/udev/known_devices")
-		if path.exists("/var/lib/bluetooth/") and "/var/lib/bluetooth/" not in self.selectedFiles:
-			self.selectedFiles.append("/var/lib/bluetooth/")
-		if path.exists("/etc/CCcam.cfg") and "/etc/CCcam.cfg" not in self.selectedFiles:
-			self.selectedFiles.append("/etc/CCcam.cfg")
-		if path.exists("/etc/CCcam.channelinfo") and "/etc/CCcam.channelinfo" not in self.selectedFiles:
-			self.selectedFiles.append("/etc/CCcam.channelinfo")
-		if path.exists("/etc/CCcam.providers") and "/etc/CCcam.providers" not in self.selectedFiles:
-			self.selectedFiles.append("/etc/CCcam.providers")
-		if path.exists("/etc/wpa_supplicant.ath0.conf") and "/etc/wpa_supplicant.ath0.conf" not in self.selectedFiles:
-			self.selectedFiles.append("/etc/wpa_supplicant.ath0.conf")
-		if path.exists("/etc/wpa_supplicant.wlan0.conf") and "/etc/wpa_supplicant.wlan0.conf" not in self.selectedFiles:
-			self.selectedFiles.append("/etc/wpa_supplicant.wlan0.conf")
-		if path.exists("/etc/auto.network") and "/etc/auto.network" not in self.selectedFiles:
-			self.selectedFiles.append("/etc/auto.network")
-		if path.exists("/usr/crossepg/crossepg.config") and "/usr/crossepg/crossepg.config" not in self.selectedFiles:
-			self.selectedFiles.append("/usr/crossepg/crossepg.config")
-		if path.exists("/usr/crossepg/providers") and "/usr/crossepg/providers" not in self.selectedFiles:
-			self.selectedFiles.append("/usr/crossepg/providers")
-		if path.exists("/usr/lib/sabnzbd") and "/usr/lib/sabnzbd" not in self.selectedFiles:
-			self.selectedFiles.append("/usr/lib/sabnzbd")
-		if path.exists("/etc/ciplus") and "/etc/ciplus" not in self.selectedFiles:
-			self.selectedFiles.append("/etc/ciplus")
-		if path.exists("/etc/samba/smb-user.conf") and "/etc/samba/smb-user.conf" not in self.selectedFiles:
-			self.selectedFiles.append("/etc/samba/smb-user.conf")
-		if path.exists("/etc/samba/private") and "/etc/samba/private" not in self.selectedFiles:
-			self.selectedFiles.append("/etc/samba/private")
+		backupLocations = [
+			"/etc/auto.network",
+			"/etc/CCcam.cfg",
+			"/etc/CCcam.channelinfo",
+			"/etc/CCcam.providers",
+			"/etc/ciplus",
+			"/etc/openvpn",
+			"/etc/rc3.d/S99tuner.sh",
+			"/etc/samba/private",
+			"/etc/samba/smb-user.conf",
+			"/etc/udev/known_devices",
+			"/etc/wpa_supplicant.ath0.conf",
+			"/etc/wpa_supplicant.wlan0.conf",
+			"/opt",
+			"/usr/crossepg/crossepg.config",
+			"/usr/crossepg/providers",
+			"/usr/lib/sabnzbd",
+			"/usr/script",
+			"/usr/sundtek",
+			"/var/lib/bluetooth/",
+		]
+		for location in backupLocations:
+			if location not in self.selectedFiles and path.exists(location):
+				self.selectedFiles.append(location)
+
 		if path.exists("/usr/keys") and "/etc/CCcam.cfg" not in self.selectedFiles:
 			self.selectedFiles.append("/usr/keys")
-		if path.exists("/opt") and "/opt" not in self.selectedFiles:
-			self.selectedFiles.append("/opt")
-		if path.exists("/usr/script") and "/usr/script" not in self.selectedFiles:
-			self.selectedFiles.append("/usr/script")
-		if path.exists("/usr/sundtek") and "/usr/sundtek" not in self.selectedFiles:
-			self.selectedFiles.append("/usr/sundtek")
-		if path.exists("/etc/rc3.d/S99tuner.sh") and "/etc/rc3.d/S99tuner.sh" not in self.selectedFiles:
-			self.selectedFiles.append("/etc/rc3.d/S99tuner.sh")
-		if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/AutoBouquetsMaker/custom/favourites.xml") and "/usr/lib/enigma2/python/Plugins/SystemPlugins/AutoBouquetsMaker/custom/favourites.xml" not in self.selectedFiles:
-			self.selectedFiles.append("/usr/lib/enigma2/python/Plugins/SystemPlugins/AutoBouquetsMaker/custom/favourites.xml")
-		if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/AutoBouquetsMaker/providers/terrestrial_finder.xml") and "/usr/lib/enigma2/python/Plugins/SystemPlugins/AutoBouquetsMaker/providers/terrestrial_finder.xml" not in self.selectedFiles:
-			self.selectedFiles.append("/usr/lib/enigma2/python/Plugins/SystemPlugins/AutoBouquetsMaker/providers/terrestrial_finder.xml")
-		if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/AutoBouquetsMaker/custom"):
-			for custommix in glob.glob("/usr/lib/enigma2/python/Plugins/SystemPlugins/AutoBouquetsMaker/custom/*CustomMix.xml"):
-				if custommix not in self.selectedFiles:
-					self.selectedFiles.append(custommix)
-		if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/AutoBouquetsMaker/custom/favourites.xml") and "/usr/lib/enigma2/python/Plugins/SystemPlugins/AutoBouquetsMaker/custom/favourites.xml" not in self.selectedFiles:
-			self.selectedFiles.append("/usr/lib/enigma2/python/Plugins/SystemPlugins/AutoBouquetsMaker/custom/favourites.xml")
 
 		# temp measure: clear "/etc/samba" from settings as this is a system config location, not user files
 		if "/etc/samba" in self.selectedFiles:
@@ -1121,7 +1081,6 @@ class BackupFiles(Screen):
 		now = datetime.now()
 		output.write(now.strftime("%Y-%m-%d %H:%M") + ": Backup started\n")
 		output.close()
-		self.backupdirs = " ".join(config.backupmanager.backupdirs.value)
 		print("[BackupManager] Listing installed plugins")
 		self.pluginreader.run(self.Stage2Complete)
 
@@ -1132,18 +1091,6 @@ class BackupFiles(Screen):
 		print("[BackupManager] Listing ExtraInstalledPlugins completed. Plugins found:", (plugins_out or "None"))
 
 	def Stage3(self):
-		# Files for reference only. No longer used by the restore process.
-		# The version check is no longer be necessary since auto-installed packages are no longer listed in the plugins backup.
-		# For more information please consult commit https://github.com/OpenViX/vix-core/commit/53a95067677651a3f2579a1b0d1f70172ccc493b
-		print("[BackupManager] Finding kernel version:", KERNEL)
-		with open("/tmp/backupkernelversion", "w") as output:
-			output.write(KERNEL)
-		print("[BackupManager] Finding image version:", SystemInfo["imageversion"])
-		with open("/tmp/backupimageversion", "w") as output:
-			output.write(SystemInfo["imageversion"])
-		self.Stage3Completed = True
-
-	def Stage4(self):
 		if config.backupmanager.xtraplugindir.value and path.exists(config.backupmanager.xtraplugindir.value):
 			with open("/tmp/3rdPartyPlugins", "w") as output:
 				for file in listdir(config.backupmanager.xtraplugindir.value):
@@ -1153,11 +1100,11 @@ class BackupFiles(Screen):
 			with open("/tmp/3rdPartyPluginsLocation", "w") as output:
 				output.write(config.backupmanager.xtraplugindir.value)
 				output.close()
-		self.Stage4Completed = True
+		self.Stage3Completed = True
 
 	tar_flist = "/tmp/_backup-files.list"  # Filename for backup list
 
-	def Stage5(self):
+	def Stage4(self):
 		# Return config.usage.power.was_controlled_shutdown to the default value so it doesn't polute the settings file saved by the backup
 		config.usage.power.was_controlled_shutdown.value = config.usage.power.was_controlled_shutdown.default
 		config.usage.power.was_controlled_shutdown.save()
@@ -1165,13 +1112,10 @@ class BackupFiles(Screen):
 
 		tmplist = config.backupmanager.backupdirs.value
 		tmplist.append("/tmp/ExtraInstalledPlugins")
-		tmplist.append("/tmp/backupkernelversion")  # Files for reference only. No longer used by the restore process.
-		tmplist.append("/tmp/backupimageversion")  # Files for reference only. No longer used by the restore process.
 		if path.exists("/tmp/3rdPartyPlugins"):
 			tmplist.append("/tmp/3rdPartyPlugins")
 		if path.exists("/tmp/3rdPartyPluginsLocation"):
 			tmplist.append("/tmp/3rdPartyPluginsLocation")
-		self.backupdirs = " ".join(tmplist)
 		config.misc.restorewizardrun.setValue(True)
 		config.misc.restorewizardrun.save()
 		configfile.save()
@@ -1193,7 +1137,7 @@ class BackupFiles(Screen):
 		if config.backupmanager.showboxname.value:
 			boxname = "-" + SystemInfo["machinebuild"]
 		self.Backupfile = self.BackupDirectory + config.backupmanager.folderprefix.value + boxname + "-" + SystemInfo["imagetype"][0:3] + backupType + SystemInfo["imageversion"] + "." + SystemInfo["imagebuild"] + imageSubBuild + "-" + backupdate.strftime("%Y%m%d-%H%M") + ".tar.gz"
-		with open(BackupFiles.tar_flist, "w") as tfl:			# Need to create a list of what to backup, so that spaces and special characters don't get lost on, or mangle, the command line
+		with open(BackupFiles.tar_flist, "w") as tfl:  # Need to create a list of what to backup, so that spaces and special characters don't get lost on, or mangle, the command line
 			for fn in tmplist:
 				tfl.write(fn + "\n")
 		self.ConsoleB.ePopen("tar -T " + BackupFiles.tar_flist + " -czvf " + self.Backupfile, self.Stage4Complete)
@@ -1203,7 +1147,7 @@ class BackupFiles(Screen):
 			chmod(self.Backupfile, 0o644)
 			print("[BackupManager] Complete.")
 			remove("/tmp/ExtraInstalledPlugins")
-			self.Stage5Completed = True
+			self.Stage4Completed = True
 		else:
 			self.session.openWithCallback(self.BackupComplete, MessageBox, _("Backup failed - e. g. wrong backup destination or no space left on backup device."), MessageBox.TYPE_INFO, timeout=10)
 			print("[BackupManager] Result.", result)
@@ -1218,7 +1162,6 @@ class BackupFiles(Screen):
 		self.Stage2Completed = True
 		self.Stage3Completed = True
 		self.Stage4Completed = True
-		self.Stage5Completed = True
 
 		# Return config.usage.power.was_controlled_shutdown to the normal running state
 		config.usage.power.was_controlled_shutdown.value = not config.usage.power.was_controlled_shutdown.default
