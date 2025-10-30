@@ -382,7 +382,7 @@ int eDVBServicePMTHandler::getProgramInfo(program &program)
 	int cached_apid_ac4 = -1;
 	int cached_apid_ddp = -1;
 	int cached_apid_mpeg = -1;
-	int cached_apid_heaac = -1;
+	int cached_apid_aache = -1;
 	int cached_apid_aac = -1;
 	int cached_apid_dra = -1;
 	int cached_vpid = -1;
@@ -405,7 +405,7 @@ int eDVBServicePMTHandler::getProgramInfo(program &program)
 		cached_apid_ac3 = m_service->getCacheEntry(eDVBService::cAC3PID);
 		cached_apid_ac4 = m_service->getCacheEntry(eDVBService::cAC4PID);
 		cached_apid_ddp = m_service->getCacheEntry(eDVBService::cDDPPID);
-		cached_apid_heaac = m_service->getCacheEntry(eDVBService::cHEAACAPID);
+		cached_apid_aache = m_service->getCacheEntry(eDVBService::cAACHEAPID);
 		cached_apid_aac = m_service->getCacheEntry(eDVBService::cAACAPID);
 		cached_apid_dra = m_service->getCacheEntry(eDVBService::cDRAAPID);
 		cached_tpid = m_service->getCacheEntry(eDVBService::cTPID);
@@ -420,7 +420,7 @@ int eDVBServicePMTHandler::getProgramInfo(program &program)
 		int autoaudio_ac3 = -1;
 		int autoaudio_ac4 = -1;
 		int autoaudio_ddp = -1;
-		int autoaudio_heaac = -1;
+		int autoaudio_aache = -1;
 		int autoaudio_aac = -1;
 		int autoaudio_dra = -1;
 		int autoaudio_level = 4;
@@ -486,7 +486,7 @@ int eDVBServicePMTHandler::getProgramInfo(program &program)
 			 || program.audioStreams[i].pid == cached_apid_ac4
 			 || program.audioStreams[i].pid == cached_apid_ddp
 			 || program.audioStreams[i].pid == cached_apid_mpeg
-			 || program.audioStreams[i].pid == cached_apid_heaac
+			 || program.audioStreams[i].pid == cached_apid_aache
 			 || program.audioStreams[i].pid == cached_apid_aac
 			 || program.audioStreams[i].pid == cached_apid_dra)
 			{
@@ -498,7 +498,7 @@ int eDVBServicePMTHandler::getProgramInfo(program &program)
 				|| (program.audioStreams[i].pid == cached_apid_ac3)
 				|| (program.audioStreams[i].pid == cached_apid_ac4)
 				|| (program.audioStreams[i].pid == cached_apid_ddp)
-				|| (program.audioStreams[i].pid == cached_apid_heaac)
+				|| (program.audioStreams[i].pid == cached_apid_aache)
 				|| (program.audioStreams[i].pid == cached_apid_aac)
 				|| (program.audioStreams[i].pid == cached_apid_dra)))
 			{
@@ -526,8 +526,8 @@ int eDVBServicePMTHandler::getProgramInfo(program &program)
 								autoaudio_ac4 = i;
 							else if (program.audioStreams[i].type == audioStream::atDDP && (autoaudio_level > x || autoaudio_ddp == -1))
 								autoaudio_ddp = i;
-							else if (program.audioStreams[i].type == audioStream::atHEAAC && (autoaudio_level > x || autoaudio_heaac == -1))
-								autoaudio_heaac = i;
+							else if (program.audioStreams[i].type == audioStream::atAACHE && (autoaudio_level > x || autoaudio_aache == -1))
+								autoaudio_aache = i;
 							else if (program.audioStreams[i].type == audioStream::atAAC && (autoaudio_level > x || autoaudio_aac == -1))
 								autoaudio_aac = i;
 							else if (program.audioStreams[i].type == audioStream::atDRA && (autoaudio_level > x || autoaudio_dra == -1))
@@ -595,8 +595,8 @@ int eDVBServicePMTHandler::getProgramInfo(program &program)
 				program.defaultAudioStream = autoaudio_ac4;
 			else if (autoaudio_ddp != -1)
 				program.defaultAudioStream = autoaudio_ddp;
-			else if (autoaudio_heaac != -1)
-				program.defaultAudioStream = autoaudio_heaac;
+			else if (autoaudio_aache != -1)
+				program.defaultAudioStream = autoaudio_aache;
 			else if (autoaudio_aac != -1)
 				program.defaultAudioStream = autoaudio_aac;
 			else if (first_non_mpeg != -1 && (defaultac3 || defaultddp))
@@ -694,11 +694,11 @@ int eDVBServicePMTHandler::getProgramInfo(program &program)
 			program.audioStreams.push_back(s);
 			++cnt;
 		}
-		if ( cached_apid_heaac != -1 )
+		if ( cached_apid_aache != -1 )
 		{
 			audioStream s = {};
-			s.type = audioStream::atHEAAC;
-			s.pid = cached_apid_heaac;
+			s.type = audioStream::atAACHE;
+			s.pid = cached_apid_aache;
 			s.rdsPid = -1;
 			program.audioStreams.push_back(s);
 			++cnt;
@@ -969,7 +969,7 @@ int eDVBServicePMTHandler::tuneExt(eServiceReferenceDVB &ref, ePtr<iTsSource> &s
 			sRelayOrigSref.getChannelID(chid);
 			res = m_resourceManager->allocateChannel(chid, m_sr_channel, simulate);
 		}
-			
+
 
 		if (m_sr_channel) {
 			m_sr_channel->connectStateChange(
