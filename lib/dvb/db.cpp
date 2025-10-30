@@ -464,7 +464,7 @@ void eDVBService::setCacheEntry(cacheID id, int pid)
 				case cacheID::cAC4PID:
 					it->aac4_pid = pid_val;
 					break;
-				case cacheID::cHEAACAPID:
+				case cacheID::cAACHEAPID:
 					it->aaach_pid = pid_val;
 					break;
 				case cacheID::cAACAPID:
@@ -492,12 +492,12 @@ void eDVBService::setCacheEntry(cacheID id, int pid)
 			eServiceReference ref = eServiceReference(m_reference_str);
 			std::string ref_s = ref.toReferenceString();
 			int pid_val = pid > 0 ? pid : -1;
-			if (endsWith(ref_s, ":")) 
+			if (endsWith(ref_s, ":"))
 			{
 				ref_s = ref_s.substr(0, ref_s.size()-1);
 			}
 			eIPTVDBItem item(ref_s, id == cacheID::cMPEGAPID ? pid_val : -1, id == cacheID::cAC3PID ? pid_val : -1, id == cacheID::cAC4PID ? pid_val : -1,
-							id == cacheID::cDDPPID ? pid_val : -1, id == cacheID::cHEAACAPID ? pid_val : -1, id == cacheID::cAACAPID ? pid_val : -1,
+							id == cacheID::cDDPPID ? pid_val : -1, id == cacheID::cAACHEAPID ? pid_val : -1, id == cacheID::cAACAPID ? pid_val : -1,
 							id == cacheID::cDRAAPID ? pid_val : -1, id == cacheID::cSUBTITLE ? pid_val : -1, id == cacheID::cVPID ? pid_val : -1);
 			iptv_services.push_back(item);
 		}
@@ -568,7 +568,7 @@ void eDVBDB::parseServiceData(ePtr<eDVBService> s, std::string str)
 					s->setCacheEntry(eDVBService::cacheID::cDDPPID, it->addp_pid);
 				}
 				if (it->aaach_pid != -1) {
-					s->setCacheEntry(eDVBService::cacheID::cHEAACAPID, it->aaach_pid);
+					s->setCacheEntry(eDVBService::cacheID::cAACHEAPID, it->aaach_pid);
 				}
 				if (it->aaac_pid != -1) {
 					s->setCacheEntry(eDVBService::cacheID::cAACAPID, it->aaac_pid);

@@ -167,7 +167,7 @@ int eDVBPMTParser::getProgramInfo(program &program)
 					if (!isvideo && !isaudio)
 					{
 						isaudio = 1;
-						audio.type = audioStream::atHEAAC;
+						audio.type = audioStream::atAACHE;
 						forced_audio = 1;
 					}
 					[[fallthrough]];
@@ -306,7 +306,7 @@ int eDVBPMTParser::getProgramInfo(program &program)
 							case 0x1C: // TS_PSI_DT_MPEG4_Audio
 							case AAC_DESCRIPTOR:
 								isaudio = 1;
-								audio.type = audioStream::atHEAAC; // MPEG4-AAC
+								audio.type = audioStream::atAACHE; // MPEG4-AAC
 								break;
 							case AC3_DESCRIPTOR:
 								isaudio = 1;
