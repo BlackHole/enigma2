@@ -330,6 +330,7 @@ class AVSwitch:
 
 
 iAVSwitch = AVSwitch()
+avSwitch = iAVSwitch
 
 
 def InitAVSwitch():
