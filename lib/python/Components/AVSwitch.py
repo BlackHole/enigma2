@@ -330,7 +330,7 @@ class AVSwitch:
 
 
 iAVSwitch = AVSwitch()
-avSwitch = iAVSwitch
+avSwitch = iAVSwitch  # Added for compatibility with OpenATV. Used by kodi plugin.
 
 
 def InitAVSwitch():
