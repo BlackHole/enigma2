@@ -11,7 +11,7 @@
 
 ## OpenBh python3 is built using oe-alliance build-environment and several git repositories: ##
 
-> [https://github.com/oe-alliance/oe-alliance-core/tree/5.5.1](https://github.com/oe-alliance/oe-alliance-core/tree/5.5.1 "OE-Alliance")
+> [https://github.com/oe-alliance/oe-alliance-core/tree/5.6](https://github.com/oe-alliance/oe-alliance-core/tree/5.6 "OE-Alliance")
 >
 > https://github.com/BlackHole/enigma2
 
@@ -83,7 +83,7 @@
 ----------
 12 - Clone oe-alliance git
 
-    git clone https://github.com/oe-alliance/build-enviroment.git -b 5.4
+    git clone https://github.com/oe-alliance/build-enviroment.git -b 5.6
 
 ----------
 13 - Switch to folder build-enviroment
@@ -122,4 +122,3 @@
 19 - Building feeds only
 
 	MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make feeds
-

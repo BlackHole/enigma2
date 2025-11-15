@@ -488,7 +488,7 @@ class MediaPlayer(Screen, InfoBarBase, InfoBarScreenSaver, InfoBarSeek, InfoBarA
 	def updateCurrentInfo(self):
 		text = ""
 		if self.currList == "filelist":
-			idx = self.filelist.getSelectionIndex()
+			idx = self.filelist.getSelectedIndex()
 			r = self.filelist.list[idx]
 			text = r[1][7]
 			if r[0][1]:
@@ -534,7 +534,7 @@ class MediaPlayer(Screen, InfoBarBase, InfoBarScreenSaver, InfoBarSeek, InfoBarA
 			text = self.getIdentifier(t)
 			self.summaries.setText(text, 1)
 			self["currenttext"].setText(text)
-			idx = self.playlist.getSelectionIndex()
+			idx = self.playlist.getSelectedIndex()
 			idx += 1
 			if idx < len(self.playlist):
 				currref = self.playlist.getServiceRefList()[idx]
@@ -560,7 +560,7 @@ class MediaPlayer(Screen, InfoBarBase, InfoBarScreenSaver, InfoBarSeek, InfoBarA
 				self.copyFile()
 
 		if self.currList == "playlist":
-			if self.playlist.getCurrentIndex() == self.playlist.getSelectionIndex() and not self.playlist.isStopped():
+			if self.playlist.getCurrentIndex() == self.playlist.getSelectedIndex() and not self.playlist.isStopped():
 				if self.shown:
 					self.hideAndInfoBar()
 				elif self.mediaPlayerInfoBar.shown:
@@ -571,7 +571,7 @@ class MediaPlayer(Screen, InfoBarBase, InfoBarScreenSaver, InfoBarSeek, InfoBarA
 				else:
 					self.mediaPlayerInfoBar.show()
 			else:
-				self.changeEntry(self.playlist.getSelectionIndex())
+				self.changeEntry(self.playlist.getSelectedIndex())
 
 	def showMenu(self):
 		menulist = []
@@ -618,7 +618,7 @@ class MediaPlayer(Screen, InfoBarBase, InfoBarScreenSaver, InfoBarSeek, InfoBarA
 		elif choice[1] == "filelist":
 			self.switchToFileList()
 		elif choice[1] == "deleteentry":
-			if self.playlist.getSelectionIndex() == self.playlist.getCurrentIndex():
+			if self.playlist.getSelectedIndex() == self.playlist.getCurrentIndex():
 				self.stopEntry()
 			self.deleteEntry()
 		elif choice[1] == "clear":
@@ -682,7 +682,7 @@ class MediaPlayer(Screen, InfoBarBase, InfoBarScreenSaver, InfoBarSeek, InfoBarA
 
 	def deletePlaylistEntry(self):
 		if self.currList == "playlist":
-			if self.playlist.getSelectionIndex() == self.playlist.getCurrentIndex():
+			if self.playlist.getSelectedIndex() == self.playlist.getCurrentIndex():
 				self.stopEntry()
 			self.deleteEntry()
 
@@ -899,7 +899,7 @@ class MediaPlayer(Screen, InfoBarBase, InfoBarScreenSaver, InfoBarSeek, InfoBarA
 				self.changeEntry(next)
 
 	def deleteEntry(self):
-		self.playlist.deleteFile(self.playlist.getSelectionIndex())
+		self.playlist.deleteFile(self.playlist.getSelectedIndex())
 		self.playlist.updateList()
 		if len(self.playlist) == 0:
 			self.switchToFileList()
