@@ -59,7 +59,7 @@ class openbhVipMain(Setup): # ConfigListScreen):
 
 	def okbuttonClick(self):
 		with open("/etc/opkg/vip-feed.conf", "w") as f:
-			f.write(f"src/gz openbh-vip https://{quote(self.username.value, safe='')}:{quote(self.password.value, safe='')}@feeds.openbh.net/vip\n")
+			f.write(f"src/gz openbh-vip https://{quote(self.username.value, safe='')}:{quote(self.password.value, safe='')}@feeds.openbh.net/vip/5.6\n")
 		self.close()
 
 	def createSetup(self):
