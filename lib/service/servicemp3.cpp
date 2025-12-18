@@ -1183,9 +1183,17 @@ RESULT eServiceMP3::seekRelative(int direction, pts_t to)
 	pts_t ppos;
 	if (getPlayPosition(ppos) < 0) return -1;
 	ppos += to * direction;
+
 	if (ppos < 0)
 		ppos = 0;
-	return seekTo(ppos);
+
+	int res = seekTo(ppos);
+
+	// Do double seek to same position so to overcome problem with seeking backward and passthrough on for some boxes
+	if (res > -1)
+		seekTo(ppos);
+
+	return res;
 }
 
 gint eServiceMP3::match_sinktype(const GValue *velement, const gchar *type)
