@@ -81,7 +81,7 @@ BoxInfo.boxInfo["kernel"] = Versions.split(" ", 3)[2].split("-", 1)[0].strip() i
 SystemInfo = BoxInfo.boxInfo
 
 
-if BoxInfo.getItem("model") in ("h7"):
+if BoxInfo.getItem("model") in ("h7", "h17"):
 	CHIPSET = "7251s"
 else:
 	chipset = fileReadLine("/proc/stb/info/chipset")

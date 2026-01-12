@@ -220,7 +220,7 @@ class RemoteControlType(ConfigListScreen, Screen):
 	rcList = [
 		("0", _("Default")),
 		("8", _("VU+")),
-		("28", _("H7/H9COMBOSE/H11 new Model")),
+		("28", _("H7/H9COMBOSE/H11/H17 new Model")),
 		("30", _("PULSe 4K/4K Mini"))
 	]
 
@@ -229,6 +229,7 @@ class RemoteControlType(ConfigListScreen, Screen):
 		("h7", 28),  # new model
 		("h9combose", 28),
 		("h11", 28),
+		("h17", 28),
 		("pulse4k", 30),
 		("pulse4kmini", 30)
 	]
