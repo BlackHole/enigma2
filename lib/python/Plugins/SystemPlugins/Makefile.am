@@ -5,7 +5,7 @@ SUBDIRS = PositionerSetup Satfinder CableScan \
 	DefaultServicesScanner CommonInterfaceAssignment \
 	VideoClippingSetup VideoEnhancement OBH \
 	WirelessLan SABnzbdSetup FastScan \
-	SatelliteEquipmentControl DiseqcTester
+	SatelliteEquipmentControl DiseqcTester SkinConfig
 
 if HAVE_LIBVUGLES2
 SUBDIRS += AnimationSetup

@@ -75,7 +75,6 @@ def getProcPartitions(partitionList):
 				continue
 			if UBIMB and SystemInfo["canMultiBoot"] and SystemInfo["BootDevice"][0:3] == device[0:3]:  # don,t show boot device
 				partitions.append(device)
-				# print(f"[MountManager]3 device={device} device[0:3]:{device[0:3]}")
 				continue
 			buildPartitionInfo(device, partitionList)
 			partitions.append(device)
@@ -119,7 +118,7 @@ def buildPartitionInfo(partition, partitionList):
 		if "/%s" % bus in physicalDevice:
 			break
 	# print("[MountManager1]bus: %s count : %s" % (bus, count))
-	pngType = busTranslate[count]
+	pngType = busTranslate[count] if partition != "mmcblk0p3" else "mmc"
 	name = ""
 	if not portDescription:
 		name = _("%s: ") % pngType.upper()

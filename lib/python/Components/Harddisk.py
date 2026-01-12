@@ -220,14 +220,14 @@ class Harddisk:
 		return busName
 
 	def port(self):
-		print(f"[Harddisk][port] physicalDevice:{self.phys_path}")
-		print(f"[Harddisk][port] list(getDeviceDB().items() {list(getDeviceDB().items())}")
+		# print(f"[Harddisk][port] physicalDevice:{self.phys_path}")
+		# print(f"[Harddisk][port] list(getDeviceDB().items() {list(getDeviceDB().items())}")
 		portDescription = ""
 		for physdevprefix, pdescription in list(getDeviceDB().items()):
-			print(f"[Harddisk][port] physdevprefix:{physdevprefix} pdescription:{pdescription}")
+			# print(f"[Harddisk][port] physdevprefix:{physdevprefix} pdescription:{pdescription}")
 			if self.phys_path.replace("/sys", "").startswith(physdevprefix):
 				portDescription = _(pdescription)
-		print(f"[Harddisk][bus] portDescription:{portDescription}")
+		# print(f"[Harddisk][port] portDescription:{portDescription}")
 		return portDescription
 
 	def diskSize(self):
