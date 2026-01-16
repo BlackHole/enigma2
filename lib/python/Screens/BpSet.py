@@ -110,7 +110,7 @@ class DeliteSettings(Screen):
 			self.noYet()
 
 	def noYet(self):
-		nobox = self.session.open(MessageBox, _("Function Not Yet Available"), MessageBox.TYPE_INFO)
+		nobox = self.session.open(MessageBox, _("Function Not Available Yet"), MessageBox.TYPE_INFO)
 		nobox.setTitle(_("Info"))
 
 	def updateList(self):
@@ -970,7 +970,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-openhbbtvbrowser"])
 		elif SystemInfo["brand"] == "gigablue" and SystemInfo["boxtype"] in ("gbtrio4k", "gbtrio4kpro", "gbip4k"):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-gb"])
-		elif SystemInfo["boxtype"] in ("zgemmah7", "novaler4kpro"):
+		elif SystemInfo["boxtype"] in ("zgemmah7", "zgemmah17twin", "novaler4kpro"):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-qt"])
 
 		if SystemInfo["boxtype"] not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero", "zgemmah82h", "sfx6008", "sfx6018"):

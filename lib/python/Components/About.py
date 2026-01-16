@@ -43,7 +43,7 @@ def getCPUSpeedMHzInt(MODEL):
 		print("[About] getCPUSpeedMHzInt, /proc/cpuinfo not available")
 
 	if cpu_speed == 0:
-		if MODEL in ("h7", "sf4008", "osmio4kplus", "osmini4k"):
+		if MODEL in ("h7", "h17", "sf4008", "osmio4kplus", "osmini4k"):
 			try:
 				import binascii
 				with open("/sys/firmware/devicetree/base/cpus/cpu@0/clock-frequency", "rb") as f:
