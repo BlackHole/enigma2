@@ -101,7 +101,7 @@ self.session.openWithCallback(msgClosed, EpgDeleteMsg)
 			<menu key="skin_setup" level="0" text="Skin Selection" weight="3">
 				<item key="skin_selection" level="0" text="GUI Skin" weight="3"><screen module="SkinSelector" /></item>
 			</menu>
-			
+
 			<menu key="osd_menu" level="0" text="On Screen Display" weight="4" requires="OsdMenu">
 				<item key="osdsetup" level="2" text="OSD Position" requires="OsdSetup"><screen module="UserInterfacePositioner" /></item>
 			</menu>
@@ -159,6 +159,7 @@ self.session.open(SABnzbdSetupScreen)
 			<item key="cccaminfo" level="2" text="CCcam Info" weight="90" requires="CCcamInstalled"><screen module="CCcamInfo" screen="CCcamInfoMain" /></item>
 			<item key="oscam/Ncaminfo" level="2" text="OScam/Ncam Info" weight="91" requires="OScamInstalled"><screen module="OScamInfo" screen="OscamInfoMenu" /></item>
 			<item key="softcam_setup" level="2" text="Settings" weight="1"><setup id="softcamsetup" /></item>
+			<item key="softcsa_settings" level="2" text="SoftCSA Settings" weight="105" requires="HasSoftCSA"><setup id="SoftCSA" /></item>
 			<item key="streamrelay_settings" level="2" text="Stream Relay Settings" weight="110"><screen module="StreamRelaySetup" screen="StreamRelaySetup" /></item>
 		</menu>
 
