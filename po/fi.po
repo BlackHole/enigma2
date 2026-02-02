@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: enigma2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-01 15:34+0200\n"
-"PO-Revision-Date: 2026-01-03 17:36+0200\n"
+"POT-Creation-Date: 2026-01-31 15:43+0200\n"
+"PO-Revision-Date: 2026-01-31 18:24+0200\n"
 "Last-Translator: Orlandox\n"
 "Language-Team: AndyBlac/timoj/Kojo/Samzam/Orlandox\n"
 "Language: fi\n"
@@ -3921,6 +3921,9 @@ msgstr "Kokoelman asetukset"
 msgid "Colombia"
 msgstr "Kolumbia"
 
+msgid "Color Theme"
+msgstr "Väriteema"
+
 msgid "Color format"
 msgstr "Väriformaatti"
 
@@ -4664,6 +4667,9 @@ msgstr "Moottorin suuntaus: "
 msgid "Current settings:"
 msgstr "Käytetyt asetukset:"
 
+msgid "Current skin configuration plugin."
+msgstr "Nykyisen teeman määritys -lisäosa."
+
 msgid "Current status:"
 msgstr "Nykyinen tila:"
 
@@ -4976,6 +4982,12 @@ msgstr "Debug tiedostoon"
 
 msgid "Debug+ Logs"
 msgstr "Debug+ lokit"
+
+msgid "Decoder Release Strategy *"
+msgstr "Dekooderin julkaisustrategia *"
+
+msgid "Decoder Start Timeout *"
+msgstr "Dekooderin käynnistyksen aikakatkaisu *"
 
 msgid "Decrement end time"
 msgstr "Vähennä loppuaikaa"
@@ -5529,6 +5541,9 @@ msgstr ""
 "Haluatko varmuuskopioida eMMC-paikat?\n"
 "Tämä kestää 1 -> 5 minuuttia eMMC-paikkaa kohden"
 
+msgid "Do you want to backup image slot (Yes) or create a recovery backup (No)"
+msgstr "Haluatko varmuuskopioida imagen paikan (Kyllä) vai luoda palautusvarmuuskopion (Ei)"
+
 msgid "Do you want to burn this collection to DVD medium?"
 msgstr "Haluatko polttaa tämän kokoelman DVD:lle?"
 
@@ -5538,15 +5553,9 @@ msgstr "Haluatko vaihtaa oletusskinin?"
 msgid "Do you want to continue?"
 msgstr "Haluatko jatkaa?"
 
-msgid "Do you want to create a full image backup?"
-msgstr "Luodaanko koko imagen varmuuskopio?"
-
-msgid ""
-"Do you want to create a full image backup?\n"
-"This can take upto 25 minutes to complete."
-msgstr ""
-"Luodaanko koko imagen varmuuskopio?\n"
-"Tämän suorittaminen voi kestää jopa 25 minuuttia."
+#, python-format
+msgid "Do you want to create a %s image backup? This can take several minutes to complete."
+msgstr "Haluatko luoda %s-imagen varmuuskopion? Tämä voi kestää useita minuutteja."
 
 msgid ""
 "Do you want to delete all the selected files:\n"
@@ -7120,6 +7129,9 @@ msgstr "Täysi läpinäkyvyys"
 msgid "Full view resolution"
 msgstr "Kokoruudun resoluutio"
 
+msgid "Function Not Available Yet"
+msgstr "Toiminto ei ole vielä käytettävissä"
+
 msgid "Function Not Yet Available"
 msgstr "Toiminto ei vielä saatavilla"
 
@@ -7462,8 +7474,8 @@ msgstr "Voimistelu"
 msgid "H"
 msgstr "H"
 
-msgid "H7/H9COMBOSE/H11 new Model"
-msgstr "H7/H9COMBOSE/H11 uusi malli"
+msgid "H7/H9COMBOSE/H11/H17 new Model"
+msgstr "H7/H9COMBOSE/H11/H17 uusi malli"
 
 msgid "H9SDcard Manager"
 msgstr "H9SD-kortin hallinnointi"
@@ -7806,6 +7818,9 @@ msgstr "Kuinka monta minuuttia haluat tallentaa?"
 
 msgid "How to display the date format for date items in the About screen."
 msgstr "Kuinka näytettään päivämäärän muoto päivämääräkohdille Tietoja-näytössä."
+
+msgid "How to release the hardware decoder when switching to software descrambling. 'Quick' releases immediately (faster zapping). 'Normal' performs clean shutdown first (more stable on some boxes). *Restart E2 for changes to take effect."
+msgstr "Kuinka vapauttaa laitteistodekooderi, kun siirrytään ohjelmistopohjaiseen salauksen purkamiseen. 'Pika' vapauttaa välittömästi (nopeampi kanavanvaihto). 'Normaali' suorittaa ensin puhtaan sammutuksen (vakaampi joissakin laitteissa). *Käynnistä E2 uudelleen, jotta muutokset tulevat voimaan."
 
 msgid "Http(s) stream start delay"
 msgstr "Http/https streamin käynnistysviive"
@@ -8224,7 +8239,7 @@ msgstr "Alustava signaalin laatu:"
 msgid ""
 "Initialising Vu+ Multiboot PLEASE WAIT!\n"
 "\n"
-"Installation will take upto 5 minutes + 5 minutes per restored eMMC slot.\n"
+"Installation will take up to 5 minutes + 5 minutes per restored eMMC slot.\n"
 "\n"
 "When installation is complete, your receiver will reboot to Slot 1 Setup Wizard."
 msgstr ""
@@ -8821,6 +8836,10 @@ msgstr "Letterbox"
 msgid "Letterbox zoom"
 msgstr "Letterbox suurennus"
 
+#, python-format
+msgid "Libdvbcsa version:\t%s\n"
+msgstr "Libdvbcsa-versio:\t%s\n"
+
 msgid "Liberia"
 msgstr "Liberia"
 
@@ -9270,6 +9289,9 @@ msgstr "Säilytettävien varmuuskopioiden maksimimäärä. Vanhat varmuuskopiot 
 
 msgid "Maximum number of days"
 msgstr "Maksimi päivien lukumäärä"
+
+msgid "Maximum time to wait for the incoming data and descrambling keys (CW) before starting decoder. Usually both arrive much faster and this is only for special cases. *Restart E2 for changes to take effect."
+msgstr "Enimmäisaika, jonka voi odottaa saapuvia tietoja ja dekoodausavaimia (CW) ennen dekooderin käynnistämistä. Yleensä molemmat saapuvat paljon nopeammin, ja tämä koskee vain erityistapauksia. *Käynnistä E2 uudelleen, jotta muutokset tulevat voimaan."
 
 msgid "Maximum total space used (MB)"
 msgstr "Maksimi tilankäyttö (MB)"
@@ -11121,6 +11143,9 @@ msgstr "Pip-kuva"
 
 msgid "PiPZap"
 msgstr "PiP-kanavanvaihto"
+
+msgid "Pick an option. After selection is saved GUI should be restarted to accept the changes."
+msgstr "Valitse vaihtoehto. Valinnan tallentamisen jälkeen käyttöliittymä tulee käynnistää uudelleen, jotta muutokset tulevat voimaan."
 
 msgid "Picon"
 msgstr "Kanavalogo"
@@ -13046,10 +13071,6 @@ msgstr "SD-kortti"
 msgid "SETUP"
 msgstr "ASETUKSET"
 
-#, python-format
-msgid "SF8008 indicate type of backup %s"
-msgstr "SF8008 ilmoittaa varmuuskopion tyypin %s"
-
 msgid "SHIFT: "
 msgstr "SHIFT: "
 
@@ -13706,6 +13727,10 @@ msgstr "Valitse vaakaerottelu:"
 
 msgid "Select how quickly the dish should move between satellites."
 msgstr "Valitse kuinka nopeasti antennin pitäisi liikkua satelliittien välillä."
+
+msgid "Select how the descrambled data stream is processed. 'Automatic' uses asynchronous writes (lower CPU usage) with automatic fallback to synchronous if kernel AIO is not supported. 'Synchronous' forces blocking writes (stable, most compatible). *Restart E2 for changes to take effect."
+msgstr ""
+"Valitse, miten dekoodattu streami käsitellään. 'Automaattinen' käyttää asynkronisia kirjoituksia (pienempi CPU-käyttö) ja siirtyy automaattisesti synkroniseen tilaan, jos ytimen AIO-toimintoa ei tueta. 'Synkroninen' pakottaa kirjoitukset estämään (vakaa, yhteensopivin). *Käynnistä E2 uudelleen, jotta muutokset tulevat voimaan."
 
 msgid "Select how the satellite dish is set up. i.e. fixed dish, single LNB, DiSEqC switch, positioner, etc."
 msgstr "Valitse kuinka satelliittiantenni on rakennettu eli kiinteä antenni, yksittäis LNB, DiSEqC-kytkin, kääntömoottori jne."
@@ -14869,6 +14894,15 @@ msgstr "Hiihto"
 msgid "Skin"
 msgstr "Teema"
 
+msgid "Skin Configuration"
+msgstr "Teeman määritys"
+
+msgid "Skin Configurator"
+msgstr "Teeman määrittely"
+
+msgid "Skin Configurator: Restart GUI"
+msgstr "Teeman määrittely: käynnistä käyttöliittymä uudelleen"
+
 msgid "Skin Selection"
 msgstr "Teeman valinta"
 
@@ -15042,6 +15076,9 @@ msgstr "Yhteiskunta"
 
 msgid "Society & Culture"
 msgstr "Yhteiskunta & Kulttuuri"
+
+msgid "SoftCSA Settings"
+msgstr "SoftCSA-asetukset"
 
 msgid "Softcam Actions"
 msgstr "Softcam-asetukset"
@@ -15818,6 +15855,9 @@ msgstr "Symbolinopeus & FEC"
 msgid "Symbol rate:"
 msgstr "Symbolinopeus:"
 
+msgid "Sync Mode *"
+msgstr "Synkronointitila *"
+
 msgid "Sync failure moving back to origin !"
 msgstr "Synkronointivirhe, palataan takaisin alkuperäiseen !"
 
@@ -15826,6 +15866,9 @@ msgstr "Synkronoi aika käyttäen"
 
 msgid "Synchronize system time using transponder or internet."
 msgstr "Synkronoi laitteen kello transponderista tai internetistä."
+
+msgid "Synchronous"
+msgstr "Synkroninen"
 
 msgid "Syrian Arab Republic"
 msgstr "Syrian Arab Republic"
@@ -15894,7 +15937,7 @@ msgid "TRANSLATOR_INFO"
 msgstr ""
 "Suomenkielinen käännös: timoj, Kojo, Samzam, Orlandox\n"
 "http://www.huoltovalikko.com\n"
-"03.01.2025"
+"31.01.2026"
 
 msgid "TS file is too large for ISO9660 level 1!"
 msgstr "TS-tiedosto on liian suuri ISO9660 1-tasolle!"
@@ -16375,9 +16418,8 @@ msgstr "Tämä asetus määrittää montako riviä näytetään."
 msgid "This allows you to set the number of digits you can input when selecting channels using number input."
 msgstr "Tämän avulla voit asettaa syötettävien numeroiden määrän valitessasi kanavia numeronsyöttöä käyttämällä."
 
-#, python-format
-msgid "This can take up to %s minutes to complete."
-msgstr "Tämä voi kestää jopa %s minuuttia."
+msgid "This can take up to 20 minutes for recovery backup , 6 minutes for image backup."
+msgstr "Palautusvarmuuskopiointi voi kestää jopa 20 minuuttia ja imagen varmuuskopiointi 6 minuuttia."
 
 msgid "This change will overwrite all eMMC Slots."
 msgstr "Tämä muutos korvaa kaikki eMMC-paikat."
@@ -16772,6 +16814,9 @@ msgstr "Jos haluat tehdä imagen varmuuskopion, valitse Imagen hallinnoinnin pä
 #, python-format
 msgid "To save and apply the selected '%s' skin the GUI needs to restart. Would you like to save the selection and restart the GUI now?"
 msgstr "Tallentaaksesi ja ottaaksesi valitun teeman '%s' käyttöön, pitää käyttöliittymä käynnistää uudelleen. Tallennetaanko ja käynnistetäänkö ?"
+
+msgid "To save and apply the selected skin configuration the GUI needs to restart. Would you like to save the selection and restart the GUI now?"
+msgstr "Valitun teeman kokoonpanon tallentamiseksi ja käyttöönottamiseksi käyttöliittymä on käynnistettävä uudelleen. Haluatko tallentaa valinnan ja käynnistää käyttöliittymän uudelleen nyt?"
 
 msgid "To start a download select YELLOW from Image Manager main screen, then select the distro, and finally which image to download."
 msgstr "Aloita lataus valitsemalla KELTAINEN Imagen hallinnoinnin päänäytöstä, valitse sitten kirjasto ja lopuksi ladattava image."
@@ -18771,10 +18816,6 @@ msgid ""
 msgstr ""
 "%s %s käynnistyy uudelleen palvelun poistamisen jälkeen\n"
 "Poistetaanko palvelu nyt?"
-
-#, python-format
-msgid "Your %s will create a recovery backup only for slot 1 else image backup."
-msgstr "%s luo palautusvarmuuskopion vain paikalle 1, muuten varmuuskopioidaan image."
 
 msgid "Your STB will restart after pressing OK on your remote control."
 msgstr "Laite käynnistyy uudelleen kun painat kaukosäätimen OK-näppäintä."
