@@ -6,6 +6,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <string>
 
 #include <lib/base/init.h>
 #include <lib/base/init_num.h>
@@ -32,6 +33,78 @@ eDVBCIInterfaces *eDVBCIInterfaces::instance = 0;
 
 pthread_mutex_t eDVBCIInterfaces::m_pmt_handler_lock = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
 pthread_mutex_t eDVBCIInterfaces::m_slot_lock = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
+
+static char* readInputCI(int NimNumber)
+{
+	char id1[] = "NIM Socket";
+	char id2[] = "Input_Name";
+	char keys1[] = "1234567890";
+	char keys2[] = "12ABCDabcd";
+	char *inputName = 0;
+	char buf[256];
+	FILE *f;
+
+	f = fopen("/proc/bus/nim_sockets", "rt");
+	if (f)
+	{
+		while (fgets(buf, sizeof(buf), f))
+		{
+			char *p = strcasestr(buf, id1);
+			if (!p)
+				continue;
+
+			p += strlen(id1);
+			p += strcspn(p, keys1);
+			if (*p && strtol(p, 0, 0) == NimNumber)
+				break;
+		}
+
+		while (fgets(buf, sizeof(buf), f))
+		{
+			if (strcasestr(buf, id1))
+				break;
+
+			char *p = strcasestr(buf, id2);
+			if (!p)
+				continue;
+
+			p = strchr(p + strlen(id2), ':');
+			if (!p)
+				continue;
+
+			p++;
+			p += strcspn(p, keys2);
+			size_t len = strspn(p, keys2);
+			if (len > 0)
+			{
+				inputName = strndup(p, len);
+				break;
+			}
+		}
+
+		fclose(f);
+	}
+
+	return inputName;
+}
+
+static std::string getTunerLetterDM(int NimNumber)
+{
+	char *srcCI = readInputCI(NimNumber);
+	if (srcCI) {
+		std::string ret = std::string(srcCI);
+		free(srcCI);
+		if (ret.size() == 1){
+			int corr = 1;
+			if (NimNumber > 7) {
+				corr = -7;
+			}
+			return ret + std::to_string(NimNumber + corr);
+		}
+		return ret;
+	}
+	return eDVBCISlot::getTunerLetter(NimNumber);
+}
 
 eDVBCIInterfaces::eDVBCIInterfaces()
  : m_messagepump_thread(this,1, "dvbci"), m_messagepump_main(eApp,1, "dvbci"), m_runTimer(eTimer::create(this))
@@ -1573,8 +1646,8 @@ int eDVBCISlot::setCaParameter(eDVBServicePMTHandler *pmthandler)
 		m_audio_pids[i] = program.audioStreams[i].pid;
 	}
 
-	m_video_pid = program.videoStreams.empty()? 0 : program.videoStreams[0].pid;
-	m_audio_pid = program.audioStreams.empty()? 0 : program.audioStreams[program.defaultAudioStream].pid;
+	m_video_pid = program.videoStreams.empty() ? 0 : program.videoStreams[0].pid;
+	m_audio_pid = (program.audioStreams.empty() || program.defaultAudioStream < 0 || static_cast<size_t>(program.defaultAudioStream) >= program.audioStreams.size()) ? 0 : program.audioStreams[program.defaultAudioStream].pid;
 
 	m_tunernum = -1;
 	if (!pmthandler->getChannel(channel))
