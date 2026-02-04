@@ -66,7 +66,7 @@ public:
 	void setCompareSref( const std::string &n, bool isSR = false) { compareSref=n; isStreamRelay=isSR; }
 	bool getStreamRelay() const { return isStreamRelay; }
 	std::string getCompareSref() const { return compareSref; }
-	
+
 
 	unsigned int getUnsignedData(unsigned int num) const
 	{
@@ -987,6 +987,7 @@ public:
 
 		evUpdateTags,
 		evUpdateIDv3Cover,
+		evGstreamerStart,
 
 		evUser = 0x100
 	};
