@@ -2419,7 +2419,7 @@ RESULT eDVBServicePlay::getTrackInfo(struct iAudioTrackInfo &info, unsigned int 
 	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atAAC)
 		info.m_description = "AAC";
 	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atAACHE)
-		info.m_description = "HE-AAC";
+		info.m_description = "AAC-HE";
 	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atDTS)
 		info.m_description = "DTS";
 	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atDTSHD)
