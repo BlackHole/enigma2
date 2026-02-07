@@ -3,10 +3,6 @@
 #include <lib/dvb/cahandler.h>
 #include <lib/base/eerror.h>
 
-#ifdef DREAMNEXTGEN
-#include <lib/dvb/alsa.h>
-#endif
-
 DEFINE_REF(eDVBCSASession);
 
 static const uint8_t DEFAULT_ECM_MODE = 0x04;
@@ -74,11 +70,6 @@ eDVBCSASession::~eDVBCSASession()
 	eDebug("[CSASession] Destroyed for service %s", m_service_ref.toString().c_str());
 
 	stopECMMonitor();
-
-#ifdef DREAMNEXTGEN
-	// Reset audio delay flag when session is destroyed
-	eAlsaOutput::setSoftDecoderActive(0);
-#endif
 }
 
 bool eDVBCSASession::init()
@@ -255,16 +246,10 @@ void eDVBCSASession::setActive(bool active)
 	if (m_active)
 	{
 		eDebug("[CSASession] ACTIVATED - CSA-ALT detected, SW-Descrambling active");
-#ifdef DREAMNEXTGEN
-		eAlsaOutput::setSoftDecoderActive(1);
-#endif
 	}
 	else
 	{
 		eDebug("[CSASession] DEACTIVATED - HW-Descrambling (passthrough)");
-#ifdef DREAMNEXTGEN
-		eAlsaOutput::setSoftDecoderActive(0);
-#endif
 		if (m_engine)
 			m_engine->clearKeys();
 		// Reset ECM analysis state
