@@ -1631,7 +1631,7 @@ void eDVBScan::insertInto(iDVBChannelList *db, bool backgroundscanresult)
 			for (std::vector<eServiceReferenceDVB>::const_iterator
 				service(m_new_servicerefs.begin()); service != m_new_servicerefs.end(); ++service)
 			{
-				bouquet->m_services.push_back(*service);
+				bouquet->m_services.push_back(service->first);
 			}
 			bouquet->flushChanges();
 			eDVBDB::getInstance()->renumberBouquet();
