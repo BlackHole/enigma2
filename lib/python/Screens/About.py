@@ -1,6 +1,6 @@
 from os import listdir, path as ospath, popen, statvfs
 from platform import libc_ver
-from re import search
+from re import search, sub
 from requests import get
 from sys import version_info, version as pyversion
 from enigma import eTimer, getDesktop, getEnigmaLastCommitDate, getEnigmaLastCommitHash, eDVBCSAEngine
@@ -435,9 +435,6 @@ class Devices(AboutBase):
 			[self.addColor(_("Detected Devices:"))] + (devicelist or [_("None")]) + [""] +
 			[self.addColor(_("Network Servers:"))] + (networkmountinfo or [_("None")]) + [""]))
 
-	def createSummary(self):
-		return AboutSummary
-
 
 class SystemMemoryInfo(AboutBase):
 	def __init__(self, session):
@@ -723,30 +720,40 @@ class SystemNetworkInfo(AboutBase):
 
 class AboutSummary(ScreenSummary):
 	def __init__(self, session, parent):
+		self.parent = parent
+		self.refresh = parent.__class__.__name__ in ("StreamingClientsInfo",)  # refresh from parent, don't scroll
 		ScreenSummary.__init__(self, session, parent=parent)
 		self.skinName = "AboutSummary"
-		self.aboutText = []
 		self["AboutText"] = StaticText()
-		self.aboutText.append(_("OpenBh: %s") % SystemInfo["imageversion"] + "." + SystemInfo["imagebuild"] + "\n")
-		self.aboutText.append(_("Model: %s %s\n") % (DISPLAYBRAND, MACHINENAME))
-		self.aboutText.append(_("Updated: %s") % getLastCommitDate() + "\n")
-		SystemTemperature = getsystemTemperature()
-		if SystemTemperature and int(SystemTemperature.replace("\n", "")) > 0:
-			self.aboutText.append(_("System temperature: %s") % SystemTemperature.replace("\n", "") + "\xb0" + "C\n")
-		self.aboutText.append(_("Chipset: %s") % CHIPSET.replace("\n", "").upper() + "\n")
-		self.aboutText.append(_("Kernel: %s") % KERNEL + "\n")
-		self.aboutText.append(_("Drivers: %s") % driversDate() + "\n")
-		self["AboutText"].text = "".join(self.aboutText)
+		self.fetchParentText()
+		self["AboutText"].text = "\n".join(self.aboutText)
 		self.timer = eTimer()
 		self.timer.callback.append(self.update)
-		self.timer.start(3000, 1)
+		self.timer.start(10 if self.refresh else 3000, 1)
 
 	def update(self):
 		self.timer.stop()
-		if self.aboutText:
-			self.aboutText.append(self.aboutText.pop(0))
-			self["AboutText"].text = "".join(self.aboutText)
+		if self.refresh:
+			self.fetchParentText()
+			self.updateAboutText()
+			self.timer.start(5000, 1)
+		elif any(self.aboutText):
+			while True:  # we want the top line to always be populated
+				self.aboutText.append(self.aboutText.pop(0))
+				if self.aboutText[0]:
+					break
+			self.updateAboutText()
 			self.timer.start(2000, 1)
+
+	def fetchParentText(self):
+		self.aboutText = [self.clean(x) for x in self.parent["AboutScrollLabel"].text.split("\n")]
+
+	def updateAboutText(self):
+		self["AboutText"].text = "\n".join(self.aboutText)
+
+	def clean(self, x):
+		# remove colours, replace tabs with spaces, remove leading/trailing whitespace
+		return sub("\\\\c[0-9-a-f]{8}", "", x).replace("\t", " ").strip()
 
 
 class TranslationInfo(Screen):
