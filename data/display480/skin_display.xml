@@ -322,8 +322,8 @@
 
 <!-- messagebox -->
 	<screen name="MessageBoxSummary" position="0,0" size="480,320">
-		<widget source="parent.Text" render="Label" position="0,20" size="480,180" font="FdLcD;40" halign="center" valign="center" />
-		<widget source="parent.selectedChoice" render="Label" position="0,220" size="400,70" font="FdLcD;40" halign="center" valign="center" noWrap="1" />
+		<widget source="parent.Text" render="Label" position="0,10" size="480,230" font="FdLcD;40" halign="center" valign="center" />
+		<widget source="parent.selectedChoice" render="Label" position="0,260" size="480,50" font="FdLcD;40" halign="center" valign="center" noWrap="1" />
 	</screen>
 	<screen name="MessageBoxSimpleSummary" position="0,0" size="480,320">
 		<panel name="MessageBoxSummary" />
@@ -390,15 +390,14 @@
 		<widget source="parent.Service" render="Label" position="241,161" size="240,100" font="FdLcD;40" halign="center" valign="bottom" noWrap="1">
 		  <convert type="MovieInfo">FileSize</convert>
 		</widget>
-		<panel name="SummaryIconsPanel" />
 		<panel name="SummaryTunerStatusPanel" />
 		<panel name="white_Clock_Panel" />
 	</screen>
 
 <!-- misc -->
 	<screen name="ScreenSummary" position="fill">
-		<widget source="Title" render="Label" position="top" size="*,100" font="FdLcD;40" halign="center" valign="center" />
-		<panel position="bottom" size="*,24" name="SummaryClockPanel" />
+		<widget source="Title" render="Label" position="0,5" size="480,60" font="FdLcD;50" halign="center" valign="center" foregroundColor="yellow" />
+		<panel name="SummaryClockPanel" />
 	</screen>
 	<screen name="WizardSummary" position="fill">
 		<widget source="text" render="Label" position="top" size="*,71" font="FdLcD;35" halign="center" />
@@ -441,7 +440,8 @@
 	</screen>
 
 	<screen name="ChoiceBoxSummary" position="0,0" size="480,320">
-		<widget source="parent.summary_list" render="Label" position="0,0" size="480,320" font="FdLcD;18" noWrap="1" />
+		<panel name="Parent_Title" />
+		<widget source="parent.summary_selection" render="Label" position="10,90" size="460,150" font="FdLcD;38" halign="center" valign="center" noWrap="1"/>
 	</screen>
 
 	<screen name="AboutSummary" position="0,0" size="480,320">
@@ -500,13 +500,11 @@
 		<panel name="Parent_Title" />
 		<widget source="parent.package" render="Label" position="0,65" size="480,90" font="FdLcD;40" halign="center" valign="center" />
 		<widget source="parent.status" render="Label" position="0,160" size="480,90" font="FdLcD;35" halign="center" valign="center" />
-		<panel name="SummaryIconsPanel" />
 		<panel name="SummaryClockPanel" />
 	</screen>
 	<screen name="SoftwareUpdateChangesSummary" position="0,0" size="480,320">
 		<widget source="parent.title_summary" render="Label" position="0,0" size="160,15" font="FdLcD;15" halign="left" noWrap="1" />
 		<widget source="parent.text_summary" render="Label" position="0,16" size="400,54" font="FdLcD;12" halign="left" transparent="1" />
-		<panel name="SummaryIconsPanel" />
 	</screen>
 
 	<!-- LCD screen EMC -->
@@ -608,5 +606,26 @@
 		<panel name="Parent_Title" />
 		<widget source="status_summary" render="Label" position="10,90" size="460,100" zPosition="1" font="FdLcD;35" halign="center" valign="center" />
 		<widget source="autostartstatus_summary" render="Label" position="10,190" size="460,50" font="FdLcD;30" halign="center" valign="center" transparent="1" />
+	</screen>
+
+<!-- CommitInfo -->
+	<screen name="CommitInfoSummary" position="fill">
+		<panel name="Parent_Title" />
+		<widget source="commitText" render="Label" position="10,90" size="460,380" font="FdLcD;35" halign="center" zPosition="2" />
+	</screen>
+
+<!-- InputDeviceSelection -->
+	<screen name="InputDeviceSelectionSummary" position="fill">
+		<panel name="Parent_Title" />
+		<widget source="parent.list" render="Listbox" position="20,80" size="440,140" scrollbarMode="showNever">
+			<convert type="TemplatedMultiContent">
+				{"template": [
+					MultiContentEntryText(pos = (0,0), size = (440,140), flags = RT_HALIGN_CENTER|RT_VALIGN_CENTER|RT_WRAP, text = 1), # index 1 is the interfacename
+				],
+				"fonts": [gFont("FdLcD",38),],
+				"itemHeight": 140
+				}
+			</convert>
+		</widget>
 	</screen>
 </skin>
