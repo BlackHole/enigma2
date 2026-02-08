@@ -182,6 +182,8 @@ void eDVBServicePMTHandler::PMTready(int error)
 			{
 				eDVBCIInterfaces::getInstance()->recheckPMTHandlers();
 				eDVBCIInterfaces::getInstance()->gotPMT(this);
+				if (isCiConnected())
+					serviceEvent(eventCIConnected);
 			}
 		}
 		if (m_ca_servicePtr)
@@ -1107,4 +1109,9 @@ void eDVBServicePMTHandler::removeCaHandler()
 	m_ca_disabled = true;
 	if (m_channel)
 		eDVBCIInterfaces::getInstance()->removePMTHandler(this);
+}
+
+bool eDVBServicePMTHandler::isCiConnected()
+{
+	return eDVBCIInterfaces::getInstance()->isCiConnected(this);
 }

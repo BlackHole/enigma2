@@ -118,6 +118,7 @@ public:
 		eventStopped,
 		eventStartPvrDescramble,   // start PVR Descramble Convert
 		eventChannelAllocated,
+		eventCIConnected,  // a CI slot was assigned to this service after recheckPMTHandlers
 	};
 #ifndef SWIG
 	sigc::signal<void(int)> serviceEvent;
@@ -165,6 +166,7 @@ public:
 	void free();
 	void addCaHandler();
 	void removeCaHandler();
+	bool isCiConnected();
 	void allocatePVRChannel();
 private:
 	bool m_have_cached_program;
