@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: enigma2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-31 15:43+0200\n"
-"PO-Revision-Date: 2026-01-31 18:24+0200\n"
+"POT-Creation-Date: 2026-02-07 23:03+0200\n"
+"PO-Revision-Date: 2026-02-08 17:51+0200\n"
 "Last-Translator: Orlandox\n"
 "Language-Team: AndyBlac/timoj/Kojo/Samzam/Orlandox\n"
 "Language: fi\n"
@@ -3275,7 +3275,7 @@ msgstr "KONTEKSTI"
 
 #, python-format
 msgid "CPU Temperature:\t%s"
-msgstr "CPU:n lämpötila:\t%s"
+msgstr "CPUn lämpötila:\t%s"
 
 #, python-format
 msgid "CPU:\t%s %s %s\n"
@@ -3655,10 +3655,6 @@ msgstr "Piirisarja:\t%s \n"
 #, python-format
 msgid "Chipset:\t%s %s\n"
 msgstr "Piirisarja:\t%s %s\n"
-
-#, python-format
-msgid "Chipset: %s"
-msgstr "Piirisarja: %s"
 
 msgid "Chkroot Manager Actions"
 msgstr "Chkroot hallinnan toiminnot"
@@ -5541,8 +5537,8 @@ msgstr ""
 "Haluatko varmuuskopioida eMMC-paikat?\n"
 "Tämä kestää 1 -> 5 minuuttia eMMC-paikkaa kohden"
 
-msgid "Do you want to backup image slot (Yes) or create a recovery backup (No)"
-msgstr "Haluatko varmuuskopioida imagen paikan (Kyllä) vai luoda palautusvarmuuskopion (Ei)"
+msgid "Do you want to backup the image slot or create a recovery backup?"
+msgstr "Haluatko varmuuskopioida imagen paikan tai luoda palautusvarmuuskopion?"
 
 msgid "Do you want to burn this collection to DVD medium?"
 msgstr "Haluatko polttaa tämän kokoelman DVD:lle?"
@@ -5732,10 +5728,6 @@ msgstr "Dramaattinen"
 #, python-format
 msgid "Drivers:\t%s\n"
 msgstr "Ajurit:\t%s\n"
-
-#, python-format
-msgid "Drivers: %s"
-msgstr "Ajurit: %s"
 
 msgid "Drogen"
 msgstr "Huumeita"
@@ -6161,7 +6153,7 @@ msgstr "Englanti"
 
 #, python-format
 msgid "Enigma2 Uptime:\t%s\n"
-msgstr "Enigma2:n käynnissäoloaika:\t%s\n"
+msgstr "Enigma2n käynnissäoloaika:\t%s\n"
 
 msgid "Enigma2 debug level."
 msgstr "Enigma2 debug-taso."
@@ -7135,10 +7127,10 @@ msgstr "Toiminto ei ole vielä käytettävissä"
 msgid "Function Not Yet Available"
 msgstr "Toiminto ei vielä saatavilla"
 
-msgid "FuÃball"
+msgid "Fußball"
 msgstr "Jalkapallo"
 
-msgid "FÃ¼r Kinder"
+msgid "Für Kinder"
 msgstr "Lapsille"
 
 msgid "G"
@@ -8059,6 +8051,9 @@ msgstr "Imagen paikka:\t %s %s"
 msgid "Image View On"
 msgstr "Kuvanäkymä päälle"
 
+msgid "Image backup"
+msgstr "Imagen varmuuskopio"
+
 msgid "Image manager"
 msgstr "Imagen hallinnointi"
 
@@ -8607,10 +8602,6 @@ msgstr "Kenia"
 msgid "Kernel:\t%s\n"
 msgstr "Kernel:\t%s\n"
 
-#, python-format
-msgid "Kernel: %s"
-msgstr "Kernel: %s"
-
 msgid "Kexec warning"
 msgstr "Kexec-varoitus"
 
@@ -8657,7 +8648,7 @@ msgstr ""
 msgid "Kodi long"
 msgstr "Kodi pitkä"
 
-msgid "KomÃ¶die"
+msgid "Komödie"
 msgstr "Komedia"
 
 msgid "Korea (Democratic People's Republic of)"
@@ -8675,7 +8666,7 @@ msgstr "Sota"
 msgid "Krimi"
 msgstr "Dekkari"
 
-msgid "KriminalitÃ¤t"
+msgid "Kriminalität"
 msgstr "Rikos"
 
 msgid "Kultur"
@@ -9473,10 +9464,6 @@ msgstr "Malli:\t%s %s\n"
 msgid "Model: "
 msgstr "Malli: "
 
-#, python-format
-msgid "Model: %s %s\n"
-msgstr "Malli: %s %s\n"
-
 msgid "Modern Dance"
 msgstr "Nykytanssi"
 
@@ -9853,7 +9840,7 @@ msgstr "Myanmar"
 msgid "Mystery"
 msgstr "Mysteeri"
 
-msgid "MÃ¤rchen"
+msgid "Märchen"
 msgstr "Satu"
 
 msgid "N"
@@ -10727,10 +10714,6 @@ msgstr "OpenBh VIP-syötteiden asetukset"
 
 msgid "OpenBh online update"
 msgstr "OpenBh:n verkkopäivitys"
-
-#, python-format
-msgid "OpenBh: %s"
-msgstr "OpenBh: %s"
 
 #, python-format
 msgid "OpenSSL version:\t%s\n"
@@ -11686,7 +11669,7 @@ msgstr "Portti D"
 msgid "Port:"
 msgstr "Portti:"
 
-msgid "PortrÃ¤t"
+msgid "Porträt"
 msgstr "Muotokuva"
 
 msgid "Portugal"
@@ -12435,6 +12418,9 @@ msgstr "Tallennus käynnissä: %d"
 
 msgid "Recovery Mode"
 msgstr "Palautustila"
+
+msgid "Recovery backup"
+msgstr "Palautusvarmuuskopio"
 
 msgid "Red"
 msgstr "Punainen"
@@ -13729,8 +13715,7 @@ msgid "Select how quickly the dish should move between satellites."
 msgstr "Valitse kuinka nopeasti antennin pitäisi liikkua satelliittien välillä."
 
 msgid "Select how the descrambled data stream is processed. 'Automatic' uses asynchronous writes (lower CPU usage) with automatic fallback to synchronous if kernel AIO is not supported. 'Synchronous' forces blocking writes (stable, most compatible). *Restart E2 for changes to take effect."
-msgstr ""
-"Valitse, miten dekoodattu streami käsitellään. 'Automaattinen' käyttää asynkronisia kirjoituksia (pienempi CPU-käyttö) ja siirtyy automaattisesti synkroniseen tilaan, jos ytimen AIO-toimintoa ei tueta. 'Synkroninen' pakottaa kirjoitukset estämään (vakaa, yhteensopivin). *Käynnistä E2 uudelleen, jotta muutokset tulevat voimaan."
+msgstr "Valitse, miten dekoodattu streami käsitellään. 'Automaattinen' käyttää asynkronisia kirjoituksia (pienempi CPU-käyttö) ja siirtyy automaattisesti synkroniseen tilaan, jos ytimen AIO-toimintoa ei tueta. 'Synkroninen' pakottaa kirjoitukset estämään (vakaa, yhteensopivin). *Käynnistä E2 uudelleen, jotta muutokset tulevat voimaan."
 
 msgid "Select how the satellite dish is set up. i.e. fixed dish, single LNB, DiSEqC switch, positioner, etc."
 msgstr "Valitse kuinka satelliittiantenni on rakennettu eli kiinteä antenni, yksittäis LNB, DiSEqC-kytkin, kääntömoottori jne."
@@ -15886,10 +15871,6 @@ msgstr "Järjestelmätiedot"
 msgid "System Temperature:\t%s"
 msgstr "Laitteen lämpötila:\t%s"
 
-#, python-format
-msgid "System temperature: %s"
-msgstr "Laitteen lämpötila: %s"
-
 msgid "System:"
 msgstr "Järjestelmä:"
 
@@ -16418,7 +16399,7 @@ msgstr "Tämä asetus määrittää montako riviä näytetään."
 msgid "This allows you to set the number of digits you can input when selecting channels using number input."
 msgstr "Tämän avulla voit asettaa syötettävien numeroiden määrän valitessasi kanavia numeronsyöttöä käyttämällä."
 
-msgid "This can take up to 20 minutes for recovery backup , 6 minutes for image backup."
+msgid "This can take up to 20 minutes for recovery backup, 6 minutes for image backup."
 msgstr "Palautusvarmuuskopiointi voi kestää jopa 20 minuuttia ja imagen varmuuskopiointi 6 minuuttia."
 
 msgid "This change will overwrite all eMMC Slots."
@@ -16972,7 +16953,7 @@ msgstr "Raita"
 msgid "Traditional Music"
 msgstr "Perinteinen Musiikki"
 
-msgid "TragÃ¶die"
+msgid "Tragödie"
 msgstr "Tragedia"
 
 msgid "Transcoding: "
@@ -17362,10 +17343,6 @@ msgstr "Päivitysväli (sekuntia)"
 
 msgid "Update packages..."
 msgstr "Päivitä paketit..."
-
-#, python-format
-msgid "Updated: %s"
-msgstr "Päivitetty: %s"
 
 msgid "Updating Cache"
 msgstr "Päivitetään välimuistia"
