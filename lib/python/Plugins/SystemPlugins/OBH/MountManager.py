@@ -168,7 +168,7 @@ def buildPartitionInfo(partition, partitionList):
 		else:
 			description = _("Size: %sTB") % format(size / (1000 * 1000), '.2f')
 
-	if SystemInfo["MountManager"]:	# called by OBHevicesPanel else DeviceMountSetup
+	if SystemInfo["MountManager"]:  # called by OBHevicesPanel else DeviceMountSetup
 		if rw.startswith("rw"):
 			rw = " R/W"
 		elif rw.startswith("ro"):
