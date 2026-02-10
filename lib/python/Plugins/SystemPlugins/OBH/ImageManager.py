@@ -600,6 +600,7 @@ class OpenBhImageManager(Screen):
 		# MAINDEST = "%s/%s" % (self.TEMPDESTROOT, SystemInfo["imagedir"])
 		MAINDEST = "%s" % self.TEMPDESTROOT  # Dual 4K
 		print(f"[ImageManager] MAINDEST={MAINDEST} UBIMB:{UBIMB} CHKROOTMB:{CHKROOTMB}")
+
 		def findImageFiles(path):
 			for path, subDirs, files in walk(path):
 				if not subDirs and files:

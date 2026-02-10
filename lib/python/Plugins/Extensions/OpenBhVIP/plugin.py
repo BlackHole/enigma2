@@ -10,6 +10,7 @@ from Components.ActionMap import ActionMap, NumberActionMap, HelpableActionMap, 
 import os
 from urllib.parse import urlsplit, quote, unquote
 
+
 class openbhVipMain(Setup):  # ConfigListScreen):
 	def __init__(self, session):
 		username = None
@@ -71,8 +72,10 @@ class openbhVipMain(Setup):  # ConfigListScreen):
 	def __layoutFinished(self):
 		self.setTitle(self.setup_title)
 
+
 def main(session, **kwargs):
 	session.open(openbhVipMain)
+
 
 def Plugins(**kwargs):
 	return PluginDescriptor(name="OpenBh VIP", description="Configure the OpenBh VIP feed", icon="openbh.png", where=PluginDescriptor.WHERE_PLUGINMENU, needsRestart=False, fnc=main)

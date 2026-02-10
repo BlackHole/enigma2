@@ -294,6 +294,7 @@ class BhNetBrowser(Screen):
 			except:
 				return self.session.open(MessageBox, _("Network Browser not Available"), MessageBox.TYPE_INFO)
 
+
 class BhMinidlna(Screen):
 	skin = """
 	<screen position="center,center" size="602,405" title="OpenBh UPnP Minidlna Server Panel">

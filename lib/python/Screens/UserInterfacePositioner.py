@@ -17,7 +17,6 @@ def getFilePath(setting):
 	return "/proc/stb/fb/dst_%s" % (setting)
 
 
-
 def setPositionParameter(parameter, configElement):
 	f = open(getFilePath(parameter), "w")
 	f.write('%08X\n' % configElement.value)
@@ -41,6 +40,7 @@ def InitOsd():
 	config.osd.dst_height = ConfigSelectionNumber(default=576, stepwidth=1, min=0, max=576, wraparound=False)
 	config.osd.alpha = ConfigSelectionNumber(default=255, stepwidth=1, min=0, max=255, wraparound=False)
 	config.av.osd_alpha = NoSave(ConfigNumber(default=255))
+
 
 def InitOsdPosition():
 	if SystemInfo["CanChangeOsdAlpha"] is True or SystemInfo["CanChangeOsdPosition"] is True:

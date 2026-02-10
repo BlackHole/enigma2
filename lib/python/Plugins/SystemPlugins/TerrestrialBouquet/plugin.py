@@ -200,6 +200,7 @@ def Plugins(**kwargs):
 	if nimmanager.hasNimType("DVB-T"):
 		from Screens.ServiceScan import ServiceScan
 		__origfunc = ServiceScan.ok
+
 		def __newfunc(self, *args, **kwargs):
 			if self["scan"].isDone() and "Terrestrial" in str(self.scanList):
 				from Plugins.SystemPlugins.TerrestrialBouquet.plugin import TerrestrialBouquet

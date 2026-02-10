@@ -846,6 +846,7 @@ def InitAVSwitch():
 	config.av.edid_override = ConfigYesNo(default=False)
 	iAVSwitch.setConfiguredMode()
 
+
 class VideomodeHotplug:
 	def __init__(self):
 		pass
