@@ -4,8 +4,8 @@
 # You're not allowed to remove my copyright or reuse this script without putting this header.
 
 setup_git() {
-  git config --global user.email "bot@openvix.co.uk"
-  git config --global user.name "openvix-bot"
+  git config --global user.email "info@openbh.net"
+  git config --global user.name "openbh-bot"
 }
 
 commit_files() {
@@ -13,15 +13,15 @@ commit_files() {
   rm -rf *.pyc
   rm -rf *.pyo
   rm -rf *.mo
-  git checkout Developer
+  git checkout Python3.13
   ./CI/chmod.sh
   ./CI/dos2unix.sh
   ./CI/PEP8.sh
 }
 
 upload_files() {
-  git remote add upstream https://${GITHUB_TOKEN}@github.com/OpenViX/enigma2.git > /dev/null 2>&1
-  git push --quiet upstream Developer || echo "failed to push with error $?"
+  git remote add upstream https://${GITHUB_TOKEN}@github.com/BlackHole/enigma2.git > /dev/null 2>&1
+  git push --quiet upstream Python3.13 || echo "failed to push with error $?"
 }
 
 setup_git
