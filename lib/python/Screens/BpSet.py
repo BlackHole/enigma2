@@ -964,7 +964,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		elif SystemInfo["model"] == "gb7252":
 			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-webkit"])
-		elif SystemInfo["brand"] not in ("vuplus", "abcom" ,"airdigital" , "maxytec") and SystemInfo["boxtype"] not in ("sfx6008" , "sfx6018"):
+		elif SystemInfo["brand"] not in ("vuplus", "abcom","airdigital", "maxytec") and SystemInfo["boxtype"] not in ("sfx6008", "sfx6018"):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-webkit"])
 		elif SystemInfo["brand"] == "abcom" or SystemInfo["boxtype"] in ("zgemmah9twinse", "zgemmah11s"):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-openhbbtvbrowser"])
