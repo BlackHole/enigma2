@@ -56,7 +56,7 @@ def readGithubCommitLogsSoftwareUpdate():
 				if SystemInfo["imagetype"] != 'developer' and c['commit']['message'].startswith('openbh: developer'):
 					print('[GitCommitLog] Skipping developer line')
 					continue
-				elif SystemInfo["imagetype"]  == 'developer' and c['commit']['message'].startswith('openbh: release') or c['commit']['message'].startswith('openbh: community'):
+				elif SystemInfo["imagetype"] == 'developer' and c['commit']['message'].startswith('openbh: release') or c['commit']['message'].startswith('openbh: community'):
 					print('[GitCommitLog] Skipping release/community line')
 					continue
 				tmp = c['commit']['message'].split(' ')[2].split('.')
