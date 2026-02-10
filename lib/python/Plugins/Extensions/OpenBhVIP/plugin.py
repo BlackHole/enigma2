@@ -79,4 +79,3 @@ def main(session, **kwargs):
 
 def Plugins(**kwargs):
 	return PluginDescriptor(name="OpenBh VIP", description="Configure the OpenBh VIP feed", icon="openbh.png", where=PluginDescriptor.WHERE_PLUGINMENU, needsRestart=False, fnc=main)
-
