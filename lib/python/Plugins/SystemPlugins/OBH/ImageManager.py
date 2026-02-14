@@ -1612,6 +1612,7 @@ class ImageManagerDownload(Screen):
 		self.imagesList = {}
 		self.setIndex = 0
 		self.expanded = []
+		self.onChangedEntry = []
 		self["list"] = ChoiceList(list=[ChoiceEntryComponent("", ((_("No images found on the selected download server...if password check validity")), "Waiter"))])
 		self.getImageDistro()
 
@@ -1684,9 +1685,9 @@ class ImageManagerDownload(Screen):
 					if self.setIndex:
 						self["list"].moveToIndex(self.setIndex if self.setIndex < len(list) else len(list) - 1)
 				self.setIndex = 0
-			self.SelectionChanged()
+			self.selectionChanged()
 
-	def SelectionChanged(self):
+	def selectionChanged(self):
 		currentSelected = self["list"].getCurrent()
 		if currentSelected[0][1] == "Waiter":
 			self["key_green"].setText("")
@@ -1695,22 +1696,24 @@ class ImageManagerDownload(Screen):
 				self["key_green"].setText(_("Compress") if currentSelected[0][0] in self.expanded else _("Expand"))
 			else:
 				self["key_green"].setText(_("Download"))
+		for cb in self.onChangedEntry:
+			cb(currentSelected[0][0], "")
 
 	def keyLeft(self):
 		self["list"].pageUp()
-		self.SelectionChanged()
+		self.selectionChanged()
 
 	def keyRight(self):
 		self["list"].pageDown()
-		self.SelectionChanged()
+		self.selectionChanged()
 
 	def keyUp(self):
 		self["list"].moveUp()
-		self.SelectionChanged()
+		self.selectionChanged()
 
 	def keyDown(self):
 		self["list"].moveDown()
-		self.SelectionChanged()
+		self.selectionChanged()
 
 	def keyDownload(self):
 		currentSelected = self["list"].getCurrent()
@@ -1764,6 +1767,10 @@ class ImageManagerDownload(Screen):
 			base64bytes = base64.b64encode(('%s:%s' % (username, password)).encode())
 			headers = {("Authorization").encode(): ("Basic %s" % base64bytes.decode()).encode()}
 		return headers, scheme + "://" + hostname + port + parsed.path + query
+
+	def createSummary(self):
+		from Screens.PluginBrowser import PluginBrowserSummary
+		return PluginBrowserSummary
 
 
 class ImageManagerSetup(Setup):
