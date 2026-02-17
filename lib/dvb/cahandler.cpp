@@ -484,22 +484,23 @@ int eDVBCAHandler::registerService(const eServiceReferenceDVB &ref, int adapter,
 	std::map<eServiceReferenceDVB, ePtr<eTable<ProgramMapSection> > >::const_iterator cacheit = pmtCache.find(ref);
 	if (cacheit != pmtCache.end() && cacheit->second)
 	{
-		// If streamserver was active and we're adding a different type (e.g. Live-TV),
-		// we need to force the softcam to restart descrambling so it resends the CW.
-		// A simple LIST_UPDATE is not enough because the softcam's demux is already
-		// running and would just "continue processing" without resending the CW.
-		// We DEFER the restart to handlePMT() so the new CSA session is already
-		// activated and its engine registered with CWHandler when the CW arrives.
-		if (had_streamserver && servicetype != 7 && servicetype != 8)
+		// When a streamserver was active, force the softcam to restart
+		// descrambling so it resends CWs for the new CSA session.
+		// A simple LIST_UPDATE would not trigger a CW resend.
+		if (had_streamserver)
 		{
 			caservice->m_force_cw_send = true;
-			eDebug("[eDVBCAService] deferred softcam restart (streamserver->live, type %d)", servicetype);
+			if (servicetype != 7 && servicetype != 8)
+			{
+				// streamserver→live: DEFER to handlePMT() so the new CSA
+				// session is already activated when the CW arrives.
+				eDebug("[eDVBCAService] deferred softcam restart (streamserver->live, type %d)", servicetype);
+				return 0;
+			}
+			eDebug("[eDVBCAService] forcing softcam CW resend (streamserver restart, type %d)", servicetype);
 		}
-		else
-		{
-			processPMTForService(caservice, cacheit->second);
-		}
-	}
+		processPMTForService(caservice, cacheit->second);
+ 	}
 	return 0;
 }
 
@@ -671,12 +672,15 @@ void eDVBCAHandler::processPMTForService(eDVBCAService *service, eTable<ProgramM
 	if (service->m_force_cw_send)
 	{
 		/*
-		 * SR→Live transition: force the softcam to restart descrambling.
-		 * Send CMD_NOT_SELECTED to stop the running demux, then LIST_ADD
-		 * with CMD_OK_DESCRAMBLING to re-add. This makes the softcam treat
-		 * it as a new service and immediately resend the CW from cache.
-		 * At this point the new CSA session is already activated and its
-		 * engine registered with CWHandler, so the CW won't be lost.
+		 * Force the softcam to restart descrambling and resend CWs.
+		 * Send CMD_NOT_SELECTED to stop, then LIST_ADD with CMD_OK_DESCRAMBLING
+		 * to re-add. This makes the softcam treat it as a new service and
+		 * immediately resend the CW.
+		 *
+		 * Used for:
+		 * 1. SR→Live: deferred until handlePMT() so the CSA session is ready
+		 * 2. SR→SR (StreamRelay restart): called immediately from registerService(),
+		 *    the new CSA session picks up the resent CWs via the normal signal path
 		 */
 		service->m_force_cw_send = false;
 		for (ePtrList<ePMTClient>::iterator client_it = clients.begin(); client_it != clients.end(); ++client_it)
@@ -687,7 +691,7 @@ void eDVBCAHandler::processPMTForService(eDVBCAService *service, eTable<ProgramM
 				service->writeCAPMTObject(*client_it, LIST_ADD, CMD_OK_DESCRAMBLING);
 			}
 		}
-		eDebug("[eDVBCAService] forced softcam restart for SR->Live transition");
+		eDebug("[eDVBCAService] forced softcam restart (CW resend)");
 	}
 	else if (isUpdate)
 	{
