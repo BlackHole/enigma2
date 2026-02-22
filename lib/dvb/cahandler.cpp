@@ -419,12 +419,12 @@ int eDVBCAHandler::getNumberOfCAServices()
 int eDVBCAHandler::registerService(const eServiceReferenceDVB &ref, int adapter, int demux_nums[2], int servicetype, eDVBCAService *&caservice)
 {
 	CAServiceMap::iterator it = services.find(ref);
+	bool service_already_registered = false;
 	bool had_streamserver = false;
 	if (it != services.end())
 	{
 		caservice = it->second;
-		// Check if streamserver was already active before adding new type
-		// servicetype 7 = streamserver, 8 = scrambled_streamserver
+		service_already_registered = true;
 		uint32_t mask = caservice->getServiceTypeMask();
 		had_streamserver = (mask & ((1 << 7) | (1 << 8))) != 0;
 	}
@@ -484,24 +484,29 @@ int eDVBCAHandler::registerService(const eServiceReferenceDVB &ref, int adapter,
 	std::map<eServiceReferenceDVB, ePtr<eTable<ProgramMapSection> > >::const_iterator cacheit = pmtCache.find(ref);
 	if (cacheit != pmtCache.end() && cacheit->second)
 	{
-		// When a streamserver was active, force the softcam to restart
-		// descrambling so it resends CWs for the new CSA session.
-		// A simple LIST_UPDATE would not trigger a CW resend.
-		if (had_streamserver)
+		// When a service is already registered and a new consumer registers for
+		// the same service, the PMT is unchanged so buildCAPMT() would skip
+		// sending ("don't build the same CA PMT twice"). Force the softcam to
+		// restart descrambling so it resends CWs for the new CSA session.
+		if (service_already_registered && servicetype != 7 && servicetype != 8)
 		{
+			// Non-streamserver (Live-TV, PiP): DEFER the CW resend to
+			// handlePMT() so the new CSA session is already activated and
+			// its engine registered with CWHandler when the CW arrives.
 			caservice->m_force_cw_send = true;
-			if (servicetype != 7 && servicetype != 8)
-			{
-				// streamserver→live: DEFER to handlePMT() so the new CSA
-				// session is already activated when the CW arrives.
-				eDebug("[eDVBCAService] deferred softcam restart (streamserver->live, type %d)", servicetype);
-				return 0;
-			}
-			eDebug("[eDVBCAService] forcing softcam CW resend (streamserver restart, type %d)", servicetype);
-		}
+			eDebug("[eDVBCAService] deferred softcam CW resend (re-register, type %d)", servicetype);
+			return 0;
+ 		}
+		if (had_streamserver)
+ 		{
+			// SR?SR or SR?Live: force immediate CW resend. The CSA session
+			// picks up the resent CWs via the normal signal path.
+			caservice->m_force_cw_send = true;
+			eDebug("[eDVBCAService] forcing softcam CW resend (SR re-register, type %d)", servicetype);
+ 		}
 		processPMTForService(caservice, cacheit->second);
  	}
-	return 0;
+ 	return 0;
 }
 
 int eDVBCAHandler::unregisterService(const eServiceReferenceDVB &ref, int adapter, int demux_nums[2], int servicetype, eTable<ProgramMapSection> *ptr)
@@ -673,14 +678,16 @@ void eDVBCAHandler::processPMTForService(eDVBCAService *service, eTable<ProgramM
 	{
 		/*
 		 * Force the softcam to restart descrambling and resend CWs.
-		 * Send CMD_NOT_SELECTED to stop, then LIST_ADD with CMD_OK_DESCRAMBLING
-		 * to re-add. This makes the softcam treat it as a new service and
-		 * immediately resend the CW.
-		 *
-		 * Used for:
-		 * 1. SR→Live: deferred until handlePMT() so the CSA session is ready
-		 * 2. SR→SR (StreamRelay restart): called immediately from registerService(),
-		 *    the new CSA session picks up the resent CWs via the normal signal path
++		 * Send CMD_NOT_SELECTED to stop, then LIST_ADD with CMD_OK_DESCRAMBLING
++		 * to re-add. This makes the softcam treat it as a new service and
++		 * immediately resend the CW from its ECM cache.
++		 *
++		 * Triggered when a service is re-registered (already known to the softcam)
++		 * and the PMT is unchanged, which would otherwise cause buildCAPMT() to
++		 * skip sending. Covers:
+		 * 1. Live/PiP (incl. SR→Live): deferred until handlePMT() so the new
++		 *    CSA session is activated and its engine registered at CWHandler
+		 * 2. SR→SR (StreamRelay restart): immediate from registerService()
 		 */
 		service->m_force_cw_send = false;
 		for (ePtrList<ePMTClient>::iterator client_it = clients.begin(); client_it != clients.end(); ++client_it)
