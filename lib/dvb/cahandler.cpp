@@ -342,9 +342,9 @@ int ePMTClient::writeCAPMTObject(const char* capmt, int len)
 /*
  * Identify whether the connecting client is capable of dvbapi Protocol 3.
  * Uses SO_PEERCRED to get the PID, then reads /proc/<pid>/exe to
- * determine the binary. Only known Protocol 3 capable softcams are
- * whitelisted. All other clients are treated as legacy; sending
- * CLIENT_INFO to them may corrupt their parser and cause a crash.
+ * determine the binary. Uses a blacklist to block known incompatible
+ * legacy softcams from using protocol 3 as sending CLIENT_INFO to them
+ * may corrupt their parser and cause a crash.
  */
 static bool isProtocol3CapableClient(int socket_fd)
 {
@@ -352,8 +352,8 @@ static bool isProtocol3CapableClient(int socket_fd)
 	socklen_t len = sizeof(cred);
 	if (getsockopt(socket_fd, SOL_SOCKET, SO_PEERCRED, &cred, &len) != 0)
 	{
-		eDebug("[eDVBCAHandler] SO_PEERCRED failed: %m, treating as legacy client");
-		return false;
+		eDebug("[eDVBCAHandler] SO_PEERCRED failed: %m, treating as protocol 3 capable");
+		return true;
 	}
 
 	char exe_path[256];
@@ -362,23 +362,23 @@ static bool isProtocol3CapableClient(int socket_fd)
 	ssize_t n = readlink(proc_path, exe_path, sizeof(exe_path) - 1);
 	if (n <= 0)
 	{
-		eDebug("[eDVBCAHandler] readlink(%s) failed: %m, treating as legacy client", proc_path);
-		return false;
+		eDebug("[eDVBCAHandler] readlink(%s) failed: %m, treating as protocol 3 capable", proc_path);
+		return true;
 	}
 	exe_path[n] = '\0';
 
 	const char* basename = strrchr(exe_path, '/');
 	basename = basename ? basename + 1 : exe_path;
 
-	/* Whitelist: known Protocol 3 capable softcams */
-	if (strcasestr(basename, "oscam") || strcasestr(basename, "ncam"))
+	/* Blacklist: known incompatible softcams that don't support Protocol 3 */
+	if (strcasestr(basename, "cccam") || strcasestr(basename, "mgcamd") || strcasestr(basename, "gbox") || strcasestr(basename, "wicardd"))
 	{
-		eDebug("[eDVBCAHandler] Protocol 3 capable client: %s (pid %d)", basename, cred.pid);
-		return true;
+		eDebug("[eDVBCAHandler] Blacklisted client detected: %s (pid %d), disabling Protocol 3", basename, cred.pid);
+		return false;
 	}
 
-	eDebug("[eDVBCAHandler] Legacy client identified: %s (pid %d), skipping Protocol 3", basename, cred.pid);
-	return false;
+	eDebug("[eDVBCAHandler] Protocol 3 capable client: %s (pid %d)", basename, cred.pid);
+	return true;
 }
 
 eDVBCAHandler *eDVBCAHandler::instance = NULL;
