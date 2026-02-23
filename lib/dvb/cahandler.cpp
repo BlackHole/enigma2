@@ -539,17 +539,17 @@ int eDVBCAHandler::registerService(const eServiceReferenceDVB &ref, int adapter,
 			caservice->m_force_cw_send = true;
 			eDebug("[eDVBCAService] deferred softcam CW resend (re-register, type %d)", servicetype);
 			return 0;
- 		}
+		}
 		if (had_streamserver)
- 		{
-			// SR?SR or SR?Live: force immediate CW resend. The CSA session
+		{
+			// SR→SR or SR→Live: force immediate CW resend. The CSA session
 			// picks up the resent CWs via the normal signal path.
 			caservice->m_force_cw_send = true;
 			eDebug("[eDVBCAService] forcing softcam CW resend (SR re-register, type %d)", servicetype);
- 		}
+		}
 		processPMTForService(caservice, cacheit->second);
- 	}
- 	return 0;
+	}
+	return 0;
 }
 
 int eDVBCAHandler::unregisterService(const eServiceReferenceDVB &ref, int adapter, int demux_nums[2], int servicetype, eTable<ProgramMapSection> *ptr)
@@ -721,15 +721,15 @@ void eDVBCAHandler::processPMTForService(eDVBCAService *service, eTable<ProgramM
 	{
 		/*
 		 * Force the softcam to restart descrambling and resend CWs.
-+		 * Send CMD_NOT_SELECTED to stop, then LIST_ADD with CMD_OK_DESCRAMBLING
-+		 * to re-add. This makes the softcam treat it as a new service and
-+		 * immediately resend the CW from its ECM cache.
-+		 *
-+		 * Triggered when a service is re-registered (already known to the softcam)
-+		 * and the PMT is unchanged, which would otherwise cause buildCAPMT() to
-+		 * skip sending. Covers:
+		 * Send CMD_NOT_SELECTED to stop, then LIST_ADD with CMD_OK_DESCRAMBLING
+		 * to re-add. This makes the softcam treat it as a new service and
+		 * immediately resend the CW from its ECM cache.
+		 *
+		 * Triggered when a service is re-registered (already known to the softcam)
+		 * and the PMT is unchanged, which would otherwise cause buildCAPMT() to
+		 * skip sending. Covers:
 		 * 1. Live/PiP (incl. SR→Live): deferred until handlePMT() so the new
-+		 *    CSA session is activated and its engine registered at CWHandler
+		 *    CSA session is activated and its engine registered at CWHandler
 		 * 2. SR→SR (StreamRelay restart): immediate from registerService()
 		 */
 		service->m_force_cw_send = false;

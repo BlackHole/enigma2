@@ -388,6 +388,7 @@ void eDVBCSASession::onCwReceived(eServiceReferenceDVB ref, int parity, const ch
 		const uint8_t* cw_bytes = (const uint8_t*)cw;
 		eDebug("[eDVBCSASession] CW set: caid=0x%04X, parity=%d, hasEven=%d, hasOdd=%d, CW=%02X",
 			caid, parity, m_engine->hasEvenKey(), m_engine->hasOddKey(), cw_bytes[0]);
+
 		// Cache serviceId for future sessions (enables pre-registration on PiP swap)
 		auto& cached = s_csa_cache[svc_key];
 		cached.serviceId = serviceId;
