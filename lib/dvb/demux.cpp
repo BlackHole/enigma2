@@ -651,7 +651,7 @@ int eDVBRecordFileThread::asyncWrite(int len)
 	// Only call parseData here if no descrambler is set.
 	// When a descrambler is active, eDVBRecordScrambledThread::writeData()
 	// calls parseData AFTER descrambling to ensure we parse clear data.
-	if (!m_serviceDescrambler)
+	if (!getProtocol() && !m_serviceDescrambler)
 	{
 		int parse_result = m_ts_parser.parseData(m_current_offset, m_buffer, len);
 		if (parse_result == -2)
@@ -752,7 +752,7 @@ int eDVBRecordFileThread::writeData(int len)
 		// Only call parseData here if no descrambler is set.
 		// When a descrambler is active, eDVBRecordScrambledThread::writeData()
 		// calls parseData AFTER descrambling to ensure we parse clear data.
-		if (!m_serviceDescrambler)
+		if (!getProtocol() && !m_serviceDescrambler)
 		{
 			m_ts_parser.parseData(m_current_offset, m_buffer, len);
 		}
@@ -1055,7 +1055,8 @@ int eDVBRecordScrambledThread::writeData(int len)
 		m_serviceDescrambler->descramble(m_buffer, len);
 
 		// Parse AFTER descrambling for correct Access Points (.ap files)
-		m_ts_parser.parseData(m_current_offset, m_buffer, len);
+		if (!getProtocol())
+			m_ts_parser.parseData(m_current_offset, m_buffer, len);
 	}
 
 	// Call the appropriate parent writeData based on target type:

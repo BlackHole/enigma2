@@ -75,6 +75,7 @@ public:
 	enum { evtEOF, evtReadError, evtWriteError, evtUser, evtStopped, evtStreamCorrupt };
 	sigc::signal<void(int)> m_event;
 
+	int getProtocol() { return m_protocol; }
 	void sendEvent(int evt);
 protected:
 	// This method should write the data out and return the number of bytes written.
