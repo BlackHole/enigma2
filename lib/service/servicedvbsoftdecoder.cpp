@@ -275,10 +275,17 @@ int eDVBSoftDecoder::setupRecorder()
 		// sync_mode is configurable via GUI:
 		// 0 - "Automatic" (default): async with automatic fallback to sync on ENOSYS
 		// 1 - "Synchronous": force sync (poll + write)
-		int sync_mode_cfg = eSimpleConfig::getInt("config.softcsa.syncMode", 0);
+		int sync_mode_cfg = eSimpleConfig::getInt("config.misc.softcsa.syncMode", 0);
 		bool sync_mode = (sync_mode_cfg == 1);  // 1 = Synchronous forced
 		eDebug("[eDVBSoftDecoder] Using %s mode (config=%d)", sync_mode ? "synchronous" : "automatic", sync_mode_cfg);
-		demux->createTSRecorder(m_record, 188, false, sync_mode);
+
+		// DVR write buffer size: only relevant for Live-TV/PIP (DVR → Hardware Decoder)
+		// Smaller = more frequent writes (smoother data flow to decoder)
+		// Larger = fewer writes (more efficient but burstier)
+		int writeBufferPackets = eSimpleConfig::getInt("config.misc.softcsa.writeBufferSize", 256);
+		int writeBufferSize = writeBufferPackets * 188;
+		eDebug("[eDVBSoftDecoder] DVR write buffer: %d packets (%d kB)", writeBufferPackets, writeBufferSize >> 10);
+		demux->createTSRecorder(m_record, 188, false, sync_mode, false, writeBufferSize);
 		if (!m_record)
 		{
 			eDebug("[eDVBSoftDecoder] no ts recorder available.");
