@@ -25,7 +25,7 @@ public:
 
 	RESULT createSectionReader(eMainloop *context, ePtr<iDVBSectionReader> &reader);
 	RESULT createPESReader(eMainloop *context, ePtr<iDVBPESReader> &reader);
-	RESULT createTSRecorder(ePtr<iDVBTSRecorder> &recorder, unsigned int packetsize = 188, bool streaming=false, bool sync_mode=false, bool is_streaming_output=false, int writeBufferSize=0);
+	RESULT createTSRecorder(ePtr<iDVBTSRecorder> &recorder, unsigned int packetsize = 188, bool streaming=false, bool sync_mode=false, bool is_streaming_output=false);
 	RESULT getMPEGDecoder(ePtr<iTSMPEGDecoder> &reader, int index);
 	RESULT getSTC(pts_t &pts, int num);
 	RESULT getCADemuxID(uint8_t &id) { id = demux; return 0; }
@@ -183,7 +183,7 @@ class eDVBTSRecorder: public iDVBTSRecorder, public sigc::trackable
 {
 	DECLARE_REF(eDVBTSRecorder);
 public:
-	eDVBTSRecorder(eDVBDemux *demux, int packetsize, bool streaming, bool sync_mode = false, bool is_streaming_output = false, int writeBufferSize = 0);
+	eDVBTSRecorder(eDVBDemux *demux, int packetsize, bool streaming, bool sync_mode = false, bool is_streaming_output = false);
 	~eDVBTSRecorder();
 
 	RESULT setBufferSize(int size);
@@ -210,6 +210,7 @@ public:
 
 	// Wait for first data to be written (for SoftDecoder sync)
 	bool waitForFirstData(int timeout_ms);
+	void setMinWrite(size_t size);
 private:
 	RESULT startPID(int pid);
 	void stopPID(int pid);

@@ -145,7 +145,7 @@ RESULT eDVBDemux::createPESReader(eMainloop *context, ePtr<iDVBPESReader> &reade
 	return res;
 }
 
-RESULT eDVBDemux::createTSRecorder(ePtr<iDVBTSRecorder> &recorder, unsigned int packetsize, bool streaming, bool sync_mode, bool is_streaming_output, int writeBufferSize)
+RESULT eDVBDemux::createTSRecorder(ePtr<iDVBTSRecorder> &recorder, unsigned int packetsize, bool streaming, bool sync_mode, bool is_streaming_output)
 {
 	if (m_dvr_busy)
 		return -EBUSY;
@@ -154,8 +154,7 @@ RESULT eDVBDemux::createTSRecorder(ePtr<iDVBTSRecorder> &recorder, unsigned int 
 	// (which supports descrambling when a descrambler is attached)
 	// sync_mode=true for Live-TV (DVR device), false for recording (file)
 	// is_streaming_output=true when target is a socket (encrypted streaming)
-	// writeBufferSize: custom write buffer size in bytes (0 = use default 256*188)
-	recorder = new eDVBTSRecorder(this, packetsize, streaming, sync_mode, is_streaming_output, writeBufferSize);
+	recorder = new eDVBTSRecorder(this, packetsize, streaming, sync_mode, is_streaming_output);
 	return 0;
 }
 
@@ -777,6 +776,8 @@ int eDVBRecordFileThread::writeData(int len)
 				continue;
 			if (w < 0 && (errno == EAGAIN || errno == EWOULDBLOCK))
 			{
+				if (m_stop)
+					return -1;
 				usleep(1000);
 				continue;
 			}
@@ -1094,7 +1095,7 @@ int eDVBRecordScrambledThread::writeData(int len)
 
 DEFINE_REF(eDVBTSRecorder);
 
-eDVBTSRecorder::eDVBTSRecorder(eDVBDemux *demux, int packetsize, bool streaming, bool sync_mode, bool is_streaming_output, int writeBufferSize):
+eDVBTSRecorder::eDVBTSRecorder(eDVBDemux *demux, int packetsize, bool streaming, bool sync_mode, bool is_streaming_output):
 	m_demux(demux),
 	m_running(0),
 	m_target_fd(-1),
@@ -1105,15 +1106,12 @@ eDVBTSRecorder::eDVBTSRecorder(eDVBDemux *demux, int packetsize, bool streaming,
 		// Encrypted streams use streaming=false and get ScrambledThread
 		m_thread = new eDVBRecordStreamThread(packetsize);
 	else
-	{
 		// Use ScrambledThread for file recording - supports optional descrambling
-		// writeBufferSize=0 means use default (256*188 = 47kB)
-		// Non-zero values are set by SoftCSA Live-TV path for DVR write tuning
-		int bufsize = (writeBufferSize > 0) ? writeBufferSize : (256 * 188);
-		eDebug("[eDVBTSRecorder] write buffer: %d bytes (%d kB)%s",
-			bufsize, bufsize >> 10, writeBufferSize > 0 ? " (custom)" : "");
-		m_thread = new eDVBRecordScrambledThread(packetsize, bufsize, sync_mode, is_streaming_output);
-	}
+		// Buffer size 256*188 = 47kB - larger buffers cause latency issues
+		// sync_mode=true for Live-TV (DVR device has small buffers, frequent short writes)
+		// sync_mode=false for recording/timeshift (file has large buffers, async is faster)
+		// is_streaming_output=true when target is a socket (streaming encrypted channels)
+		m_thread = new eDVBRecordScrambledThread(packetsize, 256*188, sync_mode, is_streaming_output);
 	CONNECT(m_thread->m_event, eDVBTSRecorder::filepushEvent);
 }
 
@@ -1374,4 +1372,9 @@ bool eDVBTSRecorder::waitForFirstData(int timeout_ms)
 	// Delegate to thread - only ScrambledThread actually implements waiting
 	// Other thread types return immediately via base class default
 	return m_thread->waitForFirstData(timeout_ms);
+}
+
+void eDVBTSRecorder::setMinWrite(size_t size)
+{
+	m_thread->setMinWrite(size);
 }

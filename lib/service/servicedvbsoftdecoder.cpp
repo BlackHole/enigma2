@@ -284,14 +284,7 @@ int eDVBSoftDecoder::setupRecorder()
 		int sync_mode_cfg = eSimpleConfig::getInt("config.misc.softcsa.syncMode", 0);
 		bool sync_mode = (sync_mode_cfg == 1);  // 1 = Synchronous forced
 		eDebug("[eDVBSoftDecoder] Using %s mode (config=%d)", sync_mode ? "synchronous" : "automatic", sync_mode_cfg);
-
-		// DVR write buffer size: only relevant for Live-TV/PIP (DVR → Hardware Decoder)
-		// Smaller = more frequent writes (smoother data flow to decoder)
-		// Larger = fewer writes (more efficient but burstier)
-		int writeBufferPackets = eSimpleConfig::getInt("config.misc.softcsa.writeBufferSize", 256);
-		int writeBufferSize = writeBufferPackets * 188;
-		eDebug("[eDVBSoftDecoder] DVR write buffer: %d packets (%d kB)", writeBufferPackets, writeBufferSize >> 10);
-		demux->createTSRecorder(m_record, 188, false, sync_mode, false, writeBufferSize);
+		demux->createTSRecorder(m_record, 188, false, sync_mode);
 		if (!m_record)
 		{
 			eDebug("[eDVBSoftDecoder] no ts recorder available.");
@@ -729,6 +722,20 @@ void eDVBSoftDecoder::updateDecoder(int vpid, int vpidtype, int pcrpid)
 			{
 				m_decoder->setAudioPID(apid, atype);
 
+				// On Broadcom, MPEG audio decoders have tiny internal buffers
+				// and need frequent writes to avoid underruns. Reduce write
+				// threshold so data reaches the decoder with less delay.
+#if !defined(HAVE_HISILICON)
+				if (m_record)
+				{
+					bool mpeg = (atype == eDVBServicePMTHandler::audioStream::atMPEG);
+					size_t threshold = mpeg ? eFilePushThreadRecorder::minWriteMPEG : eFilePushThreadRecorder::minWriteDefault;
+					m_record->setMinWrite(threshold);
+					eDebug("[eDVBSoftDecoder] Write threshold set to %zu KB (%s audio)",
+						threshold >> 10, mpeg ? "MPEG" : "non-MPEG");
+				}
+#endif
+
 				// Notify parent about selected audio PID
 				m_audio_pid_selected(apid);
 			}
@@ -805,6 +812,16 @@ int eDVBSoftDecoder::setAudioPID(int pid, int type)
 {
 	if (m_noaudio)
 		return 0;
+#if !defined(HAVE_HISILICON)
+	if (m_record)
+	{
+		bool mpeg = (type == eDVBServicePMTHandler::audioStream::atMPEG);
+		size_t threshold = mpeg ? eFilePushThreadRecorder::minWriteMPEG : eFilePushThreadRecorder::minWriteDefault;
+		m_record->setMinWrite(threshold);
+		eDebug("[eDVBSoftDecoder] Write threshold set to %zu KB (%s audio)",
+			threshold >> 10, mpeg ? "MPEG" : "non-MPEG");
+	}
+#endif
 	if (m_decoder)
 		return m_decoder->setAudioPID(pid, type);
 	return -1;
