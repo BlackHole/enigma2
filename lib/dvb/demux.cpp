@@ -6,6 +6,7 @@
 #include <signal.h>
 #include <sys/sysinfo.h>
 #include <sys/mman.h>
+#include <atomic>
 
 #include <linux/dvb/dmx.h>
 
@@ -422,7 +423,7 @@ RESULT eDVBPESReader::connectRead(const sigc::slot<void(const uint8_t*,int)> &r,
 }
 
 // AIO short write tracking: session-global sync fallback flag
-static bool s_aio_sync_fallback = false;
+static std::atomic<bool> s_aio_sync_fallback{false};
 static const int AIO_SHORT_WRITE_THRESHOLD = 3;
 
 eDVBRecordFileThread::eDVBRecordFileThread(int packetsize, int bufferCount, int buffersize, bool sync_mode) :
@@ -491,7 +492,7 @@ int eDVBRecordFileThread::getFirstPTS(pts_t &pts)
 	return m_ts_parser.getFirstPTS(pts);
 }
 
-int eDVBRecordFileThread::AsyncIO::wait(volatile int* stop_flag, int* short_write_count)
+int eDVBRecordFileThread::AsyncIO::wait(const volatile int* stop_flag, int* short_write_count)
 {
 	if (aio.aio_buf == NULL) // No request outstanding
 		return 0;
