@@ -335,7 +335,7 @@ avSwitch = iAVSwitch  # Added for compatibility with OpenATV. Used by kodi plugi
 
 def InitAVSwitch():
 	delay_choices = [(i, ngettext("%d ms", "%d ms", i) % i) for i in list(range(0, 3000, 100))]  # noqa: F821
-	config.av.passthrough_fix_long = ConfigSelection(choices=delay_choices, default=300)
+	config.av.passthrough_fix_long = ConfigSelection(choices=delay_choices, default=1200)
 	config.av.passthrough_fix_short = ConfigSelection(choices=delay_choices, default=100)
 	config.av.yuvenabled = ConfigBoolean(default=True)
 	colorformat_choices = {
