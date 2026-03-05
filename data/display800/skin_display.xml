@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- This skin is at github.com/OpenViX/enigma2/tree/master/data/display800 -->
+<!-- This skin is at github.com/Blackhole/enigma2/tree/master/data/display800 -->
 <skin>
 	<include filename="skin_display_templates.xml"/>
 
 	<!-- CHANNEL SELECTION -->
-	<screen name="ChannelSelectionSummary" position="fill" resolution="800,480"> 
+	<screen name="ChannelSelectionSummary" position="fill" resolution="800,480">
 		<panel name="LCDChannelSelectionChannelName" />
 		<panel name="LCDChannelSelectionProgramName" />
 		<panel name="LCDChannelSelectionProgress" />
@@ -24,7 +24,7 @@
 	</screen>
 
 	<!-- INFOBAR -->
-	<screen name="InfoBarSummary" position="fill" resolution="800,480"> 
+	<screen name="InfoBarSummary" position="fill" resolution="800,480">
 		<panel name="LCDInfoBarChannelName" />
 		<panel name="LCDInfoBarProgramName" />
 		<panel name="LCDInfoBarProgress" />

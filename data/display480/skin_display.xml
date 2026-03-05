@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- This skin is at github.com/OpenViX/enigma2/tree/master/data/display480 -->
+<!-- This skin is at github.com/Blackhole/enigma2/tree/master/data/display480 -->
 <skin>
 	<windowstyle id="1" type="skinned">
 		<color color="#000000" name="Background"/>
@@ -260,7 +260,7 @@
 	<screen name="VideoWizardSummary" position="fill" resolution="480,320">
 		<panel name="WizardSummary"/>
 	</screen>
-	
+
 	<screen name="LanguageWizardSummary" position="fill" resolution="480,320">
 		<widget source="parent.summarytext" render="Label" position="20,0" size="440,70" font="FdLcD;65" halign="center" valign="center" zPosition="2" />
 		<widget source="parent.summarylangname" render="Label" position="20,140" size="440,110" font="FdLcDLight;65" halign="center" zPosition="2" />
@@ -274,7 +274,7 @@
 	</screen>
 
 <!-- JobView Summary -->
-	<screen name="JobViewSummary" position="fill" resolution="480,320"> 
+	<screen name="JobViewSummary" position="fill" resolution="480,320">
 		<widget source="parent.summary_job_name" render="Label" position="0,20" size="480,50" font="FdLcD;38" halign="center" valign="center" zPosition="2" nowrap="1"/>
 		<widget source="parent.summary_job_task" render="Label" position="0,90" size="480,100" font="FdLcD;36" halign="center" valign="center" zPosition="2" />
 		<widget source="parent.summary_job_progress" render="Progress" position="10,240" size="460,60" borderWidth="2" zPosition="3"/>
@@ -342,6 +342,20 @@
 		</panel>
 	</screen>
 
+<!-- OBH -->
+	<screen name="OBHDevicesPanelSummary" position="fill" resolution="480,320">
+		<panel name="Parent_Title" />
+		<widget source="entry" render="Label" position="0,65" size="480,90" font="FdLcD;40" halign="center" valign="center" />
+		<widget source="desc" render="Label" position="0,160" size="480,90" font="FdLcD;35" halign="center" valign="center" />
+		<panel name="SummaryClockPanel" />
+	</screen>
+	<screen name="OBHSwapSummary" position="fill" resolution="480,320">
+		<panel name="Parent_Title" />
+		<widget source="parent.swapname_summary" render="Label" position="0,65" size="480,90" font="FdLcD;40" halign="center" valign="center" />
+		<widget source="parent.swapactive_summary" render="Label" position="0,160" size="480,90" font="FdLcD;35" halign="center" valign="center" />
+		<panel name="SummaryClockPanel" />
+	</screen>
+	<screen name="UpdatePluginSummary" position="fill" resolution="480,320">
 		<panel name="Parent_Title" />
 		<widget source="parent.package" render="Label" position="0,65" size="480,90" font="FdLcD;40" halign="center" valign="center" />
 		<widget source="parent.status" render="Label" position="0,160" size="480,90" font="FdLcD;35" halign="center" valign="center" />
@@ -428,7 +442,7 @@
 	</screen>
 
 <!-- SkinSelector -->
-	<screen name="SkinSelectorSummary" position="fill" resolution="480,320"> 
+	<screen name="SkinSelectorSummary" position="fill" resolution="480,320">
 		<panel name="Parent_Title" />
 		<widget source="Name" render="Label" position="20,80" size="440,150" font="FdLcD;40" halign="center" valign="center" zPosition="2" />
 		<widget source="value" render="Label" position="20,250" size="440,50" font="FdLcD;38" halign="center" valign="top" zPosition="2" />

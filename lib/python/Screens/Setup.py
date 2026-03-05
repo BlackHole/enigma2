@@ -307,7 +307,7 @@ def setupDom(setup=None, plugin=None):
 	return setupFileDom
 
 # Temporary legacy interface.
-# Not used any OpenViX enigma2 module. Known to be used by the Heinz plugin.
+# Not used any OpenBh enigma2 module. Known to be used by the Heinz plugin.
 #
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- This skin is at github.com/OpenViX/enigma2/tree/master/data/display800 -->
+<!-- This skin is at github.com/Blackhole/enigma2/tree/master/data/display800 -->
 <skin>
 	<windowstyle id="1" type="skinned">
 		<color color="#000000" name="Background"/>
@@ -43,7 +43,7 @@
 			<convert type="ClockToText">Format:%d</convert>
 		</widget>
 	</screen>
-	
+
 	<!-- ## DEFAULT ## -->
 	<screen name="LCDTitle">
 		<widget source="parent.title" render="Label" position="20,40" size="760,90" font="FdLcD;70" halign="center" valign="center" zPosition="2" />
@@ -152,7 +152,7 @@
 	<screen name="LCDPiconChannelSelectionProgramName">
 		<widget source="parent.ServiceEvent" render="Label" position="40,253" size="720,88" font="FdLcDLight;65" halign="center" valign="center" zPosition="2">
 			<convert type="EventName">Name</convert>
-		</widget>	
+		</widget>
 	</screen>
 	<screen name="LCDPiconEPGProgramName">
 		<widget source="parent.Event" render="Label" position="40,253" size="720,88" font="FdLcDLight;65" halign="center" valign="center" zPosition="2">
@@ -211,15 +211,15 @@
 		</widget>
 	</screen>
 	<screen name="LCDPicon">
-		<widget source="session.CurrentService" render="LcdPicon" position="50,25" size="340,204" transparent="1" alphatest="blend" zPosition="2">	
+		<widget source="session.CurrentService" render="LcdPicon" position="50,25" size="340,204" transparent="1" alphatest="blend" zPosition="2">
 			<convert type="ServiceName">Reference</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="540,10" size="220,84" font="FdLcD;84" halign="left">
 			<convert type="ClockToText">Default</convert>
-		</widget>			
+		</widget>
 	</screen>
 	<screen name="LCDChannelSelectionPicon">
-		<widget source="parent.ServiceEvent" render="LcdPicon" position="50,25" size="340,204" transparent="1" alphatest="blend" zPosition="2">	
+		<widget source="parent.ServiceEvent" render="LcdPicon" position="50,25" size="340,204" transparent="1" alphatest="blend" zPosition="2">
 			<convert type="ServiceName">Reference</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="540,10" size="220,84" font="FdLcD;84" halign="left">
@@ -250,7 +250,7 @@
 		<widget source="session.CurrentService" render="Pixmap" pixmap="4.3.png" position="410,190" size="163,70" zPosition="1" alphatest="blend">
 			<convert type="ServiceInfo">IsNotWidescreen</convert>
 			<convert type="ConditionalShowHide" />
-		</widget>	
+		</widget>
 		<widget source="session.CurrentService" render="Pixmap" pixmap="2160.png" position="590,110" size="163,70" zPosition="1" alphatest="blend">
 			<convert type="ServiceInfo">Is4K</convert>
 			<convert type="ConditionalShowHide" />
@@ -258,7 +258,7 @@
 		<widget source="session.CurrentService" render="Pixmap" pixmap="1080.png" position="590,110" size="163,70" zPosition="1" alphatest="blend">
 			<convert type="ServiceInfo">Is1080</convert>
 			<convert type="ConditionalShowHide" />
-		</widget>		
+		</widget>
 		<widget source="session.CurrentService" render="Pixmap" pixmap="720.png" position="590,110" size="163,70" zPosition="1" alphatest="blend">
 			<convert type="ServiceInfo">Is720</convert>
 			<convert type="ConditionalShowHide" />
@@ -302,7 +302,7 @@
 	</screen>
 
 	<!-- JOBVIEW SUMMARY -->
-	<screen name="JobViewSummary" position="fill" resolution="800,480"> 
+	<screen name="JobViewSummary" position="fill" resolution="800,480">
 		<widget source="parent.summary_job_name" render="Label" position="40,50" size="720,110" font="FdLcD;85" halign="left" valign="center" zPosition="2" />
 		<widget source="parent.summary_job_task" render="Label" position="40,200" size="720,100" font="FdLcD;75" halign="left" valign="center" zPosition="2" />
 		<widget source="parent.summary_job_progress" render="Progress" position="38,348" size="724,84" borderWidth="2" zPosition="3"/>
@@ -312,7 +312,7 @@
 	</screen>
 
 	<!-- MENU -->
-	<screen name="MenuSummary" position="fill" resolution="800,480"> 
+	<screen name="MenuSummary" position="fill" resolution="800,480">
 		<panel name="LCDTitle" />
 		<widget source="parent.menu" render="Label" position="40,200" size="720,160" font="FdLcDLight;65" halign="center" zPosition="2">
 			<convert type="StringListSelection" />
@@ -325,16 +325,16 @@
 	</screen>
 
 	<!-- MESSAGEBOX -->
-	<screen name="MessageBoxSummary" position="fill" resolution="800,480"> 
+	<screen name="MessageBoxSummary" position="fill" resolution="800,480">
 		<widget source="parent.Text" render="Label" position="40,50" size="720,310" font="FdLcD;70" halign="center" valign="center" zPosition="2" />
 		<widget source="parent.selectedChoice" render="Label" position="40,380" size="720,70" font="FdLcDLight;60" halign="center" zPosition="2" />
 	</screen>
-	<screen name="MessageBoxSimpleSummary" position="fill" resolution="800,480"> 
+	<screen name="MessageBoxSimpleSummary" position="fill" resolution="800,480">
 		<panel name="MessageBoxSummary" />
 	</screen>
 
 	<!-- MOVIE SELECTION -->
-	<screen name="MovieSelectionSummary" position="fill" resolution="800,480"> 
+	<screen name="MovieSelectionSummary" position="fill" resolution="800,480">
 		<panel name="LCDTitle" />
 		<widget source="name" render="Label" position="40,150" size="720,245" font="FdLcDLight;60" halign="center" zPosition="2" />
 		<widget source="parent.Service" render="Label" position="40,400" size="320,70" font="FdLcD;60" halign="left" valign="center">
@@ -351,7 +351,7 @@
 	</screen>
 
 	<!-- MOVIE PLAYER -->
-	<screen name="InfoBarMoviePlayerSummary" position="fill" resolution="800,480"> 
+	<screen name="InfoBarMoviePlayerSummary" position="fill" resolution="800,480">
 		<widget source="session.CurrentService" render="Label" position="40,90" size="720,260" font="FdLcD;75" halign="center" valign="center" zPosition="2">
 			<convert type="ServiceName">Name</convert>
 		</widget>
@@ -378,28 +378,28 @@
 	</screen>
 
 	<!-- PLUGIN BROWSER -->
-	<screen name="PluginBrowserSummary" position="fill" resolution="800,480"> 
+	<screen name="PluginBrowserSummary" position="fill" resolution="800,480">
 		<panel name="LCDTitle" />
 		<widget source="entry" render="Label" position="40,150" size="720,80" font="FdLcDLight;60" halign="center" zPosition="2" noWrap="1" />
 		<widget source="desc" render="Label" position="40,260" size="720,200" font="FdLcDLight;54" halign="center" zPosition="2" />
 	</screen>
 
 	<!-- SETUP -->
-	<screen name="SetupSummary" position="fill" resolution="800,480"> 
+	<screen name="SetupSummary" position="fill" resolution="800,480">
 		<widget source="SetupTitle" render="Label" position="40,40" size="720,90" font="FdLcD;75" halign="center" valign="center" zPosition="2" noWrap="1" />
 		<widget source="SetupEntry" render="Label" position="40,200" size="720,160" font="FdLcDLight;65" halign="center" zPosition="2" noWrap="1" />
 		<widget source="SetupValue" render="Label" position="40,380" size="720,80" font="FdLcDLight;60" halign="center" zPosition="2" noWrap="1" />
 	</screen>
 
 	<!-- SkinSelector -->
-	<screen name="SkinSelectorSummary" position="fill" resolution="800,480"> 
+	<screen name="SkinSelectorSummary" position="fill" resolution="800,480">
 		<panel name="LCDTitle" />
 		<widget source="Name" render="Label" position="40,190" size="720,160" font="FdLcDLight;65" halign="center" valign="center" zPosition="2" />
 		<widget source="value" render="Label" position="40,380" size="720,70" font="FdLcDLight;60" halign="center" zPosition="2" />
 	</screen>
 
 	<!-- STANDBY -->
-	<screen name="StandbySummary" position="fill" resolution="800,480"> 
+	<screen name="StandbySummary" position="fill" resolution="800,480">
 		<widget source="global.CurrentTime" render="Label" position="40,40" size="720,110" font="FdLcD;100" halign="center" valign="center" zPosition="1">
 			<convert type="ClockToText">ShortDate</convert>
 		</widget>
@@ -418,7 +418,7 @@
 	</screen>
 
 	<!-- misc -->
-	<screen name="ScreenSummary" position="fill" resolution="800,480"> 
+	<screen name="ScreenSummary" position="fill" resolution="800,480">
 		<widget source="Title" render="Label" position="40,190" size="720,200" font="FdLcD;60" halign="center" />
 	</screen>
 

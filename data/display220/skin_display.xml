@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--suppress XmlUnboundNsPrefix, XmlUnboundNsPrefix -->
-<!-- This skin is at github.com/OpenViX/enigma2/tree/master/data/display220 -->
+<!-- This skin is at github.com/Blackhole/enigma2/tree/master/data/display220 -->
 <skin>
 	<windowstyle id="1" type="skinned">
 		<color color="#000000" name="Background"/>
@@ -369,7 +369,21 @@
 		<panel name="SummaryIconsPanel" />
 		<panel name="SummaryClockPanel" />
 	</screen>
-
+<!-- OBH -->
+	<screen name="OBHDevicesPanelSummary" position="0,0" size="220,176">
+		<widget source="parent.Title" render="Label" position="0,38" size="220,26" font="FdLcD;24" halign="left" noWrap="1" />
+		<widget source="entry" render="Label" position="0,21" size="220,16" font="FdLcD;14" halign="left" noWrap="1" />
+		<widget source="desc" render="Label" position="0,38" size="220,26" font="FdLcD;12" halign="left" transparent="1" />
+		<panel name="SummaryIconsPanel" />
+		<panel name="SummaryClockPanel" />
+	</screen>
+	<screen name="OBHSwapSummary" position="0,0" size="220,176">
+		<widget source="parent.Title" render="Label" position="0,38" size="220,26" font="FdLcD;24" halign="left" noWrap="1" />
+		<widget source="parent.swapname_summary" render="Label" position="0,66" size="220,20" font="FdLcD;19" halign="left" noWrap="1" />
+		<widget source="parent.swapactive_summary" render="Label" position="0,93" size="220,16" font="FdLcD;14" halign="left" transparent="1" />
+		<panel name="SummaryIconsPanel" />
+		<panel name="SummaryClockPanel" />
+	</screen>
 	<screen name="UpdatePluginSummary" position="0,0" size="220,176">
 		<widget source="parent.Title" render="Label" position="0,38" size="220,26" font="FdLcD;24" halign="left" noWrap="1" />
 		<widget source="parent.package" render="Label" position="0,66" size="220,20" font="FdLcD;19" halign="left" noWrap="1" />

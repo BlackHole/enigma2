@@ -71,7 +71,7 @@ class ClockToText(Converter):
 		if type[0:5] == "Parse":
 			parse = type[5:6]
 		else:
-			# OpenViX used ";" as the only ClockToText token separator.  For legacy
+			# OpenBh used ";" as the only ClockToText token separator.  For legacy
 			# support if the first token is "Format" skip the multiple parse character
 			# processing.
 			#
@@ -88,13 +88,13 @@ class ClockToText(Converter):
 				self.formats.append(eval("lambda t: strftime(\"%s\", localtime(t))" % arg[7:].replace("%d %B", _("%d %B"))))
 				continue
 			if arg[0:7] == "NoSpace":
-				# Eat old OpenVIX option as it doesn't make sense now.
+				# Eat old OpenBh option as it doesn't make sense now.
 				continue
 			if arg[0:5] == "Parse":
 				# Already processed.
 				continue
 			if arg[0:12] == "Proportional":
-				# Eat old OpenVIX option as it doesn't make sense now.
+				# Eat old OpenBh option as it doesn't make sense now.
 				continue
 			if arg[0:9] == "Separator":
 				self.separator = arg[10:]

@@ -25,8 +25,8 @@
         <item level="2" text="Max image backups to keep (0==all)" description="Backups to keep">config.imagemanager.number_to_keep</item>
         <!--<item level="2" text="Login as an OpenBh developer" description="If you are an OpenBh developer you can enter your login details to have direct access to OpenBh developer images for your receiver. This feature is only available via 'https' connections.">config.imagemanager.login_as_OpenBh_developer</item>
         <if conditional="config.imagemanager.login_as_OpenBh_developer.value">
-            <item level="2" text="Developer username" description="Enter your OpenViX developer username.">config.imagemanager.developer_username</item>
-            <item level="2" text="Developer password" description="Enter your OpenViX developer password.">config.imagemanager.developer_password</item>
+            <item level="2" text="Developer username" description="Enter your OpenBh developer username.">config.imagemanager.developer_username</item>
+            <item level="2" text="Developer password" description="Enter your OpenBh developer password.">config.imagemanager.developer_password</item>
         </if>
         <item level="2" text="Homebuild URL" description="If you are running your own build server and want to download your own images directly into ImageManager you can link to the URL of your JSON index. Don't forget to add '%s' where the box name should be inserted into the url. If you need help with implementing this please ask on the forum.">config.imagemanager.imagefeed_MyBuild</item> -->
     </setup>

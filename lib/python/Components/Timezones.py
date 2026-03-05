@@ -19,7 +19,7 @@ from Tools.StbHardware import setRTCoffset
 # The DEFAULT_ZONE is used to select the default time zone within the time
 # zone area.  For example, if the "Time zone area" is selected to be
 # "Europe" then openATV can select "Berlin" as the European default while
-# OpenPLi can have "Amsterdam" as its default and OpenViX can have the the
+# OpenPLi can have "Amsterdam" as its default and OpenBh can have the the
 # European default of "London" etc.  (These are only examples.)  Images can
 # select any defaults they deem appropriate.
 #
@@ -28,7 +28,7 @@ from Tools.StbHardware import setRTCoffset
 #
 # For images that use both the "Time zone area" and "Time zone" configuration
 # options then the DEFAULT_AREA should be set to an area most appropriate for
-# the image.  For example, Beyonwiz would use "Australia" while openATV,
+# the image.  For example, Beyonwiz would use "Australia" while openATV, OpenBh,
 # OpenViX and OpenPLi would use "Europe".  If the "Europe" option is selected
 # then the DEFAULT_ZONE should be used to select the most appropriate time
 # zone selection for the image.
@@ -38,10 +38,10 @@ from Tools.StbHardware import setRTCoffset
 #
 # DEFAULT_AREA = "Classic"  # Use the classic time zone based list of time zones.
 # DEFAULT_AREA = "Australia"  # Beyonwiz
-DEFAULT_AREA = "Europe"  # openATV, OpenPLi, OpenViX
+DEFAULT_AREA = "Europe"  # openATV, OpenBh, OpenPLi, OpenViX
 # DEFAULT_ZONE = "Amsterdam"  # OpenPLi
 # DEFAULT_ZONE = "Berlin"  # openATV
-DEFAULT_ZONE = "London"  # OpenViX
+DEFAULT_ZONE = "London"  # OpenBh
 TIMEZONE_FILE = "/etc/timezone.xml"  # This should be SCOPE_TIMEZONES_FILE!  This file moves arond the filesystem!!!  :(
 TIMEZONE_DATA = "/usr/share/zoneinfo/"  # This should be SCOPE_TIMEZONES_DATA!
 
