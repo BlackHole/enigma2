@@ -2495,7 +2495,7 @@ int eDVBServicePlay::selectAudioStream(int i)
 		std::string pass = CFile::read("/proc/stb/audio/ac3");
 		if (replace_all(replace_all(pass, "\r", ""), "\n", "") == "passthrough")
 		{
-			int shortAudioDelay = eConfigManager::getConfigIntValue("config.av.passthrough_fix_short", 100);
+			int shortAudioDelay = eConfigManager::getConfigIntValue("config.av.passthrough_fix", 100);
 			m_passthrough_fix_timer->stop();
 			m_passthrough_fix_timer->start(shortAudioDelay, true);
 		}

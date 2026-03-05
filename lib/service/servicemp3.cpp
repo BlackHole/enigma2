@@ -1727,14 +1727,12 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 					std::string pass = CFile::read("/proc/stb/audio/ac3");
 					if (replace_all(replace_all(pass, "\r", ""), "\n", "") == "passthrough")
 					{
-						int longAudioDelay = eConfigManager::getConfigIntValue("config.av.passthrough_fix_long", 1200);
-						int shortAudioDelay = eConfigManager::getConfigIntValue("config.av.passthrough_fix_short", 100);
 						if (m_clear_buffers)
 						{
 							m_passthrough_fix_timer->stop();
 							m_clear_buffers = true;
 							clearBuffers();
-							m_passthrough_fix_timer->start(apidtype == atEAC3 && i > 0 && current_audio_orig > -1 ? longAudioDelay : shortAudioDelay, true);
+							m_passthrough_fix_timer->start(apidtype == atEAC3 && i > 0 && current_audio_orig > -1 ? 2000 : 100, true);
 						}
 
 					}
