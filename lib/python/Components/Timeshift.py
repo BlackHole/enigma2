@@ -932,6 +932,7 @@ class InfoBarTimeshift:
 		ptsmergeDEST = ""
 		ptsmergeeventname = ""
 		ptsgetnextfile = False
+		ptsfilemerged = False
 		filepath = config.usage.default_path.value
 		filelist = listdir(filepath.encode())
 		files = []
@@ -986,6 +987,7 @@ class InfoBarTimeshift:
 							# Add Merge Job to JobManager
 							JobManager.AddJob(MergeTimeshiftJob(self, "cat \"%s%s\" >> \"%s%s\"" % (config.usage.default_path.value, ptsmergeSRC, config.usage.default_path.value, ptsmergeDEST), ptsmergeSRC, ptsmergeDEST, eventname))
 							config.timeshift.isRecording.value = True
+							ptsfilemerged = True
 						else:
 							ptsgetnextfile = True
 
@@ -994,6 +996,7 @@ class InfoBarTimeshift:
 						ptsgetnextfile = True
 						ptsmergeDEST = filename[0:-5]
 						ptsmergeeventname = eventname
+						ptsfilemerged = False
 
 						# If still recording or transfering, try again later ...
 						if fileExists("%s%s" % (config.usage.default_path.value, ptsmergeDEST)):
