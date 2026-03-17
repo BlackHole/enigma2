@@ -1,7 +1,7 @@
 from os import path, stat
 import struct
 import random
-from time import localtime, strftime
+from time import localtime, strftime, time as nowtime
 from chardet import detect
 
 from enigma import eListboxPythonMultiContent, eListbox, gFont, iServiceInformation, eSize, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_VALIGN_CENTER, BT_SCALE, BT_KEEP_ASPECT_RATIO, BT_HALIGN_CENTER, BT_ALIGN_CENTER, BT_VALIGN_CENTER, eServiceReference, eServiceCenter, eTimer
@@ -492,7 +492,15 @@ class MovieList(GUIComponent):
 					else:
 						data.icon = self.iconMovieRec
 				elif switch in ('p', 's'):
-					data.part = 100
+					timer = self.runningTimers[path.split(pathName)[1].rsplit(".", 1)[0]]
+					now = int(nowtime())
+					total = int(timer.end) - int(timer.begin)
+					elapsed = now - int(timer.begin)
+					if total > 0:
+						data.part = min(max(int((elapsed * 100) / total), 0), 100)
+					else:
+						data.part = 0
+					data.isRecording = True
 					if (self.playInBackground or self.playInForeground) and serviceref == (self.playInBackground or self.playInForeground):
 						data.partcol = self.pbarColourPlayRec
 					else:
@@ -526,7 +534,7 @@ class MovieList(GUIComponent):
 				elif switch in ('p', 's'):
 					if data.part > 0:
 						pbarY = (self.itemHeight - self.pbarHeight) // 2 if self.pbarShift is None else self.pbarShift
-						res.append(MultiContentEntryProgress(pos=(self.spaceLeft + colX, pbarY), size=(iconSize, self.pbarHeight), percent=data.part, borderWidth=2, foreColor=data.partcol, foreColorSelected=None, backColor=None, backColorSelected=None))
+						res.append(MultiContentEntryProgress(pos=(self.spaceLeft + colX, pbarY), size=(iconSize, self.pbarHeight), percent=data.part, borderWidth=2, foreColor=data.partcol, foreColorSelected=data.partcol, backColor=None, backColorSelected=None))
 					elif data.icon is not None:
 						if self.pbarShift is None:
 							res.append(MultiContentEntryPixmapAlphaBlend(pos=(self.spaceLeft + colX + (r if showPicons else 0), 0), size=(iconSize, ih), png=data.icon, flags=BT_ALIGN_CENTER))
