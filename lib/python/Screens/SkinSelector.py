@@ -115,13 +115,13 @@ class SkinSelector(Screen, HelpableScreen):
 					if skin == EMERGENCY_SKIN:
 						skinEntry = [EMERGENCY_NAME, emergency, dir, skin, resolution, skinSize, preview]
 					elif skin == DEFAULT_SKIN:
-						skinEntry = [label, default, dir, skin, resolution, skinSize, preview]
+						skinEntry = [label.capitalize(), default, dir, skin, resolution, skinSize, preview]
 					elif skin == DEFAULT_DISPLAY_SKIN:
-						skinEntry = [label, default, dir, skin, resolution, skinSize, preview]
+						skinEntry = [label.capitalize(), default, dir, skin, resolution, skinSize, preview]
 					elif skin == displayPicon:
-						skinEntry = [label, defaultPicon, dir, skin, resolution, skinSize, preview]
+						skinEntry = [label.capitalize() + " with picon", defaultPicon, dir, skin, resolution, skinSize, preview]
 					else:
-						skinEntry = [label, "", dir, skin, resolution, skinSize, preview]
+						skinEntry = [label.capitalize(), "", dir, skin, resolution, skinSize, preview]
 					if skin == self.currentSkin:
 						skinEntry[1] = (skinEntry[1] + current).replace("><", "/")
 					elif skin == self.config.value:
