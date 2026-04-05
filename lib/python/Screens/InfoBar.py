@@ -337,6 +337,7 @@ class MoviePlayer(InfoBarBase, InfoBarShowHide, InfoBarLongKeyDetection, InfoBar
 		self.onChangedEntry = []
 		self.servicelist = slist
 		self.lastservice = lastservice or session.nav.getCurrentlyPlayingServiceOrGroup()
+		self.last_chnumber = self.lastservice and self.lastservice.getChannelNum() or 0
 		session.nav.playService(service)
 		self.cur_service = service
 		self.returning = False
@@ -345,8 +346,11 @@ class MoviePlayer(InfoBarBase, InfoBarShowHide, InfoBarLongKeyDetection, InfoBar
 		AudioSelection.fillSubtitleExt = self.subtitleListInject
 		if self.onAudioSubTrackChanged not in AudioSelection.hooks:
 			AudioSelection.hooks.append(self.onAudioSubTrackChanged)
+
 		self.__event_tracker = ServiceEventTracker(screen=self, eventmap={
 			enigma.iPlayableService.evStart: self.__evServiceStartInit})
+		self.loadSavedSubtitle(service)
+
 		config.misc.standbyCounter.addNotifier(self.standbyCountChanged, initial_call=False)
 
 		if type(self) is MoviePlayer:
@@ -361,6 +365,8 @@ class MoviePlayer(InfoBarBase, InfoBarShowHide, InfoBarLongKeyDetection, InfoBar
 
 	def clearHooks(self):
 		AudioSelection.fillSubtitleExt = None
+		if self.onAudioSubTrackChanged in AudioSelection.hooks:
+			AudioSelection.hooks.remove(self.onAudioSubTrackChanged)
 
 	def __onClose(self):
 		# clear the instance value so the skin reloader works correctly
@@ -374,7 +380,7 @@ class MoviePlayer(InfoBarBase, InfoBarShowHide, InfoBarLongKeyDetection, InfoBar
 		self.session.nav.playService(self.lastservice)
 		# Simulate service start event due to the fact when exit from playing
 		# a recording there is no evStart event because the same service is already playing
-		self.session.screen["CurrentService"].newService(self.lastservice)
+		self.session.screen["CurrentService"].newService(self.lastservice, self.last_chnumber)
 		config.usage.last_movie_played.value = self.cur_service.toString()
 		config.usage.last_movie_played.save()
 
@@ -698,11 +704,23 @@ class MoviePlayer(InfoBarBase, InfoBarShowHide, InfoBarLongKeyDetection, InfoBar
 			return True
 		return False
 
+	def loadSavedSubtitle(self, service):
+		path = service.getPath()
+		if not path:
+			return
+		try:
+			subtitle_parsed = self.load_subconf(path)
+			if subtitle_parsed:
+				subtitle = (subtitle_parsed[0], subtitle_parsed[1], subtitle_parsed[2], subtitle_parsed[3], subtitle_parsed[4], self.runSubtitles, subtitle_parsed[6])
+				self.runSubtitles(subtitle=subtitle)
+		except:
+			pass  # this in case sometimes event comes too fast and is got by the MoviePlayer before the InfoBar, so the subconf file is not yet created, or any other issue with loading/parsing the file.
+
 	def __evServiceStartInit(self):
-		subtitle_parsed = self.load_subconf(self.cur_service.getPath())
-		subtitle = (subtitle_parsed[0], subtitle_parsed[1], subtitle_parsed[2], subtitle_parsed[3], subtitle_parsed[4], self.runSubtitles, subtitle_parsed[6]) if subtitle_parsed else None
-		if subtitle:
-			self.runSubtitles(subtitle=subtitle)
+		service = self.session.nav.getCurrentlyPlayingServiceReference()
+		if not service:
+			return
+		self.loadSavedSubtitle(service)
 
 	def extract_language_from_filename(self, path: Path) -> str | None:
 		"""
