@@ -71,8 +71,8 @@
 	</screen>
 	<screen name="LCDInfoBarRemainingTime">
 		<widget source="session.Event_Now" render="Label" position="40,390" size="320,70" font="FdLcD;60" halign="left" valign="center">
-			<convert type="EventTime">Remaining</convert>
-			<convert type="RemainingToText">InMinutes</convert>
+			<convert type="EventTime">VFDRemaining</convert>
+			<convert type="RemainingToText">VFD</convert>
 		</widget>
 	</screen>
 	<screen name="LCDInfoBarStartEndTime">
@@ -105,8 +105,8 @@
 	</screen>
 	<screen name="LCDChannelSelectionRemainingTime">
 		<widget source="parent.ServiceEvent" render="Label" position="40,390" size="320,70" font="FdLcD;60" halign="left" valign="center">
-			<convert type="EventTime">Remaining</convert>
-			<convert type="RemainingToText">InMinutes</convert>
+			<convert type="EventTime">VFDRemaining</convert>
+			<convert type="RemainingToText">VFD</convert>
 		</widget>
 	</screen>
 	<screen name="LCDChannelSelectionStartEndTime">
@@ -133,8 +133,8 @@
 	</screen>
 	<screen name="LCDEPGRemainingTime">
 		<widget source="parent.Event" render="Label" position="40,390" size="320,70" font="FdLcD;60" halign="left" valign="center">
-			<convert type="EventTime">Remaining</convert>
-			<convert type="RemainingToText">InMinutes</convert>
+			<convert type="EventTime">VFDRemaining</convert>
+			<convert type="RemainingToText">VFD</convert>
 		</widget>
 	</screen>
 	<screen name="LCDEPGStartEndTime">
@@ -177,20 +177,20 @@
 	</screen>
 	<screen name="LCDPiconInfoBarRemainingTime">
 		<widget source="session.Event_Now" render="Label" position="40,390" size="320,70" font="FdLcD;60" halign="left" valign="center">
-			<convert type="EventTime">Remaining</convert>
-			<convert type="RemainingToText">InMinutes</convert>
+			<convert type="EventTime">VFDRemaining</convert>
+			<convert type="RemainingToText">VFD</convert>
 		</widget>
 	</screen>
 	<screen name="LCDPiconChannelSelectionRemainingTime">
 		<widget source="parent.ServiceEvent" render="Label" position="40,390" size="320,70" font="FdLcD;60" halign="left" valign="center">
-			<convert type="EventTime">Remaining</convert>
-			<convert type="RemainingToText">InMinutes</convert>
+			<convert type="EventTime">VFDRemaining</convert>
+			<convert type="RemainingToText">VFD</convert>
 		</widget>
 	</screen>
 	<screen name="LCDPiconEPGRemainingTime">
 		<widget source="parent.Event" render="Label" position="40,390" size="320,70" font="FdLcD;60" halign="left" valign="center">
-			<convert type="EventTime">Remaining</convert>
-			<convert type="RemainingToText">InMinutes</convert>
+			<convert type="EventTime">VFDRemaining</convert>
+			<convert type="RemainingToText">VFD</convert>
 		</widget>
 	</screen>
 	<screen name="LCDPiconInfoBarStartEndTime">
@@ -538,9 +538,11 @@
 <!-- UpdatePlugin -->
 	<screen name="UpdatePluginSummary" position="fill" resolution="800,480">
 		<panel name="LCDTitle" />
-		<widget source="parent.package" render="Label" position="40,200" size="720,160" font="FdLcDLight;65" halign="center" />
+		<widget source="parent.package" render="Label" position="40,160" size="720,200" font="FdLcDLight;65" halign="center" />
 		<widget source="parent.status" render="Label" position="20,340" size="760,120" font="FdLcDLight;54" halign="center" valign="center" />
-		<panel name="SummaryClockPanel" />
+		<widget source="global.CurrentTime" render="Label" position="600,400" size="160,60" font="FdLcD;40" halign="right" valign="center" noWrap="1">
+			<convert type="ClockToText"></convert>
+		</widget>
 	</screen>
 
 <!-- AutoTimerOverview -->
