@@ -922,14 +922,7 @@ int eMPEGStreamParserTS::processPacket(const unsigned char *pkt, off_t offset)
 			//}
 			//eDebugNoNewLine("\n");
 
-			/* Return 0 (not -2): a missing/invalid PES start code means we
-			 * cannot extract a PTS from this packet, but the stream is not
-			 * corrupt — CI-decrypted streams, MPEG-1 audio, and similar
-			 * sources regularly produce PUSI packets without a 0x000001
-			 * start code.  Returning -2 caused parseData() to abort early
-			 * and asyncWrite() to skip writing data to disk, resulting in
-			 * empty recordings and missing .ap/.sc files. */
-			return 0;
+			return 0; /* Return 0 (not -2): missing/invalid PES start code cannot extract a PTS from this packet, but stream not corrupt */
 		}
 
 		if (pkt[7] & 0x80) // PTS present?
