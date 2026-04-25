@@ -20,17 +20,10 @@ class MessageBox(Screen, HelpableScreen):
 	TYPE_ERROR = 3
 	TYPE_MESSAGE = 4
 
-	TYPE_PREFIX = {
-		TYPE_YESNO: _("Question"),
-		TYPE_INFO: _("Information"),
-		TYPE_WARNING: _("Warning"),
-		TYPE_ERROR: _("Error"),
-		TYPE_MESSAGE: _("Message")
-	}
-
-	def __init__(self, session, text, type=TYPE_YESNO, timeout=0, close_on_any_key=False, default=True, enable_input=True, msgBoxID=None, picon=True, simple=False, wizard=False, list=None, skin_name=None, timeout_default=None, title=None):
-		Screen.__init__(self, session, mandatoryWidgets=["icon", "list", "text"])
+	def __init__(self, session, text, type=TYPE_YESNO, timeout=0, close_on_any_key=False, default=True, enable_input=True, msgBoxID=None, picon=True, simple=False, wizard=False, list=None, skin_name=None, timeout_default=None, title=None, **kwargs):
+		Screen.__init__(self, session, mandatoryWidgets=["list", "text"])
 		HelpableScreen.__init__(self)
+		self.TYPE_PREFIX = {self.TYPE_YESNO: _("Question"), self.TYPE_INFO: _("Information"), self.TYPE_WARNING: _("Warning"), self.TYPE_ERROR: _("Error"), self.TYPE_MESSAGE: _("Message")}
 		self.text = text
 		self.type = type if type in self.TYPE_PREFIX else self.TYPE_MESSAGE
 		self.timeout = int(timeout)
@@ -41,7 +34,7 @@ class MessageBox(Screen, HelpableScreen):
 		self.picon = picon
 		if picon:
 			self["icon"].show()
-		self.skinName = ["MessageBox", "MessageBoxFallback"]  # MessageBoxFallback in skin_default
+		self.skinName = ["MessageBox"]
 		if simple:
 			self.skinName = ["MessageBoxSimple"] + self.skinName
 		if wizard:
@@ -121,7 +114,7 @@ class MessageBox(Screen, HelpableScreen):
 		if self.activeTitle is None:
 			self.activeTitle = self.getTitle()
 			if "%s" in self.activeTitle:
-				self.activeTitle = self.activeTitle % self.TYPE_PREFIX.get(self.type, _("Unknown"))
+				self.activeTitle = self.activeTitle % self.TYPE_PREFIX.get(self.type, self.TYPE_PREFIX[self.TYPE_MESSAGE])
 		if self.baseTitle != self.activeTitle:
 			self.baseTitle = self.activeTitle
 		if self.timeout > 0:
@@ -289,16 +282,16 @@ class ModalMessageBox:
 			self.previousDialog = None
 			self.previousEnabledActions = []
 
-	def showMessageBox(self, text="", timeout=0, list=None, default=True, close_on_any_key=False, timeout_default=None, windowTitle=None, msgBoxID=None, typeIcon=MessageBox.TYPE_YESNO, enable_input=True, callback=None, title=None, type=None):
+	def showMessageBox(self, text="", timeout=0, list=None, default=True, close_on_any_key=False, timeout_default=None, title=None, msgBoxID=None, type=None, enable_input=True, callback=None, **kwargs):
 		if self.dialog:
 			return  # sanity, nothing should be calling this with the dialog already open, so ignore it
 		self.disableParentActions()
-		title = title or windowTitle or MessageBox.TYPE_PREFIX.get(type, MessageBox.TYPE_PREFIX[MessageBox.TYPE_MESSAGE])  # windowTitle is not openvix, but is retained for compatability
-		self.dialog = self.session.instantiateDialog(MessageBox, text=text, type=type or typeIcon, timeout=timeout, close_on_any_key=close_on_any_key, default=default, enable_input=enable_input, msgBoxID=msgBoxID, list=list, skin_name="MessageBoxModal", timeout_default=timeout_default)
+		self.dialog = self.session.instantiateDialog(MessageBox, text=text, type=type, timeout=timeout, close_on_any_key=close_on_any_key, default=default, enable_input=enable_input, msgBoxID=msgBoxID, list=list, skin_name="MessageBoxModal", timeout_default=timeout_default, title=title)
 		self.dialog.setAnimationMode(0)
 		self.callback = callback
-		if "actions" in self.dialog:
-			self.dialog["actions"].execBegin()
+		for x in self.dialog:
+			if isinstance(self.dialog[x], ActionMap):
+				self.dialog[x].execBegin()
 		self.dialog.close = self.close
 		self.dialog.show()
 
@@ -306,8 +299,9 @@ class ModalMessageBox:
 		if self.dialog:
 			if self.callback and callable(self.callback):
 				self.callback(*retVal)
-			if "actions" in self.dialog:
-				self.dialog["actions"].execEnd()
+			for x in self.dialog:
+				if isinstance(self.dialog[x], ActionMap):
+					self.dialog[x].execEnd()
 			self.dialog.doClose()
 			self.dialog = None
 		self.enableParentActions()
