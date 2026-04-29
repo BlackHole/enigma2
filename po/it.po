@@ -14,6 +14,611 @@ msgstr ""
 "POT-Creation-Date: \n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
 
+# 19.04.2026 # AudioSelection
+#: \Marco\OBH-LOCALE-2026\Audio selection\AudioSelection.py:231
+msgid "Subtitle Selection"
+msgstr "Selezione sottotitoli"
+
+#: \Marco\OBH-LOCALE-2026\Audio selection\AudioSelection.py:269
+msgid "To Audio Selection"
+msgstr "Selezione audio"
+
+#: \Marco\OBH-LOCALE-2026\Audio selection\AudioSelection.py:101
+msgid "Select Audio Track"
+msgstr "Selezionare una traccia audio"
+
+#: \Marco\OBH-LOCALE-2026\Audio selection\AudioSelection.py:105
+msgid "To Subtitle Selection"
+msgstr "Selezione sottotitoli"
+
+#: \Marco\OBH-LOCALE-2026\Audio selection\AudioSelection.py:201
+msgid "Original language"
+msgstr "Lingua originale"
+
+#: \Marco\OBH-LOCALE-2026\Audio selection\AudioSelection.py:144
+msgid "Use Best / Controlled by HDMI"
+msgstr "Usa migliore / Controllato tramite HDMI"
+
+# 04.04.2026 # Diplay LCD
+msgid "Set LED Color or disable the LED."
+msgstr "Imposta il colore del LED o disattivalo."
+
+msgid "Power LED Colour State when Running."
+msgstr "Colore del LED di alimentazione quando è acceso."
+
+msgid "Power LED Colour State in Standby"
+msgstr "Colore del LED di alimentazione quando è in standby"
+
+msgid "Power LED Colour State in Deep-Standby"
+msgstr "Colore del LED di alimentazione quando è spento"
+
+msgid "PowerControl FrontDisplay Normal Mode"
+msgstr "Display frontale modalità normale"
+
+msgid "PowerControl FrontDisplay Standby Mode"
+msgstr "Display frontale modalità standby"
+
+msgid "PowerControl FrontDisplay Suspend Mode"
+msgstr "Display frontale modalità sospensione"
+
+msgid "Power On/Off display Normal Mode."
+msgstr "Acceso/Spento modalità display normale."
+
+msgid "Power On/Off display Standby Mode."
+msgstr "Acceso/Spento modalità display standby."
+
+msgid "Power On/Off display Suspend Mode."
+msgstr "Acceso/Spento modalità display sospensione."
+
+# 25.02.2026 # InfoBar - HELP
+#: \Marco\OBH-LOCALE-2026\RUN PY/InfoBarGenerics.py:1644
+msgid "Toggle aspect ratio"
+msgstr "Cambia proporzioni immagine"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/InfoBarGenerics.py:1640 PY/InfoBarGenerics.py:1641
+msgid "Show network mounts "
+msgstr "Mostra i mount di rete "
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/InfoBar.py:60
+msgid "Open XStreamity"
+msgstr "Apri XStreamity"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/InfoBar.py:61
+msgid "Open Kodi"
+msgstr "Avvia Kodi"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/InfoBar.py:62
+msgid "Open Netflix"
+msgstr "Avvia Netflix"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/InfoBar.py:63
+msgid "Open Youtube"
+msgstr "Avvia Youtube"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/InfoBar.py:247
+msgid ""
+"XStreamity is not installed!\n"
+"Please install it."
+msgstr ""
+"XStreamity non è installato!\n"
+"Installalo."
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/InfoBar.py:255
+msgid ""
+"Kodi is not installed!\n"
+"Please install it."
+msgstr ""
+"Kodi non è installato!\n"
+"Installalo."
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/InfoBar.py:263
+msgid ""
+"Netflix is not installed!\n"
+"Please install it."
+msgstr ""
+"Netflix non è installato!\n"
+"Installalo."
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/InfoBar.py:271
+msgid ""
+"YouTube is not installed!\n"
+"Please install it."
+msgstr ""
+"YouTube non è installato!\n"
+"Installalo."
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/InfoBarGenerics.py:3972
+msgid "16:9 Always"
+msgstr "Sempre in 16:9"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/InfoBarGenerics.py:1856
+msgid "Select default action of INFO button"
+msgstr "Seleziona azione predefinita tasto INFO"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/InfoBarGenerics.py:1849
+msgid "Select default action of EPG button"
+msgstr "Seleziona azione predefinita tasto EPG"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/PluginBrowser.py:84
+msgid "Cancel Actions"
+msgstr "Annulla azioni"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/PluginBrowser.py:97
+msgid "List Sort Actions"
+msgstr "Azioni di ordinamento elenchi"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/PluginBrowser.py:94
+msgid "Move the current item up the list"
+msgstr "Sposta voce corrente verso l'alto"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/PluginBrowser.py:95
+msgid "Move the current item down the list"
+msgstr "Sposta voce corrente verso il basso"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/PluginBrowser.py:96
+msgid "Reset the list order to the default"
+msgstr "Ripristina ordine predefinito elenco"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/ChoiceBox.py:128
+msgid "Navigation Actions"
+msgstr "Azioni di navigazione"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/PluginBrowser.py:83 PY/PluginBrowser.py:100
+msgid "Selection Actions"
+msgstr "Azioni di selezione"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/PluginBrowser.py:83
+msgid "Select the current item"
+msgstr "Seleziona voce corrente"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/ChoiceBox.py:105 PY/ChoiceBox.py:107
+msgid "Select item directly"
+msgstr "Seleziona voce direttamente"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/ChoiceBox.py:118
+msgid "Cancel the current action and exit"
+msgstr "Annulla modifiche ed esci"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/ChoiceBox.py:126
+msgid "Move selection one page up"
+msgstr "Sposta di una pagina verso l'alto"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/ChoiceBox.py:127
+msgid "Move selection one page down"
+msgstr "Sposta di una pagina verso il basso"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/ChoiceBox.py:124
+msgid "Move selection to the next item up"
+msgstr "Sposta in alto alla voce successiva"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/ChoiceBox.py:125
+msgid "Move selection to the next item down"
+msgstr "Sposta in basso alla voce successiva"
+
+# 21.02.2026 # - VirtualKeyBoard - ChannelSelection - HELP
+#: \Marco\OBH-LOCALE-2026\RUN PY/VirtualKeyBoard.py:152 ChannelSelection.py:1493
+msgid "Jump to next bookmark"
+msgstr "Passa al segnalibro successivo"
+
+#: ChannelSelection.py:1494
+msgid "Jump to previous bookmark"
+msgstr "Passa al segnalibro precedente"
+
+#: ChannelSelection.py:1877
+msgid "Move up in bouquet list"
+msgstr "Sposta su nell'elenco dei bouquet"
+
+#: ChannelSelection.py:1879
+msgid "Move down in bouquet list"
+msgstr "Sposta giù nell'elenco bouquet"
+
+#: ChannelSelection.py:1931
+msgid "Search channel list, SMS style ABC2"
+msgstr "Cerca nell'elenco canali, stile SMS ABC2"
+
+#: ChannelSelection.py:1933
+msgid "Search channel list, SMS style 2ABC"
+msgstr "Cerca nell'elenco canali, stile SMS 2ABC"
+
+#: ChannelSelection.py:1496
+msgid "Toggle between one & two-line channel list"
+msgstr "Passa da una a due righe nell'elenco canali"
+
+msgid "Special 1"
+msgstr "Speciale 1"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/VirtualKeyBoard.py:153
+msgid "Special 2"
+msgstr "Speciale 2"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/VirtualKeyBoard.py:556
+msgid "Keyboard data entry"
+msgstr "Inserimento dati da tastiera"
+
+#: \Marco\OBH-LOCALE-2026\RUN PY/VirtualKeyBoard.py:562 PY/VirtualKeyBoard.py:1152
+msgid "INS"
+msgstr "INS"
+
+#: VirtualKeyBoard.py:529
+msgid "Save / Enter text and exit"
+msgstr "Salva / Inserisci testo ed esci"
+
+#: VirtualKeyBoard.py:530
+msgid "Select the shifted character set for the next character only"
+msgstr "Selezionare il tasto Shift solo per il carattere successivo"
+
+#: VirtualKeyBoard.py:531
+msgid "Select the shifted character set"
+msgstr "Selezionare il tasto Shift in modo continuo"
+
+#: VirtualKeyBoard.py:533
+msgid "Select the locale from a menu"
+msgstr "Selezionare la lingua dal menu"
+
+#: VirtualKeyBoard.py:532
+msgid "Select the character or action under the keyboard cursor"
+msgstr "Selezionare il carattere o l'azione sotto il cursore"
+
+#: VirtualKeyBoard.py:539
+msgid "Move the text cursor left"
+msgstr "Spostare il cursore di testo a sinistra"
+
+#: VirtualKeyBoard.py:540
+msgid "Move the text cursor right"
+msgstr "Spostare il cursore di testo a destra"
+
+#: VirtualKeyBoard.py:542
+msgid "Delete the character to the left of text cursor"
+msgstr "Cancellare il carattere a sinistra del cursore"
+
+#: VirtualKeyBoard.py:543
+msgid "Delete the character under the text cursor"
+msgstr "Cancellare il carattere sotto il cursore"
+
+#: VirtualKeyBoard.py:534
+msgid "Move the keyboard cursor up"
+msgstr "Spostare in alto il cursore"
+
+#: VirtualKeyBoard.py:535
+msgid "Move the keyboard cursor left"
+msgstr "Spostare il cursore a sinistra"
+
+#: VirtualKeyBoard.py:536
+msgid "Move the keyboard cursor right"
+msgstr "Spostare il cursore a destra"
+
+#: VirtualKeyBoard.py:537
+msgid "Move the keyboard cursor down"
+msgstr "Spostare il cursore in basso"
+
+#: ConfigList.py:222 VirtualKeyBoard.py:544
+msgid "Delete all the text"
+msgstr "Cancellare tutto il testo"
+
+# 20.02.2026  #  MULTIBOOT
+msgid "Boot Device:"
+msgstr "Unità di avvio:"
+
+msgid "Image Slot:"
+msgstr "Posizione immagine:"
+
+# 19.02.2026 # MESSAGE BOX
+#: \Marco\OBH-LOCALE-2026/PY/MessageBox.py:26
+msgid "Message"
+msgstr "Messaggio"
+
+#: \Marco\OBH-LOCALE-2026/PY/MessageBox.py:57
+msgid "MessageBox Functions"
+msgstr "Funzioni messaggistica"
+
+#: \Marco\OBH-LOCALE-2026/PY/MessageBox.py:69
+msgid "Direct item selection"
+msgstr "Selezione diretta della voce"
+
+#: \Marco\OBH-LOCALE-2026/PY/MessageBox.py:70
+msgid "MessageBox Direct Item Selection Actions"
+msgstr "Selezione diretta delle voci MessageBox"
+
+# 19.02.2026 # ONLINE UPDATE CHECK
+#: \Marco\OBH-LOCALE-2026\PY/OnlineUpdateCheck.py:159
+msgid "There has been an error, please try again later. If this persists please report on the OpenBh forum at openbh.net"
+msgstr "Si è verificato un errore, riprova più tardi. Se il problema persiste, segnalalo sul forum OpenBh all'indirizzo openbh.net"
+
+#: \Marco\OBH-LOCALE-2026\PY/OnlineUpdateCheck.py:155
+msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check openbh.net"
+msgstr "Spiacenti: i feed sono inattivi per manutenzione. Riprova più tardi. Se il problema persiste, controlla su openbh.net"
+
+#: \MarcoO\BH-LOCALE-2026\PY/OnlineUpdateCheck.py:153
+msgid "Your %s %s is not able to connect to the feeds, please try again later. If this persists please report on the OpenBh forum at openbh.net"
+msgstr "Il tuo %s %s non riesce a connettersi ai feed, riprova più tardi. Se il problema persiste, segnalalo sul forum OpenBh all'indirizzo openbh.net"
+
+#: \Marco\OBH-LOCALE-2026\PY/OnlineUpdateCheck.py:127
+msgid "Feeds status: Official developer feeds"
+msgstr "Stato dei feed: Feed ufficiale sviluppatori"
+
+#: \Marco\OBH-LOCALE-2026\PY/OnlineUpdateCheck.py:126
+msgid "Feeds status: Unknown, user feeds url"
+msgstr "Stato dei feed: Sconosciuto, URL feed utente"
+
+# 19.02.2026 # INSTALL PLUGINS
+msgid "Install Plugins"
+msgstr "Installazione Plugin"
+
+# 12.02.2026 # OVPN
+msgid "Are you ready to remove OpenVPN ?"
+msgstr "Pronto per rimuovere OpenVPN ?"
+
+# 10.02.2026  MULTIBOOT
+msgid "New Storage Device"
+msgstr "Nuova unità di archiviazione"
+
+msgid "A new storage device has been connected:"
+msgstr "È stata collegata una nuova unità di archiviazione:"
+
+msgid "Temporarily mount as %s"
+msgstr "Montala temporaneamente come %s"
+
+msgid "Permanently mount as %s"
+msgstr "Montala permanente come %s"
+
+# 08.02.2026
+msgid "Permanently ignore this device"
+msgstr "Ignora definitivamente questa unità"
+
+# 08.02.2026 USB FORMAT WIZARD # fatta 10 volte
+msgid "Please make sure your usb drive is NOT CONNECTED to your stb before you continue.\n"
+msgstr ""
+"Controllare che il dispositivo USB NON sia collegato prima di continuare.\n"
+"\n"
+
+# 08.02.2026 MULTIBOOT
+msgid "Recovery Mode: Boot to access Recovery Options"
+msgstr "Modalità ripristino: Avvia per accedere alle opzioni di ripristino"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:542
+msgid "Create Slots"
+msgstr "Crea posizioni"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:541
+msgid "Select Device"
+msgstr "Seleziona dispositivo"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:487
+msgid "Select device and then Slot Creation"
+msgstr "Seleziona dispositivo e crea posizione"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:391
+msgid "Slot Manager Actions"
+msgstr "Azioni della gestione posizioni"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:384
+msgid "Slot Manager"
+msgstr "Gestione posizioni (SLOT)"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:381
+msgid "Select Green to action"
+msgstr "Seleziona VERDE per agire"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:381
+msgid "Select Green to start slot creation"
+msgstr "Sel. VERDE per creare la posizione"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:379
+msgid "Help text uninitialized"
+msgstr "Testo di aiuto non inizializzato"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:378
+msgid "Create slots for the selected device"
+msgstr "Crea posizione per il dispositivo selezionato"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:377
+msgid "Select Device for FORMAT!! & Creation of multiboot slots"
+msgstr "Sel. unità per FORMATTARE! & creazione delle posizioni multiboot"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:366
+msgid "Permanently disable the MultiBoot option?"
+msgstr "Disattivare definitivamente l'opzione MultiBoot?"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:320
+msgid "Chkroot MultiBoot Initialization in progress!"
+msgstr "Inizializzazione della modalità MultiBoot in corso!"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:314
+msgid "Press GREEN to enable MultiBoot process"
+msgstr "Premere VERDE per abilitare il processo MultiBoot"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:313
+msgid "The %s %s will reboot after enabling."
+msgstr "%s %s verrà riavviato dopo l'abilitazione."
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:312
+msgid "Initialize"
+msgstr "Inizializzare"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:311
+msgid "Disable Chkroot"
+msgstr "Disabilita Chkroot"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:310
+msgid "Chkroot Manager Actions"
+msgstr "Azioni di gestione Chkroot"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:308
+msgid "Disable the MultiBoot option"
+msgstr "Disabilitare l'opzione MultiBoot"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:307
+msgid "Close the Chkroot MultiBoot Manager"
+msgstr "Chiudere Chkroot Gestione MultiBoot"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:304
+msgid "Start the Chkroot initialization"
+msgstr "Avvia l'inizializzazione Chkroot"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:304
+msgid "Start the UBI Multiboot initialization"
+msgstr "Avvia l'inizializzazione UBI Multiboot"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:300
+msgid "Chkroot MultiBoot Manager"
+msgstr "Chkroot Gestione MultiBoot"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:169
+msgid "[MultiBootSelector][add USB STARTUP slots] - No EXT4 USB attached."
+msgstr "[MultiBootSelettore][agg. posizione USB STARTUP] - Nessuna USB EXT4 collegata."
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:178
+msgid "[MultiBootSelector][add USB STARTUP slots] - The USB (%s) only has %s free. At least 1024MB is required."
+msgstr "[MultiBootSelettore][agg. posizione USB STARTUP] - La USB (%s) ha solo %s liberi. Sono richiesti almeno 1024 MB."
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:185
+#, python-format
+msgid "Add 4 more Multiboot USB slots after slot %s ?"
+msgstr "Agg. altre 4 posizioni USB Multiboot dopo la posizione %s ?"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:130
+msgid "Are you sure you want to delete image:"
+msgstr "Sicuro di voler eliminare l'immagine:"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:100 \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:268
+msgid "Recovery Mode"
+msgstr "Modalità di recupero"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:260
+msgid "Slot %s %s%s: %s - %s mode%s"
+msgstr "Posizione %s %s%s: %s - %s modalità%s"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:80
+#, python-format
+msgid "Slot %s %s%s: %s%s"
+msgstr "Posizione %s %s%s: %s%s"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:79
+msgid "(Current)"
+msgstr "(in uso)"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:63
+msgid "MultiBootSelector Actions"
+msgstr "Azioni di gestione multiboot"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:48
+msgid "Add Extra USB slots"
+msgstr "Agg. posizione USB extra"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:54
+msgid "Select to restore all deleted images"
+msgstr "Sel. per ripristinare tutte le immagini eliminate"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:58
+msgid "Select the highlighted image and reboot"
+msgstr "Seleziona l'immagine evidenziata e riavvia"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:62
+msgid "Select the highlighted image and delete"
+msgstr "Seleziona l'immagine evidenziata ed eliminala"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:47
+msgid "Cancel the image selection and exit"
+msgstr "Annulla la selezione ed esci"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:49
+msgid "Cancel the image selection and exit all menus"
+msgstr "Annulla la selezione ed esci da tutti i menu"
+
+#: \Marco\OBH-LOCALE-2026\PY/MultiBootSelector.py:82
+msgid "%s: Boot to access Recovery Options%s"
+msgstr "%s: Avvia per accedere alle opzioni di ripristino%s"
+
+# 06.02.2026  impostazioni tasti
+#: \Marco\OBH-LOCALE-2026\PY/ButtonSetup.py:23
+msgid "Yellow "
+msgstr "Giallo "
+
+#: \Marco\OBH-LOCALE-2026\PY/ButtonSetup.py:33
+msgid "PageUp"
+msgstr "Pagina su"
+
+#: \Marco\OBH-LOCALE-2026\PY/ButtonSetup.py:34
+msgid "PageUp long"
+msgstr "Pagina su (a lungo)"
+
+#: \Marco\OBH-LOCALE-2026\PY/ButtonSetup.py:35
+msgid "PageDown"
+msgstr "Pagina giù"
+
+#: \Marco\OBH-LOCALE-2026\PY/ButtonSetup.py:36
+msgid "PageDown long"
+msgstr "Pagina giù (a lungo)"
+
+# 06.02.2026  impostazioni orario
+#: \Marco\OBH-LOCALE-2026\PY/Time.py:15
+msgid "Use geolocation to set the current time zone location"
+msgstr "Usa geolocalizzazione per impostare il fuso orario corrente"
+
+#: \Marco\OBH-LOCALE-2026\PY/Time.py:16
+msgid "Time Setup Actions"
+msgstr "Azioni di impostazione dell'ora"
+
+#: \Marco\OBH-LOCALE-2026\PY/Time.py:25
+msgid "Use Geolocation"
+msgstr "Geocalizzazione"
+
+#: \Marco\OBH-LOCALE-2026\PY/Time.py:35
+msgid "Geolocation is not available."
+msgstr "Geolocalizzazione non disponibile."
+
+#: \Marco\OBH-LOCALE-2026\PY/Time.py:39
+msgid "Geolocation does not contain time zone information."
+msgstr "La geolocalizzazione non contiene informazioni sul fuso orario."
+
+#: \Marco\OBH-LOCALE-2026\PY/Time.py:57
+msgid "Geolocation has been used to set the time zone."
+msgstr "Per impostare il fuso orario è stata utilizzata la geolocalizzazione."
+
+# 05.02.2026 impostazioni common interface
+#: \Marco\OBH-LOCALE-2026\PY/Ci.py:478
+msgid "Descrambling options"
+msgstr "Opzioni di decodifica"
+
+#: \Marco\OBH-LOCALE-2025\PY/Ci.py:458
+msgid "CI %s enabled"
+msgstr "CI %s abilitato"
+
+# 04.02.2026 conferma backup # IMAGE MANAGER
+#: \Marco\OBH-LOCALE-2025\PY/ImageManager.py:652
+msgid "Your %s %s has successfully flashed slot %s, enter 'Yes' to reboot new image or 'No' to return to Enigma2."
+msgstr "Il tuo %s %s ha flashato correttamente la posizione %s, 'Sì' per riavviare la nuova immagine, 'No' per tornare a Enigma2."
+
+#: \Marco\OBH-LOCALE-2025\PY/ImageManager.py:541
+msgid "slot%s %s - %s (current image)"
+msgstr "slot%s %s - %s (immagine in uso)"
+
+#: \Marco\OBH-LOCALE-2026\PY/ImageManager.py:527
+msgid ""
+"Do you want to flash image\n"
+"%s?"
+msgstr ""
+"Desideri installare l'immagine\n"
+"%s?"
+
+#: \Marco\OBH-LOCALE-2026\PY/ImageManager.py:1694
+msgid "Compress"
+msgstr "Comprimere"
+
+#: \Marco\OBH-LOCALE-2026\PY/ImageManager.py:1694
+msgid "Expand"
+msgstr "Espandere"
+
+#: \Marco\OBH-LOCALE-2026\PY/ImageManager.py:1593
+msgid "Select an image to download for %s:"
+msgstr "Seleziona un'immagine per il tuo %s:"
+
+#: \Marco\OBH-LOCALE-2026\PY/ImageManager.py:409
+msgid "Do you want to create a %s image backup? This can take several minutes to complete."
+msgstr ""
+"Desideri creare un backup completo dell’immagine %s?\n"
+"Il processo impiegherà alcuni minuti."
+
 # 19.12.2025 Vu+ Wizard
 msgid "Vu+ 4K image install options"
 msgstr "Opzioni di installazione dell'immagine Vu+ 4K"
