@@ -14,6 +14,7 @@ from urllib.parse import urlsplit, quote, unquote
 PY314 = sys.version_info[:2] == (3, 14)
 PY313 = sys.version_info[:2] == (3, 13)
 
+
 class openbhVipMain(Setup):  # ConfigListScreen):
 	def __init__(self, session):
 		username = None
