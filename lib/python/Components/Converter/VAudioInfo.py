@@ -29,6 +29,7 @@ _acedits = (
 	("audio/x", ""),
 	(" audio", ""),
 	("raw", "TrueHD"),
+	("HEAAC", "HE-AAC"),
 	("AACHE", "HE-AAC"),
 	("MPEG1", ""),
 	(" Layer 2 (MP2)", "MP2"),

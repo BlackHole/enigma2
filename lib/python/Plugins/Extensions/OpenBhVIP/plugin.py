@@ -8,8 +8,11 @@ from Plugins.Plugin import PluginDescriptor
 from Components.ConfigList import ConfigListScreen
 from Components.ActionMap import ActionMap, NumberActionMap, HelpableActionMap, HelpableNumberActionMap
 import os
+import sys
 from urllib.parse import urlsplit, quote, unquote
 
+PY314 = sys.version_info[:2] == (3, 14)
+PY313 = sys.version_info[:2] == (3, 13)
 
 class openbhVipMain(Setup):  # ConfigListScreen):
 	def __init__(self, session):
@@ -60,7 +63,12 @@ class openbhVipMain(Setup):  # ConfigListScreen):
 
 	def okbuttonClick(self):
 		with open("/etc/opkg/vip-feed.conf", "w") as f:
-			f.write(f"src/gz openbh-vip https://{quote(self.username.value, safe='')}:{quote(self.password.value, safe='')}@feeds.openbh.net/vip/5.6\n")
+			if PY314:
+				f.write(f"src/gz openbh-vip https://{quote(self.username.value, safe='')}:{quote(self.password.value, safe='')}@feeds.openbh.net/vip/6.0\n")
+			elif PY313:
+				f.write(f"src/gz openbh-vip https://{quote(self.username.value, safe='')}:{quote(self.password.value, safe='')}@feeds.openbh.net/vip/5.6\n")
+			else:
+				f.write(f"src/gz openbh-vip https://{quote(self.username.value, safe='')}:{quote(self.password.value, safe='')}@feeds.openbh.net/vip\n")
 		self.close()
 
 	def createSetup(self):
