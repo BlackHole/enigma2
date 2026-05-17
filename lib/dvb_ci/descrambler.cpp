@@ -5,11 +5,8 @@
 #include <stdlib.h>
 #include <sys/ioctl.h>
 #include <linux/dvb/ca.h>
-
 #include <lib/dvb_ci/descrambler.h>
-
 #include <lib/base/eerror.h>
-
 
 enum ca_descr_data_type
 {
@@ -51,7 +48,6 @@ struct vu_ca_descr_data {
 	int audio_number;
 	int audio_pids[16];
 };
-
 
 #define CA_SET_DESCR_DATA _IOW('o', 137, struct ca_descr_data)
 

@@ -770,6 +770,8 @@ public:
 
 	virtual RESULT setRadioPic(const std::string &filename) = 0;
 
+	virtual bool canFlush() const { return false; }
+
 	virtual RESULT flush() { return -1; }
 
 	/** Release demux filters by closing fds (no DMX_STOP ioctl).

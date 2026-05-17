@@ -3,7 +3,7 @@
 #include <lib/dvb/cahandler.h>
 #include <lib/dvb/cwhandler.h>
 #include <lib/base/eerror.h>
-#include <lib/base/esimpleconfig.h>
+#include <lib/base/nconfig.h>
 
 DEFINE_REF(eDVBCSASession);
 
@@ -128,7 +128,7 @@ void eDVBCSASession::startECMMonitor(iDVBDemux *demux, uint16_t ecm_pid, uint16_
 	// Cache-driven early activation: skip ECM section reader if CSA-ALT for
 	// this service is already known. Disabled in Aggressive mode (audio race on some boxes).
 	const bool cache_early_activate_disabled =
-		(eSimpleConfig::getInt("config.misc.softcsa.decoderRelease", 0) == 2);
+		(eConfigManager::getConfigIntValue("config.misc.softcsa.decoderRelease", 0) == 2);
 
 	if (!cache_early_activate_disabled)
 	{
