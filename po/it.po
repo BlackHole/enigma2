@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OBH 5.6 it_IT\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-12-22 11:26+0100\n"
-"Last-Translator: insanity\n"
-"Language-Team: @AlexWilMac-@insanity\n"
+"PO-Revision-Date: 2026-05-25 15:06+0100\n"
+"Last-Translator: blu8\n"
+"Language-Team: @blu8-@AlexWilMac-@insanity\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,7 +14,468 @@ msgstr ""
 "POT-Creation-Date: \n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
 
-# 19.12.2025 Vu+ Wizard
+msgid "Subtitle Selection"
+msgstr "Selezione sottotitoli"
+
+msgid "To Audio Selection"
+msgstr "Selezione audio"
+
+msgid "Select Audio Track"
+msgstr "Selezionare una traccia audio"
+
+msgid "To Subtitle Selection"
+msgstr "Selezione sottotitoli"
+
+msgid "Original language"
+msgstr "Lingua originale"
+
+msgid "Use Best / Controlled by HDMI"
+msgstr "Usa migliore / Controllato tramite HDMI"
+
+msgid "Set LED Color or disable the LED."
+msgstr "Imposta il colore del LED o disattivalo."
+
+msgid "Power LED Colour State when Running."
+msgstr "Colore del LED di alimentazione quando è acceso."
+
+msgid "Power LED Colour State in Standby"
+msgstr "Colore del LED di alimentazione quando è in standby"
+
+msgid "Power LED Colour State in Deep-Standby"
+msgstr "Colore del LED di alimentazione quando è spento"
+
+msgid "PowerControl FrontDisplay Normal Mode"
+msgstr "Display frontale modalità normale"
+
+msgid "PowerControl FrontDisplay Standby Mode"
+msgstr "Display frontale modalità standby"
+
+msgid "PowerControl FrontDisplay Suspend Mode"
+msgstr "Display frontale modalità sospensione"
+
+msgid "Power On/Off display Normal Mode."
+msgstr "Acceso/Spento modalità display normale."
+
+msgid "Power On/Off display Standby Mode."
+msgstr "Acceso/Spento modalità display standby."
+
+msgid "Power On/Off display Suspend Mode."
+msgstr "Acceso/Spento modalità display sospensione."
+
+msgid "Toggle aspect ratio"
+msgstr "Cambia proporzioni immagine"
+
+msgid "Show network mounts "
+msgstr "Mostra i mount di rete "
+
+msgid "Open XStreamity"
+msgstr "Apri XStreamity"
+
+msgid "Open Kodi"
+msgstr "Avvia Kodi"
+
+msgid "Open Netflix"
+msgstr "Avvia Netflix"
+
+msgid "Open Youtube"
+msgstr "Avvia Youtube"
+
+msgid ""
+"XStreamity is not installed!\n"
+"Please install it."
+msgstr ""
+"XStreamity non è installato!\n"
+"Installalo."
+
+msgid ""
+"Kodi is not installed!\n"
+"Please install it."
+msgstr ""
+"Kodi non è installato!\n"
+"Installalo."
+
+msgid ""
+"Netflix is not installed!\n"
+"Please install it."
+msgstr ""
+"Netflix non è installato!\n"
+"Installalo."
+
+msgid ""
+"YouTube is not installed!\n"
+"Please install it."
+msgstr ""
+"YouTube non è installato!\n"
+"Installalo."
+
+msgid "16:9 Always"
+msgstr "Sempre in 16:9"
+
+msgid "Select default action of INFO button"
+msgstr "Seleziona azione predefinita tasto INFO"
+
+msgid "Select default action of EPG button"
+msgstr "Seleziona azione predefinita tasto EPG"
+
+msgid "Cancel Actions"
+msgstr "Annulla azioni"
+
+msgid "List Sort Actions"
+msgstr "Azioni di ordinamento elenchi"
+
+msgid "Move the current item up the list"
+msgstr "Sposta voce corrente verso l'alto"
+
+msgid "Move the current item down the list"
+msgstr "Sposta voce corrente verso il basso"
+
+msgid "Reset the list order to the default"
+msgstr "Ripristina ordine predefinito elenco"
+
+msgid "Navigation Actions"
+msgstr "Azioni di navigazione"
+
+msgid "Selection Actions"
+msgstr "Azioni di selezione"
+
+msgid "Select the current item"
+msgstr "Seleziona voce corrente"
+
+msgid "Select item directly"
+msgstr "Seleziona voce direttamente"
+
+msgid "Cancel the current action and exit"
+msgstr "Annulla modifiche ed esci"
+
+msgid "Move selection one page up"
+msgstr "Sposta di una pagina verso l'alto"
+
+msgid "Move selection one page down"
+msgstr "Sposta di una pagina verso il basso"
+
+msgid "Move selection to the next item up"
+msgstr "Sposta in alto alla voce successiva"
+
+msgid "Move selection to the next item down"
+msgstr "Sposta in basso alla voce successiva"
+
+msgid "Jump to next bookmark"
+msgstr "Passa al segnalibro successivo"
+
+msgid "Jump to previous bookmark"
+msgstr "Passa al segnalibro precedente"
+
+msgid "Move up in bouquet list"
+msgstr "Sposta su nell'elenco dei bouquet"
+
+msgid "Move down in bouquet list"
+msgstr "Sposta giù nell'elenco bouquet"
+
+msgid "Search channel list, SMS style ABC2"
+msgstr "Cerca nell'elenco canali, stile SMS ABC2"
+
+msgid "Search channel list, SMS style 2ABC"
+msgstr "Cerca nell'elenco canali, stile SMS 2ABC"
+
+msgid "Toggle between one & two-line channel list"
+msgstr "Passa da una a due righe nell'elenco canali"
+
+msgid "Special 1"
+msgstr "Speciale 1"
+
+msgid "Special 2"
+msgstr "Speciale 2"
+
+msgid "Keyboard data entry"
+msgstr "Inserimento dati da tastiera"
+
+msgid "INS"
+msgstr "INS"
+
+msgid "Save / Enter text and exit"
+msgstr "Salva / Inserisci testo ed esci"
+
+msgid "Select the shifted character set for the next character only"
+msgstr "Selezionare il tasto Shift solo per il carattere successivo"
+
+msgid "Select the shifted character set"
+msgstr "Selezionare il tasto Shift in modo continuo"
+
+msgid "Select the locale from a menu"
+msgstr "Selezionare la lingua dal menu"
+
+msgid "Select the character or action under the keyboard cursor"
+msgstr "Selezionare il carattere o l'azione sotto il cursore"
+
+msgid "Move the text cursor left"
+msgstr "Spostare il cursore di testo a sinistra"
+
+msgid "Move the text cursor right"
+msgstr "Spostare il cursore di testo a destra"
+
+msgid "Delete the character to the left of text cursor"
+msgstr "Cancellare il carattere a sinistra del cursore"
+
+msgid "Delete the character under the text cursor"
+msgstr "Cancellare il carattere sotto il cursore"
+
+msgid "Move the keyboard cursor up"
+msgstr "Spostare in alto il cursore"
+
+msgid "Move the keyboard cursor left"
+msgstr "Spostare il cursore a sinistra"
+
+msgid "Move the keyboard cursor right"
+msgstr "Spostare il cursore a destra"
+
+msgid "Move the keyboard cursor down"
+msgstr "Spostare il cursore in basso"
+
+msgid "Delete all the text"
+msgstr "Cancellare tutto il testo"
+
+msgid "Boot Device:"
+msgstr "Unità di avvio:"
+
+msgid "Image Slot:"
+msgstr "Posizione immagine:"
+
+msgid "Message"
+msgstr "Messaggio"
+
+msgid "MessageBox Functions"
+msgstr "Funzioni della MessageBox"
+
+msgid "Direct item selection"
+msgstr "Selezione diretta dell'elemento"
+
+msgid "MessageBox Direct Item Selection Actions"
+msgstr "Azioni di selezione diretta elementi MessageBox"
+
+msgid "There has been an error, please try again later. If this persists please report on the OpenBh forum at openbh.net"
+msgstr "Si è verificato un errore, riprova più tardi. Se il problema persiste, segnalalo sul forum OpenBh all'indirizzo openbh.net"
+
+msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check openbh.net"
+msgstr "Spiacenti: i feed sono inattivi per manutenzione. Riprova più tardi. Se il problema persiste, controlla su openbh.net"
+
+msgid "Your %s %s is not able to connect to the feeds, please try again later. If this persists please report on the OpenBh forum at openbh.net"
+msgstr "Il tuo %s %s non riesce a connettersi ai feed, riprova più tardi. Se il problema persiste, segnalalo sul forum OpenBh all'indirizzo openbh.net"
+
+msgid "Feeds status: Official developer feeds"
+msgstr "Stato dei feed: Feed ufficiale sviluppatori"
+
+msgid "Feeds status: Unknown, user feeds url"
+msgstr "Stato dei feed: Sconosciuto, URL feed utente"
+
+msgid "Install Plugins"
+msgstr "Installazione Plugin"
+
+msgid "Are you ready to remove OpenVPN ?"
+msgstr "Pronto per rimuovere OpenVPN ?"
+
+msgid "New Storage Device"
+msgstr "Nuova unità di archiviazione"
+
+msgid "A new storage device has been connected:"
+msgstr "È stata collegata una nuova unità di archiviazione:"
+
+msgid "Temporarily mount as %s"
+msgstr "Mount temporaneo come %s"
+
+msgid "Permanently mount as %s"
+msgstr "Mount permanente come %s"
+
+msgid "Permanently ignore this device"
+msgstr "Ignora definitivamente questa unità"
+
+msgid "Please make sure your usb drive is NOT CONNECTED to your stb before you continue.\n"
+msgstr ""
+"Controllare che il dispositivo USB NON sia collegato prima di continuare.\n"
+"\n"
+
+msgid "Recovery Mode: Boot to access Recovery Options"
+msgstr "Modalità ripristino: Avvia per accedere alle opzioni di ripristino"
+
+msgid "Create Slots"
+msgstr "Crea posizioni"
+
+msgid "Select Device"
+msgstr "Seleziona dispositivo"
+
+msgid "Select device and then Slot Creation"
+msgstr "Seleziona dispositivo e crea posizione"
+
+msgid "Slot Manager Actions"
+msgstr "Azioni della gestione posizioni"
+
+msgid "Slot Manager"
+msgstr "Gestione posizioni (SLOT)"
+
+msgid "Select Green to action"
+msgstr "Seleziona VERDE per agire"
+
+msgid "Select Green to start slot creation"
+msgstr "Sel. VERDE per creare la posizione"
+
+msgid "Help text uninitialized"
+msgstr "Testo di aiuto non inizializzato"
+
+msgid "Create slots for the selected device"
+msgstr "Crea posizione per il dispositivo selezionato"
+
+msgid "Select Device for FORMAT!! & Creation of multiboot slots"
+msgstr "Sel. unità per FORMATTARE! & creazione delle posizioni multiboot"
+
+msgid "Permanently disable the MultiBoot option?"
+msgstr "Disattivare definitivamente l'opzione MultiBoot?"
+
+msgid "Chkroot MultiBoot Initialization in progress!"
+msgstr "Inizializzazione della modalità MultiBoot in corso!"
+
+msgid "Press GREEN to enable MultiBoot process"
+msgstr "Premere VERDE per abilitare il processo MultiBoot"
+
+msgid "The %s %s will reboot after enabling."
+msgstr "%s %s verrà riavviato dopo l'abilitazione."
+
+msgid "Initialize"
+msgstr "Inizializzare"
+
+msgid "Disable Chkroot"
+msgstr "Disabilita Chkroot"
+
+msgid "Chkroot Manager Actions"
+msgstr "Azioni del gestore Chkroot"
+
+msgid "Disable the MultiBoot option"
+msgstr "Disabilitare l'opzione MultiBoot"
+
+msgid "Close the Chkroot MultiBoot Manager"
+msgstr "Chiudere Chkroot Gestione MultiBoot"
+
+msgid "Start the Chkroot initialization"
+msgstr "Avvia l'inizializzazione Chkroot"
+
+msgid "Start the UBI Multiboot initialization"
+msgstr "Avvia l'inizializzazione UBI Multiboot"
+
+msgid "Chkroot MultiBoot Manager"
+msgstr "Chkroot Gestione MultiBoot"
+
+msgid "[MultiBootSelector][add USB STARTUP slots] - No EXT4 USB attached."
+msgstr "[MultiBootSelettore][agg. posizione USB STARTUP] - Nessuna USB EXT4 collegata."
+
+msgid "[MultiBootSelector][add USB STARTUP slots] - The USB (%s) only has %s free. At least 1024MB is required."
+msgstr "[MultiBootSelettore][agg. posizione USB STARTUP] - La USB (%s) ha solo %s liberi. Sono richiesti almeno 1024 MB."
+
+msgid "Add 4 more Multiboot USB slots after slot %s ?"
+msgstr "Agg. altre 4 posizioni USB Multiboot dopo la posizione %s ?"
+
+msgid "Are you sure you want to delete image:"
+msgstr "Sicuro di voler eliminare l'immagine:"
+
+msgid "Recovery Mode"
+msgstr "Modalità di recupero"
+
+msgid "Slot %s %s%s: %s - %s mode%s"
+msgstr "Posizione %s %s%s: %s - %s modalità%s"
+
+msgid "Slot %s %s%s: %s%s"
+msgstr "Posizione %s %s%s: %s%s"
+
+msgid "(Current)"
+msgstr "(in uso)"
+
+msgid "MultiBootSelector Actions"
+msgstr "Azioni di gestione multiboot"
+
+msgid "Add Extra USB slots"
+msgstr "Agg. posizione USB extra"
+
+msgid "Select to restore all deleted images"
+msgstr "Sel. per ripristinare tutte le immagini eliminate"
+
+msgid "Select the highlighted image and reboot"
+msgstr "Seleziona l'immagine evidenziata e riavvia"
+
+msgid "Select the highlighted image and delete"
+msgstr "Seleziona l'immagine evidenziata ed eliminala"
+
+msgid "Cancel the image selection and exit"
+msgstr "Annulla la selezione ed esci"
+
+msgid "Cancel the image selection and exit all menus"
+msgstr "Annulla la selezione ed esci da tutti i menu"
+
+msgid "%s: Boot to access Recovery Options%s"
+msgstr "%s: Avvia per accedere alle opzioni di ripristino%s"
+
+msgid "Yellow "
+msgstr "Giallo "
+
+msgid "PageUp"
+msgstr "Pagina su"
+
+msgid "PageUp long"
+msgstr "Pagina su (a lungo)"
+
+msgid "PageDown"
+msgstr "Pagina giù"
+
+msgid "PageDown long"
+msgstr "Pagina giù (a lungo)"
+
+msgid "Use geolocation to set the current time zone location"
+msgstr "Usa geolocalizzazione per impostare il fuso orario corrente"
+
+msgid "Time Setup Actions"
+msgstr "Azioni di impostazione dell'ora"
+
+msgid "Use Geolocation"
+msgstr "Geocalizzazione"
+
+msgid "Geolocation is not available."
+msgstr "Geolocalizzazione non disponibile."
+
+msgid "Geolocation does not contain time zone information."
+msgstr "La geolocalizzazione non contiene informazioni sul fuso orario."
+
+msgid "Geolocation has been used to set the time zone."
+msgstr "Per impostare il fuso orario è stata utilizzata la geolocalizzazione."
+
+msgid "Descrambling options"
+msgstr "Opzioni di decodifica"
+
+msgid "CI %s enabled"
+msgstr "CI %s abilitato"
+
+msgid "Your %s %s has successfully flashed slot %s, enter 'Yes' to reboot new image or 'No' to return to Enigma2."
+msgstr "Il tuo %s %s ha flashato correttamente la posizione %s, 'Sì' per riavviare la nuova immagine, 'No' per tornare a Enigma2."
+
+msgid "slot%s %s - %s (current image)"
+msgstr "slot%s %s - %s (immagine in uso)"
+
+msgid ""
+"Do you want to flash image\n"
+"%s?"
+msgstr ""
+"Desideri installare l'immagine\n"
+"%s?"
+
+msgid "Compress"
+msgstr "Comprimere"
+
+msgid "Expand"
+msgstr "Espandere"
+
+msgid "Select an image to download for %s:"
+msgstr "Seleziona un'immagine per il tuo %s:"
+
+msgid "Do you want to create a %s image backup? This can take several minutes to complete."
+msgstr ""
+"Desideri creare un backup completo dell’immagine %s?\n"
+"Il processo impiegherà alcuni minuti."
+
 msgid "Vu+ 4K image install options"
 msgstr "Opzioni di installazione dell'immagine Vu+ 4K"
 
@@ -31,16 +492,12 @@ msgstr ""
 "\n"
 "Seleziona \"Multiboot\" per configurare Vu+ Multiboot."
 
-# 19.12.2025 HelpMenu
-#: C:\Users\Notebook\Downloads\InfoBarGenerics.py:1246
 msgid "Zap to first channel & clear zap history"
 msgstr "Passa al primo canale e cancella la cronologia"
 
-#: C:\Users\Notebook\Downloads\InfoBarGenerics.py:2038
 msgid "Show %s"
 msgstr "Mostra %s"
 
-# 19.12.2025 tasto blu lungo
 msgid "Enable Fast Channel Change"
 msgstr "Attiva cambio canale veloce (FCC)"
 
@@ -56,7 +513,6 @@ msgstr "Attiva Quad PiP"
 msgid "Switch to HDMI-IN"
 msgstr "Passa in modalità HDMI"
 
-# 18.12.2025 Registrazione
 msgid "Keep logs"
 msgstr "Conserva i registri"
 
@@ -66,7 +522,6 @@ msgstr "Sref + URL dello stream"
 msgid "Sref Only"
 msgstr "Solo Sref"
 
-# 18.12.2025 Backup
 msgid ""
 "Do you want to create a full image backup?\n"
 "This can take upto 15 minutes to complete."
@@ -74,7 +529,6 @@ msgstr ""
 "Desideri creare un backup completo dell’immagine?\n"
 "Il processo durerà alcuni minuti."
 
-# 28.07.2025 Registrazioni
 msgid "Recordings - convert IPTV servicetypes to  1"
 msgstr "Registrazioni: convertire il Service Type IPTV in 1"
 
@@ -87,7 +541,6 @@ msgstr "Solo 5001"
 msgid "5002 only"
 msgstr "Solo 5002"
 
-# 27.07.2025 lista canali menu contestuale
 msgid "Channel List Context Menu"
 msgstr "Menu contestuale lista canali"
 
@@ -103,7 +556,6 @@ msgstr "Aggiungi il canale selezionato a un bouquet"
 msgid "Add a service or stream to the current bouquet"
 msgstr "Aggiungi un canale o un flusso al bouquet corrente"
 
-# 27.07.2025 aggiorna obh
 msgid "Show packages to be updated"
 msgstr "Mostra i pacchetti da aggiornare"
 
@@ -116,11 +568,9 @@ msgstr "Gestione pacchetti"
 msgid "Do you want to update your %s %s?"
 msgstr "Vuoi aggiornare il tuo %s %s?"
 
-# 27.07.2025 registrazione riproduzione
 msgid "Playback"
 msgstr "Riproduzione"
 
-# 26.07.2025 Help AV conf.
 msgid "Common Setup Actions"
 msgstr "Azioni di configurazione comuni"
 
@@ -157,7 +607,6 @@ msgstr "Seleziona l'elemento successivo o sposta il cursore a destra"
 msgid "Select, toggle, process or edit the current entry"
 msgstr "Seleziona, attiva, elabora o modifica la voce corrente"
 
-# 26.07.2025 Help CI
 msgid "Show/hide infobar"
 msgstr "Mostra/nascondi la barra info"
 
@@ -179,7 +628,6 @@ msgstr "Seleziona la voce di menu corrente"
 msgid "Sort menu"
 msgstr "Ordinamento voci dei menu"
 
-# 25.07.2025 Sistema, config. personalizzare
 msgid "Force receiver to send volume keys to all devices on hdmi when no response to audio channel request."
 msgstr "Forza il ricevitore a inviare il volume a tutti i dispositivi HDMI quando non risponde alla richiesta del canale audio."
 
@@ -222,7 +670,6 @@ msgstr "Core dump è utile per gli sviluppatori in caso di crash  SEGNALE FATALE
 msgid "Remote Control Type"
 msgstr "Tipo di telecomando"
 
-# 24.07.2025 Gestione Softcam
 msgid "Stream Relay Settings"
 msgstr "Impostazioni del flusso ( StreamRelay)"
 
@@ -244,7 +691,6 @@ msgstr "La porta del server streamrelay utilizzata per decodificare i servizi ch
 msgid "Delay when closing a stream relay service before reallocating the tuner for another service. Using '0' is only recommended for boxes with multiple satellite tuners."
 msgstr "Ritardo chiusura di un servizio di streaming  prima di riassegnare il tuner a un altro servizio. L'utilizzo di \"0\" è consigliato solo per i decoder con più sintonizzatori satellitari."
 
-# 23.07.2025 CI Interface
 msgid "module disabled"
 msgstr "modulo disabilitato"
 
@@ -278,7 +724,6 @@ msgstr "Extra Alto"
 msgid "High"
 msgstr "Alto"
 
-# 22.07.2025 config. personalizzate
 msgid "Go to last known state"
 msgstr "vai all'ultimo stato conosciuto"
 
@@ -333,51 +778,33 @@ msgstr "Configura se e come verranno visualizzate le icone canali (allineamento 
 msgid "Configure if and how the record indicator will be shown in the channel selection list (left alignment only available in single line mode)."
 msgstr "Configura se e come l'indicatore registrazione verrà visualizzato nell'elenco dei canali (l'allineamento a sinistra è disponibile solo in modalità riga singola)"
 
-# 17.03.2025
-#: \\NOTEBOOK\Users\marco\Desktop\helpmenu/HelpMenu.py:15
 msgid "Help Screen"
 msgstr "Schermata di guida"
 
-#: \\NOTEBOOK\Users\marco\Desktop\helpmenu/HelpMenu.py:16
 msgid "Brief help information for buttons in your current context."
 msgstr "Brevi informazioni di aiuto per i tasti telecomando nel contesto attuale."
 
-#: \\NOTEBOOK\Users\marco\Desktop\helpmenu/HelpMenu.py:17
 msgid "Navigate up/down with UP/DOWN buttons and page up/down with LEFT/RIGHT. EXIT to return to the help screen. OK to perform the action described in the currently highlighted help."
 msgstr "Navigare su/giù con i pulsanti SU/GIÙ, pagina su/giù con SINISTRA/DESTRA, USCIRE per tornare alla schermata di aiuto. OK per eseguire l'azione descritta nella guida attualmente evidenziata."
 
-#: \\NOTEBOOK\Users\marco\Desktop\helpmenu/HelpMenu.py:18
 msgid "Other buttons will jump to the help for that button, if there is help."
 msgstr "Altri tasti passeranno all'aiuto per quel tasto, qualora aiuto disponibile."
 
-#: \\NOTEBOOK\Users\marco\Desktop\helpmenu/HelpMenu.py:19
 msgid "If an action is user-configurable, its help entry will be flagged (C)"
 msgstr "Se un'azione è configurabile dall'utente, verrà contrassegnata (C)"
 
-#: \\NOTEBOOK\Users\marco\Desktop\helpmenu/HelpMenu.py:20
 msgid "A highlight on the remote control image shows which button the help refers to. If more than one button performs the indicated function, more than one highlight will be shown. Text below the list indicates whether the function is for a long press of the button(s)."
 msgstr "Un'evidenziazione sull'immagine del telecomando mostra a quale tasto si riferisce la guida. Se più di un tasto esegue la funzione indicata, verrà visualizzata più di una evidenziazione. Il testo sotto l'elenco indica se la funzione è per una lunga pressione dei tasto(i)."
 
-#: \\NOTEBOOK\Users\marco\Desktop\helpmenu/HelpMenu.py:21
 msgid "The order and grouping of the help information list can be controlled using MENU>Setup>User Interface>Settings>Sort order for help screen or pressing long help"
 msgstr "L'ordine e il raggruppamento dell'elenco delle informazioni di aiuto possono essere controllati utilizzando il MENU>Configurazione> Interfaccia utente >Impostazioni>Ordinamento per la schermata di aiuto o premendo a lungo aiuto"
 
-# msgid "Help"
-# msgstr "Aiuto"
-#: \\NOTEBOOK\Users\marco\Desktop\helpmenu/HelpMenu.py:25
-#: \\NOTEBOOK\Users\marco\Desktop\helpmenu/HelpMenu.py:31
-#: \\NOTEBOOK\Users\marco\Desktop\helpmenu/HelpMenu.py:149
 msgid "HELP"
 msgstr "AIUTO"
 
-# msgid "Long key press"
-# msgstr "Press. tasto a lungo"
-#: \\NOTEBOOK\Users\marco\Desktop\helpmenu/HelpMenu.py:99
-#: \\NOTEBOOK\Users\marco\Desktop\helpmenu/HelpMenu.py:106
 msgid "Long press: "
 msgstr "Pressione a lungo: "
 
-#: \\NOTEBOOK\Users\marco\Desktop\helpmenu/HelpMenu.py:109
 msgid "SHIFT: "
 msgstr "SPOST. "
 
@@ -1025,7 +1452,6 @@ msgstr "<sconosciuto>"
 msgid "=NO STREAM\n"
 msgstr "= Nessuno STREAM\n"
 
-# 17.03.2025
 msgid "A"
 msgstr "A"
 
@@ -1876,8 +2302,6 @@ msgstr "Backup del file system (root)"
 msgid "Backup"
 msgstr "Backup"
 
-# msgid "Backup & Image Manager"
-# msgstr "Gestione dei BACKUP"
 msgid "Backup Complete"
 msgstr "Backup completo!"
 
@@ -5168,13 +5592,9 @@ msgstr "Ignora gruppo dei nomi della sottorete DVB-S"
 msgid "Ignore DVB-T namespace sub network"
 msgstr "Ignora gruppo dei nomi della sottorete DVB-T"
 
-# msgid "Image Manager"
-# msgstr "Backup immagine completo"
 msgid "Image View On"
 msgstr "Visione immagini ON"
 
-# msgid "Image manager"
-# msgstr "Gestione immagine"
 msgid "Image manager settings"
 msgstr "Configurazione del gestore immagine"
 
@@ -10218,7 +10638,7 @@ msgid "TRANSLATOR_INFO"
 msgstr ""
 "Traduzione italiana enigma2\n"
 "a cura di @AlexWilmac / @insanity \n"
-"Aggiornamento 22 dicembre 2025\n"
+"Aggiornamento 25 maggio 2026\n"
 "Supporto: www.openbh.net"
 
 msgid "TS file is too large for ISO9660 level 1!"
@@ -10385,7 +10805,7 @@ msgid ""
 "Install latest image using USB stick or Image Manager."
 msgstr ""
 "Il kernel di Linux è stato modificato: un aggiornamento non è consentito.\n"
-"Installa l'ultima immagine tramite chiavetta USB o 'Gestione Immagine'."
+"Installa l'ultima immagine tramite chiavetta USB o da 'Gestione Immagine'."
 
 msgid ""
 "The Linux kernel has changed, plugins are not compatible. \n"
