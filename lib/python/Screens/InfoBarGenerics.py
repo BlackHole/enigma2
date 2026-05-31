@@ -1437,6 +1437,8 @@ class InfoBarChannelSelection:
 	def LeftPressed(self):
 		if config.obhsettings.InfoBarEpg_mode.value == "3" and config.usage.show_second_infobar.value != "INFOBAREPG":
 			self.openInfoBarEPG()
+		elif config.usage.show_second_infobar.value != "INFOBAREPG" and config.usage.leftrightbutton_mode.value == "1":
+			VolumeControl.instance.volDown()
 		else:
 			self.zapUp()
 
@@ -1446,6 +1448,8 @@ class InfoBarChannelSelection:
 	def RightPressed(self):
 		if config.obhsettings.InfoBarEpg_mode.value == "3" and config.usage.show_second_infobar.value != "INFOBAREPG":
 			self.openInfoBarEPG()
+		elif config.usage.show_second_infobar.value != "INFOBAREPG" and config.usage.leftrightbutton_mode.value == "1":
+			VolumeControl.instance.volUp()
 		else:
 			self.zapDown()
 
