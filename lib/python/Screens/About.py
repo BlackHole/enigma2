@@ -246,13 +246,6 @@ class About(AboutBase):
 
 		AboutText += _("Drivers:\t%s\n") % driversDate()
 		AboutText += _("Kernel:\t%s\n") % KERNEL
-		if SystemInfo["boxtype"] == "gbquad4kpro":
-			hwVersion = fileReadLine("/proc/stb/info/version")
-			if hwVersion:
-				match = search(r"\brev[0-9]+\b", hwVersion)
-				if match:
-					hwVersion = match.group(0)
-				AboutText += _("Hardware Version:\t%s\n") % hwVersion
 		AboutText += _("Samba:\t%s\n") % getVersionFromOpkg("samba")
 		AboutText += _("GStreamer:\t%s\n") % getGStreamerVersionString().replace("GStreamer ", "")
 		AboutText += _("GCC version:\t%s\n") % getGccVersion()
@@ -294,6 +287,14 @@ class About(AboutBase):
 					AboutText += _("Bolt:\t%s\n") % bootLoader
 				else:
 					AboutText += _("Bootloader:\t%s\n") % bootLoader
+
+		if SystemInfo["boxtype"] == "gbquad4kpro":
+			hwVersion = fileReadLine("/proc/stb/info/version")
+			if hwVersion:
+				match = search(r"\brev[0-9]+\b", hwVersion)
+				if match:
+					hwVersion = match.group(0)
+				AboutText += _("Hardware Version:\t%s\n") % hwVersion.capitalize()
 
 		self["AboutScrollLabel"].setText(AboutText)
 
