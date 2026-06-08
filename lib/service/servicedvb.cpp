@@ -1098,9 +1098,6 @@ eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *serv
 	CONNECT(m_event_handler.m_eit_changed, eDVBServicePlay::gotNewEvent);
 	CONNECT(m_subtitle_sync_timer->timeout, eDVBServicePlay::checkSubtitleTiming);
 	CONNECT(m_nownext_timer->timeout, eDVBServicePlay::updateEpgCacheNowNext);
-#ifdef PASSTHROUGH_FIX
-	CONNECT(m_passthrough_fix_timer->timeout, eDVBServicePlay::forcePassthrough);
-#endif
 }
 
 eDVBServicePlay::~eDVBServicePlay()
@@ -2504,7 +2501,7 @@ int eDVBServicePlay::selectAudioStream(int i)
 		{
 			int shortAudioDelay = eConfigManager::getConfigIntValue("config.av.passthrough_fix", 100);
 			m_passthrough_fix_timer->stop();
-			m_passthrough_fix_timer->start(shortAudioDelay, true);
+			forcePassthrough();
 		}
 	}
 #endif
