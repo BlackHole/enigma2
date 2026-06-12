@@ -1210,6 +1210,7 @@ def InitUsageConfig():
 		("", _("Don't restart")),
 		("s", _("Restart softcam"))])
 	config.misc.softcsa = ConfigSubsection()
+	config.misc.softcsa.enabled = ConfigYesNo(default=True)
 	config.misc.softcsa.decoderRelease = ConfigSelection(default=0, choices=[
 			(0, _("Quick")),
 			(1, _("Normal")),
