@@ -42,7 +42,16 @@ class _DownloadProtocol(Protocol):
 			return
 
 		self.recv += len(data)
-		self.fd.write(data)
+		try:
+			self.fd.write(data)
+		except OSError as err:
+			if callable(self.downloader.errorCallback):
+				self.downloader.errorCallback(err)
+			try:
+				self.transport.abortConnection()
+			except Exception:
+				pass
+			return
 
 		self.downloader.progress = self.recv
 
@@ -85,7 +94,7 @@ class DownloadWithProgress:
 		self.url = url
 		self.outputFile = outputFile
 
-		self.userAgent = kwargs.get("userAgent", "Enigma2 Downloader")
+		userAgent = kwargs.get("userAgent", "Enigma2 Downloader")
 
 		self.progress = 0
 		self.totalSize = -1  # means size not set
@@ -105,7 +114,7 @@ class DownloadWithProgress:
 
 		# headers (Twisted-safe: bytes in, bytes out)
 		self.requestHeader = {
-			b"User-Agent": self.userAgent.encode("utf-8"),
+			b"User-Agent": userAgent.encode("utf-8"),
 			b"Accept": b"*/*",
 			b"Accept-Encoding": b"identity",
 			b"Connection": b"keep-alive",
@@ -133,7 +142,8 @@ class DownloadWithProgress:
 		return self
 
 	def _getHeadSize(self):
-		return get_content_length(self.url, self.requestHeader)
+		headers = {k.decode("utf-8"): v.decode("utf-8") for k, v in self.requestHeader.items()}  # for urllib compatibility
+		return get_content_length(self.url, headers)
 
 	def _gotHeadSize(self, size):
 		# never override a known good value from GET
@@ -240,25 +250,26 @@ class DownloadWithProgress:
 	# --------------------------------------------------------
 	def addProgress(self, progressCallback):
 		self.progressCallback = progressCallback
+		return self
 
 	def addEnd(self, endCallback):
 		self.endCallback = endCallback
+		return self
 
 	def addError(self, errorCallback):
 		self.errorCallback = errorCallback
+		return self
 
 	def setAgent(self, userAgent):
-		self.userAgent = userAgent
+		self.requestHeader[b"User-Agent"] = userAgent.encode("utf-8")
 
 	def addErrback(self, errorCallback):  # Temporary support for deprecated callbacks.
 		print("[Downloader] Warning: DownloadWithProgress 'addErrback' is deprecated use 'addError' instead!")
-		self.errorCallback = errorCallback
-		return self
+		return self.addError(errorCallback)
 
 	def addCallback(self, endCallback):  # Temporary support for deprecated callbacks.
 		print("[Downloader] Warning: DownloadWithProgress 'addCallback' is deprecated use 'addEnd' instead!")
-		self.endCallback = endCallback
-		return self
+		return self.addEnd(endCallback)
 
 	# --------------------------------------------------------
 	# SPEED / ETA, for use by newer UI
