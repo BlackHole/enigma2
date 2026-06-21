@@ -73,7 +73,7 @@ class DownloaderPostcondition(Condition):
 		return task.returncode == 0
 
 	def getErrorMessage(self, task):
-		return self.error_message
+		return task.error_message or ""
 
 
 class DownloadTask(Task):
@@ -84,7 +84,6 @@ class DownloadTask(Task):
 		self.job = job
 		self.url = url.decode() if isinstance(url, bytes) else url
 		self.path = path
-		self.error_message = ""
 		self.error_message = None
 		self.download = None
 		self.aborted = False
@@ -113,10 +112,8 @@ class DownloadTask(Task):
 			self.progress = 0  # required to force display update
 			self.name = _("Downloading %s") % bytesToHumanReadable(recvbytes)
 
-	def download_failed(self, failure_instance=None, error_message=""):
+	def download_failed(self, error_message=""):
 		self.error_message = error_message
-		if error_message == "" and failure_instance is not None:
-			self.error_message = failure_instance.getErrorMessage()
 		Task.processFinished(self, 1)
 
 	def download_finished(self, string=""):
