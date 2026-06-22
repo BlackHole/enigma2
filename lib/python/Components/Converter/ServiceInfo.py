@@ -356,8 +356,6 @@ class ServiceInfo(Poll, Converter):
 			return str(getVideoHeight(info))
 		elif self.type == self.FRAMERATE:
 			return str(getFrameRate(info))
-		elif self.type == self.HDR_TYPE:
-			return self._readHDRType()
 		return -1
 
 	value = property(getValue)
