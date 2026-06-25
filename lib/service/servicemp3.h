@@ -116,7 +116,7 @@ public:
 
 typedef struct _GstElement GstElement;
 
-typedef enum { atUnknown, atMPEG, atMP3, atAC3, atDTS, atAAC, atPCM, atOGG, atFLAC, atWMA, atDRA, atEAC3 } audiotype_t;
+typedef enum { atUnknown, atMPEG, atMP3, atAC3, atDTS, atAACHE, atPCM, atOGG, atFLAC, atWMA, atDRA, atEAC3, atDTSHD, atAAC } audiotype_t;
 typedef enum { stUnknown, stPlainText, stSSA, stASS, stSRT, stVOB, stPGS, stDVB } subtype_t;
 typedef enum { ctNone, ctMPEGTS, ctMPEGPS, ctMKV, ctAVI, ctMP4, ctVCD, ctCDA, ctASF, ctOGG, ctWEBM, ctDRA} containertype_t;
 
@@ -375,6 +375,9 @@ private:
 #ifdef PASSTHROUGH_FIX
 	ePtr<eTimer> m_passthrough_fix_timer;
 #endif
+#ifdef PASSTHROUGH_FIX
+	ePtr<eTimer> m_passthrough_fix_timer2;
+#endif
 	ePtr<eDVBSubtitleParser> m_dvb_subtitle_parser;
 	ePtr<eConnection> m_new_dvb_subtitle_page_connection;
 	void newDVBSubtitlePage(const eDVBSubtitlePage &p);
@@ -389,6 +392,9 @@ private:
 	void clearBuffers(bool force=false);
 #ifdef PASSTHROUGH_FIX
 	void forcePassthrough();
+#endif
+#ifdef PASSTHROUGH_FIX
+	void forcePassthrough2();
 #endif
 	sourceStream m_sourceinfo;
 	gulong m_subs_to_pull_handler_id;

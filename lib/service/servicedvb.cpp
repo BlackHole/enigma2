@@ -1097,6 +1097,9 @@ eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *serv
 #ifdef PASSTHROUGH_FIX
 	m_passthrough_fix_timer = eTimer::create(eApp);
 #endif
+#ifdef PASSTHROUGH_FIX
+	m_passthrough_fix_timer2 = eTimer::create(eApp);
+#endif
 //	m_is_streamx = m_is_stream;	// sets to false if looking at fallback url at this point as m_is_stream(ref.path.find("://") is false.
 	eDebug("[servicedvb][eDVBServicePlay] now running: m_is_streamx set by m_is_stream %d", m_is_streamx);
 	eDebug("[servicedvb][eDVBServicePlay] now running: m_is_pvr set to; %d", m_is_pvr);
@@ -1143,8 +1146,15 @@ eDVBServicePlay::~eDVBServicePlay()
 #ifdef PASSTHROUGH_FIX
 void eDVBServicePlay::forcePassthrough()
 {
-	eDebug("[eDVBServicePlay] Setting 'passthrough' to force correct operation");
+	eDebug("[eDVBServicePlay] Setting 'ac3+ passthrough' to force correct operation");
 	CFile::writeStr("/proc/stb/audio/ac3", "passthrough");
+}
+#endif
+#ifdef PASSTHROUGH_FIX
+void eDVBServicePlay::forcePassthrough2()
+{
+	eDebug("[eDVBServicePlay] Setting 'he-aac passthrough' to force correct operation");
+	CFile::writeStr("/proc/stb/audio/aac", "passthrough");
 }
 #endif
 
@@ -2182,9 +2192,6 @@ int eDVBServicePlay::getInfo(int w)
 			apid = m_dvb_service->getCacheEntry(eDVBService::cAC3PID);
 			if (apid != -1)
 				return apid;
-			apid = m_dvb_service->getCacheEntry(eDVBService::cAC4PID);
-			if (apid != -1)
-				return apid;
 			apid = m_dvb_service->getCacheEntry(eDVBService::cDDPPID);
 			if (apid != -1)
 				return apid;
@@ -2195,6 +2202,9 @@ int eDVBServicePlay::getInfo(int w)
 			if (apid != -1)
 				return apid;
 			apid = m_dvb_service->getCacheEntry(eDVBService::cDRAAPID);
+			if (apid != -1)
+				return apid;
+			apid = m_dvb_service->getCacheEntry(eDVBService::cAC4PID);
 			if (apid != -1)
 				return apid;
 		}
@@ -2430,14 +2440,12 @@ RESULT eDVBServicePlay::getTrackInfo(struct iAudioTrackInfo &info, unsigned int 
 		info.m_description = "MPEG";
 	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atAC3)
 		info.m_description = "AC3";
-	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atAC4)
-		info.m_description = "AC4";
 	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atDDP)
 		info.m_description = "AC3+";
+	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atAACHE)
+		info.m_description = "HE-AAC";
 	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atAAC)
 		info.m_description = "AAC";
-	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atAACHE)
-		info.m_description = "AAC-HE";
 	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atDTS)
 		info.m_description = "DTS";
 	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atDTSHD)
@@ -2446,6 +2454,8 @@ RESULT eDVBServicePlay::getTrackInfo(struct iAudioTrackInfo &info, unsigned int 
 		info.m_description = "LPCM";
 	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atDRA)
 		info.m_description = "DRA";
+	else if (program.audioStreams[i].type == eDVBServicePMTHandler::audioStream::atAC4)
+		info.m_description = "AC4";
 	else
 		info.m_description = "???";
 
@@ -2516,6 +2526,15 @@ int eDVBServicePlay::selectAudioStream(int i)
 			int shortAudioDelay = eConfigManager::getConfigIntValue("config.av.passthrough_fix", 100);
 			m_passthrough_fix_timer->stop();
 			forcePassthrough();
+		}
+	}
+	if (apidtype == eDVBPMTParser::audioStream::atAAC || apidtype == eDVBPMTParser::audioStream::atAC3 || apidtype == eDVBPMTParser::audioStream::atAACHE) {
+		std::string pass = CFile::read("/proc/stb/audio/aac");
+		if (replace_all(replace_all(pass, "\r", ""), "\n", "") == "passthrough")
+		{
+			int shortAudioDelay = eConfigManager::getConfigIntValue("config.av.passthrough_fix", 100);
+			m_passthrough_fix_timer2->stop();
+			forcePassthrough2();
 		}
 	}
 #endif

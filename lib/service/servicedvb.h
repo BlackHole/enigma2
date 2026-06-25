@@ -334,6 +334,11 @@ protected:
 	void forcePassthrough();
 #endif
 
+#ifdef PASSTHROUGH_FIX
+	ePtr<eTimer> m_passthrough_fix_timer2;
+	void forcePassthrough2();
+#endif
+
 		/* radiotext */
 	ePtr<eDVBRdsDecoder> m_rds_decoder;
 	ePtr<eConnection> m_rds_decoder_event_connection;

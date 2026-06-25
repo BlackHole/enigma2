@@ -93,6 +93,7 @@ eServiceFactoryMP3::eServiceFactoryMP3()
 	if (sc)
 	{
 		std::list<std::string> extensions;
+		extensions.push_back("dtshd");
 		extensions.push_back("dts");
 		extensions.push_back("mp3");
 		extensions.push_back("wav");
@@ -104,8 +105,10 @@ eServiceFactoryMP3::eServiceFactoryMP3()
 		extensions.push_back("mp2");
 		extensions.push_back("m2a");
 		extensions.push_back("wma");
+		extensions.push_back("eac3");
 		extensions.push_back("ac3");
 		extensions.push_back("mka");
+		extensions.push_back("aache");
 		extensions.push_back("aac");
 		extensions.push_back("ape");
 		extensions.push_back("alac");
@@ -502,6 +505,9 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 #ifdef PASSTHROUGH_FIX
 	m_passthrough_fix_timer = eTimer::create(eApp);
 #endif
+#ifdef PASSTHROUGH_FIX
+	m_passthrough_fix_timer2 = eTimer::create(eApp);
+#endif
 	m_stream_tags = 0;
 	m_currentAudioStream = -1;
 	m_currentSubtitleStream = -1;
@@ -555,6 +561,9 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	CONNECT(m_nownext_timer->timeout, eServiceMP3::updateEpgCacheNowNext);
 #ifdef PASSTHROUGH_FIX
 	CONNECT(m_passthrough_fix_timer->timeout, eServiceMP3::forcePassthrough);
+#endif
+#ifdef PASSTHROUGH_FIX
+	CONNECT(m_passthrough_fix_timer2->timeout, eServiceMP3::forcePassthrough2);
 #endif
 	m_aspect = m_width = m_height = m_framerate = m_progressive = m_gamma = -1;
 	m_hdr_type = 0;
@@ -640,11 +649,6 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 		m_sourceinfo.containertype = ctWEBM;
 		m_sourceinfo.is_video = TRUE;
 	}
-	else if (strcasecmp(ext, ".m4a") == 0 || strcasecmp(ext, ".alac") == 0)
-	{
-		m_sourceinfo.containertype = ctMP4;
-		m_sourceinfo.audiotype = atAAC;
-	}
 	else if ( strcasecmp(ext, ".dra") == 0 )
 	{
 		m_sourceinfo.containertype = ctDRA;
@@ -667,6 +671,11 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 		m_sourceinfo.audiotype = atPCM;
 		m_sourceinfo.is_audio = TRUE;
 	}
+	else if (strcasecmp(ext, ".dtshd") == 0 || strcasecmp(ext, ".dts-hd") == 0)
+	{
+		m_sourceinfo.audiotype = atDTSHD;
+		m_sourceinfo.is_audio = TRUE;
+	}
 	else if (strcasecmp(ext, ".dts") == 0)
 	{
 		m_sourceinfo.audiotype = atDTS;
@@ -680,6 +689,16 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	else if (strcasecmp(ext, ".ac3") == 0)
 	{
 		m_sourceinfo.audiotype = atAC3;
+		m_sourceinfo.is_audio = TRUE;
+	}
+	else if (strcasecmp(ext, ".aac") == 0 || strcasecmp(ext, ".adts") == 0 || strcasecmp(ext, ".aac-lc") == 0 || strcasecmp(ext, ".aaclc") == 0 || strcasecmp(ext, ".mp4a") == 0 || strcasecmp(ext, ".m4a") == 0 || strcasecmp(ext, ".mp4") == 0 || strcasecmp(ext, ".3gp") == 0)
+	{
+		m_sourceinfo.audiotype = atAAC;
+		m_sourceinfo.is_audio = TRUE;
+	}
+	else if (strcasecmp(ext, ".aache") == 0 || strcasecmp(ext, ".heaac") == 0 || strcasecmp(ext, ".he-aac") == 0 || strcasecmp(ext, ".aac-he") == 0 || strcasecmp(ext, ".adts") == 0 ||  strcasecmp(ext, ".mp4a") == 0 || strcasecmp(ext, ".m4a") == 0 || strcasecmp(ext, ".mp4") == 0 || strcasecmp(ext, ".3gp") == 0 || strcasecmp(ext, ".alac") == 0)
+	{
+		m_sourceinfo.audiotype = atAACHE;
 		m_sourceinfo.is_audio = TRUE;
 	}
 	else if (strcasecmp(ext, ".cda") == 0)
@@ -886,8 +905,17 @@ eServiceMP3::~eServiceMP3()
 #ifdef PASSTHROUGH_FIX
 void eServiceMP3::forcePassthrough()
 {
-	eDebug("[eServiceMP3] Setting 'passthrough' to force correct operation");
+	eDebug("[eServiceMP3] Setting 'ac3+ passthrough' to force correct operation");
 	CFile::writeStr("/proc/stb/audio/ac3", "passthrough");
+	m_clear_buffers = true;
+	clearBuffers();
+}
+#endif
+#ifdef PASSTHROUGH_FIX
+void eServiceMP3::forcePassthrough2()
+{
+	eDebug("[eServiceMP3] Setting 'he-aac passthrough' to force correct operation");
+	CFile::writeStr("/proc/stb/audio/aac", "passthrough");
 	m_clear_buffers = true;
 	clearBuffers();
 }
@@ -2245,6 +2273,24 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 						clearBuffers();
 					}
 				}
+				if (apidtype == atAAC || apidtype == atAACHE || apidtype == atAC3 || apidtype == atUnknown || apidtype == atPCM) {
+					std::string pass = CFile::read("/proc/stb/audio/aac");
+					if (replace_all(replace_all(pass, "\r", ""), "\n", "") == "passthrough")
+					{
+						if (m_clear_buffers)
+						{
+							m_passthrough_fix_timer2->stop();
+							m_clear_buffers = true;
+							clearBuffers();
+							m_passthrough_fix_timer2->start(apidtype == atAACHE && i > 0 && current_audio_orig > -1 ? 2000 : 100, true);
+						}
+
+					}
+					else
+					{
+						clearBuffers();
+					}
+				}
 				else
 				{
 					clearBuffers();
@@ -3171,7 +3217,7 @@ audiotype_t eServiceMP3::gstCheckAudioPad(GstStructure* structure)
 			case 2:
 				return atAAC;
 			case 4:
-				return atAAC;
+				return atAACHE;
 			default:
 				return atUnknown;
 		}
@@ -3183,6 +3229,12 @@ audiotype_t eServiceMP3::gstCheckAudioPad(GstStructure* structure)
 		return atEAC3;
 	else if ( gst_structure_has_name (structure, "audio/x-dts") || gst_structure_has_name (structure, "audio/dts") )
 		return atDTS;
+	else if ( gst_structure_has_name (structure, "audio/x-dtshd") || gst_structure_has_name (structure, "audio/dtshd") )
+		return atDTSHD;
+	else if ( gst_structure_has_name (structure, "audio/x-aache") || gst_structure_has_name (structure, "audio/aache") || gst_structure_has_name (structure, "audio/x-heaac") || gst_structure_has_name (structure, "audio/heaac") )
+		return atAACHE;
+	else if ( gst_structure_has_name (structure, "audio/x-aac") || gst_structure_has_name (structure, "audio/aac") )
+		return atAAC;
 
 	return atPCM;
 }
