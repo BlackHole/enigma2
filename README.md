@@ -1,19 +1,58 @@
+
+### 🤝 Contributing & Contact
+
+OpenBh Enigma2 is created by users for users and we welcome every contribution. There are no highly paid developers. There are only users who have seen a problem and done their best to fix it. This means OpenBh will always need the contributions of users like you. How can you get involved?
+
+For questions or feedback, feel free and please open an issue or contribute with a Pull Request. Or post on the [OpenBh forum](https://openbh.net/)
+
+Pull requests are very welcome for:
+- **Coding:** Developers can help by fixing a bug, adding new features, Integration improvements, Feature enhancements
+- **Localization:** Translate into your native language.
+- **Helping users:** Our support process relies on enthusiastic contributors like you to help others.
+
+Your contribution is very welcome! Follow these steps:
+
+1. 🍴 Fork this repository
+2. 🔄 Create a branch for your feature
+3. 💻 Make your changes
+4. ✅ Commit using conventional messages
+5. 📤 Push to your branch
+6. 🔍 Open a Pull Request
+
+Enjoy and help us improve it today. :)
+
+### 🚨 Disclaimer
+
+The project author is not responsible for how this software is used by others. It is not intended to be used for accessing or distributing copyrighted materials without authorization.
+Users are solely responsible for determining the legality of their actions.
+
+This repository has no control over the streams, links, or the legality of the content provided by the different hosts (including all mirror sites). It is the end user's responsibility to ensure the legal use of these streams, and we strongly recommend verifying that the content complies with all applicable laws, including copyright laws and regulations of your country's jurisdiction before use.
+
+---
+
+### 🤝 Contributing Details
+
+For detailed contributing guidelines including testing procedures and AI policy, please see [CONTRIBUTING.md](https://github.com/BlackHole/enigma2/blob/Developer/doc/CONTRIBUTING.md).
+
+---
+
 ## OpenBh buildserver requirements: ##
 
->Ubuntu 24.04 LTS (GNU/Linux 6.8.0-39-generic x86_64) or (Ubuntu 26.04 LTS (GNU/Linux 7.0.0-14-generic x86_64) - for OE-A 6.0 and above builds)
+>Ubuntu 24.04 LTS (GNU/Linux 6.8.0-39-generic x86_64) or (Ubuntu 26.04 LTS (GNU/Linux 7.0.0-14-generic x86_64) - for OE-A 5.6 see note 15)
 
 ## minimum hardware requirement for image build (building feeds may require more):
 
 > RAM:  16GB
-> SWAP: 16GB (if building feeds then RAM+SWAP should be larger)>
+> SWAP: 16GB (if building feeds then RAM+SWAP should be larger)> 
 > CPU:  Multi core\thread Model
 > HDD:  for Single Build 250GB Free, for Multibuild 500GB or more
 
 ## OpenBh python3 is built using oe-alliance build-environment and several git repositories: ##
 
-> [https://github.com/oe-alliance/oe-alliance-core/tree/5.6](https://github.com/oe-alliance/oe-alliance-core/tree/5.6 "OE-Alliance")
+> [https://github.com/oe-alliance/oe-alliance-core/tree/6.0](https://github.com/oe-alliance/oe-alliance-core/tree/6.0 "OE-Alliance")
 >
-> https://github.com/BlackHole/enigma2
+> [https://github.com/BlackHole/enigma2/tree/Release](https://github.com/OpenBlackHole/enigma2/tree/Release "openbh E2")
+
 
 ----------
 
@@ -26,10 +65,10 @@
 ----------
 2 - Set python3 as preferred provider for python
 
-	sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 1
-	sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 2
-	sudo update-alternatives --config python
-	select python3
+    sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 1
+    sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 2
+    sudo update-alternatives --config python
+    select python3
 
 ----------
 3 - Set your shell to /bin/bash.
@@ -39,21 +78,23 @@
 ----------
 4 - modify max_user_watches
 
-	echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
+    echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
 
-	sudo sysctl -n -w fs.inotify.max_user_watches=524288
+    sudo sysctl -n -w fs.inotify.max_user_watches=524288
 
 ----------
 5 - Update apparmor profile
 
 ## Workaround for ubuntu issue [Allow bitbake to create user namespace](https://bugs.launchpad.net/ubuntu/+source/apparmor/+bug/2056555) ##
 ## Credit to Changqing Li (sandy-lcq), Karsten S. Opdal (karsten-s-opdal) and Ferry Toth (ftoth) ##
-
+   
     echo 'kernel.apparmor_restrict_unprivileged_userns=0' | sudo tee /etc/sysctl.d/60-apparmor-namespace.conf > /dev/null && sudo sysctl --system
     sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
 
 ----------
 6 - Add user openbhbuilder
+
+    sudo adduser openbhbuilder
 
 ----------
 7 - Add your git user and email
@@ -65,60 +106,69 @@
 ----------
 8 - Switch to user openbhbuilder
 
+    su openbhbuilder
+
 ----------
 9 - Switch to home of openbhbuilder
 
-	cd ~
+    cd ~
 
 ----------
 10 - Create folder openbh
 
-	mkdir -p ~/openbh
+    mkdir -p ~/openbh
 
 ----------
 11 - Switch to folder openbh
 
-	cd openbh
+    cd openbh
 
 ----------
 12 - Clone oe-alliance git
 
-    git clone https://github.com/oe-alliance/build-enviroment.git -b 5.6
+    git clone https://github.com/oe-alliance/build-enviroment.git -b 6.0
 
 ----------
 13 - Switch to folder build-enviroment
 
-	cd build-enviroment
+    cd build-enviroment
 
 ----------
 14 - Update build-enviroment
 
-	make update
+    make update
 
 ----------
-15 - Initialise the first machine so site.conf gets created
+15 - Ubuntu 26.04 Users, building OE-A 5.6.
 
-    MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make  init
+    Edit openembedded-core/meta/classes-global/base-bbclass
+        - change line 130 ---->            srctool = bb.utils.which(path, tool, executable=True)
+        - to 1line update ---->            srctool = (bb.utils.which(path, "gnu" + tool, executable=True) or bb.utils.which(path, tool, executable=True))
 
 ----------
-16 - Update site.conf
+16 - Initialise the first machine so site.conf gets created
+
+    MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make init
+
+----------
+17 - Update site.conf
 
     - BB_NUMBER_THREADS, PARALLEL_MAKE set to number of threads supported by the CPU
-    - add/modify DL_DIR = " location for build sources " to point to a location where you can save
+    - add/modify DL_DIR = " location for build sources " to point to a location where you can save 
       derived build sources, this will reduce build time in fetching these sources again.
     - Avoid wasting disk space creating spdx packages: INHERIT:remove = "create-spdx"
 
 ----------
-17 - Building image with feeds  e.g.:-
+18 - Building image with feeds  e.g.:-
 
-	MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make image
-
-----------
-18 - Building an image without feeds (Build time 1-2h)
-
-	MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make enigma2-image
+    MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make image
 
 ----------
-19 - Building feeds only
+19 - Building an image without feeds (Build time 1-2h)
 
-	MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make feeds
+    MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make enigma2-image
+
+----------
+20 - Building feeds only
+
+    MACHINE=vuultimo4k DISTRO=openbh DISTRO_TYPE=release make feeds

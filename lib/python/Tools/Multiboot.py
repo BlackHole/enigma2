@@ -67,7 +67,7 @@ def getMultibootslots():
 							continue
 						if "STARTUP_RECOVERY" in file:
 							slotnumber = "0"
-							SystemInfo["RecoveryMode"] = True if BOXTYPE != "gbquad4kpro" else False
+							SystemInfo["RecoveryMode"] = BOXTYPE != "gbquad4kpro"
 						if "STARTUP_FLASH" in file:
 							slotnumber = "0"
 						if slotnumber.isdigit() and slotnumber not in bootslots:
@@ -194,6 +194,7 @@ def GetImagelist(Recovery=None):
 	tmpname = tmp.dir
 	from Components.config import config		# here to prevent boot loop
 	slotRoot = ""
+	imagedir = "/"  # init here in case len(SystemInfo["canMultiBoot"].keys()) == 0
 	for slot in sorted(list(SystemInfo["canMultiBoot"].keys())):
 		if slot == 0:
 			if UBIMB:
