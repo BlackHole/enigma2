@@ -1378,7 +1378,6 @@ void eDVBFrontend::calculateSignalQuality(int snr, int &signalquality, int &sign
 	else if (!strcmp(m_description, "AVL62X1")) // Novaler Multibox Pro 4K/GB Trio 4K
 	{
 		ret = snr;
-		sat_max = 1620;
 	}
 	else if (!strcmp(m_description, "gService DVB-S2")) // SX88V2
 	{

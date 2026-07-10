@@ -25,6 +25,7 @@ private:
 		int					id;
 		int					default_id;
 		connect_choices_t	connect_choices;
+		std::string			input_choices;
 	} tuner_t;
 
 	typedef std::map<int, tuner_t> tuners_t;
@@ -42,6 +43,7 @@ private:
 
 	static int ReadProcInt(int, const std::string &);
 	static void WriteProcInt(int, const std::string &, int);
+	static void WriteProcStr(int, const std::string &, int);
 	static void LoadConnectChoices(int, connect_choices_t &);
 	static void SetProcFBCID(int, int, bool);
 	static int FESlotID(eDVBRegisteredFrontend *);

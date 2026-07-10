@@ -27,7 +27,6 @@
 #include <lib/dvb/tstools.h>
 #include <lib/python/python.h>
 #include <lib/base/nconfig.h> // access to python config
-#include <lib/base/esimpleconfig.h>
 #include <lib/base/httpsstream.h>
 #include <lib/base/httpstream.h>
 #include <lib/service/servicedvbfcc.h>
@@ -1094,12 +1093,6 @@ eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *serv
 	m_soft_decoder_video_info_valid(false),
 	m_nownext_timer(eTimer::create(eApp))
 {
-#ifdef PASSTHROUGH_FIX
-	m_passthrough_fix_timer = eTimer::create(eApp);
-#endif
-#ifdef PASSTHROUGH_FIX
-	m_passthrough_fix_timer2 = eTimer::create(eApp);
-#endif
 //	m_is_streamx = m_is_stream;	// sets to false if looking at fallback url at this point as m_is_stream(ref.path.find("://") is false.
 	eDebug("[servicedvb][eDVBServicePlay] now running: m_is_streamx set by m_is_stream %d", m_is_streamx);
 	eDebug("[servicedvb][eDVBServicePlay] now running: m_is_pvr set to; %d", m_is_pvr);
@@ -1141,22 +1134,6 @@ eDVBServicePlay::~eDVBServicePlay()
 
 	if (m_subtitle_widget) m_subtitle_widget->destroy();
 }
-
-
-#ifdef PASSTHROUGH_FIX
-void eDVBServicePlay::forcePassthrough()
-{
-	eDebug("[eDVBServicePlay] Setting 'ac3+ passthrough' to force correct operation");
-	CFile::writeStr("/proc/stb/audio/ac3", "passthrough");
-}
-#endif
-#ifdef PASSTHROUGH_FIX
-void eDVBServicePlay::forcePassthrough2()
-{
-	eDebug("[eDVBServicePlay] Setting 'he-aac passthrough' to force correct operation");
-	CFile::writeStr("/proc/stb/audio/aac", "passthrough");
-}
-#endif
 
 void eDVBServicePlay::gotNewEvent(int error)
 {
@@ -2518,27 +2495,6 @@ int eDVBServicePlay::selectAudioStream(int i)
 		return -4;
 	}
 
-#ifdef PASSTHROUGH_FIX
-	if (apidtype == eDVBPMTParser::audioStream::atAC3 || apidtype == eDVBPMTParser::audioStream::atAAC || apidtype == eDVBPMTParser::audioStream::atDDP) {
-		std::string pass = CFile::read("/proc/stb/audio/ac3");
-		if (replace_all(replace_all(pass, "\r", ""), "\n", "") == "passthrough")
-		{
-			int shortAudioDelay = eConfigManager::getConfigIntValue("config.av.passthrough_fix", 100);
-			m_passthrough_fix_timer->stop();
-			forcePassthrough();
-		}
-	}
-	if (apidtype == eDVBPMTParser::audioStream::atAAC || apidtype == eDVBPMTParser::audioStream::atAC3 || apidtype == eDVBPMTParser::audioStream::atAACHE) {
-		std::string pass = CFile::read("/proc/stb/audio/aac");
-		if (replace_all(replace_all(pass, "\r", ""), "\n", "") == "passthrough")
-		{
-			int shortAudioDelay = eConfigManager::getConfigIntValue("config.av.passthrough_fix", 100);
-			m_passthrough_fix_timer2->stop();
-			forcePassthrough2();
-		}
-	}
-#endif
-
 	if (position != -1)
 	{
 		ret = seekTo(position);
@@ -3564,10 +3520,34 @@ void eDVBServicePlay::updateDecoder(bool sendSeekableStateChanged)
 		if (!sendSeekableStateChanged && (m_decoder->getVideoProgressive() != -1) != wasSeekable)
 			sendSeekableStateChanged = true;
 	}
-
+#ifdef PASSTHROUGH_FIX
+	if (!m_noaudio)
+		forceAudioReset();
+#endif
 	if (sendSeekableStateChanged)
 		m_event((iPlayableService*)this, evSeekableStatusChanged);
 }
+
+#ifdef PASSTHROUGH_FIX
+void eDVBServicePlay::forceAudioReset()
+{
+	if (!eConfigManager::getConfigBoolValue("config.av.passthrough_fix", false))
+		return;
+	// Toggle Bluetooth audio off->on->off to force audio driver reinitialization
+	std::string btaudio = CFile::read("/proc/stb/audio/btaudio");
+	if (!btaudio.empty() && btaudio.find("off") != std::string::npos)
+	{
+		eDebug("[eDVBSoftDecoder] Force audio reset: toggling btaudio on and back off");
+		CFile::writeStr("/proc/stb/audio/btaudio", "on");
+		CFile::writeStr("/proc/stb/audio/btaudio", "off");
+	}
+	if (btaudio.empty())
+	{
+		int currAudioIndex = getCurrentTrack();
+		selectTrack(currAudioIndex);
+	}
+}
+#endif
 
 void eDVBServicePlay::loadCuesheet()
 {

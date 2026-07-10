@@ -75,7 +75,7 @@ public:
 	enum { evtEOF, evtReadError, evtWriteError, evtUser, evtStopped, evtStreamCorrupt };
 	sigc::signal<void(int)> m_event;
 
-	int getProtocol() { return m_protocol; }
+	int getProtocol() { return m_protocol;}
 	void setSession(int se, int st) { m_session_id = se; m_stream_id = st;}
 	static const size_t minWriteDefault = 32 * 1024;
 	static const size_t minWriteMPEG = 4 * 1024;
