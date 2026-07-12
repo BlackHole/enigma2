@@ -765,6 +765,7 @@ int eTextPara::renderString(const char *string, int rflags, int border)
 
 	unsigned long newcolor = 0;
 	bool activate_newcolor = false;
+	bool activate_colorreset = false;
 	int nextflags = 0;
 
 	for (std::vector<unsigned long>::const_iterator i(uc_visual.begin());
@@ -810,26 +811,15 @@ int eTextPara::renderString(const char *string, int rflags, int border)
 						{
 							char color[8];
 							int codeidx;
-							bool validhex = true;
 							for (codeidx = 0; codeidx < 8; codeidx++)
 							{
-								if ((i + 2 + codeidx) == uc_visual.end())
-								{
-									validhex = false;
+								if ((i + 2 + codeidx) == uc_visual.end()) break;
+								color[codeidx] = (char)((*(i + 2 + codeidx)) & 0xff);
+								if (!isxdigit((unsigned char)color[codeidx]))
 									break;
-								}
-								unsigned long hexchr = *(i + 2 + codeidx);
-								if (!((hexchr >= '0' && hexchr <= '9') ||
-								      (hexchr >= 'a' && hexchr <= 'f') ||
-								      (hexchr >= 'A' && hexchr <= 'F')))
-								{
-									validhex = false;
-									break;
-								}
-								color[codeidx] = (char)hexchr;
 							}
 							isprintable = 0;
-							if (validhex && codeidx == 8)
+							if (codeidx == 8)
 							{
 								newcolor = gRGB(color).argb();
 								activate_newcolor = true;
@@ -837,9 +827,8 @@ int eTextPara::renderString(const char *string, int rflags, int border)
 							}
 							else
 							{
-								/* "\c" not followed by 8 valid hex digits: reset to default colour */
-								nextflags |= GS_COLORRESET;
-								i += 1;
+								activate_colorreset = true;
+								i++;
 							}
 							break;
 						}
@@ -882,6 +871,9 @@ nprint:				isprintable=0;
 		}
 		if (isprintable)
 		{
+			if (activate_colorreset)
+				flags |= GS_COLORRESET;
+
 			FT_UInt index = 0;
 
 				/* FIXME: our font doesn't seem to have a hyphen, so use hyphen-minus for it. */
@@ -911,6 +903,7 @@ nprint:				isprintable=0;
 				appendGlyph(current_font, current_face, index, flags, rflags, border, i == uc_visual.end() - 1, activate_newcolor, newcolor);
 
 			activate_newcolor = false;
+			activate_colorreset = false;
 		}
 	}
 	bboxValid=false;
@@ -986,7 +979,8 @@ void eTextPara::blit(gDC &dc, const ePoint &offset, const gRGB &cbackground, con
 			line_offs = *(line_offs_it++);
 			line_chars = *(line_chars_it++);
 		}
-		if (!border) /* don't do colorchanges in borders */
+		/* don't do colorchanges in borders */
+		if (!border)
 		{
 			if (i->flags & GS_COLORRESET)
 			{

@@ -130,7 +130,26 @@ class OpenBhBackupManager(Screen):
 		self["key_menu"] = StaticText(_("MENU"))
 		self["key_info"] = StaticText(_("INFO"))
 
+		self["essentialActions"] = ActionMap(
+			["OkCancelActions", "MenuActions"],
+			{
+				"cancel": self.close,
+				"menu": self.createSetup,
+			}, -1)
+
+		self["optionalActions"] = ActionMap(
+			["ColorActions", "OkCancelActions", "DirectionActions", "TimerEditActions"],
+			{
+				"ok": self.keyRestore,
+				"red": self.keyDelete,
+				"green": self.GreenPressed,
+				"yellow": self.keyRestore,
+				"log": self.showLog,
+			}, -1)
+		self["optionalActions"].setEnabled(False)
+
 		self.BackupRunning = False
+		self.restoreOutcome = None
 		self.BackupDirectory = " "
 		self.onChangedEntry = []
 		self["list"] = MenuList([])
@@ -180,6 +199,14 @@ class OpenBhBackupManager(Screen):
 
 	def JobViewCB(self, in_background):
 		Components.Task.job_manager.in_background = in_background
+		msg = None
+		if self.restoreOutcome == "nothing":
+			msg = _("Settings restore was cancelled and there are no plugins to restore.")
+		elif self.restoreOutcome == "failed":
+			msg = _("Settings restore failed.")
+		self.restoreOutcome = None
+		if msg:
+			self.session.open(MessageBox, msg, MessageBox.TYPE_INFO, timeout=15)
 
 	def populate_List(self):
 		# --------------------------------------------------------------------------------------
@@ -198,31 +225,15 @@ class OpenBhBackupManager(Screen):
 		# using /media/hdd." message ever. And "Press 'Menu' to select a storage device"
 		# would not be of any help because "Backup location" would not be populated.
 		# --------------------------------------------------------------------------------------
+		self["optionalActions"].setEnabled(False)
 		mount = config.backupmanager.backuplocation.value, path.normpath(config.backupmanager.backuplocation.value)
 		hdd = "/media/hdd/", "/media/hdd"
+		self["key_red"].hide()
+		self["key_green"].hide()
+		self["key_yellow"].hide()
 		if mount not in config.backupmanager.backuplocation.choices.choices and hdd not in config.backupmanager.backuplocation.choices.choices:
-			self["myactions"] = ActionMap(
-				["OkCancelActions", "MenuActions"],
-				{
-					"cancel": self.close,
-					"menu": self.createSetup,
-				}, -1)
-			self["key_red"].hide()
-			self["key_green"].hide()
-			self["key_yellow"].hide()
 			self["lab1"].setText(_("Device: Press 'Menu' to select a storage device - none available"))
 		else:
-			self["myactions"] = ActionMap(
-				["ColorActions", "OkCancelActions", "DirectionActions", "MenuActions", "TimerEditActions"],
-				{
-					"cancel": self.close,
-					"ok": self.keyRestore,
-					"red": self.keyDelete,
-					"green": self.GreenPressed,
-					"yellow": self.keyRestore,
-					"menu": self.createSetup,
-					"log": self.showLog,
-				}, -1)
 			if mount not in config.backupmanager.backuplocation.choices.choices:
 				config.backupmanager.backuplocation.value = hdd[0]
 				config.backupmanager.backuplocation.save()
@@ -247,6 +258,8 @@ class OpenBhBackupManager(Screen):
 				else:
 					self["key_red"].hide()
 					self["key_yellow"].hide()
+				self["key_green"].show()
+				self["optionalActions"].setEnabled(True)
 			except OSError as err:
 				print("[BackupManager] populate_List:", err)
 				self["lab1"].setText(
@@ -335,15 +348,14 @@ class OpenBhBackupManager(Screen):
 					self.showJobView(job)
 					break
 
-	def myclose(self):
-		self.close()
-
 	def createRestoreJob(self):
 		self.pluginslist = []
 		self.pluginslist2 = []
 		self.didSettingsRestore = False
 		self.doPluginsRestore = False
 		self.didPluginsRestore = False
+		self.pluginsRestoreDeclined = False
+		self.pluginsRestoreNotNeeded = False
 		self.Stage1Completed = False
 		self.Stage2Completed = False
 		self.Stage3Completed = False
@@ -353,10 +365,6 @@ class OpenBhBackupManager(Screen):
 
 		task = Components.Task.PythonTask(job, _("Restoring backup..."))
 		task.work = self.JobStart
-		task.weighting = 1
-
-		task = Components.Task.PythonTask(job, _("Restoring backup..."))
-		task.work = self.Stage1
 		task.weighting = 1
 
 		task = Components.Task.ConditionTask(job, _("Restoring backup..."), timeoutCount=60)
@@ -435,7 +443,7 @@ class OpenBhBackupManager(Screen):
 				self.Stage2,
 				_("Sorry, but the restore failed."),
 				MessageBox.TYPE_INFO,
-				10,
+				15,
 				"StageOneFailedNotification"
 			)
 
@@ -577,6 +585,7 @@ class OpenBhBackupManager(Screen):
 				PLUGINRESTOREQUESTIONID
 			)
 		else:
+			self.pluginsRestoreNotNeeded = True
 			print("[BackupManager] Restoring Stage 4: plugin restore not required")
 			self.Stage6()
 
@@ -586,14 +595,9 @@ class OpenBhBackupManager(Screen):
 			self.doPluginsRestore = True
 			self.Stage4Completed = True
 		elif answer is False:
+			self.pluginsRestoreDeclined = True
 			print("[BackupManager] Restoring Stage 4: plugin restore skipped by user")
-			AddPopupWithCallback(
-				self.Stage6,
-				_("Now skipping restore process"),
-				MessageBox.TYPE_INFO,
-				15,
-				NOPLUGINS
-			)
+			self.Stage6()
 
 	def Stage5(self):
 		if self.doPluginsRestore:
@@ -635,9 +639,12 @@ class OpenBhBackupManager(Screen):
 			else:
 				print("[BackupManager] Stage 6 Restoring Completed rebooting")
 				quitMainloop(2)
+		elif self.pluginsRestoreDeclined or self.pluginsRestoreNotNeeded:
+			print("[BackupManager] Stage 6 Restoring: Settings restore was cancelled and there were no plugins to restore")
+			self.restoreOutcome = "nothing"
 		else:
-			print("[BackupManager] Restoring failed or canceled")
-			self.close()
+			print("[BackupManager] Stage 6 Restoring failed")
+			self.restoreOutcome = "failed"
 
 
 class BackupSelection(Screen):
