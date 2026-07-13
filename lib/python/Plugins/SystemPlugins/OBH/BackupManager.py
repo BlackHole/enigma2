@@ -45,7 +45,6 @@ config.backupmanager.backupdirs = ConfigLocations(
 		eEnv.resolve("${sysconfdir}/network/interfaces"),
 		eEnv.resolve("${sysconfdir}/passwd"),
 		eEnv.resolve("${sysconfdir}/shadow"),
-		eEnv.resolve("${sysconfdir}/etc/shadow"),
 		eEnv.resolve("${sysconfdir}/resolv.conf"),
 		eEnv.resolve("${sysconfdir}/ushare.conf"),
 		eEnv.resolve("${sysconfdir}/inadyn.conf"),
@@ -80,11 +79,9 @@ config.backupmanager.number_to_keep = ConfigNumber(default=0)
 def BackupManagerautostart(reason, session=None, **kwargs):
 	"""called with reason=1 to during /sbin/shutdown.sysvinit, with reason=0 at startup?"""
 	global autoBackupManagerTimer
-	global _session
 	if reason == 0:
 		print("[BackupManager] AutoStart Enabled")
 		if session is not None:
-			_session = session
 			if autoBackupManagerTimer is None:
 				autoBackupManagerTimer = AutoBackupManagerTimer(session)
 	else:
@@ -302,7 +299,11 @@ class OpenBhBackupManager(Screen):
 		self.sel = self["list"].getCurrent()
 		if self.sel is not None:
 			self["list"].moveToIndex(self["list"].getSelectedIndex() if len(self["list"].list) > self["list"].getSelectedIndex() + 1 else max(len(self["list"].list) - 2, 0))  # hold the selection current possition if the list is long enough, else go to last item
-			remove(self.BackupDirectory + self.sel)
+			try:
+				remove(self.BackupDirectory + self.sel)
+			except Exception as err:
+				print("[BackupManager] keyDelete: error while deleting", err)
+				self.session.open(MessageBox, _("Delete failure - check device available."), MessageBox.TYPE_INFO, timeout=10)
 			self.populate_List()
 
 	def GreenPressed(self):
@@ -547,7 +548,8 @@ class OpenBhBackupManager(Screen):
 					print("[BackupManager] Restoring Stage 3: thirdpartyPluginsLocation from file", "'%s'" % thirdpartyPluginsLocation)
 			with open("/tmp/3rdPartyPlugins", "r") as fd:
 				tmppluginslist2 = [package.split("_")[0] for line in fd.readlines() if (package := line.strip())]  # ".split("_")[0]" should be redundant if the input is correct
-			relative_path = len(x := thirdpartyPluginsLocation.split("/", 3)) > 3 and x[3] or None  # expects thirdpartyPluginsLocation to be in the format /media/something/myFolder
+			relative_path = len(x := thirdpartyPluginsLocation.split("/", 3)) > 3 and x[3] or None  # expects thirdpartyPluginsLocation to be in the format /media/mountpoint/relative_path... (XtraPluginsSelection.saveSelection() now enforces this)
+			# Just in case the mount point has changed?
 			devmounts = relative_path and ["/media/%s/%s" % (media, relative_path) for media in listdir("/media/") if media not in ("autofs", "net") and path.isdir(path.join("/media/", media)) and path.exists("/media/%s/%s" % (media, relative_path))]
 			print("[BackupManager] search dir = %s" % str(devmounts))
 			for ipk in tmppluginslist2:
@@ -719,12 +721,12 @@ class XtraPluginsSelection(Screen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		self.skinName = "Setup"
-		self.title = _("Select folder containing plugins(.ipk) and Save")
+		self.title = _("Select folder under /media containing plugins(.ipk) and Save")
 
 		self["key_red"] = StaticText(_("Cancel"))
 		self["key_green"] = StaticText(_("Save"))
 
-		self["config"] = FileList(config.backupmanager.backuplocation.value, showFiles=True, matchingPattern="^.*.(ipk)")
+		self["config"] = FileList(config.backupmanager.backuplocation.value, showFiles=True, matchingPattern=r"^.*\.ipk$")
 
 		self["actions"] = ActionMap(
 			["DirectionActions", "SetupActions"],
@@ -740,18 +742,24 @@ class XtraPluginsSelection(Screen):
 
 	def saveSelection(self):
 		current = self["config"].getCurrent()[0]
-		# print("[BackupManager][saveSelection] current[0] ", current[0])
-		# current[0].split("/", 3) is used in the restore code so a sanity check should be added here.
-		# The restore code assumes the ipk folder starts with /media but that is not a requirement here and needs fixing.
-		ipkList = FileList(current[0], showDirectories=False, showFiles=True, showMountpoints=False, matchingPattern="^.*.(ipk)")
-		if ipkList.getFilename() is not None:
+		print("[BackupManager][saveSelection] current", str(current))
+
+		if not current[0] or not current[0].startswith("/media/"):
+			self.session.open(MessageBox, _("Please select a folder under /media, i.e. a mount point that is not in the internal flash"), MessageBox.TYPE_INFO, timeout=30)
+			return
+
+		elif not (len(x := current[0].split("/", 3)) > 3 and x[3]):  # match formula in VIXBackupManager.Stage3Complete()
+			self.session.open(MessageBox, _("Please select a folder inside a mount point, not the mount point itself."), MessageBox.TYPE_INFO, timeout=30)
+
+		elif not any(f.endswith(".ipk") for f in listdir(current[0])):  # no .ipk found in the selected folder
+			self.session.open(MessageBox, _("Please select folder that contains .ipk packages."), MessageBox.TYPE_INFO, timeout=10)
+
+		else:  # success
 			config.backupmanager.xtraplugindir.setValue(current[0])
 			config.backupmanager.xtraplugindir.save()
 			config.backupmanager.save()
 			configfile.save()
 			self.close(None)
-		else:
-			self.session.open(MessageBox, _("Please select folder that contains .ipk packages."), MessageBox.TYPE_INFO, timeout=10)
 
 	def okClicked(self):
 		if self["config"].canDescent():
@@ -883,7 +891,6 @@ class AutoBackupManagerTimer:
 		self.backuptimer.stop()
 		now = int(time())
 		wake = self.getBackupTime()
-		atLeast = 0  # noqa: F841 if we're close enough, we're okay...
 		if wake - now < 60:
 			print("[BackupManager] Backup onTimer occured at", strftime("%c", localtime(now)))
 			from Screens.Standby import inStandby
@@ -1162,8 +1169,8 @@ class BackupFiles(Screen):
 					emlist = emlist[0:len(emlist) - config.backupmanager.number_to_keep.value]
 					for fil in emlist:
 						remove(self.BackupDirectory + fil)
-		except:
-			pass
+		except Exception as err:
+			print("[BackupManager] BackupComplete: error while pruning", err)
 		if config.backupmanager.schedule.value:
 			atLeast = 60
 			autoBackupManagerTimer.backupupdate(atLeast)
