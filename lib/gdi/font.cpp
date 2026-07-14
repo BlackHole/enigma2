@@ -818,20 +818,24 @@ int eTextPara::renderString(const char *string, int rflags, int border)
 								if (!isxdigit((unsigned char)color[codeidx]))
 									break;
 							}
-							isprintable = 0;
 							if (codeidx == 8)
 							{
 								newcolor = gRGB(color).argb();
 								activate_newcolor = true;
+								isprintable = 0;
 								i += 1 + codeidx;
 							}
 							else
 							{
-								activate_colorreset = true;
-								i++;
+								isprintable = 1;
 							}
 							break;
 						}
+						case 'C':
+							isprintable = 0;
+							activate_colorreset = true;
+							i++;
+							break;
 						default:
 						;
 					}
