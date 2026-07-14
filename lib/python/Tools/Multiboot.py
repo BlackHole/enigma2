@@ -58,9 +58,10 @@ def getMultibootslots():
 				if path.exists("/sys/firmware/devicetree/base/chosen/bootargs") or CHKROOTMB:  # check validity for multiboot
 					for file in glob.glob(path.join(tmpname, "STARTUP_*")):
 						slotnumber = file.rsplit("_", 3 if "BOXMODE" in file else 1)[1]
-						slotname = file.rsplit("_", 3 if "BOXMODE" in file else 1)[0]
-						slotname = file.rsplit("/", 1)[1]
-						slotname = slotname if len(slotname) > 1 else ""
+						# slotname - WIP
+						# slotname = file.rsplit("_", 3 if "BOXMODE" in file else 1)[0]
+						# slotname = file.rsplit("/", 1)[1]
+						# slotname = slotname if len(slotname) > 1 else ""
 						slotname = ""  # nullify for current moment
 						if "STARTUP_ANDROID" in file:
 							SystemInfo["AndroidMode"] = True
@@ -141,8 +142,7 @@ def getMultibootslots():
 					struct_fmt = "B"
 					flag = f.read(struct.calcsize(struct_fmt))
 					slot = struct.unpack(struct_fmt, flag)
-					SystemInfo["MultiBootSlot"] = int(slot[0])
-					print("[Multiboot][MultiBootSlot]1 current slot used:", SystemInfo["MultiBootSlot"])
+					SystemInfo["MultiBootSlot"] = str(slot[0])  # needs to be tested so this comment can be removed.
 			elif bootArgs and SystemInfo["HasRootSubdir"] and "root=/dev/sda" not in bootArgs and not UBIMB:							# RootSubdir receiver or sf8008 receiver with root in eMMC slot
 				slot = [x[-1] for x in bootArgs.split() if x.startswith("rootsubdir")]
 				SystemInfo["MultiBootSlot"] = int(slot[0])
@@ -387,13 +387,15 @@ def getSlotImageList(callback):
 	callback(imageList)
 
 
-def getBootCodeDescription(bootCodeEntry):
+def getBootCodeDescription(bootCode=None):
 	bootCodeDescriptions = {
 		"": _("Normal: No boot modes required."),
 		"1": _("Mode 1: Supports Kodi but PiP may not work"),
 		"12": _("Mode 12: Supports PiP but Kodi may not work")
 	}
-	return bootCodeDescriptions
+	if bootCode is None:
+		return bootCodeDescriptions
+	return bootCodeDescriptions.get(bootCode, "")
 
 
 def activateSlot(slotCode, bootCode, callback):
