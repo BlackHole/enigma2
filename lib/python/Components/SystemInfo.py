@@ -166,21 +166,6 @@ def setRCFile(source):
 		SystemInfo["rc_default"] = True
 
 
-SystemInfo["HasRootSubdir"] = False  # This needs to be here so it can be reset by getMultibootslots!
-SystemInfo["RecoveryMode"] = False  # This needs to be here so it can be reset by getMultibootslots!
-SystemInfo["AndroidMode"] = False  # This needs to be here so it can be reset by getMultibootslots!
-SystemInfo["HasMultibootMTD"] = False  # This needs to be here so it can be reset by getMultibootslots!
-SystemInfo["HasMultibootFlags"] = False  # This needs to be here so it can be reset by getMultibootslots!
-SystemInfo["resetMBoot"] = False  # Kexec kernel issue-this needs to be here so it can be reset by getMultibootslots if required!
-SystemInfo["HasKexecUSB"] = False  # This needs to be here so it can be reset by getMultibootslots!
-SystemInfo["HasKexecMultiboot"] = fileHas("/proc/cmdline", "kexec=1")  # This needs to be here so it can be tested by getMultibootslots!
-from Tools.Multiboot import getMultibootslots, isFat32  # noqa: E402  This import needs to be here to avoid a SystemInfo load loop!
-SystemInfo["HasChkrootMultiboot"] = isFat32("/dev/block/by-name/others") or fileExists("/dev/block/by-name/startup")
-SystemInfo["canchkroot"] = (UBIMB or fileExists("/dev/block/by-name/others")) and not SystemInfo["HasChkrootMultiboot"] and not fileExists("/etc/.disableChkroot")
-SystemInfo["HasHiSi"] = pathExists("/proc/hisi") and BOXTYPE not in ("viper4kv40", "sfx6008", "sfx6018")  # This needs to be for later checks
-SystemInfo["canMultiBoot"] = getMultibootslots()
-# SystemInfo["MBbootdevice"] = device set in Tools/Multiboot.py
-# SystemInfo["MultiBootSlot"] = current slot set in Tools/Multiboot.py
 SystemInfo["MTDBLACK"] = ""  # HDD device set in Harddisk.py
 
 
@@ -205,7 +190,6 @@ def hasInitCam():
 SystemInfo["CanChangeOsdAlpha"] = access('/proc/stb/video/alpha', R_OK) and True or False
 SystemInfo["CanChangeOsdPosition"] = (access('/proc/stb/fb/dst_left', R_OK) or access('/proc/stb/vmpeg/0/dst_left', R_OK)) and True or False
 SystemInfo["OsdSetup"] = SystemInfo["CanChangeOsdPosition"]
-SystemInfo["CanKexecVu"] = MODEL in ("vusolo4k", "vuduo4k", "vuduo4kse", "vuultimo4k", "vuuno4k", "vuuno4kse", "vuzero4k") and not SystemInfo["HasKexecMultiboot"]
 SystemInfo["HasUsbhdd"] = {}
 SystemInfo["ArchIsARM"] = ARCHITECTURE.startswith(("arm", "cortex"))
 SystemInfo["ArchIsARM64"] = "64" in ARCHITECTURE
@@ -238,9 +222,7 @@ SystemInfo["ConfigDisplay"] = SystemInfo["FrontpanelDisplay"] and SystemInfo["di
 SystemInfo["LCDSKINSetup"] = pathExists("/usr/share/enigma2/display") and not SystemInfo["7segment"]
 SystemInfo["OledDisplay"] = fileExists("/dev/dbox/oled0")
 SystemInfo["LcdDisplay"] = fileExists("/dev/dbox/lcd0")
-SystemInfo["LCDsymbol_hdd"] = False
 SystemInfo["HasNoDisplay"] = BOXTYPE in ("vusolo")
-#SystemInfo["DisplayLED"] = False
 SystemInfo["LEDButtons"] = False  # MODEL == "vuultimo", For some reason this causes a cpp crash on vuultimo (which we no longer build). The cause needs investigating or the dead code in surrounding modules that this change causes should be removed.
 SystemInfo["Fan"] = fileCheck("/proc/stb/fp/fan")
 SystemInfo["FanPWM"] = SystemInfo["Fan"] and fileCheck("/proc/stb/fp/fan_pwm")
@@ -278,7 +260,6 @@ SystemInfo["HasHDMIin"] = SystemInfo["hdmifhdin"] or SystemInfo["hdmihdin"]
 SystemInfo["HDMIinPiP"] = SystemInfo["HasHDMIin"] and BRAND != "dreambox"
 SystemInfo["CanHDMIinRecord"] = fileExists("/proc/stb/encoder/0/decoder")
 SystemInfo["Has24hz"] = fileCheck("/proc/stb/video/videomode_24hz") or MODEL in ("h7", "h17")
-SystemInfo["canBackupEMC"] = MODEL in ("h7") and ("disk.img", "%s" % SystemInfo["MBbootdevice"]) or MODEL in ("osmio4kplus", "osmini4k") and ("emmc.img", "%s" % SystemInfo["MBbootdevice"]) or SystemInfo["HasHiSi"] and ("usb_update.bin", "none")
 SystemInfo["canMode12"] = MODEL in ("h7") and ("brcm_cma=440M@328M brcm_cma=192M@768M", "brcm_cma=520M@248M brcm_cma=200M@768M")
 SystemInfo["HasMMC"] = fileHas("/proc/cmdline", "root=/dev/mmcblk") or "mmcblk" in SystemInfo["mtdrootfs"]
 SystemInfo["HasH9SD"] = MODEL in ("h9") and pathExists("/dev/mmcblk0p1")
@@ -348,6 +329,6 @@ SystemInfo["rc_default"] = SystemInfo["rc_model"] in ("dmm0", )
 
 # If any remotes are missing from oe-mirrors/branding-module they should be added. The
 # xml file format at oe-alliance/remotes is different from oe-mirrors/branding-module,
-# but OpenViX/OpenBh can read both formats. It seems files of both formats are now being
+# but OpenBh/OpenViX can read both formats. It seems files of both formats are now being
 # added to oe-mirrors/branding-module. For us this is not a problem but may be for other
 # distros that can't handle that format.
