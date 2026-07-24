@@ -1054,6 +1054,146 @@ RESULT eServiceMP3::start()
 	return 0;
 }
 
+namespace {
+
+const guint STOP_WATCHDOG_TIMEOUT_SECONDS = 10;
+
+/* Shared between stopWorker() and stopWatchdog() only - never touches
+ * eServiceMP3/"this", same reasoning as not passing "this" to stopWorker
+ * itself: this teardown can outlive the object it came from. refcount starts
+ * at 2 (one per thread below); whichever of the two finishes second frees it,
+ * so it's torn down properly regardless of which one happens to win the race
+ * for the normal (fast) case. */
+struct StopWatchdog
+{
+	gint done;      // atomic bool, set by stopWorker() once GST_STATE_NULL actually returns
+	gint refcount;  // atomic
+};
+
+void stopWatchdogRelease(StopWatchdog *watchdog)
+{
+	if (g_atomic_int_dec_and_test(&watchdog->refcount))
+		delete watchdog;
+}
+
+struct StopWorkerArgs
+{
+	GstElement *playbin;
+	StopWatchdog *watchdog;
+};
+
+/* gst_element_set_state(..., GST_STATE_NULL) is the call that can still block
+ * this (main) thread for seconds: unlike other transitions it is defined to
+ * not return until the element has fully stopped, and some vendor hardware
+ * sinks on this class of STB block synchronously inside their change_state()
+ * vfunc instead of returning ASYNC, especially for H.265. Doing it here on a
+ * worker thread instead just moves that wait off the main thread; nothing
+ * else needs to be touched, since stop() itself already takes just a raw
+ * ref (not "this"), and every eServiceMP3 member accessed after this call
+ * in stop() (stopHDRProbe(), saveCuesheet()) is independently safe to run
+ * before the pipeline has actually reached NULL - see the comments there. */
+gpointer stopWorker(gpointer data)
+{
+	StopWorkerArgs *args = static_cast<StopWorkerArgs*>(data);
+	GstElement *playbin = args->playbin;
+	StopWatchdog *watchdog = args->watchdog;
+	delete args;
+
+	GstStateChangeReturn ret = gst_element_set_state(playbin, GST_STATE_NULL);
+	if (ret != GST_STATE_CHANGE_SUCCESS)
+		eDebug("[eServiceMP3] stop GST_STATE_NULL failure");
+	gst_object_unref(playbin);
+
+	g_atomic_int_set(&watchdog->done, 1);
+	stopWatchdogRelease(watchdog);
+	return NULL;
+}
+
+/* Detection only, not recovery - there is no safe way to force-abort a
+ * thread stuck inside gst_element_set_state(), so this can't do anything
+ * about a genuinely wedged teardown beyond making it visible in the log
+ * instead of silently leaking a thread + pipeline forever. Runs as its own
+ * thread rather than an eTimer specifically because it has to outlive "this"
+ * (the eServiceMP3 destructor calls stop() and then immediately proceeds to
+ * destroy the object) - a member eTimer would be destroyed right along with
+ * it and never get a chance to fire for exactly the case that matters most. */
+gpointer stopWatchdog(gpointer data)
+{
+	StopWatchdog *watchdog = static_cast<StopWatchdog*>(data);
+	g_usleep(STOP_WATCHDOG_TIMEOUT_SECONDS * G_USEC_PER_SEC);
+	if (!g_atomic_int_get(&watchdog->done))
+		eDebug("[eServiceMP3] stop(): GST_STATE_NULL still hasn't completed after %u seconds - hardware sink likely stuck", STOP_WATCHDOG_TIMEOUT_SECONDS);
+	stopWatchdogRelease(watchdog);
+	return NULL;
+}
+
+}  // namespace
+
+void eServiceMP3::disconnectAsyncSignalHandlers()
+{
+	if (!m_gst_playbin)
+		return;
+
+	/* playbinNotifySource()/handleElementAdded()/gstTextpadHasCAPS() were all
+	 * connected with "this" as user_data to react to the pipeline's dynamic
+	 * reconfiguration during normal playback. Now that stop() moves
+	 * GST_STATE_NULL off the main thread (see stopWorker()), the pipeline can
+	 * keep running - and keep emitting these signals - for a while after this
+	 * object itself has been destroyed, since the two are no longer
+	 * synchronized. A real crash from exactly this (gstTextpadHasCAPS firing
+	 * into an already-freed "this") is what prompted this function. None of
+	 * these signals' actions matter once we're stopping regardless, so
+	 * disconnect all of them synchronously here, before handing the actual
+	 * teardown off to the worker thread: g_signal_handlers_disconnect_by_func()
+	 * is fast and non-blocking (it doesn't wait for the pipeline to reach any
+	 * particular state), so this doesn't reintroduce the freeze stopWorker()
+	 * exists to avoid.
+	 *
+	 * handleElementAdded() reconnects itself on every decodebin/uridecodebin
+	 * element it discovers (see its own body) - there is no fixed, known set
+	 * of objects it ends up connected to, so walk the live pipeline and
+	 * disconnect it from every bin found, not just m_gst_playbin itself.
+	 * g_signal_handlers_disconnect_by_func() is a safe no-op on any object
+	 * that callback was never actually connected to. */
+	g_signal_handlers_disconnect_by_func(m_gst_playbin, (gpointer)playbinNotifySource, this);
+	g_signal_handlers_disconnect_by_func(m_gst_playbin, (gpointer)handleElementAdded, this);
+
+	GstIterator *eit = gst_bin_iterate_recurse(GST_BIN(m_gst_playbin));
+	GValue eitem = G_VALUE_INIT;
+	bool edone = false;
+	while (!edone)
+	{
+		switch (gst_iterator_next(eit, &eitem))
+		{
+			case GST_ITERATOR_OK:
+			{
+				GstElement *el = GST_ELEMENT(g_value_get_object(&eitem));
+				if (el && GST_IS_BIN(el))
+					g_signal_handlers_disconnect_by_func(el, (gpointer)handleElementAdded, this);
+				g_value_reset(&eitem);
+				break;
+			}
+			case GST_ITERATOR_RESYNC: gst_iterator_resync(eit); break;
+			default: edone = true; break;
+		}
+	}
+	g_value_unset(&eitem);
+	gst_iterator_free(eit);
+
+	gint n_text = 0;
+	g_object_get(m_gst_playbin, "n-text", &n_text, NULL);
+	for (gint i = 0; i < n_text; i++)
+	{
+		GstPad *pad = NULL;
+		g_signal_emit_by_name(m_gst_playbin, "get-text-pad", i, &pad);
+		if (pad)
+		{
+			g_signal_handlers_disconnect_by_func(pad, (gpointer)gstTextpadHasCAPS, this);
+			gst_object_unref(pad);
+		}
+	}
+}
+
 RESULT eServiceMP3::stop()
 {
 	if (!m_gst_playbin || m_state == stStopped || !m_ref)
@@ -1064,27 +1204,50 @@ RESULT eServiceMP3::stop()
 
 	GstStateChangeReturn ret;
 	GstState state, pending;
-	/* Non-blocking state query: gst_element_set_state(NULL) aborts any
-	 * pending state change internally, so we do not need to wait here.
-	 * The previous 5 * GST_SECOND blocking wait caused the UI to freeze
-	 * (spinner with video still playing) on rapid channel zaps, especially
-	 * on H.265 channels where hardware decoders are slower to respond. */
+	/* Non-blocking state query, for logging only. */
 	ret = gst_element_get_state(m_gst_playbin, &state, &pending, 0);
 	eDebug("[eServiceMP3] stop state:%s pending:%s ret:%s",
 		gst_element_state_get_name(state),
 		gst_element_state_get_name(pending),
 		gst_element_state_change_return_get_name(ret));
 
-	ret = gst_element_set_state(m_gst_playbin, GST_STATE_NULL);
-	if (ret != GST_STATE_CHANGE_SUCCESS)
-		eDebug("[eServiceMP3] stop GST_STATE_NULL failure");
+	disconnectAsyncSignalHandlers();
+
+	/* See stopWorker()'s comment: hand the actual (potentially blocking)
+	 * teardown off to a worker thread instead of doing it here, plus a
+	 * watchdog thread that just logs if it's taking unexpectedly long -
+	 * see stopWatchdog()'s comment for why that's a thread and not a timer. */
+	gst_object_ref(m_gst_playbin);
+	StopWatchdog *watchdog = new StopWatchdog{0, 2};
+	GThread *worker = g_thread_new("mp3stop", stopWorker, new StopWorkerArgs{m_gst_playbin, watchdog});
+	g_thread_unref(worker);
+	GThread *watchdogThread = g_thread_new("mp3stopwd", stopWatchdog, watchdog);
+	g_thread_unref(watchdogThread);
 
 #ifdef HAS_SOFTWARE_HDR_DETECTION
-	/* stopHDRProbe() calls gst_pad_remove_probe() which blocks until any
-	 * in-flight probe callback finishes.  Call it AFTER GST_STATE_NULL so the
-	 * streaming thread is guaranteed to have stopped; calling it earlier (on a
-	 * live pipeline) can block the main thread indefinitely if the streaming
-	 * thread is stuck waiting on hardware. */
+	/* stopHDRProbe() itself deliberately never calls the blocking
+	 * gst_pad_remove_probe() - see its own comment - which is correct and
+	 * necessary for its OTHER call sites (startHDRProbe() restarting mid
+	 * playback, checkHDRProbe() finishing classification), where "this"
+	 * stays alive regardless of how long the probe takes to actually detach.
+	 * stop() is different: now that GST_STATE_NULL runs on a worker thread
+	 * (see stopWorker()), this object can be destroyed shortly after
+	 * returning from here, and hdrProbeCallback firing into an already-freed
+	 * "this" is exactly what caused a real crash (glibc robust-mutex
+	 * assertion / heap corruption). So only here, remove the probe for real
+	 * before doing anything else - gst_pad_remove_probe() blocks until any
+	 * in-flight invocation finishes (worst case one buffer copy, low
+	 * milliseconds - nowhere near the multi-second class of block
+	 * stopWorker() exists to avoid), which is the only way to *guarantee*
+	 * hdrProbeCallback can never fire again from here on. */
+	if (m_hdr_probe_pad && m_hdr_probe_id)
+	{
+		gst_pad_remove_probe(m_hdr_probe_pad, m_hdr_probe_id);
+		m_hdr_probe_id = 0;
+	}
+	/* Now safe to call as usual - the flag/trylock dance is redundant at this
+	 * point (nothing can be mid-callback anymore) but harmless, and this
+	 * still does the rest of the cleanup (timer, es/snap buffers, pad ref). */
 	stopHDRProbe();
 #endif
 
