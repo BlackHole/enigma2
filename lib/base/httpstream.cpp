@@ -324,7 +324,7 @@ void eHttpStream::detectStreamRelay(const std::string &url)
 	{
 		eDebug("[eHttpStream] Stream Relay detected - ring buffer disabled");
 	}
-	else:
+	else
 	{
 		/* Ring buffer — default 2 MB, tunable via config.usage.http_buffersize (KB) */
 		int bufKB = eConfigManager::getConfigIntValue("config.usage.http_buffersize");
