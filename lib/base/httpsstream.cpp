@@ -28,21 +28,6 @@ eHttpsStream::eHttpsStream()
 		startDelay = delay * 1000;
 	}
 
-	ctx = NULL;
-	ssl = NULL;
-
-	/* Ring buffer — default 2 MB, tunable via config.usage.http_buffersize (KB) */
-	int bufKB = eConfigManager::getConfigIntValue("config.usage.http_buffersize");
-	ringBufSize = (bufKB > 0 ? (size_t)bufKB : 2048) * 1024;
-	ringBuf = (unsigned char*)malloc(ringBufSize);
-	ringHead = 0;
-	ringTail = 0;
-	ringFill = 0;
-	ringEof = false;
-	threadAbort = false;
-	pthread_mutex_init(&ringMutex, NULL);
-	pthread_cond_init(&ringNotEmpty, NULL);
-	pthread_cond_init(&ringNotFull, NULL);
 }
 
 eHttpsStream::~eHttpsStream()
@@ -53,7 +38,10 @@ eHttpsStream::~eHttpsStream()
 	abort_badly();
 	kill();
 	free(tmpBuf);
-	free(ringBuf);
+	if (!isStreamRelay)
+	{
+		free(ringBuf);
+	}
 	close();
 	pthread_mutex_destroy(&ringMutex);
 	pthread_cond_destroy(&ringNotEmpty);
@@ -423,7 +411,24 @@ void eHttpsStream::detectStreamRelay(const std::string &url)
 	                 url.find("127.0.0.1:") != std::string::npos ||
 	                 url.find("localhost:") != std::string::npos);
 	if (isStreamRelay)
-		eDebug("[eHttpsStream] Stream Relay detected - ring buffer disabled");
+	{
+		eDebug("[eHttpStream] Stream Relay detected - ring buffer disabled");
+	}
+	else:
+	{
+		/* Ring buffer — default 2 MB, tunable via config.usage.http_buffersize (KB) */
+		int bufKB = eConfigManager::getConfigIntValue("config.usage.http_buffersize");
+		ringBufSize = (bufKB > 0 ? (size_t)bufKB : 2048) * 1024;
+		ringBuf = (unsigned char*)malloc(ringBufSize);
+		ringHead = 0;
+		ringTail = 0;
+		ringFill = 0;
+		ringEof = false;
+		threadAbort = false;
+		pthread_mutex_init(&ringMutex, NULL);
+		pthread_cond_init(&ringNotEmpty, NULL);
+		pthread_cond_init(&ringNotFull, NULL);
+	}
 }
 
 /* sslRead — reads raw bytes via SSL, transparently handling chunked transfer
