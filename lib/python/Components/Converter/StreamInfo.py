@@ -39,7 +39,9 @@ class StreamInfo(Converter):
 		playref = NavigationInstance.instance.getCurrentlyPlayingServiceReference()
 		if playref:
 			refstr = playref.toString()
-			if '0.0.0.0' in refstr or '127.0.0.1' in refstr or 'localhost' in refstr:
+			if '9999' in refstr:
+				return 'Abertis'
+			elif '0.0.0.0' in refstr or '127.0.0.1' in refstr or 'localhost' in refstr:
 				return ''
 			elif '.mpd' in refstr:
 				return 'DRM'

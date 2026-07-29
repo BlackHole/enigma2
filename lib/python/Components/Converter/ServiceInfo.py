@@ -209,7 +209,7 @@ class ServiceInfo(Poll, Converter):
 			return info.getInfo(iServiceInformation.sIsSoftCSA) == 1
 		elif self.type == self.IS_STREAM_RELAY and not isRef:
 			refstr = info.getInfoString(iServiceInformation.sServiceref)
-			if "127.0.0.1" in refstr or "localhost" in refstr and info.getInfo(iServiceInformation.sIsCrypted) == 1:
+			if "9999" in refstr or "17999" in refstr and "127.0.0.1" in refstr or "localhost" in refstr or "0.0.0.0" in refstr and info.getInfo(iServiceInformation.sIsCrypted) == 1:
 				return True
 		elif self.type == self.SUBSERVICES_AVAILABLE and not isRef:
 			return hasActiveSubservicesForCurrentChannel(service)
@@ -228,7 +228,7 @@ class ServiceInfo(Poll, Converter):
 			return hasattr(self.source, "editmode") and not not self.source.editmode
 		elif self.type == self.IS_STREAM and not isRef:
 			refstr = info.getInfoString(iServiceInformation.sServiceref)
-			if "%3a//" in refstr.lower() and "127.0.0.1" not in refstr and "localhost" not in refstr:
+			if "4097" in refstr or "5001" in refstr or "5002" in refstr or "9999" in refstr:
 				return service.streamed() is not None
 			return False
 		elif self.isVideoService(info, service):
@@ -259,11 +259,14 @@ class ServiceInfo(Poll, Converter):
 			elif self.type == self.IS_SDR and not isRef:
 				return info.getInfo(iServiceInformation.sGamma) == 0
 			elif self.type == self.IS_HDR and not isRef:
-				return info.getInfo(iServiceInformation.sGamma) == 1
+				hdr = info.getInfo(iServiceInformation.sHDRType)
+				return hdr == 3 if hdr > 0 else info.getInfo(iServiceInformation.sGamma) == 1
 			elif self.type == self.IS_HDR10 and not isRef:
-				return info.getInfo(iServiceInformation.sGamma) == 2
+				hdr = info.getInfo(iServiceInformation.sHDRType)
+				return hdr == 1 if hdr > 0 else info.getInfo(iServiceInformation.sGamma) == 2
 			elif self.type == self.IS_HLG and not isRef:
-				return info.getInfo(iServiceInformation.sGamma) == 3
+				hdr = info.getInfo(iServiceInformation.sHDRType)
+				return hdr == 2 if hdr > 0 else info.getInfo(iServiceInformation.sGamma) == 3
 			elif self.type == self.IS_VIDEO_MPEG2 and not isRef:
 				return info.getInfo(iServiceInformation.sVideoType) == 0
 			elif self.type == self.IS_VIDEO_AVC and not isRef:

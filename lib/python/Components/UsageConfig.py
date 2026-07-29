@@ -50,17 +50,17 @@ def InitUsageConfig():
 		refreshServiceList()
 	config.usage.alternative_number_mode.addNotifier(alternativeNumberModeChange)
 
-	config.usage.servicelist_twolines = ConfigSelection(default="0", choices=[("0", _("No")), ("1", _("two lines")), ("2", _("two lines+next event"))])
+	config.usage.servicelist_twolines = ConfigSelection(default="0", choices=[("0", _("No")), ("1", _("Two Lines")), ("2", _("Two Lines + Next Event"))])
 	config.usage.servicelist_twolines.addNotifier(refreshServiceList, initial_call=False, immediate_feedback=False)
 
 	config.usage.hide_number_markers = ConfigYesNo(default=True)
 	config.usage.hide_number_markers.addNotifier(refreshServiceList, initial_call=False, immediate_feedback=False)
 
-	config.usage.servicetype_icon_mode = ConfigSelection(default="1", choices=[("0", _("None")), ("1", _("Left from servicename")), ("2", _("Right from servicename"))])
+	config.usage.servicetype_icon_mode = ConfigSelection(default="1", choices=[("0", _("None")), ("1", _("Left from Servicename")), ("2", _("Right from Servicename"))])
 	config.usage.servicetype_icon_mode.addNotifier(refreshServiceList, initial_call=False, immediate_feedback=False)
-	config.usage.crypto_icon_mode = ConfigSelection(default="1", choices=[("0", _("None")), ("1", _("Left from servicename")), ("2", _("Right from servicename"))])
+	config.usage.crypto_icon_mode = ConfigSelection(default="1", choices=[("0", _("None")), ("1", _("Left from Servicename")), ("2", _("Right from Servicename"))])
 	config.usage.crypto_icon_mode.addNotifier(refreshServiceList, initial_call=False, immediate_feedback=False)
-	config.usage.record_indicator_mode = ConfigSelection(default="3", choices=[("0", _("None")), ("1", _("Left from servicename")), ("2", _("Right from servicename")), ("3", _("Red colored"))])
+	config.usage.record_indicator_mode = ConfigSelection(default="3", choices=[("0", _("None")), ("1", _("Left from Servicename")), ("2", _("Right from Servicename")), ("3", _("Red Colored"))])
 	config.usage.record_indicator_mode.addNotifier(refreshServiceList, initial_call=False, immediate_feedback=False)
 
 	choicelist = [("-1", _("Disable"))]
@@ -73,9 +73,9 @@ def InitUsageConfig():
 	config.usage.service_icon_enable.addNotifier(refreshServiceList, initial_call=False, immediate_feedback=False)
 	config.usage.servicelist_cursor_behavior = ConfigSelection(default="keep", choices=[
 		("standard", _("Standard")),
-		("keep", _("Keep service")),
-		("reverseB", _("Reverse bouquet buttons")),
-		("keep reverseB", _("Keep service") + " + " + _("Reverse bouquet buttons"))])
+		("keep", _("Keep Service")),
+		("reverseB", _("Reverse Bouquet Buttons")),
+		("keep reverseB", _("Keep service") + " + " + _("Reverse Bouquet Buttons"))])
 
 	config.usage.multiepg_ask_bouquet = ConfigYesNo(default=False)
 
@@ -159,7 +159,7 @@ def InitUsageConfig():
 		("standard", _("Standard")), ("swap", _("Swap PiP and main picture")),
 		("swapstop", _("Move PiP to main picture")), ("stop", _("Stop PiP"))])
 	config.usage.pip_hideOnExit = ConfigSelection(default="no", choices=[
-		("no", _("No")), ("popup", _("With popup")), ("without popup", _("Without popup"))])
+		("no", _("No")), ("popup", _("With Popup")), ("without popup", _("Without Popup"))])
 	choicelist = [("-1", _("Disabled")), ("0", _("No timeout"))]
 	for i in [60, 300, 600, 900, 1800, 2700, 3600]:
 		m = i // 60
@@ -236,7 +236,7 @@ def InitUsageConfig():
 	config.usage.next_movie_msg = ConfigYesNo(default=True)
 	config.usage.last_movie_played = ConfigText()
 	config.usage.leave_movieplayer_onExit = ConfigSelection(default="no", choices=[
-		("no", _("No")), ("popup", _("With popup")), ("without popup", _("Without popup")), ("stop", _("Behave like stop-button"))])
+		("no", _("No")), ("popup", _("With Popup")), ("without popup", _("Without Popup")), ("stop", _("Behave like Stop Button"))])
 
 	config.usage.setup_level = ConfigSelection(default="expert", choices=[
 		("simple", _("Simple")),
@@ -317,19 +317,22 @@ def InitUsageConfig():
 		("0", _("InfoBar")),
 		("1", _("Channel List"))])
 	config.usage.channelbutton_mode = ConfigSelection(default="0", choices=[
-		("0", _("Just change channels")),
+		("0", _("Just Change Channels")),
 		("1", _("Channel List")),
 		("2", _("Bouquet List")),
-		("3", _("Just change Bouquet"))])
+		("3", _("Just Change Bouquet"))])
+	config.usage.leftrightbutton_mode = ConfigSelection(default="0", choices=[
+		("0", _("Just Change Channels")),
+		("1", _("Volume Control"))])
 	config.usage.updownbutton_mode = ConfigSelection(default="1", choices=[
-		("0", _("Just change channels")),
+		("0", _("Just Change Channels")),
 		("1", _("Channel List"))])
 	config.usage.show_bouquetalways = ConfigYesNo(default=False)
 	config.usage.show_event_progress_in_servicelist = ConfigSelection(default='barleft', choices=[
-		('barleft', _("Progress bar left")),
-		('barright', _("Progress bar right")),
-		('percleft', _("Percentage left")),
-		('percright', _("Percentage right")),
+		('barleft', _("Progress Bar Left")),
+		('barright', _("Progress Bar Right")),
+		('percleft', _("Percentage Left")),
+		('percright', _("Percentage Right")),
 		('no', _("No"))])
 	config.usage.show_channel_numbers_in_servicelist = ConfigYesNo(default=True)
 	config.usage.show_channel_jump_in_servicelist = ConfigSelection(default="alpha", choices=[
@@ -421,7 +424,7 @@ def InitUsageConfig():
 
 	config.usage.hide_zap_errors = ConfigYesNo(default=True)
 	config.usage.hide_ci_messages = ConfigYesNo(default=False)
-	config.usage.show_cryptoinfo = ConfigSelection([("0", _("Off")), ("1", _("One line")), ("2", _("One line Alt")), ("3", _("Two lines")), ("4", _("Two lines Alt"))], "3")
+	config.usage.show_cryptoinfo = ConfigSelection([("0", _("Off")), ("1", _("One Line")), ("2", _("One Line Alt")), ("3", _("Two Lines")), ("4", _("Two Lines Alt"))], "3")
 	config.usage.show_eit_nownext = ConfigYesNo(default=True)
 	config.usage.show_vcr_scart = ConfigYesNo(default=False)
 	config.usage.pic_resolution = ConfigSelection(default=None, choices=[(None, _("Same resolution as skin")), ("(720, 576)", "720x576"), ("(1280, 720)", "1280x720"), ("(1920, 1080)", "1920x1080")])
@@ -743,10 +746,10 @@ def InitUsageConfig():
 	config.usage.power.wake_up_to_standby = ConfigYesNo()
 	config.usage.power.was_controlled_shutdown = ConfigBoolean(default=True)
 	config.usage.power.uncontrolled_shutdown_action = ConfigSelection(default="last", choices=[
-		("normal", _("Boot normally")),
-		("standby", _("Go to standby")),
-		("deep", _("Go to deep standby")),
-		("last", _("Go to last known state"))
+		("normal", _("Boot Normally")),
+		("standby", _("Go to Standby")),
+		("deep", _("Go to Deep Standby")),
+		("last", _("Go to Last Known State"))
 	])
 	config.usage.power.last_known_state = ConfigSelection(default="normal", choices=[
 		"normal",
@@ -796,7 +799,7 @@ def InitUsageConfig():
 
 	config.epg.joinAbbreviatedEventNames = ConfigYesNo(default=True)
 	config.epg.eventNamePrefixes = ConfigText(default="")
-	config.epg.eventNamePrefixMode = ConfigSelection(choices=[(0, _("Off")), (1, _("Remove")), (2, _("Move to description"))])
+	config.epg.eventNamePrefixMode = ConfigSelection(choices=[(0, _("Off")), (1, _("Remove")), (2, _("Move to Description"))])
 
 	def wdhm(number):
 		units = ((_("week"), _("day"), _("hour"), _("minute")), (_("weeks"), _("days"), _("hours"), _("minutes")), (7 * 24 * 60, 24 * 60, 60, 1))
@@ -915,7 +918,7 @@ def InitUsageConfig():
 	config.timeshift.stream_warning = ConfigYesNo(default=True)
 
 	config.seek = ConfigSubsection()
-	config.seek.baractivation = ConfigSelection([("leftright", _("Long Left/Right")), ("ffrw", _("Long << / >>"))], "leftright")
+	config.seek.baractivation = ConfigSelection([("leftright", _("Long Left / Right")), ("ffrw", _("Long << / >>"))], "leftright")
 	config.seek.sensibility = ConfigSelectionNumber(min=1, max=10, stepwidth=1, default=10, wraparound=True)
 	config.seek.selfdefined_13 = ConfigSelectionNumber(min=1, max=120, stepwidth=1, default=15, wraparound=True)
 	config.seek.selfdefined_46 = ConfigSelectionNumber(min=1, max=240, stepwidth=1, default=60, wraparound=True)
@@ -932,8 +935,8 @@ def InitUsageConfig():
 
 	config.seek.on_pause = ConfigSelection(default="play", choices=[
 		("play", _("Play")),
-		("step", _("Single step (GOP)")),
-		("last", _("Last speed"))])
+		("step", _("Single Step (GOP)")),
+		("last", _("Last Speed"))])
 
 	config.crash = ConfigSubsection()
 	config.crash.enabledebug = ConfigYesNo(default=False)
@@ -1017,7 +1020,7 @@ def InitUsageConfig():
 		config.misc.zapmode = ConfigSelection(default="mute", choices=[
 			("mute", _("Black screen")), ("hold", _("Hold screen")), ("mutetilllock", _("Black screen till locked")), ("holdtilllock", _("Hold till locked"))])
 		config.misc.zapmode.addNotifier(setZapmode, immediate_feedback=False)
-	config.usage.historymode = ConfigSelection(default="1", choices=[("0", _("Just zap")), ("1", _("Show menu"))])
+	config.usage.historymode = ConfigSelection(default="1", choices=[("0", _("Just Zap")), ("1", _("Show Menu"))])
 
 	config.subtitles = ConfigSubsection()
 	config.subtitles.ttx_subtitle_colors = ConfigSelection(default="1", choices=[
@@ -1186,10 +1189,10 @@ def InitUsageConfig():
 	config.obhsettings.Subservice = ConfigYesNo(default=False)
 	config.obhsettings.ColouredButtons = ConfigYesNo(default=True)
 	config.obhsettings.InfoBarEpg_mode = ConfigSelection(default="0", choices=[
-		("0", _("as plugin in extended bar")),
-		("1", _("with long OK press")),
-		("2", _("with exit button")),
-		("3", _("with left/right buttons"))])
+		("0", _("As Plugin in Extended Bar")),
+		("1", _("With Long OK Press")),
+		("2", _("With Exit Button")),
+		("3", _("With Left / Right Buttons"))])
 
 	softcams = os.listdir('/usr/camscript/')
 	config.oscaminfo = ConfigSubsection()
@@ -1207,6 +1210,7 @@ def InitUsageConfig():
 		("", _("Don't restart")),
 		("s", _("Restart softcam"))])
 	config.misc.softcsa = ConfigSubsection()
+	config.misc.softcsa.enabled = ConfigYesNo(default=True)
 	config.misc.softcsa.decoderRelease = ConfigSelection(default=0, choices=[
 			(0, _("Quick")),
 			(1, _("Normal")),

@@ -15,6 +15,9 @@
 #include <lib/service/servicemp3.h>
 #include <lib/service/servicemp3record.h>
 #include <lib/service/service.h>
+#ifdef HAS_SOFTWARE_HDR_DETECTION
+#include <lib/service/hevc_hdr.h>
+#endif
 #include <lib/gdi/gpixmap.h>
 #include <lib/dvb/subtitle.h>
 
@@ -90,6 +93,7 @@ eServiceFactoryMP3::eServiceFactoryMP3()
 	if (sc)
 	{
 		std::list<std::string> extensions;
+		extensions.push_back("dtshd");
 		extensions.push_back("dts");
 		extensions.push_back("mp3");
 		extensions.push_back("wav");
@@ -101,8 +105,10 @@ eServiceFactoryMP3::eServiceFactoryMP3()
 		extensions.push_back("mp2");
 		extensions.push_back("m2a");
 		extensions.push_back("wma");
+		extensions.push_back("eac3");
 		extensions.push_back("ac3");
 		extensions.push_back("mka");
+		extensions.push_back("aache");
 		extensions.push_back("aac");
 		extensions.push_back("ape");
 		extensions.push_back("alac");
@@ -551,9 +557,19 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	CONNECT(m_pump.recv_msg, eServiceMP3::gstPoll);
 	CONNECT(m_nownext_timer->timeout, eServiceMP3::updateEpgCacheNowNext);
 #ifdef PASSTHROUGH_FIX
-	CONNECT(m_passthrough_fix_timer->timeout, eServiceMP3::forcePassthrough);
+	CONNECT(m_passthrough_fix_timer->timeout, eServiceMP3::forceAudioReset);
 #endif
+
 	m_aspect = m_width = m_height = m_framerate = m_progressive = m_gamma = -1;
+	m_hdr_type = 0;
+#ifdef HAS_SOFTWARE_HDR_DETECTION
+	m_hdr_probe_id = 0;
+	m_hdr_probe_pad = NULL;
+	g_atomic_int_set(&m_hdr_probe_active, 0);
+	m_hdr_probe_last_classify = 0;
+	m_hdr_probe_first_sps_at = 0;
+	g_mutex_init(&m_hdr_probe_mutex);
+#endif
 
 	m_state = stIdle;
 	m_coverart = false;
@@ -562,6 +578,7 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	const char *filename;
 	std::string filename_str;
 	size_t pos = m_ref.path.find('#');
+	size_t pos_q = m_ref.path.find('?');
 	if (pos != std::string::npos && (m_ref.path.compare(0, 4, "http") == 0 || m_ref.path.compare(0, 4, "rtsp") == 0))
 	{
 		filename_str = m_ref.path.substr(0, pos);
@@ -580,11 +597,27 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 		}
 	}
 	else
+	{
+		filename_str = m_ref.path;
 		filename = m_ref.path.c_str();
+	}
 
-	const char *ext = strrchr(filename, '.');
+	std::string realFilename_str;
+	const char *realFilename;
+
+	if (pos_q != std::string::npos)
+	{
+		realFilename_str = filename_str.substr(0, pos_q);
+		realFilename = realFilename_str.c_str();
+	}
+	else
+		realFilename = filename_str.c_str();
+
+	const char *ext = strrchr(realFilename, '.');
 	if (!ext)
-		ext = filename + strlen(filename);
+		ext = realFilename + strlen(realFilename);
+
+	eDebug("[ServiceMP3] ext = %s", ext);
 
 	m_sourceinfo.is_video = FALSE;
 	m_sourceinfo.audiotype = atUnknown;
@@ -628,11 +661,6 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 		m_sourceinfo.containertype = ctWEBM;
 		m_sourceinfo.is_video = TRUE;
 	}
-	else if (strcasecmp(ext, ".m4a") == 0 || strcasecmp(ext, ".alac") == 0)
-	{
-		m_sourceinfo.containertype = ctMP4;
-		m_sourceinfo.audiotype = atAAC;
-	}
 	else if ( strcasecmp(ext, ".dra") == 0 )
 	{
 		m_sourceinfo.containertype = ctDRA;
@@ -641,7 +669,7 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	else if (strcasecmp(ext, ".m3u8") == 0)
 		m_sourceinfo.is_hls = TRUE;
 	else if (strcasecmp(ext, ".mp3") == 0)
-	{	
+	{
 		m_sourceinfo.audiotype = atMP3;
 		m_sourceinfo.is_audio = TRUE;
 	}
@@ -653,6 +681,11 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	else if (strcasecmp(ext, ".wav") == 0 || strcasecmp(ext, ".wave") == 0 || strcasecmp(ext, ".wv") == 0)
 	{
 		m_sourceinfo.audiotype = atPCM;
+		m_sourceinfo.is_audio = TRUE;
+	}
+	else if (strcasecmp(ext, ".dtshd") == 0 || strcasecmp(ext, ".dts-hd") == 0)
+	{
+		m_sourceinfo.audiotype = atDTSHD;
 		m_sourceinfo.is_audio = TRUE;
 	}
 	else if (strcasecmp(ext, ".dts") == 0)
@@ -668,6 +701,16 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	else if (strcasecmp(ext, ".ac3") == 0)
 	{
 		m_sourceinfo.audiotype = atAC3;
+		m_sourceinfo.is_audio = TRUE;
+	}
+	else if (strcasecmp(ext, ".aac") == 0 || strcasecmp(ext, ".adts") == 0 || strcasecmp(ext, ".aac-lc") == 0 || strcasecmp(ext, ".aaclc") == 0 || strcasecmp(ext, ".mp4a") == 0 || strcasecmp(ext, ".m4a") == 0 || strcasecmp(ext, ".mp4") == 0 || strcasecmp(ext, ".3gp") == 0)
+	{
+		m_sourceinfo.audiotype = atAAC;
+		m_sourceinfo.is_audio = TRUE;
+	}
+	else if (strcasecmp(ext, ".aache") == 0 || strcasecmp(ext, ".heaac") == 0 || strcasecmp(ext, ".he-aac") == 0 || strcasecmp(ext, ".aac-he") == 0 || strcasecmp(ext, ".adts") == 0 ||  strcasecmp(ext, ".mp4a") == 0 || strcasecmp(ext, ".m4a") == 0 || strcasecmp(ext, ".mp4") == 0 || strcasecmp(ext, ".3gp") == 0 || strcasecmp(ext, ".alac") == 0)
+	{
+		m_sourceinfo.audiotype = atAACHE;
 		m_sourceinfo.is_audio = TRUE;
 	}
 	else if (strcasecmp(ext, ".cda") == 0)
@@ -794,20 +837,6 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 
 		if (suburi != NULL)
 			g_object_set (G_OBJECT (m_gst_playbin), "suburi", suburi, NULL);
-		else
-		{
-			char srt_filename[ext - filename + 5];
-			strncpy(srt_filename,filename, ext - filename);
-			srt_filename[ext - filename] = '\0';
-			strcat(srt_filename, ".srt");
-			if (::access(srt_filename, R_OK) >= 0)
-			{
-				gchar *luri = g_filename_to_uri(srt_filename, NULL, NULL);
-				eDebug("[eServiceMP3] subtitle uri: %s", luri);
-				g_object_set (m_gst_playbin, "suburi", luri, NULL);
-				g_free(luri);
-			}
-		}
 	} else
 	{
 		m_event((iPlayableService*)this, evUser+12);
@@ -872,10 +901,25 @@ eServiceMP3::~eServiceMP3()
 }
 
 #ifdef PASSTHROUGH_FIX
-void eServiceMP3::forcePassthrough()
+void eServiceMP3::forceAudioReset()
 {
-	eDebug("[eServiceMP3] Setting 'passthrough' to force correct operation");
-	CFile::writeStr("/proc/stb/audio/ac3", "passthrough");
+	if (!eConfigManager::getConfigBoolValue("config.av.passthrough_fix", false))
+		return;
+	// Toggle Bluetooth audio off->on->off to force audio driver reinitialization
+	std::string btaudio = CFile::read("/proc/stb/audio/btaudio");
+	if (!btaudio.empty() && btaudio.find("off") != std::string::npos)
+	{
+		eDebug("[eDVBSoftDecoder] Force audio reset: toggling btaudio on and back off");
+		CFile::writeStr("/proc/stb/audio/btaudio", "on");
+		CFile::writeStr("/proc/stb/audio/btaudio", "off");
+	}
+
+	if (btaudio.empty())
+	{
+		int currAudioIndex = getCurrentTrack();
+		selectAudioStream(currAudioIndex, true);
+	}
+
 	m_clear_buffers = true;
 	clearBuffers();
 }
@@ -988,7 +1032,7 @@ RESULT eServiceMP3::start()
 		}
 	}
 
-	if (m_ref.path.find("://") == std::string::npos)
+	if (m_ref && m_ref.path.find("://") == std::string::npos)
 	{
 		/* read event from .eit file */
 		size_t pos;
@@ -1010,9 +1054,149 @@ RESULT eServiceMP3::start()
 	return 0;
 }
 
+namespace {
+
+const guint STOP_WATCHDOG_TIMEOUT_SECONDS = 10;
+
+/* Shared between stopWorker() and stopWatchdog() only - never touches
+ * eServiceMP3/"this", same reasoning as not passing "this" to stopWorker
+ * itself: this teardown can outlive the object it came from. refcount starts
+ * at 2 (one per thread below); whichever of the two finishes second frees it,
+ * so it's torn down properly regardless of which one happens to win the race
+ * for the normal (fast) case. */
+struct StopWatchdog
+{
+	gint done;      // atomic bool, set by stopWorker() once GST_STATE_NULL actually returns
+	gint refcount;  // atomic
+};
+
+void stopWatchdogRelease(StopWatchdog *watchdog)
+{
+	if (g_atomic_int_dec_and_test(&watchdog->refcount))
+		delete watchdog;
+}
+
+struct StopWorkerArgs
+{
+	GstElement *playbin;
+	StopWatchdog *watchdog;
+};
+
+/* gst_element_set_state(..., GST_STATE_NULL) is the call that can still block
+ * this (main) thread for seconds: unlike other transitions it is defined to
+ * not return until the element has fully stopped, and some vendor hardware
+ * sinks on this class of STB block synchronously inside their change_state()
+ * vfunc instead of returning ASYNC, especially for H.265. Doing it here on a
+ * worker thread instead just moves that wait off the main thread; nothing
+ * else needs to be touched, since stop() itself already takes just a raw
+ * ref (not "this"), and every eServiceMP3 member accessed after this call
+ * in stop() (stopHDRProbe(), saveCuesheet()) is independently safe to run
+ * before the pipeline has actually reached NULL - see the comments there. */
+gpointer stopWorker(gpointer data)
+{
+	StopWorkerArgs *args = static_cast<StopWorkerArgs*>(data);
+	GstElement *playbin = args->playbin;
+	StopWatchdog *watchdog = args->watchdog;
+	delete args;
+
+	GstStateChangeReturn ret = gst_element_set_state(playbin, GST_STATE_NULL);
+	if (ret != GST_STATE_CHANGE_SUCCESS)
+		eDebug("[eServiceMP3] stop GST_STATE_NULL failure");
+	gst_object_unref(playbin);
+
+	g_atomic_int_set(&watchdog->done, 1);
+	stopWatchdogRelease(watchdog);
+	return NULL;
+}
+
+/* Detection only, not recovery - there is no safe way to force-abort a
+ * thread stuck inside gst_element_set_state(), so this can't do anything
+ * about a genuinely wedged teardown beyond making it visible in the log
+ * instead of silently leaking a thread + pipeline forever. Runs as its own
+ * thread rather than an eTimer specifically because it has to outlive "this"
+ * (the eServiceMP3 destructor calls stop() and then immediately proceeds to
+ * destroy the object) - a member eTimer would be destroyed right along with
+ * it and never get a chance to fire for exactly the case that matters most. */
+gpointer stopWatchdog(gpointer data)
+{
+	StopWatchdog *watchdog = static_cast<StopWatchdog*>(data);
+	g_usleep(STOP_WATCHDOG_TIMEOUT_SECONDS * G_USEC_PER_SEC);
+	if (!g_atomic_int_get(&watchdog->done))
+		eDebug("[eServiceMP3] stop(): GST_STATE_NULL still hasn't completed after %u seconds - hardware sink likely stuck", STOP_WATCHDOG_TIMEOUT_SECONDS);
+	stopWatchdogRelease(watchdog);
+	return NULL;
+}
+
+}  // namespace
+
+void eServiceMP3::disconnectAsyncSignalHandlers()
+{
+	if (!m_gst_playbin)
+		return;
+
+	/* playbinNotifySource()/handleElementAdded()/gstTextpadHasCAPS() were all
+	 * connected with "this" as user_data to react to the pipeline's dynamic
+	 * reconfiguration during normal playback. Now that stop() moves
+	 * GST_STATE_NULL off the main thread (see stopWorker()), the pipeline can
+	 * keep running - and keep emitting these signals - for a while after this
+	 * object itself has been destroyed, since the two are no longer
+	 * synchronized. A real crash from exactly this (gstTextpadHasCAPS firing
+	 * into an already-freed "this") is what prompted this function. None of
+	 * these signals' actions matter once we're stopping regardless, so
+	 * disconnect all of them synchronously here, before handing the actual
+	 * teardown off to the worker thread: g_signal_handlers_disconnect_by_func()
+	 * is fast and non-blocking (it doesn't wait for the pipeline to reach any
+	 * particular state), so this doesn't reintroduce the freeze stopWorker()
+	 * exists to avoid.
+	 *
+	 * handleElementAdded() reconnects itself on every decodebin/uridecodebin
+	 * element it discovers (see its own body) - there is no fixed, known set
+	 * of objects it ends up connected to, so walk the live pipeline and
+	 * disconnect it from every bin found, not just m_gst_playbin itself.
+	 * g_signal_handlers_disconnect_by_func() is a safe no-op on any object
+	 * that callback was never actually connected to. */
+	g_signal_handlers_disconnect_by_func(m_gst_playbin, (gpointer)playbinNotifySource, this);
+	g_signal_handlers_disconnect_by_func(m_gst_playbin, (gpointer)handleElementAdded, this);
+
+	GstIterator *eit = gst_bin_iterate_recurse(GST_BIN(m_gst_playbin));
+	GValue eitem = G_VALUE_INIT;
+	bool edone = false;
+	while (!edone)
+	{
+		switch (gst_iterator_next(eit, &eitem))
+		{
+			case GST_ITERATOR_OK:
+			{
+				GstElement *el = GST_ELEMENT(g_value_get_object(&eitem));
+				if (el && GST_IS_BIN(el))
+					g_signal_handlers_disconnect_by_func(el, (gpointer)handleElementAdded, this);
+				g_value_reset(&eitem);
+				break;
+			}
+			case GST_ITERATOR_RESYNC: gst_iterator_resync(eit); break;
+			default: edone = true; break;
+		}
+	}
+	g_value_unset(&eitem);
+	gst_iterator_free(eit);
+
+	gint n_text = 0;
+	g_object_get(m_gst_playbin, "n-text", &n_text, NULL);
+	for (gint i = 0; i < n_text; i++)
+	{
+		GstPad *pad = NULL;
+		g_signal_emit_by_name(m_gst_playbin, "get-text-pad", i, &pad);
+		if (pad)
+		{
+			g_signal_handlers_disconnect_by_func(pad, (gpointer)gstTextpadHasCAPS, this);
+			gst_object_unref(pad);
+		}
+	}
+}
+
 RESULT eServiceMP3::stop()
 {
-	if (!m_gst_playbin || m_state == stStopped)
+	if (!m_gst_playbin || m_state == stStopped || !m_ref)
 		return -1;
 
 	eDebug("[eServiceMP3] stop %s", m_ref.path.c_str());
@@ -1020,16 +1204,52 @@ RESULT eServiceMP3::stop()
 
 	GstStateChangeReturn ret;
 	GstState state, pending;
-	/* make sure that last state change was successfull */
-	ret = gst_element_get_state(m_gst_playbin, &state, &pending, 5 * GST_SECOND);
+	/* Non-blocking state query, for logging only. */
+	ret = gst_element_get_state(m_gst_playbin, &state, &pending, 0);
 	eDebug("[eServiceMP3] stop state:%s pending:%s ret:%s",
 		gst_element_state_get_name(state),
 		gst_element_state_get_name(pending),
 		gst_element_state_change_return_get_name(ret));
 
-	ret = gst_element_set_state(m_gst_playbin, GST_STATE_NULL);
-	if (ret != GST_STATE_CHANGE_SUCCESS)
-		eDebug("[eServiceMP3] stop GST_STATE_NULL failure");
+	disconnectAsyncSignalHandlers();
+
+	/* See stopWorker()'s comment: hand the actual (potentially blocking)
+	 * teardown off to a worker thread instead of doing it here, plus a
+	 * watchdog thread that just logs if it's taking unexpectedly long -
+	 * see stopWatchdog()'s comment for why that's a thread and not a timer. */
+	gst_object_ref(m_gst_playbin);
+	StopWatchdog *watchdog = new StopWatchdog{0, 2};
+	GThread *worker = g_thread_new("mp3stop", stopWorker, new StopWorkerArgs{m_gst_playbin, watchdog});
+	g_thread_unref(worker);
+	GThread *watchdogThread = g_thread_new("mp3stopwd", stopWatchdog, watchdog);
+	g_thread_unref(watchdogThread);
+
+#ifdef HAS_SOFTWARE_HDR_DETECTION
+	/* stopHDRProbe() itself deliberately never calls the blocking
+	 * gst_pad_remove_probe() - see its own comment - which is correct and
+	 * necessary for its OTHER call sites (startHDRProbe() restarting mid
+	 * playback, checkHDRProbe() finishing classification), where "this"
+	 * stays alive regardless of how long the probe takes to actually detach.
+	 * stop() is different: now that GST_STATE_NULL runs on a worker thread
+	 * (see stopWorker()), this object can be destroyed shortly after
+	 * returning from here, and hdrProbeCallback firing into an already-freed
+	 * "this" is exactly what caused a real crash (glibc robust-mutex
+	 * assertion / heap corruption). So only here, remove the probe for real
+	 * before doing anything else - gst_pad_remove_probe() blocks until any
+	 * in-flight invocation finishes (worst case one buffer copy, low
+	 * milliseconds - nowhere near the multi-second class of block
+	 * stopWorker() exists to avoid), which is the only way to *guarantee*
+	 * hdrProbeCallback can never fire again from here on. */
+	if (m_hdr_probe_pad && m_hdr_probe_id)
+	{
+		gst_pad_remove_probe(m_hdr_probe_pad, m_hdr_probe_id);
+		m_hdr_probe_id = 0;
+	}
+	/* Now safe to call as usual - the flag/trylock dance is redundant at this
+	 * point (nothing can be mid-callback anymore) but harmless, and this
+	 * still does the rest of the cleanup (timer, es/snap buffers, pad ref). */
+	stopHDRProbe();
+#endif
 
 	saveCuesheet();
 	m_nownext_timer->stop();
@@ -1315,7 +1535,7 @@ RESULT eServiceMP3::getPlayPosition(pts_t &pts)
 			}
 		}
 	}
-	
+
 	if (!got_decoder_time) {
 		/* Fallback: query playbin position directly. This is needed when dvb sinks
 		* exist but get-decoder-time returns invalid values (e.g. MP4 playback on
@@ -1348,6 +1568,436 @@ RESULT eServiceMP3::isCurrentlySeekable()
 
 	return ret;
 }
+
+#ifdef HAS_SOFTWARE_HDR_DETECTION
+static int caps_hdr_value(GstCaps *caps)
+{
+	/* -1 = no colorimetry field, 0 = SDR, 1 = HDR10, 2 = HLG, 3 = generic HDR */
+	if (!caps) return -1;
+	int res = -1;
+	guint n = gst_caps_get_size(caps);
+	for (guint i = 0; i < n; i++)
+	{
+		GstStructure *str = gst_caps_get_structure(caps, i);
+		if (!str) continue;
+		const gchar *col = gst_structure_get_string(str, "colorimetry");
+		if (col)
+		{
+			if (res < 0) res = 0;
+			if (g_strrstr(col, "bt2100-pq") || g_strrstr(col, "smpte2084")) return 1;
+			if (g_strrstr(col, "bt2100-hlg") || g_strrstr(col, "arib-std-b67")) return 2;
+			/* BT.2020 traditional gamma — plain HDR (driver gamma=1, TC=14/15) */
+			if (g_strrstr(col, "bt2020-10") || g_strrstr(col, "bt2020-12")) { if (res < 3) res = 3; }
+		}
+		if (gst_structure_has_field(str, "mastering-display-info") ||
+		    gst_structure_has_field(str, "content-light-level"))
+			if (res < 1) res = 1;
+	}
+	return res;
+}
+
+/* Extract parameter-set NAL units from the HEVCDecoderConfigurationRecord
+ * (hvcC, ISO 14496-15 §8.3.3) stored in GStreamer codec_data cap.
+ * For MP4/MKV files with stream-format=hvc1/hev1, the SPS (and VPS/PPS) live
+ * here rather than in the regular buffer stream, so the bitstream probe would
+ * never see the SPS — and therefore miss HLG whose only indicator is
+ * transfer_characteristics=18 in the SPS VUI. */
+static void preingest_hevc_codec_data(GstCaps *caps, std::vector<uint8_t> &out)
+{
+	if (!caps || gst_caps_get_size(caps) == 0) return;
+	GstStructure *str = gst_caps_get_structure(caps, 0);
+	if (!str) return;
+	const GValue *cdval = gst_structure_get_value(str, "codec_data");
+	if (!cdval) return;
+	GstBuffer *cdbuf = gst_value_get_buffer(cdval);
+	if (!cdbuf) return;
+	GstMapInfo map;
+	if (!gst_buffer_map(cdbuf, &map, GST_MAP_READ)) return;
+	const uint8_t *d = map.data;
+	gsize sz = map.size;
+	/* Fixed hvcC header is 22 bytes; byte 22 = numOfArrays */
+	static const uint8_t sc[4] = {0, 0, 0, 1};
+	if (sz > 22)
+	{
+		uint8_t numArrays = d[22];
+		gsize pos = 23;
+		for (uint8_t a = 0; a < numArrays && pos + 3 <= sz; a++)
+		{
+			pos++;  /* array_completeness(1) | reserved(1) | nal_unit_type(6) */
+			uint16_t numNalus = ((uint16_t)d[pos] << 8) | d[pos + 1];
+			pos += 2;
+			for (uint16_t n = 0; n < numNalus && pos + 2 <= sz; n++)
+			{
+				uint16_t naluLen = ((uint16_t)d[pos] << 8) | d[pos + 1];
+				pos += 2;
+				if (pos + naluLen > sz) break;
+				out.insert(out.end(), sc, sc + 4);
+				out.insert(out.end(), d + pos, d + pos + naluLen);
+				pos += naluLen;
+			}
+		}
+	}
+	gst_buffer_unmap(cdbuf, &map);
+}
+
+
+
+GstPadProbeReturn eServiceMP3::hdrProbeCallback(GstPad*, GstPadProbeInfo *info, gpointer user_data)
+{
+	eServiceMP3 *self = static_cast<eServiceMP3*>(user_data);
+	GstBuffer *buf = GST_PAD_PROBE_INFO_BUFFER(info);
+	if (!buf) return GST_PAD_PROBE_OK;
+
+	/* Atomic pre-check before any buffer mapping or mutex: stopHDRProbe()
+	 * sets m_hdr_probe_active to 0 via g_atomic_int_set() WITHOUT acquiring
+	 * the mutex, so this check is always safe and avoids the cost of
+	 * gst_buffer_map + mutex acquisition when we are already stopping. */
+	if (!g_atomic_int_get(&self->m_hdr_probe_active))
+		return GST_PAD_PROBE_REMOVE;
+
+	GstMapInfo map;
+	if (!gst_buffer_map(buf, &map, GST_MAP_READ))
+		return GST_PAD_PROBE_OK;  /* DMA/opaque buffer — skip silently */
+
+	g_mutex_lock(&self->m_hdr_probe_mutex);
+	if (!g_atomic_int_get(&self->m_hdr_probe_active))
+	{
+		/* Double-check under mutex in case stopHDRProbe() ran between the
+		 * atomic pre-check above and acquiring the mutex. */
+		g_mutex_unlock(&self->m_hdr_probe_mutex);
+		gst_buffer_unmap(buf, &map);
+		return GST_PAD_PROBE_REMOVE;
+	}
+	if (self->m_hdr_probe_es.size() < (8 * 1024 * 1024))
+	{
+		const uint8_t *d = map.data;
+		gsize sz = map.size;
+		/* Detect Annex-B (00 00 01 or 00 00 00 01 start codes) vs
+		 * length-prefixed hvc1/hev1 (4-byte big-endian NAL length).
+		 * Convert length-prefixed to Annex-B so HevcHDR::classify works
+		 * regardless of what stream-format the downstream sink negotiated. */
+		bool annexb = sz >= 3 && d[0] == 0 && d[1] == 0 &&
+		              (d[2] == 1 || (sz >= 4 && d[2] == 0 && d[3] == 1));
+		if (annexb)
+		{
+			self->m_hdr_probe_es.insert(self->m_hdr_probe_es.end(), d, d + sz);
+		}
+		else
+		{
+			/* Length-prefixed: convert each NAL unit to Annex-B */
+			static const uint8_t sc[4] = {0, 0, 0, 1};
+			gsize pos = 0;
+			while (pos + 4 <= sz)
+			{
+				uint32_t nlen = ((uint32_t)d[pos] << 24) | ((uint32_t)d[pos+1] << 16)
+				              | ((uint32_t)d[pos+2] << 8) | d[pos+3];
+				pos += 4;
+				if (nlen == 0 || pos + nlen > sz) break;
+				self->m_hdr_probe_es.insert(self->m_hdr_probe_es.end(), sc, sc + 4);
+				self->m_hdr_probe_es.insert(self->m_hdr_probe_es.end(), d + pos, d + pos + nlen);
+				pos += nlen;
+			}
+		}
+	}
+	g_mutex_unlock(&self->m_hdr_probe_mutex);
+
+	gst_buffer_unmap(buf, &map);
+	return GST_PAD_PROBE_OK;
+}
+
+void eServiceMP3::startHDRProbe()
+{
+	/* Guard against stale GStreamer bus messages delivered after stop() */
+	if (m_state != stRunning || !m_gst_playbin) return;
+	stopHDRProbe();
+
+	/* Find the first src pad in the pipeline that outputs video/x-h265.
+	 * Search by caps rather than by element name — STB pipelines often do not
+	 * include a standard h265parse element and use proprietary HEVC decoders.
+	 * Demuxer src pads are encountered first and always carry CPU-accessible
+	 * buffers (unlike hardware decoder sink/src pads which may be DMA-only). */
+	GstPad *hevc_pad = NULL;
+	GstIterator *eit = gst_bin_iterate_recurse(GST_BIN(m_gst_playbin));
+	GValue eitem = G_VALUE_INIT;
+	bool edone = false;
+	while (!edone)
+	{
+		switch (gst_iterator_next(eit, &eitem))
+		{
+			case GST_ITERATOR_OK:
+			{
+				GstElement *el = GST_ELEMENT(g_value_get_object(&eitem));
+				if (el)
+				{
+					GstIterator *pit = gst_element_iterate_src_pads(el);
+					GValue pitem = G_VALUE_INIT;
+					bool pdone = false;
+					while (!pdone)
+					{
+						switch (gst_iterator_next(pit, &pitem))
+						{
+							case GST_ITERATOR_OK:
+							{
+								GstPad *pad = GST_PAD(g_value_get_object(&pitem));
+								GstCaps *caps = gst_pad_get_current_caps(pad);
+								if (caps)
+								{
+									for (guint i = 0; i < gst_caps_get_size(caps) && !hevc_pad; i++)
+									{
+										const gchar *sname = gst_structure_get_name(
+											gst_caps_get_structure(caps, i));
+										if (sname && g_str_has_prefix(sname, "video/x-h265"))
+										{
+											hevc_pad = GST_PAD(gst_object_ref(pad));
+											pdone = edone = true;
+										}
+									}
+									gst_caps_unref(caps);
+								}
+								g_value_reset(&pitem);
+								break;
+							}
+							case GST_ITERATOR_RESYNC: gst_iterator_resync(pit); break;
+							default: pdone = true; break;
+						}
+					}
+					g_value_unset(&pitem);
+					gst_iterator_free(pit);
+				}
+				g_value_reset(&eitem);
+				break;
+			}
+			case GST_ITERATOR_RESYNC: gst_iterator_resync(eit); break;
+			default: edone = true; break;
+		}
+	}
+	g_value_unset(&eitem);
+	gst_iterator_free(eit);
+
+	if (!hevc_pad)
+	{
+		eDebug("[eServiceMP3] HDR probe: no HEVC src pad found in pipeline");
+		return;
+	}
+
+	/* Fast path: check if the HEVC pad caps already carry colorimetry.
+	 * updateHDRFromVideoPad() only checked the playbin video pad and static
+	 * "src" pads.  Demuxer dynamic pads (video_0 etc.) are found here first.
+	 * For MKV/MP4, the demuxer maps ColourTransferCharacteristics / the colr
+	 * box directly into pad-caps colorimetry — the same data ffprobe reads. */
+	{
+		GstCaps *caps = gst_pad_get_current_caps(hevc_pad);
+		if (caps)
+		{
+			int hdrFromCaps = caps_hdr_value(caps);
+			gst_caps_unref(caps);
+			if (hdrFromCaps > 0)
+			{
+				eDebug("[eServiceMP3] HDR probe: result %d from HEVC pad colorimetry", hdrFromCaps);
+				gst_object_unref(hevc_pad);
+				if (hdrFromCaps != m_hdr_type)
+				{
+					m_hdr_type = hdrFromCaps;
+					m_event((iPlayableService*)this, evUpdatedInfo);
+				}
+				return;
+			}
+		}
+	}
+
+	g_mutex_lock(&m_hdr_probe_mutex);
+	m_hdr_probe_es.clear();
+	m_hdr_probe_es.reserve(512 * 1024);
+	/* Pre-populate from hvcC codec_data so the SPS is visible to classify()
+	 * even for hvc1/hev1 streams where parameter sets are not in-band. */
+	{
+		GstCaps *caps = gst_pad_get_current_caps(hevc_pad);
+		if (caps) { preingest_hevc_codec_data(caps, m_hdr_probe_es); gst_caps_unref(caps); }
+	}
+	m_hdr_probe_last_classify = 0;
+	m_hdr_probe_first_sps_at = 0;
+	g_atomic_int_set(&m_hdr_probe_active, 1);
+	g_mutex_unlock(&m_hdr_probe_mutex);
+
+	m_hdr_probe_id = gst_pad_add_probe(hevc_pad, GST_PAD_PROBE_TYPE_BUFFER,
+	                                    hdrProbeCallback, this, NULL);
+	m_hdr_probe_pad = hevc_pad; /* takes ownership of ref */
+
+	m_hdr_probe_timer = eTimer::create(eApp);
+	CONNECT(m_hdr_probe_timer->timeout, eServiceMP3::checkHDRProbe);
+	m_hdr_probe_timer->start(200, false);
+	eDebug("[eServiceMP3] HDR probe: started on HEVC src pad");
+}
+
+void eServiceMP3::stopHDRProbe()
+{
+	if (m_hdr_probe_timer) { m_hdr_probe_timer->stop(); m_hdr_probe_timer = 0; }
+
+	/* Set the active flag atomically WITHOUT acquiring m_hdr_probe_mutex.
+	 * This is the key fix for the UI lockup on H.265 channel zapping:
+	 *  - gst_element_set_state(NULL) can return GST_STATE_CHANGE_ASYNC,
+	 *    meaning the streaming thread is still running hdrProbeCallback.
+	 *  - hdrProbeCallback holds m_hdr_probe_mutex while copying H.265 I-frame
+	 *    data (can be 500KB-2MB per frame), which could block the main thread
+	 *    for a significant time if we call g_mutex_lock() here.
+	 *  - By using g_atomic_int_set(), we set inactive instantly without
+	 *    contending the mutex.  The probe callback's atomic pre-check sees the
+	 *    flag and returns GST_PAD_PROBE_REMOVE without touching the mutex at all.
+	 * m_hdr_probe_es cleanup: try a non-blocking lock; if the probe is mid-copy
+	 * skip the clear — the data is harmless and freed with the object. */
+	g_atomic_int_set(&m_hdr_probe_active, 0);
+	if (g_mutex_trylock(&m_hdr_probe_mutex))
+	{
+		std::vector<uint8_t>().swap(m_hdr_probe_es);
+		g_mutex_unlock(&m_hdr_probe_mutex);
+	}
+	std::vector<uint8_t>().swap(m_hdr_probe_snap); /* main-thread only, no lock needed */
+
+	/* Release our pad ref; GStreamer holds its own ref until the probe is removed. */
+	m_hdr_probe_id = 0;
+	if (m_hdr_probe_pad) { gst_object_unref(m_hdr_probe_pad); m_hdr_probe_pad = NULL; }
+}
+
+void eServiceMP3::checkHDRProbe()
+{
+	/* Swap out new data under lock in O(1), then append to the main-thread
+	 * accumulator and classify entirely outside the lock.  This keeps the
+	 * mutex hold-time to a pointer swap rather than an O(N) copy that would
+	 * stall the streaming thread (hdrProbeCallback) for the copy duration. */
+	std::vector<uint8_t> batch;
+	g_mutex_lock(&m_hdr_probe_mutex);
+	batch.swap(m_hdr_probe_es);                    /* O(1) */
+	m_hdr_probe_es.reserve(64 * 1024);             /* pre-allocate for next batch */
+	g_mutex_unlock(&m_hdr_probe_mutex);
+
+	if (batch.empty()) return;
+
+	m_hdr_probe_snap.insert(m_hdr_probe_snap.end(), batch.begin(), batch.end());
+
+	/* Only re-classify every 64KB of new data */
+	if (m_hdr_probe_snap.size() - m_hdr_probe_last_classify < (64 * 1024) &&
+	    m_hdr_probe_snap.size() < (8 * 1024 * 1024))
+		return;
+	m_hdr_probe_last_classify = m_hdr_probe_snap.size();
+
+	bool sawSPS = false;
+	int result = HevcHDR::classify(m_hdr_probe_snap.data(), (int)m_hdr_probe_snap.size(), &sawSPS);
+
+	if (result == HevcHDR::HDR_HDR10 || result == HevcHDR::HDR_HLG || result == HevcHDR::HDR_GENERIC)
+	{
+		int newHdrType = (result == HevcHDR::HDR_HDR10) ? 1 :
+		                 (result == HevcHDR::HDR_HLG)   ? 2 : 3;
+		eDebug("[eServiceMP3] HDR probe: result %d from bitstream", newHdrType);
+		stopHDRProbe();
+		if (newHdrType != m_hdr_type)
+		{
+			m_hdr_type = newHdrType;
+			m_event((iPlayableService*)this, evUpdatedInfo);
+		}
+		return;
+	}
+
+	if (sawSPS)
+	{
+		if (!m_hdr_probe_first_sps_at) m_hdr_probe_first_sps_at = m_hdr_probe_snap.size();
+		if (m_hdr_probe_snap.size() - m_hdr_probe_first_sps_at >= (768 * 1024))
+		{
+			/* Read enough past first SPS without finding HDR -> SDR */
+			stopHDRProbe();
+			return;
+		}
+	}
+
+	if (m_hdr_probe_snap.size() >= (8 * 1024 * 1024))
+		stopHDRProbe();
+}
+
+/* -------------------------------------------------------------------------- */
+
+void eServiceMP3::updateHDRFromVideoPad()
+{
+	if (!m_gst_playbin || m_state != stRunning)
+		return;
+
+	int hdr = -1;
+
+	/* primary: playbin video pad (pre-sink, carries parsed caps with native video) */
+	GstPad *pad = 0;
+	g_signal_emit_by_name(m_gst_playbin, "get-video-pad", 0, &pad);
+	if (pad)
+	{
+		GstCaps *caps = gst_pad_get_current_caps(pad);
+		if (caps) { hdr = caps_hdr_value(caps); gst_caps_unref(caps); }
+		gst_object_unref(pad);
+	}
+
+	/* fallback: search pipeline for ANY src pad exposing colorimetry.
+	 * Demuxers (matroskademux, qtdemux) expose video on dynamic src pads
+	 * named "video_0" etc., NOT on a static pad named "src".  Iterating
+	 * all src pads (as startHDRProbe does) finds the pad that carries
+	 * ColourTransferCharacteristics / colr-box colorimetry from the container
+	 * header — the same data source that ffprobe reads. */
+	if (hdr < 0)
+	{
+		GstIterator *eit = gst_bin_iterate_recurse(GST_BIN(m_gst_playbin));
+		GValue eitem = G_VALUE_INIT;
+		bool edone = false;
+		while (!edone)
+		{
+			switch (gst_iterator_next(eit, &eitem))
+			{
+				case GST_ITERATOR_OK:
+				{
+					GstElement *el = GST_ELEMENT(g_value_get_object(&eitem));
+					if (el)
+					{
+						GstIterator *pit = gst_element_iterate_src_pads(el);
+						GValue pitem = G_VALUE_INIT;
+						bool pdone = false;
+						while (!pdone)
+						{
+							switch (gst_iterator_next(pit, &pitem))
+							{
+								case GST_ITERATOR_OK:
+								{
+									GstPad *sp = GST_PAD(g_value_get_object(&pitem));
+									GstCaps *c = gst_pad_get_current_caps(sp);
+									if (c) { int v = caps_hdr_value(c); gst_caps_unref(c);
+										if (v >= 0) { hdr = v; if (v > 0) pdone = edone = true; }
+									}
+									g_value_reset(&pitem);
+									break;
+								}
+								case GST_ITERATOR_RESYNC: gst_iterator_resync(pit); break;
+								default: pdone = true; break;
+							}
+						}
+						g_value_unset(&pitem);
+						gst_iterator_free(pit);
+					}
+					g_value_reset(&eitem);
+					break;
+				}
+				case GST_ITERATOR_RESYNC: gst_iterator_resync(eit); break;
+				default: edone = true; break;
+			}
+		}
+		g_value_unset(&eitem);
+		gst_iterator_free(eit);
+	}
+
+	eDebug("[eServiceMP3] HDR probe: result %d from video pad colorimetry", hdr);
+
+	/* Only update m_hdr_type when caps give a positive result.
+	 * Do NOT reset a previously probed HDR result just because
+	 * caps lack colorimetry (e.g. older STB GStreamer builds). */
+	if (hdr > 0 && hdr != m_hdr_type)
+	{
+		m_hdr_type = hdr;
+		m_event((iPlayableService*)this, evUpdatedInfo);
+	}
+}
+#endif /* HAS_SOFTWARE_HDR_DETECTION */
 
 RESULT eServiceMP3::info(ePtr<iServiceInformation>&i)
 {
@@ -1393,6 +2043,7 @@ int eServiceMP3::getInfo(int w)
 	case sFrameRate: return m_framerate;
 	case sProgressive: return m_progressive;
 	case sGamma: return m_gamma;
+	case sHDRType: return m_hdr_type;
 	case sAspect: return m_aspect;
 	case sTagTitle:
 	case sTagArtist:
@@ -1773,13 +2424,20 @@ void eServiceMP3::clearBuffers(bool force)
 {
 	if ((!m_initial_start || !m_clear_buffers) && !force) return;
 
+	/* Live streams cannot seek back; flushing would stall playback, so skip. */
+	if (m_is_live && !force)
+	{
+		eDebug ("[eServiceMP3] Clear Buffers skipped (live stream)");
+		return;
+	}
+
 	eDebug ("[eServiceMP3] Clear Buffers!");
 	bool validposition = false;
 	pts_t ppos = 0;
 	if (getPlayPosition(ppos) >= 0)
 	{
 		validposition = true;
-		ppos -= 90000;
+		ppos -= 9000; /* seek back ~100ms instead of 1s for faster audio switch */
 		if (ppos < 0)
 			ppos = 0;
 	}
@@ -1800,16 +2458,32 @@ void eServiceMP3::clearBuffers(bool force)
 
 int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 {
+	/* Validate index against our own track list to avoid relying solely on
+	 * an immediate g_object_get readback which can return a stale value when
+	 * GStreamer is in a transitional state. */
+	if (i < 0 || i >= (int)m_audioStreams.size())
+	{
+		eDebug ("[eServiceMP3] selectAudioStream: index %d out of range (n=%d)", i, (int)m_audioStreams.size());
+		return -1;
+	}
 	int current_audio, current_audio_orig;
 	g_object_get (G_OBJECT (m_gst_playbin), "current-audio", &current_audio_orig, NULL);
 	g_object_set (G_OBJECT (m_gst_playbin), "current-audio", i, NULL);
 	g_object_get (G_OBJECT (m_gst_playbin), "current-audio", &current_audio, NULL);
+	if (current_audio != i)
+	{
+		/* GStreamer may be in a transitional state and hasn't applied the
+		 * property yet. Since we validated the index ourselves, trust the set. */
+		eDebug ("[eServiceMP3] selectAudioStream: readback returned %d (expected %d), trusting range-validated set", current_audio, i);
+		current_audio = i;
+	}
 	if ( current_audio == i )
 	{
 		if (!skipAudioFix)
 		{
 			eDebug ("[eServiceMP3] switched to audio stream %i", current_audio);
 			m_currentAudioStream = i;
+			m_event((iPlayableService*)this, evUpdatedInfo);
 #ifdef PASSTHROUGH_FIX
 			GstPad* pad = 0;
 			g_signal_emit_by_name (m_gst_playbin, "get-audio-pad", i, &pad);
@@ -1827,11 +2501,8 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 						if (m_clear_buffers)
 						{
 							m_passthrough_fix_timer->stop();
-							m_clear_buffers = true;
-							clearBuffers();
-							m_passthrough_fix_timer->start(apidtype == atEAC3 && i > 0 && current_audio_orig > -1 ? 2000 : 100, true);
+							m_passthrough_fix_timer->start(apidtype == atEAC3 && i > 0 && current_audio_orig > -1 ? 2000 : 300, true);
 						}
-
 					}
 					else
 					{
@@ -2375,6 +3046,20 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 				m_send_ev_start = true;
 			}
 
+#ifdef HAS_SOFTWARE_HDR_DETECTION
+			updateHDRFromVideoPad();
+
+			/* Start HEVC bitstream probe early so we capture the very first
+			 * I-frame of the stream.  For byte-stream HLG content the SPS
+			 * (carrying transfer_characteristics=18) is in those first packets;
+			 * if we wait until eventSizeChanged the decoder has already consumed
+			 * the SPS and the next one may be many seconds away (next IDR).
+			 * For hvc1/hev1 files the SPS is in codec_data and is pre-ingested
+			 * by startHDRProbe regardless of timing. */
+			if (!m_hdr_probe_active)
+				startHDRProbe();
+#endif
+
 			if (m_seek_paused)
 			{
 				m_seek_paused = false;
@@ -2423,6 +3108,15 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 							gst_structure_get_int (msgstruct, "height", &m_height);
 							if (strstr(eventname, "Changed"))
 								m_event((iPlayableService*)this, evVideoSizeChanged);
+#ifdef HAS_SOFTWARE_HDR_DETECTION
+						updateHDRFromVideoPad();
+							/* If the early probe (ASYNC_DONE) already found an SPS,
+							 * leave it running — it has good data in flight.
+							 * If no SPS yet (HEVC pad wasn't ready at ASYNC_DONE,
+							 * or probe not started), restart now that caps are settled. */
+							if (!m_hdr_probe_active || m_hdr_probe_first_sps_at == 0)
+								startHDRProbe();
+#endif
 						}
 						else if (!strcmp(eventname, "eventFrameRateChanged") || !strcmp(eventname, "eventFrameRateAvail"))
 						{
@@ -2439,8 +3133,20 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 						else if (!strcmp(eventname, "eventGammaChanged"))
 						{
 							gst_structure_get_int (msgstruct, "gamma", &m_gamma);
-							if (strstr(eventname, "Changed"))
-								m_event((iPlayableService*)this, evVideoGammaChanged);
+							m_event((iPlayableService*)this, evVideoGammaChanged);
+							/* Derive m_hdr_type from the hardware decoder gamma.
+							 * gamma: 0=SDR 1=HDR(generic) 2=SMPTE ST2084/HDR10 3=HLG
+							 * This is more reliable than GStreamer caps colorimetry,
+							 * which many STB h265parse builds do not populate. */
+							int newHdrType = 0;
+							if (m_gamma == 2) newHdrType = 1;       /* HDR10 */
+							else if (m_gamma == 3) newHdrType = 2;  /* HLG */
+							else if (m_gamma == 1) newHdrType = 3;  /* plain HDR */
+							if (newHdrType != m_hdr_type)
+							{
+								m_hdr_type = newHdrType;
+								m_event((iPlayableService*)this, evUpdatedInfo);
+							}
 						}
 						else if (!strcmp(eventname, "redirect"))
 						{
@@ -2729,7 +3435,7 @@ audiotype_t eServiceMP3::gstCheckAudioPad(GstStructure* structure)
 			case 2:
 				return atAAC;
 			case 4:
-				return atAAC;
+				return atAACHE;
 			default:
 				return atUnknown;
 		}
@@ -2741,6 +3447,12 @@ audiotype_t eServiceMP3::gstCheckAudioPad(GstStructure* structure)
 		return atEAC3;
 	else if ( gst_structure_has_name (structure, "audio/x-dts") || gst_structure_has_name (structure, "audio/dts") )
 		return atDTS;
+	else if ( gst_structure_has_name (structure, "audio/x-dtshd") || gst_structure_has_name (structure, "audio/dtshd") )
+		return atDTSHD;
+	else if ( gst_structure_has_name (structure, "audio/x-aache") || gst_structure_has_name (structure, "audio/aache") || gst_structure_has_name (structure, "audio/x-heaac") || gst_structure_has_name (structure, "audio/heaac") )
+		return atAACHE;
+	else if ( gst_structure_has_name (structure, "audio/x-aac") || gst_structure_has_name (structure, "audio/aac") )
+		return atAAC;
 
 	return atPCM;
 }
@@ -2940,7 +3652,7 @@ void eServiceMP3::pushDVBSubtitles()
 		}
 		else
 		{
-			eDebug("[eServiceMP3] Delay early subtitle by %.03fs. Page stack size %zu", diff / 1000.0f, m_dvb_subtitle_pages.size());
+			eDebug("[eServiceMP3] Delay early subtitle by %.03fs. Page stack size %d", diff / 1000.0f, m_dvb_subtitle_pages.size());
 			m_dvb_subtitle_sync_timer->start(diff, 1);
 			break;
 		}

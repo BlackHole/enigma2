@@ -444,8 +444,7 @@ eDVBRecordFileThread::eDVBRecordFileThread(int packetsize, int bufferCount, int 
 	 m_discard_on_timeout(false),
 	 m_aio(bufferCount),
 	 m_current_buffer(m_aio.begin()),
-	 m_buffer_use_histogram(bufferCount+1, 0),
-	 m_aio_short_write_count(0)
+	 m_buffer_use_histogram(bufferCount+1, 0)
 {
 	if (m_buffer == MAP_FAILED)
 		eFatal("[eDVBRecordFileThread] Failed to allocate filepush buffer, contact MiLo\n");
@@ -494,7 +493,7 @@ int eDVBRecordFileThread::getFirstPTS(pts_t &pts)
 
 int eDVBRecordFileThread::AsyncIO::wait(const volatile int* stop_flag, int* short_write_count)
 {
-	if (aio.aio_buf == NULL) // No request outstanding
+	if (aio.aio_buf == nullptr) // No request outstanding
 		return 0;
 
 	// Limit consecutive timeouts to prevent infinite blocking
@@ -648,11 +647,11 @@ int eDVBRecordFileThread::AsyncIO::start(int fd, off_t offset, size_t nbytes, vo
 // AIO write mode detection: locked after verification for entire session.
 // -1 = unknown (probing), 0 = not supported (sync), 1 = supported (async)
 static int s_aio_state = -1;
-static int s_aio_verify_count = 0;
 static const int AIO_VERIFY_THRESHOLD = 3;
 
 int eDVBRecordFileThread::asyncWrite(int len)
 {
+	static int s_aio_verify_count = 0;
 #ifdef SHOW_WRITE_TIME
 	struct timeval starttime = {};
 	struct timeval now = {};
@@ -662,7 +661,7 @@ int eDVBRecordFileThread::asyncWrite(int len)
 	// Only call parseData here if no descrambler is set.
 	// When a descrambler is active, eDVBRecordScrambledThread::writeData()
 	// calls parseData AFTER descrambling to ensure we parse clear data.
-	if (!getProtocol() && !m_serviceDescrambler)
+	if (!m_serviceDescrambler)
 	{
 		int parse_result = m_ts_parser.parseData(m_current_offset, m_buffer, len);
 		if (parse_result == -2)
@@ -718,12 +717,16 @@ int eDVBRecordFileThread::asyncWrite(int len)
 	++m_buffer_use_histogram[busy_count];
 
 	// Verify AIO by counting successful write+poll roundtrips.
-	// On broken kernels (e.g. gbquad4kpro), the poll loop fails on the 2nd
+	// On broken kernels, the poll loop fails on the 2nd
 	// write when checking the previous buffer, so we never reach the threshold.
-	if (s_aio_state != 1 && ++s_aio_verify_count >= AIO_VERIFY_THRESHOLD)
+	if (s_aio_state != 1)
 	{
-		s_aio_state = 1;
-		eDebug("[eDVBRecordFileThread] AIO verified after %d writes - locked for session", s_aio_verify_count);
+		++s_aio_verify_count;
+		if (s_aio_verify_count >= AIO_VERIFY_THRESHOLD)
+		{
+			s_aio_state = 1;
+			eDebug("[eDVBRecordFileThread] AIO verified after %d writes - locked for session", s_aio_verify_count);
+		}
 	}
 
 	++m_current_buffer;
@@ -767,7 +770,7 @@ int eDVBRecordFileThread::writeData(int len)
 		// Only call parseData here if no descrambler is set.
 		// When a descrambler is active, eDVBRecordScrambledThread::writeData()
 		// calls parseData AFTER descrambling to ensure we parse clear data.
-		if (!getProtocol() && !m_serviceDescrambler)
+		if (!m_serviceDescrambler)
 		{
 			m_ts_parser.parseData(m_current_offset, m_buffer, len);
 		}
@@ -889,7 +892,7 @@ void eDVBRecordFileThread::flush()
 		}
 	}
 	int bufferCount = m_aio.size();
-	eTrace("[eDVBRecordFileThread] buffer usage histogram (%d buffers of %zu kB)", bufferCount, m_buffersize>>10);
+	eTrace("[eDVBRecordFileThread] buffer usage histogram (%d buffers of %lu kB)", bufferCount, m_buffersize>>10);
 	for (int i=0; i <= bufferCount; ++i)
 	{
 		if (m_buffer_use_histogram[i] != 0)
@@ -1080,8 +1083,7 @@ int eDVBRecordScrambledThread::writeData(int len)
 		m_serviceDescrambler->descramble(m_buffer, len);
 
 		// Parse AFTER descrambling for correct Access Points (.ap files)
-		if (!getProtocol())
-			m_ts_parser.parseData(m_current_offset, m_buffer, len);
+		m_ts_parser.parseData(m_current_offset, m_buffer, len);
 	}
 
 	// Call the appropriate parent writeData based on target type:

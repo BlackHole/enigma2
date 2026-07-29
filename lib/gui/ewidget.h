@@ -61,9 +61,9 @@ public:
 			m_have_border_color = true;
 			invalidate();
 		}
-	virtual void setWidgetAlphaBlend(bool blend) { 
+	virtual void setWidgetAlphaBlend(bool blend) {
 			m_alphaBlend = blend;
-			invalidate(); 
+			invalidate();
 		}
 	virtual void setPadding(const eRect &padding) { m_padding = padding; }
 	virtual eRect getPadding() { return m_padding; }

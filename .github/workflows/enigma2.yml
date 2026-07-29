@@ -2,12 +2,12 @@ name: Enigma2 Python 3
 
 on:
   push:
-    branches: [ Python3.13]
+    branches: [ Python3.14]
     paths-ignore:
       - '**/README'
       - '**/DOCS'
   pull_request:
-    branches: [ Python3.13]
+    branches: [ Python3.14]
     paths-ignore:
       - '**/README'
       - '**/DOCS'
@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         gcc: [13]
-        python: ['3.13']
+        python: ['3.14']
     steps:
     - name: install dev packages
       run: |

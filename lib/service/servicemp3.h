@@ -116,7 +116,7 @@ public:
 
 typedef struct _GstElement GstElement;
 
-typedef enum { atUnknown, atMPEG, atMP3, atAC3, atDTS, atAAC, atPCM, atOGG, atFLAC, atWMA, atDRA, atEAC3 } audiotype_t;
+typedef enum { atUnknown, atMPEG, atMP3, atAC3, atDTS, atAACHE, atPCM, atOGG, atFLAC, atWMA, atDRA, atEAC3, atDTSHD, atAAC } audiotype_t;
 typedef enum { stUnknown, stPlainText, stSSA, stASS, stSRT, stVOB, stPGS, stDVB } subtype_t;
 typedef enum { ctNone, ctMPEGTS, ctMPEGPS, ctMKV, ctAVI, ctMP4, ctVCD, ctCDA, ctASF, ctOGG, ctWEBM, ctDRA} containertype_t;
 
@@ -354,6 +354,7 @@ private:
 	void HandleTocEntry(GstMessage *msg);
 	static gint match_sinktype(const GValue *velement, const gchar *type);
 	static void handleElementAdded(GstBin *bin, GstElement *element, gpointer user_data);
+	void disconnectAsyncSignalHandlers();
 
 	struct subtitle_page_t
 	{
@@ -372,9 +373,6 @@ private:
 	subtitle_pages_map_t m_subtitle_pages;
 	ePtr<eTimer> m_subtitle_sync_timer;
 	ePtr<eTimer> m_dvb_subtitle_sync_timer;
-#ifdef PASSTHROUGH_FIX
-	ePtr<eTimer> m_passthrough_fix_timer;
-#endif
 	ePtr<eDVBSubtitleParser> m_dvb_subtitle_parser;
 	ePtr<eConnection> m_new_dvb_subtitle_page_connection;
 	void newDVBSubtitlePage(const eDVBSubtitlePage &p);
@@ -388,7 +386,10 @@ private:
 	void sourceTimeout();
 	void clearBuffers(bool force=false);
 #ifdef PASSTHROUGH_FIX
-	void forcePassthrough();
+	ePtr<eTimer> m_passthrough_fix_timer;
+#endif
+#ifdef PASSTHROUGH_FIX
+	void forceAudioReset();
 #endif
 	sourceStream m_sourceinfo;
 	gulong m_subs_to_pull_handler_id;
@@ -396,6 +397,28 @@ private:
 	RESULT seekToImpl(pts_t to);
 
 	gint m_aspect, m_width, m_height, m_framerate, m_progressive, m_gamma;
+	int m_hdr_type;                  // 0=SDR 1=HDR10 2=HLG 3=HDR
+
+#ifdef HAS_SOFTWARE_HDR_DETECTION
+	void updateHDRFromVideoPad();
+
+	/* GStreamer buffer probe for direct HEVC bitstream HDR classification.
+	 * Runs in the GStreamer streaming thread; data is consumed by a periodic
+	 * timer in the main thread via a mutex-protected shared buffer. */
+	GMutex          m_hdr_probe_mutex;
+	std::vector<uint8_t> m_hdr_probe_es;      /* shared: streaming thread appends, main thread swaps out (O(1)) */
+	std::vector<uint8_t> m_hdr_probe_snap;    /* main thread only: accumulated bitstream for classify() */
+	size_t          m_hdr_probe_last_classify;
+	size_t          m_hdr_probe_first_sps_at;
+	gulong          m_hdr_probe_id;
+	GstPad         *m_hdr_probe_pad;
+	gint            m_hdr_probe_active; /* atomic: 0=inactive, 1=active; use g_atomic_int_* */
+	ePtr<eTimer>    m_hdr_probe_timer;
+	void startHDRProbe();
+	void stopHDRProbe();
+	void checkHDRProbe();
+	static GstPadProbeReturn hdrProbeCallback(GstPad*, GstPadProbeInfo*, gpointer);
+#endif /* HAS_SOFTWARE_HDR_DETECTION */
 	std::string m_useragent;
 	std::string m_extra_headers;
 	RESULT trickSeek(gdouble ratio);

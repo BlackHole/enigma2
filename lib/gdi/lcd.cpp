@@ -30,10 +30,10 @@ eLCD *eLCD::getInstance()
 
 void eLCD::setSize(int xres, int yres, int bpp)
 {
+	_stride = xres * bpp / 8;
+	_buffer = new unsigned char[xres * yres * bpp / 8];
 	res = eSize(xres, yres);
-	_buffer = new unsigned char[xres * yres * bpp/8];
-	memset(_buffer, 0, res.height() * res.width() * bpp / 8);
-	_stride = res.width() * bpp / 8;
+	memset(_buffer, 0, xres * yres * bpp / 8);
 	eDebug("[eLCD] (%dx%dx%d) buffer %p %d bytes, stride %d", xres, yres, bpp, _buffer, xres * yres * bpp / 8, _stride);
 }
 

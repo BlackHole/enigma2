@@ -160,7 +160,9 @@ class AboutBase(TextBox):
 	def __init__(self, session, labels=None):
 		TextBox.__init__(self, session, label="AboutScrollLabel")
 		self.skinName = "AboutOE"
-		self.colors = parameters.get("AboutColors", [])  # First item must be default text colour. If parameter is missing adding colours will be skipped.
+		self.colors = parameters.get("AboutColors", [])
+		if isinstance(self.colors, int):  # a single entry in skin parameters would not be comma separated and therefore an int, not a list
+			self.colors = [self.colors]
 		if labels:
 			self["lab1"] = StaticText(_("OpenBh"))
 			self["lab2"] = StaticText(_("From the OpenBh Team"))
@@ -169,9 +171,9 @@ class AboutBase(TextBox):
 			elif SystemInfo["imagetype"] == "community":
 				self["lab3"] = StaticText(_("Support at") + " blackhole-community.com")
 
-	def addColor(self, text, i=1):
+	def addColor(self, text, i=0):
 		if i < len(self.colors):
-			text = Hex2strColor(self.colors[i]) + text + Hex2strColor(self.colors[0])
+			text = Hex2strColor(self.colors[i]) + text + r"\C"
 		return text
 
 	def createSummary(self):
@@ -246,13 +248,6 @@ class About(AboutBase):
 
 		AboutText += _("Drivers:\t%s\n") % driversDate()
 		AboutText += _("Kernel:\t%s\n") % KERNEL
-		if SystemInfo["boxtype"] == "gbquad4kpro":
-			hwVersion = fileReadLine("/proc/stb/info/version")
-			if hwVersion:
-				match = search(r"\brev[0-9]+\b", hwVersion)
-				if match:
-					hwVersion = match.group(0)
-				AboutText += _("Hardware Version:\t%s\n") % hwVersion
 		AboutText += _("Samba:\t%s\n") % getVersionFromOpkg("samba")
 		AboutText += _("GStreamer:\t%s\n") % getGStreamerVersionString().replace("GStreamer ", "")
 		AboutText += _("GCC version:\t%s\n") % getGccVersion()
@@ -294,6 +289,14 @@ class About(AboutBase):
 					AboutText += _("Bolt:\t%s\n") % bootLoader
 				else:
 					AboutText += _("Bootloader:\t%s\n") % bootLoader
+
+		if SystemInfo["boxtype"] == "gbquad4kpro":
+			hwVersion = fileReadLine("/proc/stb/info/version")
+			if hwVersion:
+				match = search(r"\brev[0-9]+\b", hwVersion)
+				if match:
+					hwVersion = match.group(0)
+				AboutText += _("Hardware Version:\t%s\n") % hwVersion.capitalize()
 
 		self["AboutScrollLabel"].setText(AboutText)
 
@@ -760,7 +763,7 @@ class AboutSummary(ScreenSummary):
 
 	def clean(self, x):
 		# remove colours, replace tabs with spaces, remove leading/trailing whitespace
-		return sub("\\\\c[0-9-a-f]{8}", "", x).replace("\t", " ").strip()
+		return sub(r"\\c[0-9a-f]{8}", "", x).replace(r"\c", "").replace("\t", " ").strip()
 
 
 class TranslationInfo(Screen):

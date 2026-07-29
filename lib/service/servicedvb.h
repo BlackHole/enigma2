@@ -15,6 +15,9 @@ class eStaticServiceDVBBouquetInformation;
 
 // Forward declarations for software descrambling
 class eDVBCSASession;
+#ifdef HAS_SOFTWARE_HDR_DETECTION
+class eHDRStreamDetector;
+#endif
 class eDVBSoftDecoder;
 
 class eServiceFactoryDVB : public iServiceHandler {
@@ -268,6 +271,9 @@ protected:
 	void switchToTimeshift();
 
 	void updateDecoder(bool sendSeekableStateChanged=false);
+#ifdef PASSTHROUGH_FIX
+	void forceAudioReset();
+#endif
 
 	int m_skipmode;
 	int m_fastforward;
@@ -326,15 +332,20 @@ protected:
 	ePtr<eTimer> m_nownext_timer;
 	void updateEpgCacheNowNext();
 
-#ifdef PASSTHROUGH_FIX
-	ePtr<eTimer> m_passthrough_fix_timer;
-	void forcePassthrough();
-#endif
-
 		/* radiotext */
 	ePtr<eDVBRdsDecoder> m_rds_decoder;
 	ePtr<eConnection> m_rds_decoder_event_connection;
 	void rdsDecoderEvent(int);
+
+		/* HDR detection */
+#ifdef HAS_SOFTWARE_HDR_DETECTION
+	ePtr<eHDRStreamDetector> m_hdr_detector;
+	int m_hdr_detect_vpid;
+	bool m_hdr_firstframe_restarted; /* true once eventSizeChanged restart was done */
+	void startHDRDetection(int vpid);
+	void hdrResult(int result);
+#endif
+	int m_hdr_type;
 
 	ePtr<eConnection> m_video_event_connection;
 	void video_event(struct iTSMPEGDecoder::videoEvent);

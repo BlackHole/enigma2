@@ -5,6 +5,9 @@
 
 #include <lib/gdi/accel.h>
 
+#include <algorithm>
+#include <cstring>
+
 #include <time.h>
 #include <sys/time.h>
 
@@ -26,17 +29,14 @@ extern void bcm_accel_blit(
 		int dst_x, int dst_y, int dwidth, int dheight,
 		int pal_addr, int flags);
 #endif
-
 #ifdef HAVE_HISILICON_ACCEL
 extern void  dinobot_accel_register(void *p1,void *p2);
 extern void  dinibot_accel_notify(void);
 #endif
+
 gFBDC::gFBDC()
 {
 	fb=new fbClass;
-
-	if (!fb->Available())
-		eFatal("[gFBDC] no framebuffer available");
 
 	int xres;
 	int yres;
@@ -119,6 +119,29 @@ void gFBDC::setPalette()
 	fb->PutCMAP();
 }
 
+int gFBDC::getSurfaceOffset(const gUnmanagedSurface &s) const
+{
+	if (!s.data_phys)
+		return 0;
+
+	return (s.data_phys - fb->getPhysAddr()) / s.stride;
+}
+
+void gFBDC::rotateSurfaces()
+{
+	if (m_number_of_pages > 2 && surface_third.data_phys)
+	{
+		gUnmanagedSurface previously_displayed = surface_back;
+		surface_back = surface;
+		surface = surface_third;
+		surface_third = previously_displayed;
+	}
+	else if (surface_back.data_phys)
+	{
+		std::swap(surface, surface_back);
+	}
+}
+
 void gFBDC::exec(const gOpcode *o)
 {
 	switch (o->opcode)
@@ -172,6 +195,7 @@ void gFBDC::exec(const gOpcode *o)
 			gles_do_animation();
 		else
 			fb->blit();
+		gles_flush();
 #else
 		fb->blit();
 #endif
@@ -199,7 +223,7 @@ void gFBDC::exec(const gOpcode *o)
 		gles_set_buffer((unsigned int *)surface.data);
 		gles_set_animation(1, o->parm.setShowHideInfo->point.x(), o->parm.setShowHideInfo->point.y(), o->parm.setShowHideInfo->size.width(), o->parm.setShowHideInfo->size.height());
 #endif
-		break;
+				break;
 	}
 	case gOpcode::sendHide:
 	{
@@ -210,16 +234,28 @@ void gFBDC::exec(const gOpcode *o)
 		gles_set_buffer((unsigned int *)surface.data);
 		gles_set_animation(0, o->parm.setShowHideInfo->point.x(), o->parm.setShowHideInfo->point.y(), o->parm.setShowHideInfo->size.width(), o->parm.setShowHideInfo->size.height());
 #endif
-		break;
+				break;
 	}
 #ifdef USE_LIBVUGLES2
+	case gOpcode::sendShowItem:
+	{
+		gles_set_buffer((unsigned int *)surface.data);
+		gles_set_animation_listbox(o->parm.setShowItemInfo->dir, o->parm.setShowItemInfo->point.x(), o->parm.setShowItemInfo->point.y(), o->parm.setShowItemInfo->size.width(), o->parm.setShowItemInfo->size.height());
+		delete o->parm.setShowItemInfo;
+		break;
+	}
+	case gOpcode::setFlush:
+	{
+		gles_set_flush(o->parm.setFlush->enable);
+		delete o->parm.setFlush;
+		break;
+	}
 	case gOpcode::setView:
 	{
 		gles_viewport(o->parm.setViewInfo->size.width(), o->parm.setViewInfo->size.height(), fb->Stride());
-		break;
+				break;
 	}
 #endif
-
 	default:
 		gDC::exec(o);
 		break;
@@ -261,41 +297,29 @@ void gFBDC::setResolution(int xres, int yres, int bpp)
 
 	if (gAccel::getInstance())
 		gAccel::getInstance()->releaseAccelMemorySpace();
-
 	fb->SetMode(xres, yres, bpp);
+
+	unsigned char *base_addr = fb->lfb;
+	unsigned long base_phys = fb->getPhysAddr();
 
 	surface.x = xres;
 	surface.y = yres;
 	surface.bpp = bpp;
 	surface.bypp = bpp / 8;
 	surface.stride = fb->Stride();
-	surface.data = fb->lfb;
-	
-	for (int y=0; y<yres; y++)    // make whole screen transparent 
-		memset(fb->lfb+ y * xres * 4, 0x00, xres * 4);	
+	surface.data = base_addr;
 
-	surface.data_phys = fb->getPhysAddr();
+	for (int y=0; y<yres; y++)    // make whole screen transparent
+		memset(fb->lfb+ y * xres * 4, 0x00, xres * 4);
 
-	int fb_size = surface.stride * surface.y;
+	surface.data_phys = base_phys;
 
-	if (fb->getNumPages() > 1)
-	{
-		surface_back = surface;
-		surface_back.data = fb->lfb + fb_size;
-		surface_back.data_phys = surface.data_phys + fb_size;
-		fb_size *= 2;
-	}
-	else
-	{
-		surface_back.data = 0;
-		surface_back.data_phys = 0;
-	}
+	m_number_of_pages = fb->getNumPages();
 
-	eDebug("[gFBDC] resolution: %dx%dx%d stride=%d, %dkB available for acceleration surfaces.",
-		 surface.x, surface.y, surface.bpp, fb->Stride(), (fb->Available() - fb_size)/1024);
+	int fb_page_size = surface.stride * surface.y;
+	int fb_size = fb_page_size;
 
-	if (gAccel::getInstance())
-		gAccel::getInstance()->setAccelMemorySpace(fb->lfb + fb_size, surface.data_phys + fb_size, fb->Available() - fb_size);
+	eDebug("[gFBDC] resolution: %d x %d x %d (stride: %d) pages: %d", surface.x, surface.y, surface.bpp, fb->Stride(), fb->getNumPages());
 
 #ifdef HAVE_HISILICON_ACCEL
 	dinobot_accel_register(&surface,&surface_back);
@@ -308,6 +332,7 @@ void gFBDC::setResolution(int xres, int yres, int bpp)
 	}
 
 	surface_back.clut = surface.clut;
+	surface_third.clut = surface.clut;
 
 #if defined(CONFIG_HISILICON_FB)
 	if(islocked()==0)
@@ -319,6 +344,7 @@ void gFBDC::setResolution(int xres, int yres, int bpp)
 #endif
 
 	m_pixmap = new gPixmap(&surface);
+
 }
 
 void gFBDC::saveSettings()

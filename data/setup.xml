@@ -33,10 +33,10 @@
 		<item level="0" text="After power loss" description="When in normal use or standby (not deep standby), what should the %s %s do when booting after a power loss or other uncontrolled shutdown?">config.usage.power.uncontrolled_shutdown_action</item>
 	</setup>
 	<setup key="SoftCSA" title="SoftCSA Settings">
-		<item level="0" text="Decoder Release Strategy *" description="How to release the hardware decoder when switching to software descrambling. 'Quick' releases immediately (faster zapping). 'Normal' performs clean shutdown first (more stable on some boxes). 'Aggressive' resets the HW-descrambler slots and also bypasses the in-process CSA-ALT cache. *Restart E2 for changes to take effect.">config.misc.softcsa.decoderRelease</item>
 		<item level="0" text="Sync Mode *" description="Select how the descrambled data stream is processed. 'Automatic' uses asynchronous writes (lower CPU usage) with automatic fallback to synchronous if kernel AIO is not supported. 'Synchronous' forces blocking writes (stable, most compatible). *Restart E2 for changes to take effect.">config.misc.softcsa.syncMode</item>
-		<item level="1" text="Decoder start timeout *" description="Maximum time to wait for the first descrambling key (CW) before starting the decoder. 'Disabled' starts the decoder immediately without waiting. Useful for boxes where waiting causes unnecessary delay. *Restart E2 for changes to take effect.">config.misc.softcsa.waitForDataTimeout</item>
-		<item level="0" text="Decoder playback buffer *" description="Buffer descrambled data before starting playback. Fixes audio dropouts with passthrough AC3 by ensuring enough data is available when the decoder starts. Higher values are more stable but increase channel switch time. *Restart E2 for changes to take effect.">config.misc.softcsa.bufferTime</item>
+		<item level="0" text="Decoder Release Strategy *" description="How to release the hardware decoder when switching to software descrambling. 'Quick' releases immediately (faster zapping). 'Normal' performs clean shutdown first (more stable on some boxes). 'Aggressive' resets the HW-descrambler slots and also bypasses the in-process CSA-ALT cache. *Restart E2 for changes to take effect.">config.misc.softcsa.decoderRelease</item>
+		<item level="0" text="Decoder Start Delay *" description="Buffer descrambled data before starting playback. Fixes audio dropouts with passthrough AC3 by ensuring enough data is available when the decoder starts. Higher values are more stable but increase channel switch time. *Restart E2 for changes to take effect.">config.misc.softcsa.bufferTime</item>
+		<item level="1" text="Decoder Start Timeout *" description="Maximum time to wait for the first descrambling key (CW) before starting the decoder. 'Disabled' starts the decoder immediately without waiting. Useful for boxes where waiting causes unnecessary delay. *Restart E2 for changes to take effect.">config.misc.softcsa.waitForDataTimeout</item>
 	</setup>
 	<setup key="streamrelay" title="Stream Relay Settings">
 		<item level="2" text="Stream Relay url" description="The IP address of the streamrelay server that is used to descramble services that can only be decrypted via stream relay.">config.misc.softcam_streamrelay_url</item>
@@ -121,6 +121,9 @@
 		<item level="1" text="Channel list cursor behavior" description="Configure the cursor behavior in the channel selection list. When opening the channel selection list you can remain on the current service or already select up/down and you are able to revert the B+/B- buttons.">config.usage.servicelist_cursor_behavior</item>
 		<item level="1" text="Enable multiple bouquets" description="Services may be grouped in bouquets. When enabled, you can use more than one bouquet.">config.usage.multibouquet</item>
 		<item level="1" text="Enable panic button" description="When enabled, pressing '0' will zap you to the first channel in your first bouquet and delete your zap-history.">config.usage.panicbutton</item>
+		<item level="0" text="Channel +/- button mode" description="Select what you want the Channel +/- button to activate:">config.usage.channelbutton_mode</item>
+		<item level="0" text="Left/Right button mode" description="Select what you want the Left/Right button to activate:">config.usage.leftrightbutton_mode</item>
+		<item level="0" text="Up/Down button mode" description="Select what you want the Up/Down button to activate:">config.usage.updownbutton_mode</item>
 		<item level="1" text="Show available subservices" description="If enabled will display subservices when available else Green Panel.">config.obhsettings.Subservice</item>
 		<item level="1" text="Hide number markers" description="When enabled, number markers will be hidden.">config.usage.hide_number_markers</item>
 		<item level="1" text="Jump first press in channel selection" description="This option allows you to choose what the first button press jumps to in channel list screen, (so pressing '2' jumps to 'A' or '2' first), when 'Quick Actions' preset actions are perfomed. ">config.usage.show_channel_jump_in_servicelist</item>
@@ -151,6 +154,7 @@
 		<item level="0" text="TV button mode" description="Select what you want the TV button to activate:">config.usage.tvradiobutton_mode</item>
 		<item level="1" text="History buttons mode" description="Configure the function of the &lt;  &gt; buttons.">config.usage.historymode</item>
 		<item level="0" text="Channel +/- button mode" description="Select what you want the Channel +/- button to activate:">config.usage.channelbutton_mode</item>
+		<item level="0" text="Left/Right button mode" description="Select what you want the Left/Right button to activate:">config.usage.leftrightbutton_mode</item>
 		<item level="0" text="Up/Down button mode" description="Select what you want the Up/Down button to activate:">config.usage.updownbutton_mode</item>
 		<item level="1" text="Enable VOD skip buttons" description="This option allows you to choose to use the left/right buttons to change channels, or enable them for seeking VOD content.">config.seek.vod_buttons</item>
 		<item level="2" text="Skip jumping to live TV while timeshifting with plugins" description="If set to 'yes', allows you to use timeshift with alternative audio plugins.">config.usage.timeshift_skipreturntolive</item>
