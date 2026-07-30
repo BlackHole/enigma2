@@ -28,6 +28,8 @@ eHttpsStream::eHttpsStream()
 		startDelay = delay * 1000;
 	}
 
+	ctx = NULL;
+	ssl = NULL;
 }
 
 eHttpsStream::~eHttpsStream()
