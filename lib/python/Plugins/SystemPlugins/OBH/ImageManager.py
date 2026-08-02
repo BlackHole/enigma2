@@ -85,13 +85,6 @@ FEED_URLS = [
 	("OpenATV", "https://images.mynonpublic.com/openatv/json/%s", "getMachineMake"),
 	("OpenPLi", "http://downloads.openpli.org/json/%s", "HardwareInfo"),
 ]
-if SystemInfo["imagetype"] == "community":
-	FEED_URLS = [
-	("OpenBh", "https://images.blackhole-community.com/json/%s", "getMachineMake"),
-	("OpenViX", "https://www.openvix.co.uk/json/%s", "getMachineMake"),
-	("OpenATV", "https://images.mynonpublic.com/openatv/json/%s", "getMachineMake"),
-	("OpenPLi", "http://downloads.openpli.org/json/%s", "HardwareInfo"),
-]
 
 
 autoImageManagerTimer = None
