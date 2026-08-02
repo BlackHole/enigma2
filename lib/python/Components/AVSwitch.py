@@ -520,10 +520,10 @@ def InitAVSwitch():
 					fd.write(configElement.value)
 			except (IOError, OSError):
 				pass
-		f = "/proc/stb/video/hdmi_colordepth_choices"
+		f = "/proc/stb/video/hdmi_hdrtype_choices"
 		choices = [("auto", _("Auto")),
 					("dolby", _("Dolby Vision")),
-					("none", _("SDR")),
+					("sdr", _("SDR")),
 					("hdr10", _("HDR10")),
 					("hdr10+", _("HDR10+")),
 					("hlg", _("HLG"))]
