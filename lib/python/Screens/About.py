@@ -4,7 +4,6 @@ from re import search, sub
 from requests import get
 from sys import version_info, version as pyversion
 from enigma import eTimer, getDesktop, getEnigmaLastCommitDate, getEnigmaLastCommitHash, eDVBCSAEngine
-from skin import parameters
 from Components.About import getBoxUptime, getCPUArch, getEnigmaUptime, getIfConfig, getIfTransferredData
 from Components.ActionMap import ActionMap
 from Components.Button import Button
@@ -21,7 +20,7 @@ from Screens.Screen import Screen, ScreenSummary
 from Screens.SoftwareUpdate import UpdatePlugin
 from Screens.TextBox import TextBox
 from Tools.Directories import fileHas, fileReadLine, fileReadLines, isPluginInstalled
-from Tools.Hex2strColor import Hex2strColor
+from Tools.Hex2strColor import ColorizeText
 from Tools.Multiboot import GetCurrentImageMode
 from Tools.StbHardware import getFPVersion
 
@@ -156,13 +155,11 @@ def df_h(find=None, binary=False):
 	return out
 
 
-class AboutBase(TextBox):
+class AboutBase(TextBox, ColorizeText):
 	def __init__(self, session, labels=None):
 		TextBox.__init__(self, session, label="AboutScrollLabel")
+		ColorizeText.__init__(self, session, "AboutColors")
 		self.skinName = "AboutOE"
-		self.colors = parameters.get("AboutColors", [])
-		if isinstance(self.colors, int):  # a single entry in skin parameters would not be comma separated and therefore an int, not a list
-			self.colors = [self.colors]
 		if labels:
 			self["lab1"] = StaticText(_("OpenBh"))
 			self["lab2"] = StaticText(_("From the OpenBh Team"))
@@ -170,11 +167,6 @@ class AboutBase(TextBox):
 				self["lab3"] = StaticText(_("Support at") + " www.openbh.net")
 			elif SystemInfo["imagetype"] == "community":
 				self["lab3"] = StaticText(_("Support at") + " blackhole-community.com")
-
-	def addColor(self, text, i=0):
-		if i < len(self.colors):
-			text = Hex2strColor(self.colors[i]) + text + r"\C"
-		return text
 
 	def createSummary(self):
 		return AboutSummary
