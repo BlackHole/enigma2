@@ -5,7 +5,7 @@ from enigma import eAVSwitch, eDVBVolumecontrol, getDesktop
 from Components.config import ConfigEnableDisable, ConfigNothing, ConfigSelection, ConfigSelectionNumber, ConfigSlider, ConfigSubDict, ConfigSubsection, ConfigYesNo, NoSave, config
 from Components.SystemInfo import SystemInfo
 from Tools.CList import CList
-from Tools.Directories import fileReadLine, fileWriteLine, isPluginInstalled
+from Tools.Directories import fileCheck, fileReadLine, fileWriteLine, isPluginInstalled
 
 config.av = ConfigSubsection()
 
@@ -429,13 +429,14 @@ def InitAVSwitch():
 		iAVSwitch.setAspectRatio(map[configElement.value])
 
 	def readChoices(procx, choices, default):
-		with open(procx, "r") as myfile:
-			procChoices = myfile.read().strip()
-		if procChoices:
-			choiceslist = procChoices.split(" ")
-			choices = [(item, _(item)) for item in choiceslist]
-			default = choiceslist[0]
-			# print("[AVSwitch][readChoices from Proc] choices=%s, default=%s" % (choices, default))
+		if fileCheck(procx):
+			with open(procx, "r") as myfile:
+				procChoices = myfile.read().strip()
+			if procChoices:
+				choiceslist = procChoices.split(" ")
+				choices = [(item, _(item)) for item in choiceslist]
+				default = choiceslist[0]
+				# print(f"[AVSwitch][readChoices from Proc] choices={choices}, default={default}")
 		return (choices, default)
 
 	iAVSwitch.setInput("ENCODER")  # Init on startup.
@@ -534,16 +535,14 @@ def InitAVSwitch():
 	else:
 		config.av.hdmihdrtype = ConfigNothing()
 
-	hdrOsd = fileReadLine("/proc/stb/video/hdmi_hdr_osd", default=None)
-	SystemInfo["havehdmihdrosd"] = bool(hdrOsd)
-	if hdrOsd:
+	if SystemInfo["havehdmihdrosd"]:
 		def setHDMIHdrOsd(configElement):
 			fileWriteLine("/proc/stb/video/hdmi_hdr_osd", configElement.value)
-
 		hdrOsdChoices = [
 			("32767 0 -16384", _("GigaBlue optimized")),
 			("0 0 0", _("Broadcom default"))
 		]
+		hdrOsd = fileReadLine("/proc/stb/video/hdmi_hdr_osd", default=None)
 		config.av.hdmihdrosd = ConfigSelection(default=hdrOsd if hdrOsd in dict(hdrOsdChoices) else "32767 0 -16384", choices=hdrOsdChoices)
 		config.av.hdmihdrosd.addNotifier(setHDMIHdrOsd)
 	else:

@@ -245,7 +245,7 @@ class ServiceInfo(Poll, Converter):
 			elif self.type == self.IS_SD_AND_NOT_WIDESCREEN:
 				return video_height < 578 and video_aspect not in WIDESCREEN
 			elif self.type == self.IS_1080:
-				return video_width >= 1367 and video_width <= 1920 and video_height >= 768 and video_height <= 1440
+				return video_width >= 1367 and video_width <= 2400 and video_height >= 768 and video_height <= 1440
 			elif self.type == self.IS_720:
 				return video_width >= 1025 and video_width <= 1366 and video_height >= 481 and video_height <= 768 or video_width >= 960 and video_height == 720
 			elif self.type == self.IS_576:
