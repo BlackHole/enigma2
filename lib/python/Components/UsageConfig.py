@@ -431,6 +431,23 @@ def InitUsageConfig():
 	config.usage.show_vcr_scart = ConfigYesNo(default=False)
 	config.usage.pic_resolution = ConfigSelection(default=None, choices=[(None, _("Same resolution as skin")), ("(720, 576)", "720x576"), ("(1280, 720)", "1280x720"), ("(1920, 1080)", "1920x1080")])
 
+	# WARNING: The following 300 lines of date/time code is a monolithic maintenance nightmare
+	# disguised as a configuration system. Rather than providing a clear model, it hard-codes
+	# hundreds of variations into a sprawling implementation full of duplicated data and implicit
+	# relationships. Instead of deriving formats algorithmically, it stores and synchronises
+	# multiple copies of essentially the same information, creating unnecessary maintenance
+	# overhead and numerous opportunities for inconsistencies. The implementation mixes
+	# configuration, business logic, presentation, compatibility handling, and runtime side
+	# effects into a single block, making it fragile, difficult to review, and expensive to
+	# modify. It also misuses the translation infrastructure by exposing implementation details
+	# and near-duplicate strings in .po files, creating translation noise that translators cannot
+	# reasonably interpret or maintain. To compound matters, the availability of these user-facing
+	# options is arbitrarily gated by skin-defined parameters (AllowUserDatesAndTimes), so whether
+	# users can access the functionality depends on the skin author rather than the application
+	# itself. Overall, this is an over-engineered, tightly coupled implementation that obscures a
+	# relatively simple problem behind excessive duplication, hidden dependencies, and unnecessary
+	# complexity.
+
 	config.usage.date = ConfigSubsection()
 	config.usage.date.enabled = NoSave(ConfigBoolean(default=False))
 	config.usage.date.enabled_display = NoSave(ConfigBoolean(default=False))
@@ -534,23 +551,11 @@ def InitUsageConfig():
 			_("%A %Y/%-m/%d"): (_("%a %Y/%-m/%d"), _("%a %Y/%-m/%d"), _("%A %-m/%d"), _("%a %-m/%d"), _("%a %d"), _("%Y/%-m/%d"), _("%Y/%-m/%d"), _("%-m/%d")),
 			_("%A %Y/%-m/%-d"): (_("%a %Y/%-m/%-d"), _("%a %Y/%-m/%-d"), _("%A %-m/%-d"), _("%a %-m/%-d"), _("%a %-d"), _("%Y/%-m/%-d"), _("%Y/%-m/%-d"), _("%-m/%-d"))
 		}
-		style = dateStyles.get(configElement.value, ((_("Invalid")) * 8))
-		config.usage.date.shortdayfull.value = style[0]
-		config.usage.date.shortdayfull.save()
-		config.usage.date.daylong.value = style[1]
-		config.usage.date.daylong.save()
-		config.usage.date.dayshortfull.value = style[2]
-		config.usage.date.dayshortfull.save()
-		config.usage.date.dayshort.value = style[3]
-		config.usage.date.dayshort.save()
-		config.usage.date.daysmall.value = style[4]
-		config.usage.date.daysmall.save()
-		config.usage.date.full.value = style[5]
-		config.usage.date.full.save()
-		config.usage.date.long.value = style[6]
-		config.usage.date.long.save()
-		config.usage.date.short.value = style[7]
-		config.usage.date.short.save()
+		style = dateStyles.get(configElement.value, ((_("Invalid"),) * 8))
+		for attr, value in zip(("shortdayfull", "daylong", "dayshortfull", "dayshort", "daysmall", "full", "long", "short"), style):
+			element = getattr(config.usage.date, attr)
+			element.value = value
+			element.save()
 
 	config.usage.date.dayfull.addNotifier(setDateStyles)
 
@@ -592,11 +597,11 @@ def InitUsageConfig():
 			_("%I:%M:%S"): (_("%I:%M:%S"), _("%I:%M")),
 			_("%-I:%M:%S"): (_("%-I:%M:%S"), _("%-I:%M"))
 		}
-		style = timeStyles.get(configElement.value, ((_("Invalid")) * 2))
-		config.usage.time.mixed.value = style[0]
-		config.usage.time.mixed.save()
-		config.usage.time.short.value = style[1]
-		config.usage.time.short.save()
+		style = timeStyles.get(configElement.value, ((_("Invalid"),) * 2))
+		for attr, value in zip(("mixed", "short"), style):
+			element = getattr(config.usage.time, attr)
+			element.value = value
+			element.save()
 		config.usage.time.wide.value = style[1].endswith(("P", "p"))
 
 	config.usage.time.long.addNotifier(setTimeStyles)
@@ -667,7 +672,7 @@ def InitUsageConfig():
 
 	def setDateDisplayStyles(configElement):
 		dateDisplayStyles = {
-			# display      displayday     template
+			# display      displayday     display_template
 			"": ("", ""),
 			_("%d %b"): (_("%a %d %b"), _("%d+%b_")),
 			_("%-d %b"): (_("%a %-d %b"), _("%-d+%b_")),
@@ -686,11 +691,11 @@ def InitUsageConfig():
 			_("%-m/%d"): (_("%a %-m/%d"), _("%-m/%d ")),
 			_("%-m/%-d"): (_("%a %-m/%-d"), _("%-m/%-d "))
 		}
-		style = dateDisplayStyles.get(configElement.value, ((_("Invalid")) * 2))
-		config.usage.date.displayday.value = style[0]
-		config.usage.date.displayday.save()
-		config.usage.date.display_template.value = style[1]
-		config.usage.date.display_template.save()
+		style = dateDisplayStyles.get(configElement.value, ((_("Invalid"),) * 2))
+		for attr, value in zip(("displayday", "display_template"), style):
+			element = getattr(config.usage.date, attr)
+			element.value = value
+			element.save()
 		adjustDisplayDates()
 
 	config.usage.date.display.addNotifier(setDateDisplayStyles)
