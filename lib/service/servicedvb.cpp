@@ -1374,7 +1374,8 @@ void eDVBServicePlay::serviceEvent(int event)
 		/* Resolve the selected codec at the same point immediately preceding
 		 * evUpdatedInfo. This is the native atDDP equivalent of ServiceInfo's
 		 * IS_AUDIO_CODEC re-query on evUpdatedInfo. */
-		if (!m_timeshift_active && !m_is_pvr && !m_is_stream && m_is_primary)
+		const bool streamrelay_ddp_candidate = m_reference.isStreamRelay;
+		if (!m_timeshift_active && !m_is_pvr && (!m_is_stream || streamrelay_ddp_candidate) && m_is_primary)
 		{
 			eDVBServicePMTHandler::program program;
 			bool have_program = !m_service_handler.getProgramInfo(program);
@@ -1395,8 +1396,13 @@ void eDVBServicePlay::serviceEvent(int event)
 			/* The late readiness problem is an incoming encrypted-DD+ property, not
 			 * a same-codec-only transition. AAC-LC and MPEG-1 Layer II -> encrypted
 			 * DD+ are runtime-proven to need the same late fallback. */
+			/* StreamRelay's local HTTP leg is already descrambled, so its PMT no
+			 * longer proves the original DVB service was encrypted. Keep explicit
+			 * StreamRelay references eligible while leaving arbitrary IPTV streams
+			 * excluded from this encrypted-DD+ hardware workaround. */
+			const bool encrypted_ddp_source = program.isCrypted() || streamrelay_ddp_candidate;
 			const bool eligible_incoming_ddp = selected_ddp && have_program &&
-				program.isCrypted() && !m_encrypted_ddp_audio_reset_done &&
+				encrypted_ddp_source && !m_encrypted_ddp_audio_reset_done &&
 				!m_noaudio && !m_service_handler.isCiConnected() &&
 				eConfigManager::getConfigBoolValue("config.av.passthrough_fix", false);
 
@@ -4245,9 +4251,10 @@ void eDVBServicePlay::observeVideoResolutionState(int xres, int yres)
 	 * second. Reuse that existing observation for the current primary live
 	 * transition; only a subsequently armed encrypted-DD+ target may consume
 	 * the observed 0x0 -> valid sequence. Do not add another timer or reader. */
+	const bool streamrelay_ddp_candidate = m_reference.isStreamRelay;
 	if (s_primary_live_codec_owner != this ||
-		!m_is_primary || m_is_pvr || m_is_stream || m_timeshift_active || m_noaudio ||
-		m_service_handler.isCiConnected() ||
+		!m_is_primary || m_is_pvr || (m_is_stream && !streamrelay_ddp_candidate) ||
+		m_timeshift_active || m_noaudio || m_service_handler.isCiConnected() ||
 		!eConfigManager::getConfigBoolValue("config.av.passthrough_fix", false))
 		return;
 
@@ -4266,7 +4273,8 @@ void eDVBServicePlay::observeVideoResolutionState(int xres, int yres)
 		return;
 
 	eDVBServicePMTHandler::program program;
-	if (m_service_handler.getProgramInfo(program) || !program.isCrypted())
+	if (m_service_handler.getProgramInfo(program) ||
+		(!program.isCrypted() && !streamrelay_ddp_candidate))
 		return;
 
 	for (const auto &audio : program.audioStreams)
@@ -4277,8 +4285,8 @@ void eDVBServicePlay::observeVideoResolutionState(int xres, int yres)
 			m_encrypted_ddp_audio_reset_done = true;
 			s_encrypted_ddp_late_reset_armed.erase(this);
 			s_encrypted_ddp_resolution_zero_seen.erase(this);
-			eDebug("[eDVBServicePlay] encrypted DD+ transition: existing PliExtraInfo poll observed decoder resolution 0x0 -> %dx%d; forcing late passthrough audio reset",
-				xres, yres);
+			eDebug("[eDVBServicePlay] encrypted DD+%s transition: existing PliExtraInfo poll observed decoder resolution 0x0 -> %dx%d; forcing late passthrough audio reset",
+				streamrelay_ddp_candidate ? " StreamRelay" : "", xres, yres);
 			forceAudioReset();
 			break;
 		}
