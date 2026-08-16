@@ -218,12 +218,13 @@ public:
 		audiotype_t type;
 		std::string language_code; /* iso-639, if available. */
 		std::string codec; /* clear text codec description */
+		int channels; /* selected-track channels; normally caps, refined from DTS-HD XLL when available. */
 		audioStream()
-			:pad(0), type(atUnknown)
+			:pad(0), type(atUnknown), channels(0)
 		{
 		}
 
-		bool operator==(const audioStream& rhs) const { return type == rhs.type && language_code == rhs.language_code && codec == rhs.codec; }
+		bool operator==(const audioStream& rhs) const { return type == rhs.type && language_code == rhs.language_code && codec == rhs.codec && channels == rhs.channels; }
 
 		bool operator!=(const audioStream& rhs) const { return !(*this == rhs); }
 	};

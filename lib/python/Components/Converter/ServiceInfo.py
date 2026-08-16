@@ -9,6 +9,96 @@ from Tools.Transponder import ConvertToHumanReadable
 WIDESCREEN = [1, 3, 4, 7, 8, 0xB, 0xC, 0xF, 0x10]
 
 
+# Skin-facing audio codec booleans.  Values are exact descriptions from
+# iAudioTrackInfo after the codec work in eServiceMP3/eServiceDVB.  Legacy
+# aliases are accepted so skins also work with older/native service paths.
+AUDIO_CODEC_TYPES = {
+	"IsDolbyDigital": ("Dolby Digital", "AC3"),
+	"IsAudioAC3": ("Dolby Digital", "AC3"),
+	"IsDolbyDigitalPlus": ("Dolby Digital +", "Dolby Digital Plus", "EAC3", "AC3+"),
+	"IsAudioEAC3": ("Dolby Digital +", "Dolby Digital Plus", "EAC3", "AC3+"),
+	"IsDolbyAtmos": ("Dolby Atmos",),
+	"IsAudioAtmos": ("Dolby Atmos",),
+	"IsDolbyTrueHD": ("Dolby TrueHD", "TrueHD"),
+	"IsAudioTrueHD": ("Dolby TrueHD", "TrueHD"),
+	"IsDolbyAC4": ("Dolby AC-4", "Dolby AC4", "AC-4", "AC4"),
+
+	"IsDTS": ("DTS",),
+	"IsDTSHD": ("DTS-HD", "DTSHD"),
+	"IsDTSHDMA": ("DTS-HD MA", "DTSHD MA", "DTS-HD Master Audio", "DTSHD Master Audio", "DTS-HD MA + DTS:X", "DTS-HD MA + DTS:X IMAX"),
+	"IsDTSHDHRA": ("DTS-HD HRA", "DTSHD HRA", "DTS-HD High Resolution", "DTSHD High Resolution", "DTS-HD High Resolution Audio", "DTSHD High Resolution Audio"),
+	"IsDTSX": ("DTS:X", "DTS-HD MA + DTS:X"),
+	"IsDTSXIMAX": ("DTS:X IMAX", "DTS-HD MA + DTS:X IMAX"),
+	"IsDTSExpress": ("DTS Express",),
+
+	"IsAAC": ("AAC",),
+	"IsAACLC": ("AAC-LC", "AACLC"),
+	"IsAACLD": ("AAC-LD", "AACLD"),
+	"IsAACELD": ("AAC-ELD", "AACELD"),
+	"IsHEAAC": ("HE-AAC", "HEAAC"),
+	"IsHEAACV2": ("HE-AAC v2", "HEAAC v2"),
+	"IsXHEAAC": ("xHE-AAC", "xHEAAC"),
+
+	"IsFLAC": ("FLAC",),
+	"IsALAC": ("ALAC",),
+	"IsOpus": ("Opus",),
+	"IsVorbis": ("Vorbis",),
+	"IsWavPack": ("WavPack",),
+	"IsAPE": ("APE",),
+	"IsTTA": ("TTA",),
+	"IsWMALossless": ("WMA Lossless",),
+	"IsWMAPro": ("WMA Pro",),
+	"IsWMA": ("WMA",),
+	"IsAMRWB": ("AMR-WB", "AMRWB"),
+	"IsAMR": ("AMR",),
+	"IsSpeex": ("Speex",),
+	"IsDSD": ("DSD",),
+	"IsMP3": ("MP3",),
+	"IsMP2": ("MP2",),
+	"IsMPEGLayer1": ("MPEG Layer I",),
+	"IsMPEG1LayerII": ("MPEG1 Layer II",),
+	"IsALaw": ("A-law", "A law"),
+	"IsMuLaw": ("mu-law", "mu law"),
+	"IsPCM": ("PCM",),
+	"IsLPCM": ("LPCM", "IPCM"),
+}
+
+AUDIO_CODEC_DESCRIPTIONS = frozenset(
+	description
+	for descriptions in AUDIO_CODEC_TYPES.values()
+	for description in descriptions
+)
+
+# Exact selected-track channel-count flags.  These use the negotiated channel
+# count exposed by iAudioTrackInfo; they do not infer layout from codec names.
+AUDIO_CHANNEL_TYPES = {
+	"IsAudioMono": 1,
+	"IsAudio10": 1,
+	"IsAudioStereo": 2,
+	"IsAudio20": 2,
+	"IsAudio51": 6,
+	"IsAudio71": 8,
+}
+
+AUDIO_CHANNEL_LABELS = {
+	1: "1.0",
+	2: "2.0",
+	6: "5.1",
+	8: "7.1",
+}
+
+
+def getCurrentAudioChannels(service):
+	audio = service and service.audioTracks()
+	if not audio:
+		return 0
+	current = audio.getCurrentTrack()
+	if current < 0 or current >= audio.getNumberOfTracks():
+		return 0
+	track = audio.getTrackInfo(current)
+	return track.getChannels() if track else 0
+
+
 def getVideoHeight(info):
 	val = eAVSwitch.getInstance().getResolutionY(0)
 	return val if val else info.getInfo(iServiceInformation.sVideoHeight)
@@ -93,12 +183,29 @@ class ServiceInfo(Poll, Converter):
 	IS_VIDEO_HEVC = 43
 	IS_SOFTCSA = 44
 	IS_STREAM_RELAY = 45
+	IS_AUDIO_CODEC = 46
+	IS_AUDIO_CHANNEL = 47
+	AUDIO_CHANNELS = 48
 
 	def __init__(self, type):
 		Poll.__init__(self)
 		Converter.__init__(self, type)
 		self.poll_interval = 5000
 		self.poll_enabled = True
+		self.audio_codec = AUDIO_CODEC_TYPES.get(type)
+		if self.audio_codec is not None:
+			self.type = self.IS_AUDIO_CODEC
+			self.interesting_events = (iPlayableService.evUpdatedInfo, iPlayableService.evStart)
+			return
+		self.audio_channel = AUDIO_CHANNEL_TYPES.get(type)
+		if self.audio_channel is not None:
+			self.type = self.IS_AUDIO_CHANNEL
+			self.interesting_events = (iPlayableService.evUpdatedInfo, iPlayableService.evStart)
+			return
+		if type == "AudioChannels":
+			self.type = self.AUDIO_CHANNELS
+			self.interesting_events = (iPlayableService.evUpdatedInfo, iPlayableService.evStart)
+			return
 		self.type, self.interesting_events = {
 			"HasTelext": (self.HAS_TELETEXT, (iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
 			"IsMultichannel": (self.IS_MULTICHANNEL, (iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
@@ -183,6 +290,23 @@ class ServiceInfo(Poll, Converter):
 		if self.type == self.HAS_TELETEXT and not isRef:
 			tpid = info.getInfo(iServiceInformation.sTXTPID)
 			return tpid > 0
+		elif self.type == self.IS_AUDIO_CODEC and not isRef:
+			audio = service.audioTracks()
+			if not audio:
+				return False
+			current = audio.getCurrentTrack()
+			if current < 0 or current >= audio.getNumberOfTracks():
+				return False
+			track = audio.getTrackInfo(current)
+			description = track.getDescription() or ""
+			# Prefer an already-known exact codec description.  Only run the
+			# legacy normalizer for descriptions we do not recognize directly.
+			# This avoids aliases such as ALAC being rewritten as another codec.
+			if description not in AUDIO_CODEC_DESCRIPTIONS:
+				description = StdAudioDesc(description)
+			return description in self.audio_codec
+		elif self.type == self.IS_AUDIO_CHANNEL and not isRef:
+			return getCurrentAudioChannels(service) == self.audio_channel
 		elif self.type in (self.IS_MULTICHANNEL, self.IS_STEREO) and not isRef:
 			# FIXME. but currently iAudioTrackInfo doesn't provide more information.
 			audio = service.audioTracks()
@@ -310,6 +434,9 @@ class ServiceInfo(Poll, Converter):
 			return f"{(getFrameRate(info) + 500) // 1000} fps"
 		elif self.type == self.PROGRESSIVE:
 			return getProgressiveStr(info, instance=self)
+		elif self.type == self.AUDIO_CHANNELS:
+			channels = getCurrentAudioChannels(service)
+			return AUDIO_CHANNEL_LABELS.get(channels, f"{channels} ch" if channels > 0 else "")
 		elif self.type == self.TRANSFERBPS:
 			return self.getServiceInfoString(info, iServiceInformation.sTransferBPS, lambda x: "%d kB/s" % (x // 1024))
 		elif self.type == self.HAS_HBBTV:

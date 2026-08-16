@@ -14,6 +14,9 @@ class eAVSwitch: public sigc::trackable
 	ePtr<eSocketNotifier> m_fp_notifier;
 	void fp_event(int what);
 	int m_fp_fd;
+#ifndef SWIG
+	void (*m_video_resolution_observer)(int, int);
+#endif
 #ifdef SWIG
 	eAVSwitch();
 	~eAVSwitch();
@@ -36,6 +39,10 @@ public:
 	bool getProgressive(int flags = 0) const;
 	int getResolutionX(int defaultVal = 0, int flags = 0) const;
 	int getResolutionY(int defaultVal = 0, int flags = 0) const;
+#ifndef SWIG
+	void setVideoResolutionObserver(void (*observer)(int, int));
+#endif
+	void reportVideoResolutionState(int xres, int yres) const;
 	std::string getVideoMode(const std::string &defaultVal = "", int flags = 0) const;
 	std::string getPreferredModes(int flags = 0) const;
 	std::string readAvailableModes(int flags = 0) const;
