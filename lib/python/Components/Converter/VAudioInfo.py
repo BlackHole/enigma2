@@ -41,9 +41,33 @@ _acedits = (
 )
 
 
+_accanonical = (
+	("DTSHD Master Audio", "DTS-HD MA"),
+	("DTS-HD Master Audio", "DTS-HD MA"),
+	("DTSHD High Resolution Audio", "DTS-HD HRA"),
+	("DTS-HD High Resolution Audio", "DTS-HD HRA"),
+	("DTSHD High Resolution", "DTS-HD HRA"),
+	("DTS-HD High Resolution", "DTS-HD HRA"),
+	("DTSHD MA", "DTS-HD MA"),
+	("DTSHD HRA", "DTS-HD HRA"),
+	("DTSHD", "DTS-HD"),
+	("xHEAAC", "xHE-AAC"),
+	("HEAAC v2", "HE-AAC v2"),
+	("HEAAC", "HE-AAC"),
+	("AACELD", "AAC-ELD"),
+	("AACLD", "AAC-LD"),
+	("AACLC", "AAC-LC"),
+	("Dolby AC4", "Dolby AC-4"),
+	("AMRWB", "AMR-WB"),
+)
+
+
 def StdAudioDesc(description):
 	for orig, repl in _acedits:
 		description = description.replace(orig, repl)
+	for orig, repl in _accanonical:
+		if description == orig:
+			return repl
 	return description
 
 
@@ -59,8 +83,8 @@ class VAudioInfo(Poll, Converter, object):
 		self.poll_enabled = True
 		self.lang_strings = ("english", "englisch", "eng")
 		self.codecs = {
-			"01_dolbydigitalplus": ("ac3+", "digital+", "digitalplus",),
-			"02_dolbydigital": ("ac3", "dolbydigital",),
+			"01_dolbydigitalplus": ("ac3+", "digital+", "digitalplus", "dolby.digital.plus",),
+			"02_dolbydigital": ("ac3", "dolbydigital", "dolby.digital",),
 			"03_mp3": ("mp3",),
 			"04_wma": ("wma",),
 			"05_flac": ("flac",),
@@ -117,8 +141,6 @@ class VAudioInfo(Poll, Converter, object):
 			languages = self.getLanguage()
 			description = StdAudioDesc(self.audio_info.getDescription()) or ""
 			description_str = description.split(" ")
-			if len(description_str) and description_str[0] in languages:
-				return languages
 			if description.lower() in languages.lower():
 				languages = ""
 			description_str = description
