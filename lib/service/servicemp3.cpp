@@ -603,6 +603,7 @@ const char *detectDTSProfile(const guint8 *data, gsize size)
 	bool exss = false;
 	bool xll = false;
 	bool xbr = false;
+	bool xch = false;
 	bool xxch = false;
 	bool x96 = false;
 	bool lbr = false;
@@ -619,6 +620,7 @@ const char *detectDTSProfile(const guint8 *data, gsize size)
 			case 0x64582025: exss = true; break; /* DTS extension substream */
 			case 0x41a29547: xll = true; break;  /* lossless / DTS-HD MA */
 			case 0x655e315e: xbr = true; break;
+			case 0x5a5a5a5a: xch = true; break;   /* core XCH / DTS-ES */
 			case 0x47004a03: xxch = true; break;
 			case 0x1d95f262: x96 = true; break;
 			case 0x0a801921: lbr = true; break;  /* DTS Express */
@@ -633,6 +635,7 @@ const char *detectDTSProfile(const guint8 *data, gsize size)
 
 	/*
 	 * Match FFmpeg's DTS profile rules:
+	 * core XCH/XXCH is DTS-ES and core X96 is DTS 96/24;
 	 * XLL is DTS-HD MA; XBR/XXCH/X96 in EXSS are DTS-HD HRA;
 	 * LBR is DTS Express. DTS:X markers are XLL extensions.
 	 */
@@ -646,6 +649,10 @@ const char *detectDTSProfile(const guint8 *data, gsize size)
 		return "DTS-HD HRA";
 	if (exss && lbr)
 		return "DTS Express";
+	if (!exss && (xch || xxch))
+		return "DTS-ES";
+	if (!exss && x96)
+		return "DTS 96/24";
 
 	return NULL;
 }
@@ -4356,9 +4363,25 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 					const bool meta_dts_hra = audio_meta_lower &&
 						(strstr(audio_meta_lower, "dts-hd high resolution") || strstr(audio_meta_lower, "dts hd high resolution") ||
 						 strstr(audio_meta_lower, "dts-hd hra") || strstr(audio_meta_lower, "dts hd hra"));
+					const bool meta_dts_es = audio_meta_lower &&
+						(strstr(audio_meta_lower, "dts-es") || strstr(audio_meta_lower, "dts es"));
+					const bool meta_dts_96_24 = audio_meta_lower &&
+						(strstr(audio_meta_lower, "dts 96/24") || strstr(audio_meta_lower, "dts 96-24") || strstr(audio_meta_lower, "dts 96 24"));
+					const bool meta_mlp = audio_meta_lower &&
+						(strstr(audio_meta_lower, "meridian lossless") || strstr(audio_meta_lower, "mlp"));
+					const bool meta_realaudio = audio_meta_lower &&
+						(strstr(audio_meta_lower, "realaudio") || strstr(audio_meta_lower, "real audio"));
+					const bool meta_real_144 = audio_meta_lower &&
+						(strstr(audio_meta_lower, "real_144") || strstr(audio_meta_lower, "real 144") ||
+						 (meta_realaudio && strstr(audio_meta_lower, "14.4")));
+					const bool meta_real_288 = audio_meta_lower &&
+						(strstr(audio_meta_lower, "real_288") || strstr(audio_meta_lower, "real 288") ||
+						 (meta_realaudio && strstr(audio_meta_lower, "28.8")));
 
 					if (!strcmp(g_type, "audio/x-true-hd") || !strcmp(g_type, "audio/xTrueHD") || meta_truehd)
 						audio.codec = has_atmos ? "Dolby Atmos (TrueHD)" : "Dolby TrueHD";
+					else if (!strcmp(g_type, "audio/x-mlp") || meta_mlp)
+						audio.codec = "MLP";
 					else if (!strcmp(g_type, "audio/x-eac3") || !strcmp(g_type, "audio/eac3"))
 						audio.codec = has_atmos ? "Dolby Atmos" : "Dolby Digital +";
 					else if (!strcmp(g_type, "audio/x-ac3") || !strcmp(g_type, "audio/ac3"))
@@ -4374,6 +4397,10 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 						audio.codec = "DTS-HD MA";
 					else if (meta_dts_hra)
 						audio.codec = "DTS-HD HRA";
+					else if (meta_dts_es)
+						audio.codec = "DTS-ES";
+					else if (meta_dts_96_24)
+						audio.codec = "DTS 96/24";
 					else if (!strcmp(g_type, "audio/x-dtshd") || !strcmp(g_type, "audio/dtshd") || meta_dtshd)
 						audio.codec = "DTS-HD";
 					else if (!strcmp(g_type, "audio/x-dts") || !strcmp(g_type, "audio/dts") ||
@@ -4423,6 +4450,20 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 						else
 							audio.codec = "WMA";
 					}
+					else if (!strcmp(g_type, "audio/x-pn-realaudio"))
+					{
+						gint raversion = 0;
+						if (gst_structure_get_int(str, "raversion", &raversion) && raversion == 1)
+							audio.codec = "RealAudio 14.4";
+						else if (raversion == 2)
+							audio.codec = "RealAudio 28.8";
+						else
+							audio.codec = "RealAudio";
+					}
+					else if (meta_real_144)
+						audio.codec = "RealAudio 14.4";
+					else if (meta_real_288)
+						audio.codec = "RealAudio 28.8";
 					else if (!strcmp(g_type, "audio/AMR-WB") || (audio_meta_lower && strstr(audio_meta_lower, "amr-wb")))
 						audio.codec = "AMR-WB";
 					else if (!strcmp(g_type, "audio/AMR") || (audio_meta_lower && strstr(audio_meta_lower, "amr")))
