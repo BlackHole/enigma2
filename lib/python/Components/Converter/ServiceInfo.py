@@ -76,6 +76,72 @@ AUDIO_CODEC_DESCRIPTIONS = frozenset(
 	for description in descriptions
 )
 
+# Canonical selected-track codec label and dynamic icon key.  The icon key is
+# deliberately path- and extension-free; the skin chooses its own icon path.
+# AudioIcon prefers <path>/icon_<key>.svg, then falls back to .png.
+AUDIO_CODEC_DISPLAY = (
+	(("Dolby Digital", "AC3"), "Dolby Digital", "dolby-digital"),
+	(("Dolby Digital +", "Dolby Digital Plus", "EAC3", "AC3+"), "Dolby Digital +", "dolby-digital-plus"),
+	(("Dolby Atmos",), "Dolby Atmos", "dolby-atmos"),
+	(("Dolby Atmos (TrueHD)",), "Dolby Atmos (TrueHD)", "dolby-atmos"),
+	(("Dolby TrueHD", "TrueHD"), "Dolby TrueHD", "dolby-truehd"),
+	(("Dolby AC-4", "Dolby AC4", "AC-4", "AC4"), "Dolby AC-4", "dolby-ac4"),
+
+	(("DTS",), "DTS", "dts"),
+	(("DTS-HD", "DTSHD"), "DTS-HD", "dts-hd"),
+	(("DTS-HD MA", "DTSHD MA", "DTS-HD Master Audio", "DTSHD Master Audio"), "DTS-HD MA", "dts-hd-ma"),
+	(("DTS-HD HRA", "DTSHD HRA", "DTS-HD High Resolution", "DTSHD High Resolution", "DTS-HD High Resolution Audio", "DTSHD High Resolution Audio"), "DTS-HD HRA", "dts-hd-hra"),
+	(("DTS:X",), "DTS:X", "dts-x"),
+	(("DTS-HD MA + DTS:X",), "DTS-HD MA + DTS:X", "dts-x"),
+	(("DTS:X IMAX",), "DTS:X IMAX", "dts-x-imax"),
+	(("DTS-HD MA + DTS:X IMAX",), "DTS-HD MA + DTS:X IMAX", "dts-x-imax"),
+	(("DTS:X Pro",), "DTS:X Pro", "dts-x-pro"),
+	(("DTS Express",), "DTS Express", "dts-express"),
+	(("DTS-ES", "DTS ES"), "DTS-ES", "dts-es"),
+	(("DTS 96/24", "DTS 96-24"), "DTS 96/24", "dts-96-24"),
+
+	(("AAC",), "AAC", "aac"),
+	(("AAC-LC", "AACLC"), "AAC-LC", "aac-lc"),
+	(("AAC-LD", "AACLD"), "AAC-LD", "aac-ld"),
+	(("AAC-ELD", "AACELD"), "AAC-ELD", "aac-eld"),
+	(("HE-AAC", "HEAAC"), "HE-AAC", "he-aac"),
+	(("HE-AAC v2", "HEAAC v2"), "HE-AAC v2", "he-aac-v2"),
+	(("xHE-AAC", "xHEAAC"), "xHE-AAC", "xhe-aac"),
+
+	(("FLAC",), "FLAC", "flac"),
+	(("ALAC",), "ALAC", "alac"),
+	(("Opus",), "Opus", "opus"),
+	(("Vorbis",), "Vorbis", "vorbis"),
+	(("WavPack",), "WavPack", "wavpack"),
+	(("APE",), "APE", "ape"),
+	(("TTA",), "TTA", "tta"),
+	(("MLP",), "MLP", "mlp"),
+	(("RealAudio",), "RealAudio", "realaudio"),
+	(("RealAudio 14.4",), "RealAudio 14.4", "realaudio-14-4"),
+	(("RealAudio 28.8",), "RealAudio 28.8", "realaudio-28-8"),
+	(("WMA Lossless",), "WMA Lossless", "wma-lossless"),
+	(("WMA Pro",), "WMA Pro", "wma-pro"),
+	(("WMA",), "WMA", "wma"),
+	(("AMR-WB", "AMRWB"), "AMR-WB", "amr-wb"),
+	(("AMR",), "AMR", "amr"),
+	(("Speex",), "Speex", "speex"),
+	(("DSD",), "DSD", "dsd"),
+	(("MP3",), "MP3", "mp3"),
+	(("MP2",), "MP2", "mp2"),
+	(("MPEG Layer I",), "MPEG Layer I", "mpeg-layer-i"),
+	(("MPEG1 Layer II",), "MPEG1 Layer II", "mpeg1-layer-ii"),
+	(("A-law", "A law"), "A-law", "a-law"),
+	(("mu-law", "mu law"), "mu-law", "mu-law"),
+	(("PCM",), "PCM", "pcm"),
+	(("LPCM", "IPCM"), "LPCM", "lpcm"),
+)
+
+AUDIO_CODEC_INFO = {
+	description: (label, icon)
+	for descriptions, label, icon in AUDIO_CODEC_DISPLAY
+	for description in descriptions
+}
+
 # Exact selected-track channel-count flags.  These use the negotiated channel
 # count exposed by iAudioTrackInfo; they do not infer layout from codec names.
 AUDIO_CHANNEL_TYPES = {
@@ -104,6 +170,24 @@ def getCurrentAudioChannels(service):
 		return 0
 	track = audio.getTrackInfo(current)
 	return track.getChannels() if track else 0
+
+
+def getCurrentAudioCodec(service):
+	audio = service and service.audioTracks()
+	if not audio:
+		return ""
+	current = audio.getCurrentTrack()
+	if current < 0 or current >= audio.getNumberOfTracks():
+		return ""
+	track = audio.getTrackInfo(current)
+	if not track:
+		return ""
+	description = track.getDescription() or ""
+	# Preserve exact known codec names before the legacy normalizer.  This is
+	# important for names such as ALAC and the refined DTS-HD/DTS:X labels.
+	if description not in AUDIO_CODEC_DESCRIPTIONS:
+		description = StdAudioDesc(description)
+	return description
 
 
 def getVideoHeight(info):
@@ -193,6 +277,9 @@ class ServiceInfo(Poll, Converter):
 	IS_AUDIO_CODEC = 46
 	IS_AUDIO_CHANNEL = 47
 	AUDIO_CHANNELS = 48
+	AUDIO_CODEC = 49
+	AUDIO_CODEC_ICON = 50
+	AUDIO_CODEC_CHANNELS = 51
 
 	def __init__(self, type):
 		Poll.__init__(self)
@@ -211,6 +298,18 @@ class ServiceInfo(Poll, Converter):
 			return
 		if type == "AudioChannels":
 			self.type = self.AUDIO_CHANNELS
+			self.interesting_events = (iPlayableService.evUpdatedInfo, iPlayableService.evStart)
+			return
+		if type == "AudioCodec":
+			self.type = self.AUDIO_CODEC
+			self.interesting_events = (iPlayableService.evUpdatedInfo, iPlayableService.evStart)
+			return
+		if type == "AudioCodecIcon":
+			self.type = self.AUDIO_CODEC_ICON
+			self.interesting_events = (iPlayableService.evUpdatedInfo, iPlayableService.evStart)
+			return
+		if type == "AudioCodecChannels":
+			self.type = self.AUDIO_CODEC_CHANNELS
 			self.interesting_events = (iPlayableService.evUpdatedInfo, iPlayableService.evStart)
 			return
 		self.type, self.interesting_events = {
@@ -444,6 +543,16 @@ class ServiceInfo(Poll, Converter):
 		elif self.type == self.AUDIO_CHANNELS:
 			channels = getCurrentAudioChannels(service)
 			return AUDIO_CHANNEL_LABELS.get(channels, f"{channels} ch" if channels > 0 else "")
+		elif self.type in (self.AUDIO_CODEC, self.AUDIO_CODEC_CHANNELS, self.AUDIO_CODEC_ICON):
+			description = getCurrentAudioCodec(service)
+			label, icon = AUDIO_CODEC_INFO.get(description, (description, ""))
+			if self.type == self.AUDIO_CODEC_ICON:
+				return f"icon_{icon}" if icon else ""
+			if self.type == self.AUDIO_CODEC_CHANNELS:
+				channels = getCurrentAudioChannels(service)
+				channel_label = AUDIO_CHANNEL_LABELS.get(channels, f"{channels} ch" if channels > 0 else "")
+				return f"{label} {channel_label}".strip()
+			return label
 		elif self.type == self.TRANSFERBPS:
 			return self.getServiceInfoString(info, iServiceInformation.sTransferBPS, lambda x: "%d kB/s" % (x // 1024))
 		elif self.type == self.HAS_HBBTV:
