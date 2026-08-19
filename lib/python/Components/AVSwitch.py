@@ -334,6 +334,14 @@ avSwitch = iAVSwitch  # Added for compatibility with OpenATV. Used by kodi plugi
 
 
 def InitAVSwitch():
+	config.av.truehd_playback = ConfigSelection(choices=[
+		("passthrough", _("Passthrough")),
+		("ac3", _("Dolby Digital"))
+	], default="passthrough")
+	config.av.dts_playback = ConfigSelection(choices=[
+		("passthrough", _("Passthrough")),
+		("ac3", _("Dolby Digital"))
+	], default="passthrough")
 	if SystemInfo["Vu_EAC3_fix"]:
 		config.av.passthrough_fix = ConfigYesNo(default=True)
 	config.av.yuvenabled = ConfigYesNo(default=True)
