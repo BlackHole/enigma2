@@ -603,6 +603,7 @@ const char *detectDTSProfile(const guint8 *data, gsize size)
 	bool exss = false;
 	bool xll = false;
 	bool xbr = false;
+	bool xch = false;
 	bool xxch = false;
 	bool x96 = false;
 	bool lbr = false;
@@ -619,6 +620,7 @@ const char *detectDTSProfile(const guint8 *data, gsize size)
 			case 0x64582025: exss = true; break; /* DTS extension substream */
 			case 0x41a29547: xll = true; break;  /* lossless / DTS-HD MA */
 			case 0x655e315e: xbr = true; break;
+			case 0x5a5a5a5a: xch = true; break;   /* core XCH / DTS-ES */
 			case 0x47004a03: xxch = true; break;
 			case 0x1d95f262: x96 = true; break;
 			case 0x0a801921: lbr = true; break;  /* DTS Express */
@@ -633,6 +635,7 @@ const char *detectDTSProfile(const guint8 *data, gsize size)
 
 	/*
 	 * Match FFmpeg's DTS profile rules:
+	 * core XCH/XXCH is DTS-ES and core X96 is DTS 96/24;
 	 * XLL is DTS-HD MA; XBR/XXCH/X96 in EXSS are DTS-HD HRA;
 	 * LBR is DTS Express. DTS:X markers are XLL extensions.
 	 */
@@ -646,6 +649,10 @@ const char *detectDTSProfile(const guint8 *data, gsize size)
 		return "DTS-HD HRA";
 	if (exss && lbr)
 		return "DTS Express";
+	if (!exss && (xch || xxch))
+		return "DTS-ES";
+	if (!exss && x96)
+		return "DTS 96/24";
 
 	return NULL;
 }
@@ -710,6 +717,459 @@ GQuark dtsHDProbeQuark()
 {
 	static GQuark quark = g_quark_from_static_string("enigma2-dtshd-probe");
 	return quark;
+}
+
+enum HDAudioAuxMode
+{
+	hdAuxNone,
+	hdAuxAC3
+};
+
+struct HDAudioAuxState
+{
+	GstElement *pipeline;
+	GstElement *dvbSink;
+	GstElement *mainAudioSink;
+	int audioIndex;
+	guint mainFlags;
+	HDAudioAuxMode mode;
+	bool linked;
+	GMutex linkMutex;
+	GCond linkCond;
+};
+
+GQuark hdAudioAuxStateQuark()
+{
+	static GQuark quark = g_quark_from_static_string("enigma2-hd-audio-aux");
+	return quark;
+}
+
+GQuark hdAudioAuxReconfigQuark()
+{
+	static GQuark quark = g_quark_from_static_string("enigma2-hd-audio-aux-reconfig");
+	return quark;
+}
+
+GQuark hdAudioAuxRetryBlockQuark()
+{
+	static GQuark quark = g_quark_from_static_string("enigma2-hd-audio-aux-retry-block");
+	return quark;
+}
+
+GQuark hdAudioNativeEac3ResetPendingQuark()
+{
+	static GQuark quark = g_quark_from_static_string("enigma2-hd-audio-native-eac3-reset-pending");
+	return quark;
+}
+
+GQuark hdAudioNativeRetryQuark()
+{
+	static GQuark quark = g_quark_from_static_string("enigma2-hd-audio-native-retry");
+	return quark;
+}
+
+HDAudioAuxState *getHDAudioAuxState(GstElement *playbin)
+{
+	return playbin ? static_cast<HDAudioAuxState *>(
+		g_object_get_qdata(G_OBJECT(playbin), hdAudioAuxStateQuark())) : NULL;
+}
+
+bool hdAudioAuxReconfiguring(GstElement *playbin)
+{
+	return playbin && GPOINTER_TO_INT(g_object_get_qdata(G_OBJECT(playbin), hdAudioAuxReconfigQuark()));
+}
+
+void setHDAudioAuxReconfiguring(GstElement *playbin, bool active)
+{
+	if (playbin)
+		g_object_set_qdata(G_OBJECT(playbin), hdAudioAuxReconfigQuark(), GINT_TO_POINTER(active ? 1 : 0));
+}
+
+bool hdAudioAuxRetryBlocked(GstElement *playbin)
+{
+	return playbin && GPOINTER_TO_INT(g_object_get_qdata(G_OBJECT(playbin), hdAudioAuxRetryBlockQuark()));
+}
+
+void setHDAudioAuxRetryBlocked(GstElement *playbin, bool blocked)
+{
+	if (playbin)
+		g_object_set_qdata(G_OBJECT(playbin), hdAudioAuxRetryBlockQuark(), GINT_TO_POINTER(blocked ? 1 : 0));
+}
+
+bool hdAudioNativeEac3ResetPending(GstElement *playbin)
+{
+	return playbin && GPOINTER_TO_INT(g_object_get_qdata(G_OBJECT(playbin), hdAudioNativeEac3ResetPendingQuark()));
+}
+
+void setHDAudioNativeEac3ResetPending(GstElement *playbin, bool pending)
+{
+	if (playbin)
+		g_object_set_qdata(G_OBJECT(playbin), hdAudioNativeEac3ResetPendingQuark(), GINT_TO_POINTER(pending ? 1 : 0));
+}
+
+int hdAudioNativeRetry(GstElement *playbin)
+{
+	return playbin ? GPOINTER_TO_INT(g_object_get_qdata(G_OBJECT(playbin), hdAudioNativeRetryQuark())) - 1 : -1;
+}
+
+void setHDAudioNativeRetry(GstElement *playbin, int stream)
+{
+	if (playbin)
+		g_object_set_qdata(G_OBJECT(playbin), hdAudioNativeRetryQuark(), stream >= 0 ? GINT_TO_POINTER(stream + 1) : NULL);
+}
+
+gint hdAudioAuxMatchSinkType(const GValue *velement, gpointer user_data)
+{
+	GstElement *element = GST_ELEMENT_CAST(g_value_get_object(velement));
+	const gchar *type = static_cast<const gchar *>(user_data);
+	return element && type ? strcmp(g_type_name(G_OBJECT_TYPE(element)), type) : 1;
+}
+
+GstElement *findHDAudioMainSink(GstElement *playbin)
+{
+	if (!playbin || !GST_IS_BIN(playbin))
+		return NULL;
+	GstIterator *children = gst_bin_iterate_recurse(GST_BIN(playbin));
+	GValue result = G_VALUE_INIT;
+	GstElement *sink = NULL;
+	if (children && gst_iterator_find_custom(children, (GCompareFunc)hdAudioAuxMatchSinkType,
+		&result, (gpointer)"GstDVBAudioSink"))
+	{
+		sink = GST_ELEMENT_CAST(g_value_dup_object(&result));
+		g_value_unset(&result);
+	}
+	if (children)
+		gst_iterator_free(children);
+	return sink;
+}
+
+GstElement *quiesceHDAudioMainSink(GstElement *playbin)
+{
+	GstElement *sink = findHDAudioMainSink(playbin);
+	if (!sink)
+		return NULL;
+
+	gst_element_set_locked_state(sink, TRUE);
+	GstStateChangeReturn set_ret = gst_element_set_state(sink, GST_STATE_NULL);
+	GstState state = GST_STATE_VOID_PENDING, pending = GST_STATE_VOID_PENDING;
+	gst_element_get_state(sink, &state, &pending, 2 * GST_SECOND);
+	if (set_ret == GST_STATE_CHANGE_FAILURE || state != GST_STATE_NULL)
+	{
+		gst_element_set_locked_state(sink, FALSE);
+		gst_element_sync_state_with_parent(sink);
+		gst_object_unref(sink);
+		return NULL;
+	}
+	return sink;
+}
+
+void restoreHDAudioMainSink(GstElement *playbin, GstElement *sink, guint flags)
+{
+	if (!playbin)
+		return;
+	g_object_set(G_OBJECT(playbin), "flags", flags, NULL);
+	if (sink)
+	{
+		gst_element_set_locked_state(sink, FALSE);
+		gst_element_sync_state_with_parent(sink);
+	}
+}
+
+HDAudioAuxMode hdAudioAuxModeForCodec(const std::string &codec)
+{
+	if (codec.find("TrueHD") != std::string::npos)
+		return eConfigManager::getConfigValue("config.av.truehd_playback") == "ac3" ? hdAuxAC3 : hdAuxNone;
+	if (codec.compare(0, 3, "DTS") == 0)
+		return eConfigManager::getConfigValue("config.av.dts_playback") == "ac3" ? hdAuxAC3 : hdAuxNone;
+	return hdAuxNone;
+}
+
+GstBusSyncReply hdAudioAuxBusSync(GstBus *, GstMessage *, gpointer)
+{
+	return GST_BUS_DROP;
+}
+
+gint hdAudioAuxSelectStream(GstElement *, GstStreamCollection *collection, GstStream *stream, gpointer user_data)
+{
+	HDAudioAuxState *state = static_cast<HDAudioAuxState *>(user_data);
+	if (!state || !stream || !(gst_stream_get_stream_type(stream) & GST_STREAM_TYPE_AUDIO))
+		return 0;
+
+	int audio_ordinal = 0;
+	const guint size = gst_stream_collection_get_size(collection);
+	for (guint n = 0; n < size; ++n)
+	{
+		GstStream *candidate = gst_stream_collection_get_stream(collection, n);
+		if (!candidate || !(gst_stream_get_stream_type(candidate) & GST_STREAM_TYPE_AUDIO))
+			continue;
+		if (candidate == stream)
+			return audio_ordinal == state->audioIndex ? 1 : 0;
+		++audio_ordinal;
+	}
+	return 0;
+}
+
+void hdAudioAuxPadAdded(GstElement *, GstPad *pad, gpointer user_data)
+{
+	HDAudioAuxState *state = static_cast<HDAudioAuxState *>(user_data);
+	if (!state || state->linked)
+		return;
+
+	GstCaps *caps = gst_pad_get_current_caps(pad);
+	if (!caps)
+		caps = gst_pad_query_caps(pad, NULL);
+	const GstStructure *structure = caps && gst_caps_get_size(caps) ? gst_caps_get_structure(caps, 0) : NULL;
+	const gchar *name = structure ? gst_structure_get_name(structure) : NULL;
+	if (!name || g_strcmp0(name, "audio/x-raw"))
+	{
+		if (caps) gst_caps_unref(caps);
+		return;
+	}
+
+	GstElement *queue = gst_bin_get_by_name(GST_BIN(state->pipeline), "hdaudio_aux_queue");
+	GstPad *sink_pad = queue ? gst_element_get_static_pad(queue, "sink") : NULL;
+	const GstPadLinkReturn link_ret = sink_pad ? gst_pad_link(pad, sink_pad) : GST_PAD_LINK_REFUSED;
+	g_mutex_lock(&state->linkMutex);
+	state->linked = link_ret == GST_PAD_LINK_OK;
+	if (state->linked)
+		g_cond_broadcast(&state->linkCond);
+	g_mutex_unlock(&state->linkMutex);
+	if (sink_pad) gst_object_unref(sink_pad);
+	if (queue) gst_object_unref(queue);
+	if (caps) gst_caps_unref(caps);
+}
+
+void stopHDAudioAuxPipeline(GstElement *playbin, bool restore_main_audio)
+{
+	HDAudioAuxState *state = getHDAudioAuxState(playbin);
+	if (!state)
+		return;
+
+	g_object_set_qdata(G_OBJECT(playbin), hdAudioAuxStateQuark(), NULL);
+	if (state->dvbSink)
+		gst_element_set_locked_state(state->dvbSink, FALSE);
+	gst_element_set_state(state->pipeline, GST_STATE_NULL);
+	GstState null_state = GST_STATE_VOID_PENDING, null_pending = GST_STATE_VOID_PENDING;
+	gst_element_get_state(state->pipeline, &null_state, &null_pending, 2 * GST_SECOND);
+
+	GstBus *bus = gst_pipeline_get_bus(GST_PIPELINE(state->pipeline));
+	if (bus)
+	{
+		gst_bus_set_sync_handler(bus, NULL, NULL, NULL);
+		gst_object_unref(bus);
+	}
+	gst_object_unref(state->pipeline);
+
+	if (restore_main_audio)
+		restoreHDAudioMainSink(playbin, state->mainAudioSink, state->mainFlags);
+	if (state->mainAudioSink)
+		gst_object_unref(state->mainAudioSink);
+	g_cond_clear(&state->linkCond);
+	g_mutex_clear(&state->linkMutex);
+	delete state;
+}
+
+bool prepareHDAudioAuxPipeline(GstElement *playbin, const gchar *uri, int audio_index,
+	HDAudioAuxMode mode, int source_channels, guint main_flags, gint64 position_ns,
+	GstElement *main_audio_sink)
+{
+	if (!playbin || !uri || mode == hdAuxNone)
+		return false;
+
+	GstElement *pipeline = gst_pipeline_new("enigma2_hdaudio_aux_pipeline");
+	GstElement *decode = gst_element_factory_make("uridecodebin3", "hdaudio_aux_decode");
+	GstElement *queue = gst_element_factory_make("queue", "hdaudio_aux_queue");
+	GstElement *convert = gst_element_factory_make("audioconvert", "hdaudio_aux_convert");
+	GstElement *resample = gst_element_factory_make("audioresample", "hdaudio_aux_resample");
+	GstElement *raw_capsfilter = gst_element_factory_make("capsfilter", "hdaudio_aux_raw_caps");
+	GstElement *encoder = gst_element_factory_make("avenc_ac3", "hdaudio_aux_encoder");
+	GstElement *parser = gst_element_factory_make("ac3parse", "hdaudio_aux_parser");
+	GstElement *out_capsfilter = gst_element_factory_make("capsfilter", "hdaudio_aux_output_caps");
+	GstElement *dvb_sink = gst_element_factory_make("dvbaudiosink", "enigma2_hdaudio_aux_dvb_sink");
+
+	if (!pipeline || !decode || !queue || !convert || !resample || !raw_capsfilter ||
+		!encoder || !parser || !out_capsfilter || !dvb_sink)
+	{
+		if (pipeline) gst_object_unref(pipeline);
+		if (decode) gst_object_unref(decode);
+		if (queue) gst_object_unref(queue);
+		if (convert) gst_object_unref(convert);
+		if (resample) gst_object_unref(resample);
+		if (raw_capsfilter) gst_object_unref(raw_capsfilter);
+		if (encoder) gst_object_unref(encoder);
+		if (parser) gst_object_unref(parser);
+		if (out_capsfilter) gst_object_unref(out_capsfilter);
+		if (dvb_sink) gst_object_unref(dvb_sink);
+		return false;
+	}
+
+	const guint64 channel_mask = G_GUINT64_CONSTANT(0x003f);
+	GstCaps *raw_caps = gst_caps_new_simple("audio/x-raw",
+		"format", G_TYPE_STRING, "F32LE",
+		"layout", G_TYPE_STRING, "interleaved",
+		"rate", G_TYPE_INT, 48000,
+		"channels", G_TYPE_INT, 6,
+		"channel-mask", GST_TYPE_BITMASK, channel_mask,
+		NULL);
+	GstCaps *out_caps = gst_caps_new_simple("audio/x-ac3",
+		"framed", G_TYPE_BOOLEAN, TRUE,
+		"alignment", G_TYPE_STRING, "frame",
+		"rate", G_TYPE_INT, 48000,
+		"channels", G_TYPE_INT, 6,
+		NULL);
+	if (!raw_caps || !out_caps)
+	{
+		if (raw_caps) gst_caps_unref(raw_caps);
+		if (out_caps) gst_caps_unref(out_caps);
+		gst_object_unref(pipeline);
+		gst_object_unref(decode); gst_object_unref(queue); gst_object_unref(convert);
+		gst_object_unref(resample); gst_object_unref(raw_capsfilter); gst_object_unref(encoder);
+		gst_object_unref(parser); gst_object_unref(out_capsfilter); gst_object_unref(dvb_sink);
+		return false;
+	}
+
+	GstPad *dvb_pad = gst_element_get_static_pad(dvb_sink, "sink");
+	GstCaps *accepted = dvb_pad ? gst_pad_query_caps(dvb_pad, out_caps) : NULL;
+	const bool accepted_output = accepted && !gst_caps_is_empty(accepted);
+	if (accepted) gst_caps_unref(accepted);
+	if (dvb_pad) gst_object_unref(dvb_pad);
+	if (!accepted_output)
+	{
+		gst_caps_unref(raw_caps); gst_caps_unref(out_caps);
+		gst_object_unref(pipeline);
+		gst_object_unref(decode); gst_object_unref(queue); gst_object_unref(convert);
+		gst_object_unref(resample); gst_object_unref(raw_capsfilter); gst_object_unref(encoder);
+		gst_object_unref(parser); gst_object_unref(out_capsfilter); gst_object_unref(dvb_sink);
+		return false;
+	}
+
+	g_object_set(G_OBJECT(raw_capsfilter), "caps", raw_caps, NULL);
+	g_object_set(G_OBJECT(out_capsfilter), "caps", out_caps, NULL);
+	gst_caps_unref(raw_caps);
+	gst_caps_unref(out_caps);
+	if (g_object_class_find_property(G_OBJECT_GET_CLASS(encoder), "bitrate"))
+		g_object_set(G_OBJECT(encoder), "bitrate", 640000, NULL);
+	g_object_set(G_OBJECT(decode), "uri", uri, NULL);
+	(void)source_channels;
+	(void)position_ns;
+
+	HDAudioAuxState *state = new HDAudioAuxState();
+	state->pipeline = pipeline;
+	state->dvbSink = dvb_sink;
+	state->mainAudioSink = main_audio_sink ? GST_ELEMENT(gst_object_ref(main_audio_sink)) : NULL;
+	state->audioIndex = audio_index;
+	state->mainFlags = main_flags;
+	state->mode = mode;
+	state->linked = false;
+	g_mutex_init(&state->linkMutex);
+	g_cond_init(&state->linkCond);
+	g_signal_connect(G_OBJECT(decode), "select-stream", G_CALLBACK(hdAudioAuxSelectStream), state);
+	g_signal_connect(G_OBJECT(decode), "pad-added", G_CALLBACK(hdAudioAuxPadAdded), state);
+
+	gst_bin_add_many(GST_BIN(pipeline), decode, queue, convert, resample, raw_capsfilter,
+		encoder, parser, out_capsfilter, dvb_sink, NULL);
+	if (!gst_element_link_many(queue, convert, resample, raw_capsfilter,
+		encoder, parser, out_capsfilter, dvb_sink, NULL))
+	{
+		gst_object_unref(pipeline);
+		if (state->mainAudioSink) gst_object_unref(state->mainAudioSink);
+		g_cond_clear(&state->linkCond);
+		g_mutex_clear(&state->linkMutex);
+		delete state;
+		return false;
+	}
+
+	GstBus *bus = gst_pipeline_get_bus(GST_PIPELINE(pipeline));
+	if (bus)
+	{
+		gst_bus_set_sync_handler(bus, hdAudioAuxBusSync, state, NULL);
+		gst_object_unref(bus);
+	}
+
+	g_object_set_qdata(G_OBJECT(playbin), hdAudioAuxStateQuark(), state);
+	if (gst_element_set_state(pipeline, GST_STATE_PAUSED) == GST_STATE_CHANGE_FAILURE)
+	{
+		stopHDAudioAuxPipeline(playbin, false);
+		return false;
+	}
+	GstState aux_state = GST_STATE_NULL, aux_pending = GST_STATE_VOID_PENDING;
+	gst_element_get_state(pipeline, &aux_state, &aux_pending, 2 * GST_SECOND);
+	gst_element_set_locked_state(dvb_sink, TRUE);
+	return true;
+}
+
+void setHDAudioAuxState(GstElement *playbin, GstState target)
+{
+	HDAudioAuxState *state = getHDAudioAuxState(playbin);
+	if (state)
+		gst_element_set_state(state->pipeline, target);
+}
+
+bool seekHDAudioAuxThenResetSink(GstElement *playbin, gint64 position_ns)
+{
+	HDAudioAuxState *state = getHDAudioAuxState(playbin);
+	if (!state || !state->dvbSink || position_ns < 0)
+		return false;
+
+	if (!gst_element_seek_simple(state->pipeline, GST_FORMAT_TIME,
+		(GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT), position_ns))
+		return false;
+
+	gst_element_set_locked_state(state->dvbSink, TRUE);
+	GstStateChangeReturn null_ret = gst_element_set_state(state->dvbSink, GST_STATE_NULL);
+	GstState sink_state = GST_STATE_VOID_PENDING, sink_pending = GST_STATE_VOID_PENDING;
+	gst_element_get_state(state->dvbSink, &sink_state, &sink_pending, 250 * GST_MSECOND);
+	if (null_ret == GST_STATE_CHANGE_FAILURE || sink_state != GST_STATE_NULL)
+	{
+		gst_element_set_locked_state(state->dvbSink, FALSE);
+		gst_element_sync_state_with_parent(state->dvbSink);
+		return false;
+	}
+
+	gst_element_set_locked_state(state->dvbSink, FALSE);
+	return gst_element_sync_state_with_parent(state->dvbSink);
+}
+
+bool positionHDAudioAuxAfterStart(GstElement *playbin, gint64 position_ns)
+{
+	HDAudioAuxState *state = getHDAudioAuxState(playbin);
+	if (!state)
+		return false;
+
+	g_mutex_lock(&state->linkMutex);
+	if (!state->linked)
+	{
+		const gint64 until = g_get_monotonic_time() + G_TIME_SPAN_SECOND;
+		while (!state->linked && g_cond_wait_until(&state->linkCond, &state->linkMutex, until))
+			;
+	}
+	const bool linked = state->linked;
+	g_mutex_unlock(&state->linkMutex);
+	if (!linked)
+		return false;
+
+	if (position_ns < 500 * GST_MSECOND)
+	{
+		gst_element_set_locked_state(state->dvbSink, FALSE);
+		return gst_element_sync_state_with_parent(state->dvbSink);
+	}
+	return seekHDAudioAuxThenResetSink(playbin, position_ns);
+}
+
+bool seekHDAudioAuxPersistent(GstElement *playbin, gint64 position_ns)
+{
+	HDAudioAuxState *state = getHDAudioAuxState(playbin);
+	if (!state || position_ns < 0)
+		return false;
+
+	const bool already_reconfiguring = hdAudioAuxReconfiguring(playbin);
+	if (!already_reconfiguring)
+		setHDAudioAuxReconfiguring(playbin, true);
+	const gboolean seek_ok = gst_element_seek_simple(state->pipeline, GST_FORMAT_TIME,
+		(GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT), position_ns);
+	if (!already_reconfiguring)
+		setHDAudioAuxReconfiguring(playbin, false);
+	return seek_ok;
 }
 
 } // namespace
@@ -1563,7 +2023,13 @@ void eServiceMP3::forceAudioReset()
 	}
 
 	if (!eConfigManager::getConfigBoolValue("config.av.passthrough_fix", false))
+	{
+		setHDAudioNativeEac3ResetPending(m_gst_playbin, false);
+		setHDAudioNativeRetry(m_gst_playbin, -1);
 		return;
+	}
+	if (hdAudioNativeEac3ResetPending(m_gst_playbin))
+		setHDAudioNativeEac3ResetPending(m_gst_playbin, false);
 	// Toggle Bluetooth audio off->on->off to force audio driver reinitialization
 	std::string btaudio = CFile::read("/proc/stb/audio/btaudio");
 	if (!btaudio.empty() && btaudio.find("off") != std::string::npos)
@@ -1581,6 +2047,12 @@ void eServiceMP3::forceAudioReset()
 
 	m_clear_buffers = true;
 	clearBuffers();
+	const int retry_audio = hdAudioNativeRetry(m_gst_playbin);
+	if (retry_audio >= 0)
+	{
+		g_object_set(G_OBJECT(m_gst_playbin), "current-audio", retry_audio, NULL);
+		setHDAudioNativeRetry(m_gst_playbin, -1);
+	}
 }
 #endif
 
@@ -1895,6 +2367,7 @@ RESULT eServiceMP3::stop()
 		gst_element_state_get_name(pending),
 		gst_element_state_change_return_get_name(ret));
 
+	stopHDAudioAuxPipeline(m_gst_playbin, false);
 	disconnectAsyncSignalHandlers();
 
 	/* See stopWorker()'s comment: hand the actual (potentially blocking)
@@ -2026,6 +2499,9 @@ RESULT eServiceMP3::seekToImpl(pts_t to)
 		return -1;
 	}
 
+	if (getHDAudioAuxState(m_gst_playbin))
+		seekHDAudioAuxPersistent(m_gst_playbin, m_last_seek_pos);
+
 	if (m_paused)
 	{
 		m_event((iPlayableService*)this, evUpdatedInfo);
@@ -2057,6 +2533,7 @@ RESULT eServiceMP3::trickSeek(gdouble ratio)
 	if (ratio > -0.01 && ratio < 0.01)
 	{
 		gst_element_set_state(m_gst_playbin, GST_STATE_PAUSED);
+		setHDAudioAuxState(m_gst_playbin, GST_STATE_PAUSED);
 		/* pipeline sometimes block due to audio track issue off gstreamer.
 		If the pipeline is blocked up on pending state change to paused ,
         this issue is solved be just reselecting the current audio track.*/
@@ -2112,7 +2589,10 @@ RESULT eServiceMP3::trickSeek(gdouble ratio)
 				gst_element_set_state(m_gst_playbin, GST_STATE_PLAYING);
 				ret = gst_element_get_state(m_gst_playbin, &state, &pending, 0);
 				if (ret == GST_STATE_CHANGE_SUCCESS)
+				{
+					setHDAudioAuxState(m_gst_playbin, GST_STATE_PLAYING);
 					return 0;
+				}
 			}
 			eDebugNoNewLineStart("[eServiceMP3] trickSeek - invalid state, state:%s pending:%s ret:%s",
 				gst_element_state_get_name(state),
@@ -2155,6 +2635,7 @@ seek_unpause:
 		}
 	}
 
+	setHDAudioAuxState(m_gst_playbin, ratio == 1.0 ? GST_STATE_PLAYING : GST_STATE_PAUSED);
 	m_prev_decoder_time = -1;
 	m_decoder_time_valid_state = 0;
 	return 0;
@@ -2176,7 +2657,7 @@ RESULT eServiceMP3::seekRelative(int direction, pts_t to)
 	int res = seekTo(ppos);
 
 	// Do double seek to same position so to overcome problem with seeking backward and passthrough on for some boxes
-	if (res > -1)
+	if (res > -1 && !getHDAudioAuxState(m_gst_playbin))
 		seekTo(ppos);
 
 	return res;
@@ -3146,17 +3627,156 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 	/* Validate index against our own track list to avoid relying solely on
 	 * an immediate g_object_get readback which can return a stale value when
 	 * GStreamer is in a transitional state. */
+	if (hdAudioAuxRetryBlocked(m_gst_playbin))
+		setHDAudioAuxRetryBlocked(m_gst_playbin, false);
+	const int pending_native_retry = hdAudioNativeRetry(m_gst_playbin);
+	if (pending_native_retry >= 0 && pending_native_retry != i)
+		setHDAudioNativeRetry(m_gst_playbin, -1);
+
 	if (i < 0 || i >= (int)m_audioStreams.size())
 	{
 		eDebug ("[eServiceMP3] selectAudioStream: index %d out of range (n=%d)", i, (int)m_audioStreams.size());
 		return -1;
 	}
+
+	const HDAudioAuxMode aux_mode = !m_sourceinfo.is_streaming ?
+		hdAudioAuxModeForCodec(m_audioStreams[i].codec) : hdAuxNone;
+	HDAudioAuxState *active_aux = getHDAudioAuxState(m_gst_playbin);
+	const HDAudioAuxMode previous_aux_mode = active_aux ? active_aux->mode : hdAuxNone;
+	const bool native_eac3_to_aux = !active_aux && aux_mode == hdAuxAC3 &&
+		m_currentAudioStream >= 0 && m_currentAudioStream < (int)m_audioStreams.size() &&
+		m_audioStreams[m_currentAudioStream].type == atEAC3;
+	bool native_handoff_reset = false;
+
+	if (aux_mode != hdAuxNone || active_aux)
+	{
+		setHDAudioAuxReconfiguring(m_gst_playbin, true);
+		GstState main_state = GST_STATE_NULL, main_pending = GST_STATE_VOID_PENDING;
+		gst_element_get_state(m_gst_playbin, &main_state, &main_pending, 0);
+		const bool resume_main = main_state == GST_STATE_PLAYING || main_pending == GST_STATE_PLAYING;
+		if (resume_main)
+		{
+			gst_element_set_state(m_gst_playbin, GST_STATE_PAUSED);
+			gst_element_get_state(m_gst_playbin, &main_state, &main_pending, 1 * GST_SECOND);
+		}
+
+		gint64 position_ns = -1;
+		gst_element_query_position(m_gst_playbin, GST_FORMAT_TIME, &position_ns);
+		guint restore_flags = 0;
+		GstElement *main_audio_sink = NULL;
+		if (active_aux)
+		{
+			restore_flags = active_aux->mainFlags;
+			if (active_aux->mainAudioSink)
+				main_audio_sink = GST_ELEMENT(gst_object_ref(active_aux->mainAudioSink));
+		}
+		else
+		{
+			g_object_get(G_OBJECT(m_gst_playbin), "flags", &restore_flags, NULL);
+			if (aux_mode != hdAuxNone)
+				main_audio_sink = quiesceHDAudioMainSink(m_gst_playbin);
+		}
+
+		if (active_aux)
+			stopHDAudioAuxPipeline(m_gst_playbin, false);
+
+		if (aux_mode != hdAuxNone)
+		{
+			bool prepared = false;
+			if (!main_audio_sink)
+			{
+				setHDAudioAuxRetryBlocked(m_gst_playbin, true);
+				g_object_set(G_OBJECT(m_gst_playbin), "flags", restore_flags, NULL);
+				if (resume_main)
+					gst_element_set_state(m_gst_playbin, GST_STATE_PLAYING);
+			}
+			else
+			{
+				const guint video_only_flags = restore_flags & ~GST_PLAY_FLAG_AUDIO;
+				g_object_set(G_OBJECT(m_gst_playbin), "flags", video_only_flags, NULL);
+				g_object_set(G_OBJECT(m_gst_playbin), "current-audio", i, NULL);
+
+				GError *uri_error = NULL;
+				gchar *uri = g_filename_to_uri(m_ref.path.c_str(), NULL, &uri_error);
+				prepared = uri && prepareHDAudioAuxPipeline(m_gst_playbin, uri, i,
+					aux_mode, m_audioStreams[i].channels, restore_flags, position_ns, main_audio_sink);
+				if (uri_error) g_error_free(uri_error);
+				g_free(uri);
+
+				if (!prepared)
+				{
+					setHDAudioAuxRetryBlocked(m_gst_playbin, true);
+					restoreHDAudioMainSink(m_gst_playbin, main_audio_sink, restore_flags);
+					if (resume_main)
+						gst_element_set_state(m_gst_playbin, GST_STATE_PLAYING);
+				}
+				else
+				{
+					setHDAudioAuxState(m_gst_playbin, GST_STATE_PLAYING);
+					if (!positionHDAudioAuxAfterStart(m_gst_playbin, position_ns))
+					{
+						setHDAudioAuxRetryBlocked(m_gst_playbin, true);
+						stopHDAudioAuxPipeline(m_gst_playbin, true);
+						prepared = false;
+					}
+					else if (!resume_main)
+						setHDAudioAuxState(m_gst_playbin, GST_STATE_PAUSED);
+
+					if (resume_main)
+					{
+						gst_element_set_state(m_gst_playbin, GST_STATE_PLAYING);
+#ifdef PASSTHROUGH_FIX
+						if ((position_ns < 500 * GST_MSECOND || native_eac3_to_aux) &&
+							eConfigManager::getConfigBoolValue("config.av.passthrough_fix", false))
+						{
+							m_passthrough_fix_timer->stop();
+							m_passthrough_fix_timer->start(300, true);
+						}
+#endif
+					}
+				}
+				gst_object_unref(main_audio_sink);
+			}
+
+			if (prepared)
+			{
+				setHDAudioAuxReconfiguring(m_gst_playbin, false);
+				m_currentAudioStream = i;
+				if (!skipAudioFix)
+				{
+					m_event((iPlayableService*)this, evUpdatedInfo);
+					setCacheEntry(true, i);
+				}
+				return 0;
+			}
+		}
+		else
+		{
+			restoreHDAudioMainSink(m_gst_playbin, main_audio_sink, restore_flags);
+#ifdef PASSTHROUGH_FIX
+			if (previous_aux_mode == hdAuxAC3 && m_audioStreams[i].type == atEAC3 &&
+				eConfigManager::getConfigBoolValue("config.av.passthrough_fix", false))
+				native_handoff_reset = true;
+#endif
+			g_object_set(G_OBJECT(m_gst_playbin), "current-audio", i, NULL);
+			if (main_audio_sink)
+				gst_object_unref(main_audio_sink);
+			if (resume_main)
+				gst_element_set_state(m_gst_playbin, GST_STATE_PLAYING);
+		}
+		setHDAudioAuxReconfiguring(m_gst_playbin, false);
+	}
+
 	int current_audio, current_audio_orig;
 	g_object_get (G_OBJECT (m_gst_playbin), "current-audio", &current_audio_orig, NULL);
 	g_object_set (G_OBJECT (m_gst_playbin), "current-audio", i, NULL);
 	g_object_get (G_OBJECT (m_gst_playbin), "current-audio", &current_audio, NULL);
 	if (current_audio != i)
 	{
+#ifdef PASSTHROUGH_FIX
+		if (native_handoff_reset)
+			setHDAudioNativeRetry(m_gst_playbin, i);
+#endif
 		/* GStreamer may be in a transitional state and hasn't applied the
 		 * property yet. Since we validated the index ourselves, trust the set. */
 		eDebug ("[eServiceMP3] selectAudioStream: readback returned %d (expected %d), trusting range-validated set", current_audio, i);
@@ -3170,35 +3790,42 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 			m_currentAudioStream = i;
 			m_event((iPlayableService*)this, evUpdatedInfo);
 #ifdef PASSTHROUGH_FIX
-			GstPad* pad = 0;
-			g_signal_emit_by_name (m_gst_playbin, "get-audio-pad", i, &pad);
-			GstCaps* caps = gst_pad_get_current_caps(pad);
-			gst_object_unref(pad);
-			if (caps) {
-				GstStructure* str = gst_caps_get_structure(caps, 0);
-				const gchar *g_type = gst_structure_get_name(str);
-				audiotype_t apidtype = gstCheckAudioPad(str);
-				gst_caps_unref(caps);
-				if (apidtype == atAC3 || apidtype == atEAC3 || apidtype == atAAC || apidtype == atUnknown || apidtype == atPCM) {
-					std::string pass = CFile::read("/proc/stb/audio/ac3");
-					if (replace_all(replace_all(pass, "\r", ""), "\n", "") == "passthrough")
-					{
-						if (m_clear_buffers)
+			if (native_handoff_reset)
+			{
+				setHDAudioNativeEac3ResetPending(m_gst_playbin, true);
+				m_passthrough_fix_timer->stop();
+				m_passthrough_fix_timer->start(300, true);
+			}
+			else
+			{
+				GstPad* pad = 0;
+				g_signal_emit_by_name (m_gst_playbin, "get-audio-pad", i, &pad);
+				GstCaps* caps = gst_pad_get_current_caps(pad);
+				gst_object_unref(pad);
+				if (caps) {
+					GstStructure* str = gst_caps_get_structure(caps, 0);
+					const gchar *g_type = gst_structure_get_name(str);
+					audiotype_t apidtype = gstCheckAudioPad(str);
+					gst_caps_unref(caps);
+					if (apidtype == atAC3 || apidtype == atEAC3 || apidtype == atAAC || apidtype == atUnknown || apidtype == atPCM) {
+						std::string pass = CFile::read("/proc/stb/audio/ac3");
+						if (replace_all(replace_all(pass, "\r", ""), "\n", "") == "passthrough")
 						{
-							m_passthrough_fix_timer->stop();
-							m_passthrough_fix_timer->start(apidtype == atEAC3 && i > 0 && current_audio_orig > -1 ? 2000 : 300, true);
+							if (m_clear_buffers)
+							{
+								if (!hdAudioNativeEac3ResetPending(m_gst_playbin))
+								{
+									m_passthrough_fix_timer->stop();
+									m_passthrough_fix_timer->start(apidtype == atEAC3 && i > 0 && current_audio_orig > -1 ? 2000 : 300, true);
+								}
+							}
 						}
+						else
+							clearBuffers();
 					}
 					else
-					{
 						clearBuffers();
-					}
 				}
-				else
-				{
-					clearBuffers();
-				}
-
 			}
 #else
 			clearBuffers();
@@ -3426,7 +4053,17 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 				case GST_STATE_CHANGE_PAUSED_TO_PLAYING:
 				{
 					m_paused = false;
-					if (m_currentAudioStream < 0)
+					if (hdAudioAuxRetryBlocked(m_gst_playbin))
+					{
+					}
+					else if (getHDAudioAuxState(m_gst_playbin))
+					{
+						setHDAudioAuxState(m_gst_playbin, GST_STATE_PLAYING);
+					}
+					else if (hdAudioAuxReconfiguring(m_gst_playbin))
+					{
+					}
+					else if (m_currentAudioStream < 0)
 					{
 						unsigned int autoaudio = 0;
 						int autoaudio_level = 5;
@@ -3726,9 +4363,25 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 					const bool meta_dts_hra = audio_meta_lower &&
 						(strstr(audio_meta_lower, "dts-hd high resolution") || strstr(audio_meta_lower, "dts hd high resolution") ||
 						 strstr(audio_meta_lower, "dts-hd hra") || strstr(audio_meta_lower, "dts hd hra"));
+					const bool meta_dts_es = audio_meta_lower &&
+						(strstr(audio_meta_lower, "dts-es") || strstr(audio_meta_lower, "dts es"));
+					const bool meta_dts_96_24 = audio_meta_lower &&
+						(strstr(audio_meta_lower, "dts 96/24") || strstr(audio_meta_lower, "dts 96-24") || strstr(audio_meta_lower, "dts 96 24"));
+					const bool meta_mlp = audio_meta_lower &&
+						(strstr(audio_meta_lower, "meridian lossless") || strstr(audio_meta_lower, "mlp"));
+					const bool meta_realaudio = audio_meta_lower &&
+						(strstr(audio_meta_lower, "realaudio") || strstr(audio_meta_lower, "real audio"));
+					const bool meta_real_144 = audio_meta_lower &&
+						(strstr(audio_meta_lower, "real_144") || strstr(audio_meta_lower, "real 144") ||
+						 (meta_realaudio && strstr(audio_meta_lower, "14.4")));
+					const bool meta_real_288 = audio_meta_lower &&
+						(strstr(audio_meta_lower, "real_288") || strstr(audio_meta_lower, "real 288") ||
+						 (meta_realaudio && strstr(audio_meta_lower, "28.8")));
 
 					if (!strcmp(g_type, "audio/x-true-hd") || !strcmp(g_type, "audio/xTrueHD") || meta_truehd)
 						audio.codec = has_atmos ? "Dolby Atmos (TrueHD)" : "Dolby TrueHD";
+					else if (!strcmp(g_type, "audio/x-mlp") || meta_mlp)
+						audio.codec = "MLP";
 					else if (!strcmp(g_type, "audio/x-eac3") || !strcmp(g_type, "audio/eac3"))
 						audio.codec = has_atmos ? "Dolby Atmos" : "Dolby Digital +";
 					else if (!strcmp(g_type, "audio/x-ac3") || !strcmp(g_type, "audio/ac3"))
@@ -3744,6 +4397,10 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 						audio.codec = "DTS-HD MA";
 					else if (meta_dts_hra)
 						audio.codec = "DTS-HD HRA";
+					else if (meta_dts_es)
+						audio.codec = "DTS-ES";
+					else if (meta_dts_96_24)
+						audio.codec = "DTS 96/24";
 					else if (!strcmp(g_type, "audio/x-dtshd") || !strcmp(g_type, "audio/dtshd") || meta_dtshd)
 						audio.codec = "DTS-HD";
 					else if (!strcmp(g_type, "audio/x-dts") || !strcmp(g_type, "audio/dts") ||
@@ -3793,6 +4450,20 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 						else
 							audio.codec = "WMA";
 					}
+					else if (!strcmp(g_type, "audio/x-pn-realaudio"))
+					{
+						gint raversion = 0;
+						if (gst_structure_get_int(str, "raversion", &raversion) && raversion == 1)
+							audio.codec = "RealAudio 14.4";
+						else if (raversion == 2)
+							audio.codec = "RealAudio 28.8";
+						else
+							audio.codec = "RealAudio";
+					}
+					else if (meta_real_144)
+						audio.codec = "RealAudio 14.4";
+					else if (meta_real_288)
+						audio.codec = "RealAudio 28.8";
 					else if (!strcmp(g_type, "audio/AMR-WB") || (audio_meta_lower && strstr(audio_meta_lower, "amr-wb")))
 						audio.codec = "AMR-WB";
 					else if (!strcmp(g_type, "audio/AMR") || (audio_meta_lower && strstr(audio_meta_lower, "amr")))
@@ -3870,6 +4541,21 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 					gst_object_unref(pad);
 					g_free(g_codec);
 					subtitleStreams_temp.push_back(subs);
+				}
+
+				for (unsigned int ai = 0; ai < audioStreams_temp.size() && ai < m_audioStreams.size(); ++ai)
+				{
+					const std::string &old_codec = m_audioStreams[ai].codec;
+					std::string &new_codec = audioStreams_temp[ai].codec;
+					if (old_codec == "Dolby Atmos" && new_codec == "Dolby Digital +")
+						new_codec = old_codec;
+					else if ((old_codec.find("DTS-HD") == 0 || old_codec.find("DTS:X") == 0) &&
+						(new_codec == "DTS" || new_codec == "DTS-HD"))
+					{
+						new_codec = old_codec;
+						if (m_audioStreams[ai].channels > audioStreams_temp[ai].channels)
+							audioStreams_temp[ai].channels = m_audioStreams[ai].channels;
+					}
 				}
 
 				bool hasChanges = m_audioStreams != audioStreams_temp;
