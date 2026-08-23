@@ -1602,9 +1602,7 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	m_dvb_subtitle_sync_timer = eTimer::create(eApp);
 	m_dvb_subtitle_parser = new eDVBSubtitleParser();
 	m_dvb_subtitle_parser->connectNewPage(sigc::mem_fun(*this, &eServiceMP3::newDVBSubtitlePage), m_new_dvb_subtitle_page_connection);
-#ifdef PASSTHROUGH_FIX
 	m_passthrough_fix_timer = eTimer::create(eApp);
-#endif
 	m_stream_tags = 0;
 	m_currentAudioStream = -1;
 	m_currentSubtitleStream = -1;
@@ -1656,9 +1654,7 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	CONNECT(m_dvb_subtitle_sync_timer->timeout, eServiceMP3::pushDVBSubtitles);
 	CONNECT(m_pump.recv_msg, eServiceMP3::gstPoll);
 	CONNECT(m_nownext_timer->timeout, eServiceMP3::updateEpgCacheNowNext);
-#ifdef PASSTHROUGH_FIX
 	CONNECT(m_passthrough_fix_timer->timeout, eServiceMP3::forceAudioReset);
-#endif
 
 	m_aspect = m_width = m_height = m_framerate = m_progressive = m_gamma = -1;
 	m_hdr_type = 0;
@@ -2002,7 +1998,6 @@ eServiceMP3::~eServiceMP3()
 
 int eServiceMP3PendingStopWorkers();
 
-#ifdef PASSTHROUGH_FIX
 void eServiceMP3::forceAudioReset()
 {
 	/* start() reuses this existing main-loop timer while a previous
@@ -2026,8 +2021,11 @@ void eServiceMP3::forceAudioReset()
 	{
 		setHDAudioNativeEac3ResetPending(m_gst_playbin, false);
 		setHDAudioNativeRetry(m_gst_playbin, -1);
+		m_clear_buffers = true;
+		clearBuffers();
 		return;
 	}
+#ifdef PASSTHROUGH_FIX
 	if (hdAudioNativeEac3ResetPending(m_gst_playbin))
 		setHDAudioNativeEac3ResetPending(m_gst_playbin, false);
 	// Toggle Bluetooth audio off->on->off to force audio driver reinitialization
@@ -2044,6 +2042,7 @@ void eServiceMP3::forceAudioReset()
 		int currAudioIndex = getCurrentTrack();
 		selectAudioStream(currAudioIndex, true);
 	}
+#endif
 
 	m_clear_buffers = true;
 	clearBuffers();
@@ -2054,7 +2053,6 @@ void eServiceMP3::forceAudioReset()
 		setHDAudioNativeRetry(m_gst_playbin, -1);
 	}
 }
-#endif
 
 void eServiceMP3::updateEpgCacheNowNext()
 {
@@ -2349,9 +2347,7 @@ void eServiceMP3::disconnectAsyncSignalHandlers()
 
 RESULT eServiceMP3::stop()
 {
-#ifdef PASSTHROUGH_FIX
 	m_passthrough_fix_timer->stop();
-#endif
 	if (!m_gst_playbin || m_state == stStopped || !m_ref)
 		return -1;
 
@@ -3725,14 +3721,11 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 					if (resume_main)
 					{
 						gst_element_set_state(m_gst_playbin, GST_STATE_PLAYING);
-#ifdef PASSTHROUGH_FIX
-						if ((position_ns < 500 * GST_MSECOND || native_eac3_to_aux) &&
-							eConfigManager::getConfigBoolValue("config.av.passthrough_fix", false))
+						if (position_ns < 500 * GST_MSECOND || native_eac3_to_aux)
 						{
 							m_passthrough_fix_timer->stop();
 							m_passthrough_fix_timer->start(300, true);
 						}
-#endif
 					}
 				}
 				gst_object_unref(main_audio_sink);

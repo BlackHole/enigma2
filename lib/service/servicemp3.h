@@ -386,12 +386,8 @@ private:
 	void pullSubtitle(GstBuffer *buffer);
 	void sourceTimeout();
 	void clearBuffers(bool force=false);
-#ifdef PASSTHROUGH_FIX
 	ePtr<eTimer> m_passthrough_fix_timer;
-#endif
-#ifdef PASSTHROUGH_FIX
 	void forceAudioReset();
-#endif
 	sourceStream m_sourceinfo;
 	gulong m_subs_to_pull_handler_id;
 
