@@ -241,6 +241,9 @@ class AudioSelection(ConfigListScreen, Screen):
 				self.settings.wmapro.addNotifier(self.changeWMAPro, initial_call=False)
 				conflist.append(getConfigListEntry(_("WMA Pro Downmix"), self.settings.wmapro, None))
 
+			conflist.append(getConfigListEntry(_("Dolby TrueHD Transcoding"), config.av.truehd_playback, None))
+			conflist.append(getConfigListEntry(_("DTS / DTS-HD Transcoding"), config.av.dts_playback, None))
+
 			if SystemInfo["CanAACTranscode"]:
 				choice_list = [
 					("off", _("Off")),

@@ -453,7 +453,7 @@ def InitAVSwitch():
 	if SystemInfo["Canedidchecking"]:
 		def setEDIDBypass(configElement):
 			open(SystemInfo["Canedidchecking"], "w").write("00000001" if configElement.value else "00000000")
-		config.av.bypass_edid_checking = ConfigYesNo(default=False)
+		config.av.bypass_edid_checking = ConfigYesNo(default=True)
 		config.av.bypass_edid_checking.addNotifier(setEDIDBypass)
 	else:
 		config.av.bypass_edid_checking = ConfigNothing()
