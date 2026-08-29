@@ -22,6 +22,7 @@
 #ifdef HAS_SOFTWARE_HDR_DETECTION
 #include <lib/service/hdrdetector.h>
 #endif
+#include <lib/service/audiochanneldetector.h>
 #include <lib/service/servicedvbrecord.h>
 #include <lib/service/event.h>
 #include <lib/dvb/metaparser.h>
@@ -1633,6 +1634,9 @@ RESULT eDVBServicePlay::start()
 
 RESULT eDVBServicePlay::stop()
 {
+	if (m_audio_channel_detector)
+		m_audio_channel_detector->stop();
+
 #ifdef PASSTHROUGH_FIX
 	if (s_deferred_dvb_starts.erase(this))
 		m_nownext_timer->stop();
@@ -2597,6 +2601,46 @@ RESULT eDVBServicePlay::getTrackInfo(struct iAudioTrackInfo &info, unsigned int 
 
 	if (info.m_language.empty())
 		info.m_language = program.audioStreams[i].language_code;
+
+	// Channel count (2.0 / 5.1 / 7.1 / ...): only ever attempted for the
+	// currently selected track - we can only inspect the stream that is
+	// actually being decoded right now, not arbitrary other tracks.
+	if (program.audioStreams[i].pid == m_current_audio_pid)
+	{
+		int codec = eDVBAudioChannelDetector::codecFromStreamType(program.audioStreams[i].type);
+		bool softcsa = m_soft_decoder && m_soft_decoder->isRunning();
+
+		if (codec != eDVBAudioChannelDetector::ctUnsupported)
+		{
+			if (!m_audio_channel_detector)
+				m_audio_channel_detector = new eDVBAudioChannelDetector();
+
+			const void *identity = softcsa
+				? static_cast<const void*>(m_soft_decoder.operator->())
+				: static_cast<const void*>(m_decode_demux.operator->());
+
+			if (!m_audio_channel_detector->matches(info.m_pid, codec, identity))
+			{
+				if (softcsa)
+					m_audio_channel_detector->startSoftCSA(m_soft_decoder, info.m_pid, codec);
+				else if (m_decode_demux)
+					m_audio_channel_detector->start(m_decode_demux, info.m_pid, codec);
+			}
+
+			info.m_channels = m_audio_channel_detector->channels();
+
+			// "Dolby Atmos" vs "Dolby Digital +": same acmod/lfeon signaling
+			// either way (Atmos is a JOC metadata extension layered on top,
+			// not a different channel mode), so channels() alone can't
+			// distinguish them - override the plain "Dolby Digital +" label
+			// set above once the detector's separate Atmos/JOC scan (see
+			// eDVBAudioChannelDetector::isAtmos()) confirms it. Matches
+			// eServiceMP3's naming exactly (lib/service/servicemp3.cpp),
+			// whose already-proven E-AC-3 Atmos parser this was ported from.
+			if (codec == eDVBAudioChannelDetector::ctEAC3 && m_audio_channel_detector->isAtmos())
+				info.m_description = "Dolby Atmos";
+		}
+	}
 
 	return 0;
 }
@@ -4601,6 +4645,11 @@ void eDVBServicePlay::onSoftDecoderAudioPidSelected(int pid)
 
 void eDVBServicePlay::cleanupSoftwareDescrambling()
 {
+	// Release any active channel-count probe before the SoftCSA recorder it
+	// may be tapping (via a monitor fd) goes away.
+	if (m_audio_channel_detector)
+		m_audio_channel_detector->stop();
+
 	// Aggressive mode: reset HW-descrambler slot when leaving any encrypted
 	// service.
 	if (eDVBServicePMTHandler::program prog;
