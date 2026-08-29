@@ -19,6 +19,7 @@ class eDVBCSASession;
 class eHDRStreamDetector;
 #endif
 class eDVBSoftDecoder;
+class eDVBAudioChannelDetector;
 
 class eServiceFactoryDVB : public iServiceHandler {
 	DECLARE_REF(eServiceFactoryDVB);
@@ -236,6 +237,10 @@ protected:
 	eDVBServiceEITHandler m_event_handler;
 	int m_current_audio_pid;
 	int m_current_video_pid_type;
+
+	// Selected-audio channel-count detection (see audiochanneldetector.h).
+	// One probe at a time, for whichever track is currently selected.
+	ePtr<eDVBAudioChannelDetector> m_audio_channel_detector;
 
 	eDVBServicePlay(const eServiceReference &ref, eDVBService *service, bool connect_event=true);
 
