@@ -18,6 +18,12 @@ namespace
 	const size_t MAX_CAPTURE_BYTES = 1024 * 1024;
 	const int PROBE_TIMEOUT_MS = 10000;
 
+	// Once an initial answer is found, the probe switches to continuously
+	// re-checking with a small rolling window instead of tearing down (see
+	// feed()) - this bounds resource use per window without needing the
+	// full 1MB safety margin the initial, never-yet-detected search gets.
+	const size_t MONITOR_WINDOW_BYTES = 65536;
+
 	// Generous margin covering the worst-case E-AC-3 bsi() walk (dialnorm/
 	// compr, dependent-stream chanmap, full mixing metadata, informational
 	// metadata, converter sync) before reaching addbsi - real streams rarely
@@ -584,7 +590,7 @@ DEFINE_REF(eDVBAudioChannelDetector);
 
 eDVBAudioChannelDetector::eDVBAudioChannelDetector()
 	: m_pid(-1), m_codec(ctUnsupported), m_identity(nullptr), m_softcsa(false),
-	  m_channels(0), m_atmos(false), m_gaveUp(false)
+	  m_channels(0), m_atmos(false), m_monitoring(false), m_gaveUp(false)
 {
 	m_monitor_fd[0] = m_monitor_fd[1] = -1;
 	m_timeout = eTimer::create(eApp);
@@ -626,6 +632,7 @@ void eDVBAudioChannelDetector::reset()
 	m_data.reserve(16384);
 	m_channels = 0;
 	m_atmos = false;
+	m_monitoring = false;
 	m_gaveUp = false;
 }
 
@@ -822,59 +829,94 @@ void eDVBAudioChannelDetector::monitorData(int)
 
 void eDVBAudioChannelDetector::feed(const uint8_t *data, int len)
 {
-	if (finished() || len <= 0)
+	if (m_gaveUp || len <= 0)
 		return;
 
 	// Inactivity timeout, not a wall-clock deadline from start(): a slow-to-
 	// establish source (StreamRelay in particular can take a while to open)
 	// must not be abandoned just because setup took time - as long as data
 	// keeps arriving, keep pushing the deadline out. It only fires if data
-	// genuinely stops for the full window.
+	// genuinely stops for the full window. Also doubles as "the track has
+	// gone silent" once monitoring - see onTimeout().
 	m_timeout->start(PROBE_TIMEOUT_MS, true);
 
-	size_t room = MAX_CAPTURE_BYTES - m_data.size();
+	size_t cap = m_monitoring ? MONITOR_WINDOW_BYTES : MAX_CAPTURE_BYTES;
+	size_t room = cap - m_data.size();
 	if (room > 0)
 	{
 		size_t take = (size_t)len < room ? (size_t)len : room;
 		m_data.insert(m_data.end(), data, data + take);
 	}
 
+	int prev_channels = m_channels;
+	bool prev_atmos = m_atmos;
+
 	tryDetect();
 
-	if (finished() && !m_gaveUp)
+	if (settled())
 	{
-		eDebug("[eDVBAudioChannelDetector] detected %d channel(s)%s for pid=%04x after %zu bytes",
-			m_channels, m_atmos ? " (Dolby Atmos)" : "", m_pid, m_data.size());
-		// Detected. Do NOT tear down the reader/notifier synchronously here:
-		// feed() may be running inside that very reader's own read callback
-		// (e.g. eDVBPESReader::data(), whose loop touches 'this' again after
-		// invoking m_read()). Let this call frame return first and defer the
-		// actual stop() to the next mainloop iteration via a zero-delay timer.
-		channelsDetected();
-		m_timeout->start(0, true);
+		if (m_channels != prev_channels || m_atmos != prev_atmos)
+		{
+			eDebug("[eDVBAudioChannelDetector] %d channel(s)%s for pid=%04x (was %d%s)",
+				m_channels, m_atmos ? " (Dolby Atmos)" : "", m_pid,
+				prev_channels, prev_atmos ? " (Dolby Atmos)" : "");
+			channelsDetected();
+		}
+
+		// Got a fresh, complete answer for this window. Do NOT tear down
+		// the reader/notifier - the format can legitimately change later on
+		// the very same pid/codec (e.g. an ad break swapping 5.1 program
+		// audio for 2.0, or vice versa, with no PID/PMT change at all) and
+		// matches() has no way to notice that on its own. Instead, keep
+		// watching: start a fresh, bounded window so a later change gets
+		// picked up rather than being permanently masked by whatever was
+		// seen first. channels()/isAtmos() keep reporting the last answer
+		// found until a new one replaces it.
+		m_monitoring = true;
+		m_data.clear();
 		return;
 	}
 
-	if (m_data.size() >= MAX_CAPTURE_BYTES)
+	if (m_data.size() >= cap)
 	{
-		eDebug("[eDVBAudioChannelDetector] giving up on pid=%04x: no valid header found in %zu bytes",
-			m_pid, m_data.size());
-		// Same self-teardown hazard as above - mark finished now (so further
-		// feed() calls are no-ops) but defer the actual stop() to next tick.
-		m_gaveUp = true;
-		m_timeout->start(0, true);
+		if (!m_monitoring)
+		{
+			// Initial detection never found anything in the full safety
+			// margin - give up for good, same as before.
+			eDebug("[eDVBAudioChannelDetector] giving up on pid=%04x: no valid header found in %zu bytes",
+				m_pid, m_data.size());
+			// Self-teardown hazard as elsewhere - mark finished now (so
+			// further feed() calls are no-ops) but defer stop() to next tick.
+			m_gaveUp = true;
+			m_timeout->start(0, true);
+		}
+		else
+		{
+			// Already monitoring, this window just didn't turn up a fresh
+			// answer - not a failure, the last known channels()/isAtmos()
+			// is still valid. Reset the window and keep watching.
+			m_data.clear();
+		}
 	}
 }
 
-bool eDVBAudioChannelDetector::finished() const
+bool eDVBAudioChannelDetector::settled() const
 {
-	if (m_gaveUp)
-		return true;
 	if (m_channels <= 0)
 		return false;
 	if (m_codec == ctEAC3 && !m_atmos && m_data.size() < EAC3_ATMOS_MIN_BYTES)
 		return false; // channel count known, but give isAtmos() more data first
 	return true;
+}
+
+bool eDVBAudioChannelDetector::finished() const
+{
+	// "No point feeding this probe any more data at all" - true once given
+	// up outright. Deliberately does NOT include settled(): a settled probe
+	// still wants more data, forever, to notice a later format change - see
+	// feed(). Callers that mean "do we have an answer yet" should check
+	// channels() (or settled()) instead.
+	return m_gaveUp;
 }
 
 void eDVBAudioChannelDetector::tryDetect()
@@ -920,14 +962,16 @@ void eDVBAudioChannelDetector::giveUp()
 
 void eDVBAudioChannelDetector::onTimeout()
 {
-	// Fires either as the real probe timeout, or as the deferred teardown
-	// scheduled by feed() after reaching a real completion state (see
-	// feed()/finished()). If we haven't actually finished yet - e.g. the
-	// channel count is known but the E-AC-3 stream went quiet before the
-	// Atmos scan got enough data - timing out now means give up on any
-	// further attempt: keep whatever we already have (channels(),
-	// isAtmos()) and settle the probe as finished for good, rather than
-	// leaving it torn down but permanently "not finished".
+	// Fires either as the deferred teardown scheduled by feed() right after
+	// giving up outright (m_gaveUp already true, a 0ms one-shot - see
+	// feed()), or as a genuine 10s-inactivity timeout: no data at all
+	// during initial probing, or - now that a settled probe keeps watching
+	// indefinitely for a later format change instead of tearing down (see
+	// feed()) - the track has gone quiet after having been settled for a
+	// while. Either way, that means give up for good: keep whatever
+	// channels()/isAtmos() already found (frozen at their last value) and
+	// stop watching, rather than spinning forever on a source that has
+	// stopped producing data.
 	if (!finished())
 	{
 		eDebug("[eDVBAudioChannelDetector] probe timed out for pid=%04x after %zu bytes", m_pid, m_data.size());
