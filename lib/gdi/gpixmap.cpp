@@ -525,21 +525,36 @@ void gPixmap::drawRectangleNew(const gRegion& region, const eRect& area, const g
 			if (r <= 0)
 				return;
 
+				/* clip the r x r bounding box to reg (area intersected with the current
+				   region rect -- see the multi-rect note below) BEFORE running the
+				   expensive per-pixel supersampling below, rather than iterating the
+				   full corner every time and discarding out-of-reg pixels one at a
+				   time -- this function is invoked once per rect of a possibly multi-
+				   rect region (routine once alphablended/rounded siblings overlap,
+				   since they don't get subtracted out of each other's visible regions),
+				   so without this a busy region could redo the full O(r^2 * samples^2)
+				   corner sampling several times over per repaint for corners that a
+				   given rect doesn't even touch. */
+			int yStart = std::max(0, reg.top() - cy);
+			int yEnd = std::min(r, reg.bottom() - cy);
+			int xStart = std::max(0, reg.left() - cx);
+			int xEnd = std::min(r, reg.right() - cx);
+			if (yStart >= yEnd || xStart >= xEnd)
+				return;
+
 			const int samples = 4;
 			const int r2 = r * r;
 			const int innerR = r - borderWidth;
 			const int innerR2 = innerR * innerR;
 			const double invSamples = 1.0 / (samples * samples);
 
-			for (int y = 0; y < r; ++y) {
-				for (int x = 0; x < r; ++x) {
+			for (int y = yStart; y < yEnd; ++y) {
+				for (int x = xStart; x < xEnd; ++x) {
 					int dx = left ? r - x - 1 : x;
 					int dy = top ? r - y - 1 : y;
 
 					int px = cx + x;
 					int py = cy + y;
-					if (px < area.left() || px >= area.right() || py < area.top() || py >= area.bottom())
-						continue;
 
 					uint32_t* dst = (uint32_t*)((uint8_t*)surface->data + py * surface->stride + px * surface->bypp);
 
@@ -582,51 +597,72 @@ void gPixmap::drawRectangleNew(const gRegion& region, const eRect& area, const g
 			drawCorner(area.right() - brr, area.bottom() - brr, brr, false, false);
 
 		// Borders
+			/* every block below intersects its rows/columns with reg (this iteration's
+			   piece of the region), for the same reason as the corner bound check above:
+			   without it, a multi-rect region would re-blend the same pixels once per rect. */
 		if (borderWidth > 0) {
 			// Top Border
 			for (int y = 0; y < borderWidth; ++y) {
 				int py = area.top() + y;
+				if (py < reg.top() || py >= reg.bottom())
+					continue;
 				int x_start = (tlr > 0) ? area.left() + tlr : area.left();
 				int x_end = (trr > 0) ? area.right() - trr : area.right();
+				x_start = std::max(x_start, reg.left());
+				x_end = std::min(x_end, reg.right());
 				gRGB* dst = (gRGB*)(uint32_t*)((uint8_t*)surface->data + py * surface->stride + x_start * surface->bypp);
 				for (int x = x_start; x < x_end; ++x, ++dst)
-					dst->alpha_blend(gRGB(borderCol));
+					if (borderA == 255) *dst = borderCol; else dst->alpha_blend(gRGB(borderCol));
 			}
 
 			// Bottom Border
 			for (int y = 0; y < borderWidth; ++y) {
 				int py = area.bottom() - 1 - y;
+				if (py < reg.top() || py >= reg.bottom())
+					continue;
 				int x_start = (blr > 0) ? area.left() + blr : area.left();
 				int x_end = (brr > 0) ? area.right() - brr : area.right();
+				x_start = std::max(x_start, reg.left());
+				x_end = std::min(x_end, reg.right());
 				gRGB* dst = (gRGB*)(uint32_t*)((uint8_t*)surface->data + py * surface->stride + x_start * surface->bypp);
 				for (int x = x_start; x < x_end; ++x, ++dst)
-					dst->alpha_blend(gRGB(borderCol));
+					if (borderA == 255) *dst = borderCol; else dst->alpha_blend(gRGB(borderCol));
 			}
 
 			// Left Border
 			for (int x = 0; x < borderWidth; ++x) {
 				int px = area.left() + x;
+				if (px < reg.left() || px >= reg.right())
+					continue;
 				int y_start = (tlr > 0) ? area.top() + tlr : area.top();
 				int y_end = (blr > 0) ? area.bottom() - blr : area.bottom();
+				y_start = std::max(y_start, reg.top());
+				y_end = std::min(y_end, reg.bottom());
 				for (int y = y_start; y < y_end; ++y) {
 					gRGB* dst = (gRGB*)(uint32_t*)((uint8_t*)surface->data + y * surface->stride + px * surface->bypp);
-					dst->alpha_blend(gRGB(borderCol));
+					if (borderA == 255) *dst = borderCol; else dst->alpha_blend(gRGB(borderCol));
 				}
 			}
 
 			// Right Border
 			for (int x = 0; x < borderWidth; ++x) {
 				int px = area.right() - 1 - x;
+				if (px < reg.left() || px >= reg.right())
+					continue;
 				int y_start = (trr > 0) ? area.top() + trr : area.top();
 				int y_end = (brr > 0) ? area.bottom() - brr : area.bottom();
+				y_start = std::max(y_start, reg.top());
+				y_end = std::min(y_end, reg.bottom());
 				for (int y = y_start; y < y_end; ++y) {
 					gRGB* dst = (gRGB*)(uint32_t*)((uint8_t*)surface->data + y * surface->stride + px * surface->bypp);
-					dst->alpha_blend(gRGB(borderCol));
+					if (borderA == 255) *dst = borderCol; else dst->alpha_blend(gRGB(borderCol));
 				}
 			}
 		}
 
 		// Top-Fill
+			/* same reg intersection as the borders above -- keep this iteration's fill
+			   confined to its piece of the region so a multi-rect region doesn't re-blend it. */
 		{
 			int y0 = area.top() + borderWidth;
 			int y1 = area.top() + ((tlr > 0 || trr > 0) ? std::max(tlr, trr) : borderWidth);
@@ -639,10 +675,15 @@ void gPixmap::drawRectangleNew(const gRegion& region, const eRect& area, const g
 			if (trr > 0)
 				x_end = std::max(x_end - trr, area.right() - trr);
 
+			y0 = std::max(y0, reg.top());
+			y1 = std::min(y1, reg.bottom());
+			x_start = std::max(x_start, reg.left());
+			x_end = std::min(x_end, reg.right());
+
 			for (int y = y0; y < y1; ++y) {
 				gRGB* dst = (gRGB*)(uint32_t*)((uint8_t*)surface->data + y * surface->stride + x_start * surface->bypp);
 				for (int x = x_start; x < x_end; ++x, ++dst)
-					dst->alpha_blend(gRGB(fillCol));
+					if (fillA == 255) *dst = fillCol; else dst->alpha_blend(gRGB(fillCol));
 			}
 		}
 
@@ -660,10 +701,15 @@ void gPixmap::drawRectangleNew(const gRegion& region, const eRect& area, const g
 			if (brr > 0)
 				x_end = std::max(x_end - brr, area.right() - brr);
 
+			y0 = std::max(y0, reg.top());
+			y1 = std::min(y1, reg.bottom());
+			x_start = std::max(x_start, reg.left());
+			x_end = std::min(x_end, reg.right());
+
 			for (int y = y0; y < y1; ++y) {
 				gRGB* dst = (gRGB*)(uint32_t*)((uint8_t*)surface->data + y * surface->stride + x_start * surface->bypp);
 				for (int x = x_start; x < x_end; ++x, ++dst)
-					dst->alpha_blend(gRGB(fillCol));
+					if (fillA == 255) *dst = fillCol; else dst->alpha_blend(gRGB(fillCol));
 			}
 		}
 
@@ -671,11 +717,18 @@ void gPixmap::drawRectangleNew(const gRegion& region, const eRect& area, const g
 		{
 			int y0 = area.top() + ((tlr || trr) ? std::max(tlr, trr) : borderWidth);
 			int y1 = area.bottom() - ((blr || brr) ? std::max(blr, brr) : borderWidth);
+			int x_start = area.left() + borderWidth;
+			int x_end = area.right() - borderWidth;
+
+			y0 = std::max(y0, reg.top());
+			y1 = std::min(y1, reg.bottom());
+			x_start = std::max(x_start, reg.left());
+			x_end = std::min(x_end, reg.right());
 
 			for (int y = y0; y < y1; ++y) {
-				gRGB* dst = (gRGB*)(uint32_t*)((uint8_t*)surface->data + y * surface->stride + (area.left() + borderWidth) * surface->bypp);
-				for (int x = area.left() + borderWidth; x < area.right() - borderWidth; ++x, ++dst)
-					dst->alpha_blend(gRGB(fillCol));
+				gRGB* dst = (gRGB*)(uint32_t*)((uint8_t*)surface->data + y * surface->stride + x_start * surface->bypp);
+				for (int x = x_start; x < x_end; ++x, ++dst)
+					if (fillA == 255) *dst = fillCol; else dst->alpha_blend(gRGB(fillCol));
 			}
 		}
 	}
@@ -878,11 +931,12 @@ void gPixmap::drawRectangle(const gRegion& region, const eRect& area, const gRGB
 						gRGB* dst = (gRGB*)dstptr;
 						while (width >= blendRatio) {
 							for (int i = 0; i < blendRatio; ++i) {
-								dst[i].b += (((src[i].b - dst[i].b) * src[i].a) >> 8);
-								dst[i].g += (((src[i].g - dst[i].g) * src[i].a) >> 8);
-								dst[i].r += (((src[i].r - dst[i].r) * src[i].a) >> 8);
-								dst[i].a += (((0xFF - dst[i].a) * src[i].a) >> 8);
+								dst[i].b += (((src->b - dst[i].b) * src->a) >> 8);
+								dst[i].g += (((src->g - dst[i].g) * src->a) >> 8);
+								dst[i].r += (((src->r - dst[i].r) * src->a) >> 8);
+								dst[i].a += (((0xFF - dst[i].a) * src->a) >> 8);
 							}
+
 							dst += blendRatio;
 							src += blendRatio;
 							width -= blendRatio;
@@ -2058,11 +2112,10 @@ void gPixmap::blit(const gPixmap& src, const eRect& _pos, const gRegion& clip, i
 				/* alpha blending is requested */
 				if (gAccel::getInstance()->hasAlphaBlendingSupport()) {
 #ifdef FORCE_ALPHABLENDING_ACCELERATION
-					/* Hardware alpha blending is broken on the few
-					 * boxes that support it, so only use it
-					 * when scaling */
-
-					accel = true;
+					/* Hardware alpha blending is unreliable on these boxes
+					 * even when scaling is involved (e.g. picons silently
+					 * fail to render), so always fall back to software. */
+					accel = false;
 #else
 					if (flag & blitScale)
 						accel = true;
@@ -2209,6 +2262,9 @@ void gPixmap::blit(const gPixmap& src, const eRect& _pos, const gRegion& clip, i
 						dstptr += surface->stride;
 					}
 				}
+			} else {
+				eWarning("[gPixmap] unimplemented: scale on non-accel surface %d->%d bpp", src.surface->bpp,
+						 surface->bpp);
 			}
 #ifdef GPIXMAP_DEBUG
 			s.stop();
@@ -2581,7 +2637,7 @@ void gPixmap::line(const gRegion &clip, ePoint start, ePoint dst, unsigned int c
 				lasthit = a = 0;
 			else
 				goto fail;
-		} 
+		}
 		else if (!clip.rects[a].contains(x, y))
 		{
 			do

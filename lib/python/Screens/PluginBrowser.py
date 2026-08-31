@@ -299,7 +299,7 @@ class PluginDownloadBrowser(Screen, HelpableScreen):
 			self.setTitle(_("Remove Plugins"))
 
 		categories = ("bootlogos", "display", "drivers", "extensions", "picons", "security", "settings", "skin", "softcams", "systemplugins", "vip")
-		self.plugin_prefix_whitelist = tuple(prefix_whitelist) if prefix_whitelist else tuple([self.PLUGIN_PREFIX + x + "-" for x in categories])
+		self.plugin_prefix_whitelist = tuple(prefix_whitelist) if prefix_whitelist else tuple([self.PLUGIN_PREFIX + x for x in categories])
 		self.plugin_suffix_blacklist = ('-dev', '-staticdev', '-dbg', '-doc', '-common', '-meta', '-src', '-po')
 		self.expandableIcon = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/expandable-plugins.png"))
 		self.expandedIcon = LoadPixmap(resolveFilename(SCOPE_CURRENT_SKIN, "icons/expanded-plugins.png"))
@@ -502,12 +502,6 @@ class PluginDownloadBrowser(Screen, HelpableScreen):
 	def startIpkgListAvailable(self):
 		self.container.execute(self.ipkg + Ipkg.opkgExtraDestinations() + " list")
 
-	def cleanupOpkgCache(self):
-		opkg_list_path = "/var/lib/opkg/lists"
-		if path.exists(opkg_list_path):
-			for f in [f.path for f in scandir(opkg_list_path) if not f.is_dir()]:
-				unlink(f)
-
 	def startRun(self):
 		listsize = self["list"].instance.size()
 		self["list"].instance.hide()
@@ -518,13 +512,11 @@ class PluginDownloadBrowser(Screen, HelpableScreen):
 			if (SystemInfo["imagetype"] != "release" and feedsstatuscheck.getFeedsBool() not in ("unknown", "alien")) or (SystemInfo["imagetype"] == "release" and feedsstatuscheck.getFeedsBool() not in ("stable", "unstable", "alien")):
 				self["text"].setText(feedsstatuscheck.getFeedsErrorMessage())
 			elif SystemInfo["imagetype"] != 'release' or (config.softwareupdate.updateisunstable.value == 1 and config.softwareupdate.updatebeta.value):
-				self.cleanupOpkgCache()
 				self["text"].setText(_("WARNING: feeds may be unstable.") + '\n' + _("Downloading plugin information. Please wait..."))
 				self.container.execute(self.ipkg + " update")
-			elif config.softwareupdate.updateisunstable.value == '1' and not config.softwareupdate.updatebeta.value:
+			elif config.softwareupdate.updateisunstable.value == 1 and not config.softwareupdate.updatebeta.value:
 				self["text"].setText(_("Sorry feeds seem be in an unstable state, if you wish to use them please enable 'Allow unstable (experimental) updates' in \"Software update settings\"."))
 			else:
-				self.cleanupOpkgCache()
 				self.container.execute(self.ipkg + " update")
 		elif self.type == self.REMOVE:
 			self.run = 1
