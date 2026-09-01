@@ -1129,7 +1129,7 @@ void eDVBFrontend::calculateSignalQuality(int snr, int &signalquality, int &sign
 		strstr(m_description, "BCM45308") ||
 		strstr(m_description, "BCM4506 (internal)") ||
 		strstr(m_description, "BCM73625 (G3)") ||
-		strstr(m_description, "BCM3158")) // DM9O0/DM920 FBC "BCM3158 (DVB-C)"
+		strstr(m_description, "BCM3158")) // FBC "BCM3158 (DVB-C)"
 	{
 		ret = (snr * 100) >> 8;
 	}
@@ -1340,7 +1340,7 @@ void eDVBFrontend::calculateSignalQuality(int snr, int &signalquality, int &sign
 	{
 		ret = snr;
 	}
-	else if (!strncmp(m_description, "Si2166D", 7)) // S2 - SF8008/HD51/AB Pulse 4K(mini)/GB Trio 4K/Zgemma more models/DM9O0/DM920
+	else if (!strncmp(m_description, "Si2166D", 7)) // S2 - SF8008/HD51/AB Pulse 4K(mini)/GB Trio 4K/Zgemma more models
 	{
 		ret = snr;
 		sat_max = 1620;
