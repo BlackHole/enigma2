@@ -335,11 +335,11 @@ avSwitch = iAVSwitch  # Added for compatibility with OpenATV. Used by kodi plugi
 
 def InitAVSwitch():
 	config.av.truehd_playback = ConfigSelection(choices=[
-		("passthrough", _("Passthrough")),
+		("off", _("Off")),
 		("ac3", _("Dolby Digital"))
 	], default="passthrough")
 	config.av.dts_playback = ConfigSelection(choices=[
-		("passthrough", _("Passthrough")),
+		("off", _("Off")),
 		("ac3", _("Dolby Digital"))
 	], default="passthrough")
 	if SystemInfo["Vu_EAC3_fix"]:
@@ -489,7 +489,7 @@ def InitAVSwitch():
 		def setHDMIColorimetry(configElement):
 			open(SystemInfo["havecolorimetry"], "w").write(configElement.value)
 		choices = [
-			("auto", _("auto")),
+			("auto", _("Auto")),
 			("bt2020ncl", _("BT 2020 NCL")),
 			("bt2020cl", _("BT 2020 CL")),
 			("bt709", _("BT 709"))
@@ -615,7 +615,7 @@ def InitAVSwitch():
 		def set3DSurround(configElement):
 			open(SystemInfo["Can3DSurround"], "w").write(configElement.value)
 		choices = [
-			("none", _("off")),
+			("none", _("Off")),
 			("hdmi", _("HDMI")),
 			("spdif", _("SPDIF")),
 			("dac", _("DAC"))
@@ -634,9 +634,9 @@ def InitAVSwitch():
 		def set3DPosition(configElement):
 			open(SystemInfo["Can3DSpeaker"], "w").write(configElement.value)
 		choices = [
-			("center", _("center")),
-			("wide", _("wide")),
-			("extrawide", _("extra wide"))
+			("center", _("Center")),
+			("wide", _("Wide")),
+			("extrawide", _("Extra Wide"))
 		]
 		default = "center"
 		if SystemInfo["CanProc"]:
@@ -651,7 +651,7 @@ def InitAVSwitch():
 		def setAutoVolume(configElement):
 			open("/proc/stb/audio/avl", "w").write(configElement.value)
 		choices = [
-			("none", _("off")),
+			("none", _("Off")),
 			("hdmi", _("HDMI")),
 			("spdif", _("SPDIF")),
 			("dac", _("DAC"))
@@ -744,10 +744,10 @@ def InitAVSwitch():
 			open("/proc/stb/audio/dtshd", "w").write(configElement.value)
 		choices = [
 			("downmix", _("Downmix")),
-			("force_dts", _("convert to DTS")),
-			("use_hdmi_caps", _("controlled by HDMI")),
-			("multichannel", _("convert to multi-channel PCM")),
-			("hdmi_best", _("use best / controlled by HDMI"))
+			("force_dts", _("Convert to DTS")),
+			("use_hdmi_caps", _("Controlled by HDMI")),
+			("multichannel", _("Convert to Multi-Channel PCM")),
+			("hdmi_best", _("Use Best / Controlled by HDMI"))
 		]
 		default = "downmix"
 		if SystemInfo["CanProc"]:
@@ -763,12 +763,9 @@ def InitAVSwitch():
 		choices = [
 			("downmix", _("Downmix")),
 			("passthrough", _("Passthrough")),
-			("multichannel", _("convert to multi-channel PCM")),
-			("force_ac3", _("convert to AC3")),
-			("force_dts", _("convert to DTS")),
-			("use_hdmi_cacenter", _("use hdmi cacenter")),
-			("wide", _("wide")),
-			("extrawide", _("extrawide"))
+			("multichannel", _("Convert to Nulti-Channel PCM")),
+			("force_ac3", _("Convert to AC3")),
+			("force_dts", _("Convert to DTS"))
 		]
 		default = "downmix"
 		if SystemInfo["CanProc"]:
@@ -784,8 +781,8 @@ def InitAVSwitch():
 		choices = [
 			("downmix", _("Downmix")),
 			("passthrough", _("Passthrough")),
-			("multichannel", _("convert to multi-channel PCM")),
-			("hdmi_best", _("use best / controlled by HDMI"))
+			("multichannel", _("Convert to Multi-Channel PCM")),
+			("hdmi_best", _("Use Best / Controlled by HDMI"))
 		]
 		default = "downmix"
 		if SystemInfo["CanProc"]:
@@ -799,7 +796,7 @@ def InitAVSwitch():
 		def setAACTranscode(configElement):
 			open("/proc/stb/audio/aac_transcode", "w").write(configElement.value)
 		choices = [
-			("off", _("off")),
+			("off", _("Off")),
 			("ac3", _("AC3")),
 			("dts", _("DTS"))
 		]
