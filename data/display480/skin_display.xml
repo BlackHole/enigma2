@@ -111,7 +111,6 @@
 			<convert type="EventTime">VFDRemaining</convert>
 			<convert type="RemainingToText">VFD</convert>
 		</widget>
-		<panel name="TunerPanel" />
 		<panel name="RecordIconPanel" />
 		<panel name="SummaryClockPanel" />
 	</screen>
@@ -139,7 +138,6 @@
 			<convert type="EventTime">VFDRemaining</convert>
 			<convert type="RemainingToText">VFD</convert>
 		</widget>
-		<panel name="TunerPanel" />
 		<panel name="RecordIconPanel" />
 		<panel name="SummaryClockPanel" />
 	</screen>
@@ -167,7 +165,6 @@
 			<convert type="EventTime">VFDRemaining</convert>
 			<convert type="RemainingToText">VFD</convert>
 		</widget>
-		<panel name="TunerPanel" />
 		<panel name="RecordIconPanel" />
 		<panel name="SummaryClockPanel" />
 	</screen>
@@ -208,12 +205,11 @@
 			<convert type="ClockToText">Format:%H:%M</convert>
 		</widget>
 		<panel name="RecordIconPanel" />
-		<panel name="TunerPanel" />
 	</screen>
 
 <!-- movieplayer -->
 	<screen name="InfoBarMoviePlayerSummary" position="fill" resolution="480,320">
-		<widget source="session.CurrentService" render="Label" position="0,5" size="480,120" font="FdLcD;50" halign="center" foregroundColor="FdLcdTitleForeground">
+		<widget source="session.CurrentService" render="Label" position="0,5" size="480,200" font="FdLcD;50" halign="center" foregroundColor="FdLcdTitleForeground">
 			<convert type="ServiceName">Name</convert>
 		</widget>
 		<widget source="session.CurrentService" render="Progress" position="20,170" size="440,20" borderWidth="1">
@@ -240,17 +236,16 @@
 	</screen>
 
 	<screen name="MovieSelectionSummary" position="fill" resolution="480,320">
-		<widget source="parent.Service" render="Label" position="0,5" size="480,160" font="FdLcD;50" halign="center" valign="center" foregroundColor="FdLcdTitleForeground" >
+		<widget source="parent.Service" render="Label" position="0,5" size="480,200" font="FdLcD;50" halign="center" valign="center" foregroundColor="FdLcdTitleForeground" >
 			<convert type="ServiceName">Name</convert>
 		</widget>
-		<widget source="parent.Service" render="Label" position="0,161" size="240,100" font="FdLcD;40" halign="center" valign="bottom" noWrap="0">
+		<widget source="parent.Service" render="Label" position="0,200" size="240,100" font="FdLcD;40" halign="center" valign="top" noWrap="0">
 			<convert type="ServiceTime">Duration</convert>
 			<convert type="ClockToText">AsLength</convert>
 		</widget>
-		<widget source="parent.Service" render="Label" position="241,161" size="240,100" font="FdLcD;40" halign="center" valign="bottom" noWrap="1">
+		<widget source="parent.Service" render="Label" position="241,200" size="240,100" font="FdLcD;40" halign="center" valign="top" noWrap="1">
 		  <convert type="MovieInfo">FileSize</convert>
 		</widget>
-		<panel name="TunerPanel" />
 		<panel name="Colored_Clock_Panel" />
 	</screen>
 
