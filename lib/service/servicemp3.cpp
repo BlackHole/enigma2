@@ -4070,7 +4070,7 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 					}
 					else if (m_currentAudioStream < 0)
 					{
-						unsigned int autoaudio = 0;
+						int autoaudio = -1; // -1 = no configured-language match found; track 0 is a valid match and must not be confused with "nothing to select"
 						int autoaudio_level = 5;
 						std::string configvalue;
 						std::vector<std::string> autoaudio_languages;
@@ -4103,8 +4103,16 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 							}
 						}
 
-						if (autoaudio)
-							selectAudioStream(autoaudio);
+						/* Always select explicitly, even when no configured language
+						 * matched and we're falling back to track 0: selectAudioStream()
+						 * is what sets up TrueHD/DTS AC3 transcoding (hdAudioAuxModeForCodec)
+						 * and the passthrough-fix seek-back that prevents a video freeze
+						 * when that track first starts decoding. The previous `if (autoaudio)`
+						 * check treated index 0 as "nothing found" and skipped this call
+						 * whenever no language preference matched (or matched track 0
+						 * itself), silently leaving GStreamer's own default audio selection
+						 * in effect with none of the above ever engaging. */
+						selectAudioStream(autoaudio >= 0 ? autoaudio : 0);
 					}
 					else
 					{
