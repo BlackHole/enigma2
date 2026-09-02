@@ -169,15 +169,15 @@ static std::unordered_map<std::string, std::string> HardwareDB{
 	{"/devices/platform/rdb/f0471000.xhci_v2/usb2/2-2/2-2:1.0", "Rear Upper USB 3.0"},
 	{"/devices/platform/rdb/f0471000.xhci_v2/usb2/2-1/2-1:1.0", "Rear Lower USB 3.0"}
 #elif HWVUDUO4KLITE // CHECKED
-	{"/devices/platform/rdb/f045a000.sata/ata1/host0/target0:0:0/0:0:0:0", "SATA"},
-	{"/devices/platform/rdb/f0471000.xhci_v2/usb2/2-2/2-2.3/2-2.3:1.0/host7/target7:0:0/7:0:0:0", "SD"},
-	("/devices/platform/rdb/f0470500.ehci_v2/usb4/4-1/4-1.1/4-1.1:1.0/host3/target3:0:0/3:0:0:0", "Front USB 2.0"},
-	("/devices/platform/rdb/f0471000.xhci_v2/usb2/2-2/2-2.1/2-2.1:1.0/host4/target4:0:0/4:0:0:0", "Front USB 3.0"},
-	("/devices/platform/rdb/f0471000.xhci_v2/usb2/2-2/2-2.3/2-2.3:1.0/host3/target3:0:0/3:0:0:0", "Rear USB C 3.0"},
-	{"/devices/platform/rdb/f0470300.ehci_v2/usb3/3-1/3-1:1.0/host5/target5:0:0/5:0:0:0", "Rear Left USB 2.0"),
-	{"/devices/platform/rdb/f0470500.ehci_v2/usb4/4-1/4-1.4/4-1.4:1.0/host8/target8:0:0/8:0:0:0", "Rear Right USB 2.0"),
-	{"/devices/platform/rdb/f0471000.xhci_v2/usb2/2-1/2-1:1.0/host2/target2:0:0/2:0:0:0", "Rear Left USB 3.0"),
-	("/devices/platform/rdb/f0471000.xhci_v2/usb2/2-2/2-2.4/2-2.4:1.0/host2/target2:0:0/2:0:0:0", "Rear Right USB 3.0"),
+	{"/devices/platform/rdb/f045a000.sata/ata1/", "SATA"},
+	{"/devices/platform/rdb/f0471000.xhci_v2/usb2/2-2/2-2.3/2-2.3:1.0", "SD"},
+	{"/devices/platform/rdb/f0470500.ehci_v2/usb4/4-1/4-1.1/4-1.1:1.0", "Front USB 2.0"},
+	{"/devices/platform/rdb/f0471000.xhci_v2/usb2/2-2/2-2.1/2-2.1:1.0", "Front USB 3.0"},
+	{"/devices/platform/rdb/f0471000.xhci_v2/usb2/2-2/2-2.3/2-2.3:1.0", "Rear USB C 3.0"},
+	{"/devices/platform/rdb/f0470300.ehci_v2/usb3/3-1/3-1:1.0", "Rear Left USB 2.0"},
+	{"/devices/platform/rdb/f0470500.ehci_v2/usb4/4-1/4-1.4/4-1.4:1.0", "Rear Right USB 2.0"},
+	{"/devices/platform/rdb/f0471000.xhci_v2/usb2/2-1/2-1:1.0", "Rear Left USB 3.0"},
+	{"/devices/platform/rdb/f0471000.xhci_v2/usb2/2-2/2-2.4/2-2.4:1.0", "Rear Right USB 3.0"}
 #elif HWVUSOLO4K // CHECKED
 	{"/devices/platform/strict-ahci.0/ata1", "SATA"},
 	{"/devices/f0490500.ehci/usb6/6-1/6-1:1.0", "Front USB"},
