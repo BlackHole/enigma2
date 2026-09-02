@@ -298,7 +298,7 @@ SystemInfo["hasRCA"] = SystemInfo["rca"]
 SystemInfo["hasScart"] = SystemInfo["scart"]
 SystemInfo["hasScartYUV"] = SystemInfo["scartyuv"]
 SystemInfo["hasYUV"] = SystemInfo["yuv"]
-SystemInfo["needsVideoJudderDriverFix"] = BOXTYPE in ("gbquad4kpro",)
+SystemInfo["needsVideoJudderDriverFix"] = BOXTYPE in ("gbquad4kpro", "vuduo4klite")
 SystemInfo["scalerSharpnessWorkaround"] = False
 SystemInfo["VideoModes"] = CHIPSET.replace("hi", "") in (  # 2160p and 1080p capable hardware...
 	"5272s", "7251", "7251s", "7252", "7252s", "7278", "7366", "7376", "7444s", "72604", "3798cv200", "3798mv200", "3798mv200advca", "3798mv200h", "3798mv300"
