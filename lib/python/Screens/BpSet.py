@@ -959,12 +959,12 @@ class BhSpeedUp(Screen, ConfigListScreen):
 
 		if SystemInfo["boxtype"] in ("vuduo", "vuuno", "vuultimo", "vuzero", "vusolo2", "vusolose", "vuduo2"):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv"])
+		elif SystemInfo["model"] in ("gb7252", "vuduo4klite"):
+			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
+			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-webkit"])
 		elif SystemInfo["brand"] == "vuplus" and SystemInfo["boxtype"] != "vusolo":
 			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-webkithbbtv"])
-		elif SystemInfo["model"] == "gb7252":
-			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
-			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-webkit"])
 		elif SystemInfo["brand"] not in ("vuplus", "abcom", "airdigital", "maxytec") and SystemInfo["boxtype"] not in ("sfx6008", "sfx6018"):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-webkit"])
 		elif SystemInfo["brand"] == "abcom" or SystemInfo["boxtype"] in ("zgemmah9twinse", "zgemmah11s"):
