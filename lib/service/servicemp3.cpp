@@ -3728,7 +3728,28 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 						prepared = false;
 					}
 					else if (!resume_main)
+					{
 						setHDAudioAuxState(m_gst_playbin, GST_STATE_PAUSED);
+						/* Cold start: the main pipeline was not yet PLAYING (or
+						 * pending PLAYING) when this aux setup ran, so the
+						 * resume_main branch below - the only other place this
+						 * timer gets armed - never runs. That's a pure timing
+						 * accident, not a sign the anti-freeze reset isn't
+						 * needed: a fresh TrueHD/DTS-to-AC3 handoff can still
+						 * leave the hardware audio passthrough/HDMI format in
+						 * a state that freezes video on first frames, exactly
+						 * as it can when reconfiguring an already-playing
+						 * pipeline. Arm it here too so the fix isn't silently
+						 * skipped depending on exactly when GStreamer happens
+						 * to reach PLAYING relative to this call.
+						 * clearBuffers() (forceAudioReset()'s job) already
+						 * tolerates firing before a valid play position
+						 * exists - it's a no-op in that case - so this is
+						 * safe even if PLAYING hasn't been reached yet when
+						 * the timer fires. */
+						m_passthrough_fix_timer->stop();
+						m_passthrough_fix_timer->start(300, true);
+					}
 
 					if (resume_main)
 					{
