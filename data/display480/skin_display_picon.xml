@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- This skin is at github.com/OpenViX/enigma2/tree/master/data/display480 -->
+<!-- This skin is at github.com/Blackhole/enigma2/tree/master/data/display480 -->
 <skin>
 	<include filename="skin_display.xml"/>
 	<colors>
 		<!-- pick unique names for the colours to not conflict with the GUI skin -->
-		<color name="FdLcdTitleForeground" value="#87cefa" />
+		<color name="FdLcdTitleForeground" value="white" />
 	</colors>
 
 <!-- template -->
 	<screen name="SummaryClockPanelTopRight">
-		<widget source="global.CurrentTime" render="Label" position="e-180,10" size="160,40" font="FdLcD;40" halign="right" valign="center" noWrap="1">
+		<widget source="global.CurrentTime" render="Label" position="e-180,10" size="160,60" font="FdLcD;60" halign="right" valign="center" noWrap="1">
 			<convert type="ClockToText"></convert>
 		</widget>
 	</screen>

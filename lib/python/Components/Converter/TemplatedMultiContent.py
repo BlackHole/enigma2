@@ -9,6 +9,7 @@ class TemplatedMultiContent(StringList):
 
 	def __init__(self, args):
 		StringList.__init__(self, args)
+		# The following are imported here because they are used by eval in local scope, not global
 		from enigma import BT_SCALE, BT_KEEP_ASPECT_RATIO, BT_ALPHATEST, BT_ALPHABLEND, BT_FIXRATIO, BT_HALIGN_LEFT, BT_HALIGN_CENTER, BT_HALIGN_RIGHT, BT_VALIGN_TOP, BT_VALIGN_CENTER, BT_VALIGN_BOTTOM, BT_ALIGN_CENTER, RT_HALIGN_CENTER, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_VALIGN_BOTTOM, RT_VALIGN_CENTER, RT_VALIGN_TOP, RT_WRAP, RT_BLEND, eListboxPythonMultiContent, gFont  # noqa: F401
 		from skin import parseFont, getSkinFactor  # noqa: F401
 		from Components.MultiContent import MultiContentEntryLinearGradient, MultiContentEntryLinearGradientAlphaBlend, MultiContentEntryPixmap, MultiContentEntryPixmapAlphaBlend, MultiContentEntryPixmapAlphaTest, MultiContentEntryProgress, MultiContentEntryProgressPixmap, MultiContentEntryText, MultiContentTemplateColor  # noqa: F401
@@ -20,10 +21,7 @@ class TemplatedMultiContent(StringList):
 		self.template = eval(args, {}, loc)
 		self.scale = None
 		self.orientations = {"orHorizontal": eListbox.orHorizontal, "orVertical": eListbox.orVertical, "orGrid": eListbox.orGrid}
-		assert "fonts" in self.template
-		assert "itemHeight" in self.template
-		assert "template" in self.template or "templates" in self.template
-		assert "template" in self.template or "default" in self.template["templates"]  # We need to have a default template.
+		self._validateTemplate()
 		if "template" not in self.template:  # Default template can be ["template"] or ["templates"]["default"].
 			templateDefault = self.template["templates"]["default"]
 			self.template["template"] = templateDefault[1]  # mandatory
@@ -35,6 +33,17 @@ class TemplatedMultiContent(StringList):
 			if len(templateDefault) > 5:  # optional, but, must be present together
 				self.template["itemWidth"] = templateDefault[4]
 				self.template["orientation"] = templateDefault[5]
+
+	def _validateTemplate(self):
+		missing = [key for key in ("fonts", "itemHeight") if key not in self.template]
+		if missing:
+			raise ValueError("[TemplatedMultiContent]: template missing required key(s) %s in %r" % (missing, self.template))
+		if "template" not in self.template:
+			templates = self.template.get("templates")
+			if not templates:
+				raise ValueError("[TemplatedMultiContent]: template must define either 'template' or 'templates' in %r" % (self.template,))
+			if "default" not in templates:
+				raise ValueError("[TemplatedMultiContent]: 'templates' dict must contain a 'default' entry in %r" % (self.template,))
 
 	def changed(self, what):
 		if not self.content:
@@ -64,12 +73,12 @@ class TemplatedMultiContent(StringList):
 		for font in self.template["fonts"]:
 			fonts.append(gFont(font.family, int(font.pointSize * scaleFactorVertical)))
 		for content in template:
-			elments = list(content)
-			elments[1] = int(elments[1] * scaleFactorHorizontal)  # pos_x
-			elments[2] = int(elments[2] * scaleFactorVertical)  # pos_y
-			elments[3] = int(elments[3] * scaleFactorHorizontal)  # size_x (width)
-			elments[4] = int(elments[4] * scaleFactorVertical)  # size_y (height)
-			scaledtemplate.append(tuple(elments))
+			elements = list(content)
+			elements[1] = int(elements[1] * scaleFactorHorizontal)  # pos_x
+			elements[2] = int(elements[2] * scaleFactorVertical)  # pos_y
+			elements[3] = int(elements[3] * scaleFactorHorizontal)  # size_x (width)
+			elements[4] = int(elements[4] * scaleFactorVertical)  # size_y (height)
+			scaledtemplate.append(tuple(elements))
 		return scaledtemplate, itemheight, itemwidth, fonts
 
 	def setTemplate(self):

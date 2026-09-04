@@ -117,6 +117,7 @@ AS_IF([test "$BOXTYPE" == "ustym4kpro"],[AC_DEFINE(HWUSTYM4KPRO, 1,[ustym4kpro])
 AS_IF([test "$BOXTYPE" == "vuduo2"],[AC_DEFINE(HWVUDUO2, 1,[vuduo2])])
 AS_IF([test "$BOXTYPE" == "vuduo4k"],[AC_DEFINE(HWVUDUO4K, 1,[vuduo4k])])
 AS_IF([test "$BOXTYPE" == "vuduo4kse"],[AC_DEFINE(HWVUDUO4KSE, 1,[vuduo4kse])])
+AS_IF([test "$BOXTYPE" == "vuduo4klite"],[AC_DEFINE(HWVUDUO4KLITE, 1,[vuduo4klite])])
 AS_IF([test "$BOXTYPE" == "vusolo2"],[AC_DEFINE(HWVUSOLO2, 1,[vusolo2])])
 AS_IF([test "$BOXTYPE" == "vusolo4k"],[AC_DEFINE(HWVUSOLO4K, 1,[vusolo4k])])
 AS_IF([test "$BOXTYPE" == "vusolose"],[AC_DEFINE(HWVUSOLOSE, 1,[vusolose])])
@@ -130,20 +131,21 @@ AS_IF([test "$BOXTYPE" == "vuzero4k"],[AC_DEFINE(HWVUZERO4K, 1,[vuzero4k])])
 dnl Software HDR detection (HEVC bitstream parser + TS recorder tap).
 dnl Enabled for VU+ 4K boxes, GB Quad 4K / Pro & UE4K, Zgemma H7 & H17Twin, which
 dnl have capable enough SoCs and GStreamer stacks to support the detection pipeline.
-if test "$BOXTYPE" == "vuduo4k"    -o "$BOXTYPE" == "vuduo4kse"  \
-	 -o "$BOXTYPE" == "vusolo4k"   -o "$BOXTYPE" == "vuultimo4k"  \
-	 -o "$BOXTYPE" == "vuuno4k"    -o "$BOXTYPE" == "vuuno4kse"  \
-	 -o "$BOXTYPE" == "vuzero4k"   -o "$BOXTYPE" == "gb7252"  \
-	 -o "$BOXTYPE" == "zgemmah7"   -o "$BOXTYPE" == "zgemmah17twin"; then
+if test "$BOXTYPE" == "vuultimo4k"    -o "$BOXTYPE" == "vuduo4kse"\    
+	 -o "$BOXTYPE" == "vuduo4klite"   -o "$BOXTYPE" == "vuduo4k"   \
+	 -o "$BOXTYPE" == "vuuno4kse"     -o "$BOXTYPE" == "vuuno4k"    \    
+	 -o "$BOXTYPE" == "vusolo4k"      -o "$BOXTYPE" == "vuzero4k"    \ 
+	 -o "$BOXTYPE" == "gb7252"        -o "$BOXTYPE" == "zgemmah17twin"\
+	 -o "$BOXTYPE" == "zgemmah7"; then
 	AC_DEFINE(HAS_SOFTWARE_HDR_DETECTION, 1, [Enable software HDR detection via HEVC bitstream parsing])
 fi
 AM_CONDITIONAL(HAS_SOFTWARE_HDR_DETECTION, \
-	test "$BOXTYPE" == "vuduo4k"    -o "$BOXTYPE" == "vuduo4kse"  \
-	  -o "$BOXTYPE" == "vusolo4k"   -o "$BOXTYPE" == "vuultimo4k"  \
-	  -o "$BOXTYPE" == "vuuno4k"    -o "$BOXTYPE" == "vuuno4kse"  \
-	  -o "$BOXTYPE" == "vuzero4k"   -o "$BOXTYPE" == "gb7252"  \
-	  -o "$BOXTYPE" == "zgemmah7"   -o "$BOXTYPE" == "zgemmah17twin")
-
+	test "$BOXTYPE" == "vuultimo4k"    -o "$BOXTYPE" == "vuduo4kse"\    
+	 -o "$BOXTYPE" == "vuduo4klite"    -o "$BOXTYPE" == "vuduo4k"   \
+	 -o "$BOXTYPE" == "vuuno4kse"      -o "$BOXTYPE" == "vuuno4k"    \    
+	 -o "$BOXTYPE" == "vusolo4k"       -o "$BOXTYPE" == "vuzero4k"    \ 
+	 -o "$BOXTYPE" == "gb7252"         -o "$BOXTYPE" == "zgemmah17twin"\
+	 -o "$BOXTYPE" == "zgemmah7")
 AC_ARG_WITH(accelerationthreshold,
 	AS_HELP_STRING([--with-accelerationthreshold=n], [use acceleration threshold of n bytes]),
 	[[with_accelerationthreshold=$withval]],

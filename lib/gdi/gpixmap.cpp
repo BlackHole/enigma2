@@ -2083,16 +2083,22 @@ void gPixmap::blit(const gPixmap& src, const eRect& _pos, const gRegion& clip, i
 		//			srcarea.x(), srcarea.y(), srcarea.width(), srcarea.height());
 
 		if (cornerRadius && surface->bpp == 32) {
+			/* use 'area', not the raw clip.rects[i]: area is already clamped to
+			 * both pos and this pixmap's own surface bounds. clip.rects[i] alone
+			 * isn't guaranteed to be, and the rounded-corner blitters below trust
+			 * their clip rect completely (no further bounds check), so passing
+			 * the raw clip could make them write past the right/bottom edge of
+			 * the destination surface into the next scanline. */
 			if (src.surface->bpp == 32) {
 				if (flag & blitScale)
-					blitRounded32BitScaled(src, pos, clip.rects[i], cornerRadius, edges, flag);
+					blitRounded32BitScaled(src, pos, area, cornerRadius, edges, flag);
 				else
-					blitRounded32Bit(src, pos, clip.rects[i], cornerRadius, edges, flag);
+					blitRounded32Bit(src, pos, area, cornerRadius, edges, flag);
 			} else {
 				if (flag & blitScale)
-					blitRounded8BitScaled(src, pos, clip.rects[i], cornerRadius, edges, flag);
+					blitRounded8BitScaled(src, pos, area, cornerRadius, edges, flag);
 				else
-					blitRounded8Bit(src, pos, clip.rects[i], cornerRadius, edges, flag);
+					blitRounded8Bit(src, pos, area, cornerRadius, edges, flag);
 			}
 
 			continue;
@@ -2112,10 +2118,7 @@ void gPixmap::blit(const gPixmap& src, const eRect& _pos, const gRegion& clip, i
 				/* alpha blending is requested */
 				if (gAccel::getInstance()->hasAlphaBlendingSupport()) {
 #ifdef FORCE_ALPHABLENDING_ACCELERATION
-					/* Hardware alpha blending is unreliable on these boxes
-					 * even when scaling is involved (e.g. picons silently
-					 * fail to render), so always fall back to software. */
-					accel = false;
+					accel = true;
 #else
 					if (flag & blitScale)
 						accel = true;
@@ -2129,11 +2132,11 @@ void gPixmap::blit(const gPixmap& src, const eRect& _pos, const gRegion& clip, i
 					accel = false;
 				}
 			}
+#endif
 		}
 
 #ifdef GPIXMAP_CHECK_THRESHOLD
 		accel = (surface->data_phys && src.surface->data_phys);
-#endif
 #endif
 
 #ifdef GPIXMAP_DEBUG

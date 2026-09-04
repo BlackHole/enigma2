@@ -315,28 +315,13 @@ class ChkrootInit(Screen):
 		self["description"].setText("%s\n\n%s" % (_("Chkroot MultiBoot Initialization in progress!"), self.descriptionSuffix))
 		device = "/dev/block/by-name/others"
 		mountpoint = "/boot"
-		if BOXTYPE in ("dm900", "dm920"):  # mmcblk0p1 = 63488 mmcblk0p2 = 2031616 mmcblk0p3 = 13172703
-			with open("/sys/block/mmcblk0/mmcblk0p1/size", "r") as fd:
-				sectors = int(fd.read().strip())
-			rootMap = [
-				("mmcblk0p2", "linuxrootfs1"),
-				("mmcblk0p2", "linuxrootfs1")
-			]
-			rootMap.append(("mmcblk0p3" if sectors < 2097152 else "mmcblk0p2", "linuxrootfs2"))
-			rootMap.extend([
-				("mmcblk0p3", "linuxrootfs3"),
-				("mmcblk0p3", "linuxrootfs4"),
-				("mmcblk0p3", "linuxrootfs5"),
-				("mmcblk0p3", "linuxrootfs6")
-			])
-		else:
-			rootMap = [
-				(MTDROOTFS, "linuxrootfs1"),
-				(MTDROOTFS, "linuxrootfs1"),
-				(MTDROOTFS, "linuxrootfs2"),
-				(MTDROOTFS, "linuxrootfs3"),
-				(MTDROOTFS, "linuxrootfs4")
-			]
+		rootMap = [
+			(MTDROOTFS, "linuxrootfs1"),
+			(MTDROOTFS, "linuxrootfs1"),
+			(MTDROOTFS, "linuxrootfs2"),
+			(MTDROOTFS, "linuxrootfs3"),
+			(MTDROOTFS, "linuxrootfs4")
+		]
 
 		cmdList = [
 			f"mkfs.vfat -F 32 -n CHKROOT {device}",

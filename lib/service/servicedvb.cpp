@@ -4714,7 +4714,7 @@ void eDVBServicePlay::cleanupSoftwareDescrambling()
 
 void eDVBServicePlay::resetHwDescramblerSlot()
 {
-	// Works around drivers (dm900) where CA_SET_PID(pid, -1) returns ok but
+	// Works around drivers where CA_SET_PID(pid, -1) returns ok but
 	// the slot keeps descrambling with old CWs. Must run BEFORE the next
 	// service tunes - after CSA-ALT detection the slot ignores all ioctls.
 

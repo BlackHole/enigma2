@@ -193,7 +193,7 @@ class About(AboutBase):
 	def populate(self):
 		Brands = {"bcm": "Broadcom", "hisi": "HiSilicon"}
 		AboutText = ""
-		AboutText += _("Model:\t%s %s\n") % (DISPLAYBRAND.replace("qv", "Qv"), MACHINENAME)
+		AboutText += _("Model:\t%s %s\n") % (DISPLAYBRAND.replace("qv", "Qv"), MACHINENAME.replace("4k", "4K"))
 		AboutText += _("Chipset:\t%s %s\n") % (Brands.get(SOC_BRAND, SOC_BRAND), CHIPSET.replace("hi", "HI").replace("cv", "CV").replace("mv", "MV"))
 		CPUArch = getCPUArch(MODEL)
 		AboutText += _("CPU:\t%s %s %s\n") % (CPUArch[0], CPUArch[1], CPUArch[2])
@@ -277,7 +277,7 @@ class About(AboutBase):
 		if ospath.exists('/sys/firmware/devicetree/base/bolt/tag'):
 			with open("/sys/firmware/devicetree/base/bolt/tag") as f:
 				bootLoader = f.read().replace('\x00', '').replace('\n', '')
-				if MODEL in ("gb7252, "):
+				if MODEL in ("gb7252"):
 					AboutText += _("Bolt:\t%s\n") % bootLoader
 				else:
 					AboutText += _("Bootloader:\t%s\n") % bootLoader
