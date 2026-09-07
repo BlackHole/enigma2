@@ -1093,7 +1093,9 @@ bool prepareHDAudioAuxPipeline(GstElement *playbin, const gchar *uri, int audio_
 		return false;
 	}
 	GstState aux_state = GST_STATE_NULL, aux_pending = GST_STATE_VOID_PENDING;
-	gst_element_get_state(pipeline, &aux_state, &aux_pending, 2 * GST_SECOND);
+	GstStateChangeReturn wait_ret = gst_element_get_state(pipeline, &aux_state, &aux_pending, 2 * GST_SECOND);
+	eDebug("[eServiceMP3] prepareHDAudioAuxPipeline: get_state wait_ret=%d state=%d pending=%d (PAUSED=%d)",
+		(int)wait_ret, (int)aux_state, (int)aux_pending, (int)GST_STATE_PAUSED);
 	gst_element_set_locked_state(dvb_sink, TRUE);
 	return true;
 }
@@ -1145,6 +1147,7 @@ bool positionHDAudioAuxAfterStart(GstElement *playbin, gint64 position_ns)
 	}
 	const bool linked = state->linked;
 	g_mutex_unlock(&state->linkMutex);
+	eDebug("[eServiceMP3] positionHDAudioAuxAfterStart: linked=%d", (int)linked);
 	if (!linked)
 		return false;
 
@@ -2000,6 +2003,7 @@ int eServiceMP3PendingStopWorkers();
 
 void eServiceMP3::forceAudioReset()
 {
+	eDebug("[eServiceMP3] forceAudioReset: timer fired (m_state=%d)", (int)m_state);
 	/* start() reuses this existing main-loop timer while a previous
 	 * GStreamer pipeline is still releasing the shared hardware sinks.
 	 * Polling here keeps Enigma2 responsive and adds no fixed handover
@@ -3596,6 +3600,8 @@ RESULT eServiceMP3::selectTrack(unsigned int i)
 
 void eServiceMP3::clearBuffers(bool force)
 {
+	eDebug("[eServiceMP3] clearBuffers: entry initial_start=%d clear_buffers=%d force=%d is_live=%d",
+		(int)m_initial_start, (int)m_clear_buffers, (int)force, (int)m_is_live);
 	if ((!m_initial_start || !m_clear_buffers) && !force) return;
 
 	/* Live streams cannot seek back; flushing would stall playback, so skip. */
@@ -3615,10 +3621,12 @@ void eServiceMP3::clearBuffers(bool force)
 		if (ppos < 0)
 			ppos = 0;
 	}
+	eDebug("[eServiceMP3] Clear Buffers: validposition=%d ppos=%lld", (int)validposition, (long long)ppos);
 	if (validposition)
 	{
 		/* flush */
 		int res = seekTo(ppos);
+		eDebug("[eServiceMP3] Clear Buffers: seekTo result=%d", res);
 		if (res == -1)
 		{
 			m_clear_buffers = false;
@@ -3754,7 +3762,20 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 					if (resume_main)
 					{
 						gst_element_set_state(m_gst_playbin, GST_STATE_PLAYING);
-						if (position_ns < 500 * GST_MSECOND || native_eac3_to_aux)
+						eDebug("[eServiceMP3] aux timer decision: resume_main=1 position_ns=%lld active_aux=%d native_eac3_to_aux=%d",
+							(long long)position_ns, (int)(active_aux != NULL), (int)native_eac3_to_aux);
+						/* !active_aux: this is a brand new aux-transcode handoff,
+						 * not a routine reconfiguration of one already running -
+						 * always arm the reset for that case. position_ns<500ms
+						 * is otherwise used as a "this is right at the start of
+						 * playback" proxy, but it's a live position query at the
+						 * exact moment this code happens to run, so under
+						 * scheduling jitter it can read >=500ms on some runs and
+						 * <500ms on others even for what is, from the user's
+						 * perspective, the same "just started this file" moment -
+						 * seen in the field as the exact same file/setup freezing
+						 * on some attempts and not others. Don't rely on it alone. */
+						if (!active_aux || position_ns < 500 * GST_MSECOND || native_eac3_to_aux)
 						{
 							m_passthrough_fix_timer->stop();
 							m_passthrough_fix_timer->start(300, true);
