@@ -1228,7 +1228,7 @@ class ImageBackup(Screen):
 					self.commands.append('echo "' + _("Create:") + " logo dump" + '"')
 					self.commands.append(f"dd if=/dev/mtd4 of={self.WORKDIR}/logo.bin")
 			else:
-				if MODEL not in ("h8",):
+				if MODEL not in ("h8", "h8se"):
 					self.MKUBIFS_ARGS = "-m 2048 -e 126976 -c 4096 -F"
 					self.UBINIZE_ARGS = "-m 2048 -p 128KiB"
 				self.commands.append(f"touch {self.WORKDIR}/root.ubi")

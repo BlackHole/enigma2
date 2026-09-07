@@ -407,7 +407,7 @@ if test "$BOXTYPE" == "sf8008" -o "$BOXTYPE" == "sx88v2" -o "$BOXTYPE" == "sx988
 	AC_DEFINE(FORCE_ALPHABLENDING_ACCELERATION, 1,[define when the framebuffer acceleration has alphablending support, but detection slow down all])
 fi
 
-if test "$BOXTYPE" == "zgemmah11s" -o "$BOXTYPE" == "zgemmah82h"; then
+if test "$BOXTYPE" == "zgemmah82h" -o "$BOXTYPE" == "zgemmah8se" -o "$BOXTYPE" == "zgemmah11s"; then
 	AC_DEFINE(FORCE_NO_BLENDING_ACCELERATION, 1,[define when the framebuffer acceleration does not have alphablending support, though the autodetection might indicate that it does])
 fi
 
