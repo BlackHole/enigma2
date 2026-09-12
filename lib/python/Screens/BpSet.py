@@ -975,7 +975,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-qt"])
 
 		if SystemInfo["boxtype"] not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero", "zgemmah82h", "sfx6008", "sfx6018"):
-			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
+			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-stbkodilauncher"])
 
 		if CHIPSET in ("hi3798mv200", "hi3798mv200h", "hi3798mv200advca", "hi3798mv300"):
 			self.pluglist.append(["Chromium2 (Netflix, YoutubeTV, Dazn, Prime Video, Disney +)", "enigma2-plugin-extensions-chromium2"])
