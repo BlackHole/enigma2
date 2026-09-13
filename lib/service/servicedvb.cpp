@@ -3727,12 +3727,7 @@ void eDVBServicePlay::forceAudioReset()
 		return;
 	// Toggle Bluetooth audio off->on->off to force audio driver reinitialization
 	std::string btaudio = CFile::read("/proc/stb/audio/btaudio");
-	if (!btaudio.empty() && btaudio.find("off") != std::string::npos)
-	{
-		eDebug("[eDVBSoftDecoder] Force audio reset: toggling btaudio on and back off");
-		CFile::writeStr("/proc/stb/audio/btaudio", "on");
-		CFile::writeStr("/proc/stb/audio/btaudio", "off");
-	}
+
 	if (btaudio.empty())
 	{
 		int currAudioIndex = getCurrentTrack();
