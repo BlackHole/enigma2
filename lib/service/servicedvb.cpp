@@ -1113,6 +1113,7 @@ eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *serv
 	m_soft_decoder_video_info_valid(false),
 #ifdef PASSTHROUGH_FIX
 	m_encrypted_ddp_audio_reset_done(false),
+	m_ddp_audio_reset_timer(eTimer::create(eApp)),
 #endif
 	m_nownext_timer(eTimer::create(eApp))
 {
@@ -1125,6 +1126,9 @@ eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *serv
 	CONNECT(m_event_handler.m_eit_changed, eDVBServicePlay::gotNewEvent);
 	CONNECT(m_subtitle_sync_timer->timeout, eDVBServicePlay::checkSubtitleTiming);
 	CONNECT(m_nownext_timer->timeout, eDVBServicePlay::updateEpgCacheNowNext);
+#ifdef PASSTHROUGH_FIX
+	CONNECT(m_ddp_audio_reset_timer->timeout, eDVBServicePlay::forceAudioReset);
+#endif
 }
 
 eDVBServicePlay::~eDVBServicePlay()
@@ -3714,7 +3718,10 @@ void eDVBServicePlay::updateDecoder(bool sendSeekableStateChanged)
 	}
 #ifdef PASSTHROUGH_FIX
 	if (!m_noaudio)
-		forceAudioReset();
+	{
+		m_ddp_audio_reset_timer->stop();
+		m_ddp_audio_reset_timer->start(300, true);
+	}
 #endif
 	if (sendSeekableStateChanged)
 		m_event((iPlayableService*)this, evSeekableStatusChanged);
@@ -4351,7 +4358,8 @@ void eDVBServicePlay::observeVideoResolutionState(int xres, int yres)
 			s_encrypted_ddp_resolution_zero_seen.erase(this);
 			eDebug("[eDVBServicePlay] encrypted DD+%s transition: existing PliExtraInfo poll observed decoder resolution 0x0 -> %dx%d; forcing late passthrough audio reset",
 				streamrelay_ddp_candidate ? " StreamRelay" : "", xres, yres);
-			forceAudioReset();
+			m_ddp_audio_reset_timer->stop();
+			m_ddp_audio_reset_timer->start(300, true);
 			break;
 		}
 	}
@@ -4388,7 +4396,8 @@ void eDVBServicePlay::video_event(struct iTSMPEGDecoder::videoEvent event)
 								s_encrypted_ddp_late_reset_armed.erase(this);
 								eDebug("[eDVBServicePlay] encrypted DD+ valid evVideoSizeChanged %dx%d: forcing late passthrough audio reset",
 									video_width, video_height);
-								forceAudioReset();
+								m_ddp_audio_reset_timer->stop();
+								m_ddp_audio_reset_timer->start(300, true);
 								break;
 							}
 						}

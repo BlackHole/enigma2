@@ -339,6 +339,15 @@ protected:
 
 #ifdef PASSTHROUGH_FIX
 	bool m_encrypted_ddp_audio_reset_done;
+	/* forceAudioReset() (selectTrack() under the hood) must never run
+	 * synchronously from within observeVideoResolutionState()'s call stack
+	 * - that's driven by PliExtraInfo's once-a-second Python poll and can
+	 * land at any point relative to an in-progress channel transition,
+	 * including while the demux/decoder are actively being reconfigured
+	 * for the new channel. Route it through this one-shot timer instead so
+	 * it always executes on its own mainloop tick, after such transitions
+	 * have had a chance to settle. */
+	ePtr<eTimer> m_ddp_audio_reset_timer;
 #endif
 	ePtr<eTimer> m_nownext_timer;
 	void updateEpgCacheNowNext();
