@@ -153,13 +153,21 @@ AUDIO_CHANNEL_TYPES = {
 	"IsAudio71": 8,
 }
 
+AUDIO_CHANNELS_DISPLAY = (
+	(1, "Mono", "mono"),
+	(2, "Stereo", "stereo"),
+	(6, "5.1", "5-1"),
+	(8, "7.1", "7-1"),
+)
+
+AUDIO_CHANNELS_INFO = {chCount: (label, icon) for chCount, label, icon in AUDIO_CHANNELS_DISPLAY}
+
 AUDIO_CHANNEL_LABELS = {
 	1: "1.0",
 	2: "2.0",
 	6: "5.1",
 	8: "7.1",
 }
-
 
 def getCurrentAudioChannels(service):
 	audio = service and service.audioTracks()
@@ -264,6 +272,125 @@ def getProgressiveStr(info):
 	return "p" if eAVSwitch.getInstance().getProgressive() else "i"
 
 
+# Canonical video resolution format label and dynamic icon key, keyed by the
+# ServiceInfo type IDs (e.g., self.IS_HD, self.IS_4K).
+VIDEO_RESOLUTION_DISPLAY = (
+	(25, "SD", "sd"),
+	(26, "HD", "hd"),
+	(27, "4K", "uhd4k"),
+	(28, "1080", "hd1080"),
+	(29, "720", "hd720"),
+	(30, "576", "sd576"),
+	(31, "480", "sd480"),
+)
+
+VIDEO_RESOLUTION_INFO = {resType: (label, icon) for resType, label, icon in VIDEO_RESOLUTION_DISPLAY}
+
+
+def getCurrentVideoResolutionType(info, video_width, video_height):
+	if video_width >= 1921 and video_height >= 1440:
+		return 27  # IS_4K
+	elif (video_width >= 1220 and video_width <= 2400 and video_height >= 769 and video_height <= 1440) or (video_width == 1080 and video_height == 1920):
+		return 28  # IS_1080
+	elif (video_width >= 1025 and video_width <= 1366 and video_height >= 481 and video_height <= 768) or (video_width >= 960 and video_height == 720) or (video_width == 720 and video_height == 1280):
+		return 29  # IS_720
+	elif video_width > 1 and video_width <= 1024 and video_height >= 481 and video_height <= 578:
+		return 30  # IS_576
+	elif (video_width > 1 and video_width <= 1024 and video_height > 1 and video_height <= 480) or (video_width == 404 and video_height == 720):
+		return 31  # IS_480
+	elif video_width >= 950 and video_width <= 1920 and video_height >= 481 and video_height <= 1080:
+		return 26  # IS_HD
+	elif video_width > 1 and video_width <= 1024 and video_height > 1 and video_height <= 578:
+		return 25  # IS_SD
+	return -1
+
+
+# Canonical video gamma/HDR format label and dynamic icon key,
+# keyed by the ServiceInfo type IDs.
+VIDEO_GAMMA_DISPLAY = (
+	(46, "SDR", "sdr"),
+	(47, "HDR", "hdr"),
+	(48, "HDR10", "hdr10"),
+	(49, "HLG", "hlg"),
+)
+
+VIDEO_GAMMA_INFO = {gammaType: (label, icon) for gammaType, label, icon in VIDEO_GAMMA_DISPLAY}
+
+
+def getCurrentVideoGammaType(info):
+	hdr = info.getInfo(iServiceInformation.sHDRType)
+	gamma = info.getInfo(iServiceInformation.sGamma)
+	if (hdr == 2 if hdr > 0 else gamma == 3):
+		return 49  # IS_HLG
+	elif (hdr == 1 if hdr > 0 else gamma == 2):
+		return 48  # IS_HDR10
+	elif (hdr == 3 if hdr > 0 else gamma == 1):
+		return 47  # IS_HDR
+	elif gamma == 0:
+		return 46  # IS_SDR
+	return -1
+
+
+# Mappings for features that return an active icon name if available.
+FEATURE_ICON_MAPPING = {
+	"Subtitles": "subtitles",
+	"Teletext": "teletext"
+}
+
+
+def isSubtitlesAvailable(service):
+	subtitle = service and service.subtitle()
+	subtitlelist = subtitle and subtitle.getSubtitleList()
+	return bool(subtitlelist and len(subtitlelist) > 0)
+
+def isTeletextAvailable(info):
+	tpid = info.getInfo(iServiceInformation.sTXTPID)
+	return tpid > 0
+
+
+# Detailed Aspect Ratio Mapping Constants
+IS_ASPECT_WIDESCREEN = 70
+IS_ASPECT_NOT_WIDESCREEN = 71
+IS_ASPECT_SD_WIDESCREEN = 72
+IS_ASPECT_SD_NOT_WIDESCREEN = 73
+
+ASPECT_ICON_INFO = {
+	70: "widescreen",
+	71: "not_widescreen",
+	72: "sd_widescreen",
+	73: "sd_not_widescreen"
+}
+
+
+def getCurrentAspectType(info, service):
+	from enigma import eServiceReference
+	isRef = isinstance(service, eServiceReference)
+	video_width = getVideoWidth(info)    # still used for HD/SD height guard below
+	video_height = getVideoHeight(info)
+	video_aspect = None
+	if not isRef:
+		video_aspect = info.getInfo(iServiceInformation.sAspect)
+	is_widescreen_flag = video_aspect in WIDESCREEN
+	if info.getInfo(iServiceInformation.sVideoType) == 1:  # H.264/AVC
+		raw_width  = info.getInfo(iServiceInformation.sVideoWidth)
+		raw_height = info.getInfo(iServiceInformation.sVideoHeight)
+		if raw_width > 1 and raw_width <= 1024 and raw_height > 1 and raw_height <= 578:
+			is_widescreen_flag = (float(raw_width) / float(raw_height)) >= 1.4
+			is_widescreen_flag = False
+		else:
+			is_widescreen_flag = True
+	is_sd = video_height <= 578 and video_height > 0
+	if is_sd and is_widescreen_flag:
+		return 72  # IS_ASPECT_SD_WIDESCREEN -> icon_sd_widescreen
+	elif is_sd and not is_widescreen_flag:
+		return 73  # IS_ASPECT_SD_NOT_WIDESCREEN -> icon_sd_not_widescreen
+	elif is_widescreen_flag:
+		return 70  # IS_ASPECT_WIDESCREEN -> icon_widescreen
+	elif video_width > 0 or video_height > 0:
+		return 71  # IS_ASPECT_NOT_WIDESCREEN -> icon_not_widescreen
+	return -1
+
+
 class ServiceInfo(Poll, Converter):
 	HAS_TELETEXT = 1
 	IS_MULTICHANNEL = 2
@@ -291,40 +418,45 @@ class ServiceInfo(Poll, Converter):
 	IS_STREAM = 24
 	IS_SD = 25
 	IS_HD = 26
-	IS_1440 = 27
+	IS_4K = 27
 	IS_1080 = 28
 	IS_720 = 29
 	IS_576 = 30
 	IS_480 = 31
-	IS_4K = 32
-	FREQ_INFO = 33
-	PROGRESSIVE = 34
-	VIDEO_INFO = 35
-	IS_SD_AND_WIDESCREEN = 36
-	IS_SD_AND_NOT_WIDESCREEN = 37
-	IS_SDR = 38
-	IS_HDR = 39
-	IS_HDR10 = 40
-	IS_HLG = 41
-	IS_VIDEO_MPEG2 = 42
-	IS_VIDEO_AVC = 43
-	IS_VIDEO_HEVC = 44
-	IS_SOFTCSA = 45
-	IS_STREAM_RELAY = 46
-	IS_AUDIO_CODEC = 47
-	IS_AUDIO_CHANNEL = 48
-	AUDIO_CHANNELS = 49
-	AUDIO_CODEC = 50
-	AUDIO_CODEC_ICON = 51
-	AUDIO_CODEC_CHANNELS = 52
-	VIDEO_CODEC_ICON = 53
-	IS_DVBS   = 54
-	IS_DVBS2  = 55
-	IS_DVBS2X = 56
-	IS_DVBC   = 57
-	IS_DVBT   = 58
-	IS_DVBT2  = 59
-	IS_ATSC   = 60
+	IS_VIDEO_RESOLUTION_ICON = 32
+	IS_DVBS   = 33
+	IS_DVBS2  = 34
+	IS_DVBS2X = 35
+	IS_DVBC   = 36
+	IS_DVBT   = 37
+	IS_DVBT2  = 38
+	IS_ATSC   = 39
+	FREQ_INFO = 40
+	PROGRESSIVE = 41
+	VIDEO_INFO = 42
+	IS_SD_AND_WIDESCREEN = 43
+	IS_SD_AND_NOT_WIDESCREEN = 44
+	IS_SDR = 45
+	IS_HDR = 46
+	IS_HDR10 = 47
+	IS_HLG = 48
+	IS_VIDEO_GAMMA_ICON = 49
+	IS_VIDEO_MPEG2 = 50
+	IS_VIDEO_AVC = 51
+	IS_VIDEO_HEVC = 52
+	IS_SOFTCSA = 53
+	IS_STREAM_RELAY = 54
+	IS_AUDIO_CODEC = 55
+	IS_AUDIO_CHANNEL = 56
+	IS_VIDEO_CODEC_ICON = 57
+	IS_AUDIO_CHANNELS_ICON = 58
+	AUDIO_CHANNELS = 59
+	AUDIO_CODEC = 60
+	AUDIO_CODEC_ICON = 61
+	AUDIO_CODEC_CHANNELS = 62
+	IS_SUBTITLES_ICON = 63
+	IS_TELETEXT_ICON = 64
+	IS_ASPECT_ICON = 65
 
 	def __init__(self, type):
 		Poll.__init__(self)
@@ -356,10 +488,6 @@ class ServiceInfo(Poll, Converter):
 			return
 		if type == "AudioCodecChannels":
 			self.type = self.AUDIO_CODEC_CHANNELS
-			self.interesting_events = (iPlayableService.evUpdatedInfo, iPlayableService.evStart)
-			return
-		if type == "VideoCodecIcon":
-			self.type = self.VIDEO_CODEC_ICON
 			self.interesting_events = (iPlayableService.evUpdatedInfo, iPlayableService.evStart)
 			return
 		self.type, self.interesting_events = {
@@ -396,19 +524,11 @@ class ServiceInfo(Poll, Converter):
 			"IsHD": (self.IS_HD, (iPlayableService.evVideoSizeChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
 			"IsSDAndWidescreen": (self.IS_SD_AND_WIDESCREEN, (iPlayableService.evVideoSizeChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
 			"IsSDAndNotWidescreen": (self.IS_SD_AND_NOT_WIDESCREEN, (iPlayableService.evVideoSizeChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
-			"Is1440": (self.IS_1440, (iPlayableService.evVideoSizeChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"Is4K": (self.IS_4K, (iPlayableService.evVideoSizeChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
 			"Is1080": (self.IS_1080, (iPlayableService.evVideoSizeChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
 			"Is720": (self.IS_720, (iPlayableService.evVideoSizeChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
 			"Is576": (self.IS_576, (iPlayableService.evVideoSizeChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
 			"Is480": (self.IS_480, (iPlayableService.evVideoSizeChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
-			"Is4K": (self.IS_4K, (iPlayableService.evVideoSizeChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
-			"IsSDR": (self.IS_SDR, (iPlayableService.evVideoGammaChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
-			"IsHDR": (self.IS_HDR, (iPlayableService.evVideoGammaChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
-			"IsHDR10": (self.IS_HDR10, (iPlayableService.evVideoGammaChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
-			"IsHLG": (self.IS_HLG, (iPlayableService.evVideoGammaChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
-			"IsVideoMPEG2": (self.IS_VIDEO_MPEG2, (iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
-			"IsVideoAVC": (self.IS_VIDEO_AVC, (iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
-			"IsVideoHEVC": (self.IS_VIDEO_HEVC, (iPlayableService.evUpdatedInfo, iPlayableService.evVideoSizeChanged)),
 			"IsDvbS": (self.IS_DVBS, (iPlayableService.evUpdatedInfo, iPlayableService.evNewProgramInfo)),
 			"IsDvbS2": (self.IS_DVBS2, (iPlayableService.evUpdatedInfo, iPlayableService.evNewProgramInfo)),
 			"IsDvbS2X": (self.IS_DVBS2X, (iPlayableService.evUpdatedInfo, iPlayableService.evNewProgramInfo)),
@@ -416,6 +536,21 @@ class ServiceInfo(Poll, Converter):
 			"IsDvbT": (self.IS_DVBT, (iPlayableService.evUpdatedInfo, iPlayableService.evNewProgramInfo)),
 			"IsDvbT2": (self.IS_DVBT2, (iPlayableService.evUpdatedInfo, iPlayableService.evNewProgramInfo)),
 			"IsATSC": (self.IS_ATSC, (iPlayableService.evUpdatedInfo, iPlayableService.evNewProgramInfo)),
+			"IsSDR": (self.IS_SDR, (iPlayableService.evVideoGammaChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"IsHDR": (self.IS_HDR, (iPlayableService.evVideoGammaChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"IsHDR10": (self.IS_HDR10, (iPlayableService.evVideoGammaChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"IsHLG": (self.IS_HLG, (iPlayableService.evVideoGammaChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"IsVideoMPEG2": (self.IS_VIDEO_MPEG2, (iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"IsVideoAVC": (self.IS_VIDEO_AVC, (iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"IsVideoHEVC": (self.IS_VIDEO_HEVC, (iPlayableService.evUpdatedInfo, iPlayableService.evVideoSizeChanged)),
+			"VideoCodecIcon": (self.IS_VIDEO_CODEC_ICON, (iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"AudioChannelsIcon": (self.IS_AUDIO_CHANNELS_ICON, (iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"VideoResolutionIcon": (self.IS_VIDEO_RESOLUTION_ICON, (iPlayableService.evVideoSizeChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"VideoGammaIcon": (self.IS_VIDEO_GAMMA_ICON, (iPlayableService.evVideoGammaChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"SubtitlesIcon": (self.IS_SUBTITLES_ICON, (iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"TeletextIcon": (self.IS_TELETEXT_ICON, (iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"AspectIcon": (self.IS_ASPECT_ICON, (iPlayableService.evVideoSizeChanged, iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
+			"CryptoIcon": (self.IS_CRYPTED, (iPlayableService.evUpdatedInfo, iPlayableService.evStart)),
 		}[type]
 
 	def isVideoService(self, info, service):
@@ -423,7 +558,6 @@ class ServiceInfo(Poll, Converter):
 			serviceInfo = info.getInfoString(iServiceInformation.sServiceref).split(':')
 		else:
 			serviceInfo = info.getInfoString(service, iServiceInformation.sServiceref).split(':')
-
 		return len(serviceInfo) < 3 or serviceInfo[2] != '2'
 
 	def getServiceInfoString(self, info, what, convert=lambda x: "%d" % x):
@@ -441,21 +575,18 @@ class ServiceInfo(Poll, Converter):
 		info = service.info() if (service and not isRef) else None
 		if not info or self.type == -1:
 			return False
-
 		sref = str(info.getInfoString(iServiceInformation.sServiceref)).upper()
-		if sref.startswith("1:0:19:") or sref.startswith("4097:") or sref.startswith("5001:") or sref.startswith("5002:"):
-			if "://" in sref or "%3A//" in sref:
-				return False
-
+		if self.type in (self.IS_DVBS, self.IS_DVBS2, self.IS_DVBS2X, self.IS_DVBC, self.IS_DVBT, self.IS_DVBT2, self.IS_ATSC):
+			if sref.startswith("1:0:19:") or sref.startswith("4097:") or sref.startswith("5001:") or sref.startswith("5002:"):
+				if "://" in sref or "%3A//" in sref:
+					return False
 		if self.type in (self.IS_DVBS, self.IS_DVBS2, self.IS_DVBS2X, self.IS_DVBC, self.IS_DVBT, self.IS_DVBT2, self.IS_ATSC):
 			tp_data = info.getInfoObject(iServiceInformation.sTransponderData)
 			name = str(info.getName()).upper()
-
 			if tp_data and isinstance(tp_data, dict):
 				t_type = str(tp_data.get("tuner_type", "")).upper()
 				system = tp_data.get("system", -1)
 				sys_str = str(tp_data.get("system_string", "")).upper()
-
 				if "DVB-S" in t_type or "SAT" in t_type or "orbital_position" in tp_data:
 					is_s2x = (system == 2) or (tp_data.get("is_id", -1) != -1) or ("S2X" in sys_str) or ("S2X" in t_type)
 					if is_s2x:
@@ -464,42 +595,33 @@ class ServiceInfo(Poll, Converter):
 						return self.type == self.IS_DVBS2
 					else:
 						return self.type == self.IS_DVBS
-
 				elif "DVB-C" in t_type or "CABLE" in t_type:
 					return self.type == self.IS_DVBC
-
 				elif "DVB-T" in t_type or "TERR" in t_type:
 					is_t2 = (system == 1) or ("T2" in sys_str) or ("T2" in t_type)
 					if is_t2:
 						return self.type == self.IS_DVBT2
 					else:
 						return self.type == self.IS_DVBT
-
 				elif "ATSC" in t_type:
 					return self.type == self.IS_ATSC
-
 			is_terrestrial = "EEEE0000" in sref or "FFFF0000" in sref or (tp_data and isinstance(tp_data, dict) and "frequency" in tp_data and "orbital_position" not in tp_data)
-
 			if is_terrestrial:
 				is_t2_feed = "HD" in name or "4K" in name or "T2" in sref or "T2" in name
 				if tp_data and isinstance(tp_data, dict):
 					is_t2_feed = is_t2_feed or (tp_data.get("system", 0) == 1) or ("T2" in str(tp_data.get("system_string", "")).upper())
-
 				if is_t2_feed:
 					return self.type == self.IS_DVBT2
 				else:
 					return self.type == self.IS_DVBT
 			return False
-
 		video_height = 0
 		video_width = 0  # noqa: F841
 		video_aspect = None
-
 		video_height = getVideoHeight(info)
 		video_width = getVideoWidth(info)  # noqa: F841
 		if not isRef:
 			video_aspect = info.getInfo(iServiceInformation.sAspect)
-
 		if self.type == self.HAS_TELETEXT and not isRef:
 			tpid = info.getInfo(iServiceInformation.sTXTPID)
 			return tpid > 0
@@ -560,19 +682,18 @@ class ServiceInfo(Poll, Converter):
 		elif self.type == self.EDITMODE:
 			return hasattr(self.source, "editmode") and not not self.source.editmode
 		elif self.type == self.IS_STREAM and not isRef:
-			refstr = info.getInfoString(iServiceInformation.sServiceref)
+			refstr = str(info.getInfoString(iServiceInformation.sServiceref)).lower()
 			if "4097" in refstr or "5001" in refstr or "5002" in refstr or "9999" in refstr:
-				return service.streamed() is not None
+				return True
 			return False
 		elif self.isVideoService(info, service):
 			if self.type in (self.IS_WIDESCREEN, self.IS_NOT_WIDESCREEN, self.IS_SD_AND_WIDESCREEN, self.IS_SD_AND_NOT_WIDESCREEN):
 				is_widescreen_flag = video_aspect in WIDESCREEN
-				if info.getInfo(iServiceInformation.sVideoType) == 1:
-					if video_width > 1 and video_width <= 1024 and video_height > 1 and video_height <= 578:
-						if (float(video_width) / float(video_height)) < 1.4:
-							is_widescreen_flag = False
-						else:
-							is_widescreen_flag = True
+				if info.getInfo(iServiceInformation.sVideoType) == 1:  # H.264/AVC
+					raw_width  = info.getInfo(iServiceInformation.sVideoWidth)
+					raw_height = info.getInfo(iServiceInformation.sVideoHeight)
+					if raw_width > 1 and raw_width <= 1024 and raw_height > 1 and raw_height <= 578:
+						is_widescreen_flag = (float(raw_width) / float(raw_height)) >= 1.4
 				if self.type == self.IS_WIDESCREEN:
 					return is_widescreen_flag
 				elif self.type == self.IS_NOT_WIDESCREEN:
@@ -586,17 +707,15 @@ class ServiceInfo(Poll, Converter):
 			elif self.type == self.IS_SD:
 				return video_width > 1 and video_width <= 1024 and video_height > 1 and video_height <= 578
 			elif self.type == self.IS_4K:
-				return video_width >= 3840 or video_height >= 2160
-			elif self.type == self.IS_1440:
-				return video_width >= 1921 and video_width <= 3839 and video_height >= 1081 and video_height <= 2159
+				return video_width >= 1921 and video_height >= 1440
 			elif self.type == self.IS_1080:
-				return video_width >= 1220 and video_width <= 1920 and video_height >= 769 and video_height <= 1080
+				return video_width >= 1220 and video_width <= 2400 and video_height >= 768 and video_height <= 1440 or video_width == 1080 and video_height == 1920
 			elif self.type == self.IS_720:
-				return (video_width >= 1025 and video_width <= 1366 and video_height >= 481 and video_height <= 768) or (video_width >= 960 and video_height == 720)
+				return video_width >= 1025 and video_width <= 1366 and video_height >= 481 and video_height <= 768 or video_width >= 960 and video_height == 720 or video_width == 720 and video_height == 1280
 			elif self.type == self.IS_576:
 				return video_width > 1 and video_width <= 1024 and video_height >= 481 and video_height <= 578
 			elif self.type == self.IS_480:
-				return video_width > 1 and video_width <= 1024 and video_height > 1 and video_height <= 480
+				return video_width > 1 and video_width <= 1024 and video_height > 1 and video_height <= 480 or video_width == 404 and video_height == 720
 			elif self.type == self.PROGRESSIVE and not isRef:
 				return bool(self._getProgressive(info))
 			elif self.type == self.IS_SDR and not isRef:
@@ -666,11 +785,64 @@ class ServiceInfo(Poll, Converter):
 				channel_label = AUDIO_CHANNEL_LABELS.get(channels, f"{channels} ch" if channels > 0 else "")
 				return f"{label} {channel_label}".strip()
 			return label
-		elif self.type == self.VIDEO_CODEC_ICON:
+		elif self.type == self.IS_AUDIO_CHANNELS_ICON:
+			channels = getCurrentAudioChannels(service)
+			label, icon = AUDIO_CHANNELS_INFO.get(channels, ("", ""))
+			return f"{self.codecIconPrefix}{icon}" if icon else ""
+		elif self.type == self.IS_VIDEO_CODEC_ICON:
 			description = getCurrentVideoCodec(info)
 			label, icon = VIDEO_CODEC_INFO.get(description, (description, ""))
-			if self.type == self.VIDEO_CODEC_ICON:
+			if self.type == self.IS_VIDEO_CODEC_ICON:
 				return f"{self.codecIconPrefix}{icon}" if icon else ""
+		elif self.type == self.IS_VIDEO_RESOLUTION_ICON:
+			video_width = getVideoWidth(info)
+			video_height = getVideoHeight(info)
+			res_type = getCurrentVideoResolutionType(info, video_width, video_height)
+			label, icon = VIDEO_RESOLUTION_INFO.get(res_type, ("", ""))
+			return f"{self.codecIconPrefix}{icon}" if icon else ""
+		elif self.type == self.IS_VIDEO_GAMMA_ICON:
+			gamma_type = getCurrentVideoGammaType(info)
+			label, icon = VIDEO_GAMMA_INFO.get(gamma_type, ("", ""))
+			return f"{self.codecIconPrefix}{icon}" if icon else ""
+		elif self.type == self.IS_SUBTITLES_ICON:
+			state = "_on" if isSubtitlesAvailable(service) else "_off"
+			return f"{self.codecIconPrefix}subtitles{state}"
+		elif self.type == self.IS_TELETEXT_ICON:
+			state = "_on" if isTeletextAvailable(info) else "_off"
+			return f"{self.codecIconPrefix}teletext{state}"
+		elif self.type == self.IS_ASPECT_ICON:
+			isRef = isinstance(service, eServiceReference)
+			video_aspect = None if isRef else info.getInfo(iServiceInformation.sAspect)
+			video_width = getVideoWidth(info)
+			video_height = getVideoHeight(info)
+			is_widescreen_flag = video_aspect in WIDESCREEN
+			if info.getInfo(iServiceInformation.sVideoType) == 1:  # H.264/AVC
+				raw_width  = info.getInfo(iServiceInformation.sVideoWidth)
+				raw_height = info.getInfo(iServiceInformation.sVideoHeight)
+				if raw_width > 1 and raw_width <= 1024 and raw_height > 1 and raw_height <= 578:
+					is_widescreen_flag = (float(raw_width) / float(raw_height)) >= 1.4
+			icon = ""
+			if video_height <= 578 and is_widescreen_flag:
+				icon = "sd_widescreen"
+			elif video_height <= 578 and not is_widescreen_flag:
+				icon = "sd_not_widescreen"
+			elif is_widescreen_flag:
+				icon = "widescreen"
+			else:
+				icon = "not_widescreen"
+			return f"{self.codecIconPrefix}{icon}" if icon else ""
+		elif self.type == self.IS_CRYPTED:
+			icon = "clear"
+			if info.getInfo(iServiceInformation.sIsCrypted) == 1:
+				if info.getInfo(iServiceInformation.sIsSoftCSA) == 1:
+					icon = "softcsa"
+				else:
+					refstr = info.getInfoString(iServiceInformation.sServiceref)
+					if "9999" in refstr or "17999" in refstr and "127.0.0.1" in refstr or "localhost" in refstr or "0.0.0.0" in refstr:
+						icon = "streamrelay"
+					else:
+						icon = "crypted"
+			return f"{self.codecIconPrefix}{icon}" if icon else ""
 		elif self.type == self.TRANSFERBPS:
 			return self.getServiceInfoString(info, iServiceInformation.sTransferBPS, lambda x: "%d kB/s" % (x // 1024))
 		elif self.type == self.HAS_HBBTV:
