@@ -1,18 +1,524 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: OBH 5.6 it_IT\n"
+"Project-Id-Version: OBH 6.2 it-IT\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-05-25 15:06+0100\n"
+"PO-Revision-Date: 2026-09-16 11:13+0200\n"
 "Last-Translator: blu8\n"
-"Language-Team: @blu8-@AlexWilMac-@insanity\n"
+"Language-Team: @blu8-@AlexWilMac\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.3\n"
-"POT-Creation-Date: \n"
-"X-Poedit-SourceCharset: iso-8859-1\n"
+
+msgid "Two Lines + Next Event"
+msgstr "Due righe + prossimo evento"
+
+msgid "GCC version:\t%s\n"
+msgstr "Versione GCC:\t%s\n"
+
+msgid "Glibc version:\t%s\n"
+msgstr "Versione Glibc:\t%s\n"
+
+msgid "FFmpeg version:\t%s\n"
+msgstr "Versione FFmpeg:\t%s\n"
+
+msgid "Libdvbcsa version:\t%s\n"
+msgstr "Versione Libdvbcsa:\t%s\n"
+
+msgid "OpenSSL version:\t%s\n"
+msgstr "Versione OpenSSL:\t%s\n"
+
+msgid "Rust version:\t%s\n"
+msgstr "Versione Rust:\t%s\n"
+
+msgid "E2 (Re)starts:\t%s\n"
+msgstr "Riavvii di E2:\t%s\n"
+
+msgid "CPU Temperature:\t%s"
+msgstr "Temperatura CPU:\t%s"
+
+msgid "UPX version:\t%s\n"
+msgstr "Versione UPX:\t%s\n"
+
+msgid "Last E2 Update:\t%s (%s)\n"
+msgstr "Ultimo aggiornamento di E2:\t%s (%s)\n"
+
+msgid "Uptime:\t%s\n"
+msgstr "Attivo da:\t%s\n"
+
+msgid "Remote:\t%s\n"
+msgstr "Telecomando:\t%s\n"
+
+msgid "Enigma2 Uptime:\t%s\n"
+msgstr "Tempo di attività di E2:\t%s\n"
+
+msgid "Not Installed"
+msgstr "Non installato"
+
+msgid "Detected Tuners:"
+msgstr "Tuner rilevati:"
+
+msgid "Detected Devices:"
+msgstr "Dispositivi rilevati:"
+
+msgid "Namespace & Orbital pos."
+msgstr "Namespace e pos. orbitale"
+
+msgid "Audio PID%s, codec & lang"
+msgstr "PID audio%s, codec e lingua"
+
+msgid "Service info"
+msgstr "Informazioni canale"
+
+msgid "Show Ecm info"
+msgstr "Mostra informazioni ECM"
+
+msgid "Always"
+msgstr "Sempre"
+
+msgid "Top"
+msgstr "In alto"
+
+msgid "Bottom"
+msgstr "In basso"
+
+msgid "Show Time Remaining/Elapsed *"
+msgstr "Mostra tempo rimanente/trascorso *"
+
+msgid "Show Transponder Remaining/Elapsed as *"
+msgstr "Mostra tempo rimanente/trascorso del transponder come *"
+
+msgid "This option allows you to choose how to display the remaining/elapsed time for Media playback. If set to 'Skin Setting' the setting above 'Show time remaining/elapsed' will be ignored in this context."
+msgstr "Questa opzione consente di scegliere come mostrare il tempo rimanente/trascorso durante la riproduzione. Con \"Impostazione skin\", l'opzione tempo rimanente/trascorso viene ignorata."
+
+msgid "Transponder Time"
+msgstr "Ora del transponder"
+
+msgid "Go to Last Known State"
+msgstr "Vai all'ultimo stato noto"
+
+msgid "Boot Normally"
+msgstr "Avvio normale"
+
+msgid "Go to Standby"
+msgstr "Vai in standby"
+
+msgid "Go to Deep Standby"
+msgstr "Vai in spegnimento"
+
+msgctxt "Text list separator"
+msgid ", "
+msgstr ", "
+
+msgctxt "ButtonSetup help separator"
+msgid "/"
+msgstr "/"
+
+msgid "Center"
+msgstr "Centrato"
+
+msgid "Wide"
+msgstr "Ampio"
+
+msgid "Extra Wide"
+msgstr "Molto ampio"
+
+msgid "SoftCSA Settings"
+msgstr "Impostazioni SoftCSA"
+
+msgid "Synchronous"
+msgstr "Sincrono"
+
+msgid "Normal"
+msgstr "Normale"
+
+msgid "Aggressive"
+msgstr "Aggressivo"
+
+msgid "Sync Mode *"
+msgstr "Modalità di sincronizzazione *"
+
+msgid "Decoder Release Strategy *"
+msgstr "Strategia rilascio del decoder *"
+
+msgid "Decoder Start Delay *"
+msgstr "Ritardo avvio del decoder *"
+
+msgid "Decoder Start Timeout *"
+msgstr "Timeout avvio del decoder *"
+
+msgid "Select how the descrambled data stream is processed. 'Automatic' uses asynchronous writes (lower CPU usage) with automatic fallback to synchronous if kernel AIO is not supported. 'Synchronous' forces blocking writes (stable, most compatible). *Restart E2 for changes to take effect."
+msgstr "Scegli come elaborare il flusso dati decodificato. 'Automatico' usa scritture asincrone (minor uso CPU), con fallback automatico a scritture sincrone se il kernel non supporta AIO. 'Sincrono' forza scritture bloccanti (stabile e compatibile). *Riavvia E2 per applicare le modifiche."
+
+msgid "How to release the hardware decoder when switching to software descrambling. 'Quick' releases immediately (faster zapping). 'Normal' performs clean shutdown first (more stable on some boxes). 'Aggressive' resets the HW-descrambler slots and also bypasses the in-process CSA-ALT cache. *Restart E2 for changes to take effect."
+msgstr "Gestisce il rilascio del decoder hardware passando alla decodifica software. 'Veloce' rilascia subito (zapping più rapido). 'Normale' esegue prima l'arresto (più stabile su alcuni box). 'Aggressivo' rilascia tutti gli slot HW-descrambler e bypassa la cache CSA-ALT interna. *Riavvia E2 per applicare le modifiche."
+
+msgid "Buffer descrambled data before starting playback. Fixes audio dropouts with passthrough AC3 by ensuring enough data is available when the decoder starts. Higher values are more stable but increase channel switch time. *Restart E2 for changes to take effect."
+msgstr "Memorizza in buffer i dati decodificati prima della riproduzione. Riduce le interruzioni audio con passthrough AC3. Valori più alti aumentano la stabilità ma anche il tempo di cambio canale. *Riavvia E2 per applicare le modifiche"
+
+msgid "Maximum time to wait for the first descrambling key (CW) before starting the decoder. 'Disabled' starts the decoder immediately without waiting. Useful for boxes where waiting causes unnecessary delay. *Restart E2 for changes to take effect."
+msgstr "Tempo massimo di attesa per la prima chiave (CW) prima di avviare il decoder. 'Disabilitato' avvia subito il decoder. Utile per evitare ritardi. *Riavvia E2 per applicare le modifiche."
+
+msgid ""
+"Setting a network password is mandatory in OpenBh %s if you wish to use network services. \n"
+"To set a password using the virtual keyboard press the 'text' button on your remote control."
+msgstr ""
+"Per usare i servizi di rete in OpenBH %s è obbligatorio impostare una password di rete.\n"
+"Per impostarla con la tastiera virtuale, premi il tasto 'text' del telecomando."
+
+msgid "Password Setup"
+msgstr "Configurazione della password"
+
+msgid "Random Password"
+msgstr "Password casuale"
+
+msgid "Password Actions"
+msgstr "Azioni password"
+
+msgid "Randomly generate a password"
+msgstr "Genera una password casuale"
+
+msgid "Long Left / Right"
+msgstr "Pressione lunga SX/DX"
+
+msgid "Single Step (GOP)"
+msgstr "Passo singolo (GOP)"
+
+msgid "Last Speed"
+msgstr "Ultima velocità"
+
+msgid "convert to DTS"
+msgstr "Converti in DTS"
+
+msgid "convert to multi-channel PCM"
+msgstr "Converti in PCM multicanale"
+
+msgid "WMA Pro downmix"
+msgstr "Downmix WMA Pro"
+
+msgid "HDR OSD adjustment"
+msgstr "Regolazione OSD HDR"
+
+msgid "This option adjusts SDR graphics and OSD colors while the HDMI output is in HDR mode."
+msgstr "Opzione che regola la grafica SDR e i colori dell'OSD quando l'uscita HDMI è in modalità HDR."
+
+msgid "HLG Support"
+msgstr "Supporto HLG"
+
+msgid "HDR10 Support"
+msgstr "Supporto HDR10"
+
+msgid "Allow 12bit"
+msgstr "Consenti 12 bit"
+
+msgid "Allow 10bit"
+msgstr "Consenti 10 bit"
+
+msgid "Enable or Disable the 10 Bit Color Mode"
+msgstr "Abilita o disabilita la modalità colore a 10 bit"
+
+msgid "AC3 / AC3+ Downmix"
+msgstr "Downmix AC3 / AC3+"
+
+msgid "Choose whether multi channel AC3 / AC3+ sound tracks should be downmixed to stereo."
+msgstr "Scegliere se le tracce AC3/AC3+ multicanale vanno convertite in stereo."
+
+msgid "AC3 Downmix"
+msgstr "Downmix AC3"
+
+msgid "AC3+ Downmix"
+msgstr "Downmix AC3+"
+
+msgid "AAC / AAC+ Downmix"
+msgstr "Downmix AAC / AAC+"
+
+msgid "Choose whether multi channel AAC / AAC+ sound tracks should be downmixed to stereo."
+msgstr "Scegliere se le tracce AAC/AAC+ multicanale vanno convertite in stereo."
+
+msgid "AAC Downmix"
+msgstr "Downmix AAC"
+
+msgid "AAC+ Downmix"
+msgstr "Downmix AAC+"
+
+msgid "Choose whether multi channel AAC+ sound tracks should be downmixed to stereo."
+msgstr "Scegliere se le tracce AAC+ multicanale vanno convertite in stereo."
+
+msgid "DTS Downmix"
+msgstr "Downmix DTS"
+
+msgid "Choose whether multi channel DTS sound tracks should be downmixed to stereo."
+msgstr "Scegliere se le tracce DTS multicanale vanno convertite in stereo."
+
+msgid "DTS-HD MA/HR Downmix"
+msgstr "DTS-HD MA/HR Downmix"
+
+msgid "Choose whether multi channel DTS-HD sound tracks should be downmixed or transcoded."
+msgstr "Scegliere se le tracce DTS-HD multicanale vanno convertite o transcodificate."
+
+msgid "WMA Pro Downmix"
+msgstr "WMA Pro Downmix"
+
+msgid "Choose whether WMA Pro sound tracks should be downmixed."
+msgstr "Scegliere se le tracce audio WMA Pro devono essere sottoposte a conversione."
+
+msgid "DTS / DTS-HD Transcoding"
+msgstr "Transcodifica DTS / DTS-HD"
+
+msgid "Choose whether DTS / DTS-HD sound tracks should be transcoded to Dolby Digital."
+msgstr "Scegli se le tracce audio DTS / DTS-HD devono essere transcodificate in Dolby Digital."
+
+msgid "Dolby TrueHD Transcoding"
+msgstr "Transcodifica Dolby TrueHD"
+
+msgid "Choose whether Dolby TrueHD sound tracks should be transcoded to Dolby Digital."
+msgstr "Scegli se le tracce audio Dolby TrueHD devono essere transcodificate in Dolby Digital."
+
+msgid "General AC3 Delay"
+msgstr "Ritardo generico AC3"
+
+msgid "Choose whether multi channel AC3+ sound tracks should be downmixed to stereo."
+msgstr "Scegli se le tracce audio AC3+ multicanale devono essere sottoposte a conversione in stereo."
+
+msgid "Choose whether multi channel AC3 sound tracks should be downmixed to stereo"
+msgstr "Sceglie se le tracce audio AC3 multicanale devono essere sottoposte a conversione in stereo."
+
+msgid "Choose whether multi channel AC3 / AC3+ sound tracks should be downmixed to stereo"
+msgstr "Sceglie se le tracce audio AC3 / AC3+ multicanale devono essere sottoposte a conversione stereo."
+
+msgid "HDMI HDR Type"
+msgstr "Tipo HDR HDMI"
+
+msgid "Change the Colorimetry for HDR - this may cause unexpected results or black screen"
+msgstr "Modifica la colorimetria per HDR - può causare risultati imprevisti o schermata nera"
+
+msgid "Enable or disable the 10 Bit Color Mode"
+msgstr "Abilita o disabilita la modalità colore a 10 bit"
+
+msgid "Enable or disable the 12 Bit Color Mode"
+msgstr "Abilita o disabilita la modalità colore a 12 bit"
+
+msgid "Enable or disable to force HDR Modes for UHD"
+msgstr "Abilita o disabilita la forzatura modalità HDR per UHD"
+
+msgid "Enable or disable to force HDR10 Modes for UHD"
+msgstr "Abilita o disabilita la forzatura modalità HDR10 per UHD"
+
+msgid "Enable or disable to force HLG Modes for UHD"
+msgstr "Abilita o disabilita la forzatura modalità HLG per UHD"
+
+msgid "Just Scale"
+msgstr "Solo ridimensionamento"
+
+msgid "HDMI Color Depth"
+msgstr "Profondità colore HDMI"
+
+msgid "Refresh Rate"
+msgstr "Frequenza di aggiornamento"
+
+msgid "Video Output"
+msgstr "Uscita video"
+
+msgid "Display >16:9 Content as"
+msgstr "Visualizza i contenuti > 16:9 come"
+
+msgid "Display 4:3 Content as"
+msgstr "Visualizza i contenuti 4:3 come"
+
+msgid "General PCM Delay"
+msgstr "Ritardo generale PCM"
+
+msgid "General Bluetooth Audio Delay"
+msgstr "Ritardo generale audio Bluetooth"
+
+msgid "Audio Volume Step Size"
+msgstr "Incremento del volume audio"
+
+msgid "Hide Mute Icon"
+msgstr "Nascondi icona Muto"
+
+msgid "Flat alphabetical"
+msgstr "Elenco alfabetico"
+
+msgid "Flat by key group on remote"
+msgstr "Elenco per gruppo di tasti del telecomando"
+
+msgid "Flat by position on remote"
+msgstr "Elenco per posizione sul telecomando"
+
+msgid "Mins (only digits)"
+msgstr "Minuti (solo cifre)"
+
+msgid "Show Menu"
+msgstr "Mostra menu"
+
+msgid "Just Zap"
+msgstr "Solo zapping"
+
+msgid "One Line"
+msgstr "Una riga"
+
+msgid "One Line Alt"
+msgstr "Una riga alternative"
+
+msgid "Two Lines"
+msgstr "Due righe"
+
+msgid "Two Lines Alt"
+msgstr "Due righe alternative"
+
+msgid "Show time remaining/elapsed *"
+msgstr "Mostra tempo residuo/trascorso *"
+
+msgid "Show time elapsed as positive *"
+msgstr "Mostra tempo trascorso come positivo *"
+
+msgid "Show transponder remaining/elapsed as *"
+msgstr "Mostra tempo transponder residuo/trascorso come *"
+
+msgid "Show Media playback Remaining/Elapsed as *"
+msgstr "Mostra riproduzione media residua/trascorsa come *"
+
+msgid "As Plugin in Extended Bar"
+msgstr "Come plugin nella barra estesa"
+
+msgid "With Long OK Press"
+msgstr "Con pressione prolungata di OK"
+
+msgid "With Exit Button"
+msgstr "Con tasto EXIT"
+
+msgid "With Left / Right Buttons"
+msgstr "Con tasti Sinistra / Destra"
+
+msgid "Keep Service"
+msgstr "Mantieni canale"
+
+msgid "Reverse Bouquet Buttons"
+msgstr "Inverti i tasti del bouquet"
+
+msgid "Progress Bar Left"
+msgstr "Barra di avanzamento a sinistra"
+
+msgid "Progress Bar Right"
+msgstr "Barra di avanzamento a destra"
+
+msgid "Percentage Left"
+msgstr "Percentuale a sinistra"
+
+msgid "Percentage Right"
+msgstr "Percentuale a destra"
+
+msgid "Just Change Channels"
+msgstr "Solo cambio canali"
+
+msgid "Just Change Bouquet"
+msgstr "Solo cambio bouquet"
+
+msgid "Volume Control"
+msgstr "Controllo volume"
+
+msgid "Left/Right button mode"
+msgstr "Modalità tasti Sinistra/Destra"
+
+msgid "Select what you want the Left/Right button to activate:"
+msgstr "Seleziona l'azione dei tasti Sinistra/Destra:"
+
+msgid "Left from Servicename"
+msgstr "A sinistra del nome del canale"
+
+msgid "Right from Servicename"
+msgstr "A destra del nome del canale"
+
+msgid "Red Colored"
+msgstr "Di colore rosso"
+
+msgid "OpenBh VIP Feed Setup"
+msgstr "Configurazione feed VIP OpenBH"
+
+msgid "Forum Username"
+msgstr "Nome utente del forum"
+
+msgid "Please enter your forum username to configure the VIP feed"
+msgstr "Inserisci il nome utente del forum per configurare il feed VIP"
+
+msgid "Forum Password"
+msgstr "Password forum"
+
+msgid "Please enter your forum password to configure the VIP feed"
+msgstr "Inserisci la password del forum per configurare il feed VIP"
+
+msgid "Virtual Keyboard"
+msgstr "Tastiera virtuale"
+
+msgid "Delete character to left of cursor or select AM times"
+msgstr "Cancella a sinistra del cursore o seleziona gli orari AM"
+
+msgid "Delete character under cursor or select PM times"
+msgstr "Cancella sotto il cursore o seleziona gli orari PM"
+
+msgid "Display the virtual keyboard for data entry"
+msgstr "Mostra la tastiera virtuale per l'inserimento dei dati"
+
+msgid "Save Feed"
+msgstr "Salva feed"
+
+msgid "Welcome..."
+msgstr "Benvenuto..."
+
+msgid "View the history of the principal repositories. These show up to the minute changes but may not reflect the exact state of any new build."
+msgstr "Cronologia dei repository principali. Aggiornata in tempo reale, ma non sempre rappresentativa dell'ultima build."
+
+msgid "Update to the newest version of any channel list package previously downloaded from the feeds. No other changes will be made."
+msgstr "Aggiorna le liste canali scaricate dai feed. Non verranno apportate altre modifiche."
+
+msgid "Make a full image backup if you want save an exact copy of your current image and its configuration."
+msgstr "Esegui un backup completo per salvare una copia esatta dell'immagine e della configurazione attuali."
+
+msgid "View the list of packages which have newer versions and are marked for updating."
+msgstr "Visualizza i pacchetti con nuove versioni disponibili, selezionati per l'aggiornamento."
+
+msgid "Download and install any packages that have been updated since the last software update was performed."
+msgstr "Scarica e installa i pacchetti aggiornati dall'ultimo aggiornamento software."
+
+msgid "Feeds and Update Manager"
+msgstr "Gestione feed e aggiornamenti"
+
+msgid "Package list loading"
+msgstr "Caricamento elenco pacchetti"
+
+msgid "Loading the package list. Please wait..."
+msgstr "Caricamento dell'elenco pacchetti. Attendere..."
+
+msgid ""
+"Initialising Vu+ Multiboot PLEASE WAIT!\n"
+"\n"
+"Installation will take up to 5 minutes + 5 minutes per restored eMMC slot.\n"
+"\n"
+"When installation is complete, your receiver will reboot to Slot 1 Setup Wizard."
+msgstr ""
+"Inizializzazione di Vu+ Multiboot, ATTENDERE PREGO!\n"
+"\n"
+"L'installazione richiederà fino a 5 minuti + 5 minuti per ogni slot eMMC ripristinato.\n"
+"\n"
+"Al termine dell'installazione, il ricevitore verrà riavviato nel Wizard di configurazione dello Slot 1."
+
+msgid "Enable or disable client mode."
+msgstr "Abilita o disabilita la modalità client."
+
+msgid "Client %s-%s"
+msgstr "Client %s-%s"
+
+msgid "Client Mode setup"
+msgstr "Configurazione modalità client"
+
+msgid "DVB subtitles color filter"
+msgstr "Filtro colore sottotitoli DVB"
+
+msgid "DVB Subtitles PID & lang"
+msgstr "PID e lingua sottotitoli DVB"
 
 msgid "Subtitle Selection"
 msgstr "Selezione sottotitoli"
@@ -270,8 +776,11 @@ msgstr "Stato dei feed: Sconosciuto, URL feed utente"
 msgid "Install Plugins"
 msgstr "Installazione Plugin"
 
-msgid "Are you ready to remove OpenVPN ?"
-msgstr "Pronto per rimuovere OpenVPN ?"
+msgid "Are you ready to remove %s ?"
+msgstr "Pronto per rimuovere %s ?"
+
+msgid "Are you ready to install %s ?"
+msgstr "Pronto a installare %s ?"
 
 msgid "New Storage Device"
 msgstr "Nuova unità di archiviazione"
@@ -842,13 +1351,13 @@ msgid "Choose whether multi channel AC3 sound tracks should be downmixed to ster
 msgstr "Scegliere se le tracce audio AC3 multi canale debbano essere riprodotte in stereo."
 
 msgid "Change the Colordepth for UHD - this may cause unexpected results or black screen"
-msgstr "Modifica profondità colore per UHD: questo potrebbe causare risultati imprevisti o schermo nero"
+msgstr "Modifica profondità colore UHD: potresti ottenere risultati imprevisti o schermo nero"
 
 msgid "Change Colorspace setting - this may cause unexpected results or black screen"
-msgstr "Modifica l'impostazione dello spazio colore: questo potrebbe causare risultati imprevisti o schermo nero"
+msgstr "Modifica spazio colore: potresti ottenere risultati imprevisti o schermo nero"    
 
 msgid "Configure screen refresh rate. Multi & Auto rates depend on the source 24/50/60Hz"
-msgstr "Configura la frequenza di aggiornamento schermo. Le frequenze Multi & Auto dipendono dalla sorgente 24/50/60Hz"
+msgstr "Imposta la frequenza di aggiornamento. Multi/Auto dipendono dal segnale sorgente 24/50/60 Hz"
 
 msgid "HDMI Color depth"
 msgstr "Profondità colore HDMI"
@@ -1282,7 +1791,7 @@ msgid "+24 hours"
 msgstr "Giorno succ."
 
 msgid "- Max backups to keep (0==all)"
-msgstr "- Max num. di backup ma conservare (0=tutti)"
+msgstr "- Max num. di backup da conservare (0=tutti)"
 
 msgid "- Query before backup starts"
 msgstr "- Chiedi prima di avviare il backup."
@@ -5909,7 +6418,7 @@ msgid "Just change channels"
 msgstr "Cambia canale +/-"
 
 msgid "Just scale"
-msgstr "Scalare solamente"
+msgstr "Solo ridimensionamento"
 
 msgid "Just zap"
 msgstr "Solo cambio canale"
@@ -10636,9 +11145,9 @@ msgstr "Sistema: "
 
 msgid "TRANSLATOR_INFO"
 msgstr ""
-"Traduzione italiana enigma2\n"
-"a cura di @AlexWilmac / @insanity \n"
-"Aggiornamento 25 maggio 2026\n"
+"Traduzione italiana di enigma2\n"
+"a cura di @blu8 @AlexWilmac\n"
+"Aggiornamento Settembre 2026\n"
 "Supporto: www.openbh.net"
 
 msgid "TS file is too large for ISO9660 level 1!"
@@ -11907,7 +12416,7 @@ msgid "Video: %s fps"
 msgstr "Video: %s fps"
 
 msgid "Videocodec, size & format"
-msgstr "Codec video, dimensioni e formato"
+msgstr "Codec video dim. e formato"
 
 msgid "Videosize: "
 msgstr "Risoluzione A/V: "
