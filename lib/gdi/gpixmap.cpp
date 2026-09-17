@@ -2122,6 +2122,17 @@ void gPixmap::blit(const gPixmap& src, const eRect& _pos, const gRegion& clip, i
 		}
 		if (accel) {
 			/* we have hardware acceleration for this blit operation */
+#if defined(FORCE_ALPHABLENDING_ACCELERATION) && defined(HWDUAL)
+			/* Hardware blitting is unreliable on these boxes even for
+			 * plain (non-alpha) blits -- not just alpha blending -- so
+			 * always fall back to software regardless of the requested
+			 * flags. Restricting this to alpha-flagged blits only (as
+			 * done below for other targets) still left opaque blits
+			 * (e.g. alphatest="off" pixmaps, JPEG covers, opaque 8-bit
+			 * indexed PNGs) on the flaky hardware path, where they could
+			 * silently fail to render. */
+			accel = false;
+#else
 			if (flag & (blitAlphaTest | blitAlphaBlend)) {
 				/* alpha blending is requested */
 				if (gAccel::getInstance()->hasAlphaBlendingSupport()) {
@@ -2145,6 +2156,7 @@ void gPixmap::blit(const gPixmap& src, const eRect& _pos, const gRegion& clip, i
 
 #ifdef GPIXMAP_CHECK_THRESHOLD
 		accel = (surface->data_phys && src.surface->data_phys);
+#endif
 #endif
 
 #ifdef GPIXMAP_DEBUG
