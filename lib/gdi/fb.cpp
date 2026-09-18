@@ -15,7 +15,6 @@
 
 #define FBIO_SET_MANUAL_BLIT _IOW('F', 0x21, __u8)
 #define FBIO_BLIT 0x22
-#endif
 
 fbClass *fbClass::instance;
 
