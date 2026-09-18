@@ -454,7 +454,6 @@ AC_SUBST([EGL_CFLAGS])
 AC_SUBST([EGL_LIBS])
 AC_SUBST([GLES2_CFLAGS])
 AC_SUBST([GLES2_LIBS])
-fi
 
 if test `echo "$BOXTYPE" | cut -b 1-2` == "gb"; then
 	AC_DEFINE(KEY_PLAY_ACTUALLY_IS_KEY_PLAYPAUSE, 1,[define when rc sends a KEY_PLAY event for its KEY_PLAYPAUSE key])
