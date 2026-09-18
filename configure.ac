@@ -11,6 +11,7 @@ AC_SYS_LARGEFILE
 
 AC_PROG_CC
 AC_PROG_CXX
+PKG_PROG_PKG_CONFIG
 m4_ifdef([LT_INIT], [LT_INIT], [AC_PROG_LIBTOOL])
 AC_CONFIG_MACRO_DIR([m4])
 AC_OPENMP()
@@ -392,6 +393,69 @@ if test "$BOXTYPE" == "vuultimo4k" -o "$BOXTYPE" == "vuduo4kse"; then
 	AC_DEFINE(PASSTHROUGH_FIX, 1 ,[define when passthrough is not entirely supported by drivers])
 fi
 
+AC_ARG_WITH([egl],
+  AS_HELP_STRING([--with-egl], [enable EGL/GLES2/GLES3 backend, yes/no/auto]),
+  [],
+  [with_egl=no])
+
+# Unlike most --with-* switches here, EGL is not something a box gets by
+# default: with_egl defaults to "no", so a box only gets probed for EGL/GLES
+# when whatever's driving this build (e.g. the recipe's EXTRA_OECONF, keyed
+# off the distro-level ENABLE_E2EGL var) explicitly passes --with-egl.
+# Boxes whose SDK merely happens to carry EGL/GLESv2/GLES3 pkg-config
+# metadata without a working backend (this has bitten vuduo4kse, vusolo4k
+# and vuultimo4k in the past, with link failures such as "undefined
+# reference to glBindVertexArray") simply never pass --with-egl and are
+# never probed at all - with_egl stays "no" and PKG_CHECK_MODULES below
+# never runs.
+have_egl=no
+have_gles2=no
+have_gles3=no
+
+AS_IF([test "x$with_egl" != "xno"], [
+  PKG_CHECK_MODULES([EGL], [egl], [have_egl=yes], [have_egl=no])
+  PKG_CHECK_MODULES([GLES2], [glesv2], [have_gles2=yes], [have_gles2=no])
+])
+
+AS_IF([test "x$have_gles2" = "xyes"], [
+  saved_CPPFLAGS="$CPPFLAGS"
+  CPPFLAGS="$CPPFLAGS $GLES2_CFLAGS"
+  AC_CHECK_HEADERS([GLES3/gl3.h], [have_gles3=yes], [have_gles3=no])
+  CPPFLAGS="$saved_CPPFLAGS"
+])
+
+AS_IF([test "x$with_egl" = "xyes"], [
+  AS_IF([test "x$have_egl" != "xyes" -o "x$have_gles2" != "xyes"], [
+    AC_MSG_ERROR([--with-egl was given, but egl and/or glesv2 were not found])
+  ])
+])
+
+# Baseline requirement is EGL + GLESv2 - this alone decides use_egl.
+AS_IF([test "x$have_egl" = "xyes" -a "x$have_gles2" = "xyes"], [
+  AC_DEFINE([HAVE_EGL], [1], [Define if EGL/GLES2 support is available])
+  use_egl=yes
+], [
+  use_egl=no
+])
+
+# GLES3 is a strictly optional upgrade on top of that baseline - it must
+# only ever ADD the extra define, never downgrade use_egl back to no when
+# GLES3/gl3.h isn't available (a very common case: many SDKs ship EGL +
+# GLESv2 without GLES3 headers at all). Getting this wrong silently drops
+# the whole EGL backend for anyone without GLES3, with no error - it just
+# falls back to gfbdc/sdl as if --with-egl had never been requested.
+AS_IF([test "x$use_egl" = "xyes" -a "x$have_gles3" = "xyes"], [
+  AC_DEFINE([HAVE_GLES3], [1], [Define if GLES3 support is available])
+])
+
+AM_CONDITIONAL([HAVE_EGL], [test "x$use_egl" = "xyes"])
+
+AC_SUBST([EGL_CFLAGS])
+AC_SUBST([EGL_LIBS])
+AC_SUBST([GLES2_CFLAGS])
+AC_SUBST([GLES2_LIBS])
+fi
+
 if test `echo "$BOXTYPE" | cut -b 1-2` == "gb"; then
 	AC_DEFINE(KEY_PLAY_ACTUALLY_IS_KEY_PLAYPAUSE, 1,[define when rc sends a KEY_PLAY event for its KEY_PLAYPAUSE key])
 	AC_DEFINE(FORCE_NO_BLENDING_ACCELERATION, 1,[define when the framebuffer acceleration does not have alphablending support, though the autodetection might indicate that it does])
@@ -506,7 +570,7 @@ CXXFLAGS="$CXXFLAGS -Wall -Wextra -Wno-psabi \
 	-Wno-error=stringop-truncation -Wno-error=shadow -Wno-error=cast-qual \
 	-Wno-error=aggregate-return -Wno-error=missing-field-initializers \
 	-Wno-error=packed -Wno-error=vla -Wno-error=clobbered -Wno-error=unused-parameter \
-	$BASE_CFLAGS $ENIGMA2_CFLAGS $PTHREAD_CFLAGS $OPENMP_CFLAGS $ALSA_CFLAGS $GLES_CFLAGS"
+	$BASE_CFLAGS $ENIGMA2_CFLAGS $PTHREAD_CFLAGS $OPENMP_CFLAGS $ALSA_CFLAGS $GLES_CFLAGS $EGL_CFLAGS $GLES2_CFLAGS"
 AX_SWIG_PYTHON_OPT="$AX_SWIG_PYTHON_OPT -DSWIG_PYTHON_LEGACY_BOOL"
 
 AC_CONFIG_FILES([

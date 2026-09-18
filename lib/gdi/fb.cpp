@@ -13,7 +13,6 @@
 #define FBIO_WAITFORVSYNC _IOW('F', 0x20, uint32_t)
 #endif
 
-#ifndef FBIO_BLIT
 #define FBIO_SET_MANUAL_BLIT _IOW('F', 0x21, __u8)
 #define FBIO_BLIT 0x22
 #endif
@@ -145,7 +144,7 @@ int fbClass::SetMode(int nxRes, int nyRes, int nbpp)
 			return -1;
 		}
 		eDebug("[fb] double buffering not available.");
-	} 
+	}
 	else
 		eDebug("[fb] double buffering available!");
 
