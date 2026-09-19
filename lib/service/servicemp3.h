@@ -381,6 +381,11 @@ private:
 	pts_t m_prev_decoder_time;
 	int m_decoder_time_valid_state;
 
+	RESULT getRawPlayPosition(pts_t &pts);
+	bool m_position_baseline_valid;
+	bool m_position_correction_enabled;
+	pts_t m_position_baseline;
+
 	void pushDVBSubtitles();
 	void pushSubtitles();
 	void pullSubtitle(GstBuffer *buffer);
