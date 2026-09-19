@@ -1634,6 +1634,8 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	m_position_correction_enabled = true;
 	m_position_baseline = 0;
 	m_subtitle_ever_switched = false;
+	m_seek_in_progress = false;
+	m_seek_failure_restarts_pipeline = false;
 	m_errorInfo.missing_codec = "";
 	audioSink = videoSink = NULL;
 	m_decoder = NULL;
@@ -2509,16 +2511,70 @@ RESULT eServiceMP3::getLength(pts_t &pts)
 	return 0;
 }
 
+namespace {
+
+struct SeekWorkerArgs
+{
+	eServiceMP3 *service;
+	GstElement *playbin;
+	eFixedMessagePump<ePtr<GstMessageContainer> > *pump;
+	gdouble trickRatio;
+	gint64 seekPos;
+	int seekRestoreText;
+	bool restartPipelineOnFailure;
+};
+
+/* gst_element_seek() with GST_SEEK_FLAG_FLUSH on a PAUSED/PLAYING pipeline
+ * blocks the calling thread until the flush completes and every sink -
+ * including "subsink", the embedded-subtitle appsink - has reprerolled (see
+ * the long-standing comment this replaces, below). Doing the call itself on
+ * a worker thread unblocks the UI the same way stopWorker() does for
+ * GST_STATE_NULL in stop().
+ *
+ * Unlike stopWorker(), the result here does have to be reconciled back into
+ * "service": current-text must not be restored until this seek has actually
+ * finished, or it would race playbin's input-selector while it is still
+ * mid-flush - reselecting a pad before the flush settles is exactly what
+ * leaves the subtitle sink permanently wedged (no further preroll, and every
+ * later seek then hangs again). So this worker AddRef()s the service and
+ * posts the result through its m_pump (message type 4, handled by
+ * seekWorkerDone() on the main thread) instead of touching "service"
+ * directly - the pump is the same thread-safe hand-off already used for
+ * buffers arriving on the GStreamer streaming thread. */
+gpointer seekWorker(gpointer data)
+{
+	SeekWorkerArgs *args = static_cast<SeekWorkerArgs*>(data);
+	GstElement *playbin = args->playbin;
+
+	gboolean seek_ok = gst_element_seek(playbin, args->trickRatio, GST_FORMAT_TIME,
+		(GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT),
+		GST_SEEK_TYPE_SET, args->seekPos,
+		GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
+	eDebug("[eServiceMP3] seekWorker: gst_element_seek returned %d", seek_ok);
+
+	args->pump->send(GstMessageContainer::newSeekDone(seek_ok, args->seekRestoreText, args->restartPipelineOnFailure));
+
+	gst_object_unref(playbin);
+	args->service->Release();
+	delete args;
+	return NULL;
+}
+
+}  // namespace
+
 RESULT eServiceMP3::seekToImpl(pts_t to)
 {
 	/* gstreamer suffers from a bug causing sparse streams (embedded subtitle
 	 * tracks, which can go a long time between buffers) to stall a flushing
 	 * seek forever: a sync=TRUE sink won't report PAUSED until it has a
-	 * buffer to preroll on, and gst_element_seek() below waits for every
-	 * sink - including "subsink" (the embedded-subtitle appsink) - to reach
-	 * that state. If the seek target has no subtitle buffer anywhere nearby,
-	 * this can hang indefinitely.
-	 * see: https://bugzilla.gnome.org/show_bug.cgi?id=619434
+	 * buffer to preroll on, and gst_element_seek() waits for every sink -
+	 * including "subsink" (the embedded-subtitle appsink) - to reach that
+	 * state. If the seek target has no subtitle buffer anywhere nearby, this
+	 * can hang indefinitely. see: https://bugzilla.gnome.org/show_bug.cgi?id=619434
+	 * The wait itself now runs on a worker thread (seekWorker()) so it can't
+	 * freeze the UI; see seekWorker()'s and seekWorkerDone()'s comments for
+	 * why the current-text restore has to wait for that worker rather than
+	 * happening here.
 	 *
 	 * Confirmed behaviour (not just "a subtitle track is selected"):
 	 *  - initial selection of a track (from none active) seeks fine;
@@ -2530,10 +2586,18 @@ RESULT eServiceMP3::seekToImpl(pts_t to)
 	 *    (set by enableSubtitles() only on an actual switch, not the first
 	 *    selection) is;
 	 *  - deselecting the subtitle track (current-text = -1) before seeking
-	 *    avoids the hang even when it ends up reselected right after.
-	 * Deselect before the seek and restore after, mirroring exactly the
-	 * sequence that is already known to avoid the hang, once a switch has
-	 * ever happened this session. */
+	 *    avoids the hang even when it ends up reselected right after. */
+	if (m_state != stRunning)
+	{
+		eDebug("[eServiceMP3] seekToImpl: not running, ignoring");
+		return -1;
+	}
+	if (m_seek_in_progress)
+	{
+		eDebug("[eServiceMP3] seekToImpl: a seek is already in progress, ignoring");
+		return -1;
+	}
+
 	int seek_restore_text = -1;
 	if (m_subtitle_ever_switched)
 	{
@@ -2548,23 +2612,37 @@ RESULT eServiceMP3::seekToImpl(pts_t to)
 
 		/* convert pts to nanoseconds */
 	m_last_seek_pos = to * 11111LL;
-	eDebug("[eServiceMP3] seekToImpl: calling gst_element_seek to %lld ns", (long long)m_last_seek_pos);
-	gboolean seek_ok = gst_element_seek (m_gst_playbin, m_currentTrickRatio, GST_FORMAT_TIME, (GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT),
-		GST_SEEK_TYPE_SET, m_last_seek_pos,
-		GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
-	eDebug("[eServiceMP3] seekToImpl: gst_element_seek returned %d", seek_ok);
+	eDebug("[eServiceMP3] seekToImpl: dispatching gst_element_seek to %lld ns on worker thread", (long long)m_last_seek_pos);
+
+	m_seek_in_progress = true;
+	bool restart_on_failure = m_seek_failure_restarts_pipeline;
+	m_seek_failure_restarts_pipeline = false;
+	AddRef();
+	gst_object_ref(m_gst_playbin);
+	SeekWorkerArgs *args = new SeekWorkerArgs{this, m_gst_playbin, &m_pump, m_currentTrickRatio, m_last_seek_pos, seek_restore_text, restart_on_failure};
+	GThread *worker = g_thread_new("mp3seek", seekWorker, args);
+	g_thread_unref(worker);
+
+	return 0;
+}
+
+void eServiceMP3::seekWorkerDone(gboolean seek_ok, int seek_restore_text, bool restart_pipeline_on_failure, gint64 seek_pos)
+{
+	m_seek_in_progress = false;
 
 	if (seek_restore_text >= 0)
 	{
-		eDebug("[eServiceMP3] seekToImpl: restoring current-text to %d", seek_restore_text);
+		eDebug("[eServiceMP3] seekWorkerDone: restoring current-text to %d", seek_restore_text);
 		g_object_set(G_OBJECT(m_gst_playbin), "current-text", seek_restore_text, NULL);
-		eDebug("[eServiceMP3] seekToImpl: current-text restored");
+		eDebug("[eServiceMP3] seekWorkerDone: current-text restored");
 	}
 
 	if (!seek_ok)
 	{
-		eDebug("[eServiceMP3] seekTo failed");
-		return -1;
+		eDebug("[eServiceMP3] seekWorkerDone: seek failed");
+		if (restart_pipeline_on_failure)
+			restartPipelineAfterSeekFailure();
+		return;
 	}
 
 	/* A seek just happened: from here on the sink/pipeline itself reports
@@ -2575,14 +2653,12 @@ RESULT eServiceMP3::seekToImpl(pts_t to)
 	m_position_correction_enabled = false;
 
 	if (getHDAudioAuxState(m_gst_playbin))
-		seekHDAudioAuxPersistent(m_gst_playbin, m_last_seek_pos);
+		seekHDAudioAuxPersistent(m_gst_playbin, seek_pos);
 
 	if (m_paused)
 	{
 		m_event((iPlayableService*)this, evUpdatedInfo);
 	}
-
-	return 0;
 }
 
 RESULT eServiceMP3::seekTo(pts_t to)
@@ -3758,19 +3834,29 @@ void eServiceMP3::clearBuffers(bool force)
 	eDebug("[eServiceMP3] Clear Buffers: validposition=%d ppos=%lld", (int)validposition, (long long)ppos);
 	if (validposition)
 	{
-		/* flush */
+		/* flush. seekTo()'s own gst_element_seek() call runs asynchronously
+		 * (see seekToImpl()'s comment) - set this so seekWorkerDone() still
+		 * performs the restart below if that call turns out to fail, since
+		 * seekTo()'s return value here can no longer tell us that directly. */
+		m_seek_failure_restarts_pipeline = true;
 		eDebug("[eServiceMP3] clearBuffers: calling seekTo(%lld)", (long long)ppos);
 		int res = seekTo(ppos);
 		eDebug("[eServiceMP3] clearBuffers: seekTo returned %d", res);
 		if (res == -1)
 		{
-			m_clear_buffers = false;
-			m_send_ev_start = false;
-			stop();
-			m_state = stIdle;
-			start();
+			m_seek_failure_restarts_pipeline = false;
+			restartPipelineAfterSeekFailure();
 		}
 	}
+}
+
+void eServiceMP3::restartPipelineAfterSeekFailure()
+{
+	m_clear_buffers = false;
+	m_send_ev_start = false;
+	stop();
+	m_state = stIdle;
+	start();
 }
 
 int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
@@ -5248,6 +5334,11 @@ void eServiceMP3::gstPoll(ePtr<GstMessageContainer> const &msg)
 		{
 			GstPad *pad = *((GstMessageContainer*)msg);
 			gstTextpadHasCAPS_synced(pad);
+			break;
+		}
+		case 4:
+		{
+			seekWorkerDone(msg->getSeekOk(), msg->getSeekRestoreText(), msg->getSeekRestartPipelineOnFailure(), m_last_seek_pos);
 			break;
 		}
 	}
