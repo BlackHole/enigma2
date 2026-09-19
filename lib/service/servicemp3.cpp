@@ -5490,14 +5490,27 @@ RESULT eServiceMP3::enableSubtitles(iSubtitleUser *user, struct SubtitleTrack &t
 		 * with sparse buffers (subsink blocking pipeline preroll on its own
 		 * first buffer - see the "async" property set on subsink in
 		 * gstBusCall()'s GST_STATE_CHANGE_READY_TO_PAUSED handling). Now that
-		 * subsink no longer blocks preroll, the flush-seek itself is no
-		 * longer expected to hang, and doing it on a worker thread turned
-		 * out to introduce its own problems - a seek racing normal playback
-		 * from a different thread than the one enigma2 otherwise always
-		 * drives the pipeline from, and stop() racing an in-flight worker
-		 * seek against gst_element_set_state(..., GST_STATE_NULL) on the
-		 * same element. Simple and synchronous, like every other seek in
-		 * this file. */
+		 * subsink no longer blocks preroll, that particular hang is fixed,
+		 * and doing the flush on a worker thread turned out to introduce its
+		 * own problems - a seek racing normal playback from a different
+		 * thread than the one enigma2 otherwise always drives the pipeline
+		 * from, and stop() racing an in-flight worker seek against
+		 * gst_element_set_state(..., GST_STATE_NULL) on the same element.
+		 * Simple and synchronous, like every other seek in this file.
+		 *
+		 * However, switching current-text (just above) still reconfigures
+		 * playbin's internal text pad asynchronously (new subtitle decoder
+		 * linked in on a streaming thread), and issuing the flush-seek
+		 * immediately after, back-to-back on the main thread, can still race
+		 * that reconfiguration - unlike plain seeks or disableSubtitles()
+		 * (which never touches current-text), this is the one path that
+		 * does both together. Give the pad-switch a bounded moment to settle
+		 * first: this can only shorten or no-op (if it settles immediately,
+		 * common case) or wait up to the cap (never longer) - it cannot hang,
+		 * unlike the flush-seek itself used to. */
+		GstState state, pending;
+		gst_element_get_state(m_gst_playbin, &state, &pending, 300 * GST_MSECOND);
+
 		m_clear_buffers = true;
 		clearBuffers();
 	}
