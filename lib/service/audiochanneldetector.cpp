@@ -712,14 +712,14 @@ void eDVBAudioChannelDetector::start(iDVBDemux *demux, int pid, int codec)
 
 	if (pid <= 0 || codec == ctUnsupported || !demux)
 	{
-		eDebug("[eDVBAudioChannelDetector] start: skipping pid=%d codec=%d (unsupported or invalid)", pid, codec);
+		eTrace("[eDVBAudioChannelDetector] start: skipping pid=%d codec=%d (unsupported or invalid)", pid, codec);
 		giveUp();
 		return;
 	}
 
 	if (demux->createPESReader(eApp, m_pes_reader) || !m_pes_reader)
 	{
-		eDebug("[eDVBAudioChannelDetector] start: createPESReader failed for pid=%d", pid);
+		eTrace("[eDVBAudioChannelDetector] start: createPESReader failed for pid=%d", pid);
 		m_pes_reader = 0;
 		giveUp();
 		return;
@@ -728,14 +728,14 @@ void eDVBAudioChannelDetector::start(iDVBDemux *demux, int pid, int codec)
 	m_pes_reader->connectRead(sigc::mem_fun(*this, &eDVBAudioChannelDetector::pesData), m_pes_conn);
 	if (m_pes_reader->start(pid))
 	{
-		eDebug("[eDVBAudioChannelDetector] start: PES reader start() failed for pid=%d", pid);
+		eTrace("[eDVBAudioChannelDetector] start: PES reader start() failed for pid=%d", pid);
 		m_pes_reader = 0;
 		m_pes_conn = 0;
 		giveUp();
 		return;
 	}
 
-	eDebug("[eDVBAudioChannelDetector] probing pid=%04x codec=%d via PES reader", pid, codec);
+	eTrace("[eDVBAudioChannelDetector] probing pid=%04x codec=%d via PES reader", pid, codec);
 	m_timeout->start(PROBE_TIMEOUT_MS, true);
 }
 
@@ -750,14 +750,14 @@ void eDVBAudioChannelDetector::startSoftCSA(eDVBSoftDecoder *soft_decoder, int p
 
 	if (pid <= 0 || codec == ctUnsupported || !soft_decoder)
 	{
-		eDebug("[eDVBAudioChannelDetector] startSoftCSA: skipping pid=%d codec=%d (unsupported or invalid)", pid, codec);
+		eTrace("[eDVBAudioChannelDetector] startSoftCSA: skipping pid=%d codec=%d (unsupported or invalid)", pid, codec);
 		giveUp();
 		return;
 	}
 
 	if (::socketpair(AF_UNIX, SOCK_STREAM, 0, m_monitor_fd) != 0)
 	{
-		eDebug("[eDVBAudioChannelDetector] startSoftCSA: socketpair() failed for pid=%d: %m", pid);
+		eTrace("[eDVBAudioChannelDetector] startSoftCSA: socketpair() failed for pid=%d: %m", pid);
 		m_monitor_fd[0] = m_monitor_fd[1] = -1;
 		giveUp();
 		return;
@@ -774,7 +774,7 @@ void eDVBAudioChannelDetector::startSoftCSA(eDVBSoftDecoder *soft_decoder, int p
 
 	if (soft_decoder->setAudioMonitorFD(m_monitor_fd[1]))
 	{
-		eDebug("[eDVBAudioChannelDetector] startSoftCSA: setAudioMonitorFD failed for pid=%d (recorder not active yet?)", pid);
+		eTrace("[eDVBAudioChannelDetector] startSoftCSA: setAudioMonitorFD failed for pid=%d (recorder not active yet?)", pid);
 		::close(m_monitor_fd[0]); m_monitor_fd[0] = -1;
 		::close(m_monitor_fd[1]); m_monitor_fd[1] = -1;
 		giveUp();
@@ -787,7 +787,7 @@ void eDVBAudioChannelDetector::startSoftCSA(eDVBSoftDecoder *soft_decoder, int p
 	CONNECT(m_notifier->activated, eDVBAudioChannelDetector::monitorData);
 	m_notifier->start();
 
-	eDebug("[eDVBAudioChannelDetector] probing pid=%04x codec=%d via SoftCSA monitor fd", pid, codec);
+	eTrace("[eDVBAudioChannelDetector] probing pid=%04x codec=%d via SoftCSA monitor fd", pid, codec);
 	m_timeout->start(PROBE_TIMEOUT_MS, true);
 }
 
@@ -810,7 +810,7 @@ void eDVBAudioChannelDetector::monitorData(int)
 			// here and leave the notifier running, it fires again
 			// immediately, forever (a busy-loop / permanent spinner). This
 			// probe can never get more data, so stop it outright.
-			eDebug("[eDVBAudioChannelDetector] monitor fd closed for pid=%04x, giving up", m_pid);
+			eTrace("[eDVBAudioChannelDetector] monitor fd closed for pid=%04x, giving up", m_pid);
 			giveUp();
 			return;
 		}
@@ -819,7 +819,7 @@ void eDVBAudioChannelDetector::monitorData(int)
 		{
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
 				return; // no data right now - wait for the next real notification
-			eDebug("[eDVBAudioChannelDetector] monitor fd read error for pid=%04x: %m", m_pid);
+			eTrace("[eDVBAudioChannelDetector] monitor fd read error for pid=%04x: %m", m_pid);
 			giveUp();
 			return;
 		}
@@ -895,7 +895,7 @@ void eDVBAudioChannelDetector::feed(const uint8_t *data, int len)
 	{
 		if (m_channels != prev_channels || m_atmos != prev_atmos)
 		{
-			eDebug("[eDVBAudioChannelDetector] %d channel(s)%s for pid=%04x (was %d%s)",
+			eTrace("[eDVBAudioChannelDetector] %d channel(s)%s for pid=%04x (was %d%s)",
 				m_channels, m_atmos ? " (Dolby Atmos)" : "", m_pid,
 				prev_channels, prev_atmos ? " (Dolby Atmos)" : "");
 			channelsDetected();
@@ -922,7 +922,7 @@ void eDVBAudioChannelDetector::feed(const uint8_t *data, int len)
 		{
 			// Initial detection never found anything in the full safety
 			// margin - give up for good, same as before.
-			eDebug("[eDVBAudioChannelDetector] giving up on pid=%04x: no valid header found in %zu bytes",
+			eTrace("[eDVBAudioChannelDetector] giving up on pid=%04x: no valid header found in %zu bytes",
 				m_pid, m_data.size());
 			// Self-teardown hazard as elsewhere - mark finished now (so
 			// further feed() calls are no-ops) but defer stop() to next tick.
@@ -1011,12 +1011,12 @@ void eDVBAudioChannelDetector::tryDetect()
 				if (atmos_scan == 1 && !m_atmos)
 				{
 					m_atmos = true;
-					eDebug("[eDVBAudioChannelDetector] Dolby Atmos (JOC) detected for pid=%04x", m_pid);
+					eTrace("[eDVBAudioChannelDetector] Dolby Atmos (JOC) detected for pid=%04x", m_pid);
 				}
 				else if (atmos_scan == 0 && m_atmos)
 				{
 					m_atmos = false;
-					eDebug("[eDVBAudioChannelDetector] Dolby Atmos (JOC) no longer present for pid=%04x", m_pid);
+					eTrace("[eDVBAudioChannelDetector] Dolby Atmos (JOC) no longer present for pid=%04x", m_pid);
 				}
 			}
 			break;
@@ -1055,7 +1055,7 @@ void eDVBAudioChannelDetector::onTimeout()
 	// stopped producing data.
 	if (!finished())
 	{
-		eDebug("[eDVBAudioChannelDetector] probe timed out for pid=%04x after %zu bytes", m_pid, m_data.size());
+		eTrace("[eDVBAudioChannelDetector] probe timed out for pid=%04x after %zu bytes", m_pid, m_data.size());
 		m_gaveUp = true;
 	}
 	stop();
