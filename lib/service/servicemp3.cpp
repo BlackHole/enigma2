@@ -1606,7 +1606,6 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	m_dvb_subtitle_parser = new eDVBSubtitleParser();
 	m_dvb_subtitle_parser->connectNewPage(sigc::mem_fun(*this, &eServiceMP3::newDVBSubtitlePage), m_new_dvb_subtitle_page_connection);
 	m_passthrough_fix_timer = eTimer::create(eApp);
-	m_subtitle_clear_buffers_timer = eTimer::create(eApp);
 	m_stream_tags = 0;
 	m_currentAudioStream = -1;
 	m_currentSubtitleStream = -1;
@@ -1662,7 +1661,6 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	CONNECT(m_pump.recv_msg, eServiceMP3::gstPoll);
 	CONNECT(m_nownext_timer->timeout, eServiceMP3::updateEpgCacheNowNext);
 	CONNECT(m_passthrough_fix_timer->timeout, eServiceMP3::forceAudioReset);
-	CONNECT(m_subtitle_clear_buffers_timer->timeout, eServiceMP3::deferredSubtitleClearBuffers);
 
 	m_aspect = m_width = m_height = m_framerate = m_progressive = m_gamma = -1;
 	m_hdr_type = 0;
@@ -2299,98 +2297,6 @@ gpointer stopWatchdog(gpointer data)
 	return NULL;
 }
 
-const guint SUBTITLE_FLUSH_POLL_TIMEOUT_MS = 500;
-const guint SUBTITLE_FLUSH_POLL_STEP_MS = 20;
-const guint SUBTITLE_FLUSH_WATCHDOG_TIMEOUT_SECONDS = 5;
-
-/* Shared between subtitleFlushWorker() and subtitleFlushWatchdog() only -
- * same "never touches eServiceMP3/'this'" reasoning as StopWatchdog: this can
- * outlive the eServiceMP3 that started it (e.g. the user stops playback while
- * the flush is stuck). refcount starts at 2, whichever thread finishes second
- * frees it. */
-struct SubtitleFlushWatchdog
-{
-	gint done;      // atomic bool
-	gint refcount;  // atomic
-};
-
-void subtitleFlushWatchdogRelease(SubtitleFlushWatchdog *watchdog)
-{
-	if (g_atomic_int_dec_and_test(&watchdog->refcount))
-		delete watchdog;
-}
-
-struct SubtitleFlushArgs
-{
-	GstElement *playbin;
-	SubtitleFlushWatchdog *watchdog;
-};
-
-/* enableSubtitles() switching current-text reconfigures playbin's internal
- * text pad (new subtitle decoder/parser linked into the running pipeline) on
- * a GStreamer streaming thread. A position query/flush-seek issued right
- * after that from the main thread can contend with that still-in-progress
- * reconfiguration and, for some embedded subtitle tracks (seen with MKV),
- * block forever - even though audio/video keep playing fine, since they are
- * on unrelated pipeline branches. There is no way to know in advance whether
- * a given track will hit this, and no safe way to force-abort a thread once
- * it's stuck inside a GStreamer call, so this combines both a best-effort
- * wait for the common case and an unconditional move off the main thread as
- * the actual safety net:
- *  1) poll (bounded) for the pipeline to report no pending async state
- *     change before touching it - resolves the race in the common case
- *     without any fixed guess-a-delay wait.
- *  2) do the query+seek itself on this worker thread regardless, so even if
- *     step 1's wait wasn't enough and the call genuinely hangs, only this
- *     background thread is stuck - enigma2's main thread and playback are
- *     never blocked by it. */
-gpointer subtitleFlushWorker(gpointer data)
-{
-	SubtitleFlushArgs *args = static_cast<SubtitleFlushArgs*>(data);
-	GstElement *playbin = args->playbin;
-	SubtitleFlushWatchdog *watchdog = args->watchdog;
-	delete args;
-
-	guint waited_ms = 0;
-	GstState state, pending;
-	while (waited_ms < SUBTITLE_FLUSH_POLL_TIMEOUT_MS)
-	{
-		GstStateChangeReturn ret = gst_element_get_state(playbin, &state, &pending, 0);
-		if (ret != GST_STATE_CHANGE_ASYNC && pending == GST_STATE_VOID_PENDING)
-			break;
-		g_usleep(SUBTITLE_FLUSH_POLL_STEP_MS * 1000);
-		waited_ms += SUBTITLE_FLUSH_POLL_STEP_MS;
-	}
-
-	gint64 pos = -1;
-	if (gst_element_query_position(playbin, GST_FORMAT_TIME, &pos) && pos >= 0)
-	{
-		pos -= 100 * GST_MSECOND;
-		if (pos < 0)
-			pos = 0;
-		if (!gst_element_seek(playbin, 1.0, GST_FORMAT_TIME, (GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT),
-			GST_SEEK_TYPE_SET, pos, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
-			eDebug("[eServiceMP3] subtitle clear-buffers seek failed");
-	}
-
-	gst_object_unref(playbin);
-	g_atomic_int_set(&watchdog->done, 1);
-	subtitleFlushWatchdogRelease(watchdog);
-	return NULL;
-}
-
-/* Detection only, see subtitleFlushWorker()'s comment - logs if the worker
- * above is still stuck well past how long this ever legitimately takes. */
-gpointer subtitleFlushWatchdog(gpointer data)
-{
-	SubtitleFlushWatchdog *watchdog = static_cast<SubtitleFlushWatchdog*>(data);
-	g_usleep(SUBTITLE_FLUSH_WATCHDOG_TIMEOUT_SECONDS * G_USEC_PER_SEC);
-	if (!g_atomic_int_get(&watchdog->done))
-		eDebug("[eServiceMP3] subtitle clear-buffers still hasn't completed after %u seconds - pipeline likely stuck", SUBTITLE_FLUSH_WATCHDOG_TIMEOUT_SECONDS);
-	subtitleFlushWatchdogRelease(watchdog);
-	return NULL;
-}
-
 }  // namespace
 
 void eServiceMP3::disconnectAsyncSignalHandlers()
@@ -2461,7 +2367,6 @@ void eServiceMP3::disconnectAsyncSignalHandlers()
 RESULT eServiceMP3::stop()
 {
 	m_passthrough_fix_timer->stop();
-	m_subtitle_clear_buffers_timer->stop();
 	/* A restarted pipeline (see start()/forceAudioReset()) can bring the
 	 * decoder-time register back to an arbitrary/stale value unrelated to
 	 * this baseline, so don't carry it across a stop() - re-arm the one-time
@@ -3802,34 +3707,6 @@ void eServiceMP3::clearBuffers(bool force)
 			start();
 		}
 	}
-}
-
-void eServiceMP3::deferredSubtitleClearBuffers()
-{
-	if (!m_clear_buffers || !m_gst_playbin)
-		return;
-	m_clear_buffers = false;
-
-	/* Live streams cannot seek back; flushing would stall playback, so skip. */
-	if (m_is_live)
-	{
-		eDebug ("[eServiceMP3] Clear Buffers skipped (live stream)");
-		return;
-	}
-
-	eDebug ("[eServiceMP3] Clear Buffers (subtitle switch, async)!");
-
-	/* See subtitleFlushWorker()'s comment: this hands the actual query+seek
-	 * off to a worker thread (with its own watchdog) instead of doing it
-	 * here, specifically because it can hang for some embedded subtitle
-	 * tracks. Takes its own ref on the playbin so the worker stays valid
-	 * even if this eServiceMP3 is stopped/destroyed while it's still running. */
-	gst_object_ref(m_gst_playbin);
-	SubtitleFlushWatchdog *watchdog = new SubtitleFlushWatchdog{0, 2};
-	GThread *worker = g_thread_new("mp3subflush", subtitleFlushWorker, new SubtitleFlushArgs{m_gst_playbin, watchdog});
-	g_thread_unref(worker);
-	GThread *watchdogThread = g_thread_new("mp3subflushwd", subtitleFlushWatchdog, watchdog);
-	g_thread_unref(watchdogThread);
 }
 
 int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
@@ -5608,16 +5485,21 @@ RESULT eServiceMP3::enableSubtitles(iSubtitleUser *user, struct SubtitleTrack &t
 
 	if (track.type != stDVB)
 	{
-		/* Don't call clearBuffers() inline here - see
-		 * deferredSubtitleClearBuffers()/subtitleFlushWorker()'s comments.
-		 * Setting current-text just above reconfigures playbin's internal
-		 * text pad asynchronously, and the flush this triggers can race that
-		 * and hang for some embedded subtitle tracks (seen with MKV). Give
-		 * the pad switch one mainloop tick to get going, then hand the actual
-		 * flush off to a worker thread that can never block the main thread
-		 * even if the underlying GStreamer call itself hangs. */
+		/* This used to be deferred to a background worker thread because the
+		 * flush-seek below could hang forever on embedded subtitle tracks
+		 * with sparse buffers (subsink blocking pipeline preroll on its own
+		 * first buffer - see the "async" property set on subsink in
+		 * gstBusCall()'s GST_STATE_CHANGE_READY_TO_PAUSED handling). Now that
+		 * subsink no longer blocks preroll, the flush-seek itself is no
+		 * longer expected to hang, and doing it on a worker thread turned
+		 * out to introduce its own problems - a seek racing normal playback
+		 * from a different thread than the one enigma2 otherwise always
+		 * drives the pipeline from, and stop() racing an in-flight worker
+		 * seek against gst_element_set_state(..., GST_STATE_NULL) on the
+		 * same element. Simple and synchronous, like every other seek in
+		 * this file. */
 		m_clear_buffers = true;
-		m_subtitle_clear_buffers_timer->start(20, true);
+		clearBuffers();
 	}
 
 	m_subtitle_widget = user;
