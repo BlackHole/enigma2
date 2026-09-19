@@ -93,14 +93,6 @@ class GstMessageContainer: public iObject
 	GstPad *messagePad;
 	GstBuffer *messageBuffer;
 	int messageType;
-	/* Only used by type 4 (seek-worker-done, see seekToImpl()): whether the
-	 * worker's gst_element_seek() call reported success, the current-text
-	 * value to restore afterward (-1 = nothing to restore), and whether a
-	 * failed seek should restart the pipeline (see clearBuffers()'s use of
-	 * m_seek_failure_restarts_pipeline). */
-	gboolean seekOk;
-	int seekRestoreText;
-	bool seekRestartPipelineOnFailure;
 
 public:
 	GstMessageContainer(int type, GstMessage *msg, GstPad *pad, GstBuffer *buffer)
@@ -109,17 +101,6 @@ public:
 		messagePad = pad;
 		messageBuffer = buffer;
 		messageType = type;
-		seekOk = FALSE;
-		seekRestoreText = -1;
-		seekRestartPipelineOnFailure = false;
-	}
-	static GstMessageContainer *newSeekDone(gboolean seek_ok, int seek_restore_text, bool seek_restart_pipeline_on_failure)
-	{
-		GstMessageContainer *c = new GstMessageContainer(4, (GstMessage*)NULL, (GstPad*)NULL, (GstBuffer*)NULL);
-		c->seekOk = seek_ok;
-		c->seekRestoreText = seek_restore_text;
-		c->seekRestartPipelineOnFailure = seek_restart_pipeline_on_failure;
-		return c;
 	}
 	~GstMessageContainer()
 	{
@@ -128,9 +109,6 @@ public:
 		if (messageBuffer) gst_buffer_unref(messageBuffer);
 	}
 	int getType() { return messageType; }
-	gboolean getSeekOk() { return seekOk; }
-	int getSeekRestoreText() { return seekRestoreText; }
-	bool getSeekRestartPipelineOnFailure() { return seekRestartPipelineOnFailure; }
 	operator GstMessage *() { return messagePointer; }
 	operator GstPad *() { return messagePad; }
 	operator GstBuffer *() { return messageBuffer; }
@@ -415,20 +393,6 @@ private:
 	 * that leftover branch even with no subtitle currently selected - see
 	 * seekToImpl()'s comment. */
 	bool m_subtitle_ever_switched;
-
-	/* Guards against a second flushing seek being dispatched while a prior
-	 * one is still running on its worker thread - see seekToImpl(). Main
-	 * thread only. */
-	bool m_seek_in_progress;
-	/* clearBuffers() used to restart the whole pipeline synchronously when
-	 * its own seekTo() call reported failure - now that the actual
-	 * gst_element_seek() result only arrives later via seekWorkerDone() (see
-	 * seekToImpl()'s comment), set right before dispatching that seek so
-	 * seekWorkerDone() knows to still perform that same recovery if it turns
-	 * out this particular seek failed. Main thread only. */
-	bool m_seek_failure_restarts_pipeline;
-	void seekWorkerDone(gboolean seek_ok, int seek_restore_text, bool restart_pipeline_on_failure, gint64 seek_pos);
-	void restartPipelineAfterSeekFailure();
 
 	void pushDVBSubtitles();
 	void pushSubtitles();
