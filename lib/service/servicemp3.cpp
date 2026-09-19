@@ -1633,6 +1633,7 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	m_position_baseline_valid = false;
 	m_position_correction_enabled = true;
 	m_position_baseline = 0;
+	m_subtitle_ever_switched = false;
 	m_errorInfo.missing_codec = "";
 	audioSink = videoSink = NULL;
 	m_decoder = NULL;
@@ -2510,11 +2511,57 @@ RESULT eServiceMP3::getLength(pts_t &pts)
 
 RESULT eServiceMP3::seekToImpl(pts_t to)
 {
+	/* gstreamer suffers from a bug causing sparse streams (embedded subtitle
+	 * tracks, which can go a long time between buffers) to stall a flushing
+	 * seek forever: a sync=TRUE sink won't report PAUSED until it has a
+	 * buffer to preroll on, and gst_element_seek() below waits for every
+	 * sink - including "subsink" (the embedded-subtitle appsink) - to reach
+	 * that state. If the seek target has no subtitle buffer anywhere nearby,
+	 * this can hang indefinitely.
+	 * see: https://bugzilla.gnome.org/show_bug.cgi?id=619434
+	 *
+	 * Confirmed behaviour (not just "a subtitle track is selected"):
+	 *  - initial selection of a track (from none active) seeks fine;
+	 *  - switching from one already-active non-DVB text pad to a different
+	 *    one leaves playbin's input-selector in a state where even a LATER
+	 *    seek can hang, after the track has since been disabled again
+	 *    (m_currentSubtitleStream back to -1) - so gating purely on "is a
+	 *    subtitle currently selected" is not enough, m_subtitle_ever_switched
+	 *    (set by enableSubtitles() only on an actual switch, not the first
+	 *    selection) is;
+	 *  - deselecting the subtitle track (current-text = -1) before seeking
+	 *    avoids the hang even when it ends up reselected right after.
+	 * Deselect before the seek and restore after, mirroring exactly the
+	 * sequence that is already known to avoid the hang, once a switch has
+	 * ever happened this session. */
+	int seek_restore_text = -1;
+	if (m_subtitle_ever_switched)
+	{
+		if (m_currentSubtitleStream >= 0 &&
+			m_currentSubtitleStream < (int)m_subtitleStreams.size() &&
+			m_subtitleStreams[m_currentSubtitleStream].type != stDVB)
+			seek_restore_text = m_currentSubtitleStream;
+		eDebug("[eServiceMP3] seekToImpl: deselecting current-text before seek (was %d)", m_currentSubtitleStream);
+		g_object_set(G_OBJECT(m_gst_playbin), "current-text", -1, NULL);
+		eDebug("[eServiceMP3] seekToImpl: current-text deselected");
+	}
+
 		/* convert pts to nanoseconds */
 	m_last_seek_pos = to * 11111LL;
-	if (!gst_element_seek (m_gst_playbin, m_currentTrickRatio, GST_FORMAT_TIME, (GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT),
+	eDebug("[eServiceMP3] seekToImpl: calling gst_element_seek to %lld ns", (long long)m_last_seek_pos);
+	gboolean seek_ok = gst_element_seek (m_gst_playbin, m_currentTrickRatio, GST_FORMAT_TIME, (GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT),
 		GST_SEEK_TYPE_SET, m_last_seek_pos,
-		GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
+		GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
+	eDebug("[eServiceMP3] seekToImpl: gst_element_seek returned %d", seek_ok);
+
+	if (seek_restore_text >= 0)
+	{
+		eDebug("[eServiceMP3] seekToImpl: restoring current-text to %d", seek_restore_text);
+		g_object_set(G_OBJECT(m_gst_playbin), "current-text", seek_restore_text, NULL);
+		eDebug("[eServiceMP3] seekToImpl: current-text restored");
+	}
+
+	if (!seek_ok)
 	{
 		eDebug("[eServiceMP3] seekTo failed");
 		return -1;
@@ -2714,7 +2761,9 @@ RESULT eServiceMP3::getRawPlayPosition(pts_t &pts)
 	if ((audioSink || videoSink) && !m_paused)
 	{
 		if (m_sourceinfo.is_audio && videoSink) {
+			eDebug("[eServiceMP3] getRawPlayPosition: emitting get-decoder-time on audioSink (is_audio branch)");
 			g_signal_emit_by_name(audioSink, "get-decoder-time", &pos);
+			eDebug("[eServiceMP3] getRawPlayPosition: get-decoder-time (audioSink) returned pos=%lld", (long long)pos);
 			if (GST_CLOCK_TIME_IS_VALID(pos))
 				got_decoder_time = true;
 		} else if (!m_sourceinfo.is_audio) {
@@ -2722,13 +2771,21 @@ RESULT eServiceMP3::getRawPlayPosition(pts_t &pts)
 			 * audio is 0 or invalid */
 			/* avoid taking the audio play position if audio sink is in state NULL */
 			if (audioSink) {
+				eDebug("[eServiceMP3] getRawPlayPosition: emitting get-decoder-time on audioSink");
 				g_signal_emit_by_name(audioSink, "get-decoder-time", &pos);
+				eDebug("[eServiceMP3] getRawPlayPosition: get-decoder-time (audioSink) returned pos=%lld", (long long)pos);
 				if (!GST_CLOCK_TIME_IS_VALID(pos) && videoSink)
+				{
+					eDebug("[eServiceMP3] getRawPlayPosition: emitting get-decoder-time on videoSink");
 					g_signal_emit_by_name(videoSink, "get-decoder-time", &pos);
+					eDebug("[eServiceMP3] getRawPlayPosition: get-decoder-time (videoSink) returned pos=%lld", (long long)pos);
+				}
 				if (GST_CLOCK_TIME_IS_VALID(pos))
 					got_decoder_time = true;
 			} else if (videoSink) {
+				eDebug("[eServiceMP3] getRawPlayPosition: emitting get-decoder-time on videoSink (no audioSink)");
 				g_signal_emit_by_name(videoSink, "get-decoder-time", &pos);
+				eDebug("[eServiceMP3] getRawPlayPosition: get-decoder-time (videoSink) returned pos=%lld", (long long)pos);
 				if (GST_CLOCK_TIME_IS_VALID(pos))
 				got_decoder_time = true;
 			}
@@ -2740,7 +2797,10 @@ RESULT eServiceMP3::getRawPlayPosition(pts_t &pts)
 		* exist but get-decoder-time returns invalid values (e.g. MP4 playback on
 		* some chipsets like HiSilicon), or when no dvb sinks are available at all. */
 		GstFormat fmt = GST_FORMAT_TIME;
-		if (!gst_element_query_position(m_gst_playbin, fmt, &pos))
+		eDebug("[eServiceMP3] getRawPlayPosition: calling gst_element_query_position");
+		gboolean qp_ok = gst_element_query_position(m_gst_playbin, fmt, &pos);
+		eDebug("[eServiceMP3] getRawPlayPosition: gst_element_query_position returned %d, pos=%lld", qp_ok, (long long)pos);
+		if (!qp_ok)
 		{
 			eDebug("[eServiceMP3] gst_element_query_position failed in getPlayPosition");
 			return -1;
@@ -3685,7 +3745,10 @@ void eServiceMP3::clearBuffers(bool force)
 
 	bool validposition = false;
 	pts_t ppos = 0;
-	if (getRawPlayPosition(ppos) >= 0)
+	eDebug("[eServiceMP3] clearBuffers: calling getRawPlayPosition");
+	int rawpos_res = getRawPlayPosition(ppos);
+	eDebug("[eServiceMP3] clearBuffers: getRawPlayPosition returned %d, ppos=%lld", rawpos_res, (long long)ppos);
+	if (rawpos_res >= 0)
 	{
 		validposition = true;
 		ppos -= 9000; /* seek back ~100ms instead of 1s for faster audio switch */
@@ -3696,8 +3759,9 @@ void eServiceMP3::clearBuffers(bool force)
 	if (validposition)
 	{
 		/* flush */
+		eDebug("[eServiceMP3] clearBuffers: calling seekTo(%lld)", (long long)ppos);
 		int res = seekTo(ppos);
-		eDebug("[eServiceMP3] Clear Buffers: seekTo result=%d", res);
+		eDebug("[eServiceMP3] clearBuffers: seekTo returned %d", res);
 		if (res == -1)
 		{
 			m_clear_buffers = false;
@@ -4113,6 +4177,16 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 						 * so display timing (ts-offset/pushSubtitles()'s own PTS
 						 * comparison) is unaffected. */
 						g_object_set (G_OBJECT (subsink), "async", TRUE, NULL);
+						{
+							/* Read back what GStreamer actually stored: if "subsink"
+							 * doesn't implement GstBaseSink's standard async property
+							 * the way assumed, g_object_set() above silently no-ops
+							 * (GLib only warns, never errors, on an unknown/wrong-type
+							 * property) and this readback will not show TRUE. */
+							gboolean async_readback = FALSE;
+							g_object_get(G_OBJECT(subsink), "async", &async_readback, NULL);
+							eDebug("[eServiceMP3] subsink async property readback: %s", async_readback ? "TRUE" : "FALSE");
+						}
 						eDebug("[eServiceMP3] subsink properties set!");
 						gst_object_unref(subsink);
 					}
@@ -5471,6 +5545,19 @@ RESULT eServiceMP3::enableSubtitles(iSubtitleUser *user, struct SubtitleTrack &t
 		return -1;
 	}
 	eDebug ("[eServiceMP3][enableSubtitles] entered: subtitle stream %i track.pid %i", m_currentSubtitleStream, track.pid - 1);
+	/* Switching from one already-active non-DVB (embedded) text pad to a
+	 * different one - as opposed to selecting a track for the first time
+	 * from none active - leaves classic playbin's input-selector in a state
+	 * where a later flushing seek can hang even after the subtitle track is
+	 * subsequently disabled again (see seekToImpl()'s comment). Record that
+	 * this has happened at least once so seekToImpl() knows to guard every
+	 * later seek, not just ones with a subtitle currently selected. */
+	if (m_currentSubtitleStream >= 0 &&
+		m_currentSubtitleStream < (int)m_subtitleStreams.size() &&
+		m_subtitleStreams[m_currentSubtitleStream].type != stDVB)
+	{
+		m_subtitle_ever_switched = true;
+	}
 	g_object_set (G_OBJECT (m_gst_playbin), "current-text", -1, NULL);
 	m_subtitle_sync_timer->stop();
 	m_dvb_subtitle_sync_timer->stop();
@@ -5482,6 +5569,18 @@ RESULT eServiceMP3::enableSubtitles(iSubtitleUser *user, struct SubtitleTrack &t
 	m_cachedSubtitleStream = m_currentSubtitleStream;
 	setCacheEntry(false, track.pid - 1);
 	g_object_set (G_OBJECT (m_gst_playbin), "current-text", m_currentSubtitleStream, NULL);
+
+	if (track.type != stDVB)
+	{
+		/* The switch above alone does not make the new track actually
+		 * render until the pipeline flushes - without this, video/audio
+		 * keep playing but the new subtitle track never shows anything
+		 * until the next seek. clearBuffers() has to run here for the
+		 * switch to take visible effect; seekToImpl() is what guards this
+		 * (and every other) seek against the hang described above. */
+		m_clear_buffers = true;
+		clearBuffers();
+	}
 
 	m_subtitle_widget = user;
 

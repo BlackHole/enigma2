@@ -385,6 +385,14 @@ private:
 	bool m_position_baseline_valid;
 	bool m_position_correction_enabled;
 	pts_t m_position_baseline;
+	/* Set once enableSubtitles() has selected a non-DVB (embedded) subtitle
+	 * track at least once this session. Classic playbin's input-selector
+	 * leaves the previously-activated text pad/decoder branch linked in the
+	 * pipeline even after switching away or disabling via current-text=-1,
+	 * so once this has happened, a later flushing seek can still stall on
+	 * that leftover branch even with no subtitle currently selected - see
+	 * seekToImpl()'s comment. */
+	bool m_subtitle_ever_switched;
 
 	void pushDVBSubtitles();
 	void pushSubtitles();
