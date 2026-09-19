@@ -4221,27 +4221,21 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 						 * Then we do aditional sync of subtitles if they arrive ahead of PTS
 						 */
 						g_object_set (G_OBJECT (subsink), "ts-offset", -2LL * GST_SECOND, NULL);
-#ifdef GSTREAMER_SUBTITLE_SYNC_MODE_BUG
 						/*
-						 * HACK: disable sync mode for now, gstreamer suffers from a bug causing sparse streams to loose sync, after pause/resume / skip
+						 * gstreamer suffers from a bug causing sparse streams (like
+						 * embedded subtitle tracks, which can go a long time between
+						 * buffers) to stall pipeline preroll: a sync=TRUE sink won't
+						 * report PAUSED until it has a buffer to preroll on, and a
+						 * flushing seek waits for every sink to reach that state - so
+						 * if the seek target has no subtitle buffer anywhere nearby,
+						 * the whole seek can hang forever waiting on this one sink.
 						 * see: https://bugzilla.gnome.org/show_bug.cgi?id=619434
-						 * Sideeffect of using sync=false is that we receive subtitle buffers (far) ahead of their
-						 * display time.
-						 * Not too far ahead for subtitles contained in the media container.
-						 * But for external srt files, we could receive all subtitles at once.
-						 * And not just once, but after each pause/resume / skip.
-						 * So as soon as gstreamer has been fixed to keep sync in sparse streams, sync needs to be re-enabled.
-						 */
-						g_object_set (G_OBJECT (subsink), "sync", FALSE, NULL);
-#endif
-#if 0
-						/* we should not use ts-offset to sync with the decoder time, we have to do our own decoder timekeeping */
-						g_object_set (G_OBJECT (subsink), "ts-offset", -2LL * GST_SECOND, NULL);
-						/* late buffers probably will not occur very often */
-						g_object_set (G_OBJECT (subsink), "max-lateness", 0LL, NULL);
-						/* avoid prerolling (it might not be a good idea to preroll a sparse stream) */
+						 * async=TRUE (unlike sync=FALSE, tried previously) only takes
+						 * this sink out of the preroll handshake - buffers it does
+						 * receive are still clock-gated/timed normally via sync=TRUE,
+						 * so display timing (ts-offset/pushSubtitles()'s own PTS
+						 * comparison) is unaffected. */
 						g_object_set (G_OBJECT (subsink), "async", TRUE, NULL);
-#endif
 						eDebug("[eServiceMP3] subsink properties set!");
 						gst_object_unref(subsink);
 					}
