@@ -4110,36 +4110,30 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 					if (subsink)
 					{
 						/*
-						 * FIX: Seems that subtitle sink have a delay of receiving subtitles buffer.
-						 * So we move ahead the PTS of the subtitle sink by 2 seconds.
-						 * Then we do aditional sync of subtitles if they arrive ahead of PTS
-						 */
-						g_object_set (G_OBJECT (subsink), "ts-offset", -2LL * GST_SECOND, NULL);
-						/*
 						 * gstreamer suffers from a bug causing sparse streams (like
 						 * embedded subtitle tracks, which can go a long time between
-						 * buffers) to stall pipeline preroll: a sync=TRUE sink won't
-						 * report PAUSED until it has a buffer to preroll on, and a
-						 * flushing seek waits for every sink to reach that state - so
-						 * if the seek target has no subtitle buffer anywhere nearby,
-						 * the whole seek can hang forever waiting on this one sink.
+						 * buffers) to stall pipeline preroll and any later flushing
+						 * seek: a sync=TRUE sink won't report PAUSED until it has a
+						 * buffer to preroll on, and both preroll and a flushing seek
+						 * wait for every sink to reach that state - so if the seek
+						 * target has no subtitle buffer anywhere nearby, the whole
+						 * seek can hang forever waiting on this one sink.
 						 * see: https://bugzilla.gnome.org/show_bug.cgi?id=619434
-						 * async=TRUE (unlike sync=FALSE, tried previously) only takes
-						 * this sink out of the preroll handshake - buffers it does
-						 * receive are still clock-gated/timed normally via sync=TRUE,
-						 * so display timing (ts-offset/pushSubtitles()'s own PTS
-						 * comparison) is unaffected. */
+						 * async=TRUE alone does not prevent this in practice (seeks
+						 * still hang on-device with only that set) - it only affects
+						 * the state-change preroll handshake, not whatever a flushing
+						 * seek additionally waits for. sync=FALSE takes this sink off
+						 * the pipeline clock entirely, so it never blocks on a nearby
+						 * buffer at all: safe here because display timing is not
+						 * driven by the sink's own clock-gated rendering - it's fully
+						 * decoupled already, computed by pullSubtitle()/
+						 * pushSubtitles() from GST_BUFFER_PTS() vs getRawPlayPosition()
+						 * and displayed via m_subtitle_sync_timer regardless of when
+						 * "new-buffer" itself fires. ts-offset (previously set here to
+						 * compensate for sync=TRUE's clock wait) is meaningless once
+						 * there is no clock wait left to offset, so it's dropped. */
+						g_object_set (G_OBJECT (subsink), "sync", FALSE, NULL);
 						g_object_set (G_OBJECT (subsink), "async", TRUE, NULL);
-						{
-							/* Read back what GStreamer actually stored: if "subsink"
-							 * doesn't implement GstBaseSink's standard async property
-							 * the way assumed, g_object_set() above silently no-ops
-							 * (GLib only warns, never errors, on an unknown/wrong-type
-							 * property) and this readback will not show TRUE. */
-							gboolean async_readback = FALSE;
-							g_object_get(G_OBJECT(subsink), "async", &async_readback, NULL);
-							eDebug("[eServiceMP3] subsink async property readback: %s", async_readback ? "TRUE" : "FALSE");
-						}
 						eDebug("[eServiceMP3] subsink properties set!");
 						gst_object_unref(subsink);
 					}
