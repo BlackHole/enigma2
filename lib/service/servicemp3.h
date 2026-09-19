@@ -314,7 +314,6 @@ private:
 	bool m_use_prefillbuffer;
 	bool m_paused;
 	bool m_clear_buffers;
-	bool m_clear_buffers_done_once;
 	bool m_initial_start;
 	bool m_send_ev_start;
 	bool m_seek_paused;
