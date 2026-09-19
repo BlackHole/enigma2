@@ -1606,7 +1606,6 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	m_dvb_subtitle_parser = new eDVBSubtitleParser();
 	m_dvb_subtitle_parser->connectNewPage(sigc::mem_fun(*this, &eServiceMP3::newDVBSubtitlePage), m_new_dvb_subtitle_page_connection);
 	m_passthrough_fix_timer = eTimer::create(eApp);
-	m_subtitle_clear_buffers_timer = eTimer::create(eApp);
 	m_stream_tags = 0;
 	m_currentAudioStream = -1;
 	m_currentSubtitleStream = -1;
@@ -1662,7 +1661,6 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	CONNECT(m_pump.recv_msg, eServiceMP3::gstPoll);
 	CONNECT(m_nownext_timer->timeout, eServiceMP3::updateEpgCacheNowNext);
 	CONNECT(m_passthrough_fix_timer->timeout, eServiceMP3::forceAudioReset);
-	CONNECT(m_subtitle_clear_buffers_timer->timeout, eServiceMP3::deferredSubtitleClearBuffers);
 
 	m_aspect = m_width = m_height = m_framerate = m_progressive = m_gamma = -1;
 	m_hdr_type = 0;
@@ -2369,7 +2367,6 @@ void eServiceMP3::disconnectAsyncSignalHandlers()
 RESULT eServiceMP3::stop()
 {
 	m_passthrough_fix_timer->stop();
-	m_subtitle_clear_buffers_timer->stop();
 	/* A restarted pipeline (see start()/forceAudioReset()) can bring the
 	 * decoder-time register back to an arbitrary/stale value unrelated to
 	 * this baseline, so don't carry it across a stop() - re-arm the one-time
@@ -3710,11 +3707,6 @@ void eServiceMP3::clearBuffers(bool force)
 			start();
 		}
 	}
-}
-
-void eServiceMP3::deferredSubtitleClearBuffers()
-{
-	clearBuffers();
 }
 
 int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
@@ -5490,33 +5482,6 @@ RESULT eServiceMP3::enableSubtitles(iSubtitleUser *user, struct SubtitleTrack &t
 	m_cachedSubtitleStream = m_currentSubtitleStream;
 	setCacheEntry(false, track.pid - 1);
 	g_object_set (G_OBJECT (m_gst_playbin), "current-text", m_currentSubtitleStream, NULL);
-
-	if (track.type != stDVB)
-	{
-		/* Switching current-text (just above) reconfigures playbin's
-		 * internal text pad asynchronously (new subtitle decoder linked in
-		 * on a streaming thread). Calling clearBuffers()'s flush-seek
-		 * immediately after, back-to-back in the same call stack on the main
-		 * thread, reliably hangs inside getRawPlayPosition()/seekTo() for
-		 * embedded subtitle tracks - unlike plain seeks or disableSubtitles()
-		 * (neither touches current-text), this is the only path that does
-		 * both together, and a bounded gst_element_get_state() wait first
-		 * did not help (confirmed by testing), so whatever this races is not
-		 * observable through the pipeline's top-level state.
-		 *
-		 * Deferring the flush to the next mainloop iteration via a
-		 * single-shot timer avoids the hang: it's still synchronous and
-		 * single-threaded (unlike an earlier attempt that moved this to a
-		 * worker thread, which fixed this hang but introduced two new ones -
-		 * a stop() vs in-flight-seek race, and a black-screen pipeline
-		 * freeze from seeking off the thread that otherwise always drives
-		 * this pipeline), it just runs after returning to the mainloop
-		 * instead of nested inside current-text's own g_object_set() call,
-		 * letting whatever that reconfiguration schedules on the mainloop
-		 * run first. */
-		m_clear_buffers = true;
-		m_subtitle_clear_buffers_timer->start(300, true);
-	}
 
 	m_subtitle_widget = user;
 

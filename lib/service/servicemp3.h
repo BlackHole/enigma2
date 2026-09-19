@@ -393,8 +393,6 @@ private:
 	void clearBuffers(bool force=false);
 	ePtr<eTimer> m_passthrough_fix_timer;
 	void forceAudioReset();
-	ePtr<eTimer> m_subtitle_clear_buffers_timer;
-	void deferredSubtitleClearBuffers();
 	sourceStream m_sourceinfo;
 	gulong m_subs_to_pull_handler_id;
 
