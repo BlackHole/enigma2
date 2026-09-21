@@ -343,7 +343,7 @@ def InitAVSwitch():
 		("ac3", _("Dolby Digital"))
 	], default="off")
 	if SystemInfo["Vu_EAC3_fix"]:
-		config.av.passthrough_fix = ConfigYesNo(default=True)
+		config.av.passthrough_fix = ConfigYesNo(default=False)
 	config.av.yuvenabled = ConfigYesNo(default=True)
 	colorformat_choices = {
 		"cvbs": _("CVBS"),
