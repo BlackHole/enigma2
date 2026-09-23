@@ -2142,8 +2142,6 @@ RESULT eServiceMP3::start()
 {
 	ASSERT(m_state == stIdle);
 
-#ifdef PASSTHROUGH_FIX
-	if (eConfigManager::getConfigBoolValue("config.av.passthrough_fix", false))
 	{
 		int pending = eServiceMP3PendingStopWorkers();
 		if (pending > 0)
@@ -2153,7 +2151,6 @@ RESULT eServiceMP3::start()
 			return 0;
 		}
 	}
-#endif
 
 	if (m_gst_playbin)
 	{
