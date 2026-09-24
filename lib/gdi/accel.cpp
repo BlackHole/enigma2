@@ -24,7 +24,7 @@ gAccel *gAccel::instance;
 #endif
 #endif
 
-#ifdef HAVE_HISILICON_ACCEL 
+#ifdef HAVE_HISILICON_ACCEL
 extern int  dinobot_accel_init(void);
 extern void dinobot_accel_close(void);
 extern void dinobot_accel_blit(
@@ -427,7 +427,7 @@ int gAccel::accelAlloc(gUnmanagedSurface* surface)
 		}
 	}
 
-	eDebug("[gAccel] alloc failed");
+	eTrace("[gAccel] alloc failed");
 	return -3;
 }
 
