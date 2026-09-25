@@ -201,14 +201,23 @@ void eDVBSoftDecoder::stop()
 	// Disconnect from source PMT handler events
 	m_source_event_conn.disconnect();
 
-	// Close decoder demux filter fds without DMX_STOP ioctl.
-	// On mipsel (Broadcom), DMX_STOP on PVR-sourced demux either
-	// deadlocks (no data flowing) or crashes (NULL deref in playpump).
-	// freeDecoder() closes fds via destructors — the kernel cleans up
-	// filters without going through the playpump path.
+	// Stop the audio decoder before releasing the decoder object.
+	// freeDecoder() deliberately avoids eTSMPEGDecoder::setState(), so it
+	// does not call eDVBAudio::stop().  When SoftCSA was using DD+ this can
+	// leave the hardware audio/demux state active after the SoftCSA decoder
+	// is released.  The next normal decoder can then select DD+ correctly
+	// but produce no audio until another zap resets the hardware state.
+	//
+	// Only reset the audio path here; keep freeDecoder() for the video/PVR
+	// demux paths because DMX_STOP on a PVR-sourced demux can deadlock or
+	// crash on Broadcom.
 	m_video_event_conn = nullptr;
 	if (m_decoder)
+	{
+		m_decoder->setAudioPID(-1, -1);
+		m_decoder->set();
 		m_decoder->freeDecoder();
+	}
 
 	if (m_record)
 	{
