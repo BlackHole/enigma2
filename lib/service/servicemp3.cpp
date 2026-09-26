@@ -78,6 +78,18 @@ typedef enum
 namespace
 {
 
+bool isDTSStartupSkipbackContainer(const std::string &path)
+{
+	size_t end = path.find_first_of("?#");
+	if (end == std::string::npos)
+		end = path.size();
+	size_t dot = path.rfind('.', end);
+	if (dot == std::string::npos || dot + 1 >= end)
+		return false;
+	const std::string ext = path.substr(dot, end - dot);
+	return !strcasecmp(ext.c_str(), ".mkv") || !strcasecmp(ext.c_str(), ".mp4");
+}
+
 struct EAC3AtmosBitReader
 {
 	const guint8 *data;
@@ -2180,7 +2192,8 @@ void eServiceMP3::forceAudioReset()
 	 * switches. */
 	if (m_pending_start_position == -2 && m_currentAudioStream >= 0 &&
 		m_currentAudioStream < (int)m_audioStreams.size() &&
-		m_audioStreams[m_currentAudioStream].codec.compare(0, 3, "DTS") == 0)
+		m_audioStreams[m_currentAudioStream].codec.compare(0, 3, "DTS") == 0 &&
+		isDTSStartupSkipbackContainer(m_ref.path))
 	{
 		m_pending_start_position = -1;
 		if (!m_is_live)
@@ -4449,7 +4462,8 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 						setHDAudioAuxState(m_gst_playbin, GST_STATE_PAUSED);
 						if (!active_aux && !m_initial_start &&
 							m_pending_start_position < 0 &&
-							m_audioStreams[i].codec.compare(0, 3, "DTS") == 0)
+							m_audioStreams[i].codec.compare(0, 3, "DTS") == 0 &&
+							isDTSStartupSkipbackContainer(m_ref.path))
 						{
 							m_pending_start_position = -2;
 						}
@@ -4479,7 +4493,8 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 						gst_element_set_state(m_gst_playbin, GST_STATE_PLAYING);
 						if (!active_aux && !m_initial_start &&
 							m_pending_start_position < 0 &&
-							m_audioStreams[i].codec.compare(0, 3, "DTS") == 0)
+							m_audioStreams[i].codec.compare(0, 3, "DTS") == 0 &&
+							isDTSStartupSkipbackContainer(m_ref.path))
 						{
 							m_pending_start_position = -2;
 						}
