@@ -2066,6 +2066,32 @@ int eServiceMP3PendingStopWorkers();
 
 void eServiceMP3::forceAudioReset()
 {
+	/* A fresh DTS -> AC3 auxiliary handoff can leave the main playbin
+	 * several seconds ahead by the time the 300ms startup reset fires.
+	 * Mark that one startup reset and perform a 10-second skip-back after
+	 * the normal buffer flush. This is deliberately a DTS-transcoding-only
+	 * test and does not alter normal AC3/E-AC3 playback or later track
+	 * switches. */
+	if (m_pending_start_position == -2)
+	{
+		m_pending_start_position = -1;
+		if (!m_is_live)
+		{
+			m_clear_buffers = true;
+			clearBuffers();
+			pts_t pos = 0;
+			if (getRawPlayPosition(pos) >= 0)
+			{
+				const pts_t skip_back = 900000; /* 10 seconds at 90 kHz */
+				pts_t target = pos > skip_back ? pos - skip_back : 0;
+				eDebug("[eServiceMP3] forceAudioReset: DTS startup skip-back %lld -> %lld",
+					(long long)pos, (long long)target);
+				seekTo(target);
+			}
+		}
+		return;
+	}
+
 	/* start() reuses this existing main-loop timer while a previous
 	 * GStreamer pipeline is still releasing the shared hardware sinks.
 	 * Polling here keeps Enigma2 responsive and adds no fixed handover
@@ -4313,6 +4339,12 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 					else if (!resume_main)
 					{
 						setHDAudioAuxState(m_gst_playbin, GST_STATE_PAUSED);
+						if (!active_aux && !m_initial_start &&
+							m_pending_start_position < 0 &&
+							m_audioStreams[i].codec.compare(0, 3, "DTS") == 0)
+						{
+							m_pending_start_position = -2;
+						}
 						/* Cold start: the main pipeline was not yet PLAYING (or
 						 * pending PLAYING) when this aux setup ran, so the
 						 * resume_main branch below - the only other place this
@@ -4337,6 +4369,12 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 					if (resume_main)
 					{
 						gst_element_set_state(m_gst_playbin, GST_STATE_PLAYING);
+						if (!active_aux && !m_initial_start &&
+							m_pending_start_position < 0 &&
+							m_audioStreams[i].codec.compare(0, 3, "DTS") == 0)
+						{
+							m_pending_start_position = -2;
+						}
 						if (position_ns < 500 * GST_MSECOND || native_eac3_to_aux)
 						{
 							m_passthrough_fix_timer->stop();
