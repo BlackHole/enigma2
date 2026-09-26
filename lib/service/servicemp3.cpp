@@ -2072,7 +2072,9 @@ void eServiceMP3::forceAudioReset()
 	 * the normal buffer flush. This is deliberately a DTS-transcoding-only
 	 * test and does not alter normal AC3/E-AC3 playback or later track
 	 * switches. */
-	if (m_pending_start_position == -2)
+	if (m_pending_start_position == -2 && m_currentAudioStream >= 0 &&
+		m_currentAudioStream < (int)m_audioStreams.size() &&
+		m_audioStreams[m_currentAudioStream].codec.compare(0, 3, "DTS") == 0)
 	{
 		m_pending_start_position = -1;
 		if (!m_is_live)
