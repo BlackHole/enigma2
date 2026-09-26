@@ -4400,6 +4400,19 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 
 		gint64 position_ns = -1;
 		gst_element_query_position(m_gst_playbin, GST_FORMAT_TIME, &position_ns);
+		/* VOB DTS startup: GStreamer reports the demuxer pre-roll PTS here.
+		 * Treat the initial position as zero so the HD-audio auxiliary AC3
+		 * pipeline takes its startup path instead of seeking to the pre-roll. */
+		if (!m_initial_start && m_audioStreams[i].codec.compare(0, 3, "DTS") == 0)
+		{
+			size_t end = m_ref.path.find_first_of("?#");
+			if (end == std::string::npos)
+				end = m_ref.path.size();
+			size_t dot = m_ref.path.rfind('.', end);
+			if (dot != std::string::npos && dot + 1 < end &&
+				!strcasecmp(m_ref.path.substr(dot, end - dot).c_str(), ".vob"))
+				position_ns = 0;
+		}
 		guint restore_flags = 0;
 		GstElement *main_audio_sink = NULL;
 		if (active_aux)
