@@ -2233,7 +2233,15 @@ void eServiceMP3::forceAudioReset()
 	setHDAudioNativeEac3ResetPending(m_gst_playbin, false);
 	setHDAudioNativeRetry(m_gst_playbin, -1);
 	m_clear_buffers = true;
-	clearBuffers();
+	/* clearBuffers() guards itself with (!m_initial_start || !m_clear_buffers).
+	 * By the time this 300 ms timer fires, tryApplyPendingStartOffset() has
+	 * already cleared m_initial_start to false during the PAUSED->PLAYING
+	 * transition, so a plain clearBuffers() call returns immediately without
+	 * doing anything.  This is the intended reset path for all container types
+	 * that do not go through the DTS skip-back branch above (VOBs, TS files,
+	 * and any other format where isDTSStartupSkipbackContainer returns false),
+	 * so we must bypass the guard with force=true. */
+	clearBuffers(true);
 }
 
 void eServiceMP3::updateEpgCacheNowNext()
