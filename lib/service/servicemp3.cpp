@@ -5308,7 +5308,7 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 					std::string &new_codec = audioStreams_temp[ai].codec;
 					if (old_codec == "Dolby Atmos" && new_codec == "Dolby Digital +")
 						new_codec = old_codec;
-					else if ((old_codec.find("DTS-HD") == 0 || old_codec.find("DTS:X") == 0) &&
+					else if (old_codec.find("DTS") == 0 && old_codec != "DTS" &&
 						(new_codec == "DTS" || new_codec == "DTS-HD"))
 					{
 						new_codec = old_codec;
