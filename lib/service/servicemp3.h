@@ -337,6 +337,10 @@ private:
 	bool m_clear_buffers_done_once;
 	bool m_initial_start;
 	bool m_send_ev_start;
+	/* True once evFirstFrame has been fired for this playback session -
+	 * see its firing sites in gstBusCall() for why this needs its own
+	 * one-shot flag rather than reusing m_initial_start. */
+	bool m_first_frame_fired;
 	bool m_seek_paused;
 	bool m_autoturnon;
 	/* cuesheet load check */
