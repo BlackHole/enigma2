@@ -1,0 +1,149 @@
+#include <cstdint>
+#include <cstring>
+#include <EGL/egl.h>
+#include <lib/base/eerror.h>
+#include <lib/gdi/fb.h>
+// Must come before <nxclient.h>: this header's NEXUS_HAS_DISPLAY/AUDIO/
+// GRAPHICS2D defines and its nexus_hdmi_output_hdcp.h include both need to
+// be visible before anything reaches nxclient.h's own chain into
+// nexus_core_compat.h/nxclient_global.h - see its own comment for why.
+#include <lib/gdi/egl/platform/gbquad/gbquad_window_provider.h>
+#include <nxclient.h>
+
+GbquadWindowProvider::GbquadWindowProvider()
+	: m_nxpl_display_handle(nullptr), m_native_window(nullptr), m_joined_nxclient(false) {
+}
+
+GbquadWindowProvider::~GbquadWindowProvider() {
+	cleanup();
+}
+
+bool GbquadWindowProvider::init(int width, int height) {
+	// 1. Join the already-running Nexus server (started at boot, outside
+	// enigma2) - every EGL call below aborts with a Broadcom "memory
+	// interface not registered" assertion until this has succeeded.
+	NxClient_JoinSettings joinSettings;
+	NxClient_GetDefaultJoinSettings(&joinSettings);
+	NEXUS_Error join_rc = NxClient_Join(&joinSettings);
+	if (join_rc != NEXUS_SUCCESS) {
+		eDebug("[GbquadWindowProvider] NxClient_Join failed, rc=%d", (int)join_rc);
+		return false;
+	}
+	m_joined_nxclient = true;
+	eDebug("[GbquadWindowProvider] joined Nexus server");
+
+	// 2. Register a Nexus display platform with the EGL glue layer - this is
+	// what actually satisfies the vendor driver's memory-interface check
+	// that a bare eglGetDisplay()/eglInitialize() aborts on otherwise.
+	// Passing a null NEXUS_DISPLAYHANDLE registers against the server's
+	// default display, exactly as NxClient-based clients are expected to.
+	NXPL_RegisterNexusDisplayPlatform(&m_nxpl_display_handle, nullptr);
+	if (!m_nxpl_display_handle) {
+		eDebug("[GbquadWindowProvider] NXPL_RegisterNexusDisplayPlatform did not produce a handle");
+		cleanup();
+		return false;
+	}
+
+	// 3. Create and show a full-screen native window through Nexus's own
+	// compositor - this is what eglCreateWindowSurface() targets below, and
+	// what actually reaches the TV as enigma2's OSD: /dev/fb0 is only a
+	// separate layer beneath it on this stack (unlike Dreambox, where the
+	// pixmap surface IS the live framebuffer - see DreamboxWindowProvider).
+	NXPL_NativeWindowInfoEXT windowInfo;
+	NXPL_GetDefaultNativeWindowInfoEXT(&windowInfo);
+	windowInfo.width = (uint32_t)width;
+	windowInfo.height = (uint32_t)height;
+	windowInfo.x = 0;
+	windowInfo.y = 0;
+
+	// width/height above are enigma2's fixed OSD/skin canvas (its own gEGLDC
+	// constructor comment) - NOT the current HDMI/video-mode resolution, and
+	// nothing ever calls NXPL_UpdateNativeWindowEXT() to change them when the
+	// video mode changes later (VideoWizard/VideoSetup only ever write to
+	// /proc/stb/video/videomode_*, see Components/AVSwitch.py's setMode()).
+	// Without this, NXPL_GetDefaultNativeWindowInfoEXT()'s default (false,
+	// confirmed by reading default_nexus.h - see this struct's own comment)
+	// leaves Nexus's compositor showing this window's canvas pixel-for-pixel
+	// against the display's active area instead of scaling it to fit: at any
+	// output resolution below the canvas size (e.g. HDMI at 720p against a
+	// 1920x1080 canvas) the OSD renders correctly internally but the display
+	// only ever shows its unscaled top-left corner - every widget's own pixel
+	// size stays literal, so relative to the now-smaller visible frame
+	// everything reads as oversized, with the right/bottom edge of the UI
+	// simply never reaching the screen. `stretch` (this exact field, same
+	// struct - see NXPL_NativeWindowInfoEXT in default_nexus.h from
+	// gb-v3ddriver-headers.bb) is Nexus's own per-window "author at a fixed
+	// size, scale that to fill the display regardless of its current output
+	// resolution" flag - setting it once here covers every later video-mode
+	// change too, since re-scaling to the display's current mode is exactly
+	// what this flag asks Nexus's compositor to keep doing.
+	windowInfo.stretch = true;
+
+	m_native_window = NXPL_CreateNativeWindowEXT(&windowInfo);
+	if (!m_native_window) {
+		eDebug("[GbquadWindowProvider] NXPL_CreateNativeWindowEXT failed");
+		cleanup();
+		return false;
+	}
+
+	NXPL_ShowNativeWindowEXT(m_native_window, true);
+
+	// 4. fbClass is NOT our render target here, but it is the singleton the
+	// rest of enigma2 uses for the framebuffer lock (ImageManager.py's
+	// fbClass.getInstance().lock()/unlock() around ofgwrite, gEGLDC::islocked())
+	// - and gFBDC, its normal owner, isn't built with EGL (see
+	// lib/gdi/Makefile.inc), so without this getInstance() returned None and
+	// the lock silently did nothing. SetMode() is required too: unlock()
+	// re-applies xRes/yRes/bpp, which only SetMode() initializes. Not fatal on
+	// failure - the EGL window above is what actually displays enigma2.
+	fbClass* fb = fbClass::getInstance();
+	if (!fb)
+		fb = new fbClass;
+	if (fb->SetMode(width, height, 32) < 0) {
+		eDebug("[GbquadWindowProvider] fbClass::SetMode(%dx%d) failed - framebuffer lock unavailable", width, height);
+	} else {
+		// fb0 is composited UNDER the Nexus window, so anything left in it
+		// (boot splash leftovers) would show wherever the OSD is transparent.
+		clearFramebuffer();
+	}
+
+	eDebug("[GbquadWindowProvider] init %dx%d - Nexus joined, display platform registered, native window shown", width, height);
+	return true;
+}
+
+void GbquadWindowProvider::clearFramebuffer() {
+	fbClass* fb = fbClass::getInstance();
+	if (fb && fb->lfb && fb->Available() > 0)
+		memset(fb->lfb, 0, (size_t)fb->Available());
+}
+
+EGLNativeDisplayType GbquadWindowProvider::getNativeDisplay() {
+	return EGL_DEFAULT_DISPLAY;
+}
+
+EGLNativeWindowType GbquadWindowProvider::getNativeWindow() {
+	return (EGLNativeWindowType)m_native_window;
+}
+
+void GbquadWindowProvider::cleanup() {
+	if (m_native_window) {
+		NXPL_ShowNativeWindowEXT(m_native_window, false);
+		NXPL_DestroyNativeWindow(m_native_window);
+		m_native_window = nullptr;
+	}
+	if (m_nxpl_display_handle) {
+		NXPL_UnregisterNexusDisplayPlatform(m_nxpl_display_handle);
+		m_nxpl_display_handle = nullptr;
+	}
+	// NxClient_Join() is reference-counted (nxclient.h) - an equal number of
+	// NxClient_Uninit() calls is required to detach from Nexus and the
+	// server app, unlike the old dlopen-based version of this file, which
+	// left libnxclient.so/libnxpl.so dlopen'd (and therefore joined) forever
+	// specifically to sidestep a dlclose() safety concern that doesn't apply
+	// here: with real linking there's no dlclose() to worry about, only the
+	// documented join/uninit symmetry.
+	if (m_joined_nxclient) {
+		NxClient_Uninit();
+		m_joined_nxclient = false;
+	}
+}
