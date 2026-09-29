@@ -112,7 +112,7 @@ def addspace(text):
 
 
 def getCryptoInfo(info):
-	elif info and info.getInfo(iServiceInformation.sIsCrypted) == 1 or pathExists("/tmp/ecm.info"):
+	if info and info.getInfo(iServiceInformation.sIsCrypted) == 1 or pathExists("/tmp/ecm.info"):
 		data = getCachedEcmData()
 		current_source = data[0]
 		current_caid = int(data[1], 16)
