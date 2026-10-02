@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <memory.h>
+#include <algorithm>
 #include <linux/kd.h>
 
 #include <lib/gdi/fb.h>
