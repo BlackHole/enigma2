@@ -168,7 +168,30 @@ int fbClass::SetMode(int nxRes, int nyRes, int nbpp)
 		eDebug("[fb] FBIOGET_FSCREENINFO %m");
 	}
 	stride=fix.line_length;
+
+#if defined(HAVE_ABCOM_EGL)
+	// For the Abcom (hifb + Mali fbdev) EGL build: libMali flips between the
+	// framebuffer's pages, so every page has to start out clear, not just
+	// page 0. hifb sizes its video memory per mode, so re-read it and remap
+	// if it changed since the constructor mapped it (the clear is bounded
+	// by what is actually mapped).
+	if (fix.smem_len != (unsigned int)available)
+	{
+		if (lfb && lfb != MAP_FAILED)
+			munmap(lfb, available);
+		available = fix.smem_len;
+		lfb = (unsigned char*)mmap(0, available, PROT_WRITE|PROT_READ, MAP_SHARED, fbFd, 0);
+		if (lfb == MAP_FAILED)
+		{
+			eDebug("[fb] remap after SetMode failed: %m");
+			lfb = 0;
+		}
+	}
+	if (lfb)
+		memset(lfb, 0, std::min<size_t>((size_t)available, (size_t)stride * std::max<unsigned int>(screeninfo.yres_virtual, yRes)));
+#else
 	memset(lfb, 0, stride*yRes);
+#endif
 	blit();
 	return 0;
 }
