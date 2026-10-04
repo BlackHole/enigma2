@@ -175,6 +175,12 @@ int fbClass::SetMode(int nxRes, int nyRes, int nbpp)
 	// page 0. hifb sizes its video memory per mode, so re-read it and remap
 	// if it changed since the constructor mapped it (the clear is bounded
 	// by what is actually mapped).
+#elif defined(HAVE_HISI_MALI_EGL)
+	// Same as the CONFIG_ION branch above, for the HiSilicon (hifb + Mali fbdev) EGL
+	// build: libMali flips between the framebuffer's pages, so every page has to
+	// start out clear, not just page 0. hifb sizes its video memory per mode, so
+	// re-read it and remap if it changed since the constructor mapped it (the
+	// clear is bounded by what is actually mapped).
 	if (fix.smem_len != (unsigned int)available)
 	{
 		if (lfb && lfb != MAP_FAILED)
