@@ -574,7 +574,6 @@ AM_CONDITIONAL(HAVE_HISI_MALI_EGL, test "x$use_egl" = "xyes" -a "x$hisi_mali_egl
 if test "x$use_egl" = "xyes" -a "x$hisi_mali_egl_box" = "xyes"; then
 	AC_DEFINE(HAVE_HISI_MALI_EGL, 1, [HiSilicon Hi3798MV200 Mali Utgard fbdev EGL window backend available])
 fi
-fi
 
 if test `echo "$BOXTYPE" | cut -b 1-2` == "gb"; then
 	AC_DEFINE(KEY_PLAY_ACTUALLY_IS_KEY_PLAYPAUSE, 1,[define when rc sends a KEY_PLAY event for its KEY_PLAYPAUSE key])
