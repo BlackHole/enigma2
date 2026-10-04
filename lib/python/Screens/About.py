@@ -213,13 +213,30 @@ class About(AboutBase):
 		if SystemInfo["imagetype"] == "developer":
 			imageSubBuild = ".%s" % SystemInfo["imagedevbuild"]
 		AboutText += _("Image:\t%s.%s%s (%s)\n") % (SystemInfo["imageversion"], SystemInfo["imagebuild"], imageSubBuild, SystemInfo["imagetype"].title())
-
-		egl = "/".join([x for x in (getEGLVersionString(), getGLESVersionString()) if x])
+		# Get the raw strings
+		egl_raw = getEGLVersionString() or ""
+		gles_raw = getGLESVersionString() or ""
+		# Clean up EGL: Take just the first part (e.g., "1.4") and prefix it
+		egl_clean = ""
+		if egl_raw:
+			egl_parts = egl_raw.split()
+		if egl_parts:
+			egl_clean = f"EGL {egl_parts[0]}"
+		# Clean up GLES: Keep "OpenGL ES" and the version number (e.g., "2.0")
+		gles_clean = ""
+		if gles_raw:
+			gles_parts = gles_raw.split()
+		if "OpenGL" in gles_parts and "ES" in gles_parts:
+			idx = gles_parts.index("ES")
+			if idx + 1 < len(gles_parts):
+				gles_clean = f"OpenGL ES {gles_parts[idx + 1]}"
+		else:
+			gles_clean = gles_raw
+		# Join them together with spaces around the slash
+		egl = " / ".join([x for x in (egl_clean, gles_clean) if x])
 		if egl:
 			AboutText += _("EGL/GLES:\t%s\n") % egl
-
 		AboutText += _("Installed:\t%s\n") % getFlashDateString()
-
 		VuPlustxt = _("Vu+ Multiboot") + " - " if SystemInfo["HasKexecMultiboot"] else ""
 		if fileHas("/proc/cmdline", "rootsubdir=linuxrootfs0"):
 			AboutText += _("Boot Device: \tRecovery Slot\n")
