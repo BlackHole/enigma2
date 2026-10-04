@@ -326,6 +326,7 @@ private:
 	iSubtitleUser *m_subtitle_widget;
 	gdouble m_currentTrickRatio;
 	friend class eServiceFactoryMP3;
+	friend class eServiceFactoryHisilicon; /* ServiceHisilicon hybrid factory: non-TrueHD fallback */
 	eServiceReference m_ref;
 	std::string m_prov;
 	int m_buffer_size;
