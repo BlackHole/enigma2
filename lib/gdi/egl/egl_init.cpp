@@ -51,7 +51,7 @@ class gEGLDCAutoInit : protected eAutoInit
 		INativeWindowProvider *provider = nullptr;
 
 		eDebug("[gEGLDC-trace] initNow: start (BOXTYPE=%s MACHINEBUILD=%s)", BOXTYPE, MACHINEBUILD);
-#elif defined(HAVE_GBQUAD_EGL)
+#if defined(HAVE_GBQUAD_EGL)
 		eDebug("[gEGLDC-trace] initNow: creating GbquadWindowProvider");
 		provider = new GbquadWindowProvider();
 		eDebug("[gEGLDC-trace] initNow: GbquadWindowProvider created");
