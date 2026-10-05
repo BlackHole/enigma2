@@ -51,6 +51,33 @@ class gEGLDCAutoInit : protected eAutoInit
 		INativeWindowProvider *provider = nullptr;
 
 		eDebug("[gEGLDC-trace] initNow: start (BOXTYPE=%s MACHINEBUILD=%s)", BOXTYPE, MACHINEBUILD);
+		eDebug("[gEGLDC-trace] compile-time macros: DREAMNEXTGEN=%d HAVE_DREAMBOX_EGL=%d HAVE_GBQUAD_EGL=%d HAVE_VUPLUS_EGL=%d HAVE_HISI_MALI_EGL=%d HAVE_NXPL_NO_NXCLIENT=%d HAVE_EGL=%d",
+#ifdef HAVE_GBQUAD_EGL
+			1,
+#else
+			0,
+#endif
+#ifdef HAVE_VUPLUS_EGL
+			1,
+#else
+			0,
+#endif
+#ifdef HAVE_HISI_MALI_EGL
+			1,
+#else
+			0,
+#endif
+#ifdef HAVE_NXPL_NO_NXCLIENT
+			1,
+#else
+			0,
+#endif
+#ifdef HAVE_EGL
+			1
+#else
+			0
+#endif
+		);
 #if defined(HAVE_GBQUAD_EGL)
 		eDebug("[gEGLDC-trace] initNow: creating GbquadWindowProvider");
 		provider = new GbquadWindowProvider();
