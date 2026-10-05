@@ -10,6 +10,9 @@
 SRC_URI:append:openbh = " https://source.mynonpublic.com/gigablue/v3ddriver/gb-nexus-headers.zip;name=headers"
 SRC_URI[headers.sha256sum] = "4cfda443d72ec56965f989b9306c0af6f85cbac55fc6a70b0d081ea605c192aa"
 
+DEPENDS:remove:openbh = "mesa"
+
+
 do_install:append:openbh() {
     install -d ${D}${includedir}
     for f in ${UNPACKDIR}/*.h; do
