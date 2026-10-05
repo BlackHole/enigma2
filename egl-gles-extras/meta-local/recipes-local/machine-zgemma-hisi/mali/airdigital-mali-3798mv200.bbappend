@@ -6,10 +6,10 @@
 # - checked on the zip's strings), so stage the same HiSilicon SDK headers; see
 # machine-pulse4k/mali/abcom-mali-3798mv200.bbappend. Only EGL, GLES, GLES2 and KHR are
 # staged: no GLES3 headers.
-SRC_URI:append:openvix = " https://source.mynonpublic.com/dags/hisi3798mv200-opengl-20200915.tar.gz;name=headers"
+SRC_URI:append:openbh = " https://source.mynonpublic.com/dags/hisi3798mv200-opengl-20200915.tar.gz;name=headers"
 SRC_URI[headers.sha256sum] = "95f4ecd9c90f07075dd24493baa4a440d6140007d33e9238fc37de111ae2c574"
 
-do_install:append:openvix() {
+do_install:append:openbh() {
     for d in EGL GLES GLES2 KHR; do
         install -d ${D}${includedir}/$d
         for f in ${UNPACKDIR}/usr/include/$d/*.h; do
@@ -45,4 +45,4 @@ Cflags: -I${includedir}
 EOF
 }
 
-FILES:${PN}-dev:append:openvix = " ${libdir}/pkgconfig/egl.pc ${libdir}/pkgconfig/glesv2.pc"
+FILES:${PN}-dev:append:openbh = " ${libdir}/pkgconfig/egl.pc ${libdir}/pkgconfig/glesv2.pc"

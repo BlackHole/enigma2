@@ -7,10 +7,10 @@
 # driver's libnxpl.so by disassembly, see gbquad_window_provider.h) and generates the pc files.
 # The zip also carries the Nexus headers the provider includes (nxclient.h, default_nexus.h).
 # NOTE: no libnxclient.so is shipped here, hence HAVE_NXPL_NO_NXCLIENT in configure.ac.
-SRC_URI:append:openvix = " https://source.mynonpublic.com/gigablue/v3ddriver/gb-nexus-headers.zip;name=headers"
+SRC_URI:append:openbh = " https://source.mynonpublic.com/gigablue/v3ddriver/gb-nexus-headers.zip;name=headers"
 SRC_URI[headers.sha256sum] = "4cfda443d72ec56965f989b9306c0af6f85cbac55fc6a70b0d081ea605c192aa"
 
-do_install:append:openvix() {
+do_install:append:openbh() {
     install -d ${D}${includedir}
     for f in ${UNPACKDIR}/*.h; do
         install -m 0644 $f ${D}${includedir}/
@@ -49,4 +49,4 @@ Cflags: -I${includedir}
 EOF
 }
 
-FILES:${PN}-dev:append:openvix = " ${libdir}/pkgconfig/egl.pc ${libdir}/pkgconfig/glesv2.pc"
+FILES:${PN}-dev:append:openbh = " ${libdir}/pkgconfig/egl.pc ${libdir}/pkgconfig/glesv2.pc"

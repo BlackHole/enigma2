@@ -3,7 +3,7 @@
 # EGL/eglplatform.h defines EGLNativeWindowType as fbdev_window*) but ships no pkg-config
 # files, so configure's PKG_CHECK_MODULES([egl]/[glesv2]) fails. Generate them. No GLES3
 # headers are staged.
-do_install:append:openvix() {
+do_install:append:openbh() {
     for d in EGL GLES GLES2 KHR; do
         install -d ${D}${includedir}/$d
         for f in ${UNPACKDIR}/usr/include/$d/*.h; do
@@ -39,4 +39,4 @@ Cflags: -I${includedir}
 EOF
 }
 
-FILES:${PN}-dev:append:openvix = " ${libdir}/pkgconfig/egl.pc ${libdir}/pkgconfig/glesv2.pc"
+FILES:${PN}-dev:append:openbh = " ${libdir}/pkgconfig/egl.pc ${libdir}/pkgconfig/glesv2.pc"
