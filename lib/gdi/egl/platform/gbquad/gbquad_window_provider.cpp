@@ -94,6 +94,7 @@ GbquadWindowProvider::~GbquadWindowProvider() {
 }
 
 bool GbquadWindowProvider::init(int width, int height) {
+	eDebug("[GbquadWindowProvider-trace] init(%d, %d) enter", width, height);
 	// 1. Join the already-running Nexus server (started at boot, outside
 	// enigma2) - every EGL call below aborts with a Broadcom "memory
 	// interface not registered" assertion until this has succeeded.
@@ -119,6 +120,7 @@ bool GbquadWindowProvider::init(int width, int height) {
 #endif
 	m_joined_nxclient = true;
 	eDebug("[GbquadWindowProvider] joined Nexus server");
+	eDebug("[GbquadWindowProvider-trace] calling NXPL_RegisterNexusDisplayPlatform");
 
 	// 2. Register a Nexus display platform with the EGL glue layer - this is
 	// what actually satisfies the vendor driver's memory-interface check
@@ -126,6 +128,7 @@ bool GbquadWindowProvider::init(int width, int height) {
 	// Passing a null NEXUS_DISPLAYHANDLE registers against the server's
 	// default display, exactly as NxClient-based clients are expected to.
 	NXPL_RegisterNexusDisplayPlatform(&m_nxpl_display_handle, nullptr);
+	eDebug("[GbquadWindowProvider-trace] NXPL_RegisterNexusDisplayPlatform returned, handle=%p", (void*)m_nxpl_display_handle);
 	if (!m_nxpl_display_handle) {
 		eDebug("[GbquadWindowProvider] NXPL_RegisterNexusDisplayPlatform did not produce a handle");
 		cleanup();
@@ -138,7 +141,9 @@ bool GbquadWindowProvider::init(int width, int height) {
 	// separate layer beneath it on this stack (unlike Dreambox, where the
 	// pixmap surface IS the live framebuffer - see DreamboxWindowProvider).
 	NXPL_NativeWindowInfoEXT windowInfo;
+	eDebug("[GbquadWindowProvider-trace] calling NXPL_GetDefaultNativeWindowInfoEXT");
 	NXPL_GetDefaultNativeWindowInfoEXT(&windowInfo);
+	eDebug("[GbquadWindowProvider-trace] NXPL_GetDefaultNativeWindowInfoEXT returned");
 	windowInfo.width = (uint32_t)width;
 	windowInfo.height = (uint32_t)height;
 	windowInfo.x = 0;
@@ -174,7 +179,9 @@ bool GbquadWindowProvider::init(int width, int height) {
 	// what this flag asks Nexus's compositor to keep doing.
 	windowInfo.stretch = true;
 
+	eDebug("[GbquadWindowProvider-trace] calling NXPL_CreateNativeWindowEXT");
 	m_native_window = NXPL_CreateNativeWindowEXT(&windowInfo);
+	eDebug("[GbquadWindowProvider-trace] NXPL_CreateNativeWindowEXT returned %p", m_native_window);
 	if (!m_native_window) {
 		eDebug("[GbquadWindowProvider] NXPL_CreateNativeWindowEXT failed");
 		cleanup();
@@ -182,6 +189,7 @@ bool GbquadWindowProvider::init(int width, int height) {
 	}
 
 	NXPL_ShowNativeWindowEXT(m_native_window, true);
+	eDebug("[GbquadWindowProvider-trace] NXPL_ShowNativeWindowEXT returned");
 
 	// 4. fbClass is NOT our render target here, but it is the singleton the
 	// rest of enigma2 uses for the framebuffer lock (ImageManager.py's
@@ -192,8 +200,11 @@ bool GbquadWindowProvider::init(int width, int height) {
 	// re-applies xRes/yRes/bpp, which only SetMode() initializes. Not fatal on
 	// failure - the EGL window above is what actually displays enigma2.
 	fbClass* fb = fbClass::getInstance();
-	if (!fb)
+	if (!fb) {
+		eDebug("[GbquadWindowProvider-trace] constructing fbClass");
 		fb = new fbClass;
+	}
+	eDebug("[GbquadWindowProvider-trace] fbClass=%p, calling SetMode(%d, %d, 32)", (void*)fb, width, height);
 	if (fb->SetMode(width, height, 32) < 0) {
 		eDebug("[GbquadWindowProvider] fbClass::SetMode(%dx%d) failed - framebuffer lock unavailable", width, height);
 	} else {

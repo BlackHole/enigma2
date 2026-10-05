@@ -260,8 +260,12 @@ int main(int argc, char **argv)
 	ePython python;
 	eMain main;
 
+	eDebug("[MAIN-trace] eMain constructed, fetching gMainDC");
 	ePtr<gMainDC> my_dc;
 	gMainDC::getInstance(my_dc);
+	eDebug("[MAIN-trace] gMainDC instance = %p", (void*)(gMainDC*)my_dc);
+	if (!my_dc)
+		eDebug("[MAIN-trace] gMainDC is NULL - no display DC was created (EGL init skipped or failed); the next line will crash");
 
 	//int double_buffer = my_dc->haveDoubleBuffering();
 

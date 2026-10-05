@@ -2135,6 +2135,7 @@ static void allocStagingPalette(gPixmap* pixmap) {
 }
 
 gEGLDC::gEGLDC(INativeWindowProvider* window_provider, int width, int height) : gMainDC() {
+	eDebug("[gEGLDC-trace] ctor enter (%dx%d)", width, height);
 	s_instance = this;
 	int xres = width, yres = height, bpp = 32;
 
@@ -2175,6 +2176,7 @@ gEGLDC::gEGLDC(INativeWindowProvider* window_provider, int width, int height) : 
 	// object entirely - a very likely source of the wrong colors seen.
 	m_pixmap = new gPixmap(eSize(width, height), 32, gPixmap::accelNever);
 	allocStagingPalette(m_pixmap);
+	eDebug("[gEGLDC-trace] ctor done");
 }
 
 gEGLDC::~gEGLDC() {

@@ -50,8 +50,11 @@ class gEGLDCAutoInit : protected eAutoInit
 
 		INativeWindowProvider *provider = nullptr;
 
-#if defined(HAVE_GBQUAD_EGL)
+		eDebug("[gEGLDC-trace] initNow: start (BOXTYPE=%s MACHINEBUILD=%s)", BOXTYPE, MACHINEBUILD);
+#elif defined(HAVE_GBQUAD_EGL)
+		eDebug("[gEGLDC-trace] initNow: creating GbquadWindowProvider");
 		provider = new GbquadWindowProvider();
+		eDebug("[gEGLDC-trace] initNow: GbquadWindowProvider created");
 #elif defined(HAVE_VUPLUS_EGL)
 		provider = new VuplusWindowProvider();
 #elif defined(HAVE_HISI_MALI_EGL)
@@ -61,12 +64,22 @@ class gEGLDCAutoInit : protected eAutoInit
 		// For now, if not HWDREAMONE/HAVE_DREAMBOX_EGL, we don't have a default provider here
 		// unless we add SDLWindowProvider or WaylandWindowProvider detection.
 #endif
-		if (provider)
+
+		if (!provider)
+		{
+			// Nothing above matched this build (see configure.ac's HAVE_*_EGL
+			// conditions): no gEGLDC will exist and gMainDC::getInstance() hands
+			// main() a null DC.
+			eDebug("[gEGLDC-trace] initNow: NO window provider compiled in");
+		}
+		else
 		{
 			int xres = 1920, yres = 1080, bpp = 32;
+			eDebug("[gEGLDC-trace] initNow: fbClass::getInstance()=%p", (void*)fbClass::getInstance());
 			if (fbClass::getInstance())
 				fbClass::getInstance()->getMode(xres, yres, bpp);
 
+			eDebug("[gEGLDC-trace] initNow: calling provider->init(%d, %d)", xres, yres);
 			if (!provider->init(xres, yres))
 			{
 				eDebug("[gEGLDC] window provider init failed, falling back...");
@@ -85,7 +98,9 @@ class gEGLDCAutoInit : protected eAutoInit
 			// zeroes, nothing ever rendering). gRC::thread() calls
 			// gEGLDC::getInstance()->initEGL() itself at startup instead,
 			// mirroring the existing USE_LIBVUGLES2 pattern in that function.
+			eDebug("[gEGLDC-trace] initNow: constructing gEGLDC");
 			m_dc = new gEGLDC(provider, xres, yres);
+			eDebug("[gEGLDC-trace] initNow: gEGLDC constructed (%p)", (void*)(gEGLDC*)m_dc);
 		}
 	}
 
