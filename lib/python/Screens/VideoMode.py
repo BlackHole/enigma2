@@ -89,9 +89,9 @@ class VideoSetup(Setup):
 				self.list.append(getConfigListEntry(_("DTS-HD MA/HR Downmix"), config.av.dtshd, _("Choose whether multi channel DTS-HD sound tracks should be downmixed or transcoded.")))
 			if SystemInfo["CanWMAPRO"]:
 				self.list.append(getConfigListEntry(_("WMA Pro Downmix"), config.av.wmapro, _("Choose whether WMA Pro sound tracks should be downmixed.")))
-
-			self.list.append(getConfigListEntry(_("DTS / DTS-HD Transcoding"), config.av.dts_playback, _("Choose whether DTS / DTS-HD sound tracks should be transcoded to Dolby Digital.")))
-			if not SystemInfo.get("UseServiceHisilicon", False):
+			if not SystemInfo["CanNot_DTS_Transcode"]:
+				self.list.append(getConfigListEntry(_("DTS / DTS-HD Transcoding"), config.av.dts_playback, _("Choose whether DTS / DTS-HD sound tracks should be transcoded to Dolby Digital.")))
+			if not SystemInfo["CanNot_TrueHD_Transcode"] and not SystemInfo["UseServiceHisilicon"]:
 				self.list.append(getConfigListEntry(_("Dolby TrueHD Transcoding"),config.av.truehd_playback,_("Choose whether Dolby TrueHD sound tracks should be transcoded to Dolby Digital.")))
 
 			if SystemInfo["CanAACTranscode"]:
