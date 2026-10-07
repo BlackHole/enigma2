@@ -433,7 +433,7 @@ AS_IF([test "x$have_gles2" = "xyes"], [
     # glBindVertexArrayOES/glGenVertexArraysOES but none of the core GLES3
     # symbols - while any GLES3/gl3.h that happens to be in the sysroot (e.g.
     # mesa's) would still turn HAVE_GLES3 on.
-    pulse4k|pulse4kmini|sf8008|gbmv200|h8se|h9combose|dagsmv200)
+    pulse4k|pulse4kmini|sf8008|gbmv200|h8se|h9combose|dagsmv200|multiboxpro)
       have_gles3=no
       ;;
   esac
@@ -568,7 +568,7 @@ AC_SUBST([VUPL_LIBS])
 # MACHINEBUILDs actually get EGL is decided by ENABLE_E2EGL in egl-gles-extras/openbh.conf.
 hisi_mali_egl_box=no
 case "$BOXTYPE" in
-  pulse4k|pulse4kmini|sf8008|gbmv200|h8se|h9combose|dagsmv200) hisi_mali_egl_box=yes ;;
+  pulse4k|pulse4kmini|sf8008|gbmv200|h8se|h9combose|dagsmv200|multiboxpro) hisi_mali_egl_box=yes ;;
 esac
 AM_CONDITIONAL(HAVE_HISI_MALI_EGL, test "x$use_egl" = "xyes" -a "x$hisi_mali_egl_box" = "xyes")
 if test "x$use_egl" = "xyes" -a "x$hisi_mali_egl_box" = "xyes"; then
