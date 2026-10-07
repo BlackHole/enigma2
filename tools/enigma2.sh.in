@@ -366,6 +366,18 @@ case $ret in
 		/sbin/halt
 		;;
 	2)
+		if [ -e /proc/stb/info/vumodel ]; then
+			stbcheck=$(cat /proc/stb/info/vumodel)
+			if [ "$stbcheck" ]; then
+				# Check if Enigma2 is actively configured for 4K output
+				current_res=$(grep "config.av.videomode.HDMI" /etc/enigma2/settings | cut -d'=' -f2)
+				if [[ "$current_res" == *"2160p"* ]]; then
+					if [ -e /proc/stb/video/videomode ]; then
+						echo "1080p50" > /proc/stb/video/videomode
+					fi
+				fi
+			fi
+		fi
 		/sbin/reboot
 		;;
 	3)
