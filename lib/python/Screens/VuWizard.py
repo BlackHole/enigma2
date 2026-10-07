@@ -146,6 +146,8 @@ class VuWizard(WizardLanguage, Rc):
 					    "--exclude ./.resizerootfs "
 					    "--exclude ./linuxrootfs* "
 					    "--exclude ./STARTUP_* "
+					    "--exclude ./STARTUP.cpio.gz "
+					    "--exclude ./STARTUP "
 					    "--exclude ./.resize-rootfs "
 					    "--exclude ./.resize-linuxrootfs "
 					    "--exclude ./.resize-userdata "
