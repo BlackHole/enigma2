@@ -242,9 +242,16 @@ class AudioSelection(ConfigListScreen, Screen):
 				conflist.append(getConfigListEntry(_("WMA Pro Downmix"), self.settings.wmapro, None))
 
 			if not SystemInfo["CanNot_DTS_Transcode"]:
-				conflist.append(getConfigListEntry(_("DTS / DTS-HD Transcoding"), config.av.dts_playback, None))
+				choice_list = [("off", _("Off")), ("ac3", _("Dolby Digital"))]
+				self.settings.dts_playback = ConfigSelection(choices=choice_list, default=config.av.dts_playback.value)
+				self.settings.dts_playback.addNotifier(self.setDTSTranscode, initial_call=False)
+				conflist.append(getConfigListEntry(_("DTS / DTS-HD Transcoding"), self.settings.dts_playback, None))
+
 			if not SystemInfo["CanNot_TrueHD_Transcode"] and not SystemInfo["UseServiceHisilicon"]:
-				conflist.append(getConfigListEntry(_("Dolby TrueHD Transcoding"), config.av.truehd_playback, None))
+				choice_list = [("off", _("Off")), ("ac3", _("Dolby Digital"))]
+				self.settings.truehd_playback = ConfigSelection(choices=choice_list, default=config.av.truehd_playback.value)
+				self.settings.truehd_playback.addNotifier(self.setTrueHDTranscode, initial_call=False)
+				conflist.append(getConfigListEntry(_("Dolby TrueHD Transcoding"), self.settings.truehd_playback, None))
 
 			if SystemInfo["CanAACTranscode"]:
 				choice_list = [
@@ -491,6 +498,14 @@ class AudioSelection(ConfigListScreen, Screen):
 	def changeWMAPro(self, downmix):
 		config.av.wmapro.setValue(downmix.value)
 		config.av.wmapro.save()
+
+	def setDTSTranscode(self, transcode):
+		config.av.dts_playback.setValue(transcode.value)
+		config.av.dts_playback.save()
+
+	def setTrueHDTranscode(self, transcode):
+		config.av.truehd_playback.setValue(transcode.value)
+		config.av.truehd_playback.save()
 
 	def setAACTranscode(self, transcode):
 		config.av.transcodeaac.setValue(transcode.value)
