@@ -509,12 +509,12 @@ def InitAVSwitch():
 					("10bit", _("10bit")),
 					("12bit", _("12bit"))]
 		default = "auto"
-		if SystemInfo["model"] in ("gb7252", "vuduo4klite"):
-			choices = [("10bit", "10bit"), ("12bit", "12bit")]
-			default = "10bit"
-		elif SystemInfo["havehdmicolordepthchoices"] and SystemInfo["CanProc"]:
+		if SystemInfo["havehdmicolordepthchoices"] and SystemInfo["CanProc"]:
 			f = "/proc/stb/video/hdmi_colordepth_choices"
 			(choices, default) = readChoices(f, choices, default)
+		if SystemInfo["model"] in ("gb7252", "vuduo4klite"):
+			choices = [choice for choice in choices if choice[0] not in ("auto", "8bit")]
+			default = "10bit"
 		config.av.hdmicolordepth = ConfigSelection(choices=choices, default=default)
 		config.av.hdmicolordepth.addNotifier(setHdmiColordepth)
 	else:
