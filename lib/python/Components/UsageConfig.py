@@ -32,6 +32,8 @@ def InitUsageConfig():
 	config.version = ConfigNumber(default=0)
 	config.misc.remotecontrol_text_support = ConfigYesNo(default=SystemInfo["brand"] in ('vuplus', ))
 
+	config.misc.longkey_threshold = ConfigSelection(default="4", choices=[(str(i), _("%d") % i) for i in range(1, 7)])
+
 	config.usage = ConfigSubsection()
 	config.usage.subnetwork = ConfigYesNo(default=True)
 	config.usage.subnetwork_cable = ConfigYesNo(default=True)
