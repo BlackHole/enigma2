@@ -5240,8 +5240,78 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 				g_object_get (m_gst_playbin, "n-audio", &n_audio, NULL);
 				g_object_get (m_gst_playbin, "n-text", &n_text, NULL);
 
+				/*
+				 * Some DASH MPDs expose each bitrate as a separate video stream,
+				 * sometimes listing an I-frame-only/trick-play stream first.
+				 * Legacy playbin selects that first stream by default, regardless
+				 * of its connection-speed setting. Do not set current-video in
+				 * the constructor: playbin has no video selector at that point
+				 * and silently rejects the request. After preroll the pads have
+				 * real caps, so choose the largest normal video frame.
+				 * This is deliberately restricted to MPEG-DASH.
+				 */
+				if (m_sourceinfo.is_dash && n_video > 1)
+				{
+					gint best_video = -1;
+					guint64 best_pixels = 0;
+					for (gint vi = 0; vi < n_video; ++vi)
+					{
+						GstPad *video_pad = NULL;
+						g_signal_emit_by_name(m_gst_playbin, "get-video-pad", vi, &video_pad);
+						if (!video_pad)
+							continue;
 
-				eDebug("[eServiceMP3] async-done - %d video, %d audio, %d subtitle", n_video, n_audio, n_text);
+						/* Reject trick-play streams when their stream ID says so. */
+						bool trick_play = false;
+						gchar *stream_id = gst_pad_get_stream_id(video_pad);
+						if (stream_id)
+						{
+							gchar *lower = g_ascii_strdown(stream_id, -1);
+							trick_play = g_strrstr(lower, "iframe") || g_strrstr(lower, "trick");
+							g_free(lower);
+							g_free(stream_id);
+						}
+
+						GstCaps *caps = gst_pad_get_current_caps(video_pad);
+						gst_object_unref(video_pad);
+						if (!caps)
+							continue;
+
+						gint width = 0, height = 0;
+						if (!gst_caps_is_empty(caps) && !gst_caps_is_any(caps))
+						{
+							const GstStructure *s = gst_caps_get_structure(caps, 0);
+							gst_structure_get_int(s, "width", &width);
+							gst_structure_get_int(s, "height", &height);
+						}
+						gst_caps_unref(caps);
+
+						eTrace("[eServiceMP3] DASH video %d: %dx%d%s",
+							vi, width, height, trick_play ? " (trick-play)" : "");
+						if (trick_play || width <= 0 || height <= 0)
+							continue;
+						const guint64 pixels = (guint64)width * (guint64)height;
+						if (pixels > best_pixels)
+						{
+							best_pixels = pixels;
+							best_video = vi;
+						}
+					}
+
+					if (best_video >= 0)
+					{
+						gint current_video = -1;
+						g_object_get(m_gst_playbin, "current-video", &current_video, NULL);
+						if (current_video != best_video)
+						{
+							eTrace("[eServiceMP3] DASH select video %d -> %d (%" G_GUINT64_FORMAT " pixels)",
+								current_video, best_video, best_pixels);
+							g_object_set(m_gst_playbin, "current-video", best_video, NULL);
+						}
+					}
+				}
+
+				eTrace("[eServiceMP3] async-done - %d video, %d audio, %d subtitle", n_video, n_audio, n_text);
 
 				if ( n_video + n_audio <= 0 )
 					stop();
