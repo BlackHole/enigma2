@@ -500,6 +500,7 @@ private:
 	void HandleTocEntry(GstMessage *msg);
 	static gint match_sinktype(const GValue *velement, const gchar *type);
 	static void handleElementAdded(GstBin *bin, GstElement *element, gpointer user_data);
+	static void handleDeepElementAdded(GstBin *bin, GstBin *sub_bin, GstElement *element, gpointer user_data);
 	void disconnectAsyncSignalHandlers();
 
 	struct subtitle_page_t
@@ -570,6 +571,12 @@ private:
 	void forceAudioReset();
 	ePtr<eTimer> m_subtitle_clear_buffers_timer;
 	void deferredSubtitleClearBuffers();
+	/* Live DASH recovery: dashdemux2 can die on a manifest/period change (e.g. an
+	 * ad break) leaving a frozen picture. Restart the pipeline, a few times. */
+	ePtr<eTimer> m_dash_recover_timer;
+	int m_dash_recover_count;
+	time_t m_dash_recover_last;
+	void dashRecover();
 	sourceStream m_sourceinfo;
 	gulong m_subs_to_pull_handler_id;
 
@@ -652,6 +659,7 @@ private:
 #endif /* HAS_SOFTWARE_HDR_DETECTION */
 	std::string m_useragent;
 	std::string m_extra_headers;
+	std::string m_clearkeys; /* "kid=key,kid=key" hex pairs for cencdec, from &e2clearkeys= */
 	RESULT trickSeek(gdouble ratio);
 	ePtr<iTSMPEGDecoder> m_decoder; // for showSinglePic when radio
 };

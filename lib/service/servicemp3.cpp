@@ -1722,6 +1722,9 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	m_dvb_subtitle_parser = new eDVBSubtitleParser();
 	m_dvb_subtitle_parser->connectNewPage(sigc::mem_fun(*this, &eServiceMP3::newDVBSubtitlePage), m_new_dvb_subtitle_page_connection);
 	m_passthrough_fix_timer = eTimer::create(eApp);
+	m_dash_recover_timer = eTimer::create(eApp);
+	m_dash_recover_count = 0;
+	m_dash_recover_last = 0;
 	m_audio_switch_deferred = -1;
 	m_audio_switch_flush_phase = AudioSwitchFlushNone;
 	m_audio_switch_flush_resume = true;
@@ -1789,6 +1792,7 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	CONNECT(m_pump.recv_msg, eServiceMP3::gstPoll);
 	CONNECT(m_nownext_timer->timeout, eServiceMP3::updateEpgCacheNowNext);
 	CONNECT(m_passthrough_fix_timer->timeout, eServiceMP3::forceAudioReset);
+	CONNECT(m_dash_recover_timer->timeout, eServiceMP3::dashRecover);
 
 	m_aspect = m_width = m_height = m_framerate = m_progressive = m_gamma = -1;
 	m_hdr_type = 0;
@@ -1807,7 +1811,21 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 
 	const char *filename;
 	std::string filename_str;
-	size_t pos = m_ref.path.find('#');
+	/* "&e2clearkeys=<kid>=<key>[,<kid>=<key>...]" (hex) - ClearKey CENC keys
+	 * handed to the cencdec element via handleDeepElementAdded(). Stripped from
+	 * the path here, ahead of the extension/"#" parsing below, so that neither
+	 * is thrown off by it (e.g. "x.mpd&e2clearkeys=..." must still be seen as
+	 * ".mpd") and it never reaches the source element. */
+	size_t pos = m_ref.path.find("&e2clearkeys=");
+	if (pos != std::string::npos && m_ref.path.compare(0, 4, "http") == 0)
+	{
+		size_t kstart = pos + strlen("&e2clearkeys=");
+		size_t kend = m_ref.path.find_first_of("&#", kstart);
+		m_clearkeys = m_ref.path.substr(kstart, kend == std::string::npos ? std::string::npos : kend - kstart);
+		m_ref.path.erase(pos, kend == std::string::npos ? std::string::npos : kend - pos);
+		eDebug("[eServiceMP3] construct: e2clearkeys supplied (%zu bytes)", m_clearkeys.size());
+	}
+	pos = m_ref.path.find('#');
 	size_t pos_q = m_ref.path.find('?');
 	if (pos != std::string::npos && (m_ref.path.compare(0, 4, "http") == 0 || m_ref.path.compare(0, 4, "rtsp") == 0))
 	{
@@ -2084,6 +2102,8 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 		if ( m_sourceinfo.is_streaming )
 		{
 			g_signal_connect (G_OBJECT (m_gst_playbin), "notify::source", G_CALLBACK (playbinNotifySource), this);
+			if (!m_clearkeys.empty())
+				g_signal_connect(G_OBJECT(m_gst_playbin), "deep-element-added", G_CALLBACK(handleDeepElementAdded), this);
 			if (m_download_buffer_path != "")
 			{
 				/* use progressive download buffering */
@@ -2583,6 +2603,18 @@ bool eServiceMP3::waitForHardwareRelease(unsigned int timeout_ms)
 	return remaining == 0;
 }
 
+void eServiceMP3::dashRecover()
+{
+	if (!m_gst_playbin || m_state != stRunning)
+		return;
+	eDebug("[eServiceMP3] restarting dash pipeline (attempt %d)", m_dash_recover_count);
+	m_dash_recover_last = time(NULL);
+	/* same sequence as the "redirect" element message: the playbin keeps its uri,
+	 * and the deep-element-added hook hands the clearkeys to the new cencdec elements */
+	gst_element_set_state(m_gst_playbin, GST_STATE_NULL);
+	gst_element_set_state(m_gst_playbin, GST_STATE_PLAYING);
+}
+
 void eServiceMP3::disconnectAsyncSignalHandlers()
 {
 	if (!m_gst_playbin)
@@ -2611,6 +2643,7 @@ void eServiceMP3::disconnectAsyncSignalHandlers()
 	 * that callback was never actually connected to. */
 	g_signal_handlers_disconnect_by_func(m_gst_playbin, (gpointer)playbinNotifySource, this);
 	g_signal_handlers_disconnect_by_func(m_gst_playbin, (gpointer)handleElementAdded, this);
+	g_signal_handlers_disconnect_by_func(m_gst_playbin, (gpointer)handleDeepElementAdded, this);
 
 	GstIterator *eit = gst_bin_iterate_recurse(GST_BIN(m_gst_playbin));
 	GValue eitem = G_VALUE_INIT;
@@ -2651,6 +2684,7 @@ void eServiceMP3::disconnectAsyncSignalHandlers()
 RESULT eServiceMP3::stop()
 {
 	m_passthrough_fix_timer->stop();
+	m_dash_recover_timer->stop();
 	/* A switch still waiting on the pipeline to settle - a fresh pipeline
 	 * session starts its own settling from scratch. */
 	m_audio_switch_deferred = -1;
@@ -5052,6 +5086,26 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 					stop();
 				}
 			}
+			if ( m_sourceinfo.is_dash && m_state == stRunning && g_str_has_prefix(sourceName, "dashdemux")
+				&& (err->domain == GST_STREAM_ERROR || err->domain == GST_RESOURCE_ERROR) )
+			{
+				/* a burst of errors arrives at once, schedule just one restart */
+				if ( !m_dash_recover_timer->isActive() )
+				{
+					time_t now = time(NULL);
+					/* a restart that held for a minute counts as healthy again */
+					if ( now - m_dash_recover_last > 60 )
+						m_dash_recover_count = 0;
+					if ( m_dash_recover_count < 3 )
+					{
+						m_dash_recover_count++;
+						eDebug("[eServiceMP3] dash error, restarting pipeline in %d ms (attempt %d/3)", 1500 * m_dash_recover_count, m_dash_recover_count);
+						m_dash_recover_timer->start(1500 * m_dash_recover_count, true);
+					}
+					else
+						eWarning("[eServiceMP3] dash error, giving up after 3 restarts");
+				}
+			}
 			g_error_free(err);
 			break;
 		}
@@ -5903,6 +5957,23 @@ void eServiceMP3::playbinNotifySource(GObject *object, GParamSpec *unused, gpoin
 		}
 		gst_object_unref(source);
 	}
+}
+
+void eServiceMP3::handleDeepElementAdded(GstBin *bin, GstBin *sub_bin, GstElement *element, gpointer user_data)
+{
+	eServiceMP3 *_this = (eServiceMP3*)user_data;
+	GstElementFactory *factory = gst_element_get_factory(element);
+	if (!_this || !factory || _this->m_clearkeys.empty())
+		return;
+	if (strcmp(gst_plugin_feature_get_name(GST_PLUGIN_FEATURE(factory)), "cencdec") != 0)
+		return;
+	if (!g_object_class_find_property(G_OBJECT_GET_CLASS(element), "clearkeys"))
+	{
+		eDebug("[eServiceMP3] cencdec has no 'clearkeys' property, installed plugin is not the patched build");
+		return;
+	}
+	eDebug("[eServiceMP3] passing clearkeys to cencdec");
+	g_object_set(G_OBJECT(element), "clearkeys", _this->m_clearkeys.c_str(), NULL);
 }
 
 void eServiceMP3::handleElementAdded(GstBin *bin, GstElement *element, gpointer user_data)
