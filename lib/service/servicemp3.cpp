@@ -426,10 +426,79 @@ bool eac3FrameHasAtmos(const guint8 *data, gsize size)
 	return false;
 }
 
+/* Fallback when DASH-derived compressed caps omit their channel count.
+ * E-AC-3 acmod and lfeon identify the actual encoded speaker channels. */
+guint eac3FrameChannels(const guint8 *data, gsize size)
+{
+	if (!data || size < 7)
+		return 0;
+
+	bool swap16 = false;
+	if (size > 15 && data[0] == 0x72 && data[1] == 0xf8 &&
+		data[2] == 0x1f && data[3] == 0x4e)
+	{
+		data += 8;
+		size -= 8;
+		swap16 = true;
+	}
+	else if (size > 15 && data[0] == 0xf8 && data[1] == 0x72 &&
+		data[2] == 0x4e && data[3] == 0x1f)
+	{
+		data += 8;
+		size -= 8;
+	}
+	else if (data[0] == 0x77 && data[1] == 0x0b)
+		swap16 = true;
+
+	EAC3AtmosBitReader br(data, size, swap16);
+	if (br.read(16) != 0x0b77)
+		return 0;
+	const guint frame_type = br.read(2);
+	const guint substream_id = br.read(3);
+	const guint frame_size = (br.read(11) + 1) << 1;
+	const guint sample_rate_code = br.read(2);
+	/* fscod2 when sample_rate_code == 3, numblkscod otherwise. */
+	const guint rate_or_blocks = br.read(2);
+	const guint acmod = br.read(3);
+	const guint lfeon = br.read(1);
+	const guint bsid = br.read(5);
+	if (!br.ok || frame_type == 3 || substream_id != 0 || frame_size > size ||
+		bsid <= 10 || bsid > 16 || (sample_rate_code == 3 && rate_or_blocks == 3))
+		return 0;
+	static const guint channels_for_acmod[8] = { 2, 1, 2, 3, 3, 4, 4, 5 };
+	return channels_for_acmod[acmod] + lfeon;
+}
+
+/* AAC AudioSpecificConfig channelConfiguration, in the MP4 codec_data caps.
+ * A value of zero needs a program-config-element and cannot be guessed. */
+guint aacCodecDataChannels(const GstStructure *str)
+{
+	const GValue *value = gst_structure_get_value(str, "codec_data");
+	if (!value || !GST_VALUE_HOLDS_BUFFER(value))
+		return 0;
+	GstBuffer *buf = gst_value_get_buffer(value);
+	GstMapInfo map;
+	if (!buf || !gst_buffer_map(buf, &map, GST_MAP_READ))
+		return 0;
+	guint channels = 0;
+	if (map.size >= 2)
+	{
+		const guint config = (map.data[1] >> 3) & 0x0f;
+		if (config >= 1 && config <= 6)
+			channels = config;
+		else if (config == 7)
+			channels = 8;
+	}
+	gst_buffer_unmap(buf, &map);
+	return channels;
+}
+
 struct EAC3AtmosProbeData
 {
 	int stream;
 	guint buffers;
+	bool channelsReported;
+	bool inspectChannels;
 };
 
 void freeEAC3AtmosProbeData(gpointer data)
@@ -449,10 +518,30 @@ GstPadProbeReturn eac3AtmosProbe(GstPad *pad, GstPadProbeInfo *info, gpointer us
 
 	GstMapInfo map;
 	bool detected = false;
+	guint encoded_channels = 0;
 	if (gst_buffer_map(buffer, &map, GST_MAP_READ))
 	{
+		if (probe->inspectChannels && !probe->channelsReported)
+			encoded_channels = eac3FrameChannels(map.data, map.size);
 		detected = eac3FrameHasAtmos(map.data, map.size);
 		gst_buffer_unmap(buffer, &map);
+	}
+
+	if (encoded_channels > 0)
+	{
+		probe->channelsReported = true;
+		GstObject *parent = gst_pad_get_parent(pad);
+		if (parent && GST_IS_ELEMENT(parent))
+		{
+			GstStructure *event = gst_structure_new("eventAudioChannelsDetected",
+				"stream", G_TYPE_INT, probe->stream,
+				"channels", G_TYPE_INT, (gint)encoded_channels,
+				NULL);
+			gst_element_post_message(GST_ELEMENT(parent),
+				gst_message_new_element(parent, event));
+		}
+		if (parent)
+			gst_object_unref(parent);
 	}
 
 	if (detected)
@@ -4126,6 +4215,9 @@ RESULT eServiceMP3::selectTrack(unsigned int i)
 {
 	m_clear_buffers = true;
 	int result = selectAudioStream(i);
+	/* The DASH selector path intentionally never flushes the pipeline. */
+	if (m_sourceinfo.is_dash)
+		m_clear_buffers = false;
 	return result;
 }
 
@@ -4622,6 +4714,17 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 			setCacheEntry(true, i);
 			if (isActualAudioSwitch)
 			{
+				/* DASH exposes audio and video as separate tracks.  Switching
+				 * current-audio is sufficient; the legacy seek/restart below
+				 * reinitialises adaptive demux and can reset the selected video
+				 * representation (or stall a live MPD permanently).  Let playbin's
+				 * stream selector finish naturally without flushing the video. */
+				if (m_sourceinfo.is_dash)
+				{
+					eDebug("[eServiceMP3] DASH audio switch to %d: preserving video and avoiding seek/restart", i);
+					m_clear_buffers = false;
+					return 0;
+				}
 				/*
 				 * beginAudioSwitchPauseFlush() is a no-op for a live source
 				 * (see its own m_is_live guard) - its pause/wait-for-PAUSED/
@@ -5339,6 +5442,12 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 					gint channels = 0;
 					if (gst_structure_get_int(str, "channels", &channels) && channels > 0)
 						audio.channels = channels;
+					/* DASH often omits 'channels' from compressed AAC caps even
+					 * when the MP4 AudioSpecificConfig contains it. */
+					if (m_sourceinfo.is_dash && audio.channels == 0 &&
+						(!strcmp(g_type, "audio/mpeg") || !strcmp(g_type, "audio/x-aac") ||
+						 !strcmp(g_type, "audio/aac")))
+						audio.channels = aacCodecDataChannels(str);
 					eDebug("[eServiceMP3] AUDIO STRUCT=%s channels=%d", g_type, audio.channels);
 
 					if ((!strcmp(g_type, "audio/x-eac3") || !strcmp(g_type, "audio/eac3")) &&
@@ -5346,7 +5455,7 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 					{
 						g_object_set_qdata(G_OBJECT(pad), eac3AtmosProbeQuark(), GUINT_TO_POINTER(1));
 						gst_pad_add_probe(pad, GST_PAD_PROBE_TYPE_BUFFER, eac3AtmosProbe,
-							new EAC3AtmosProbeData{i, 0}, freeEAC3AtmosProbeData);
+							new EAC3AtmosProbeData{i, 0, false, m_sourceinfo.is_dash}, freeEAC3AtmosProbeData);
 					}
 
 					if ((!strcmp(g_type, "audio/x-dts") || !strcmp(g_type, "audio/dts")) &&
@@ -5598,6 +5707,13 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 
 				for (unsigned int ai = 0; ai < audioStreams_temp.size() && ai < m_audioStreams.size(); ++ai)
 				{
+					/* Avoid losing a previously detected channel count during
+					 * DASH re-preroll/audio re-enumeration when the caps omit it. */
+					if (m_sourceinfo.is_dash && audioStreams_temp[ai].channels == 0 &&
+						m_audioStreams[ai].channels > 0 &&
+						m_audioStreams[ai].type == audioStreams_temp[ai].type &&
+						m_audioStreams[ai].language_code == audioStreams_temp[ai].language_code)
+						audioStreams_temp[ai].channels = m_audioStreams[ai].channels;
 					const std::string &old_codec = m_audioStreams[ai].codec;
 					std::string &new_codec = audioStreams_temp[ai].codec;
 					if (old_codec == "Dolby Atmos" && new_codec == "Dolby Digital +")
@@ -5766,6 +5882,21 @@ void eServiceMP3::gstBusCall(GstMessage *msg)
 							{
 								m_audioStreams[stream].codec = "Dolby Atmos";
 								eDebug("[eServiceMP3] audio stream=%d updated codec=Dolby Atmos", stream);
+								m_event((iPlayableService*)this, evUpdatedInfo);
+							}
+						}
+						else if (!strcmp(eventname, "eventAudioChannelsDetected"))
+						{
+							int stream = -1, channels = 0;
+							if (m_sourceinfo.is_dash &&
+								gst_structure_get_int(msgstruct, "stream", &stream) &&
+								gst_structure_get_int(msgstruct, "channels", &channels) &&
+								stream >= 0 && stream < (int)m_audioStreams.size() &&
+								channels > 0 && channels <= 16 &&
+								m_audioStreams[stream].channels != channels)
+							{
+								m_audioStreams[stream].channels = channels;
+								eDebug("[eServiceMP3] DASH audio stream=%d detected channels=%d", stream, channels);
 								m_event((iPlayableService*)this, evUpdatedInfo);
 							}
 						}
