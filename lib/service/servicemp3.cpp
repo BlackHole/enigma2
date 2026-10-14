@@ -2194,8 +2194,9 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 		if ( m_sourceinfo.is_streaming )
 		{
 			g_signal_connect (G_OBJECT (m_gst_playbin), "notify::source", G_CALLBACK (playbinNotifySource), this);
-			if (!m_clearkeys.empty())
-				g_signal_connect(G_OBJECT(m_gst_playbin), "deep-element-added", G_CALLBACK(handleDeepElementAdded), this);
+			/* always hooked now: besides handing clearkeys to cencdec it also
+			 * strips SCTE-35 / emsg ad-marker handling out of the pipeline */
+			g_signal_connect(G_OBJECT(m_gst_playbin), "deep-element-added", G_CALLBACK(handleDeepElementAdded), this);
 			if (m_download_buffer_path != "")
 			{
 				/* use progressive download buffering */
@@ -6017,9 +6018,12 @@ void eServiceMP3::handleMessage(GstMessage *msg)
 	m_pump.send(new GstMessageContainer(1, msg, NULL, NULL));
 }
 
+static bool isAdMarkerStructure(const GstStructure *s);
 GstBusSyncReply eServiceMP3::gstBusSyncHandler(GstBus *bus, GstMessage *message, gpointer user_data)
 {
 	eServiceMP3 *_this = (eServiceMP3*)user_data;
+	if (GST_MESSAGE_TYPE(message) == GST_MESSAGE_ELEMENT && isAdMarkerStructure(gst_message_get_structure(message)))
+		return GST_BUS_DROP; /* SCTE-35 section / emsg message: ignored */
 	if (_this) _this->handleMessage(message);
 	return GST_BUS_DROP;
 }
@@ -6166,11 +6170,108 @@ void eServiceMP3::playbinNotifySource(GObject *object, GParamSpec *unused, gpoin
 	}
 }
 
+/* ---- SCTE-35 / emsg ad-marker suppression -------------------------------
+ * We never act on ad markers, so anything that carries them is thrown away
+ * before it can reach an element that mishandles it (cencdec, the demuxers,
+ * the dvb sinks). */
+static bool isAdMarkerStructure(const GstStructure *s)
+{
+	const gchar *n = s ? gst_structure_get_name(s) : NULL;
+	return n && (strcasestr(n, "scte") || strcasestr(n, "emsg") ||
+		strcasestr(n, "splice") || strcasestr(n, "mpegts-section") ||
+		strcasestr(n, "cue-out") || strcasestr(n, "cue-in") || strcasestr(n, "daterange"));
+}
+
+static GstPadProbeReturn dropAdMarkerEventProbe(GstPad *pad, GstPadProbeInfo *info, gpointer user_data)
+{
+	GstEvent *ev = GST_PAD_PROBE_INFO_EVENT(info);
+	if (!ev)
+		return GST_PAD_PROBE_OK;
+	switch (GST_EVENT_TYPE(ev))
+	{
+		case GST_EVENT_CUSTOM_DOWNSTREAM:
+		case GST_EVENT_CUSTOM_DOWNSTREAM_STICKY:
+		case GST_EVENT_CUSTOM_DOWNSTREAM_OOB:
+		case GST_EVENT_CUSTOM_BOTH:
+		case GST_EVENT_CUSTOM_BOTH_OOB:
+			if (isAdMarkerStructure(gst_event_get_structure(ev)))
+			{
+				eDebug("[eServiceMP3] dropped ad-marker event '%s' on %s:%s",
+					gst_structure_get_name(gst_event_get_structure(ev)),
+					GST_DEBUG_PAD_NAME(pad));
+				return GST_PAD_PROBE_DROP;
+			}
+			break;
+		default:
+			break;
+	}
+	return GST_PAD_PROBE_OK;
+}
+
+static void attachAdMarkerProbe(GstPad *pad)
+{
+	if (!pad)
+		return;
+	gst_pad_add_probe(pad, (GstPadProbeType)(GST_PAD_PROBE_TYPE_EVENT_DOWNSTREAM | GST_PAD_PROBE_TYPE_EVENT_BOTH),
+		dropAdMarkerEventProbe, NULL, NULL);
+}
+
+static void adMarkerPadAdded(GstElement *element, GstPad *pad, gpointer user_data)
+{
+	attachAdMarkerProbe(pad);
+}
+
+static void stripAdMarkersFromElement(GstElement *element, const char *fname)
+{
+	static const char *const demuxers[] = {
+		"dashdemux", "dashdemux2", "hlsdemux", "hlsdemux2", "adaptivedemux",
+		"tsdemux", "qtdemux", "cencdec", NULL };
+	bool match = false;
+	for (int i = 0; demuxers[i]; i++)
+		if (!strcmp(fname, demuxers[i])) { match = true; break; }
+	if (!match)
+		return;
+
+	/* tsdemux can forward SCTE-35 sections downstream - make sure it doesn't */
+	if (!strcmp(fname, "tsdemux") &&
+		g_object_class_find_property(G_OBJECT_GET_CLASS(element), "send-scte35-events"))
+		g_object_set(G_OBJECT(element), "send-scte35-events", FALSE, NULL);
+
+	/* existing pads (cencdec/qtdemux/tsdemux have static ones) ... */
+	GstIterator *it = gst_element_iterate_pads(element);
+	GValue v = G_VALUE_INIT;
+	bool done = false;
+	while (!done)
+	{
+		switch (gst_iterator_next(it, &v))
+		{
+			case GST_ITERATOR_OK:
+				attachAdMarkerProbe(GST_PAD(g_value_get_object(&v)));
+				g_value_reset(&v);
+				break;
+			case GST_ITERATOR_RESYNC:
+				gst_iterator_resync(it);
+				break;
+			default:
+				done = true;
+				break;
+		}
+	}
+	g_value_unset(&v);
+	gst_iterator_free(it);
+	/* ... and the ones that appear later (dashdemux/hlsdemux/tsdemux src pads) */
+	g_signal_connect(element, "pad-added", G_CALLBACK(adMarkerPadAdded), NULL);
+	eDebug("[eServiceMP3] ad-marker (SCTE-35) filter installed on %s", fname);
+}
+
 void eServiceMP3::handleDeepElementAdded(GstBin *bin, GstBin *sub_bin, GstElement *element, gpointer user_data)
 {
 	eServiceMP3 *_this = (eServiceMP3*)user_data;
 	GstElementFactory *factory = gst_element_get_factory(element);
-	if (!_this || !factory || _this->m_clearkeys.empty())
+	if (!_this || !factory)
+		return;
+	stripAdMarkersFromElement(element, gst_plugin_feature_get_name(GST_PLUGIN_FEATURE(factory)));
+	if (_this->m_clearkeys.empty())
 		return;
 	if (strcmp(gst_plugin_feature_get_name(GST_PLUGIN_FEATURE(factory)), "cencdec") != 0)
 		return;
