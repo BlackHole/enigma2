@@ -25,15 +25,58 @@ ecmdata = GetEcmInfo()
 _CRYPTO_CACHE_INTERVAL = 1.0
 _cryptoCacheTime = 0.0
 _cryptoCacheData = None
+_cryptoCachePresent = False
 
 
+# The only place that touches /tmp/ecm.info: the stat() and the parse are both done at most once per interval.
 def getCachedEcmData():
-	global _cryptoCacheTime, _cryptoCacheData
+	global _cryptoCacheTime, _cryptoCacheData, _cryptoCachePresent
 	now = monotonic()
 	if _cryptoCacheData is None or now - _cryptoCacheTime >= _CRYPTO_CACHE_INTERVAL:
+		_cryptoCachePresent = pathExists("/tmp/ecm.info")
 		_cryptoCacheData = ecmdata.getEcmData()
 		_cryptoCacheTime = now
 	return _cryptoCacheData
+
+
+# Whether the softcam has written /tmp/ecm.info (as of the last refresh of the cache above).
+def ecmFilePresent():
+	getCachedEcmData()
+	return _cryptoCachePresent
+
+
+# Whether a softcam is loaded: only then does a missing /tmp/ecm.info mean something (used when the stream cannot be asked).
+def softcamLoaded():
+	try:
+		return bool(SystemInfo["HasInitCam"])
+	except Exception:
+		return False
+
+
+# 1 = the packets of the current video (or audio) PID are scrambled right now, 0 = they are clear, -1 = not known
+# (also on images without iServiceInformation.sIsScrambled, for IPTV, recordings, timeshift and in the first moments after a zap).
+def scramblingState(info):
+	key = getattr(iServiceInformation, "sIsScrambled", None)
+	print("scramblingState", repr(key))
+	if key is not None:
+		print("scramblingState", repr(info.getInfo(key)))
+	return -1 if key is None else info.getInfo(key)
+
+
+# Used when there is no ecm.info: True if the stream can be called free to air. If the stream can be asked, that decides,
+# so an encrypted channel in a free news break is free to air (it still has CA descriptors, sIsCrypted == 1). Otherwise:
+# with a softcam loaded no ecm.info on an encrypted service also means free; without one ecm.info never exists, so nothing
+# is known. After a zap the video and audio PIDs read -1 until the PMT has arrived (the PCR PID keeps the previous
+# service's value), so that moment is not free to air either.
+def isFreeToAir(info):
+	if not info or not info.getInfoString(iServiceInformation.sServiceref).startswith("1:"):
+		return True
+	scrambled = scramblingState(info)
+	if scrambled != -1:
+		return scrambled == 0
+	if all(info.getInfo(pid) == -1 for pid in (iServiceInformation.sVideoPID, iServiceInformation.sAudioPID)):
+		return False
+	return info.getInfo(iServiceInformation.sIsCrypted) != 1 or softcamLoaded()
 
 
 caid_data = tuple(
@@ -112,7 +155,7 @@ def addspace(text):
 
 
 def getCryptoInfo(info):
-	if info and info.getInfo(iServiceInformation.sIsCrypted) == 1 or pathExists("/tmp/ecm.info"):
+	if info and info.getInfo(iServiceInformation.sIsCrypted) == 1 or ecmFilePresent():
 		data = getCachedEcmData()
 		current_source = data[0]
 		current_caid = int(data[1], 16)
@@ -147,10 +190,11 @@ def createCurrentCaidLabel(info, currentCaid=None, currentDevice=None):
 				if stateDecoding == 2 and stateSlot not in (-1, 0, 3):
 					decodingCiSlot = slot
 
-	if not pathExists("/tmp/ecm.info") and decodingCiSlot == -1:
-		return "FTA"
+	ecm_present = ecmFilePresent()
+	if not ecm_present and decodingCiSlot == -1:
+		return "FTA" if isFreeToAir(info) else ""
 
-	if decodingCiSlot > -1 and not pathExists("/tmp/ecm.info"):
+	if decodingCiSlot > -1 and not ecm_present:
 		return "CI%d" % (decodingCiSlot)
 
 	for caid_entry in caid_data:
@@ -577,7 +621,9 @@ class PliExtraInfo(Poll, Converter, object):
 		caid_name = "Free to Air"
 		if "%3a//" in refstr.lower() and "127.0.0.1" not in refstr and "0.0.0.0" not in refstr and "localhost" not in refstr or "@" in refstr or "4097" in refstr or "5001" in refstr or "5002" in refstr:
 			return "IPTV" + ":%04X" % (info.getInfo(iServiceInformation.sSID))
-		if self.current_caid == 0:
+		elif self.current_caid == 0:
+			if not isFreeToAir(info):
+				return ""  # No ECM, but not known to be free to air.
 			return caid_name + ":%06X:%04X" % (int(self.current_provid, 16), info.getInfo(iServiceInformation.sSID))
 		try:
 			for caid_entry in caid_data:
@@ -591,8 +637,8 @@ class PliExtraInfo(Poll, Converter, object):
 
 	def createCryptoNameCaid(self, info):
 		caid_name = "Free to Air"
-		if int(self.current_caid, 16) == 0:
-			return caid_name
+		if self.current_caid == 0:
+			return caid_name if isFreeToAir(info) else ""
 		try:
 			for caid_entry in caid_data:
 				if caid_entry[0] <= self.current_caid <= caid_entry[1]:
@@ -813,7 +859,7 @@ class PliExtraInfo(Poll, Converter, object):
 			if textType == "CurrentCrypto":
 				if int(config.usage.show_cryptoinfo.value) > 0:
 					self.refreshCryptoInfo(info)
-					return self.createCurrentCaidLabel()
+					return self.createCurrentCaidLabel(info)
 				else:
 					return ""
 
@@ -828,7 +874,6 @@ class PliExtraInfo(Poll, Converter, object):
 			# (Seca/Via/Irdeto/NDS/Conax/CryptoW/PowerVU/Tandberg/Beta/Nagra/Biss/Dre)
 			if textType in self.CRYPTO_LETTER_RANGES:
 				if int(config.usage.show_cryptoinfo.value) > 0:
-
 					self.refreshCryptoInfo(info)
 					lo, hi, letter = self.CRYPTO_LETTER_RANGES[textType]
 					return self.createCryptoLetter(info, lo, hi, letter)
@@ -891,7 +936,7 @@ class PliExtraInfo(Poll, Converter, object):
 
 			return _("?%s?") % textType
 		except:
-			return "Free to Air"
+			return ""
 
 	text = property(getText)
 
