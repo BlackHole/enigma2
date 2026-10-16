@@ -1,6 +1,7 @@
 #include <lib/gdi/egl/shader/gtexture_shader.h>
 #include <lib/gdi/egl/gles_version.h>
 #include <lib/base/eerror.h>
+#include <stdlib.h>
 
 // ---------------------------------------------------------------------------
 // GLES 3.0 shader sources
@@ -27,6 +28,9 @@ static const char *fragment_shader_es3 = R"(#version 300 es
     
     uniform sampler2D u_texture;
     uniform float u_global_alpha;
+    uniform float u_unpremultiply;
+    uniform sampler2D u_tone_lut;
+    uniform float u_tone_on;
     
     uniform vec4 u_rect_size;
     uniform float u_radius;
@@ -37,7 +41,12 @@ static const char *fragment_shader_es3 = R"(#version 300 es
         return min(max(d.x, d.y), 0.0) + length(max(d, 0.0)) - r;
     }
 
+    // 256-entry per-channel tone LUT (texel centres: v*255/256 + 0.5/256)
+    float toneLut(float v) { return texture(u_tone_lut, vec2(v * 0.99609375 + 0.001953125, 0.5)).r; }
+
     void main() {
+        float coverage = 1.0;
+
         if (u_radius > 0.0) {
             vec2 half_size = u_rect_size.zw * 0.5;
             vec2 center = vec2(u_rect_size.x, u_rect_size.y) + half_size;
@@ -50,11 +59,40 @@ static const char *fragment_shader_es3 = R"(#version 300 es
             if (p.x > 0.0 && p.y > 0.0 && (u_edges & 8) == 0) r = 0.0;
 
             float dist = udRoundBox(p, half_size, r);
-            if (dist > 0.5) discard;
+            // Analytic coverage ramp instead of a hard discard - see
+            // gadvanced_shader.cpp's fragment shader for why (same technique,
+            // kept consistent here so a rounded background image blitted
+            // under a rounded solid-color overlay - e.g. eListboxServiceContent's
+            // per-item background pixmap plus its selection highlight rect,
+            // which can legitimately use two different radii - doesn't show a
+            // seam where this shader's old hard edge disagreed with the
+            // other shader's soft one.
+            coverage = clamp(0.5 - dist, 0.0, 1.0);
+            if (coverage <= 0.0) discard;
         }
 
         vec4 tex_color = texture(u_texture, v_uv);
-        frag_color = vec4(tex_color.rgb, tex_color.a * u_global_alpha);
+        if (u_tone_on > 0.5 && tex_color.a > 0.0) {
+            // Present pass only: tone-map the straight (un-premultiplied) colour, then
+            // re-premultiply so the modes below see the same kind of input as before.
+            vec3 s = min(tex_color.rgb / tex_color.a, vec3(1.0));
+            tex_color.rgb = vec3(toneLut(s.r), toneLut(s.g), toneLut(s.b)) * tex_color.a;
+        }
+        // Only the final present pass sets this (see setUnpremultiply()).
+        vec3 rgb = tex_color.rgb;
+        float out_a = tex_color.a;
+        if (u_unpremultiply < -0.5)
+            rgb *= tex_color.a; // raw-overwrite blit: store premultiplied (setPremultiply())
+        else if (u_unpremultiply > 2.5 && tex_color.a > 0.0) {
+            // Compositor computes S*A^2 + D*(1-A): pick the smallest A >= a for which
+            // S = P/A^2 still fits in [0,1], so the colour term P is reproduced exactly.
+            // P can never exceed a in a premultiplied frame - clamp stray values.
+            rgb = min(rgb, vec3(tex_color.a));
+            out_a = max(tex_color.a, sqrt(max(rgb.r, max(rgb.g, rgb.b))));
+            rgb = min(rgb / (out_a * out_a), vec3(1.0));
+        } else if (u_unpremultiply > 0.5 && tex_color.a > 0.0)
+            rgb = min(rgb / tex_color.a, vec3(1.0));
+        frag_color = vec4(rgb, out_a * u_global_alpha * coverage);
     }
 )";
 #endif
@@ -82,6 +120,9 @@ static const char *fragment_shader_es2 = R"(#version 100
     
     uniform sampler2D u_texture;
     uniform float u_global_alpha;
+    uniform float u_unpremultiply;
+    uniform sampler2D u_tone_lut;
+    uniform float u_tone_on;
     
     uniform vec4 u_rect_size;
     uniform float u_radius;
@@ -96,7 +137,12 @@ static const char *fragment_shader_es2 = R"(#version 100
         return min(max(d.x, d.y), 0.0) + length(max(d, 0.0)) - r;
     }
 
+    // 256-entry per-channel tone LUT (texel centres: v*255/256 + 0.5/256)
+    float toneLut(float v) { return texture2D(u_tone_lut, vec2(v * 0.99609375 + 0.001953125, 0.5)).r; }
+
     void main() {
+        float coverage = 1.0;
+
         if (u_radius > 0.0) {
             vec2 half_size = u_rect_size.zw * 0.5;
             vec2 center = vec2(u_rect_size.x, u_rect_size.y) + half_size;
@@ -109,11 +155,82 @@ static const char *fragment_shader_es2 = R"(#version 100
             if (p.x > 0.0 && p.y > 0.0) r = u_r_br;
 
             float dist = udRoundBox(p, half_size, r);
-            if (dist > 0.5) discard;
+            // See the ES3 fragment shader above for why this is a coverage
+            // ramp instead of a hard discard.
+            coverage = clamp(0.5 - dist, 0.0, 1.0);
+            if (coverage <= 0.0) discard;
         }
 
         vec4 tex_color = texture2D(u_texture, v_uv);
-        gl_FragColor = vec4(tex_color.rgb, tex_color.a * u_global_alpha);
+        if (u_tone_on > 0.5 && tex_color.a > 0.0) {
+            // Present pass only: tone-map the straight (un-premultiplied) colour, then
+            // re-premultiply so the modes below see the same kind of input as before.
+            vec3 s = min(tex_color.rgb / tex_color.a, vec3(1.0));
+            tex_color.rgb = vec3(toneLut(s.r), toneLut(s.g), toneLut(s.b)) * tex_color.a;
+        }
+        // Only the final present pass sets this (see setUnpremultiply()).
+        vec3 rgb = tex_color.rgb;
+        float out_a = tex_color.a;
+        if (u_unpremultiply < -0.5)
+            rgb *= tex_color.a; // raw-overwrite blit: store premultiplied (setPremultiply())
+        else if (u_unpremultiply > 2.5 && tex_color.a > 0.0) {
+            // Compositor computes S*A^2 + D*(1-A): pick the smallest A >= a for which
+            // S = P/A^2 still fits in [0,1], so the colour term P is reproduced exactly.
+            // P can never exceed a in a premultiplied frame - clamp stray values.
+            rgb = min(rgb, vec3(tex_color.a));
+            out_a = max(tex_color.a, sqrt(max(rgb.r, max(rgb.g, rgb.b))));
+            rgb = min(rgb / (out_a * out_a), vec3(1.0));
+        } else if (u_unpremultiply > 0.5 && tex_color.a > 0.0)
+            rgb = min(rgb / tex_color.a, vec3(1.0));
+        gl_FragColor = vec4(rgb, out_a * u_global_alpha * coverage);
+    }
+)";
+
+// ---------------------------------------------------------------------------
+// Plain (no rounding / no unpremultiply) variants - see gTextureShader::drawBatch()
+// ---------------------------------------------------------------------------
+#if defined(HAVE_GLES3)
+static const char *plain_vertex_shader_es3 = R"(#version 300 es
+    layout(location = 0) in vec4 pos_uv;
+    uniform mat4 u_projection;
+    out vec2 v_uv;
+    void main() {
+        gl_Position = u_projection * vec4(pos_uv.xy, 0.0, 1.0);
+        v_uv = pos_uv.zw;
+    }
+)";
+
+static const char *plain_fragment_shader_es3 = R"(#version 300 es
+    precision mediump float;
+    in vec2 v_uv;
+    out vec4 frag_color;
+    uniform sampler2D u_texture;
+    uniform float u_global_alpha;
+    void main() {
+        vec4 c = texture(u_texture, v_uv);
+        frag_color = vec4(c.rgb, c.a * u_global_alpha);
+    }
+)";
+#endif
+
+static const char *plain_vertex_shader_es2 = R"(#version 100
+    attribute vec4 pos_uv;
+    uniform mat4 u_projection;
+    varying vec2 v_uv;
+    void main() {
+        gl_Position = u_projection * vec4(pos_uv.xy, 0.0, 1.0);
+        v_uv = pos_uv.zw;
+    }
+)";
+
+static const char *plain_fragment_shader_es2 = R"(#version 100
+    precision mediump float;
+    varying vec2 v_uv;
+    uniform sampler2D u_texture;
+    uniform float u_global_alpha;
+    void main() {
+        vec4 c = texture2D(u_texture, v_uv);
+        gl_FragColor = vec4(c.rgb, c.a * u_global_alpha);
     }
 )";
 
@@ -142,6 +259,45 @@ void gTextureShader::destroy()
     m_vbo = 0;
     if (m_program_id) glDeleteProgram(m_program_id);
     m_program_id = 0;
+    if (m_plain_program_id) glDeleteProgram(m_plain_program_id);
+    m_plain_program_id = 0;
+}
+
+GLuint gTextureShader::buildPlainProgram()
+{
+#if defined(HAVE_GLES3)
+    const char *vs_src = gles::isGLES3() ? plain_vertex_shader_es3   : plain_vertex_shader_es2;
+    const char *fs_src = gles::isGLES3() ? plain_fragment_shader_es3 : plain_fragment_shader_es2;
+#else
+    const char *vs_src = plain_vertex_shader_es2;
+    const char *fs_src = plain_fragment_shader_es2;
+#endif
+    GLuint vs = compileShader(GL_VERTEX_SHADER, vs_src);
+    GLuint fs = compileShader(GL_FRAGMENT_SHADER, fs_src);
+    if (!vs || !fs) {
+        if (vs) glDeleteShader(vs);
+        if (fs) glDeleteShader(fs);
+        return 0;
+    }
+    GLuint prog = glCreateProgram();
+    if (!gles::isGLES3())
+        glBindAttribLocation(prog, 0, "pos_uv");
+    glAttachShader(prog, vs);
+    glAttachShader(prog, fs);
+    glLinkProgram(prog);
+    glDeleteShader(vs);
+    glDeleteShader(fs);
+    GLint linked = 0;
+    glGetProgramiv(prog, GL_LINK_STATUS, &linked);
+    if (!linked) {
+        eDebug("[gTextureShader] plain program link failed - using the full program for batches");
+        glDeleteProgram(prog);
+        return 0;
+    }
+    m_plain_projection_location = glGetUniformLocation(prog, "u_projection");
+    m_plain_texture_location    = glGetUniformLocation(prog, "u_texture");
+    m_plain_alpha_location      = glGetUniformLocation(prog, "u_global_alpha");
+    return prog;
 }
 
 GLuint gTextureShader::compileShader(GLenum type, const char *source)
@@ -192,9 +348,22 @@ bool gTextureShader::init()
     m_projection_location  = glGetUniformLocation(m_program_id, "u_projection");
     m_texture_location     = glGetUniformLocation(m_program_id, "u_texture");
     m_alpha_location       = glGetUniformLocation(m_program_id, "u_global_alpha");
+    m_unpremult_location   = glGetUniformLocation(m_program_id, "u_unpremultiply");
+    m_tone_on_location     = glGetUniformLocation(m_program_id, "u_tone_on");
+    m_tone_lut_location    = glGetUniformLocation(m_program_id, "u_tone_lut");
+    if (m_tone_lut_location >= 0 || m_tone_on_location >= 0) {
+        glUseProgram(m_program_id);
+        if (m_tone_lut_location >= 0) glUniform1i(m_tone_lut_location, 1); // texture unit 1
+        if (m_tone_on_location >= 0)  glUniform1f(m_tone_on_location, 0.0f);
+    }
     m_rect_size_location   = glGetUniformLocation(m_program_id, "u_rect_size");
     m_radius_location      = glGetUniformLocation(m_program_id, "u_radius");
     m_edges_location       = glGetUniformLocation(m_program_id, "u_edges");
+
+    // Optional: if it fails to build, batches just keep using the full program.
+    // ENIGMA_EGL_PLAIN_TEXTURE=0 disables it (A/B testing).
+    if (!(getenv("ENIGMA_EGL_PLAIN_TEXTURE") && atoi(getenv("ENIGMA_EGL_PLAIN_TEXTURE")) == 0))
+        m_plain_program_id = buildPlainProgram();
 
     if (!gles::isGLES3()) {
         m_edges_tl_location = glGetUniformLocation(m_program_id, "u_r_tl");
@@ -229,35 +398,36 @@ bool gTextureShader::init()
     return true;
 }
 
+void gTextureShader::applyToneUniforms()
+{
+    if (m_tone_on_location < 0)
+        return;
+    if (m_tone_lut) {
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, m_tone_lut);
+        glActiveTexture(GL_TEXTURE0);
+    }
+    glUniform1f(m_tone_on_location, m_tone_lut ? 1.0f : 0.0f);
+}
+
 void gTextureShader::bind()
 {
     glUseProgram(m_program_id);
 }
 
-void gTextureShader::bindVAO()
-{
-#if defined(HAVE_GLES3)
-    if (gles::isGLES3()) {
-        glBindVertexArray(m_vao);
-    } else
-#endif
-    {
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-    }
-}
+// pos_uv (x, y, u, v) - must match init()'s VAO layout.
+static const gles::VertexAttrib texture_attribs[] = {{0, 4, 0}};
 
-void gTextureShader::unbindVAO()
+void gTextureShader::drawVertices(const float* vertex_data, int vertex_count)
 {
 #if defined(HAVE_GLES3)
-    if (gles::isGLES3()) {
-        glBindVertexArray(0);
-    } else
+    GLuint vao = m_vao;
+#else
+    GLuint vao = 0;
 #endif
-    {
-        glDisableVertexAttribArray(0);
-    }
+    gles::setVertexData(vao, m_vbo, vertex_data, (GLsizeiptr)vertex_count * 4 * sizeof(float), 4, texture_attribs, 1);
+    glDrawArrays(GL_TRIANGLES, 0, vertex_count);
+    gles::endVertexData(texture_attribs, 1);
 }
 
 void gTextureShader::setResolution(float width, float height)
@@ -270,6 +440,11 @@ void gTextureShader::setResolution(float width, float height)
         -1.0f, 1.0f, 0.0f, 1.0f
     };
     glUniformMatrix4fv(m_projection_location, 1, GL_FALSE, ortho);
+    if (m_plain_program_id) {
+        glUseProgram(m_plain_program_id);
+        glUniformMatrix4fv(m_plain_projection_location, 1, GL_FALSE, ortho);
+        glUseProgram(m_program_id);
+    }
 }
 
 void gTextureShader::drawTexture(float x, float y, float width, float height, GLuint texture_id, float global_alpha, float radius, uint8_t edges)
@@ -281,6 +456,8 @@ void gTextureShader::drawTexture(float x, float y, float width, float height, GL
     glUniform1i(m_texture_location, 0);
     glUniform1f(m_alpha_location, global_alpha);
     
+    glUniform1f(m_unpremult_location, m_premultiply ? -1.0f : (m_unpremultiply ? m_unpremultiply_power : 0.0f));
+    applyToneUniforms();
     glUniform4f(m_rect_size_location, x, y, width, height);
     glUniform1f(m_radius_location, radius);
 
@@ -303,15 +480,58 @@ void gTextureShader::drawTexture(float x, float y, float width, float height, GL
         x + width, y + height, 1.0f, 1.0f
     };
 
-    bindVAO();
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    gles::uploadDynamicVBO(sizeof(vertices), vertices);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    unbindVAO();
+    drawVertices(vertices, 6);
+}
+
+void gTextureShader::drawTextureSub(float x, float y, float width, float height, float sx, float sy, float sw, float sh, GLuint texture_id, float radius, uint8_t edges)
+{
+    bind();
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glUniform1i(m_texture_location, 0);
+    glUniform1f(m_alpha_location, 1.0f);
+
+    glUniform1f(m_unpremult_location, m_premultiply ? -1.0f : (m_unpremultiply ? m_unpremultiply_power : 0.0f));
+    applyToneUniforms();
+    glUniform4f(m_rect_size_location, x, y, width, height);
+    glUniform1f(m_radius_location, radius);
+
+    if (gles::isGLES3()) {
+        glUniform1i(m_edges_location, (int)edges);
+    } else {
+        glUniform1f(m_edges_tl_location, (edges & 1) ? radius : 0.0f);
+        glUniform1f(m_edges_tr_location, (edges & 2) ? radius : 0.0f);
+        glUniform1f(m_edges_bl_location, (edges & 4) ? radius : 0.0f);
+        glUniform1f(m_edges_br_location, (edges & 8) ? radius : 0.0f);
+    }
+
+    const float u0 = (sx - x) / width, u1 = (sx + sw - x) / width;
+    const float v0 = (sy - y) / height, v1 = (sy + sh - y) / height;
+    float vertices[24] = {
+        sx,      sy,      u0, v0,
+        sx,      sy + sh, u0, v1,
+        sx + sw, sy,      u1, v0,
+        sx + sw, sy,      u1, v0,
+        sx,      sy + sh, u0, v1,
+        sx + sw, sy + sh, u1, v1
+    };
+
+    drawVertices(vertices, 6);
 }
 
 void gTextureShader::drawBatch(const float* vertex_data, int vertex_count, GLuint texture_id, float global_alpha)
 {
+    if (m_plain_program_id && !m_premultiply && !m_unpremultiply && !m_tone_lut) {
+        glUseProgram(m_plain_program_id);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture_id);
+        glUniform1i(m_plain_texture_location, 0);
+        glUniform1f(m_plain_alpha_location, global_alpha);
+        drawVertices(vertex_data, vertex_count);
+        return;
+    }
+
     bind();
 
     glActiveTexture(GL_TEXTURE0);
@@ -319,12 +539,11 @@ void gTextureShader::drawBatch(const float* vertex_data, int vertex_count, GLuin
     glUniform1i(m_texture_location, 0);
     glUniform1f(m_alpha_location, global_alpha);
 
+    glUniform1f(m_unpremult_location, m_premultiply ? -1.0f : (m_unpremultiply ? m_unpremultiply_power : 0.0f));
+    applyToneUniforms();
+
     // No rounding for a batch - see the header comment on drawBatch().
     glUniform1f(m_radius_location, 0.0f);
 
-    bindVAO();
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    gles::uploadDynamicVBO((size_t)vertex_count * 4 * sizeof(float), vertex_data);
-    glDrawArrays(GL_TRIANGLES, 0, vertex_count);
-    unbindVAO();
+    drawVertices(vertex_data, vertex_count);
 }

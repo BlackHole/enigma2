@@ -57,8 +57,7 @@ class VideoSetup(Setup):
 		if SystemInfo["havecolorimetry"]:
 			self.list.append(getConfigListEntry(_("HDMI Colorimetry"), config.av.hdmicolorimetry, _("Change the Colorimetry for HDR - this may cause unexpected results or black screen")))
 		if SystemInfo["havehdmicolordepth"]:
-			if not SystemInfo["needsVideoJudderDriverFix"]:
-				self.list.append(getConfigListEntry(_("HDMI Color Depth"), config.av.hdmicolordepth, _("Change the Colordepth for UHD - this may cause unexpected results or black screen")))
+			self.list.append(getConfigListEntry(_("HDMI Color Depth"), config.av.hdmicolordepth, _("Change the Colordepth for UHD - this may cause unexpected results or black screen")))
 		if SystemInfo["havehdmihdrtype"]:
 			self.list.append(getConfigListEntry(_("HDMI HDR Type"), config.av.hdmihdrtype, _("Enable or disable to force HDR Modes for UHD")))
 		if SystemInfo["havehdmihdrosd"]:
@@ -89,9 +88,10 @@ class VideoSetup(Setup):
 				self.list.append(getConfigListEntry(_("DTS-HD MA/HR Downmix"), config.av.dtshd, _("Choose whether multi channel DTS-HD sound tracks should be downmixed or transcoded.")))
 			if SystemInfo["CanWMAPRO"]:
 				self.list.append(getConfigListEntry(_("WMA Pro Downmix"), config.av.wmapro, _("Choose whether WMA Pro sound tracks should be downmixed.")))
-
-			self.list.append(getConfigListEntry(_("DTS / DTS-HD Transcoding"), config.av.dts_playback, _("Choose whether DTS / DTS-HD sound tracks should be transcoded to Dolby Digital.")))
-			self.list.append(getConfigListEntry(_("Dolby TrueHD Transcoding"), config.av.truehd_playback, _("Choose whether Dolby TrueHD sound tracks should be transcoded to Dolby Digital.")))
+			if not SystemInfo["CanNot_DTS_Transcode"]:
+				self.list.append(getConfigListEntry(_("DTS / DTS-HD Transcoding"), config.av.dts_playback, _("Choose whether DTS / DTS-HD sound tracks should be transcoded to Dolby Digital.")))
+			if not SystemInfo["CanNot_TrueHD_Transcode"] and not SystemInfo["UseServiceHisilicon"]:
+				self.list.append(getConfigListEntry(_("Dolby TrueHD Transcoding"),config.av.truehd_playback,_("Choose whether Dolby TrueHD sound tracks should be transcoded to Dolby Digital.")))
 
 			if SystemInfo["CanAACTranscode"]:
 				self.list.append(getConfigListEntry(_("AAC Transcoding"), config.av.transcodeaac, _("Choose whether AAC sound tracks should be transcoded.")))

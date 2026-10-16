@@ -11,6 +11,7 @@
 /* for subtitles */
 #include <lib/gui/esubtitle.h>
 #include <atomic>
+#include <memory>
 
 class eStaticServiceMP3Info;
 
@@ -166,7 +167,7 @@ public:
 	RESULT cueSheet(ePtr<iCueSheet> &ptr);
 
 		// not implemented (yet)
-	RESULT setTarget(int target, bool noaudio = false) { return -1; }
+	RESULT setTarget(int target, bool noaudio = false);
 	RESULT frontendInfo(ePtr<iFrontendInformation> &ptr) { ptr = 0; return -1; }
 	RESULT subServices(ePtr<iSubserviceList> &ptr) { ptr = 0; return -1; }
 	RESULT timeshift(ePtr<iTimeshiftService> &ptr) { ptr = 0; return -1; }
@@ -267,8 +268,9 @@ public:
 		bool is_audio;
 		bool is_streaming;
 		bool is_hls;
+		bool is_dash;
 		sourceStream()
-			:audiotype(atUnknown), containertype(ctNone), is_video(FALSE), is_audio(FALSE), is_streaming(FALSE), is_hls(FALSE)
+			:audiotype(atUnknown), containertype(ctNone), is_video(FALSE), is_audio(FALSE), is_streaming(FALSE), is_hls(FALSE), is_dash(FALSE)
 		{
 		}
 	};
@@ -317,6 +319,16 @@ protected:
 private:
 	static int pcm_delay;
 	static int ac3_delay;
+	/* live bitrate: pad probes on the playbin stream pads count compressed bytes (streaming thread),
+	 * getInfo(sVideoBitrate/sAudioBitrate) turns the deltas into kbit/s (main thread) */
+	typedef std::shared_ptr<std::atomic<guint64> > byteCounterPtr;
+	byteCounterPtr m_video_byte_counter;
+	std::vector<byteCounterPtr> m_audio_byte_counters;
+	guint64 m_br_last_video_bytes, m_br_last_audio_bytes;
+	gint64 m_br_last_us;
+	int m_br_audio_idx, m_br_video_kbps, m_br_audio_kbps;
+	void installBitrateProbes(int n_video, int n_audio);
+	void updateLiveBitrate();
 	int m_currentAudioStream;
 	int m_currentSubtitleStream;
 	int m_cachedSubtitleStream;
@@ -326,11 +338,16 @@ private:
 	iSubtitleUser *m_subtitle_widget;
 	gdouble m_currentTrickRatio;
 	friend class eServiceFactoryMP3;
+	friend class eServiceFactoryHisilicon; /* ServiceHisilicon hybrid factory: non-TrueHD fallback */
 	eServiceReference m_ref;
 	std::string m_prov;
 	int m_buffer_size;
 	int m_ignore_buffering_messages;
 	bool m_is_live;
+	/* PiP: video-only playback on a secondary hardware decoder (see setTarget()) */
+	int m_pip_decoder;
+	bool m_pip_applied;
+	void applyPipTarget();
 	bool m_use_prefillbuffer;
 	bool m_paused;
 	bool m_clear_buffers;
@@ -498,6 +515,7 @@ private:
 	void HandleTocEntry(GstMessage *msg);
 	static gint match_sinktype(const GValue *velement, const gchar *type);
 	static void handleElementAdded(GstBin *bin, GstElement *element, gpointer user_data);
+	static void handleDeepElementAdded(GstBin *bin, GstBin *sub_bin, GstElement *element, gpointer user_data);
 	void disconnectAsyncSignalHandlers();
 
 	struct subtitle_page_t
@@ -568,6 +586,12 @@ private:
 	void forceAudioReset();
 	ePtr<eTimer> m_subtitle_clear_buffers_timer;
 	void deferredSubtitleClearBuffers();
+	/* Live DASH recovery: dashdemux2 can die on a manifest/period change (e.g. an
+	 * ad break) leaving a frozen picture. Restart the pipeline, a few times. */
+	ePtr<eTimer> m_dash_recover_timer;
+	int m_dash_recover_count;
+	time_t m_dash_recover_last;
+	void dashRecover();
 	sourceStream m_sourceinfo;
 	gulong m_subs_to_pull_handler_id;
 
@@ -650,6 +674,7 @@ private:
 #endif /* HAS_SOFTWARE_HDR_DETECTION */
 	std::string m_useragent;
 	std::string m_extra_headers;
+	std::string m_clearkeys; /* "kid=key,kid=key" hex pairs for cencdec, from &e2clearkeys= */
 	RESULT trickSeek(gdouble ratio);
 	ePtr<iTSMPEGDecoder> m_decoder; // for showSinglePic when radio
 };

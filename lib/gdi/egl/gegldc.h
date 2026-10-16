@@ -1,5 +1,9 @@
 #pragma once
 
+#include <atomic>
+#include <mutex>
+#include <vector>
+#include <chrono>
 #include <EGL/egl.h>
 #ifdef HAVE_GLES3
 #include <GLES3/gl3.h>
@@ -7,6 +11,9 @@
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 #endif
+#include <string>
+#include <lib/base/ebase.h>
+#include <lib/gdi/egl/gosd_capture.h>
 #include <lib/gdi/egl/gtexture_manager.h>
 #include <lib/gdi/egl/inative_window_provider.h>
 #include <lib/gdi/egl/shader/gadvanced_shader.h>
@@ -36,8 +43,249 @@ private:
 	int m_page_count; // 1 unless a multi-page pixmap-surface provider
 	int m_render_page; // index into m_egl_surfaces currently bound for rendering
 
+	// Set in tryInitEGL() when a window-surface provider's driver did NOT
+	// grant EGL_SWAP_BEHAVIOR_PRESERVED (see the eglSurfaceAttrib() check
+	// there). Without it, eglSwapBuffers() is free to hand back a surface
+	// with UNDEFINED content on the next frame - fatal for this backend's
+	// dirty-rect-only opcode redraw, which assumes the render target
+	// already holds the previous frame everywhere it doesn't explicitly
+	// touch. Confirmed on real hardware (GigaBlue Quad 4K Pro/Nexus/NXPL):
+	// "most areas of screen go black, some areas stay" - exactly the areas
+	// each frame's opcodes happened to redraw. When true, every opcode
+	// renders into m_shadow_fbo/m_shadow_texture instead - a persistent
+	// offscreen target that behaves like a single-buffered "pixmap IS the
+	// display" surface (see DreamboxWindowProvider) - and flip() blits its
+	// FULL content into the window surface right before eglSwapBuffers().
+	bool m_use_shadow_fbo = false;
+	GLuint m_shadow_fbo = 0;
+	GLuint m_shadow_texture = 0;
+
+	// Diagnostic only, opt-in via ENIGMA_EGL_SHADOW_BLIT_STRIDE (parsed once
+	// in tryInitEGL() right next to where m_use_shadow_fbo is decided) - see
+	// flip()'s use of these. Default stride is 1, meaning "blit every frame",
+	// i.e. today's actual shipping behaviour; unset/invalid values keep that
+	// default. This exists purely to empirically find this platform's real
+	// window-surface backbuffer count on real hardware (how many consecutive
+	// skipped blits it takes before stale/torn content becomes visible),
+	// which the previous scoped-blit attempt above had to guess at and got
+	// wrong. NOT a proposed fix by itself - production must keep stride 1
+	// until that count is known and a real dirty-region scheme is designed
+	// around it.
+	int m_shadow_blit_stride = 1;
+	int m_shadow_blit_frame = 0;
+	// Diagnostic, opt-in via ENIGMA_EGL_BLIT_INVALIDATE=1: call
+	// glInvalidateFramebuffer() on the window surface right before the shadow
+	// blit so a tiled GPU needn't load the stale buffer into tile memory first.
+	bool m_blit_invalidate = false;
+
+	// (Re)creates the EGL window surface for the current native window and makes it
+	// current; false (leaving no surface) if the driver refused either step. Render
+	// thread only.
+	bool recreateWindowSurface();
+	// Set when a resolution change could not get a usable window surface: nothing
+	// can be presented, so exec() keeps retrying (throttled) until it works.
+	bool m_surface_lost = false;
+	std::chrono::steady_clock::time_point m_surface_retry_time;
+	bool createShadowFramebuffer();
+	// createShadowFramebuffer() with retries that first release GPU memory
+	// (queued texture deletions, cached textures) - a large canvas right after a
+	// resolution change can fail to allocate while the old buffers are still alive.
+	bool recreateShadowFramebuffer();
+	// Creation failed (m_use_shadow_fbo set but no FBO): exec() retries, throttled.
+	std::chrono::steady_clock::time_point m_shadow_retry_time;
+	void destroyShadowFramebuffer();
+
+	// setResolution() (below) is called directly from Python (skin.py,
+	// PicturePlayer, VideoFinetune) on the main thread, but actually
+	// applying a resolution change touches GL/EGL state (shader projection
+	// matrices, the shadow FBO's texture size, the native window's own
+	// authored size) that's only ever valid to touch from gRC's render
+	// thread - the only thread that ever makes the EGL context current (see
+	// cleanupEGL()'s own comment on this same rule). Doing any of that
+	// directly in setResolution() was a silent no-op at best (GL calls
+	// issued with no context current on that thread) - confirmed as why a
+	// 2560x1440 skin rendered with completely wrong sizes/positions while
+	// 1080p ones worked fine: this canvas's *construction-time* size comes
+	// from fbClass's boot-time mode (see egl_init.cpp), which commonly
+	// happens to already be 1920x1080 - so a 1080p skin's setResolution()
+	// call matched it and hit the early-return guard, never exercising this
+	// path at all; anything else actually ran it, on the wrong thread.
+	// setResolution() now only records the request; applyPendingResolutionChange()
+	// - called from the top of flip(), on the render thread - does the real
+	// work, at most one frame later.
+	// Atomic: set on the main thread after m_pending_width/height are written, polled
+	// by the render thread at every opcode - seq_cst makes the sizes visible first.
+	std::atomic<bool> m_pending_resolution_change{false};
+	int m_pending_width = 0;
+	int m_pending_height = 0;
+	// Guards m_pending_width/height (a second setResolution() during an apply
+	// must not be seen half-written) and m_retired_pixmaps: the staging pixmap a
+	// setResolution() replaces may still be in use by the render thread, so it is
+	// parked here and only released by the render thread in
+	// applyPendingResolutionChange(), never freed under it by the main thread.
+	std::mutex m_resolution_mutex;
+	std::vector<ePtr<gPixmap>> m_retired_pixmaps;
+	void applyPendingResolutionChange();
+
+	// External screenshot support (aio-grab) - see gosd_capture.h. Only
+	// started for window-surface providers: on a pixmap-surface provider
+	// (Dreambox) the OSD already IS /dev/fb0 memory and aio-grab's own
+	// framebuffer path captures it correctly.
+	gEGLOSDCapture m_osd_capture;
+	void serviceOsdCapture();
+
+	// GPU readback into m_pixmap - see its definition (gegldc.cpp, right
+	// after serviceOsdCapture()) for why enableSpinner() needs this.
+	void captureBackgroundIntoPixmap(const eRect& rect);
+	void dumpSpinnerRestore();
+
+	// GPU-only spinner (see gEGLDC::spinnerGpuPath()): the area under the spinner is copied
+	// into a small texture once and redrawn from it (destructively, alpha included) before
+	// each icon frame and at the erase, so nothing ever goes through a CPU readback/copy.
+	bool m_spinner_gpu = false;
+	GLuint m_spinner_bg_tex = 0;
+	eRect m_spinner_gpu_rect;
+	bool spinnerGpuPath();
+	bool captureSpinnerGpu();
+	void drawSpinnerGpu(bool with_icon);
+	void releaseSpinnerGpu();
+	void clearWindowSurfaceTransparent();
+
+	// fbClass lock (ofgwrite's Mode 2 flash, see ImageManager.py) on a
+	// window-surface platform: the window surface is a separate layer
+	// composited ABOVE /dev/fb0, so ofgwrite's progress screen - drawn into
+	// fb0 - stayed hidden under enigma's last frame. While locked, flip()
+	// presents one fully transparent frame instead (m_shadow_fbo, enigma's
+	// real UI, is left untouched) and nothing else; unlock's flush then
+	// presents the preserved UI again. Only with the shadow FBO: without it
+	// the window surface's own content is the UI and clearing it would lose it.
+	bool m_lock_cleared = false;
+	static void onFramebufferLockChanged(bool locked);
+	// Wakes the render thread with a flush opcode even while locked
+	// (gPainter::flush() is suppressed then).
+	void requestFlush();
+
+	// Diagnostic only, opt-in via ENIGMA_EGL_PROFILE=1 (read once in
+	// initEGL()): one log line per flip() splitting that frame's render-thread
+	// time by where it went. CPU-side wall time - GL calls are asynchronous,
+	// so a GPU stall shows up in whichever call is forced to wait for it
+	// (buffer map, texture upload, swap), which is exactly what this is for.
+	bool m_profile = false;
+	struct FrameProfile {
+		double text_ms = 0, text_flush_ms = 0, vbo_ms = 0, atlas_ms = 0, band_ms = 0, overlay_ms = 0, other_ms = 0;
+		int text_ops = 0, text_flushes = 0, glyphs = 0, atlas_uploads = 0, atlas_rows = 0, band_uploads = 0, band_rows = 0, overlays = 0, other_ops = 0;
+		// Rectangle breakdown (see executeRectangle()): flat = basic-shader
+		// path, adv1/adv2 = advanced-shader ops drawn in 1 or 2 passes, draws =
+		// advanced-shader draw calls, adv_mpx = megapixels of clip-limited
+		// area actually shaded by the advanced shader (all passes summed).
+		int rect_flat = 0, rect_adv1 = 0, rect_adv2 = 0, rect_adv_draws = 0, rect_fast = 0;
+		double rect_adv_mpx = 0;
+	} m_prof;
+	std::chrono::steady_clock::time_point m_prof_last_flip;
+	static double msSince(const std::chrono::steady_clock::time_point& t0) {
+		return std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t0).count();
+	}
+
+	// Logical canvas size: what the skin/widgets lay out against and what every
+	// shader projection and draw coordinate is expressed in.
 	int m_width;
 	int m_height;
+
+	// Physical render size: the size of the real GL targets (viewport, shadow
+	// FBO, window surface). Identical to m_width x m_height unless the canvas
+	// is larger than the GPU's GL_MAX_TEXTURE_SIZE / GL_MAX_RENDERBUFFER_SIZE
+	// (m_max_tex_size) - e.g. a 2560x1440 skin on VideoCore IV (2048 limit) -
+	// in which case it is the same aspect ratio shrunk to fit and everything is
+	// rendered scaled by m_scale_x/y (the projection stays logical, so drawing
+	// needs no change; scissors, blits and readbacks convert). m_max_tex_size
+	// is 0 until the context is current; scale is 1.0 whenever it isn't needed.
+	int m_phys_width = 0;
+	int m_phys_height = 0;
+	float m_scale_x = 1.0f;
+	float m_scale_y = 1.0f;
+	// Where the canvas lands inside the physical surface (top-left based pixels):
+	// the whole surface unless an OSD overscan rectangle is set (setOsdRect()).
+	// m_scale_x/y then are m_content_w/h over the canvas size.
+	int m_content_x = 0, m_content_y = 0, m_content_w = 0, m_content_h = 0;
+	// Overscan rectangle, 720x576 units. Main thread writes, render thread reads.
+	std::atomic<int> m_osd_left{0}, m_osd_top{0}, m_osd_width{720}, m_osd_height{576};
+	std::atomic<bool> m_osd_dirty{false};
+	void applyViewport();
+	void applyOsdRect();
+	int m_max_tex_size = 0;
+	// The GPU's real limit, kept even when scaling is compiled out (then
+	// m_max_tex_size stays 0) - only used to say so in the log.
+	int m_gpu_max_tex = 0;
+	// The window compositor blends the surface as straight alpha, so the final
+	// present pass must un-premultiply the frame (see
+	// INativeWindowProvider::needsStraightAlphaPresent()). Forces the shader
+	// present path even where glBlitFramebuffer() exists.
+	bool m_straight_alpha_present = false;
+	float m_unpremult_power = 1.0f;
+
+	// HDR10 OSD tone curve. The Broadcom SDR-graphics-to-HDR path is a straight scaling in the PQ
+	// signal domain, which leaves the OSD far too dark in HDR10 (HLG is unaffected). When a control
+	// file (see updateToneControl()) asks for it, the final present pass maps the OSD colours through
+	// a PQ(white * v^gamma) / PQ(white) LUT instead of leaving them as plain SDR code values.
+	GLuint m_tone_lut_tex = 0;
+	bool m_tone_active = false;
+	float m_tone_white_nits = 0.0f;
+	float m_tone_gamma = 0.0f;
+	long long m_tone_stamp = -1; // mtime(ns) ^ size of the control file last read; -1 = none
+	std::chrono::steady_clock::time_point m_tone_last_poll;
+	void updateToneControl();
+	bool setToneCurve(float white_nits, float gamma);
+	bool setToneCurveHlg(float white_signal, float gamma);
+	bool applyToneSpec(const char *text, float *driver_white_nits = nullptr);
+	void disableTone();
+	bool uploadToneLut(const unsigned char *lut);
+	// Video gamma as reported by the decoder (0 SDR, 1 HDR, 2 ST2084/HDR10, 3 HLG); see
+	// setVideoGamma(). The OSD tone curve + driver gain are on only while it is 2 (HDR10).
+	static std::atomic<int> s_video_gamma;
+	static std::atomic<long long> s_video_gamma_ms; // steady-clock ms of the last gamma change
+	static std::atomic<bool> s_hdr_osd_enabled;
+	bool m_tone_seen_enabled = true;
+	int m_tone_seen_gamma = -1;                    // gamma updateToneControl() last acted on
+	static std::atomic<long long> s_hdr10_lost_ms; // steady-clock ms when gamma left 2; 0 while it is 2
+	ePtr<eTimer> m_hdr_timer;       // main thread: repaint when the HDR10-lost grace period ends
+	std::string m_tone_spec;        // spec last acted on ("" = tone off)
+	std::string m_tone_file_text;   // content of the live-tuning file ("" = none)
+	bool m_tone_gain_set = false;   // driver gain currently raised by us
+	int m_tone_kind = 0; // 0 = power curve (white nits, gamma), 1 = HLG response (white signal)
+	void releaseToneLut();
+	// Blits drawn with blending off copy straight RGBA raw; premultiply them in the
+	// shader when the frame is premultiplied for a double-alpha compositor (H17).
+	bool m_premultiply_blits = false;
+	// Raw-overwrite draws write premultiplied colour (see drawFlatRects()).
+	bool m_premultiply_overwrites = false;
+	// The size the native window/surface was created at (the canvas size at
+	// construction - egl_init.cpp hands the provider the same width/height).
+	// When the canvas has to be scaled down, a physical size equal to this is
+	// preferred (if the aspect ratio matches): the window then never needs to
+	// be resized at all, which is both the proven-working configuration and
+	// avoids depending on a platform's window-resize path.
+	int m_native_width = 0;
+	int m_native_height = 0;
+	// Diagnostic: how many of the next presented frames to log (GL/EGL error
+	// state, sizes) after a resolution change - to tell "nothing is being drawn
+	// or swapped" from "drawn fine but not shown by the compositor" from a log.
+	int m_log_frames_left = 0;
+	// Set only by updatePhysicalSize() on the render thread (never derived from
+	// m_width/m_height, which setResolution() changes on the main thread before
+	// the render thread has applied the change) - so a GPU that never hits its
+	// limit always takes the original, unscaled code paths.
+	bool m_scaled = false;
+	bool isScaled() const { return m_scaled; }
+	void updatePhysicalSize(int logical_w, int logical_h);
+
+	// Uploads the area [left, right) x [top, bottom) of the CPU text-overlay
+	// staging pixmap (m_pixmap) into its GL texture. Unscaled: full-width rows,
+	// as always (GLES2 has no GL_UNPACK_ROW_LENGTH). When that texture had to be
+	// created smaller than the pixmap (see gTextureManager::setMaxTextureSize())
+	// only the area itself is downsampled and uploaded, so the cost follows the
+	// size of what was drawn, not the width of the screen.
+	void uploadOverlayBand(GLuint tex_id, int left, int top, int right, int bottom);
+
 	int m_gles_version; // 2 or 3
 
 	gShader m_basic_shader;
@@ -162,7 +410,33 @@ private:
 	void executeBlit(const gOpcode* op);
 	void executeClear(const gOpcode* op);
 	void flushTextBatch();
+	// Draws `vertices` (glyph quads, 8 floats per vertex) with whatever
+	// texture is bound, once per m_text_batch_clip rect.
+	void drawTextVertices(const std::vector<float>& vertices);
+
+	// See flushTextBatch(): the main atlas texture is only updated before its
+	// first use in a frame; glyphs new after that come from per-flush "band"
+	// textures, deleted once the frame is presented.
+	bool m_atlas_used_this_frame = false;
+	std::vector<GLuint> m_atlas_band_textures;
+	std::vector<float> m_text_main_scratch;
+	std::vector<float> m_text_band_scratch;
+	void releaseFrameTextures();
 	void setGlScissor(const eRect& rect);
+
+	// executeFill()/executeFillRegion()/executeClear()'s plain-overwrite
+	// paths all draw one quad per (disjoint) clip.rects entry, sized to
+	// exactly that rect - so, unlike executeRectangle()'s flat branch (which
+	// draws the whole opcode area once per rect and relies on the scissor to
+	// cut it down), none of them actually need glScissor at all: the quad's
+	// own geometry already is the clip. That makes the whole loop just a
+	// pile of independent, same-blend-state quads, which is exactly what
+	// gShader::drawBatch() draws in one glDrawArrays call instead of one per
+	// rect - callers must still bracket this themselves with
+	// glDisable/glEnable(GL_BLEND) as before, since that depends on the
+	// call site (executeClear()'s erase/recomposite pass wants blend back
+	// on immediately after, for instance).
+	void drawFlatRects(const gRegion& clip, float r, float g, float b, float a);
 
 	// Shared by gOpcode::renderText and gOpcode::renderPara for whatever
 	// glyphs renderGlyph() below didn't handle (border/pre-rendered "image"
@@ -207,6 +481,13 @@ private:
 	// comment) - without composing m_spinner_pos to the real GPU surface
 	// after each of these, the spinner is drawn but never actually reaches
 	// the screen.
+	// True while m_spinner_saved holds a background captured from the
+	// *current* render target. A resolution change throws that target (and
+	// m_pixmap/its overlay texture) away, so everything saved/positioned for the
+	// old canvas is stale: restoring or recompositing it painted old-size
+	// leftovers (stripes, a shrunken spinner) over the new canvas. Render
+	// thread only (spinner ops and applyPendingResolutionChange() both run there).
+	bool m_spinner_active = false;
 	void enableSpinner() override;
 	void disableSpinner() override;
 	void incrementSpinner() override;
@@ -219,6 +500,22 @@ public:
 	// constructs gEGLDC (eInit/gEGLDCAutoInit) - EGL contexts are per-thread,
 	// and gRC::thread() is the only thread that ever issues GL draw calls.
 	static gEGLDC* getInstance() { return s_instance; }
+
+	// Decoder gamma hook (any thread): 0 SDR, 1 HDR, 2 HDR10 (ST2084), 3 HLG. While it is 2
+	// the OSD is tone-mapped and the driver's OSD gain raised ("hlg 1.1" by default, see
+	// updateToneControl()); for SDR/HLG both are off, so those UIs stay unchanged.
+	static void setVideoGamma(int gamma);
+
+	// config.usage.hdr_osd_correction (via gMainDC): master switch for the HDR10 OSD correction.
+	bool supportsHdrOsdCorrection() override;
+	void setHdrOsdCorrection(bool enable) override;
+
+	// OSD overscan adjustment (what /proc/stb/fb/dst_* does on non-EGL builds).
+	// left/top/width/height are in the same 720x576 units as config.osd.dst_*.
+	// The canvas is rendered into that rectangle of the surface (viewport +
+	// scissor offset), so it works the same for every window provider and needs
+	// no extra buffer. Callers must repaint the desktop afterwards.
+	void setOsdRect(int left, int top, int width, int height);
 
 	bool initEGL();
 
@@ -252,4 +549,23 @@ public:
 	void flip();
 	bool isInitialized() const { return m_egl_context != EGL_NO_CONTEXT; }
 	int getGLESVersion() const { return m_gles_version; }
+
+	// gDC::islocked() defaults to 0 (unlocked) and gMainDC never overrides
+	// it either - gFBDC is the only other gMainDC subclass, and it forwards
+	// to its own fbClass* (see gfbdc.h). Without this override, every
+	// gPainter call (fill/blit/renderText/flush/flip/...) skips its
+	// `if (m_dc->islocked()) return;` guard (grc.cpp) unconditionally on
+	// this backend, so fbClass::lock()/unlock() - already called by
+	// ImageManager.py bracketing ofgwrite's Mode 2 (non-active-slot, e2
+	// stays running) flash - had no effect here: enigma2 kept drawing and
+	// flipping/presenting pages throughout the flash, racing ofgwrite's own
+	// direct framebuffer writes for the same physical memory. That race is
+	// the progress-screen flicker/corruption seen after gEGLDC's earlier
+	// fix restored real triple-buffered presentPixmap() rotation (see
+	// project memory) - before that fix a leftover forceSingleBuffer flag
+	// meant some stb's never exercised multi-page presentation, so the race was
+	// latent. Forwarding to the same fbClass singleton WindowProvider
+	// already uses (see its init()) makes gEGLDC honor the same lock every
+	// other backend does, with no ofgwrite or Python-side change needed.
+	int islocked() const override;
 };

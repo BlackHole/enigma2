@@ -180,14 +180,17 @@ def loadSkin(filename, scope=SCOPE_SKIN, desktop=getDesktop(GUI_SKIN_ID), screen
 			for element in domSkin:
 				if element.tag == "screen":  # Process all screen elements.
 					name = element.attrib.get("name", None)
-					if name:  # Without a name, it's useless!
-						scrnID = element.attrib.get("id", None)
-						if scrnID is None or scrnID == screenID:  # If there is a screen ID is it for this display.
+					# "name" attribute is mandatory in <screen> elements
+					if name:
+						# "id" attribute is optional in <screen> elements, but if present the screen will  only
+						# be saved if it matches the current skin type, i.e. GUI_SKIN_ID or DISPLAY_SKIN_ID
+						if int(element.attrib.get("id", screenID)) == screenID:
 							# print("[Skin] DEBUG: Extracting screen '%s' from '%s'.  (scope='%s')" % (name, filename, scope))
 							domScreens[name] = (element, "%s/" % dirname(filename))
 				elif element.tag == "windowstyle":  # Process the windowstyle element.
 					scrnID = element.attrib.get("id", None)
-					if scrnID is not None:  # Without an scrnID, it is useless!
+					# "id" attribute is mandatory in <windowstyle> elements
+					if scrnID is not None:
 						scrnID = int(scrnID)
 						# print("[Skin] DEBUG: Processing a windowstyle ID='%s'." % scrnID)
 						domStyle = ElementTree(Element("skin"))
@@ -389,30 +392,26 @@ def parseColor(value, default=0x00FFFFFF):
 
 def parseGradient(value):
 	def validColor(value):
-		if value[0] == "#" and len(value) in (9, 7):
-			isColor = True
-		elif value in colors:
-			isColor = True
-		else:
-			isColor = False
-		return isColor
+		return (value.startswith("#") and len(value) in (9, 7)) or value in colors
 
 	data = [x.strip() for x in value.split(",")]
 	gradientColors = [gRGB(0x00000000), gRGB(0x00FFFFFF), gRGB(0x00FFFFFF)]  # Start color, center color, end color.
-	for index, color in enumerate(data):
-		if not validColor(color) or index > 2:
+	colorCount = 0
+	for color in data[:3]:
+		if not validColor(color):
 			break
-		gradientColors[index] = parseColor(color)
-	if index == 2:
+		gradientColors[colorCount] = parseColor(color)
+		colorCount += 1
+	if colorCount == 2:  # Two colors means start and end, drawRectangle treats center == end as a two color gradient.
 		gradientColors[2] = gradientColors[1]
-	argCount = len(data) - index
-	if index > 1 and argCount:
+	argCount = len(data) - colorCount
+	if colorCount > 1 and argCount:
 		options = {
 			"horizontal": eWidget.GRADIENT_HORIZONTAL,
 			"vertical": eWidget.GRADIENT_VERTICAL,
 		}
-		direction = parseOptions(options, "gradient", data[index], eWidget.GRADIENT_VERTICAL)
-		alphaBlend = int(argCount > 1 and parseBoolean("alphablend", data[index + 1]))
+		direction = parseOptions(options, "gradient", data[colorCount], eWidget.GRADIENT_VERTICAL)
+		alphaBlend = int(argCount > 1 and parseBoolean("alphablend", data[colorCount + 1]))
 	else:
 		direction = eWidget.GRADIENT_VERTICAL
 		alphaBlend = 0
@@ -479,7 +478,8 @@ def parseScrollbarMode(s):
 			"showOnDemand": eListbox.showOnDemand,
 			"showAlways": eListbox.showAlways,
 			"showNever": eListbox.showNever,
-			"showLeft": eListbox.showLeft
+			"showLeft": eListbox.showLeft,
+			"showTop": eListbox.showTop,
 		}[s]
 	except KeyError:
 		print("[Skin] Error: Invalid scrollbarMode '%s'!  Must be one of 'showOnDemand', 'showAlways', 'showNever' or 'showLeft'." % s)
@@ -562,7 +562,7 @@ class AttributeParser:
 		return int(value) if self.scaleTuple[0][0] == self.scaleTuple[0][1] else int(int(value) * self.scaleTuple[0][0] / self.scaleTuple[0][1])
 
 	def applyVerticalScale(self, value):
-		return int(value) if self.scaleTuple[0][0] == self.scaleTuple[0][1] else int(int(value) * self.scaleTuple[1][0] / self.scaleTuple[1][1])
+		return int(value) if self.scaleTuple[1][0] == self.scaleTuple[1][1] else int(int(value) * self.scaleTuple[1][0] / self.scaleTuple[1][1])
 
 	def alphaBlend(self, value):
 		self.guiObject.setWidgetAlphaBlend(parseBoolean("alphablend", value))
@@ -584,6 +584,15 @@ class AttributeParser:
 
 	def size(self, value):
 		self.guiObject.resize(eSize(*value) if isinstance(value, tuple) else parseSize(value, self.scaleTuple, self.guiObject, self.desktop))
+
+	def align(self, value):
+		self.guiObject.setAlign(value)
+
+	def spacing(self, value):
+		self.guiObject.setSpacing(int(value))
+
+	def stack(self, value):  # This is a dummy method for the parser.
+		pass
 
 	def animationPaused(self, value):
 		pass
@@ -897,7 +906,7 @@ def applyScrollbar(guiObject):
 	if scrollbarStyle is None:
 		return
 	guiObject.setScrollbarWidth(scrollbarStyle["width"])
-	if "height" in scrollbarStyle and hasattr("setScrollbarHeight", guiObject):
+	if "height" in scrollbarStyle and hasattr(guiObject, "setScrollbarHeight"):
 		guiObject.setScrollbarHeight(scrollbarStyle["height"])
 	guiObject.setScrollbarBorderWidth(scrollbarStyle["borderWidth"])
 	guiObject.setScrollbarBorderColor(scrollbarStyle["borderColor"])
@@ -1242,6 +1251,7 @@ class SizeTuple(tuple):
 
 class SkinContext:
 	def __init__(self, parent=None, pos=None, size=None, font=None):
+		self.spacing = 0
 		if parent is not None and pos is not None:
 			pos, size = parent.parse(pos, size, font)
 			self.x, self.y = pos
@@ -1358,7 +1368,8 @@ class SkinContextVertical(SkinContext):
 				self.h -= (height + self.spacing)
 				self.y += (height + self.spacing)
 			elif pos == "center":
-				pos = (left, (self.h - height) / 2)
+				originY = self.by - self.bh
+				pos = (left, originY + (self.bh - height) // 2)
 				size = (width, height)
 			else:
 				size = (width, height)
@@ -1390,7 +1401,7 @@ class SkinContextHorizontal(SkinContext):
 			top = self.y
 			positions = pos.split(",")
 			if len(positions) == 2 and positions[0] in ("left", "right") and positions[1].isdigit():
-				top += int(int(positions[1]) * self.scale[0][0] / self.scale[0][1])
+				top += int(int(positions[1]) * self.scale[1][0] / self.scale[1][1])
 				pos = positions[0]
 			if pos == "left":
 				pos = (self.x, top)
@@ -1406,7 +1417,8 @@ class SkinContextHorizontal(SkinContext):
 				size = (width, height)
 				self.w -= (width + self.spacing)
 			elif pos == "center":
-				pos = ((self.w - width) / 2, top)
+				originX = self.rx - self.rw
+				pos = (originX + (self.rw - width) // 2, top)
 				size = (width, height)
 			else:
 				size = (width, height)
@@ -1482,13 +1494,18 @@ def readSkin(screen, skin, names, desktop):
 	screen.stacks = []
 	usedComponents = set()
 
-	def processNone(widget, context):
+	def processNone(widget, context, stack=None):
 		pass
 
+	stackOrder = 0
+
 	def proccesStackAddition(widget, stack, target):
+		nonlocal stackOrder
 		if stack:
 			target.stackIndex = stack.index
-			pos = widget.attrib.get("position")
+			target.stackOrder = stackOrder  # Children must be stacked in skin (XML) order.
+			stackOrder += 1
+			pos = widget.attrib.get("position", "")
 			align = eWidget.eStackAlignNone
 			if stack.layout == 0:  # horizontal
 				if "left" in pos:
@@ -1507,7 +1524,7 @@ def readSkin(screen, skin, names, desktop):
 			target.skinAttributes.append(("align", align))
 		return target
 
-	def processWidget(widget, context):
+	def processWidget(widget, context, stack=None):
 		# Okay, we either have 1:1-mapped widgets ("old style"), or 1:n-mapped
 		# widgets (source->renderer).
 		wname = widget.attrib.get("name")
@@ -1531,6 +1548,7 @@ def readSkin(screen, skin, names, desktop):
 				raise SkinError("Component with name '%s' was not found in skin of screen '%s'" % (wname, name))
 			# assert screen[wname] is not Source
 			collectAttributes(attributes, widget, context, skinPath, ignore=("name",))
+			screen[wname] = proccesStackAddition(widget, stack, screen[wname])
 		elif wsource:
 			# print("[Skin] DEBUG: Widget source='%s'." % wsource)
 			while True:  # Get corresponding source until we found a non-obsolete source.
@@ -1551,7 +1569,7 @@ def readSkin(screen, skin, names, desktop):
 					print("[Skin] OBSOLETE SOURCE WILL BE REMOVED %s, PLEASE UPDATE!" % source.removalDate)
 					if source.description:
 						print("[Skin] Source description: '%s'." % source.description)
-					wsource = source.new_source
+					wsource = source.newSource
 				else:
 					break  # Otherwise, use the source.
 			if source is None:
@@ -1594,6 +1612,7 @@ def readSkin(screen, skin, names, desktop):
 				renderer.connect(source)  # Connect to source.
 			attributes = renderer.skinAttributes = []
 			collectAttributes(attributes, widget, context, skinPath, ignore=("render", "source"))
+			renderer = proccesStackAddition(widget, stack, renderer)
 			screen.renderer.append(renderer)
 		elif wclass:
 			try:
@@ -1616,8 +1635,9 @@ def readSkin(screen, skin, names, desktop):
 			screen[wclassname].connectRelatedElement(wconnection, screen)
 			attributes = screen[wclassname].skinAttributes = []
 			collectAttributes(attributes, widget, context, skinPath, ignore=("addon",))
+			screen[wclassname] = proccesStackAddition(widget, stack, screen[wclassname])
 
-	def processApplet(widget, context):
+	def processApplet(widget, context, stack=None):
 		try:
 			codeText = widget.text.strip()
 			widgetType = widget.attrib.get("type")
@@ -1631,19 +1651,25 @@ def readSkin(screen, skin, names, desktop):
 		else:
 			raise SkinError("Applet type '%s' is unknown" % widgetType)
 
-	def processLabel(widget, context):
+	def processLabel(widget, context, stack=None):
 		w = additionalWidget()
 		w.widget = eLabel
 		w.skinAttributes = []
 		collectAttributes(w.skinAttributes, widget, context, skinPath, ignore=("name",))
+		w = proccesStackAddition(widget, stack, w)
 		screen.additionalWidgets.append(w)
+		if stack:
+			stack.children.append(w)
 
-	def processPixmap(widget, context):
+	def processPixmap(widget, context, stack=None):
 		w = additionalWidget()
 		w.widget = ePixmap
 		w.skinAttributes = []
 		collectAttributes(w.skinAttributes, widget, context, skinPath, ignore=("name",))
+		w = proccesStackAddition(widget, stack, w)
 		screen.additionalWidgets.append(w)
+		if stack:
+			stack.children.append(w)
 
 	def processRectangle(widget, context, stack=None):
 		item = additionalWidget()
@@ -1655,26 +1681,26 @@ def readSkin(screen, skin, names, desktop):
 		if stack:
 			stack.children.append(item)
 
-	def processScreen(widget, context):
+	def processScreen(widget, context, stack=None):
 		for w in list(widget):
 			conditional = w.attrib.get("conditional")
-			if conditional and not [i for i in conditional.split(",") if i in list(screen.keys())]:
+			if conditional and not [i for i in conditional.split(",") if i in screen]:
 				continue
 			objecttypes = w.attrib.get("objectTypes", "").split(",")
-			if len(objecttypes) > 1 and (objecttypes[0] not in list(screen.keys()) or not [i for i in objecttypes[1:] if i == screen[objecttypes[0]].__class__.__name__]):
+			if len(objecttypes) > 1 and (objecttypes[0] not in screen or not [i for i in objecttypes[1:] if i == screen[objecttypes[0]].__class__.__name__]):
 				continue
 			objecttypesinverted = w.attrib.get("objectTypesInverted", "").split(",")
-			if len(objecttypesinverted) > 1 and (objecttypesinverted[0] not in list(screen.keys()) or [i for i in objecttypesinverted[1:] if i == screen[objecttypesinverted[0]].__class__.__name__]):
+			if len(objecttypesinverted) > 1 and (objecttypesinverted[0] not in screen or [i for i in objecttypesinverted[1:] if i == screen[objecttypesinverted[0]].__class__.__name__]):
 				continue
 			p = processors.get(w.tag, processNone)
 			try:
-				p(w, context)
+				p(w, context, stack)
 			except SkinError as err:
 				print("[Skin] Error in screen '%s' widget '%s' %s!" % (name, w.tag, str(err)))
 				import traceback
 				traceback.print_exc()
 
-	def processPanel(widget, context):
+	def processPanel(widget, context, stack=None):
 		n = widget.attrib.get("name")
 		if n:
 			try:
@@ -1707,7 +1733,8 @@ def readSkin(screen, skin, names, desktop):
 			contextScreen = contextClass(context, widget.attrib.get("position"), widget.attrib.get("size"), widget.attrib.get("font"))
 			spacing = widget.attrib.get("spacing")
 			if spacing:
-				contextScreen.spacing = int(spacing)
+				axisScale = contextScreen.scale[0 if item.layout == 0 else 1]  # Spacing runs along the stack's layout axis.
+				contextScreen.spacing = int(int(spacing) * axisScale[0] / axisScale[1])
 			item.index = len(screen.stacks)
 			item.skinAttributes.append(("size", (contextScreen.w, contextScreen.h)))
 			item.skinAttributes.append(("position", (contextScreen.x, contextScreen.y)))
@@ -1746,9 +1773,6 @@ def readSkin(screen, skin, names, desktop):
 		import traceback
 		traceback.print_exc()
 
-	from Components.GUIComponent import GUIComponent
-	unusedComponents = [x for x in set(screen.keys()) - usedComponents if isinstance(x, GUIComponent)]
-	assert not unusedComponents, "[Skin] The following components in '%s' don't have a skin entry: %s" % (name, ", ".join(unusedComponents))
 	# This may look pointless, but it unbinds "screen" from the nested scope. A better
 	# solution is to avoid the nested scope above and use the context object to pass
 	# things around.
@@ -1827,9 +1851,10 @@ def applySkinFactor(*d):
 	Multiply the numeric input by the skin factor
 	and return the result as an integer.
 	"""
+	factor = getSkinFactor()
 	if len(d) == 1:
-		return int(d[0] * getSkinFactor())
-	return tuple(int(value * getSkinFactor()) if isinstance(value, (int, float)) else value for value in d)
+		return int(d[0] * factor)
+	return tuple(int(value * factor) if isinstance(value, (int, float)) else value for value in d)
 
 
 def findSkinScreen(names):

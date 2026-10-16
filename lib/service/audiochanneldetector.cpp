@@ -24,12 +24,13 @@ namespace
 	// full 1MB safety margin the initial, never-yet-detected search gets.
 	const size_t MONITOR_WINDOW_BYTES = 65536;
 
-	// Generous margin covering the worst-case E-AC-3 bsi() walk (dialnorm/
-	// compr, dependent-stream chanmap, full mixing metadata, informational
-	// metadata, converter sync) before reaching addbsi - real streams rarely
-	// come close to this, but this is cheap insurance against stopping the
-	// probe just short of the Atmos flag.
-	const size_t EAC3_ATMOS_MIN_BYTES = 512;
+	// Minimum E-AC-3 window before an answer is considered complete. Must
+	// be large enough to hold two complete back-to-back syncframes (up to
+	// ~2.5KB each at 640kbps, plus an arbitrary capture start offset): the
+	// Atmos scan only trusts a flag/no-flag verdict on a frame that is
+	// immediately followed by another valid frame, which rules out stray
+	// 0x0B77 byte pairs inside compressed payload.
+	const size_t EAC3_ATMOS_MIN_BYTES = 12288;
 
 	const int AAC_CHANNELS[8] = { 0, 1, 2, 3, 4, 5, 6, 8 }; // index 7 -> 8 (7.1)
 
@@ -398,10 +399,13 @@ namespace
 	// flag_ec3_extension_type_a signals Dolby Atmos (Joint Object Coding).
 	// Same acmod/lfeon either way - this is a separate signal, not
 	// something the channel-count parser above can distinguish on its own.
-	bool parseEAC3AtmosFrame(const uint8_t *data, size_t len, unsigned int &frame_size, bool &atmos)
+	bool parseEAC3AtmosFrame(const uint8_t *data, size_t len, unsigned int &frame_size, bool &atmos,
+		unsigned int *frame_type_out = nullptr)
 	{
 		frame_size = 0;
 		atmos = false;
+		if (frame_type_out)
+			*frame_type_out = 0;
 
 		if (!data || len < 7)
 			return false;
@@ -411,6 +415,8 @@ namespace
 			return false;
 
 		unsigned int frame_type = bits.read(2);
+		if (frame_type_out)
+			*frame_type_out = frame_type;
 		unsigned int substreamid = bits.read(3);
 		frame_size = (bits.read(11) + 1) << 1;
 		unsigned int sr_code = bits.read(2);
@@ -556,33 +562,64 @@ namespace
 			if (bits.bad || addbsil > 63)
 				return false;
 
-			bits.skip(7);
-			atmos = !bits.bad && bits.read(1) != 0;
+			// Atmos (JOC) uses exactly two addbsi bytes: the extension
+			// flag (LSB of byte 0) then complexity_index_type_a (byte 1,
+			// non-zero). Checking just the flag bit also
+			// matches unrelated addbsi payloads and misaligned walks.
+			if (addbsil == 1)
+			{
+				bits.skip(7);
+				if (!bits.bad && bits.read(1) != 0)
+				{
+					unsigned int complexity = bits.read(8);
+					atmos = !bits.bad && complexity >= 1;
+				}
+			}
 		}
 
 		return !bits.bad;
 	}
 
-	// Scans the accumulated capture for any E-AC-3 sync frame carrying the
-	// Atmos flag. Unlike eServiceMP3's frame-hopping variant (which receives
-	// buffers already aligned to a frame boundary by GStreamer), our capture
-	// may start mid-frame, so this checks every candidate sync position
-	// rather than jumping by declared frame_size.
-	bool scanForAtmos(const uint8_t *data, size_t len)
+	// Scans the accumulated capture for E-AC-3 syncframes. The capture is raw
+	// demux/PES data: it may start mid-frame and has PES headers between
+	// access units, so frames are NOT necessarily back to back and no fixed
+	// spacing can be assumed. Instead of chaining on the next frame, a verdict
+	// needs two separate, non-overlapping valid frames agreeing, which a stray
+	// 0x0B77 inside compressed payload (one lone, header-valid hit at most)
+	// cannot produce.
+	//
+	// Returns: 1 = Atmos confirmed (>= 2 Atmos frames)
+	//          0 = plain DD+ confirmed (>= 2 independent frames, none Atmos)
+	//         -1 = nothing conclusive in this range
+	int scanForAtmos(const uint8_t *data, size_t len)
 	{
 		if (len < 7)
-			return false;
+			return -1;
+		unsigned int atmos_hits = 0, clean_hits = 0;
 		for (size_t pos = 0; pos + 7 <= len; ++pos)
 		{
 			if (data[pos] != 0x0B || data[pos + 1] != 0x77)
 				continue;
 
 			unsigned int frame_size = 0;
+			unsigned int frame_type = 0;
 			bool atmos = false;
-			if (parseEAC3AtmosFrame(data + pos, len - pos, frame_size, atmos) && atmos)
-				return true;
+			if (!parseEAC3AtmosFrame(data + pos, len - pos, frame_size, atmos, &frame_type))
+				continue;
+
+			if (atmos)
+				++atmos_hits;
+			else if (frame_type == 0)
+				++clean_hits;
+
+			// Valid frame: continue after it rather than scanning its payload.
+			pos += frame_size - 1;
 		}
-		return false;
+		if (atmos_hits >= 2)
+			return 1;
+		if (clean_hits >= 2 && atmos_hits == 0)
+			return 0;
+		return -1;
 	}
 }
 
@@ -675,14 +712,14 @@ void eDVBAudioChannelDetector::start(iDVBDemux *demux, int pid, int codec)
 
 	if (pid <= 0 || codec == ctUnsupported || !demux)
 	{
-		eDebug("[eDVBAudioChannelDetector] start: skipping pid=%d codec=%d (unsupported or invalid)", pid, codec);
+		eTrace("[eDVBAudioChannelDetector] start: skipping pid=%d codec=%d (unsupported or invalid)", pid, codec);
 		giveUp();
 		return;
 	}
 
 	if (demux->createPESReader(eApp, m_pes_reader) || !m_pes_reader)
 	{
-		eDebug("[eDVBAudioChannelDetector] start: createPESReader failed for pid=%d", pid);
+		eTrace("[eDVBAudioChannelDetector] start: createPESReader failed for pid=%d", pid);
 		m_pes_reader = 0;
 		giveUp();
 		return;
@@ -691,14 +728,14 @@ void eDVBAudioChannelDetector::start(iDVBDemux *demux, int pid, int codec)
 	m_pes_reader->connectRead(sigc::mem_fun(*this, &eDVBAudioChannelDetector::pesData), m_pes_conn);
 	if (m_pes_reader->start(pid))
 	{
-		eDebug("[eDVBAudioChannelDetector] start: PES reader start() failed for pid=%d", pid);
+		eTrace("[eDVBAudioChannelDetector] start: PES reader start() failed for pid=%d", pid);
 		m_pes_reader = 0;
 		m_pes_conn = 0;
 		giveUp();
 		return;
 	}
 
-	eDebug("[eDVBAudioChannelDetector] probing pid=%04x codec=%d via PES reader", pid, codec);
+	eTrace("[eDVBAudioChannelDetector] probing pid=%04x codec=%d via PES reader", pid, codec);
 	m_timeout->start(PROBE_TIMEOUT_MS, true);
 }
 
@@ -713,14 +750,14 @@ void eDVBAudioChannelDetector::startSoftCSA(eDVBSoftDecoder *soft_decoder, int p
 
 	if (pid <= 0 || codec == ctUnsupported || !soft_decoder)
 	{
-		eDebug("[eDVBAudioChannelDetector] startSoftCSA: skipping pid=%d codec=%d (unsupported or invalid)", pid, codec);
+		eTrace("[eDVBAudioChannelDetector] startSoftCSA: skipping pid=%d codec=%d (unsupported or invalid)", pid, codec);
 		giveUp();
 		return;
 	}
 
 	if (::socketpair(AF_UNIX, SOCK_STREAM, 0, m_monitor_fd) != 0)
 	{
-		eDebug("[eDVBAudioChannelDetector] startSoftCSA: socketpair() failed for pid=%d: %m", pid);
+		eTrace("[eDVBAudioChannelDetector] startSoftCSA: socketpair() failed for pid=%d: %m", pid);
 		m_monitor_fd[0] = m_monitor_fd[1] = -1;
 		giveUp();
 		return;
@@ -737,7 +774,7 @@ void eDVBAudioChannelDetector::startSoftCSA(eDVBSoftDecoder *soft_decoder, int p
 
 	if (soft_decoder->setAudioMonitorFD(m_monitor_fd[1]))
 	{
-		eDebug("[eDVBAudioChannelDetector] startSoftCSA: setAudioMonitorFD failed for pid=%d (recorder not active yet?)", pid);
+		eTrace("[eDVBAudioChannelDetector] startSoftCSA: setAudioMonitorFD failed for pid=%d (recorder not active yet?)", pid);
 		::close(m_monitor_fd[0]); m_monitor_fd[0] = -1;
 		::close(m_monitor_fd[1]); m_monitor_fd[1] = -1;
 		giveUp();
@@ -750,7 +787,7 @@ void eDVBAudioChannelDetector::startSoftCSA(eDVBSoftDecoder *soft_decoder, int p
 	CONNECT(m_notifier->activated, eDVBAudioChannelDetector::monitorData);
 	m_notifier->start();
 
-	eDebug("[eDVBAudioChannelDetector] probing pid=%04x codec=%d via SoftCSA monitor fd", pid, codec);
+	eTrace("[eDVBAudioChannelDetector] probing pid=%04x codec=%d via SoftCSA monitor fd", pid, codec);
 	m_timeout->start(PROBE_TIMEOUT_MS, true);
 }
 
@@ -773,7 +810,7 @@ void eDVBAudioChannelDetector::monitorData(int)
 			// here and leave the notifier running, it fires again
 			// immediately, forever (a busy-loop / permanent spinner). This
 			// probe can never get more data, so stop it outright.
-			eDebug("[eDVBAudioChannelDetector] monitor fd closed for pid=%04x, giving up", m_pid);
+			eTrace("[eDVBAudioChannelDetector] monitor fd closed for pid=%04x, giving up", m_pid);
 			giveUp();
 			return;
 		}
@@ -782,7 +819,7 @@ void eDVBAudioChannelDetector::monitorData(int)
 		{
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
 				return; // no data right now - wait for the next real notification
-			eDebug("[eDVBAudioChannelDetector] monitor fd read error for pid=%04x: %m", m_pid);
+			eTrace("[eDVBAudioChannelDetector] monitor fd read error for pid=%04x: %m", m_pid);
 			giveUp();
 			return;
 		}
@@ -858,7 +895,7 @@ void eDVBAudioChannelDetector::feed(const uint8_t *data, int len)
 	{
 		if (m_channels != prev_channels || m_atmos != prev_atmos)
 		{
-			eDebug("[eDVBAudioChannelDetector] %d channel(s)%s for pid=%04x (was %d%s)",
+			eTrace("[eDVBAudioChannelDetector] %d channel(s)%s for pid=%04x (was %d%s)",
 				m_channels, m_atmos ? " (Dolby Atmos)" : "", m_pid,
 				prev_channels, prev_atmos ? " (Dolby Atmos)" : "");
 			channelsDetected();
@@ -885,7 +922,7 @@ void eDVBAudioChannelDetector::feed(const uint8_t *data, int len)
 		{
 			// Initial detection never found anything in the full safety
 			// margin - give up for good, same as before.
-			eDebug("[eDVBAudioChannelDetector] giving up on pid=%04x: no valid header found in %zu bytes",
+			eTrace("[eDVBAudioChannelDetector] giving up on pid=%04x: no valid header found in %zu bytes",
 				m_pid, m_data.size());
 			// Self-teardown hazard as elsewhere - mark finished now (so
 			// further feed() calls are no-ops) but defer stop() to next tick.
@@ -907,8 +944,8 @@ bool eDVBAudioChannelDetector::settled() const
 {
 	if (m_channels <= 0)
 		return false;
-	if (m_codec == ctEAC3 && !m_atmos && m_data.size() < EAC3_ATMOS_MIN_BYTES)
-		return false; // channel count known, but give isAtmos() more data first
+	if (m_codec == ctEAC3 && m_data.size() < EAC3_ATMOS_MIN_BYTES)
+		return false; // channel count known, but give isAtmos() a full window first
 	return true;
 }
 
@@ -967,10 +1004,20 @@ void eDVBAudioChannelDetector::tryDetect()
 			break;
 		case ctEAC3:
 			channels = parseAC3EAC3(data, len, true);
-			if (!m_atmos && scanForAtmos(data, len))
 			{
-				m_atmos = true;
-				eDebug("[eDVBAudioChannelDetector] Dolby Atmos (JOC) detected for pid=%04x", m_pid);
+				// Reversible: a later window that confirms plain DD+ clears
+				// the flag again (e.g. Atmos programme -> DD+ ad break).
+				const int atmos_scan = scanForAtmos(data, len);
+				if (atmos_scan == 1 && !m_atmos)
+				{
+					m_atmos = true;
+					eTrace("[eDVBAudioChannelDetector] Dolby Atmos (JOC) detected for pid=%04x", m_pid);
+				}
+				else if (atmos_scan == 0 && m_atmos)
+				{
+					m_atmos = false;
+					eTrace("[eDVBAudioChannelDetector] Dolby Atmos (JOC) no longer present for pid=%04x", m_pid);
+				}
 			}
 			break;
 		case ctAAC:
@@ -1008,7 +1055,7 @@ void eDVBAudioChannelDetector::onTimeout()
 	// stopped producing data.
 	if (!finished())
 	{
-		eDebug("[eDVBAudioChannelDetector] probe timed out for pid=%04x after %zu bytes", m_pid, m_data.size());
+		eTrace("[eDVBAudioChannelDetector] probe timed out for pid=%04x after %zu bytes", m_pid, m_data.size());
 		m_gaveUp = true;
 	}
 	stop();

@@ -37,40 +37,60 @@ eListbox::~eListbox()
 
 void eListbox::setOrientation(int orientation)
 {
+	const bool wasVerticalBar = (m_orientation == orVertical || m_orientation == orGrid);
 	m_orientation = orientation;
+	const bool verticalBar = (m_orientation == orVertical || m_orientation == orGrid);
+	if (m_scrollbar && verticalBar != wasVerticalBar)
+		m_scrollbar->setOrientation(verticalBar ? eSlider::orVertical : eSlider::orHorizontal);
 }
 
 void eListbox::setScrollbarMode(int mode)
 {
 	m_scrollbar_mode = mode;
-	if (m_scrollbar)
+
+	if (mode == showNever)
 	{
-		if (m_scrollbar_mode == showNever)
-		{
-			delete m_scrollbar;
-			m_scrollbar=0;
-		}
+		delete m_scrollbar;
+		m_scrollbar = nullptr;
+		return;
+	}
+
+	if (m_scrollbar)
+		return;
+
+	m_scrollbar = new eSlider(this);
+	m_scrollbar->hide();
+
+	if (m_orientation == orVertical || m_orientation == orGrid)
+	{
+		m_scrollbar->setOrientation(eSlider::orVertical);
 	}
 	else
 	{
-		m_scrollbar = new eSlider(this);
-		m_scrollbar->hide();
-		if (m_orientation == orVertical || m_orientation == orGrid) {
-			m_scrollbar->setOrientation(eSlider::orVertical);
-		} else {
-			m_scrollbar->setOrientation(eSlider::orHorizontal);
-		}
-		m_scrollbar->setRange(0,100);
-		if (m_scrollbarbackgroundpixmap) m_scrollbar->setBackgroundPixmap(m_scrollbarbackgroundpixmap);
-		if (m_scrollbarpixmap) m_scrollbar->setPixmap(m_scrollbarpixmap);
-		if (m_style.m_scrollbarforeground_color_set) m_scrollbar->setForegroundColor(m_style.m_scrollbarforeground_color);
-		if (m_style.m_scrollbarbackground_color_set) m_scrollbar->setBackgroundColor(m_style.m_scrollbarbackground_color);
-		if (m_style.m_scrollbarborder_width_set)
-			m_scrollbar->setBorderWidth(m_style.m_scrollbarborder_width);
-		else
-			m_scrollbar->setBorderWidth(1);
-		if (m_style.m_scrollbarborder_color_set) m_scrollbar->setBorderColor(m_style.m_scrollbarborder_color);
+		m_scrollbar->setOrientation(eSlider::orHorizontal);
 	}
+
+	m_scrollbar->setRange(0, 100);
+
+	if (m_scrollbarbackgroundpixmap)
+		m_scrollbar->setBackgroundPixmap(m_scrollbarbackgroundpixmap);
+
+	if (m_scrollbarpixmap)
+		m_scrollbar->setPixmap(m_scrollbarpixmap);
+
+	if (m_style.m_scrollbarforeground_color_set)
+		m_scrollbar->setForegroundColor(m_style.m_scrollbarforeground_color);
+
+	if (m_style.m_scrollbarbackground_color_set)
+		m_scrollbar->setBackgroundColor(m_style.m_scrollbarbackground_color);
+
+	if (m_style.m_scrollbarborder_width_set)
+		m_scrollbar->setBorderWidth(m_style.m_scrollbarborder_width);
+	else
+		m_scrollbar->setBorderWidth(1);
+
+	if (m_style.m_scrollbarborder_color_set)
+		m_scrollbar->setBorderColor(m_style.m_scrollbarborder_color);
 }
 
 void eListbox::setWrapAround(bool state)
@@ -772,7 +792,7 @@ void eListbox::updateScrollBar()
 			else if (m_orientation == orHorizontal)
 				m_content->setSize(eSize(m_itemwidth, height));
 			else
-				m_content->setSize(eSize(m_itemwidth, m_itemwidth));
+				m_content->setSize(eSize(m_itemwidth, m_itemheight));
 
 			m_scrollbar->hide();
 		}
@@ -966,11 +986,12 @@ int eListbox::event(int event, void *data, void *data2)
 			}
 
 			// clear/repaint empty/unused space between scrollbar and listboxentrys
-			if (m_scrollbar_mode == showLeft)
+			// (showLeft/showTop always reserve the gap; on the default side it only exists while the scrollbar is shown)
+			if (m_scrollbar && !isTransparent() && (m_scrollbar_mode == showLeft || m_scrollbar_mode == showTop || m_scrollbar->isVisible()))
 			{
-				if (m_scrollbar)
+				style->setStyle(painter, eWindowStyle::styleListboxNormal);
+				if (m_scrollbar_mode == showLeft)
 				{
-					style->setStyle(painter, eWindowStyle::styleListboxNormal);
 					if (m_scrollbar->isVisible())
 					{
 						painter.clip(eRect(m_scrollbar->position() + ePoint(m_scrollbar->size().width(), 0), eSize(5,m_scrollbar->size().height())));
@@ -979,13 +1000,9 @@ int eListbox::event(int event, void *data, void *data2)
 					{
 						painter.clip(eRect(m_scrollbar->position(), eSize(m_scrollbar->size().width() + 5, m_scrollbar->size().height())));
 					}
-					painter.clear();
-					painter.clippop();
 				}
-			} else if (m_scrollbar_mode == showTop) {
-				if (m_scrollbar)
+				else if (m_scrollbar_mode == showTop)
 				{
-					style->setStyle(painter, eWindowStyle::styleListboxNormal);
 					if (m_scrollbar->isVisible())
 					{
 						painter.clip(eRect(m_scrollbar->position() + ePoint(0, m_scrollbar->size().height()), eSize(m_scrollbar->size().width(), 5)));
@@ -994,23 +1011,17 @@ int eListbox::event(int event, void *data, void *data2)
 					{
 						painter.clip(eRect(m_scrollbar->position(), eSize(m_scrollbar->size().width(), m_scrollbar->size().height() + 5)));
 					}
-					painter.clear();
-					painter.clippop();
 				}
-			}
-			else
-			{
-				if (m_scrollbar && m_scrollbar->isVisible())
+				else if (m_orientation == orVertical)
 				{
-					style->setStyle(painter, eWindowStyle::styleListboxNormal);
-					if (m_orientation == orVertical) {
-						painter.clip(eRect(m_scrollbar->position() - ePoint(5,0), eSize(5,m_scrollbar->size().height())));
-					} else {
-						painter.clip(eRect(m_scrollbar->position() - ePoint(0,5), eSize(m_scrollbar->size().width(), 5)));
-					}
-					painter.clear();
-					painter.clippop();
+					painter.clip(eRect(m_scrollbar->position() - ePoint(5,0), eSize(5,m_scrollbar->size().height())));
 				}
+				else
+				{
+					painter.clip(eRect(m_scrollbar->position() - ePoint(0,5), eSize(m_scrollbar->size().width(), 5)));
+				}
+				painter.clear();
+				painter.clippop();
 			}
 
 			return 0;
@@ -1100,7 +1111,7 @@ void eListbox::setSelectionEnable(int en)
 
 void eListbox::entryAdded(int index)
 {
-	if (m_content && (m_content->size() % m_items_per_page) == 1)
+	if (m_content && m_items_per_page && (m_content->size() % m_items_per_page) == 1)
 		m_content_changed=true;
 	/* manage our local pointers. when the entry was added before the current position, we have to advance. */
 
@@ -1143,7 +1154,7 @@ void eListbox::entryAdded(int index)
 
 void eListbox::entryRemoved(int index)
 {
-	if (m_content && !(m_content->size() % m_items_per_page))
+	if (m_content && m_items_per_page && (m_content->size() % m_items_per_page) == 1)
 		m_content_changed=true;
 
 	if (index == m_selected && m_content)
@@ -1400,6 +1411,13 @@ void eListbox::setItemCornerRadiusInternal(int radius, uint8_t edges, int index)
 {
 	m_style.m_itemCornerRadius[index] = radius;
 	m_style.m_itemCornerRadiusEdges[index] = edges;
+
+	// Per-item rounding lives entirely in m_style, never in this widget's own
+	// m_cornerRadius, so eWidgetDesktop::calcWidgetClipRegion has no way to
+	// know each row's antialiased corners need a real backdrop behind them -
+	// see setNeedsBackdrop()'s comment (ewidget.h) for what goes wrong
+	// without this.
+	setNeedsBackdrop(m_style.m_itemCornerRadius[0] != 0 || m_style.m_itemCornerRadius[1] != 0);
 }
 
 void eListbox::setItemCornerRadius(int radius, uint8_t edges)
