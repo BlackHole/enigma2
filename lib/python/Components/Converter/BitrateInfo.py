@@ -136,14 +136,22 @@ class BitrateInfo(Converter):
 	def getText(self):
 		video, audio = engine.vcur, engine.acur
 		if self.type == self.VIDEO:
-			return "%d kbit/s" % video
+			if video <= 0:
+				return ""
+			return "%d Kb/s" % video
 		if self.type == self.AUDIO:
-			return "%d kbit/s" % audio
+			if audio <= 0:
+				return ""
+			return "%d Kb/s" % audio
 		if self.type == self.VIDEO_VALUE:
+			if video <= 0:
+				return ""
 			return "%d" % video
 		if self.type == self.AUDIO_VALUE:
+			if audio <= 0:
+				return ""
 			return "%d" % audio
-		return "V: %d kbit/s  A: %d kbit/s" % (video, audio)
+		return "V: %d Kb/s  A: %d Kb/s" % (video, audio)
 
 	text = property(getText)
 
