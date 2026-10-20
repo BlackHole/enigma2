@@ -1891,6 +1891,60 @@ void eServiceMP3InfoContainer::setBuffer(GstBuffer *buffer)
 int eServiceMP3::ac3_delay = 0,
     eServiceMP3::pcm_delay = 0;
 
+/* Reduce an "&e2clearkeys=" value to clean "kid=key[,kid=key...]" pairs.
+ * The value is whatever followed the parameter in the service path, and
+ * Enigma2 can leave stray text on the end of it (e.g. "<kid>=<key>:Virgin",
+ * the first word of the channel name), which cencdec rejects as an invalid
+ * entry - with a single key that leaves it with no key at all and every sample
+ * is dropped (no picture/sound). Keep only a 32-hex KID (dashes tolerated) and
+ * the first 32 hex digits of the key, drop everything else, and lowercase the
+ * hex since cencdec looks keys up by lowercase KID. */
+static inline bool ckIsHex(char ch)
+{
+	return (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F');
+}
+
+static std::string sanitiseClearkeys(const std::string &in)
+{
+	std::string out;
+	size_t i = 0;
+	while (i <= in.size())
+	{
+		size_t e = in.find(',', i);
+		if (e == std::string::npos)
+			e = in.size();
+		size_t j = i;
+		while (j < e && (in[j] == ' ' || in[j] == '\t'))
+			++j;
+		std::string kid, key;
+		while (j < e && (ckIsHex(in[j]) || in[j] == '-'))
+		{
+			if (in[j] != '-')
+				kid += (char)((in[j] >= 'A' && in[j] <= 'F') ? in[j] + 32 : in[j]);
+			++j;
+		}
+		if (kid.size() == 32 && j < e && in[j] == '=')
+		{
+			++j;
+			while (j < e && key.size() < 32 && ckIsHex(in[j]))
+			{
+				key += (char)((in[j] >= 'A' && in[j] <= 'F') ? in[j] + 32 : in[j]);
+				++j;
+			}
+			if (key.size() == 32)
+			{
+				if (!out.empty())
+					out += ',';
+				out += kid + "=" + key;
+			}
+		}
+		if (e >= in.size())
+			break;
+		i = e + 1;
+	}
+	return out;
+}
+
 eServiceMP3::eServiceMP3(eServiceReference ref):
 	m_nownext_timer(eTimer::create(eApp)),
 	m_cuesheet_changed(0),
@@ -2011,6 +2065,17 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 		m_clearkeys = m_ref.path.substr(kstart, kend == std::string::npos ? std::string::npos : kend - kstart);
 		m_ref.path.erase(pos, kend == std::string::npos ? std::string::npos : kend - pos);
 		eDebug("[eServiceMP3] construct: e2clearkeys supplied (%zu bytes)", m_clearkeys.size());
+		{
+			const std::string cleaned = sanitiseClearkeys(m_clearkeys);
+			if (cleaned.empty())
+				eDebug("[eServiceMP3] e2clearkeys: no valid <32 hex kid>=<32 hex key> pair found, passing as given");
+			else
+			{
+				if (cleaned != m_clearkeys)
+					eDebug("[eServiceMP3] e2clearkeys cleaned (stray characters removed / hex lowercased): %zu -> %zu bytes", m_clearkeys.size(), cleaned.size());
+				m_clearkeys = cleaned;
+			}
+		}
 	}
 	pos = m_ref.path.find('#');
 	size_t pos_q = m_ref.path.find('?');
