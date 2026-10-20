@@ -29,8 +29,10 @@ import NavigationInstance
 from Components.Converter.Converter import Converter
 from Components.Element import cached
 
-# readings below this (kbit/s) are treated as gaps in the data, not as the real rate
-MIN_VALID_KBPS = 100
+# readings below this (kbit/s) are treated as gaps in the data, not as the real rate.
+# Separate limits for (video, audio): one limit of 100 hid every audio stream below 100 kbit/s
+# (normal for HE-AAC and low-rate AAC), which then showed nothing for good.
+MIN_VALID_KBPS = (100, 8)
 
 
 class BitrateEngine:
@@ -39,6 +41,7 @@ class BitrateEngine:
 		self.running = False
 		self.sref = None
 		self.pollHist = [[], []]
+		self.pollRaw = 0
 		self.vcur = 0
 		self.acur = 0
 		self.pollTimer = eTimer()
@@ -77,6 +80,7 @@ class BitrateEngine:
 		self.sref = sref
 		self.running = True
 		self.pollHist = [[], []]
+		self.pollRaw = 0
 		self.pollTimer.start(1000, False)
 
 	def stop(self):
@@ -94,6 +98,11 @@ class BitrateEngine:
 		info = service.info()
 		v = info.getInfo(iServiceInformation.sVideoBitrate)
 		a = info.getInfo(iServiceInformation.sAudioBitrate)
+		# trace of the raw values every 10 s: -1 = the service has no counter for that stream,
+		# 0 = it has one but has seen no data in the last second, otherwise the kbit/s it measured
+		self.pollRaw += 1
+		if self.pollRaw % 10 == 1:
+			print("[BitrateInfo] raw from service: video=%s audio=%s (poll %d)" % (v, a, self.pollRaw))
 		if v < 0 and a < 0:
 			return
 		# Readings below MIN_VALID_KBPS are gaps, not a rate: leave them out and average the
@@ -102,7 +111,7 @@ class BitrateEngine:
 		smooth = []
 		for idx, val in enumerate((v, a)):
 			hist = self.pollHist[idx]
-			if val >= MIN_VALID_KBPS:
+			if val >= MIN_VALID_KBPS[idx]:
 				hist.append(val)
 				del hist[:-10]
 			smooth.append(sum(hist) // len(hist) if hist else 0)
