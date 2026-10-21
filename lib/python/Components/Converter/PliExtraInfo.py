@@ -229,7 +229,7 @@ def createCurrentCaidLabel(info, currentCaid=None, currentDevice=None):
 
 	ecm_present = ecmFilePresentFor(info)
 	if not ecm_present and decodingCiSlot == -1:
-		return "FTA" if isFreeToAir(info) else ""
+		return "Free to Air" if isFreeToAir(info) else ""
 
 	if decodingCiSlot > -1 and not ecm_present:
 		return "CI%d" % (decodingCiSlot)
