@@ -430,7 +430,7 @@ AS_IF([test "x$have_gles2" = "xyes"], [
     # glBindVertexArrayOES/glGenVertexArraysOES but none of the core GLES3
     # symbols - while any GLES3/gl3.h that happens to be in the sysroot (e.g.
     # mesa's) would still turn HAVE_GLES3 on.
-    pulse4k|pulse4kmini|sf8008|gbmv200|h8se|h9combose|dagsmv200|multiboxpro|ustym4kpro)
+    pulse4k|pulse4kmini|sf8008|gbmv200|h8se|h9combose|h11|dagsmv200|multiboxpro|ustym4kpro)
       have_gles3=no
       ;;
   esac
@@ -550,9 +550,9 @@ fi
 AC_SUBST([VUPL_CFLAGS])
 AC_SUBST([VUPL_LIBS])
 
-# ABCom's pulse4k/pulse4kmini, Octagon sf8008 and GigaBlue's gbmv200 (gbip4k/gbtrio4k/gbtrio4kpro) and Zgemma/AirDigital's
-# h8se/h9combose and Qviart's dagsmv200 (all HiSilicon Hi3798MV200, ARM Mali-450 "Utgard"
-# GPU) EGL backend (see lib/gdi/egl/platform/hisi) - a real EGL window
+# ABCom's pulse4k/pulse4kmini, Octagon sf8008 and GigaBlue's gbmv200 (gbip4k/gbtrio4k/gbtrio4kpro) and 
+# Zgemma/AirDigital's h8se/h9combose/h11a and Qviart's dagsmv200 (all HiSilicon Hi3798MV200, 
+# ARM Mali-450 "Utgard" GPU) EGL backend (see lib/gdi/egl/platform/hisi) - a real EGL window
 # surface against a Mali fbdev binary driver (libMali.so, GLES 2.0 only),
 # unlike GigaBlue/VU+'s Broadcom Nexus stack above. oe-alliance-core's
 # abcom-mali-utgard.inc symlinks libMali.so onto the standard libEGL/libGLESv2
@@ -565,7 +565,7 @@ AC_SUBST([VUPL_LIBS])
 # MACHINEBUILDs actually get EGL is decided by ENABLE_E2EGL in egl-gles-extras/openbh.conf.
 hisi_mali_egl_box=no
 case "$BOXTYPE" in
-  pulse4k|pulse4kmini|sf8008|gbmv200|h8se|h9combose|dagsmv200|multiboxpro|ustym4kpro) hisi_mali_egl_box=yes ;;
+  pulse4k|pulse4kmini|sf8008|gbmv200|h8se|h9combose|h11|dagsmv200|multiboxpro|ustym4kpro) hisi_mali_egl_box=yes ;;
 esac
 AM_CONDITIONAL(HAVE_HISI_MALI_EGL, test "x$use_egl" = "xyes" -a "x$hisi_mali_egl_box" = "xyes")
 if test "x$use_egl" = "xyes" -a "x$hisi_mali_egl_box" = "xyes"; then
