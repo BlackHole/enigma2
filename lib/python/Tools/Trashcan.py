@@ -3,7 +3,7 @@ import enigma
 import time
 
 from Components.config import config
-from Components.Harddisk import findMountPoint
+from Components.Harddisk import findMountPoint, getStorageSizeBase
 import Components.Task
 
 
@@ -88,7 +88,7 @@ class Trashcan:
 			ctimeLimit = time.time() - (config.usage.movielist_trashcan_days.value * 3600 * 24)
 		else:
 			ctimeLimit = 0
-		reserveBytes = 1024 * 1024 * 1024 * int(config.usage.movielist_trashcan_reserve.value)
+		reserveBytes = getStorageSizeBase() ** 3 * int(config.usage.movielist_trashcan_reserve.value)
 		clean(ctimeLimit, reserveBytes)
 
 
@@ -163,7 +163,7 @@ class CleanTrashTask(Components.Task.PythonTask):
 				print("[Trashcan][CleanTrashTask][work] looking in trashcan", trashfolder)
 				trashsize = get_size(trashfolder)
 				diskstat = statvfs(trashfolder)
-				free = diskstat.f_bfree * diskstat.f_bsize
+				free = diskstat.f_bavail * diskstat.f_frsize
 				bytesToRemove = self.reserveBytes - free
 				print("[Trashcan][CleanTrashTask][work] " + str(trashfolder) + ": Size:", "{:,}".format(trashsize))
 				candidates = []

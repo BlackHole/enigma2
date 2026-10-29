@@ -5,7 +5,7 @@ import skin
 
 from enigma import eDVBDB, eEPGCache, setTunerTypePriorityOrder, setPreferredTuner, setSpinnerOnOff, setEnableTtCachingOnOff, eEnv, Misc_Options, eBackgroundFileEraser, eServiceEvent, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, RT_WRAP
 
-from Components.Harddisk import harddiskmanager
+from Components.Harddisk import harddiskmanager, bytesToHumanReadable
 from Components.config import config, ConfigBoolean, ConfigDictionarySet, ConfigDirectory, ConfigInteger, ConfigIP, ConfigLocations, ConfigNumber, ConfigPassword, ConfigSelection, ConfigSelectionNumber, ConfigSet, ConfigSlider, ConfigSubsection, ConfigText, ConfigYesNo, NoSave
 from Tools.camcontrol import CamControl
 from Tools.Directories import resolveFilename, SCOPE_HDD, SCOPE_TIMESHIFT, defaultRecordingLocation
@@ -35,6 +35,9 @@ def InitUsageConfig():
 	config.misc.longkey_threshold = ConfigSelection(default="4", choices=[(str(i), _("%d") % i) for i in range(1, 7)])
 
 	config.usage = ConfigSubsection()
+	config.usage.storage_size_units = ConfigSelection(default="decimal", choices=[
+		("decimal", _("Decimal (KB/MB/GB, base 1000)")),
+		("binary", _("Binary (KiB/MiB/GiB, base 1024)"))])
 	config.usage.subnetwork = ConfigYesNo(default=True)
 	config.usage.subnetwork_cable = ConfigYesNo(default=True)
 	config.usage.subnetwork_terrestrial = ConfigYesNo(default=True)
@@ -981,6 +984,10 @@ def InitUsageConfig():
 	def report_debugloglimit_change(configElement):
 		raw_stderr_print("\nCHANGE config.crash.debugloglimit=%d\n" % config.crash.debugloglimit.value)
 	config.crash.debugloglimit.addNotifier(report_debugloglimit_change, immediate_feedback=False)
+	# Keep the running debug logger's file-size limit in the selected MB/MiB units.
+	def report_storage_size_units_change(configElement):
+		raw_stderr_print("\nCHANGE config.usage.storage_size_units=%s\n" % config.usage.storage_size_units.value)
+	config.usage.storage_size_units.addNotifier(report_storage_size_units_change, immediate_feedback=False)
 	config.crash.daysloglimit = ConfigSelectionNumber(min=1, max=30, stepwidth=1, default=8, wraparound=True)
 	config.crash.sizeloglimit = ConfigSelectionNumber(min=1, max=20, stepwidth=1, default=10, wraparound=True)
 	# config.crash.logtimeformat sets ENIGMA_DEBUG_TIME environmental variable on enigma2 start from enigma2.sh
@@ -1249,8 +1256,12 @@ def InitUsageConfig():
 	)
 	config.misc.softcsa.writeBufferSize = ConfigSelection(
 		default=256,
-		choices=[(x, _("%d packets (%d kB)") % (x, x * 188 // 1024)) for x in (32, 64, 128, 256, 512, 1024)]
+		choices=[(x, _("%d packets (%s)") % (x, bytesToHumanReadable(x * 188))) for x in (32, 64, 128, 256, 512, 1024)]
 	)
+	def updateBufferSizeLabels(configElement):
+		config.misc.softcsa.writeBufferSize.setChoices(
+			[(x, _("%d packets (%s)") % (x, bytesToHumanReadable(x * 188))) for x in (32, 64, 128, 256, 512, 1024)], default=256)
+	config.usage.storage_size_units.addNotifier(updateBufferSizeLabels, initial_call=False)
 	config.misc.softcam_streamrelay_url = ConfigIP(default=[127, 0, 0, 1], auto_jump=True)
 	config.misc.softcam_streamrelay_port = ConfigInteger(default=17999, limits=(0, 65535))
 	config.misc.softcam_streamrelay_delay = ConfigSelectionNumber(min=0, max=2000, stepwidth=50, default=100, wraparound=True)

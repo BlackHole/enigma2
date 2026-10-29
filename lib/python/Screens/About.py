@@ -1,4 +1,4 @@
-from os import listdir, path as ospath, popen, statvfs
+from os import listdir, path as ospath, popen
 from platform import libc_ver
 from re import search, sub
 from requests import get
@@ -8,7 +8,8 @@ from Components.About import getBoxUptime, getCPUArch, getEnigmaUptime, getIfCon
 from Components.ActionMap import ActionMap
 from Components.Button import Button
 from Components.config import config
-from Components.Harddisk import harddiskmanager, bytesToHumanReadable
+from Components.Harddisk import harddiskmanager, bytesToHumanReadable, filesystemUsage, getBlockDeviceSizeBytes
+from Components.Label import Label
 from Components.Network import iNetwork
 from Components.NimManager import nimmanager
 from Components.Pixmap import MultiPixmap
@@ -128,9 +129,8 @@ def getprocessorTemperature():
 	return tempinfo
 
 
-def df_h(find=None, binary=False):
-
-	# Ubuntu base10/base2 units policy (since 2010): https://wiki.ubuntu.com/UnitsPolicy
+def df_h(find=None, binary=True):
+	# 'binary' remains for compatibility; all filesystem sizes use IEC units.
 
 	# Format of /proc/mounts
 	# The 1st column specifies the device that is mounted.
@@ -156,14 +156,27 @@ def df_h(find=None, binary=False):
 	for mount in open("/proc/mounts").readlines():
 		fs_spec, fs_file, fs_vfstype, fs_mntops, fs_freq, fs_passno = mount.split()
 		if True:  # fs_spec.startswith('/'):  # possible filtering here if necessary
-			r = statvfs(fs_file)
 			if find is None or find == fs_file:
-				total = r.f_bsize * r.f_blocks
-				free = r.f_bsize * r.f_bfree
-				used = total - free
-				usedpercent = "%d%%" % (100 * used // total if total else 100)  # sanity against ZeroDivisionError if total is 0
-				out.append((fs_spec, bytesToHumanReadable(int(total), binary=binary), bytesToHumanReadable(int(used), binary=binary), bytesToHumanReadable(int(free), binary=binary), usedpercent, fs_file))
+				total, used, free, percent = filesystemUsage(fs_file)
+				# Local block-device capacity must match Devices Manager;
+				# network and virtual mounts retain their filesystem totals.
+				partition_size = getBlockDeviceSizeBytes(fs_spec)
+				if partition_size is not None:
+					total = partition_size
+				usedpercent = "%d%%" % percent
+				out.append((fs_spec, bytesToHumanReadable(total), bytesToHumanReadable(used), bytesToHumanReadable(free), usedpercent, fs_file))
 	return out
+
+
+def networkBytesToDecimalBits(size_bytes):
+	# Network quantities are decimal bits, never binary storage units.
+	bits = float(size_bytes) * 8
+	units = ("b", "Kb", "Mb", "Gb", "Tb")
+	unit = 0
+	while bits >= 1000 and unit < len(units) - 1:
+		bits /= 1000
+		unit += 1
+	return ("%.0f %s" if unit == 0 else "%.2f %s") % (bits, units[unit])
 
 
 class AboutBase(TextBox, ColorizeText):
@@ -454,28 +467,28 @@ class SystemMemoryInfo(AboutBase):
 	def __init__(self, session):
 		AboutBase.__init__(self, session, labels=True)
 		self.setTitle(_("Memory"))
-		out_lines = open("/proc/meminfo").readlines()  # output is in kiB so multiply by 1024
+		out_lines = open("/proc/meminfo").readlines()  # /proc/meminfo reports KiB; convert to bytes.
 		self.AboutText = self.addColor(_("RAM")) + "\n"
 		for lidx in range(len(out_lines) - 1):
 			tstLine = out_lines[lidx].split()
 			if "MemTotal:" in tstLine:
 				MemTotal = out_lines[lidx].split()
-				self.AboutText += _("Total memory:") + "\t" + bytesToHumanReadable(int(MemTotal[1]) * 1024, binary=True) + "\n"
+				self.AboutText += _("Total memory:") + "\t" + bytesToHumanReadable(int(MemTotal[1]) * 1024) + "\n"
 			if "MemFree:" in tstLine:
 				MemFree = out_lines[lidx].split()
-				self.AboutText += _("Free memory:") + "\t" + bytesToHumanReadable(int(MemFree[1]) * 1024, binary=True) + "\n"
+				self.AboutText += _("Free memory:") + "\t" + bytesToHumanReadable(int(MemFree[1]) * 1024) + "\n"
 			if "Buffers:" in tstLine:
 				Buffers = out_lines[lidx].split()
-				self.AboutText += _("Buffers:") + "\t" + bytesToHumanReadable(int(Buffers[1]) * 1024, binary=True) + "\n"
+				self.AboutText += _("Buffers:") + "\t" + bytesToHumanReadable(int(Buffers[1]) * 1024) + "\n"
 			if "Cached:" in tstLine:
 				Cached = out_lines[lidx].split()
-				self.AboutText += _("Cached:") + "\t" + bytesToHumanReadable(int(Cached[1]) * 1024, binary=True) + "\n"
+				self.AboutText += _("Cached:") + "\t" + bytesToHumanReadable(int(Cached[1]) * 1024) + "\n"
 			if "SwapTotal:" in tstLine:
 				SwapTotal = out_lines[lidx].split()
-				self.AboutText += _("Total swap:") + "\t" + bytesToHumanReadable(int(SwapTotal[1]) * 1024, binary=True) + "\n"
+				self.AboutText += _("Total swap:") + "\t" + bytesToHumanReadable(int(SwapTotal[1]) * 1024) + "\n"
 			if "SwapFree:" in tstLine:
 				SwapFree = out_lines[lidx].split()
-				self.AboutText += _("Free swap:") + "\t" + bytesToHumanReadable(int(SwapFree[1]) * 1024, binary=True) + "\n\n"
+				self.AboutText += _("Free swap:") + "\t" + bytesToHumanReadable(int(SwapFree[1]) * 1024) + "\n\n"
 
 		flash = df_h(find="/")[0]
 
@@ -487,41 +500,39 @@ class SystemMemoryInfo(AboutBase):
 
 
 class SystemSwapsInfo(AboutBase):
-  def __init__(self, session):
-    AboutBase.__init__(self, session, labels=True)
-    self.setTitle(_("System defined swaps"))
-    self.AboutText = ""
-    self.onLayoutFinish.append(self.updateSwap)
+	def __init__(self, session):
+		AboutBase.__init__(self, session, labels=True)
+		self.setTitle(_("System swap files"))
+		self["AboutScrollLabel"] = Label("")
+		swapinfo = _("Swap Status: Disabled")
+		self.AboutText = ""
+		self.onLayoutFinish.append(self.updateSwap)
 
-  def updateSwap(self):
-    self.AboutText = ""
+	def updateSwap(self):
+		self.AboutText = ""
+		try:
+			with open("/proc/swaps", "r") as f:
+				next(f, None)
+				for line in f:
+					parts = line.split()
+					if len(parts) < 3:
+						continue
+					try:
+						device = parts[0].strip()
+						size = bytesToHumanReadable(int(parts[2].strip()) * 1024).strip()
+						used = bytesToHumanReadable(int(parts[3].strip()) * 1024).strip()
+						self.AboutText += _("Swap status: \tActive") + "\n" + _("Swap file:") + "\t" + device + "\n" + _("Swap size:") + "\t" + size + "\n" + _("Swap used:") + "\t" + used + "\n"
+					except ValueError:
+						continue
+		except (IOError, ValueError):
+			self.AboutText = _("Unable To Read Swap Information") + "\n"
+		if not self.AboutText.strip():
+			self.AboutText = _("No Active Swaps Found") + "\n"
+		from enigma import eLabel
+		if hasattr(self["AboutScrollLabel"], "instance") and self["AboutScrollLabel"].instance:
+			self["AboutScrollLabel"].instance.setHAlign(eLabel.alignLeft)
 
-    try:
-      with open("/proc/swaps", "r") as f:
-        next(f, None)  # Skip header
-
-        for line in f:
-          parts = line.split()
-          if len(parts) < 3:
-            continue
-
-          try:  # don't crash on rogue output
-            device = parts[0]
-            size_bytes = int(parts[2]) * 1024
-          except ValueError:
-            continue
-
-          size = bytesToHumanReadable(size_bytes, binary=False)
-          self.AboutText += _("%s: %s") % (device, size) + "\n"
-
-      if not self.AboutText:
-        self.AboutText = _("No active swaps found") + "\n"
-
-    except (IOError, ValueError):
-      self.AboutText = _("Unable to read swap information") + "\n"
-
-    self["AboutScrollLabel"].setText(self.AboutText)
-
+		self["AboutScrollLabel"].setText(self.AboutText)
 
 class SystemNetworkInfo(AboutBase):
 	def __init__(self, session):
@@ -613,8 +624,8 @@ class SystemNetworkInfo(AboutBase):
 			self.iface = "wlan3"
 
 		rx_bytes, tx_bytes = getIfTransferredData(self.iface)
-		self.AboutText += "\n" + _("Bytes received:") + "\t" + bytesToHumanReadable(int(rx_bytes)) + "\n"
-		self.AboutText += _("Bytes sent:") + "\t" + bytesToHumanReadable(int(tx_bytes)) + "\n"
+		self.AboutText += "\n" + _("Data received:") + "\t" + networkBytesToDecimalBits(int(rx_bytes)) + "\n"
+		self.AboutText += _("Data sent:") + "\t" + networkBytesToDecimalBits(int(tx_bytes)) + "\n"
 		for line in popen("ethtool %s |grep Speed" % self.iface, "r"):
 			line = line.strip().split(":")
 			line = line[1].replace(" ", "")

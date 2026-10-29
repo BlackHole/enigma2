@@ -413,7 +413,7 @@ class RemoveDVDFolder(Task):
 class CheckDiskspaceTask(Task):
 	def __init__(self, job):
 		Task.__init__(self, job, "Checking free space")
-		totalsize = 0  # require an extra safety 50 MB
+		totalsize = 0  # require an extra safety 50 MiB
 		maxsize = 0
 		for title in job.project.titles:
 			titlesize = title.estimatedDiskspace
@@ -422,7 +422,7 @@ class CheckDiskspaceTask(Task):
 			totalsize += titlesize
 		diskSpaceNeeded = totalsize + maxsize
 		job.estimateddvdsize = totalsize / 1024 / 1024
-		totalsize += 50 * 1024 * 1024  # require an extra safety 50 MB
+		totalsize += 50 * 1024 * 1024  # require an extra safety 50 MiB
 		self.global_preconditions.append(DiskspacePrecondition(diskSpaceNeeded))
 		self.weighting = 5
 

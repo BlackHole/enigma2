@@ -165,7 +165,7 @@ def diskFreeSpace():
 	try:
 		stat = statvfs(config.movielist.last_videodir.value)
 		percent = f"({100 * stat.f_bavail // stat.f_blocks}%)"
-		free = bytesToHumanReadable(stat.f_bfree * stat.f_bsize)
+		free = bytesToHumanReadable(stat.f_bavail * stat.f_frsize)
 		text = " ".join((free, percent, _("free diskspace")))
 	except:
 		text = ""

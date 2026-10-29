@@ -9,6 +9,7 @@ from Screens.Standby import TryQuitMainloop
 from Components.ActionMap import ActionMap
 from Components.Label import Label
 from Components.Pixmap import Pixmap
+from Components.Harddisk import bytesToHumanReadable
 from Tools.Directories import fileExists
 from os import system, listdir, remove as os_remove
 
@@ -46,6 +47,7 @@ class Bp_UsbFormat(Screen):
 		self.device = None
 		self.totalpartitions = 1
 		self.totalsize = self.p1size = self.p2size = self.p3size = self.p4size = "0"
+		self.displayCapacityBytes = 0
 		self.canclose = True
 
 	def stepOne(self):
@@ -86,7 +88,7 @@ class Bp_UsbFormat(Screen):
 	def partSize1(self, total):
 		self.totalpartitions = int(total[1])
 		if self.totalpartitions > 1:
-			self.session.openWithCallback(self.partSize2, InputBox, title=_("Enter the size in Megabytes of the first partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
+			self.session.openWithCallback(self.partSize2, InputBox, title=_("Enter the size in MiB of the first partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
 		else:
 			self.writePartFile()
 
@@ -95,7 +97,7 @@ class Bp_UsbFormat(Screen):
 			psize = "100"
 		self.p1size = psize
 		if self.totalpartitions > 2:
-			self.session.openWithCallback(self.partSize3, InputBox, title=_("Enter the size in Megabytes of the second partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
+			self.session.openWithCallback(self.partSize3, InputBox, title=_("Enter the size in MiB of the second partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
 		else:
 			self.writePartFile()
 
@@ -104,7 +106,7 @@ class Bp_UsbFormat(Screen):
 			psize = "100"
 		self.p2size = psize
 		if self.totalpartitions > 3:
-			self.session.openWithCallback(self.partSize4, InputBox, title=_("Enter the size in Megabytes of the third partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
+			self.session.openWithCallback(self.partSize4, InputBox, title=_("Enter the size in MiB of the third partition:"), windowTitle=_("Partition size"), text="1", useableChars="1234567890")
 		else:
 			self.writePartFile()
 
@@ -119,32 +121,32 @@ class Bp_UsbFormat(Screen):
 		device = "/dev/" + self.device
 		out0 = "#!/bin/sh\n\nsfdisk %s << EOF\n" % (device)
 
-		msg = _("Total Megabytes Available: \t") + str(self.totalsize)
+		msg = _("Total device capacity: \t") + bytesToHumanReadable(self.displayCapacityBytes) + "\n" + _("Partition sizes are entered in MiB.")
 		msg += _("\nPartition scheme:\n")
 		p1 = self.p1size
 		out1 = ",%sM\n" % (self.p1size)
 		if self.totalpartitions == 1:
 			p1 = str(self.totalsize)
 			out1 = ";\n"
-		msg += "%s1 \t size:%s M\n" % (device, p1)
+		msg += "%s1 \t size:%s MiB\n" % (device, p1)
 		if self.totalpartitions > 1:
 			p2 = self.p2size
 			out2 = ",%sM\n" % (self.p2size)
 			if self.totalpartitions == 2:
 				p2 = self.totalsize - int(self.p1size)
 				out2 = ";\n"
-			msg += "%s2 \t size:%s M\n" % (device, p2)
+			msg += "%s2 \t size:%s MiB\n" % (device, p2)
 		if self.totalpartitions > 2:
 			p3 = self.p3size
 			out3 = ",%sM\n" % (self.p3size)
 			if self.totalpartitions == 3:
 				p3 = self.totalsize - (int(self.p1size) + int(self.p2size))
 				out3 = ";\n"
-			msg += "%s3 \t size:%s M\n" % (device, p3)
+			msg += "%s3 \t size:%s MiB\n" % (device, p3)
 		if self.totalpartitions > 3:
 			p4 = self.totalsize - (int(self.p1size) + int(self.p2size) + int(self.p3size))
 			out4 = ";\n"
-			msg += "%s4 \t size:%s M\n" % (device, p4)
+			msg += "%s4 \t size:%s MiB\n" % (device, p4)
 		msg += _("\nWarning: all the data will be lost.\nAre you sure you want to format this device?\n")
 
 		out = open("/tmp/sfdisk.tmp", 'w')
@@ -260,9 +262,10 @@ class Bp_UsbFormat(Screen):
 			model = open(filename).read().strip()
 			filename = "/sys/block/%s/size" % (device)
 			size = int(open(filename).read().strip())
-			cap = size // 1000 * 512 // 1024
-			size = "%d.%03d GB" % (cap // 1000, cap % 1000)
-			self.totalsize = cap
+			capacity_bytes = size * 512
+			self.displayCapacityBytes = capacity_bytes
+			size = bytesToHumanReadable(capacity_bytes)
+			self.totalsize = capacity_bytes // (1024 * 1024)
 		info = _("Model: ") + vendor + " " + model + "\n" + _("Size: ") + size + "\n" + _("Device: ") + "/dev/" + device
 		return info
 

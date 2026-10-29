@@ -764,7 +764,7 @@ void eDVBSoftDecoder::updateDecoder(int vpid, int vpidtype, int pcrpid)
 					bool mpeg = (atype == eDVBServicePMTHandler::audioStream::atMPEG);
 					size_t threshold = mpeg ? eFilePushThreadRecorder::minWriteMPEG : eFilePushThreadRecorder::minWriteDefault;
 					m_record->setMinWrite(threshold);
-					eDebug("[eDVBSoftDecoder] Write threshold set to %zu KB (%s audio)",
+					eDebug("[eDVBSoftDecoder] Write threshold set to %zu KiB (%s audio)",
 						threshold >> 10, mpeg ? "MPEG" : "non-MPEG");
 				}
 #endif
@@ -905,7 +905,7 @@ int eDVBSoftDecoder::setAudioPID(int pid, int type)
 		bool mpeg = (type == eDVBServicePMTHandler::audioStream::atMPEG);
 		size_t threshold = mpeg ? eFilePushThreadRecorder::minWriteMPEG : eFilePushThreadRecorder::minWriteDefault;
 		m_record->setMinWrite(threshold);
-		eDebug("[eDVBSoftDecoder] Write threshold set to %zu KB (%s audio)",
+		eDebug("[eDVBSoftDecoder] Write threshold set to %zu KiB (%s audio)",
 			threshold >> 10, mpeg ? "MPEG" : "non-MPEG");
 	}
 #endif

@@ -646,7 +646,8 @@ class ServiceInfo(Poll, Converter):
 		return "%d" % value if value > 0 else "?"
 
 	def formatKBps(self, value):
-		return "%d kB/s" % (value // 1024)
+		# sTransferBPS is bytes/s: streaming rates use decimal kilobits.
+		return "%d Kb/s" % (value * 8 // 1000)
 
 	def iconName(self, icon):
 		return f"{self.codecIconPrefix}{icon}" if icon else ""

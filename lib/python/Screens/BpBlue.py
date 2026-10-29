@@ -13,6 +13,7 @@ from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from Components.SystemInfo import SystemInfo
 from Components.Gauge import Gauge
+from Components.Harddisk import bytesToHumanReadable, filesystemUsage, getMountedPartitionSizeBytes, getProcMounts
 from Components.Pixmap import Pixmap, MultiPixmap
 from Components.About import about
 from Components.ConfigList import ConfigListScreen
@@ -379,49 +380,32 @@ class BhsysInfo(Screen):
 		}, -1)
 
 	def updateInfo(self):
-		rc = system("df -h > /tmp/syinfo.tmp")
 		text = _("STB \n") + _("Brand:") + "\t%s\n" % (SystemInfo["displaybrand"].capitalize())
 		text += _("Model:\t%s \n") % (SystemInfo["machinename"])
 		text += _("Chipset:\t%s \n") % about.getChipSetString().upper() + "\n"
 		text += _("MEMORY\n")
-		memTotal = memFree = swapTotal = swapFree = 0
-		for line in open("/proc/meminfo", 'r'):
-			parts = line.replace("k", "K").split(':')
-			key = parts[0].strip()
-			if key == "MemTotal":
-				memTotal = parts[1].strip()
-			elif key in ("MemFree", "Buffers", "Cached"):
-				memFree += int(parts[1].strip().split(' ', 1)[0])
-			elif key == "SwapTotal":
-				swapTotal = parts[1].strip()
-			elif key == "SwapFree":
-				swapFree = parts[1].strip()
-		text += _("Total memory:") + "\t%s\n" % memTotal
-		text += _("Free memory:") + "\t%s KB\n" % memFree
-		text += _("Swap total:") + "\t%s \n" % swapTotal
-		text += _("Swap free:") + "\t%s \n" % swapFree
-		text += "\n" + _("STORAGE") + "\n"
-		f = open("/tmp/syinfo.tmp", 'r')
-		line = f.readline()
-		parts = line.split()
-		text += _("Filesystem:") + "\t" + "{0:<16}".format(parts[1]) + "{0:<15}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
-		line = f.readline()
-		parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
-		text += _("Flash:") + "\t" + "{0:<14}".format(parts[1]) + "{0:<12}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<0}".format(parts[4]) + "\n"
-		for line in f.readlines():
-			if line.find('/media/') != -1:
-				line = line.replace('/media/', '').replace('hdd', 'Hdd:').replace('usb', 'Usb:')
+		meminfo = {}
+		with open("/proc/meminfo", "r") as info:
+			for line in info:
 				parts = line.split()
-				if len(parts) == 6:
-					if line.find('Hdd:') != -1:
-						parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
-						text += _("Hdd:") + "\t" + "{0:<12}".format(parts[1]) + "{0:<12}".format(parts[2]) + "{0:<13}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
-				if len(parts) == 6:
-					if line.find('Usb:') != -1:
-						parts = line.replace('M', 'MB').replace('G', 'GB').replace('K', 'KB').split()
-						text += _("Usb:") + "\t" + "{0:<14}".format(parts[1]) + "{0:<14}".format(parts[2]) + "{0:<14}".format(parts[3]) + "{0:<14}".format(parts[4]) + "\n"
-		f.close()
-		os_remove("/tmp/syinfo.tmp")
+				if len(parts) >= 2:
+					meminfo[parts[0].rstrip(":")] = int(parts[1]) * 1024
+		text += _("Total memory:") + "\t%s\n" % bytesToHumanReadable(meminfo.get("MemTotal", 0))
+		text += _("Free memory:") + "\t%s\n" % bytesToHumanReadable(meminfo.get("MemFree", 0))
+		text += _("Swap total:") + "\t%s\n" % bytesToHumanReadable(meminfo.get("SwapTotal", 0))
+		text += _("Swap free:") + "\t%s\n" % bytesToHumanReadable(meminfo.get("SwapFree", 0))
+		text += "\n" + _("STORAGE") + "\n"
+		text += _("Filesystem:") + "\t" + "{0:<17}{1:<17}{2:<17}{3}\n".format(_("Size"), _("Used"), _("Free"), _("Use%"))
+		mounts = {item[1] for item in getProcMounts()}
+		for mount, label in (("/", _("Flash:")), ("/media/hdd", _("Hdd:")), ("/media/usb", _("Usb:")), ("/media/mmc", _("Micro SD:"))):
+			if mount not in mounts:
+				continue
+			try:
+				total, used, free, percent = filesystemUsage(mount)
+			except OSError:
+				continue
+			partition_size = getMountedPartitionSizeBytes(mount)
+			text += "%s\t%s  %s  %s  %d%%\n" % (label, bytesToHumanReadable(partition_size if partition_size is not None else total), bytesToHumanReadable(used), bytesToHumanReadable(free), percent)
 
 		text += "\n" + _("SOFTWARE") + "\n"
 		text += "Image:\t" + "OpenBh %s.%s (%s)\n" % (SystemInfo["imageversion"], SystemInfo["imagebuild"], SystemInfo["imagetype"].title())
@@ -574,22 +558,21 @@ class BhsysInfo2(Screen):
 		t1 = 0
 		t2 = 0
 
-		output = subprocess.run(['free'], encoding='utf-8', errors='ignore', capture_output=True)
-		for line in output.stdout.split("\n"):
-			parts = line.strip().split()
-			if len(parts) < 2:
-				continue
-			if parts[0] == "Mem:":
-				ramused = int((int(parts[2]) * 100) // int(parts[1]))
-				t1 += int(parts[1])
-				t2 += int(parts[2])
-			elif parts[0] == "Swap:":
-				if int(parts[1]) > 1:
-					swapused = int((int(parts[2]) * 100) // int(parts[1]))
-					t1 += int(parts[1])
-					t2 += int(parts[2])
-
-		totused = int((int(t2) * 100) // int(t1))
+		memory = {}
+		with open("/proc/meminfo", "r") as info:
+			for line in info:
+				parts = line.split()
+				if len(parts) >= 2 and parts[0] in ("MemTotal:", "MemFree:", "SwapTotal:", "SwapFree:"):
+					memory[parts[0]] = int(parts[1])
+		memtotal = memory.get("MemTotal:", 0)
+		memused = memtotal - memory.get("MemFree:", 0)
+		swaptotal = memory.get("SwapTotal:", 0)
+		swapusedbytes = swaptotal - memory.get("SwapFree:", 0)
+		ramused = (memused * 100 // memtotal) if memtotal else 0
+		swapused = (swapusedbytes * 100 // swaptotal) if swaptotal else 0
+		t1 = memtotal + swaptotal
+		t2 = memused + swapusedbytes
+		totused = (t2 * 100 // t1) if t1 else 0
 
 		self.smallmontxt += _("Ram in use: ") + str(ramused) + " %\n"
 		self.smallmontxt += _("Swap in use: ") + str(swapused) + " %\n"
@@ -599,65 +582,26 @@ class BhsysInfo2(Screen):
 		self["memtg"].setValue(int(((totused * 100) // 120) + 50))
 
 	def getSpace(self):
-		rc = system("df > /tmp/ninfo.tmp")
-
-		flused = 0
-		fltot = 0
-		flperc = 0
-		mmcused = 0
-		mmctot = 0
-		mmcperc = 0
-		usused = 0
-		ustot = 0
-		usperc = 0
-		hdused = 0
-		hdtot = 0
-		hdperc = 0
-		fperc = 0
-
-		if fileExists("/tmp/ninfo.tmp"):
-			f = open("/tmp/ninfo.tmp", 'r')
-			for line in f.readlines():
-				line = line.replace('part1', ' ')
-				parts = line.strip().split()
-				totsp = (len(parts) - 1)
-				if parts[totsp] == "/":
-					strview = parts[totsp - 1].replace('%', '')
-					if strview.isdigit():
-						flperc = int(parts[totsp - 1].replace('%', ''))
-						fltot = int(parts[totsp - 4])
-						flused = int(parts[totsp - 3])
-				if parts[totsp] == "/usr":
-					self.extendedFlash = True
-					strview = parts[totsp - 1].replace('%', '')
-					if strview.isdigit():
-						flperc = int(parts[totsp - 1].replace('%', ''))
-						fltot = int(parts[totsp - 4])
-						flused = int(parts[totsp - 3])
-				if parts[totsp] == "/media/mmc":
-					mmcperc = int(parts[totsp - 1].replace('%', ''))
-					mmctot = int(parts[totsp - 4])
-					mmcused = int(parts[totsp - 3])
-				if parts[totsp] == "/media/usb":
-					strview = parts[totsp - 1].replace('%', '')
-					if strview.isdigit():
-						usperc = int(parts[totsp - 1].replace('%', ''))
-						ustot = int(parts[totsp - 4])
-						usused = int(parts[totsp - 3])
-				if parts[totsp] == "/media/hdd":
-					strview = parts[totsp - 1].replace('%', '')
-					if strview.isdigit():
-						hdperc = int(parts[totsp - 1].replace('%', ''))
-						hdtot = int(parts[totsp - 4])
-						hdused = int(parts[totsp - 3])
-
-			f.close()
-			os_remove("/tmp/ninfo.tmp")
-
-			ftot = mmctot + ustot + hdtot
-			fused = int(mmcused) + int(usused) + int(hdused)
-			if ftot > 100:
-				fperc = (fused * 100) // ftot
+		mounted = {item[1] for item in getProcMounts()}
+		self.extendedFlash = "/usr" in mounted
+		percents = {}
+		ftot = fused = 0
+		for mount in ("/usr" if self.extendedFlash else "/", "/media/mmc", "/media/usb", "/media/hdd"):
+			if mount not in mounted:
+				continue
+			try:
+				total, used, free, percent = filesystemUsage(mount)
+			except OSError:
+				continue
+			percents[mount] = percent
+			if mount.startswith("/media/"):
+				ftot += total
+				fused += used
+		fperc = fused * 100 // ftot if ftot else 0
+		flperc = percents.get("/usr" if self.extendedFlash else "/", 0)
+		mmcperc = percents.get("/media/mmc", 0)
+		usperc = percents.get("/media/usb", 0)
+		hdperc = percents.get("/media/hdd", 0)
 
 		self.smallmontxt += _("Flash in use: ") + str(flperc) + " %\n"
 		self.smallmontxt += _("Micro SD in use: ") + str(mmcperc) + " %\n"
@@ -788,133 +732,30 @@ class BhsysInfo2(Screen):
 	def KeyGreen(self):
 		if self.moni_state == 0:
 			self.moniShow()
-		rc = system("df > /tmp/ninfo.tmp")
 		mytext = ""
-		flused = 0
-		fltot = 0
-		flperc = 0
-		mmcused = 0
-		mmctot = 0
-		mmcperc = 0
-		usused = 0
-		ustot = 0
-		usperc = 0
-		hdused = 0
-		hdtot = 0
-		hdperc = 0
-
 		mountflash = "/"
 		if self.extendedFlash == True:
 			mountflash = "/usr"
-
-		if fileExists("/tmp/ninfo.tmp"):
-			f = open("/tmp/ninfo.tmp", 'r')
-			for line in f.readlines():
-				meas = "M"
-				line = line.replace('part1', ' ')
-				parts = line.strip().split()
-				totsp = (len(parts) - 1)
-				if parts[totsp] == mountflash:
-					if flused:
-						continue
-					flused = parts[totsp - 1]
-					flperc = int(flused.replace('%', ''))
-					fltot = int(parts[totsp - 4])
-					if fltot > 1000000:
-						fltot = fltot // 1000
-						meas = "Gb"
-					capacity = "%d.%03d " % (fltot // 1000, fltot % 1000)
-					mytext += _("FLASH: ") + capacity + meas + _("   in use: ") + flused + "\n"
-					mytext += _("Total: ") + parts[totsp - 4] + _("   Used: ") + parts[totsp - 3] + _("   Free: ") + parts[totsp - 2] + "\n\n"
-					fltot = int(parts[totsp - 4])
-					flused = int(parts[totsp - 3])
-
-				if parts[totsp] == "/media/mmc":
-					if mmcused:
-						continue
-					mmcused = parts[totsp - 1]
-					mmcperc = int(mmcused.replace('%', ''))
-					mmctot = int(parts[totsp - 4])
-					if mmctot > 1000000:
-						mmctot = mmctot // 1000
-						meas = "Gb"
-					capacity = "%d.%03d " % (mmctot // 1000, mmctot % 1000)
-					mytext += ("Micro SD: ") + capacity + meas + _("   in use: ") + mmcused + "\n"
-					mytext += _("Total: ") + parts[totsp - 4] + _("   Used: ") + parts[totsp - 3] + _("   Free: ") + parts[totsp - 2] + "\n\n"
-					mmctot = int(parts[totsp - 4])
-					mmcused = int(parts[totsp - 3])
-				if parts[totsp] == "/media/usb":
-					if usused:
-						continue
-					usused = parts[totsp - 1]
-					usperc = int(usused.replace('%', ''))
-					ustot = int(parts[totsp - 4])
-					if ustot > 1000000:
-						ustot = ustot // 1000
-						meas = "Gb"
-					capacity = "%d.%03d " % (ustot // 1000, ustot % 1000)
-					mytext += _("USB: ") + capacity + meas + _("   in use: ") + usused + "\n"
-					mytext += _("Total: ") + parts[totsp - 4] + _("   Used: ") + parts[totsp - 3] + _("   Free: ") + parts[totsp - 2] + "\n\n"
-					ustot = int(parts[totsp - 4])
-					usused = int(parts[totsp - 3])
-				if parts[totsp] == "/media/hdd":
-					if hdused:
-						continue
-					strview = parts[totsp - 1].replace('%', '')
-					if strview.isdigit():
-						hdused = parts[totsp - 1]
-						hdperc = int(hdused.replace('%', ''))
-						hdtot = int(parts[totsp - 4])
-						if hdtot > 1000000:
-							hdtot = hdtot // 1000
-							meas = "Gb"
-						capacity = "%d.%03d " % (hdtot // 1000, hdtot % 1000)
-						mytext += _("HDD: ") + capacity + meas + _("   in use: ") + hdused + "\n"
-						mytext += _("Total: ") + parts[totsp - 4] + _("   Used: ") + parts[totsp - 3] + _("   Free: ") + parts[totsp - 2] + "\n\n"
-						hdtot = int(parts[totsp - 4])
-						hdused = int(parts[totsp - 3])
-
-			f.close()
-			os_remove("/tmp/ninfo.tmp")
-
-			meas = "M"
-			ftot = fltot + mmctot + ustot + hdtot
-			fused = int(flused) + int(mmcused) + int(usused) + int(hdused)
-			ffree = (ftot - fused)
-			fperc = 0
-			if ftot > 100:
-				fperc = (fused * 100) // ftot
-			if ftot > 1000000:
-				ftot = ftot // 1000
-				meas = "Gb"
-			if ftot > 1000000000:
-				ftot = ftot // 1000000
-				meas = "Tera"
-			ftot = "%d.%03d " % (ftot // 1000, ftot % 1000)
-			ftot += meas
-
-			meas = "M"
-			if fused > 1000000:
-				fused = fused // 1000
-				meas = "Gb"
-			if fused > 1000000000:
-				fused = fused // 1000000
-				meas = "Tera"
-			fused = "%d.%03d " % (fused // 1000, fused % 1000)
-			fused += meas
-
-			meas = "M"
-			if ffree > 1000000:
-				ffree = ffree // 1000
-				meas = "Gb"
-			if ffree > 1000000000:
-				ffree = ffree // 1000000
-				meas = "Tera"
-			ffree = "%d.%03d " % (ffree // 1000, ffree % 1000)
-			ffree += meas
-
-			mytext += _("Total Space: ") + ftot + _("    in use: ") + str(fperc) + "% \n"
-			mytext += _("Total: ") + ftot + _(" Used: ") + fused + _(" Free: ") + ffree
+		mounted = {item[1] for item in getProcMounts()}
+		all_total = all_used = all_free = 0
+		for mount, label in ((mountflash, _("FLASH: ")), ("/media/mmc", _("Micro SD: ")), ("/media/usb", _("USB: ")), ("/media/hdd", _("HDD: "))):
+			if mount not in mounted:
+				continue
+			try:
+				total, used, free, percent = filesystemUsage(mount)
+			except OSError:
+				continue
+			partition_size = getMountedPartitionSizeBytes(mount)
+			if partition_size is not None:
+				total = partition_size
+			all_total += total
+			all_used += used
+			all_free += free
+			mytext += label + bytesToHumanReadable(total) + _("   in use: ") + "%d%%\n" % percent
+			mytext += _("Total: ") + bytesToHumanReadable(total) + _("   Used: ") + bytesToHumanReadable(used) + _("   Free: ") + bytesToHumanReadable(free) + "\n\n"
+		if all_total:
+			mytext += _("Total Space: ") + bytesToHumanReadable(all_total) + _("    in use: ") + "%d%%\n" % (100 * all_used // all_total)
+			mytext += _("Total: ") + bytesToHumanReadable(all_total) + _(" Used: ") + bytesToHumanReadable(all_used) + _(" Free: ") + bytesToHumanReadable(all_free)
 
 		self["moni2"].setText(mytext)
 

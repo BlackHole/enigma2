@@ -368,7 +368,7 @@ void eFilePushThreadRecorder::thread()
 	ignore_but_report_signals();
 	hasStarted(); /* "start()" blocks until we get here */
 #endif
-	eDebug("[eFilePushThreadRecorder] THREAD START (min_write=%zu KB, buffersize=%zu KB)", m_buffer_min_write >> 10, m_buffersize >> 10);
+	eDebug("[eFilePushThreadRecorder] THREAD START (min_write=%zu KiB, buffersize=%zu KiB)", m_buffer_min_write >> 10, m_buffersize >> 10);
 
 #ifdef HAVE_HISILICON
 	/* we set the signal to not restart syscalls, so we can detect our signal. */

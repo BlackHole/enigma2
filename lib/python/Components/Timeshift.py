@@ -36,6 +36,7 @@ from enigma import eBackgroundFileEraser, eTimer, eServiceCenter, iServiceInform
 
 from Components.ActionMap import ActionMap, HelpableActionMap
 from Components.config import config
+from Components.Harddisk import bytesToHumanReadable
 from Components.ServiceEventTracker import ServiceEventTracker
 from Components.SystemInfo import SystemInfo, MODEL
 from Components.Task import job_manager as JobManager
@@ -734,12 +735,12 @@ class InfoBarTimeshift:
 			if not timeshift_saved:
 				try:
 					statv = statvfs(config.usage.default_path.value)
-					freespace = statv.f_bfree / 1000 * statv.f_bsize / 1000
+					freespace = statv.f_bavail * statv.f_frsize
 					randomint = randint(1, 999)
 
 					if timeshiftfile is None:
 						# Get Filesize for Free Space Check
-						filesize = int(ospath.getsize("%s%s" % (config.usage.timeshift_path.value, savefilename)) / (1024 * 1024))
+						filesize = ospath.getsize("%s%s" % (config.usage.timeshift_path.value, savefilename))
 
 						# Save Current Event by copying it to the other device
 						if filesize <= freespace:
@@ -751,7 +752,7 @@ class InfoBarTimeshift:
 							self.ptsCreateEITFile(fullname)
 					elif timeshiftfile.startswith("pts_livebuffer"):
 						# Get Filesize for Free Space Check
-						filesize = int(ospath.getsize("%s%s" % (config.usage.timeshift_path.value, timeshiftfile)) / (1024 * 1024))
+						filesize = ospath.getsize("%s%s" % (config.usage.timeshift_path.value, timeshiftfile))
 
 						# Save stored timeshift by copying it to the other device
 						if filesize <= freespace:
@@ -787,7 +788,7 @@ class InfoBarTimeshift:
 					else:
 						timeshift_saved = False
 						timeshift_saveerror1 = ""
-						timeshift_saveerror2 = _("Not enough free Diskspace!\n\nFilesize: %sMB\nFree Space: %sMB\nPath: %s" % (filesize, freespace, config.usage.default_path.value))
+						timeshift_saveerror2 = _("Not enough free Diskspace!\n\nFilesize: %s\nFree Space: %s\nPath: %s") % (bytesToHumanReadable(filesize), bytesToHumanReadable(freespace), config.usage.default_path.value)
 
 				except Exception as errormsg:
 					timeshift_saved = False

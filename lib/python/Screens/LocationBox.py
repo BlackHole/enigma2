@@ -352,7 +352,7 @@ class LocationBox(Screen, NumericalTextInput, HelpableScreen):
 				# Try to read fs stats
 				try:
 					s = statvfs(currentFolder)
-					if (s.f_bavail * s.f_bsize) / 1000000 > self.minFree:
+					if (s.f_bavail * s.f_frsize) / (1024 * 1024) > self.minFree:
 						# Automatically confirm if we have enough free disk Space available
 						return self.selectConfirmed(True)
 				except OSError:

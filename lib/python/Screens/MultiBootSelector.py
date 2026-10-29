@@ -8,7 +8,7 @@ from Components.ActionMap import HelpableActionMap
 from Components.ChoiceList import ChoiceEntryComponent, ChoiceList
 from Components.config import ConfigSelection
 from Components.Console import Console
-from Components.Harddisk import Harddisk, harddiskmanager
+from Components.Harddisk import Harddisk, harddiskmanager, bytesToHumanReadable
 from Components.Label import Label
 from Components.Sources.StaticText import StaticText
 from Components.SystemInfo import SystemInfo, getBoxDisplayName, BOXTYPE, MTDKERNEL, MTDROOTFS, UBIMB
@@ -173,9 +173,9 @@ class MultiBootSelector(Screen, HelpableScreen):
 				free = Harddisk(usb).Totalfree()
 				print("[MultiBootSelector] USB free space", free)
 				if free < 1024:
-					des = str(round((float(free)), 2)) + _("MB")
+					des = bytesToHumanReadable(free * 1024 * 1024)
 					print("[MultiBootSelector][add USB STARTUP slot] limited free space", des)
-					self.session.open(MessageBox, _("[MultiBootSelector][add USB STARTUP slots] - The USB (%s) only has %s free. At least 1024MB is required.") % (usb, des), MessageBox.TYPE_INFO, timeout=30)
+					self.session.open(MessageBox, _("[MultiBootSelector][add USB STARTUP slots] - The USB (%s) only has %s free. At least %s is required.") % (usb, des, bytesToHumanReadable(1024 ** 3)), MessageBox.TYPE_INFO, timeout=30)
 					self.cancel()
 					return
 				self.tmp_dir = tempfile.mkdtemp(prefix="MultibootSelector_addSTARTUPs")
@@ -441,7 +441,7 @@ class UBISlotManager(Setup):
 		device = self.UBISlotManagerDevice
 		PART_SUFFIX = "p" if "mmcblk" in device else ""
 		uuidRootFS = fileReadLine(f"/dev/uuid/{device}{PART_SUFFIX}2", default=None)
-		diskSize = self.partitionSizeGB(f"/dev/{device}")
+		diskSize = self.partitionSizeGiB(f"/dev/{device}")
 
 		rootfsName = "rootfs"
 		startupContent = f"kernel=/dev/{MTDKERNEL} ubi.mtd=rootfs root=ubi0:{rootfsName} flash=1 rootfstype=ubifs\n"
@@ -485,7 +485,7 @@ class UBISlotManager(Setup):
 			self.UBISlotManagerLocation.value = path
 		self.updateStatus("Selected device: %s" % self.deviceData[selection][1])
 
-	def partitionSizeGB(self, dev):
+	def partitionSizeGiB(self, dev):
 		try:
 			base = dev.replace("/dev/", "")
 			path = f"/sys/class/block/{base}/size"

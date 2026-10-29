@@ -1325,7 +1325,7 @@ void eDVBRecordFileThread::flush()
 		}
 	}
 	int bufferCount = m_aio.size();
-	eTrace("[eDVBRecordFileThread] buffer usage histogram (%d buffers of %lu kB)", bufferCount, m_buffersize>>10);
+	eTrace("[eDVBRecordFileThread] buffer usage histogram (%d buffers of %lu KiB)", bufferCount, m_buffersize>>10);
 	for (int i=0; i <= bufferCount; ++i)
 	{
 		if (m_buffer_use_histogram[i] != 0)
@@ -1344,7 +1344,7 @@ void eDVBRecordFileThread::flush()
 eDVBRecordStreamThread::eDVBRecordStreamThread(int packetsize, int buffersize, bool sync_mode) :
 	eDVBRecordFileThread(packetsize, recordingBufferCount, buffersize, sync_mode)
 {
-	eDebug("[eDVBRecordStreamThread] allocated %zu buffers of %zu kB", m_aio.size(), m_buffersize>>10);
+	eDebug("[eDVBRecordStreamThread] allocated %zu buffers of %zu KiB", m_aio.size(), m_buffersize>>10);
 }
 
 
@@ -1493,7 +1493,7 @@ eDVBRecordScrambledThread::eDVBRecordScrambledThread(int packetsize, int buffers
 	pthread_cond_init(&m_data_ready_cond, NULL);
 	// Note: s_aio_state may override sync_mode at runtime in writeData()
 	const char* mode = sync_mode ? "sync" : (s_aio_state == 0 ? "sync (AIO unavailable)" : "async");
-	eDebug("[eDVBRecordScrambledThread] %s allocated %zu buffers of %zu kB (streaming=%d)",
+	eDebug("[eDVBRecordScrambledThread] %s allocated %zu buffers of %zu KiB (streaming=%d)",
 		mode, m_aio.size(), m_buffersize>>10, is_streaming);
 }
 

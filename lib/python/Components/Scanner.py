@@ -158,7 +158,7 @@ class ScanFile:
 		self.size = size
 
 	def __repr__(self):
-		return "<ScanFile " + self.path + " (" + str(self.mimetype) + ", " + str(self.size) + " MB)>"
+		return "<ScanFile " + self.path + " (" + str(self.mimetype) + ", size=" + str(self.size) + ")>"
 
 
 def execute(option):

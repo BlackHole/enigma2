@@ -1,5 +1,5 @@
 import errno
-from os import mkdir, path, rename, statvfs, system
+from os import mkdir, path, rename, system
 import re
 
 from enigma import getDeviceDB, eTimer
@@ -9,6 +9,7 @@ from Components.Label import Label
 from Components.ConfigList import ConfigListScreen
 from Components.config import getConfigListEntry, ConfigSelection, NoSave
 from Components.Console import Console
+from Components.Harddisk import bytesToHumanReadable, filesystemUsage, getBlockDeviceSizeBytes
 from Components.Sources.List import List
 from Components.SystemInfo import SystemInfo, DISPLAYBRAND, MACHINENAME, MODEL, UBIMB
 from Screens.MessageBox import MessageBox
@@ -153,20 +154,10 @@ def buildPartitionInfo(partition, partitionList):
 	print(f"[MountManager1][buildPartitionInfo] mediamount:{mediamount}")
 	if mediamount == "/" and SystemInfo["HasKexecMultiboot"]:
 		return
-	if mediamount == _("None") or mediamount is None:
-		description = _("Size: ") + _("unavailable")
-	else:
-		stat = statvfs(mediamount)
-		# print("[MountManager1]mediamount: %s" % mediamount)
-		size = (stat.f_blocks * stat.f_bsize) / (1000 * 1000)  # get size in MB
-		if size < 1:  # is condition ever fulfilled?
-			description = _("Size: unavailable")
-		if size < 1000:
-			description = _("Size: %sMB") % str(int(size))
-		elif size < 1000 * 1000:
-			description = _("Size: %sGB") % format(size / 1000, '.2f')
-		else:
-			description = _("Size: %sTB") % format(size / (1000 * 1000), '.2f')
+	size = getBlockDeviceSizeBytes("/dev/" + partition)
+	if size is None and mediamount not in (_("None"), None):
+		size = filesystemUsage(mediamount)[0]
+	description = _("Size: %s") % bytesToHumanReadable(size) if size is not None else _("Size: unavailable")
 
 	if SystemInfo["MountManager"]:  # called by OBHevicesPanel else DeviceMountSetup
 		if rw.startswith("rw"):

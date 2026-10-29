@@ -1,10 +1,9 @@
-from os import popen, statvfs
+from os import popen
 
 from Components.Converter.Converter import Converter
 from Components.Element import cached
 from Components.Converter.Poll import Poll
-
-SIZE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB']
+from Components.Harddisk import bytesToHumanReadable, filesystemUsage, getMountedPartitionSizeBytes
 
 
 class LayoutInfo(Poll, Converter):
@@ -161,27 +160,16 @@ class LayoutInfo(Poll, Converter):
 		result = [0, 0, 0, 0]
 		if isMountPoint():
 			try:
-				st = statvfs(path)
-			except:
-				st = None
-			if st is not None and 0 not in (st.f_bsize, st.f_blocks):
-				result[0] = st.f_bsize * st.f_blocks
-				result[2] = st.f_bsize * st.f_bavail
-				result[1] = result[0] - result[2]
-				result[3] = result[1] * 100 // result[0]
+				result = list(filesystemUsage(path))
+				partition_size = getMountedPartitionSizeBytes(path)
+				if partition_size is not None:
+					result[0] = partition_size
+			except OSError:
+				pass
 		return result
 
 	def getSizeStr(self, value, u=0):
-		fractal = 0
-		if value >= 1024:
-			fmt = '%(size)u.%(frac)d %(unit)s'
-			while value >= 1024 and u < len(SIZE_UNITS):
-				value, mod = divmod(value, 1024)
-				fractal = mod * 10 // 1024
-				u += 1
-		else:
-			fmt = '%(size)u %(unit)s'
-		return fmt % {'size': value, 'frac': fractal, 'unit': SIZE_UNITS[u]}
+		return bytesToHumanReadable(value)
 
 	def doSuspend(self, suspended):
 		if suspended:

@@ -1,8 +1,10 @@
 #define PNG_SKIP_SETJMP_CHECK
 #include <png.h>
 #include <fcntl.h>
+#include <stdio.h>
 
 #include <lib/base/cfile.h>
+#include <lib/base/nconfig.h>
 #include <lib/base/estring.h>
 #include <lib/base/wrappers.h>
 #include <lib/gdi/picexif.h>
@@ -30,7 +32,22 @@ static std::string getSize(const char* file)
 	struct stat64 s = {};
 	if (stat64(file, &s) < 0)
 		return "";
-	return std::to_string((long)(s.st_size / 1024)) + " kB";
+	// Match Components.Harddisk.bytesToHumanReadable and the current user setting.
+	const bool binary = eConfigManager::getConfigValue("config.usage.storage_size_units") == "binary";
+	static const char *decimalUnits[] = {"B", "KB", "MB", "GB", "TB", "PB", "EB"};
+	static const char *binaryUnits[] = {"B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB"};
+	const char **units = binary ? binaryUnits : decimalUnits;
+	const double base = binary ? 1024.0 : 1000.0;
+	double size = static_cast<double>(s.st_size);
+	size_t unit = 0;
+	while (size >= base && unit < 6)
+	{
+		size /= base;
+		++unit;
+	}
+	char output[64];
+	snprintf(output, sizeof(output), unit ? "%.2f %s" : "%.0f %s", size, units[unit]);
+	return output;
 }
 
 static int convert_8Bit_to_24Bit(Cfilepara *filepara, unsigned char *dest)

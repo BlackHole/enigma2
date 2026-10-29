@@ -10,9 +10,12 @@ from Components.Pixmap import Pixmap
 from Components.ConfigList import ConfigListScreen
 from Components.config import getConfigListEntry, ConfigSelection, NoSave
 from Components.SystemInfo import SystemInfo
+from Components.Harddisk import bytesToHumanReadable, getBlockDeviceSizeBytes, getSwapSizeChoices
 from Tools.LoadPixmap import LoadPixmap
 from Tools.Directories import fileExists, pathExists, createDir, resolveFilename, SCOPE_CURRENT_SKIN
 from os import system, listdir, remove as os_remove, rename as os_rename, stat as os_stat
+from os.path import getsize, isfile, join, lexists
+from shlex import quote
 from enigma import eTimer
 import stat
 
@@ -106,13 +109,8 @@ class DeliteDevicesPanel(Screen):
 		return model
 
 	def get_Dsize(self, device, partition):
-		size = "0"
-		filename = "/sys/block/%s/%s/size" % (device, partition)
-		if fileExists(filename):
-			size = int(open(filename).read().strip())
-			cap = size / 1000 * 512 / 1000
-			size = "%d.%03d GB" % (cap / 1000, cap % 1000)
-		return size
+		capacity = getBlockDeviceSizeBytes("/dev/%s" % partition)
+		return bytesToHumanReadable(capacity if capacity is not None else 0)
 
 	def get_Dtype(self, device):
 		pixpath = resolveFilename(SCOPE_CURRENT_SKIN, "")
@@ -246,37 +244,59 @@ class BlackPoleSwap(Screen):
 
 	def updateSwap(self):
 		self.swap_file = ""
-		swapinfo = _("Swap status: disabled")
+		self.swap_active = False
+		swapinfo = _("Swap status: Disabled")
 		f = open("/proc/swaps", 'r')
 		for line in f.readlines():
 			if line.find('swapfile') != -1:
 				parts = line.split()
 				self.swap_file = parts[0].strip()
-				size = int(parts[2].strip()) / 1024
-				swapinfo = _("Swap status: active\nSwap file: %s \nSwap size: %d M \nSwap used: %s Kb") % (self.swap_file, size, parts[3].strip())
+				self.swap_active = True
+				size = bytesToHumanReadable(int(parts[2].strip()) * 1024)
+				used = bytesToHumanReadable(int(parts[3].strip()) * 1024)
+				swapinfo = _("Swap status: Active\nSwap file: %s \nSwap size: %s \nSwap used: %s") % (self.swap_file, size, used)
+				break
 
 		f.close()
+		if not self.swap_file:
+			# Swapfiles that are not active are not listed in /proc/swaps.
+			with open("/proc/mounts", 'r') as mounts:
+				for line in mounts:
+					parts = line.split()
+					if len(parts) < 3 or not parts[1].startswith('/media/') or not parts[2].startswith('ext'):
+						continue
+					candidate = join(parts[1].replace('\\040', ' '), 'swapfile')
+					if isfile(candidate):
+						self.swap_file = candidate
+						swapinfo = _("Swap status: Disabled\nSwap file: %s\nSwap size: %s") % (candidate, bytesToHumanReadable(getsize(candidate)))
+						break
 		self["lab1"].setText(swapinfo)
 
 	def keyYellow(self):
 		if self.swap_file:
-			cmd = "swapoff %s" % self.swap_file
-			rc = system(cmd)
+			if self.swap_active and system("swapoff %s" % quote(self.swap_file)) != 0:
+				self.session.open(MessageBox, _("Unable to stop the swapfile; it has not been deleted."), MessageBox.TYPE_ERROR)
+				self.updateSwap()
+				return
 			try:
-				out = open("/etc/init.d/bh_swap", "w")
-				strview = "#!/bin/sh\n\nexit 0"
-				out.write(strview)
-				out.close()
+				os_remove(self.swap_file)
+			except OSError as error:
+				self.session.open(MessageBox, _("Unable to delete the swapfile: %s") % error, MessageBox.TYPE_ERROR)
+				self.updateSwap()
+				return
+			try:
+				with open("/etc/init.d/bh_swap", "w") as out:
+					out.write("#!/bin/sh\n\nexit 0")
 				system("chmod 0755 /etc/init.d/bh_swap")
-			except:
-				pass
+			except OSError as error:
+				self.session.open(MessageBox, _("Swapfile deleted, but autostart could not be updated: %s") % error, MessageBox.TYPE_ERROR)
 			self.updateSwap()
 		else:
-			self.session.open(MessageBox, _("Swap already disabled."), MessageBox.TYPE_INFO)
+			self.session.open(MessageBox, _("No swapfile found."), MessageBox.TYPE_INFO)
 
 	def keyGreen(self):
 		if self.swap_file:
-			self.session.open(MessageBox, _("Swap file is active.\nRemove it before to create a new swap space."), MessageBox.TYPE_INFO)
+			self.session.open(MessageBox, _("A swapfile already exists.\nRemove it before creating a new one."), MessageBox.TYPE_INFO)
 		else:
 			options = []
 			f = open("/proc/mounts", 'r')
@@ -296,20 +316,30 @@ class BlackPoleSwap(Screen):
 	def selectSize(self, device):
 		if device:
 			self.new_swap = device[1] + "/swapfile"
-			options = [['16 MB', '16384'], ['32 MB', '32768'], ['64 MB', '65536'], ['128 MB', '131072'], ['256 MB', '262144'], ['512 MB', '524288'], ['1 GB', '1048576'], ['2 GB', '2097152']]
+			options = getSwapSizeChoices((16, 32, 64, 128, 256, 512, 1024, 2048))
 			self.session.openWithCallback(self.swapOn, ChoiceBox, title=_("Select the Swap File Size:"), list=options)
 
 	def swapOn(self, size):
 		if size:
-			cmd = "dd if=/dev/zero of=%s bs=1024 count=%s 2>/dev/null" % (self.new_swap, size[1])
+			if lexists(self.new_swap):
+				self.session.open(MessageBox, _("A swapfile already exists at this location. It will not be overwritten."), MessageBox.TYPE_INFO)
+				return
+			size_megabytes, base = size[1]
+			# dd writes exactly size_megabytes * base ** 2 bytes.
+			cmd = "dd if=/dev/zero of=%s bs=%d count=%d 2>/dev/null" % (quote(self.new_swap), base, size_megabytes * base)
 			rc = system(cmd)
 			if rc == 0:
-				cmd = "mkswap %s" % (self.new_swap)
+				cmd = "mkswap %s" % quote(self.new_swap)
 				rc = system(cmd)
-				cmd = "swapon %s" % (self.new_swap)
-				rc = system(cmd)
+				if rc != 0:
+					self.session.open(MessageBox, _("Swap File creation Failed. Check for available space."), MessageBox.TYPE_INFO)
+					return
+				cmd = "swapon %s" % quote(self.new_swap)
+				if system(cmd) != 0:
+					self.session.open(MessageBox, _("Swap File could not be activated."), MessageBox.TYPE_INFO)
+					return
 				out = open("/etc/init.d/bh_swap", "w")
-				strview = "#!/bin/sh\nmkswap " + self.new_swap + "\nswapon " + self.new_swap + "\nexit 0"
+				strview = "#!/bin/sh\nmkswap " + quote(self.new_swap) + "\nswapon " + quote(self.new_swap) + "\nexit 0"
 				out.write(strview)
 				out.close()
 				system("chmod 0755 /etc/init.d/bh_swap")

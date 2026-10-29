@@ -7,6 +7,7 @@ from Components.ActionMap import ActionMap
 from Components.Button import Button
 from Components.config import config, configfile
 from Components.FileList import FileList, MultiFileSelectList
+from Components.Harddisk import bytesToHumanReadable, getStorageSizeBase
 from Components.GUIComponent import GUIComponent
 from Components.Label import Label
 from Components.MenuList import MenuList
@@ -72,7 +73,7 @@ class LogManagerPoller:
 
 	def JobTrash(self):
 		ctimeLimit = time() - (config.crash.daysloglimit.value * 3600 * 24)
-		allowedBytes = 1024 * 1024 * int(config.crash.sizeloglimit.value)
+		allowedBytes = getStorageSizeBase() ** 2 * int(config.crash.sizeloglimit.value)
 
 		mounts = []
 		matches = []
@@ -451,12 +452,7 @@ class LogInfo(VariableText, GUIComponent):
 
 		if self.type == self.USED:
 			try:
-				if total_size < 10000000:
-					total_size = "%d kB" % (total_size >> 10)
-				elif total_size < 10000000000:
-					total_size = "%d MB" % (total_size >> 20)
-				else:
-					total_size = "%d GB" % (total_size >> 30)
+				total_size = bytesToHumanReadable(total_size)
 				self.setText(_("Space used:") + " " + total_size)
 			except:
 				# occurs when f_blocks is 0 or a similar error

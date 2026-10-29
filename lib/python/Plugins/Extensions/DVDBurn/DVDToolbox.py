@@ -4,7 +4,7 @@ from Components.Sources.StaticText import StaticText
 from Components.Sources.Progress import Progress
 from Components.Task import Task, Job, job_manager, Condition
 from Components.ScrollLabel import ScrollLabel
-from Components.Harddisk import harddiskmanager
+from Components.Harddisk import harddiskmanager, bytesToHumanReadable
 from Components.Console import Console
 from Plugins.SystemPlugins.Hotplug.plugin import hotplugNotifier
 
@@ -135,13 +135,13 @@ class DVDToolbox(Screen):
 			self["key_yellow"].text = ""
 		percent = 100 * used / (capacity or 1)
 		if capacity > 4600:
-			self["space_label"].text = "%d / %d MB" % (used, capacity) + " (%.2f%% " % percent + _("of a DUAL layer medium used.") + ")"
+			self["space_label"].text = "%s / %s (%.2f%% %s)" % (bytesToHumanReadable(used * 1048576), bytesToHumanReadable(capacity * 1048576), percent, _("dual layer"))
 			self["space_bar"].value = int(percent)
 		elif capacity > 1:
-			self["space_label"].text = "%d / %d MB" % (used, capacity) + " (%.2f%% " % percent + _("of a SINGLE layer medium used.") + ")"
+			self["space_label"].text = "%s / %s (%.2f%% %s)" % (bytesToHumanReadable(used * 1048576), bytesToHumanReadable(capacity * 1048576), percent, _("single layer"))
 			self["space_bar"].value = int(percent)
 		elif capacity == 1 and used > 0:
-			self["space_label"].text = "%d MB " % used + _("on READ ONLY medium.")
+			self["space_label"].text = bytesToHumanReadable(used * 1048576) + " " + _("on READ ONLY medium.")
 			self["space_bar"].value = int(percent)
 		else:
 			self["space_label"].text = _("Medium is not a writeable DVD!")
@@ -149,7 +149,7 @@ class DVDToolbox(Screen):
 		free = capacity - used
 		if free < 2:
 			free = 0
-		self["info"].text = "Media-Type:\t\t%s\nFree capacity:\t\t%d MB" % (mediatype or "NO DVD", free)
+		self["info"].text = "Media-Type:\t\t%s\nFree capacity:\t\t%s" % (mediatype or "NO DVD", bytesToHumanReadable(free * 1048576))
 
 	def exit(self):
 		del self.Console

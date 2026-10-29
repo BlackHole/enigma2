@@ -239,7 +239,7 @@ class OpenBhBackupManager(Screen):
 				self["lab1"].setText(_("The chosen location does not exist, using /media/hdd.") + "\n" + _("Select a backup to restore:"))
 			else:
 				s = statvfs(config.backupmanager.backuplocation.value)
-				self["lab1"].setText(_("Device: ") + path.normpath(config.backupmanager.backuplocation.value) + " - " + _("Free space:") + " " + bytesToHumanReadable(s.f_bsize * s.f_bavail) + "\n" + _("Select a backup to restore:"))
+				self["lab1"].setText(_("Device: ") + path.normpath(config.backupmanager.backuplocation.value) + " - " + _("Free space:") + " " + bytesToHumanReadable(s.f_frsize * s.f_bavail) + "\n" + _("Select a backup to restore:"))
 			self.BackupDirectory = path.join(config.backupmanager.backuplocation.value, "backup", "")
 			try:
 				if not path.exists(self.BackupDirectory):
@@ -1103,8 +1103,8 @@ class BackupFiles(Screen):
 			print("[BackupManager] Device: " + path.normpath(self.BackupDevice) + ", i don't seem to have write access to this device.")
 
 		s = statvfs(self.BackupDevice)
-		free = (s.f_bsize * s.f_bavail) // (1024 * 1024)
-		if int(free) < 50:
+		free = s.f_frsize * s.f_bavail
+		if free < 50 * 1024 * 1024:
 			self.session.open(MessageBox, _("The backup location does not have enough free space."), MessageBox.TYPE_INFO, timeout=10)
 		else:
 			self.Stage1Complete()

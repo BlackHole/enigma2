@@ -15,6 +15,7 @@ from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from Components.Sources.Progress import Progress
 from Components.Label import MultiColorLabel
+from Components.Harddisk import bytesToHumanReadable
 from Components.SystemInfo import getBoxDisplayName
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 
@@ -319,7 +320,7 @@ class TitleList(Screen, HelpableScreen):
 		print("updateSize:", size, "MAX_DL:", MAX_DL, "MAX_SL:", MAX_SL)
 		if size > MAX_DL:
 			percent = 100 * size / float(MAX_DL)
-			self["space_label_dual"].text = "%d MB (%.2f%%)" % (size, percent)
+			self["space_label_dual"].text = "%s (%.2f%%)" % (bytesToHumanReadable(self.project.size), percent)
 			self["space_bar_dual"].value = int(percent)
 			self["space_bar_single"].value = 100
 			self["space_label_single"].text = ""
@@ -329,21 +330,21 @@ class TitleList(Screen, HelpableScreen):
 				self.session.open(MessageBox, text=_("Exceeds dual layer medium!"), type=MessageBox.TYPE_ERROR)
 		elif size > MAX_SL:
 			percent = 100 * size / float(MAX_DL)
-			self["space_label_dual"].text = "%d MB (%.2f%%)" % (size, percent)
+			self["space_label_dual"].text = "%s (%.2f%%)" % (bytesToHumanReadable(self.project.size), percent)
 			self["space_bar_dual"].value = int(percent)
 			self["space_bar_single"].value = 100
 			self["space_label_single"].text = ""
-			self["medium_label"].setText(_("Required medium type:") + " " + _("DUAL LAYER DVD") + ", %d MB " % (MAX_DL - size) + _("free"))
+			self["medium_label"].setText(_("Required medium type:") + " " + _("DUAL LAYER DVD") + ", %s " % bytesToHumanReadable((MAX_DL - size) * 1048576) + _("free"))
 			self["medium_label"].setForegroundColorNum(1)
 			if self.previous_size < MAX_SL:
 				self.session.open(MessageBox, text=_("Your collection exceeds the size of a single layer medium, you will need a blank dual layer DVD!"), timeout=10, type=MessageBox.TYPE_INFO)
 		elif size < MAX_SL:
 			percent = 100 * size / float(MAX_SL)
-			self["space_label_single"].text = "%d MB (%.2f%%)" % (size, percent)
+			self["space_label_single"].text = "%s (%.2f%%)" % (bytesToHumanReadable(self.project.size), percent)
 			self["space_bar_single"].value = int(percent)
 			self["space_bar_dual"].value = 0
 			self["space_label_dual"].text = ""
-			self["medium_label"].setText(_("Required medium type:") + " " + _("SINGLE LAYER DVD") + ", %d MB " % (MAX_SL - size) + _("free"))
+			self["medium_label"].setText(_("Required medium type:") + " " + _("SINGLE LAYER DVD") + ", %s " % bytesToHumanReadable((MAX_SL - size) * 1048576) + _("free"))
 			self["medium_label"].setForegroundColorNum(0)
 		self.previous_size = size
 

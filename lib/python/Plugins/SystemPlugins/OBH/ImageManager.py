@@ -321,7 +321,7 @@ class OpenBhImageManager(Screen):
 				self["lab1"].setText(_("The chosen location does not exist, using /media/hdd.") + "\n" + _("Select an image to flash."))
 			else:
 				s = statvfs(config.imagemanager.backuplocation.value)
-				self["lab1"].setText(_("Device: ") + path.normpath(config.imagemanager.backuplocation.value) + " - " + _("Free space:") + " " + bytesToHumanReadable(s.f_bsize * s.f_bavail) + "\n" + _("Select an image to flash."))
+				self["lab1"].setText(_("Device: ") + path.normpath(config.imagemanager.backuplocation.value) + " - " + _("Free space:") + " " + bytesToHumanReadable(s.f_frsize * s.f_bavail) + "\n" + _("Select an image to flash."))
 			self.BackupDirectory = path.join(config.imagemanager.backuplocation.value, "imagebackups", "")
 			try:
 				if not path.exists(self.BackupDirectory):
@@ -754,7 +754,7 @@ class OpenBhImageManager(Screen):
 			"\n\n" +
 			_("The image will then be downloaded to the 'Backup location'."),
 			"\n\n" +
-			_("Please note, images are large, generally over 100 MB so downloading over a slow or unstable connection is prohibitive."),
+			_("Please note, images are large, generally over %s so downloading over a slow or unstable connection is prohibitive.") % bytesToHumanReadable(100 * 1024 * 1024),
 			"\n\n" +
 			_("Also, instead of downloading, it is possible to send a zipped image to the 'Backup location' by FTP."),
 			"\n\n\n" +
@@ -1089,11 +1089,11 @@ class ImageBackup(Screen):
 			print("[ImageManager] Device: " + self.BackupDevice + ", I don't seem to have write access to this device.")
 
 		s = statvfs(self.BackupDevice)
-		free = (s.f_bsize * s.f_bavail) // (1024 * 1024)
-		if int(free) < 200:
+		free = s.f_frsize * s.f_bavail
+		if free < 200 * 1024 * 1024:
 			AddPopupWithCallback(
 				self.BackupComplete,
-				_("The backup location does not have enough free space.") + "\n" + (_("%s only has %s MB free.") % (self.BackupDevice, str(free))),
+				_("The backup location does not have enough free space.") + "\n" + (_("%s only has %s free.") % (self.BackupDevice, bytesToHumanReadable(free))),
 				MessageBox.TYPE_INFO,
 				10,
 				"RamCheckFailedNotification"

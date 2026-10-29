@@ -492,13 +492,14 @@ class DiskspacePrecondition(Condition):
 	def check(self, task):
 		try:
 			s = statvfs(task.job.workspace)
-			self.diskspace_available = s.f_bsize * s.f_bavail
+			self.diskspace_available = s.f_frsize * s.f_bavail
 			return self.diskspace_available >= self.diskspace_required
 		except OSError:
 			return False
 
 	def getErrorMessage(self, task):
-		return _("Not enough disk space. Please free up some disk space and try again. (%d MB required, %d MB available)") % (self.diskspace_required // 1024 // 1024, self.diskspace_available // 1024 // 1024)
+		from Components.Harddisk import bytesToHumanReadable
+		return _("Not enough disk space. Please free up some disk space and try again. (%s required, %s available)") % (bytesToHumanReadable(self.diskspace_required), bytesToHumanReadable(self.diskspace_available))
 
 
 class ToolExistsPrecondition(Condition):

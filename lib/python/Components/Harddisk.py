@@ -161,16 +161,79 @@ def addInstallTask(job, package):
 	task.args.append(package)
 
 
-def bytesToHumanReadable(size_bytes, binary=False):
-	# input is bytes, convert from KB, MB before use.
-	size_units = ("B", "kB", "MB", "GB", "TB")
-	base = 1024 if binary else 1000
-	i = 0
-	L = len(size_units) - 1
-	while i < L and size_bytes >= base:
+def getStorageSizeBase():
+	# Read the live setting each time so all screens use the same selection.
+	# The default also applies during startup before UsageConfig is initialised.
+	try:
+		from Components.config import config
+		return 1024 if config.usage.storage_size_units.value == "binary" else 1000
+	except AttributeError:
+		return 1000
+
+
+def getStorageSizeUnit(power):
+	units = ("B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB") if getStorageSizeBase() == 1024 else ("B", "KB", "MB", "GB", "TB", "PB", "EB")
+	return units[power]
+
+
+def bytesToHumanReadable(size_bytes, binary=None):
+	# The legacy 'binary' argument is available to external callers, but our
+	# storage/RAM screens never override the global user preference.
+	base = getStorageSizeBase() if binary is None else (1024 if binary else 1000)
+	size_units = ("B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB") if base == 1024 else ("B", "KB", "MB", "GB", "TB", "PB", "EB")
+	size_bytes = float(size_bytes)
+	unit = 0
+	while abs(size_bytes) >= base and unit < len(size_units) - 1:
 		size_bytes /= base
-		i += 1
-	return ("%.2f %s" if i != 0 and size_bytes < 10 else "%.0f %s") % (size_bytes, size_units[i])
+		unit += 1
+	return "%d B" % int(size_bytes) if unit == 0 else "%.2f %s" % (size_bytes, size_units[unit])
+
+
+def getSwapSizeChoices(sizes):
+	# A menu choice represents whole MB or MiB, not a fixed number of KiB.
+	# Retain the selected base in its callback value so it cannot change
+	# between showing the choice and creating the swapfile.
+	base = getStorageSizeBase()
+	return [[bytesToHumanReadable(size * base * base, binary=(base == 1024)), (size, base)] for size in sizes]
+
+
+def getBlockDeviceSizeBytes(device):
+	# Block-device capacity is reported in 512-byte sectors by sysfs, whether
+	# the device is mounted or not.  Do not substitute filesystem capacity.
+	if not device or not device.startswith("/dev/"):
+		return None
+	name = realpath(device).rsplit("/", 1)[-1]
+	try:
+		with open(join("/sys/class/block", name, "size"), "r") as fd:
+			return int(fd.read().strip()) * 512
+	except (IOError, OSError, ValueError):
+		return None
+
+
+def getMountedPartitionSizeBytes(mountpoint):
+	# Resolve the exact backing partition without affecting network/virtual
+	# mounts.  These have no local block-device capacity and return None.
+	mountpoint = mountpoint.rstrip("/") or "/"
+	try:
+		with open("/proc/mounts", "r") as fd:
+			for line in fd:
+				parts = line.split()
+				if len(parts) >= 2 and parts[1].replace("\\040", " ") == mountpoint:
+					return getBlockDeviceSizeBytes(parts[0])
+	except (IOError, OSError):
+		pass
+	return None
+
+
+def filesystemUsage(path):
+	# Total, used and available bytes as shown on all filesystem screens.
+	# f_bavail is space usable by the current user (unlike reserved f_bfree).
+	info = statvfs(path)
+	block_bytes = info.f_frsize or info.f_bsize
+	total = info.f_blocks * block_bytes
+	free = info.f_bavail * block_bytes
+	used = total - free
+	return total, used, free, (100 * used // total if total else 0)
 
 
 class Harddisk:
@@ -248,29 +311,33 @@ class Harddisk:
 		# print(f"[Harddisk][port] portDescription:{portDescription}")
 		return portDescription
 
-	def diskSize(self):
-		# output in MB
+	def diskSizeBytes(self):
+		# Use the source's exact byte count; sysfs block sizes are 512-byte sectors.
+		data = readFile(self.sysfsPath("size"))
+		if data is not None:
+			return int(data) * 512
+		# Only fall back to the filesystem if the block device has no sysfs size.
 		dev = self.findMount()
 		if dev:
 			try:
 				stat = statvfs(dev)
-				# print(f"[Harddisk][diskSize]: stat.f_blocks: {stat.f_blocks} stat.f_bsize: {stat.f_bsize}")
-				cap = int((stat.f_blocks * stat.f_bsize) / 1000 / 1000)
+				cap = stat.f_blocks * stat.f_frsize
 			except (IOError, OSError) as err:
 				print(f"[Harddisk][diskSize] Error: Failed to get disk size for '{dev}':", err)
 				cap = 0
 		else:
-			data = readFile(self.sysfsPath("size"))
-			if data is not None:
-				cap = int(int(data) / 1000 * 512 / 1024)
-			else:
-				cap = 0
+			cap = 0
 		return cap
 
+	def diskSize(self):
+		# Legacy numeric API: whole MiB (formerly decimal MB).
+		return self.diskSizeBytes() // (1024 * 1024)
+
 	def capacity(self):
-		cap = self.diskSize()  # cap is in MB
-		cap *= 1000000  # convert to MB to bytes
-		return bytesToHumanReadable(cap)
+		# HDDList and HarddiskSetup describe the whole physical device.
+		# Filesystem capacity can be smaller and is zero on unformatted disks.
+		device_bytes = getBlockDeviceSizeBytes(self.dev_path)
+		return bytesToHumanReadable(device_bytes if device_bytes is not None else self.diskSizeBytes())
 
 	def model(self):
 		data = None
@@ -297,14 +364,13 @@ class Harddisk:
 		# print("[Harddisk][free]dev:", dev)
 		if dev:
 			try:
-				stat = statvfs(dev)
-				return (stat.f_bfree / 1000) * (stat.f_bsize / 1000)
+				return filesystemUsage(dev)[2] / (1024 * 1024)
 			except (IOError, OSError) as err:
 				print(f"[Harddisk][free] Error: Failed to get free space for '{dev}' :", err)
 		return -1
 
 	def totalFree(self):
-		# output in MB
+		# Output in MiB, matching free() and MultiBootSelector.
 		mediapath = []
 		freetot = 0
 		# print("[Harddisk][totalFree]self.dev_path:", self.dev_path)
@@ -638,14 +704,14 @@ class Partition:
 	def free(self):
 		try:
 			status = self.stat()
-			return status.f_bavail * status.f_bsize
+			return status.f_bavail * status.f_frsize
 		except (IOError, OSError):
 			return None
 
 	def total(self):
 		try:
 			status = self.stat()
-			return status.f_blocks * status.f_bsize
+			return status.f_blocks * status.f_frsize
 		except (IOError, OSError):
 			return None
 

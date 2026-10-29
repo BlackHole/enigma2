@@ -320,7 +320,7 @@ class RecordTimerEntry(TimerEntry):
 			return False
 
 		s = statvfs(dirname)
-		if (s.f_bavail * s.f_bsize) // 1000000 < 1024:
+		if (s.f_bavail * s.f_frsize) < (1024 ** 3):
 			self.log(0, "Not enough free space to record")
 			return False
 		else:

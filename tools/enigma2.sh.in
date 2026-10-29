@@ -83,6 +83,13 @@ if grep -q 'config\.crash\.logtimeformat' @sysconfdir@/enigma2/settings; then
 	export ENIGMA_DEBUG_TIME=`grep "config\.crash\.logtimeformat" @sysconfdir@/enigma2/settings | sed -E "s/^.*=(.*)$/\1/" -`
 fi
 
+# Read storage units once for both core dumps and the debug logger.
+# The default when no setting exists is decimal MB/GB.
+storage_size_units=`awk -F= '
+ BEGIN{res="decimal"};
+ $1 == "config.usage.storage_size_units" {res=$2; exit};
+ END{print res}' @sysconfdir@/enigma2/settings`
+
 # Enable generation of core dumps
 debug_dir=$(sed -n 's/config.crash.debug_path=//p' @sysconfdir@/enigma2/settings)
 	[ -n "${debug_dir}" -a -d "${debug_dir}" ] || debug_dir=/home/root/logs/
@@ -91,12 +98,23 @@ debug_dir=$(sed -n 's/config.crash.debug_path=//p' @sysconfdir@/enigma2/settings
 # The kernel.core_pattern could be set via /etc/sysctl.conf.
 # The size limit could be set via /etc/security/limits.conf.
 if [ "$(grep -i config.crash.coredump=true @sysconfdir@/enigma2/settings)" != "" ]; then
-	COREDUMPSIZE=$((10 * 512 * 4 - 1 * 512 * 4)) # size is in blocks (512 byte) so this sets 10 MB - 1 MB for log files
-	COREDUMPFILE=${debug_dir}%t-enigma2-core.dump
-	if [ "$(grep -i config.crash.sizeloglimit= @sysconfdir@/enigma2/settings | sed 's/config.crash.sizeloglimit=//g')" != "" ]; then
-		COREDUMPSIZE=$(grep -i config.crash.sizeloglimit= @sysconfdir@/enigma2/settings | sed 's/config.crash.sizeloglimit=//g')
-		COREDUMPSIZE=$((${COREDUMPSIZE} * 512 * 4 - 1 * 512 * 4))
+	COREDUMP_LIMIT=`awk -F= '
+ BEGIN{res=10};
+ $1 == "config.crash.sizeloglimit" {res=$2; exit};
+ END{print res}' @sysconfdir@/enigma2/settings`
+	case "$COREDUMP_LIMIT" in
+		''|*[!0-9]*) COREDUMP_LIMIT=10 ;;
+	esac
+	if [ "$COREDUMP_LIMIT" -lt 1 ]; then
+		COREDUMP_LIMIT=1
 	fi
+	# Reserve one MB/MiB for logs. Bash ulimit -c uses 1024-byte blocks.
+	if [ "$storage_size_units" = "binary" ]; then
+		COREDUMPSIZE=$(((COREDUMP_LIMIT - 1) * 1024))
+	else
+		COREDUMPSIZE=$(((COREDUMP_LIMIT - 1) * 1000 * 1000 / 1024))
+	fi
+	COREDUMPFILE=${debug_dir}%t-enigma2-core.dump
 	echo ${COREDUMPFILE} > /proc/sys/kernel/core_pattern
 	ulimit -c ${COREDUMPSIZE}
 fi
@@ -192,11 +210,15 @@ EOP
 
 # Set a new file-size limit
 # We MUST ensure that this is ONLY set for the dblogger - NOT enigma2!!!
-# ulimit uses 1024-byte units, so we must multiply the configured limit
-# (in MB) by 1024
+# ulimit uses 1024-byte blocks. Decimal MB limits must be rounded down
+# to whole blocks so the file never exceeds the selected byte limit.
 #
     new_limit() {
-        lim=$(($1 * 1024))
+        if [ "$storage_size_units" = "binary" ]; then
+            lim=$(($1 * 1024))
+        else
+            lim=$(($1 * 1000 * 1000 / 1024))
+        fi
         ulimit -S -f $lim
     }
 
@@ -242,6 +264,7 @@ EOP
 # handled them above, so set flags to ignore them the first time.
 #
         first_limit=1   # Not yet seen
+        first_units=1   # Initial notifier repeats the setting read above
         first_lpath=1   # Not yet seen
 
         echo "========== Enigma2 log starts =========="
@@ -264,6 +287,15 @@ EOP
                 else
                     debugloglimit=`echo $line |
                          sed -e's/^.*config.crash.debugloglimit=//'`
+                    new_limit $debugloglimit
+                fi
+                ;;
+            CHANGE\ config.usage.storage_size_units=*)
+                if [ $first_units -eq 1 ]; then
+                    first_units=0
+                else
+                    storage_size_units=`echo $line |
+                         sed -e's/^.*config.usage.storage_size_units=//'`
                     new_limit $debugloglimit
                 fi
                 ;;

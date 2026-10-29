@@ -1,13 +1,15 @@
 from os import system, stat as mystat, path, remove
 from glob import glob
 import stat
+import re
 
 from enigma import eTimer
 
 from Components.config import config, configfile, ConfigSubsection, ConfigYesNo
 from Components.ActionMap import ActionMap
 from Components.Console import Console
-from Components.Harddisk import harddiskmanager, getProcMounts
+from Components.Harddisk import harddiskmanager, getProcMounts, bytesToHumanReadable, getSwapSizeChoices
+from shlex import quote
 from Components.Label import Label
 from Components.Pixmap import Pixmap
 from Components.Sources.StaticText import StaticText
@@ -27,6 +29,17 @@ if config.obhsettings.swapautostart.value:
 	config.obhsettings.swapautostart.save()
 # end: temp code
 startswap = None
+
+
+def partedSizeToHumanReadable(size):
+	# parted's plain kB/MB/GB values are decimal, unlike /proc/swaps.
+	match = re.fullmatch(r"(\d+(?:\.\d+)?)(B|kB|MB|GB|TB|KiB|MiB|GiB|TiB)", size)
+	if match:
+		unit = match.group(2)
+		base = 1024 if "iB" in unit else 1000
+		power = {"B": 0, "kB": 1, "MB": 2, "GB": 3, "TB": 4, "KiB": 1, "MiB": 2, "GiB": 3, "TiB": 4}[unit]
+		return bytesToHumanReadable(float(match.group(1)) * base ** power)
+	return size
 
 
 def SwapAutostart(reason, session=None, **kwargs):
@@ -194,13 +207,14 @@ class OpenBhSwap(Screen):
 				parts = line.strip().split()
 				# print("[SwapManager][updateSwap2] parts = ", parts, "   ", parts[3])
 				self.swap_Pname = line.strip().split(" ", 1)[-1]
-				self.Pswapsize = parts[3]
+				self.Pswapsize = partedSizeToHumanReadable(parts[3])
 				if self.swap_Pname == "sfdisk:":
 					self.swap_Pname = ""
 				f = open("/proc/swaps", "r")
 				for line2 in f.readlines():
 					parts = line2.strip().split()
 					if line2.find("partition") != -1:
+						self.Pswapsize = bytesToHumanReadable(int(parts[2]) * 1024)
 						if "mmc" in parts[0]:
 							self.MMCdevice = True
 							self.swap_Pname = parts[0]
@@ -248,17 +262,7 @@ class OpenBhSwap(Screen):
 
 		f.close()
 		if self.swap_Fname:
-			self.swapsize = int(self.Fswapsize)
-			if self.swapsize > 0:
-				if self.swapsize >= 1024:
-					self.swapsize = self.swapsize // 1000
-					if self.swapsize >= 1024:
-						self.swapsize = self.swapsize // 1000
-					self.swapsize = str(self.swapsize) + " " + "MB"
-				else:
-					self.swapsize = str(self.swapsize) + " " + "KB"
-			else:
-				self.swapsize = ""
+			self.swapsize = bytesToHumanReadable(self.Fswapsize) if self.Fswapsize > 0 else ""
 		elif self.swap_Pname:
 			self.swapsize = self.Pswapsize					# picked up from parted command
 		self["labsize"].setText(self.swapsize)
@@ -353,20 +357,23 @@ class OpenBhSwap(Screen):
 	def doCSname(self, name):
 		if name:
 			self.new_name = name[1]
-			myoptions = [[_("8 Mb"), "8192"], [_("16 Mb"), "16384"], [_("32 Mb"), "32768"], [_("64 Mb"), "65536"], [_("96 Mb"), "98304"], [_("128 Mb"), "131072"], [_("256 Mb"), "262144"], [_("512 Mb"), "524288"], [_("756 Mb"), "774144"], [_("1024 Mb"), "1048576"]]
+			myoptions = getSwapSizeChoices((8, 16, 32, 64, 96, 128, 256, 512, 756, 1024))
 			self.session.openWithCallback(self.doCSsize, ChoiceBox, title=_("Select the SWAP file size:"), list=myoptions)
 
 	def doCSsize(self, swapsize):
 		if swapsize:
+			myfile = path.join(self.new_name, "swapfile")
+			if path.lexists(myfile):
+				self.session.open(MessageBox, _("A swapfile already exists at this location. It will not be overwritten."), MessageBox.TYPE_INFO)
+				return
 			self["actions"].setEnabled(False)
 			scanning = _("Wait please while creating SWAP file...")
 			self["lab1"].setText(scanning)
 			self["lab1"].show()
-			swapsize = swapsize[1]
-			myfile = self.new_name + "swapfile"
+			size_megabytes, base = swapsize[1]
 			self.commands = []
-			self.commands.append("dd if=/dev/zero of=" + myfile + " bs=1024 count=" + swapsize + " 2>/dev/null")
-			self.commands.append("mkswap " + myfile)
+			self.commands.append("dd if=/dev/zero of=%s bs=%d count=%d 2>/dev/null" % (quote(myfile), base, size_megabytes * base))
+			self.commands.append("mkswap " + quote(myfile))
 			self.Console.eBatch(self.commands, self.updateSwap, debug=True)
 
 	def autoSsWap(self):
