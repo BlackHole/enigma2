@@ -957,15 +957,15 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		["MiniDlna UPnP Server", "enigma2-plugin-extensions-dlnaserver"],
 		]
 
-		if SystemInfo["boxtype"] in ("vuduo", "vuuno", "vuultimo", "vuzero", "vusolo2", "vusolose", "vuduo2"):
+		if SystemInfo["boxtype"] in ("vuultimo", "vuzero", "vusolo2", "vusolose", "vuduo2"):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv"])
 		elif SystemInfo["model"] in ("gb7252", "vuduo4klite"):
 			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-webkit"])
-		elif SystemInfo["brand"] == "vuplus" and SystemInfo["boxtype"] != "vusolo":
+		elif SystemInfo["brand"] == "vuplus":
 			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-webkithbbtv"])
-		elif SystemInfo["brand"] not in ("vuplus", "abcom", "airdigital", "maxytec") and SystemInfo["boxtype"] not in ("sfx6008", "sfx6018"):
+		elif SystemInfo["brand"] not in ("vuplus", "abcom", "airdigital", "maxytec"):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-webkit"])
 		elif SystemInfo["brand"] == "abcom" or SystemInfo["boxtype"] in ("zgemmah8se", "zgemmah9twinse", "zgemmah11s"):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-openhbbtvbrowser"])
@@ -973,9 +973,6 @@ class BhSpeedUp(Screen, ConfigListScreen):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-gb"])
 		elif SystemInfo["boxtype"] in ("zgemmah7", "zgemmah17twin", "novaler4kpro"):
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-hbbtv-qt"])
-
-		if SystemInfo["boxtype"] not in ("vusolo", "vuduo", "vuultimo", "vuuno", "vuzero", "zgemmah82h", "sfx6008", "sfx6018"):
-			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-stbkodilauncher"])
 
 		if CHIPSET in ("hi3798mv200", "hi3798mv200h", "hi3798mv200advca", "hi3798mv300"):
 			self.pluglist.append(["Chromium2 (Netflix, YoutubeTV, Dazn, Prime Video, Disney +)", "enigma2-plugin-extensions-chromium2"])
