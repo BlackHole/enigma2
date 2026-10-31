@@ -69,14 +69,14 @@ class VideoSetup(Setup):
 			self.list.append(getConfigListEntry(_("Allow 10bit"), config.av.allow_10bit, _("Enable or Disable the 10 Bit Color Mode")))
 		if config.usage.setup_level.index >= 1:
 			if SystemInfo["CanDownmixAC3"]:
-				if SystemInfo["Vu_EAC3_fix"]:
+				if SystemInfo["model"] not in ("gb7252", "vuduo4klite"):
 					self.list.append(getConfigListEntry(_("AC3 / AC3+ Downmix"), config.av.downmix_ac3, _("Choose whether multi channel AC3 / AC3+ sound tracks should be downmixed to stereo.")))
 				else:
 					self.list.append(getConfigListEntry(_("AC3 Downmix"), config.av.downmix_ac3, _("Choose whether multi channel AC3 sound tracks should be downmixed to stereo.")))
 			if SystemInfo["CanDownmixAC3Plus"]:
 				self.list.append(getConfigListEntry(_("AC3+ Downmix"), config.av.downmix_ac3plus, _("Choose whether multi channel AC3+ sound tracks should be downmixed to stereo.")))
 			if SystemInfo["CanDownmixAAC"]:
-				if SystemInfo["Vu_EAC3_fix"]:
+				if SystemInfo["model"] not in ("gb7252", "vuduo4klite"):
 					self.list.append(getConfigListEntry(_("AAC / AAC+ Downmix"), config.av.downmix_aac, _("Choose whether multi channel AAC / AAC+ sound tracks should be downmixed to stereo.")))
 				else:
 					self.list.append(getConfigListEntry(_("AAC Downmix"), config.av.downmix_aac, _("Choose whether multi channel AAC sound tracks should be downmixed to stereo.")))
@@ -88,9 +88,9 @@ class VideoSetup(Setup):
 				self.list.append(getConfigListEntry(_("DTS-HD MA/HR Downmix"), config.av.dtshd, _("Choose whether multi channel DTS-HD sound tracks should be downmixed or transcoded.")))
 			if SystemInfo["CanWMAPRO"]:
 				self.list.append(getConfigListEntry(_("WMA Pro Downmix"), config.av.wmapro, _("Choose whether WMA Pro sound tracks should be downmixed.")))
-			if not SystemInfo["CanNot_DTS_Transcode"]:
+			if SystemInfo["CanDownmixAC3"] and config.av.downmix_ac3.value == "passthrough":
 				self.list.append(getConfigListEntry(_("DTS / DTS-HD Transcoding"), config.av.dts_playback, _("Choose whether DTS / DTS-HD sound tracks should be transcoded to Dolby Digital.")))
-			if not SystemInfo["CanNot_TrueHD_Transcode"] and not SystemInfo["UseServiceHisilicon"]:
+			if SystemInfo["CanDownmixAC3"] and config.av.downmix_ac3.value == "passthrough" and not SystemInfo["UseServiceHisilicon"]:
 				self.list.append(getConfigListEntry(_("Dolby TrueHD Transcoding"),config.av.truehd_playback,_("Choose whether Dolby TrueHD sound tracks should be transcoded to Dolby Digital.")))
 
 			if SystemInfo["CanAACTranscode"]:
