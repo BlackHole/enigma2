@@ -14,6 +14,7 @@ from Components.ConfigList import ConfigListScreen
 from Components.Console import Console
 from Components.FileList import MultiFileSelectList
 from Components.Label import Label, MultiColorLabel
+from Components.ScrollLabel import ScrollLabel
 from Components.MenuList import MenuList
 from Components.Network import iNetwork
 from Components.OnlineUpdateCheck import feedsstatuscheck
@@ -1959,9 +1960,32 @@ class NetworkOpenvpn(NSCommon, Screen):
 			cb(title, status_summary, autostartstatus_summary)
 
 
-class NetworkVpnLog(LogBase):
+class NetworkVpnLog(Screen):
 	def __init__(self, session):
-		LogBase.__init__(self, session, "/etc/openvpn/tmp.log")
+		Screen.__init__(self, session)
+		self.skinName = ["DeliteVpnLog"]
+		self.setTitle(_("OpenVPN Log"))
+		self["infotext"] = ScrollLabel("")
+		self["actions"] = ActionMap(["OkCancelActions", "WizardActions", "DirectionActions"], {
+			"ok": self.close,
+			"cancel": self.close,
+			"back": self.close,
+			"up": self["infotext"].pageUp,
+			"down": self["infotext"].pageDown,
+		})
+		self.onLayoutFinish.append(self.loadLog)
+
+	def loadLog(self):
+		try:
+			from collections import deque
+			with open("/etc/openvpn/openvpn.log", "r", encoding="utf-8", errors="replace") as logfile:
+				content = "".join(deque(logfile, maxlen=100))
+			if not content:
+				content = _("OpenVPN log file is empty.")
+		except Exception as error:
+			content = _("Unable to read OpenVPN log: %s") % error
+		self["infotext"].setText(content)
+		self["infotext"].lastPage()
 
 
 class NetworkSamba(NSCommon, Screen):
