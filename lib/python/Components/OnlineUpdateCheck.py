@@ -178,7 +178,7 @@ class FeedsStatusCheck:
 				if self.total_packages and (SystemInfo["imagetype"] != "release" or (config.softwareupdate.updateisunstable.value == 1 and config.softwareupdate.updatebeta.value) or config.softwareupdate.updateisunstable.value == 0):
 					print(("[OnlineUpdateCheck][ipkgCallback] %s Updates available" % self.total_packages))
 					config.softwareupdate.updatefound.setValue(True)
-		config.softwareupdate.updatefound.save()
+		pass
 
 
 feedsstatuscheck = FeedsStatusCheck()
@@ -221,7 +221,6 @@ class OnlineUpdateCheckPoller:
 			delay = minimum_delay
 		if delay > gap:
 			delay = gap
-		print("[OnlineUpdateCheck] last_run=%s gap=%s delay=%s minimum_delay=%s" % (last_run, gap, delay, minimum_delay))
 		self.timer.startLongTimer(delay)
 
 	def stop(self):
@@ -269,7 +268,9 @@ class VersionCheck:
 				return True
 			else:
 				print("[OnlineVersionCheck] skipping as unstable is not wanted")
-		return False
+				return False
+		else:
+			return False
 
 	def getUnstableUpdateAvailable(self):
 		if config.softwareupdate.updatefound.value and config.softwareupdate.check.value:
@@ -278,7 +279,9 @@ class VersionCheck:
 				return True
 			else:
 				print("[OnlineVersionCheck] skipping as beta is not wanted")
-		return False
+				return False
+		else:
+			return False
 
 
 versioncheck = VersionCheck()
