@@ -2051,6 +2051,7 @@ eServiceMP3::eServiceMP3(eServiceReference ref):
 	m_last_seek_pos = 0; /* CVR last seek position */
 	m_pending_start_position = -1;
 	m_start_events_deferred = false;
+	m_deferred_send_ev_start = true;
 	m_useragent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36";
 	m_extra_headers = "";
 	m_download_buffer_path = "";
@@ -2666,7 +2667,7 @@ void eServiceMP3::fireDeferredStartEvents()
 {
 	m_start_events_deferred = false;
 	m_event(this, evGstreamerStart);
-	if (m_send_ev_start)
+	if (m_deferred_send_ev_start)
 		m_event(this, evStart);
 }
 
@@ -2817,6 +2818,7 @@ RESULT eServiceMP3::start()
 		 * need holding back, and only when there's actually a pending start
 		 * offset to apply first. */
 		m_start_events_deferred = m_pending_start_position >= 0;
+		m_deferred_send_ev_start = m_send_ev_start;
 
 		applyPipTarget();
 

@@ -375,6 +375,9 @@ private:
 	 * m_pending_start_position was still pending when start() requested
 	 * PLAYING - see fireDeferredStartEvents()/tryApplyPendingStartOffset(). */
 	bool m_start_events_deferred;
+	/* m_send_ev_start as it was when start() ran: the first ASYNC_DONE
+	 * sets m_send_ev_start back to true before deferred events fire. */
+	bool m_deferred_send_ev_start;
 	void fireDeferredStartEvents();
 	void tryApplyPendingStartOffset();
 	/*
