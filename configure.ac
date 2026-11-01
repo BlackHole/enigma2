@@ -106,6 +106,7 @@ AS_IF([test "$MACHINEBUILD" == "gbue4k"],[AC_DEFINE(HWGBUE4K, 1,[gbue4k])])
 AS_IF([test "$BOXTYPE" == "h7"],[AC_DEFINE(HWH7, 1,[h7])])
 AS_IF([test "$BOXTYPE" == "h8se"],[AC_DEFINE(HWH8SE, 1,[h8se])])
 AS_IF([test "$BOXTYPE" == "h9combose"],[AC_DEFINE(HWH9COMBOSE, 1,[h9combose])])
+AS_IF([test "$BOXTYPE" == "h9twinse"],[AC_DEFINE(HWH9TWINSE, 1,[h9twinse])])
 AS_IF([test "$BOXTYPE" == "h11"],[AC_DEFINE(HWH11, 1,[h11])])
 AS_IF([test "$BOXTYPE" == "h17"],[AC_DEFINE(HWH17, 1,[h17])])
 AS_IF([test "$BOXTYPE" == "multiboxpro"],[AC_DEFINE(HWMULTIBOXPRO, 1,[multiboxpro])])
@@ -134,9 +135,10 @@ dnl enough SoCs and GStreamer stacks to support the detection pipeline.
 dnl Not enabled for vuduo4klite, vuultimo4k and gbquad4kpro.
 has_sw_hdr_detection=no
 if test "$MACHINEBUILD" != "gbquad4kpro" -a "$MACHINEBUILD" != "vuduo4klite" -a "$MACHINEBUILD" != "vuultimo4k" \
-	-a \( "$BOXTYPE" == "vuduo4k"  -o "$BOXTYPE" == "vuduo4kse" \
-	 -o "$BOXTYPE" == "vusolo4k"   -o "$BOXTYPE" == "vuuno4k"   \
-	 -o "$BOXTYPE" == "vuuno4kse"  -o "$BOXTYPE" == "vuzero4k"  \
+	-a \( "$BOXTYPE" == "vuduo4k" -o "$BOXTYPE" == "vuduo4kse" \
+	 -o "$BOXTYPE" == "vusolo4k"  -o "$BOXTYPE" == "vuuno4k"   \
+	 -o "$BOXTYPE" == "vuuno4kse" -o "$BOXTYPE" == "vuzero4k"  \
+	 -o "$BOXTYPE" == "h7"        -o "$BOXTYPE" == "h17"       \
 	 -o "$BOXTYPE" == "gb7252" \); then
 	has_sw_hdr_detection=yes
 	AC_DEFINE(HAS_SOFTWARE_HDR_DETECTION, 1, [Enable software HDR detection via HEVC bitstream parsing])
@@ -430,7 +432,7 @@ AS_IF([test "x$have_gles2" = "xyes"], [
     # glBindVertexArrayOES/glGenVertexArraysOES but none of the core GLES3
     # symbols - while any GLES3/gl3.h that happens to be in the sysroot (e.g.
     # mesa's) would still turn HAVE_GLES3 on.
-    pulse4k|pulse4kmini|sf8008|gbmv200|h8se|h9combose|h11|dagsmv200|multiboxpro|ustym4kpro)
+    pulse4k|pulse4kmini|sf8008|gbmv200|h8se|h9combose|h9twinse|h11|dagsmv200|multiboxpro|ustym4kpro)
       have_gles3=no
       ;;
   esac
@@ -550,8 +552,8 @@ fi
 AC_SUBST([VUPL_CFLAGS])
 AC_SUBST([VUPL_LIBS])
 
-# ABCom's pulse4k/pulse4kmini, Octagon sf8008 and GigaBlue's gbmv200 (gbip4k/gbtrio4k/gbtrio4kpro) and 
-# Zgemma/AirDigital's h8se/h9combose/h11a and Qviart's dagsmv200 (all HiSilicon Hi3798MV200, 
+# ABCom's pulse4k/pulse4kmini, Octagon sf8008 and GigaBlue's gbmv200 (gbip4k/gbtrio4k/gbtrio4kpro) and
+# Zgemma/AirDigital's h8se/h9twinse/h11 and Qviart's dagsmv200 (all HiSilicon Hi3798MV200,
 # ARM Mali-450 "Utgard" GPU) EGL backend (see lib/gdi/egl/platform/hisi) - a real EGL window
 # surface against a Mali fbdev binary driver (libMali.so, GLES 2.0 only),
 # unlike GigaBlue/VU+'s Broadcom Nexus stack above. oe-alliance-core's
@@ -565,7 +567,7 @@ AC_SUBST([VUPL_LIBS])
 # MACHINEBUILDs actually get EGL is decided by ENABLE_E2EGL in egl-gles-extras/openbh.conf.
 hisi_mali_egl_box=no
 case "$BOXTYPE" in
-  pulse4k|pulse4kmini|sf8008|gbmv200|h8se|h9combose|h11|dagsmv200|multiboxpro|ustym4kpro) hisi_mali_egl_box=yes ;;
+  pulse4k|pulse4kmini|sf8008|gbmv200|h8se|h9combose|h9twinse|h11|dagsmv200|multiboxpro|ustym4kpro) hisi_mali_egl_box=yes ;;
 esac
 AM_CONDITIONAL(HAVE_HISI_MALI_EGL, test "x$use_egl" = "xyes" -a "x$hisi_mali_egl_box" = "xyes")
 if test "x$use_egl" = "xyes" -a "x$hisi_mali_egl_box" = "xyes"; then
@@ -583,7 +585,7 @@ if test "$BOXTYPE" == "sf8008" -o "$BOXTYPE" == "dagsmv200" -o "$BOXTYPE" == "gb
 	AC_DEFINE(FORCE_ALPHABLENDING_ACCELERATION, 1,[define when the framebuffer acceleration has alphablending support, but detection slow down all])
 fi
 
-if test "$BOXTYPE" == "zgemmah8se" -o "$BOXTYPE" == "zgemmah11s"; then
+if test "$BOXTYPE" == "h8se" -o "$BOXTYPE" == "h11"; then
 	AC_DEFINE(FORCE_NO_BLENDING_ACCELERATION, 1,[define when the framebuffer acceleration does not have alphablending support, though the autodetection might indicate that it does])
 fi
 
