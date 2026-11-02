@@ -314,9 +314,9 @@ def InitUsageConfig():
 
 	preferredTunerChoicesUpdate()
 
-	config.usage.servicenum_fontsize = ConfigSelectionNumber(default=0, stepwidth=1, min=-8, max=10, wraparound=True)
-	config.usage.servicename_fontsize = ConfigSelectionNumber(default=0, stepwidth=1, min=-8, max=10, wraparound=True)
-	config.usage.serviceinfo_fontsize = ConfigSelectionNumber(default=0, stepwidth=1, min=-8, max=10, wraparound=True)
+	config.usage.servicenum_fontsize = ConfigSelectionNumber(default=0, stepwidth=1, min=-20, max=20, wraparound=True)
+	config.usage.servicename_fontsize = ConfigSelectionNumber(default=0, stepwidth=1, min=-20, max=20, wraparound=True)
+	config.usage.serviceinfo_fontsize = ConfigSelectionNumber(default=0, stepwidth=1, min=-20, max=20, wraparound=True)
 	choices = [(0, _("Use skin default"))] + [(i, _("%d") % i) for i in range(1, 41)]
 	config.usage.serviceitems_per_page = ConfigSelection(default=0, choices=choices)
 	config.usage.show_servicelist = ConfigYesNo(default=True)
