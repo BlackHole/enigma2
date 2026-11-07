@@ -103,7 +103,8 @@ class LayoutInfo(Poll, Converter):
 		textvalue = 'No info'
 		info = '0'
 		try:
-			out_line = popen('hddtemp -n -q /dev/sda').readline()
+			with popen('hddtemp -n -q /dev/sda') as pipe:
+				out_line = pipe.readline()
 			info = 'Hdd C:' + out_line[:4]
 			textvalue = info
 		except:
@@ -114,7 +115,8 @@ class LayoutInfo(Poll, Converter):
 		textvalue = 'No info'
 		info = '0'
 		try:
-			out_line = popen('cat /proc/loadavg').readline()
+			with open('/proc/loadavg') as fd:
+				out_line = fd.readline()
 			info = 'loadavg:' + out_line[:15]
 			textvalue = info
 		except:
@@ -147,12 +149,11 @@ class LayoutInfo(Poll, Converter):
 
 		def isMountPoint():
 			try:
-				fd = open('/proc/mounts', 'r')
-				for line in fd:
-					partLine = line.split()
-					if len(partLine) > 1 and partLine[1] == path:
-						return True
-				fd.close()
+				with open('/proc/mounts', 'r') as fd:
+					for line in fd:
+						partLine = line.split()
+						if len(partLine) > 1 and partLine[1] == path:
+							return True
 			except:
 				return None
 			return False
