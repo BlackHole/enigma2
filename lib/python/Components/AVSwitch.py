@@ -336,11 +336,13 @@ avSwitch = iAVSwitch  # Added for compatibility with OpenATV. Used by kodi plugi
 def InitAVSwitch():
 	config.av.truehd_playback = ConfigSelection(choices=[
 		("off", _("Off")),
-		("ac3", _("Dolby Digital"))
+		("ac3", _("Dolby Digital")),
+		("eac3", _("Dolby Digital +"))
 	], default="off")
 	config.av.dts_playback = ConfigSelection(choices=[
 		("off", _("Off")),
-		("ac3", _("Dolby Digital"))
+		("ac3", _("Dolby Digital")),
+		("eac3", _("Dolby Digital +"))
 	], default="off")
 	config.av.yuvenabled = ConfigYesNo(default=True)
 	colorformat_choices = {

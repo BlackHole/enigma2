@@ -1022,7 +1022,8 @@ GQuark dtsHDProbeQuark()
 enum HDAudioAuxMode
 {
 	hdAuxNone,
-	hdAuxAC3
+	hdAuxAC3,
+	hdAuxEAC3
 };
 
 struct HDAudioAuxState
@@ -1183,9 +1184,19 @@ void restoreHDAudioMainSink(GstElement *playbin, GstElement *sink, guint flags)
 HDAudioAuxMode hdAudioAuxModeForCodec(const std::string &codec)
 {
 	if (codec.find("TrueHD") != std::string::npos)
-		return eConfigManager::getConfigValue("config.av.truehd_playback") == "ac3" ? hdAuxAC3 : hdAuxNone;
+	{
+		const std::string mode = eConfigManager::getConfigValue("config.av.truehd_playback");
+		if (mode == "eac3")
+			return hdAuxEAC3;
+		return mode == "ac3" ? hdAuxAC3 : hdAuxNone;
+	}
 	if (codec.compare(0, 3, "DTS") == 0)
-		return eConfigManager::getConfigValue("config.av.dts_playback") == "ac3" ? hdAuxAC3 : hdAuxNone;
+	{
+		const std::string mode = eConfigManager::getConfigValue("config.av.dts_playback");
+		if (mode == "eac3")
+			return hdAuxEAC3;
+		return mode == "ac3" ? hdAuxAC3 : hdAuxNone;
+	}
 	return hdAuxNone;
 }
 
@@ -1211,7 +1222,10 @@ struct HDAudioSinkBin
 	std::map<std::string, std::vector<GstElement *> > branches;
 	std::string decoder;
 	bool truehdAC3;
+	/* re-encoded to Dolby Digital +, not Dolby Digital */
+	bool truehdEAC3;
 	bool dtsAC3;
+	bool dtsEAC3;
 	/* set by hdAudioSinkBinArmSwitchFlush(), taken by the probe */
 	gint switchFlushArmed;
 	gint64 switchFlushNs;
@@ -1266,8 +1280,9 @@ GstCaps *hdAudioSinkBinCaps(const HDAudioSinkBin *state, GstCaps *filter)
 
 /* [dcaparse !] avdec ! audioconvert ! audioresample ! capsfilter ! avenc_ac3
  * ! ac3parse ! capsfilter, added to the bin and linked, both ends left open */
-bool hdAudioSinkBinMakeBranch(GstElement *bin, HDAudioSinkBin *state, const char *decoder_name)
+bool hdAudioSinkBinMakeBranch(GstElement *bin, HDAudioSinkBin *state, const char *decoder_name, bool eac3 = false)
 {
+	const char *encoder_name = eac3 ? "avenc_eac3" : "avenc_ac3";
 	std::vector<GstElement *> branch;
 	if (!strcmp(decoder_name, "avdec_dca"))
 	{
@@ -1276,7 +1291,8 @@ bool hdAudioSinkBinMakeBranch(GstElement *bin, HDAudioSinkBin *state, const char
 		if (parse)
 			branch.push_back(parse);
 	}
-	const char *names[] = { decoder_name, "audioconvert", "audioresample", "capsfilter", "avenc_ac3", "ac3parse", "capsfilter" };
+	/* ac3parse frames E-AC3 as well */
+	const char *names[] = { decoder_name, "audioconvert", "audioresample", "capsfilter", encoder_name, "ac3parse", "capsfilter" };
 	for (const char *name : names)
 	{
 		GstElement *element = gst_element_factory_make(name, NULL);
@@ -1298,7 +1314,7 @@ bool hdAudioSinkBinMakeBranch(GstElement *bin, HDAudioSinkBin *state, const char
 		"channels", G_TYPE_INT, 6,
 		"channel-mask", GST_TYPE_BITMASK, channel_mask,
 		NULL);
-	GstCaps *out_caps = gst_caps_new_simple("audio/x-ac3",
+	GstCaps *out_caps = gst_caps_new_simple(eac3 ? "audio/x-eac3" : "audio/x-ac3",
 		"framed", G_TYPE_BOOLEAN, TRUE,
 		"alignment", G_TYPE_STRING, "frame",
 		"rate", G_TYPE_INT, 48000,
@@ -1310,7 +1326,7 @@ bool hdAudioSinkBinMakeBranch(GstElement *bin, HDAudioSinkBin *state, const char
 	gst_caps_unref(raw_caps);
 	gst_caps_unref(out_caps);
 	if (g_object_class_find_property(G_OBJECT_GET_CLASS(branch[n - 3]), "bitrate"))
-		g_object_set(G_OBJECT(branch[n - 3]), "bitrate", 640000, NULL);
+		g_object_set(G_OBJECT(branch[n - 3]), "bitrate", eac3 ? 1536000 : 640000, NULL);
 
 	for (GstElement *element : branch)
 		gst_bin_add(GST_BIN(bin), element);
@@ -1319,7 +1335,7 @@ bool hdAudioSinkBinMakeBranch(GstElement *bin, HDAudioSinkBin *state, const char
 		linked = gst_element_link(branch[k], branch[k + 1]);
 	if (!linked)
 	{
-		eWarning("[eServiceMP3] HD audio AC3: linking the %s ! avenc_ac3 branch failed", decoder_name);
+		eWarning("[eServiceMP3] HD audio AC3: linking the %s ! %s branch failed", decoder_name, encoder_name);
 		for (GstElement *element : branch)
 			gst_bin_remove(GST_BIN(bin), element);
 		return false;
@@ -1495,28 +1511,88 @@ GstPadProbeReturn hdAudioSinkBinProbe(GstPad *, GstPadProbeInfo *info, gpointer 
 
 	hdAudioSinkBinRoute(state, wanted);
 	if (!state->decoder.empty())
-		eDebug("[eServiceMP3] HD audio AC3: transcoding through %s ! avenc_ac3", state->decoder.c_str());
+		eDebug("[eServiceMP3] HD audio AC3: transcoding through %s ! %s", state->decoder.c_str(),
+			(state->truehdEAC3 && state->decoder == "avdec_truehd") ||
+			(state->dtsEAC3 && state->decoder == "avdec_dca") ? "avenc_eac3" : "avenc_ac3");
 	else
 		eDebug("[eServiceMP3] HD audio AC3: track goes to dvbaudiosink directly");
 	hdAudioSinkBinFlushAfterLateSwitch(bin, state);
 	return GST_PAD_PROBE_OK;
 }
 
-/* NULL when neither TrueHD nor DTS is set to "ac3" or the pieces are missing */
+bool hdAudioSinkBinCapsAreEAC3(GstCaps *caps)
+{
+	const GstStructure *s = caps && gst_caps_get_size(caps) ? gst_caps_get_structure(caps, 0) : NULL;
+	return s && (gst_structure_has_name(s, "audio/x-eac3") || gst_structure_has_name(s, "audio/eac3"));
+}
+
+/*
+ * streaming thread: dvbaudiosink's sink pad.
+ *
+ * Between two native E-AC3 tracks playbin sends the sink no new caps: the
+ * driver keeps its decoder as it is and the switch flush is all that
+ * happens. A native E-AC3 track and one transcoded to E-AC3 differ in the
+ * details of their caps, so the sink was given new caps and set the driver
+ * up for E-AC3 a second time, and the Ultimo4K's driver then put out
+ * nothing until a track of another codec had been played (confirmed on
+ * device, in both directions, with the driver's own restart and with a
+ * full stop and start alike). The sink only looks at the type, so when
+ * E-AC3 follows E-AC3 keep these caps from it and let the switch be the
+ * same as between two native tracks.
+ */
+GstPadProbeReturn hdAudioSinkBinDvbProbe(GstPad *pad, GstPadProbeInfo *info, gpointer)
+{
+	GstEvent *event = GST_PAD_PROBE_INFO_EVENT(info);
+	if (!event || GST_EVENT_TYPE(event) != GST_EVENT_CAPS)
+		return GST_PAD_PROBE_OK;
+
+	GstCaps *caps = NULL;
+	gst_event_parse_caps(event, &caps);
+	if (!hdAudioSinkBinCapsAreEAC3(caps))
+		return GST_PAD_PROBE_OK;
+	GstCaps *current = gst_pad_get_current_caps(pad);
+	const bool eac3_again = hdAudioSinkBinCapsAreEAC3(current);
+	if (current)
+		gst_caps_unref(current);
+	return eac3_again ? GST_PAD_PROBE_DROP : GST_PAD_PROBE_OK;
+}
+
+/* NULL when neither TrueHD nor DTS is set to transcode or the pieces are missing */
 GstElement *createHDAudioSinkBin()
 {
-	const bool truehd_ac3 = eConfigManager::getConfigValue("config.av.truehd_playback") == "ac3";
-	const bool dts_ac3 = eConfigManager::getConfigValue("config.av.dts_playback") == "ac3";
+	const std::string truehd_mode = eConfigManager::getConfigValue("config.av.truehd_playback");
+	const std::string dts_mode = eConfigManager::getConfigValue("config.av.dts_playback");
+	bool truehd_eac3 = truehd_mode == "eac3";
+	bool dts_eac3 = dts_mode == "eac3";
+	const bool truehd_ac3 = truehd_mode == "ac3" || truehd_eac3;
+	const bool dts_ac3 = dts_mode == "ac3" || dts_eac3;
 	if (!truehd_ac3 && !dts_ac3)
 		return NULL;
 
-	GstElementFactory *encoder = gst_element_factory_find("avenc_ac3");
-	if (!encoder)
+	GstElementFactory *encoder = NULL;
+	if (truehd_eac3 || dts_eac3)
 	{
-		eWarning("[eServiceMP3] HD audio AC3: avenc_ac3 missing (gstreamer1.0-libav), no transcoding");
-		return NULL;
+		/* Dolby Digital + needs ffmpeg built with the eac3 encoder.
+		 * Without it, fall back to Dolby Digital. */
+		encoder = gst_element_factory_find("avenc_eac3");
+		if (encoder)
+			gst_object_unref(encoder);
+		else
+		{
+			eWarning("[eServiceMP3] HD audio AC3: avenc_eac3 missing, transcoding to Dolby Digital instead");
+			truehd_eac3 = dts_eac3 = false;
+		}
 	}
-	gst_object_unref(encoder);
+	if ((truehd_ac3 && !truehd_eac3) || (dts_ac3 && !dts_eac3))
+	{
+		encoder = gst_element_factory_find("avenc_ac3");
+		if (!encoder)
+		{
+			eWarning("[eServiceMP3] HD audio AC3: avenc_ac3 missing (gstreamer1.0-libav), no transcoding");
+			return NULL;
+		}
+		gst_object_unref(encoder);
+	}
 
 	GstElement *bin = gst_bin_new("enigma2_hdaudio_sinkbin");
 	GstElement *entry = gst_element_factory_make("identity", "hdaudio_sinkbin_entry");
@@ -1544,12 +1620,14 @@ GstElement *createHDAudioSinkBin()
 	state->entry = entry;
 	state->dvbSink = dvb_sink;
 	state->truehdAC3 = truehd_ac3;
+	state->truehdEAC3 = truehd_eac3;
 	state->dtsAC3 = dts_ac3;
+	state->dtsEAC3 = dts_eac3;
 	state->switchFlushArmed = 0;
 	if (truehd_ac3)
-		hdAudioSinkBinMakeBranch(bin, state, "avdec_truehd");
+		hdAudioSinkBinMakeBranch(bin, state, "avdec_truehd", truehd_eac3);
 	if (dts_ac3)
-		hdAudioSinkBinMakeBranch(bin, state, "avdec_dca");
+		hdAudioSinkBinMakeBranch(bin, state, "avdec_dca", dts_eac3);
 	if (state->branches.empty())
 	{
 		delete state;
@@ -1562,8 +1640,15 @@ GstElement *createHDAudioSinkBin()
 		(GstPadProbeType)(GST_PAD_PROBE_TYPE_EVENT_DOWNSTREAM | GST_PAD_PROBE_TYPE_QUERY_DOWNSTREAM),
 		hdAudioSinkBinProbe, bin, NULL);
 	gst_object_unref(entry_sink);
+	GstPad *dvb_sink_pad = gst_element_get_static_pad(dvb_sink, "sink");
+	if (dvb_sink_pad)
+	{
+		gst_pad_add_probe(dvb_sink_pad, GST_PAD_PROBE_TYPE_EVENT_DOWNSTREAM, hdAudioSinkBinDvbProbe, bin, NULL);
+		gst_object_unref(dvb_sink_pad);
+	}
 	eDebug("[eServiceMP3] HD audio AC3: audio sink bin in use (TrueHD %s, DTS %s)",
-		state->branches.count("avdec_truehd") ? "ac3" : "native", state->branches.count("avdec_dca") ? "ac3" : "native");
+		state->branches.count("avdec_truehd") ? (truehd_eac3 ? "eac3" : "ac3") : "native",
+		state->branches.count("avdec_dca") ? (dts_eac3 ? "eac3" : "ac3") : "native");
 	return bin;
 }
 
@@ -1687,7 +1772,20 @@ bool prepareHDAudioAuxPipeline(GstElement *playbin, const gchar *uri, int audio_
 	GstElement *convert = gst_element_factory_make("audioconvert", "hdaudio_aux_convert");
 	GstElement *resample = gst_element_factory_make("audioresample", "hdaudio_aux_resample");
 	GstElement *raw_capsfilter = gst_element_factory_make("capsfilter", "hdaudio_aux_raw_caps");
-	GstElement *encoder = gst_element_factory_make("avenc_ac3", "hdaudio_aux_encoder");
+	/* Dolby Digital + needs ffmpeg built with the eac3 encoder.  Without
+	 * it, fall back to Dolby Digital rather than to no transcoding at all. */
+	GstElement *encoder = NULL;
+	if (mode == hdAuxEAC3)
+	{
+		encoder = gst_element_factory_make("avenc_eac3", "hdaudio_aux_encoder");
+		if (!encoder)
+		{
+			eWarning("[eServiceMP3] HD audio AC3: avenc_eac3 missing, transcoding to Dolby Digital instead");
+			mode = hdAuxAC3;
+		}
+	}
+	if (!encoder)
+		encoder = gst_element_factory_make("avenc_ac3", "hdaudio_aux_encoder");
 	GstElement *parser = gst_element_factory_make("ac3parse", "hdaudio_aux_parser");
 	GstElement *out_capsfilter = gst_element_factory_make("capsfilter", "hdaudio_aux_output_caps");
 	GstElement *dvb_sink = gst_element_factory_make("dvbaudiosink", "enigma2_hdaudio_aux_dvb_sink");
@@ -1721,7 +1819,7 @@ bool prepareHDAudioAuxPipeline(GstElement *playbin, const gchar *uri, int audio_
 		"channels", G_TYPE_INT, 6,
 		"channel-mask", GST_TYPE_BITMASK, channel_mask,
 		NULL);
-	GstCaps *out_caps = gst_caps_new_simple("audio/x-ac3",
+	GstCaps *out_caps = gst_caps_new_simple(mode == hdAuxEAC3 ? "audio/x-eac3" : "audio/x-ac3",
 		"framed", G_TYPE_BOOLEAN, TRUE,
 		"alignment", G_TYPE_STRING, "frame",
 		"rate", G_TYPE_INT, 48000,
@@ -1760,7 +1858,7 @@ bool prepareHDAudioAuxPipeline(GstElement *playbin, const gchar *uri, int audio_
 	gst_caps_unref(raw_caps);
 	gst_caps_unref(out_caps);
 	if (g_object_class_find_property(G_OBJECT_GET_CLASS(encoder), "bitrate"))
-		g_object_set(G_OBJECT(encoder), "bitrate", 640000, NULL);
+		g_object_set(G_OBJECT(encoder), "bitrate", mode == hdAuxEAC3 ? 1536000 : 640000, NULL);
 	g_object_set(G_OBJECT(decode), "uri", uri, NULL);
 	(void)source_channels;
 	(void)position_ns;
@@ -5305,7 +5403,7 @@ int eServiceMP3::selectAudioStream(int i, bool skipAudioFix)
 	const HDAudioAuxMode aux_mode = !m_sourceinfo.is_streaming && !m_hdaudio_sinkbin ?
 		hdAudioAuxModeForCodec(m_audioStreams[i].codec) : hdAuxNone;
 	HDAudioAuxState *active_aux = getHDAudioAuxState(m_gst_playbin);
-	const bool native_eac3_to_aux = !active_aux && aux_mode == hdAuxAC3 &&
+	const bool native_eac3_to_aux = !active_aux && aux_mode != hdAuxNone &&
 		m_currentAudioStream >= 0 && m_currentAudioStream < (int)m_audioStreams.size() &&
 		m_audioStreams[m_currentAudioStream].type == atEAC3;
 

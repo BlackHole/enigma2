@@ -242,13 +242,13 @@ class AudioSelection(ConfigListScreen, Screen):
 				conflist.append(getConfigListEntry(_("WMA Pro Downmix"), self.settings.wmapro, None))
 
 			if SystemInfo["CanDownmixAC3"] and config.av.downmix_ac3.value == "passthrough":
-				choice_list = [("off", _("Off")), ("ac3", _("Dolby Digital"))]
+				choice_list = [("off", _("Off")), ("ac3", _("Dolby Digital")), ("eac3", _("Dolby Digital +"))]
 				self.settings.dts_playback = ConfigSelection(choices=choice_list, default=config.av.dts_playback.value)
 				self.settings.dts_playback.addNotifier(self.setDTSTranscode, initial_call=False)
 				conflist.append(getConfigListEntry(_("DTS / DTS-HD Transcoding"), self.settings.dts_playback, None))
 
 			if SystemInfo["CanDownmixAC3"] and config.av.downmix_ac3.value == "passthrough" and not SystemInfo["UseServiceHisilicon"]:
-				choice_list = [("off", _("Off")), ("ac3", _("Dolby Digital"))]
+				choice_list = [("off", _("Off")), ("ac3", _("Dolby Digital")), ("eac3", _("Dolby Digital +"))]
 				self.settings.truehd_playback = ConfigSelection(choices=choice_list, default=config.av.truehd_playback.value)
 				self.settings.truehd_playback.addNotifier(self.setTrueHDTranscode, initial_call=False)
 				conflist.append(getConfigListEntry(_("Dolby TrueHD Transcoding"), self.settings.truehd_playback, None))
