@@ -90,7 +90,7 @@ class VideoSetup(Setup):
 				self.list.append(getConfigListEntry(_("WMA Pro Downmix"), config.av.wmapro, _("Choose whether WMA Pro sound tracks should be downmixed.")))
 			if SystemInfo["CanDownmixAC3"] and config.av.downmix_ac3.value == "passthrough":
 				self.list.append(getConfigListEntry(_("DTS / DTS-HD Transcoding"), config.av.dts_playback, _("Choose whether DTS / DTS-HD sound tracks should be transcoded to Dolby Digital or Dolby Digital +.")))
-			if SystemInfo["CanDownmixAC3"] and config.av.downmix_ac3.value == "passthrough" and not SystemInfo["UseServiceHisilicon"]:
+			if SystemInfo["CanDownmixAC3"] and config.av.downmix_ac3.value == "passthrough":
 				self.list.append(getConfigListEntry(_("Dolby TrueHD Transcoding"),config.av.truehd_playback,_("Choose whether Dolby TrueHD sound tracks should be transcoded to Dolby Digital or Dolby Digital +.")))
 
 			if SystemInfo["CanAACTranscode"]:
