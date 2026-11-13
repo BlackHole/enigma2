@@ -61,6 +61,8 @@ config.movielist.root = ConfigSelection(default="/media/hdd/movie", choices=["/"
 config.movielist.hide_extensions = ConfigYesNo(default=False)
 config.movielist.stop_service = ConfigYesNo(default=True)
 config.movielist.enable_collections = ConfigSelection(default=0, choices=[(0, _("Off")), (1, _("On except in same named directory")), (2, _("On"))])
+config.movielist.group_downloaded_series = ConfigYesNo(default=True)
+config.movielist.fetch_series_eit = ConfigYesNo(default=True)
 
 userDefinedButtons = None
 last_selected_dest = []
@@ -375,6 +377,8 @@ class MovieBrowserConfiguration(Setup):
 			config.movielist.description.save()
 			config.movielist.useslim.save()
 			config.usage.on_movie_eof.save()
+			config.movielist.group_downloaded_series.save()
+			config.movielist.fetch_series_eit.save()
 		self.close(True)
 
 	def cancel(self):  # Deprecated - for backwards compatibility

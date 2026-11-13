@@ -1,6 +1,13 @@
-from os import path, stat
+from itertools import islice
+from os import listdir, path, remove, stat
+import json
+import queue
+import re
 import struct
 import random
+import threading
+import urllib.parse
+import urllib.request
 from time import localtime, strftime, time as nowtime
 from chardet import detect
 
@@ -24,6 +31,9 @@ IMAGE_EXTENSIONS = frozenset((".jpg", ".png", ".gif", ".bmp", ".jpeg", ".jpe", "
 MOVIE_EXTENSIONS = frozenset((".mpg", ".vob", ".m4v", ".mkv", ".avi", ".divx", ".dat", ".flv", ".mp4", ".mov", ".wmv", ".asf", ".3gp", ".3g2", ".mpeg", ".mpe", ".rm", ".rmvb", ".ogm", ".ogv", ".m2ts", ".mts", ".webm", ".pva", ".wtv", ".ts"))
 KNOWN_EXTENSIONS = MOVIE_EXTENSIONS.union(IMAGE_EXTENSIONS, DVD_EXTENSIONS, AUDIO_EXTENSIONS)
 
+DOWNLOAD_VIDEO_EXTS = (".mp4", ".mkv", ".ts", ".m4v", ".avi", ".mov")
+SIDECAR_CLEANUP_EXTS = (".meta", ".cuts", ".ap", ".sc", ".eit")
+
 # Gets the name of a movielist item for display in the UI honouring the hide extensions setting
 
 
@@ -35,6 +45,11 @@ def getItemDisplayName(itemRef, info, removeExtension=None):
 		name = path.basename(name.rstrip("/"))
 	else:
 		name = info.getName(itemRef)
+		evt = getLocalEitEvent(itemRef)
+		if evt and evt.getShortDescription():
+			name = f"{evt.getEventName()} - {evt.getShortDescription()}"
+		elif itemRef.type != eServiceReference.idDVB and config.movielist.group_downloaded_series.value:
+			name = getSeriesCollectionTitle(itemRef, info)
 		removeExtension = config.movielist.hide_extensions.value if removeExtension is None else removeExtension
 		if removeExtension:
 			fileName, fileExtension = path.splitext(name)
@@ -68,6 +83,284 @@ cutsParser = struct.Struct('>QI')  # big-endian, 64-bit PTS and 32-bit type
 class MovieListData:
 	def __init__(self):
 		self.dirty = True
+
+
+SERIES_EPISODE_RE = re.compile(
+	r"^(.*?)[.\s_-]*(?:(?:[Ss]eries|[Ss]eason)[.\s_-]*(\d{1,2})[.\s_-]*)?"
+	r"(?:[Ss](\d{1,2})[.\s_-]*[Ee](\d{1,2})|(\d{1,2})[xX](\d{1,2})|(?:[Ee]p|[Ee]pisode|[Pp]art)[.\s_-]*(\d{1,3}))\b"
+)
+
+_EIT_QUEUE = queue.Queue()
+_EIT_PENDING = set()
+_EIT_WORKER_STARTED = False
+_EIT_LOCK = threading.Lock()
+
+
+def parseDownloadedSeries(rawName):
+	base, _ = path.splitext(rawName)
+	base = re.sub(r"^\d{8}\s+\d{4}\s+-\s+[^-]+-\s+", "", base.strip())
+	match = SERIES_EPISODE_RE.match(base)
+	if not match:
+		return None, None, None
+	show = re.sub(r"[._]+", " ", match.group(1)).strip(" -_:")
+	if not show:
+		return None, None, None
+	season = int(match.group(2) or match.group(3) or match.group(5) or 1)
+	episode = int(match.group(4) or match.group(6) or match.group(7))
+	return show, season, episode
+
+
+def cleanupOrphanedSidecars(folderPath):
+	if not folderPath or not path.isdir(folderPath):
+		return
+	try:
+		for entry in listdir(folderPath):
+			low = entry.lower()
+			for ext in SIDECAR_CLEANUP_EXTS:
+				if low.endswith(ext):
+					sidecarPath = path.join(folderPath, entry)
+					videoPath = sidecarPath[:-len(ext)]
+					if videoPath.lower().endswith(DOWNLOAD_VIDEO_EXTS) and not path.exists(videoPath):
+						try:
+							remove(sidecarPath)
+						except OSError:
+							pass
+					break
+	except OSError:
+		pass
+
+
+def getSeriesCollectionTitle(itemRef, info):
+	filePath = itemRef.getPath()
+	if filePath and path.isfile(filePath + ".meta"):
+		try:
+			with open(filePath + ".meta", "r", encoding="utf-8", errors="ignore") as metaFile:
+				lines = metaFile.read().splitlines()
+				if len(lines) >= 2:
+					secondLine = next(islice(lines, 1, 2)).strip()
+					if secondLine:
+						return secondLine
+		except OSError:
+			pass
+	rawName = info.getName(itemRef).strip()
+	if config.movielist.group_downloaded_series.value:
+		show, _, _ = parseDownloadedSeries(path.basename(filePath) if filePath else rawName)
+		if show:
+			return show.title()
+	return rawName
+
+
+def _buildDvbEitPacket(title, shortDesc, extDesc, startTs):
+	t = localtime(startTs)
+	y, m, d = t.tm_year, t.tm_mon, t.tm_mday
+	leap = 1 if m in (1, 2) else 0
+	mjd = 14956 + d + int((y - 1900 - leap) * 365.25) + int((m + 1 + leap * 12) * 30.6001)
+	bcd = lambda val: ((val // 10) << 4) | (val % 10)
+	startBytes = struct.pack(">HBBB", mjd, bcd(t.tm_hour), bcd(t.tm_min), bcd(t.tm_sec))
+	durBytes = b"\x01\x00\x00"
+
+	titleBytes = title.encode("utf-8", "ignore")[:200]
+	shortBytes = shortDesc.encode("utf-8", "ignore")[:200]
+	shortPayload = b"eng" + bytes([len(titleBytes) + 1, 0x15]) + titleBytes + bytes([len(shortBytes) + 1, 0x15]) + shortBytes
+	descLoop = bytes([0x4D, len(shortPayload)]) + shortPayload
+
+	extRaw = extDesc.encode("utf-8", "ignore")
+	chunks = [extRaw[i:i + 240] for i in range(0, len(extRaw), 240)] or [b""]
+	lastIdx = len(chunks) - 1
+	for idx, chunk in enumerate(chunks):
+		chunkData = b"\x15" + chunk
+		payload = bytes([(idx << 4) | lastIdx]) + b"eng\x00" + bytes([len(chunkData)]) + chunkData
+		descLoop += bytes([0x4E, len(payload)]) + payload
+
+	eventHeader = struct.pack(">H", 1) + startBytes + durBytes + struct.pack(">H", (4 << 13) | len(descLoop))
+	eventData = eventHeader + descLoop
+	secLen = 11 + len(eventData) + 4
+	header = struct.pack(">BHHBBBHH", 0x4E, 0xF000 | secLen, 1, 0xC1, 0, 0, 1, 1) + b"\x00\x4E"
+	return header + eventData + b"\x00\x00\x00\x00"
+
+
+def _fetchTvMazeEpisode(show, season, episode):
+	apiHost = "https://api." + "tvmaze.com"
+	cleanShow = re.sub(r"^(?:all\s+new|brand\s+new|new|premiere|live|repeat)\s*:\s*", "", show, flags=re.IGNORECASE)
+	cleanShow = re.sub(r"^(?:EN|UK|US|AU|CA|FR|DE|ES|IT)\s+", "", cleanShow, flags=re.IGNORECASE)
+	cleanShow = re.sub(r"\[[^\]]*\]|\([^\)]*\)", " ", cleanShow)
+	cleanShow = re.sub(
+		r"\b(?:2160p|1080p|1080i|720p|576p|480p|4k|uhd|fhd|hd|sd|"
+		r"web[- ]?dl|web[- ]?rip|web|hdtv|pdtv|dvdrip|bdrip|brrip|bluray|blu[- ]?ray|remux|"
+		r"x264|x265|h\.?264|h\.?265|hevc|avc|xvid|divx|av1|"
+		r"aac(?:2\.0)?|ac3|eac3|ddp?5\.1|dd5\.1|dts(?:-hd)?|atmos|mp3|flac|"
+		r"10bit|8bit|hdr10?\+?|dv|dolby\s*vision|sdr|"
+		r"proper|repack|rerip|internal|extended|uncut|uncensored|director'?s\s*cut|multi|dual\s*audio)\b.*$",
+		"",
+		cleanShow,
+		flags=re.IGNORECASE,
+	)
+	cleanShow = re.sub(r"(?:\s+\(?\d{4}\)?)+", "", cleanShow)
+	cleanShow = re.sub(r"\s+", " ", cleanShow).strip(" -_:")
+	query = urllib.parse.quote(cleanShow or show)
+	showData = None
+	try:
+		with urllib.request.urlopen(f"{apiHost}/singlesearch/shows?q={query}", timeout=6) as resp:
+			showData = json.loads(resp.read().decode("utf-8"))
+	except urllib.error.HTTPError as err:
+		if err.code == 404:
+			with urllib.request.urlopen(f"{apiHost}/search/shows?q={query}", timeout=6) as resp:
+				results = json.loads(resp.read().decode("utf-8"))
+			if results:
+				showData = results.get("show")
+		else:
+			raise
+
+	if not showData:
+		return None
+	showId = showData.get("id")
+	showTitle = showData.get("name") or (cleanShow or show).title()
+	if not showId:
+		return None
+
+	epData = None
+	try:
+		epUrl = f"{apiHost}/shows/{showId}/episodebynumber?season={season}&number={episode}"
+		with urllib.request.urlopen(epUrl, timeout=6) as resp:
+			epData = json.loads(resp.read().decode("utf-8"))
+	except Exception:
+		with urllib.request.urlopen(f"{apiHost}/shows/{showId}/episodes?specials=1", timeout=6) as resp:
+			allEps = json.loads(resp.read().decode("utf-8"))
+		for candidate in allEps:
+			if candidate.get("season") == season and candidate.get("number") == episode:
+				epData = candidate
+				break
+
+	if not epData:
+		return showTitle, f"S{season:02d}E{episode:02d}", ""
+
+	epName = epData.get("name") or f"Episode {episode}"
+	summary = re.sub(r"<[^>]+>", "", epData.get("summary") or "").strip()
+	return showTitle, f"S{season:02d}E{episode:02d} - {epName}", summary
+
+
+def _eitQueueWorker():
+	while True:
+		filePath = _EIT_QUEUE.get()
+		try:
+			stem, _ = path.splitext(filePath)
+			eitPath = stem + ".eit"
+			if not path.exists(eitPath) and path.exists(filePath):
+				show, season, episode = parseDownloadedSeries(path.basename(filePath))
+				if show and episode is not None:
+					result = _fetchTvMazeEpisode(show, season, episode)
+					if result:
+						showTitle, shortDesc, summary = result
+						mtime = stat(filePath).st_mtime
+						packet = _buildDvbEitPacket(showTitle, shortDesc, summary, mtime)
+						with open(eitPath, "wb") as eitFile:
+							eitFile.write(packet)
+		except Exception as err:
+			print("[MovieList] EIT fetch failed:", err)
+		finally:
+			with _EIT_LOCK:
+				_EIT_PENDING.discard(filePath)
+			_EIT_QUEUE.task_done()
+
+
+def queueEitDownload(filePath):
+	global _EIT_WORKER_STARTED
+	if not config.movielist.fetch_series_eit.value:
+		return
+	if not filePath or not filePath.lower().endswith(DOWNLOAD_VIDEO_EXTS):
+		return
+	stem, _ = path.splitext(filePath)
+	if path.exists(stem + ".eit"):
+		return
+	with _EIT_LOCK:
+		if filePath in _EIT_PENDING:
+			return
+		_EIT_PENDING.add(filePath)
+		if not _EIT_WORKER_STARTED:
+			worker = threading.Thread(target=_eitQueueWorker, name="MovieListEitWorker", daemon=True)
+			worker.start()
+			_EIT_WORKER_STARTED = True
+	_EIT_QUEUE.put(filePath)
+
+
+class _LocalEitEvent:
+	def __init__(self, eitPath, startTs=0, duration=3600):
+		self._title = ""
+		self._short = ""
+		self._ext = ""
+		self._begin = int(startTs)
+		self._dur = int(duration)
+		try:
+			with open(eitPath, "rb") as eitFile:
+				data = eitFile.read()
+			pos = 26
+			extParts = list()
+			limit = len(data) - 4
+			while pos + 2 <= limit:
+				tag = next(islice(data, pos, pos + 1))
+				dlen = next(islice(data, pos + 1, pos + 2))
+				payload = data[pos + 2:pos + 2 + dlen]
+				pos += 2 + dlen
+				if tag == 0x4D and len(payload) >= 5:
+					tLen = next(islice(payload, 3, 4))
+					tRaw = payload[4:4 + tLen]
+					if tRaw and next(iter(tRaw)) == 0x15:
+						tRaw = tRaw[1:]
+					self._title = tRaw.decode("utf-8", "ignore").strip()
+					sOff = 4 + tLen
+					if sOff < len(payload):
+						sLen = next(islice(payload, sOff, sOff + 1))
+						sRaw = payload[sOff + 1:sOff + 1 + sLen]
+						if sRaw and next(iter(sRaw)) == 0x15:
+							sRaw = sRaw[1:]
+						self._short = sRaw.decode("utf-8", "ignore").strip()
+				elif tag == 0x4E and len(payload) >= 6:
+					cLen = next(islice(payload, 5, 6))
+					cRaw = payload[6:6 + cLen]
+					if cRaw and next(iter(cRaw)) == 0x15:
+						cRaw = cRaw[1:]
+					extParts.append(cRaw.decode("utf-8", "ignore"))
+			self._ext = "".join(extParts).strip()
+		except Exception:
+			pass
+
+	def getEventName(self):
+		return self._title
+
+	def getShortDescription(self):
+		return self._short
+
+	def getExtendedDescription(self):
+		return self._ext
+
+	def getBeginTime(self):
+		return self._begin
+
+	def getDuration(self):
+		return self._dur
+
+	def getEventId(self):
+		return 1
+
+	def getBeginTimeString(self):
+		return strftime("%d.%m.%Y %H:%M", localtime(self._begin)) if self._begin else ""
+
+
+def getLocalEitEvent(serviceref, additionalInfo=None):
+	if not serviceref:
+		return None
+	if (serviceref.flags & eServiceReference.isGroup) and additionalInfo and getattr(additionalInfo, "collectionItems", None):
+		lastItem = next(reversed(additionalInfo.collectionItems))
+		serviceref = next(iter(lastItem))
+	filePath = serviceref.getPath()
+	if not filePath:
+		return None
+	stem, _ = path.splitext(filePath)
+	eitPath = stem + ".eit"
+	if path.isfile(eitPath):
+		mtime = stat(filePath).st_mtime if path.exists(filePath) else 0
+		return _LocalEitEvent(eitPath, mtime)
+	return None
 
 # iStaticServiceInformation
 
@@ -711,6 +1004,8 @@ class MovieList(GUIComponent):
 		realtags = set()
 		autotags = {}
 		rootPath = path.normpath(root.getPath())
+		if config.movielist.group_downloaded_series.value:
+			cleanupOrphanedSidecars(rootPath)
 		split = path.split(rootPath)
 		parent = None
 		# Don't navigate above the "root". But if we are in a collection we do want to show the "..".
@@ -761,7 +1056,8 @@ class MovieList(GUIComponent):
 				info = justStubInfo
 			begin = info.getInfo(serviceref, iServiceInformation.sTimeCreate)
 			begin2 = 0
-			name = info.getName(serviceref)
+			name = getSeriesCollectionTitle(serviceref, info)
+			queueEitDownload(serviceref.getPath())
 			# OSX put a lot of stupid files ._* everywhere... we need to skip them
 			if name[:2] == "._":
 				continue
@@ -832,7 +1128,7 @@ class MovieList(GUIComponent):
 				if item[0].flags & eServiceReference.mustDescent:
 					items.append(item)
 				else:
-					name = item[1].getName(item[0]).strip().lower()
+					name = getSeriesCollectionTitle(item[0], item[1]).lower()
 					if collectionMode == 1 and name == split[1].lower():
 						items.append(item)
 					elif groupedFiles.get(name):
@@ -851,7 +1147,7 @@ class MovieList(GUIComponent):
 					groupedItems = sorted(groupedItems, key=self.buildBeginTimeSortKey, reverse=True)
 					firstItem = groupedItems[0]
 					data = MovieListData()
-					data.txt = firstItem[1].getName(firstItem[0]).strip()
+					data.txt = getSeriesCollectionTitle(firstItem[0], firstItem[1])
 					data.collectionCount = len(groupedItems)
 					collectionSize = 0
 					for item in groupedItems:
