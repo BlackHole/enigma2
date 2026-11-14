@@ -15,13 +15,7 @@ class ServiceEvent(Source):
 
 	@cached
 	def getCurrentEvent(self):
-		evt = None
-		if self.service:
-			from Components.MovieList import getLocalEitEvent
-			evt = getLocalEitEvent(self.service, self.additionalInfo)
-		if evt is None:
-			evt = self.service and self.info and self.info.getEvent(self.service)
-		return evt
+		return self.service and self.info and self.info.getEvent(self.service)
 
 	@cached
 	def getInfo(self):
