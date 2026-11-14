@@ -12,6 +12,7 @@ from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixm
 from Components.Renderer.Picon import getPiconName
 from Screens.LocationBox import defaultInhibitDirs
 from Tools.Directories import SCOPE_CURRENT_SKIN, resolveFilename
+from Tools.DownloadedSeries import episodeInfoFetcher, getDownloadedSeriesTitle
 from Tools.FuzzyDate import FuzzyTime
 from Tools.LoadPixmap import LoadPixmap
 from Tools.Trashcan import getTrashFolder, isTrashFolder
@@ -41,6 +42,17 @@ def getItemDisplayName(itemRef, info, removeExtension=None):
 			if fileExtension in KNOWN_EXTENSIONS:
 				name = fileName
 	return name
+
+
+def getCollectionName(itemRef, info):
+	# The name used to group items into collections. Downloaded episodes
+	# ("Show.Name.S01E02.mkv") are grouped by their series title so they
+	# end up in the same collection as recordings of that show.
+	if config.movielist.group_downloaded_series.value:
+		seriesTitle = getDownloadedSeriesTitle(itemRef.getPath())
+		if seriesTitle:
+			return seriesTitle
+	return info.getName(itemRef).strip()
 
 
 def getItemDisplayNameText(itemRef, info, removeExtension=None):
@@ -703,6 +715,7 @@ class MovieList(GUIComponent):
 		collectionMode = config.movielist.enable_collections.value
 		if not collectionMode or not self.allowCollections:
 			collectionName = None
+		fetchSeriesInfo = config.movielist.fetch_series_eit.value
 
 		reflist = root and serviceHandler.list(root)
 		if reflist is None:
@@ -776,7 +789,7 @@ class MovieList(GUIComponent):
 					begin = deltime
 
 			# Filter on a specific collections. Users don't care about case of the name
-			if collectionName and collectionName.lower() != name.strip().lower():
+			if collectionName and collectionName.lower() != getCollectionName(serviceref, info).lower():
 				continue
 
 			if not collectionName and serviceref.flags & eServiceReference.mustDescent:
@@ -816,6 +829,8 @@ class MovieList(GUIComponent):
 				this_tags = set(this_tags)
 				if not this_tags.issuperset(filter_tags) and not this_tags_fullname.issuperset(filter_tags):
 					continue
+			if fetchSeriesInfo and getDownloadedSeriesTitle(serviceref.getPath()):
+				episodeInfoFetcher.request(serviceref.getPath())
 			data = MovieListData()
 			data.txt = getItemDisplayNameText(serviceref, info)
 			if begin2 != 0:
@@ -832,7 +847,7 @@ class MovieList(GUIComponent):
 				if item[0].flags & eServiceReference.mustDescent:
 					items.append(item)
 				else:
-					name = item[1].getName(item[0]).strip().lower()
+					name = getCollectionName(item[0], item[1]).lower()
 					if collectionMode == 1 and name == split[1].lower():
 						items.append(item)
 					elif groupedFiles.get(name):
@@ -851,7 +866,7 @@ class MovieList(GUIComponent):
 					groupedItems = sorted(groupedItems, key=self.buildBeginTimeSortKey, reverse=True)
 					firstItem = groupedItems[0]
 					data = MovieListData()
-					data.txt = firstItem[1].getName(firstItem[0]).strip()
+					data.txt = getCollectionName(firstItem[0], firstItem[1])
 					data.collectionCount = len(groupedItems)
 					collectionSize = 0
 					for item in groupedItems:

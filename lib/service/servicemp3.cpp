@@ -2172,6 +2172,17 @@ RESULT eMP3ServiceOfflineOperations::getListOfFilenames(std::list<std::string> &
 {
 	res.clear();
 	res.push_back(m_ref.path);
+	/* side files enigma2 creates for media files, so deleting a file does not leave them behind */
+	std::string cuts = m_ref.path + ".cuts";
+	if (::access(cuts.c_str(), F_OK) == 0)
+		res.push_back(cuts);
+	size_t pos = m_ref.path.rfind('.');
+	if (pos != std::string::npos && m_ref.path.find('/', pos) == std::string::npos)
+	{
+		std::string eit = m_ref.path.substr(0, pos) + ".eit";
+		if (::access(eit.c_str(), F_OK) == 0)
+			res.push_back(eit);
+	}
 	return 0;
 }
 

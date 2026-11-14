@@ -61,6 +61,8 @@ config.movielist.root = ConfigSelection(default="/media/hdd/movie", choices=["/"
 config.movielist.hide_extensions = ConfigYesNo(default=False)
 config.movielist.stop_service = ConfigYesNo(default=True)
 config.movielist.enable_collections = ConfigSelection(default=0, choices=[(0, _("Off")), (1, _("On except in same named directory")), (2, _("On"))])
+config.movielist.group_downloaded_series = ConfigYesNo(default=False)
+config.movielist.fetch_series_eit = ConfigYesNo(default=False)
 
 userDefinedButtons = None
 last_selected_dest = []
