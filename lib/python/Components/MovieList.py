@@ -12,7 +12,7 @@ from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixm
 from Components.Renderer.Picon import getPiconName
 from Screens.LocationBox import defaultInhibitDirs
 from Tools.Directories import SCOPE_CURRENT_SKIN, resolveFilename
-from Tools.DownloadedSeries import episodeInfoFetcher, getDownloadedSeriesTitle, stripLanguagePrefixes
+from Tools.DownloadedSeries import episodeInfoFetcher, getDownloadedSeriesTitle, storeDuration, stripLanguagePrefixes
 from Tools.FuzzyDate import FuzzyTime
 from Tools.LoadPixmap import LoadPixmap
 from Tools.Trashcan import getTrashFolder, isTrashFolder
@@ -716,6 +716,7 @@ class MovieList(GUIComponent):
 		if not collectionMode or not self.allowCollections:
 			collectionName = None
 		fetchSeriesInfo = config.movielist.fetch_series_eit.value
+		durationDeadline = nowtime() + 3  # Reading durations of new downloads, the rest continues on the next load.
 
 		if root and config.movielist.strip_language_prefix.value:
 			playing = NavigationInstance.instance and NavigationInstance.instance.getCurrentlyPlayingServiceReference()
@@ -834,6 +835,8 @@ class MovieList(GUIComponent):
 					continue
 			if fetchSeriesInfo and getDownloadedSeriesTitle(serviceref.getPath()):
 				episodeInfoFetcher.request(serviceref.getPath())
+			if nowtime() < durationDeadline:
+				storeDuration(serviceref.getPath())
 			data = MovieListData()
 			data.txt = getItemDisplayNameText(serviceref, info)
 			if begin2 != 0:

@@ -18,7 +18,7 @@ from os import listdir, path, rename, remove, replace, stat
 from queue import Queue
 from re import IGNORECASE, compile as reCompile, sub
 from string import capwords
-from struct import pack
+from struct import pack, unpack
 from threading import Lock, Thread
 from time import gmtime, sleep, time
 from urllib.error import HTTPError
@@ -248,6 +248,220 @@ def stripLanguagePrefixes(folder, skipPath=None):
 				print("[DownloadedSeries] Unable to rename '%s': %s" % (old, err))
 			done.add(old)
 	return renamed
+
+
+# Durations of downloaded videos. servicemp3 only knows the length of a media file
+# from its .meta file or, when there is none, a CUT_TYPE_LENGTH entry in its .cuts
+# file. Downloads usually have neither (or a .meta without a length), so the movie
+# list showed no duration. The duration is read from the file header (MP4/MOV
+# "mvhd", Matroska/WebM "Info") and stored where servicemp3 will look for it.
+
+MP4_EXTENSIONS = frozenset((".mp4", ".m4v", ".mov"))
+MATROSKA_EXTENSIONS = frozenset((".mkv", ".webm"))
+CUT_ENTRY_SIZE = 12  # 64 bit position + 32 bit type.
+CUT_TYPE_LENGTH = 5
+META_LENGTH_LINE = 5  # Line of the length (in 1/90000 s) in a .meta file, see eDVBMetaParser::parseMeta().
+PTS_PER_SECOND = 90000
+durationFailed = set()  # Files whose duration could not be read or stored, not tried again this session.
+
+
+def _mp4Boxes(fd, start, end):
+	position = start
+	while position + 8 <= end:
+		fd.seek(position)
+		header = fd.read(8)
+		if len(header) < 8:
+			return
+		size, kind = unpack(">I4s", header)
+		headerSize = 8
+		if size == 1:  # 64 bit size follows.
+			extended = fd.read(8)
+			if len(extended) < 8:
+				return
+			size = unpack(">Q", extended)[0]
+			headerSize = 16
+		elif size == 0:  # Box runs to the end.
+			size = end - position
+		if size < headerSize:
+			return
+		yield kind, position + headerSize, position + size
+		position += size
+
+
+def _mp4Duration(fd, fileSize):
+	for kind, start, end in _mp4Boxes(fd, 0, fileSize):
+		if kind == b"moov":
+			for childKind, childStart, childEnd in _mp4Boxes(fd, start, end):
+				if childKind == b"mvhd":
+					fd.seek(childStart)
+					data = fd.read(32)
+					if len(data) >= 32 and data[0] == 1:
+						timescale, duration = unpack(">IQ", data[20:32])
+					elif len(data) >= 20:
+						timescale, duration = unpack(">II", data[12:20])
+					else:
+						return None
+					if timescale and duration not in (0, 0xFFFFFFFF, 0xFFFFFFFFFFFFFFFF):
+						return duration / timescale
+					return None
+			return None
+	return None
+
+
+def _readVint(fd, keepMarker):
+	first = fd.read(1)
+	if not first:
+		return None, 0
+	byte = first[0]
+	length = 1
+	mask = 0x80
+	while length <= 8 and not byte & mask:
+		mask >>= 1
+		length += 1
+	if length > 8:
+		return None, 0
+	rest = fd.read(length - 1)
+	if len(rest) < length - 1:
+		return None, 0
+	value = byte if keepMarker else byte & (mask - 1)
+	unknown = not keepMarker and value == mask - 1 and all(x == 0xFF for x in rest)
+	for x in rest:
+		value = (value << 8) | x
+	return (-1 if unknown else value), length
+
+
+def _matroskaElements(fd, start, end):
+	position = start
+	while position < end:
+		fd.seek(position)
+		elementId, idLength = _readVint(fd, True)
+		size, sizeLength = _readVint(fd, False)
+		if elementId is None or size is None:
+			return
+		dataStart = position + idLength + sizeLength
+		dataEnd = end if size < 0 else dataStart + size
+		yield elementId, dataStart, dataEnd
+		if size < 0:  # Unknown size, can't skip it.
+			return
+		position = dataEnd
+
+
+def _matroskaDuration(fd, fileSize):
+	for elementId, start, end in _matroskaElements(fd, 0, fileSize):
+		if elementId == 0x18538067:  # Segment
+			for childId, childStart, childEnd in _matroskaElements(fd, start, end):
+				if childId == 0x1549A966:  # Info
+					scale, duration = 1000000, None
+					for infoId, infoStart, infoEnd in _matroskaElements(fd, childStart, childEnd):
+						if infoId in (0x2AD7B1, 0x4489) and infoEnd - infoStart <= 8:
+							fd.seek(infoStart)
+							data = fd.read(infoEnd - infoStart)
+							if infoId == 0x2AD7B1:  # TimestampScale, nanoseconds per tick.
+								scale = int.from_bytes(data, "big") or scale
+							elif len(data) in (4, 8):  # Duration in ticks, a float.
+								duration = unpack(">f" if len(data) == 4 else ">d", data)[0]
+					return duration * scale / 1000000000 if duration and duration > 0 else None
+				if childId == 0x1F43B675:  # Cluster, Info always comes before the first one.
+					return None
+			return None
+	return None
+
+
+def getMediaDuration(filePath):
+	"""Duration in seconds of an MP4/MOV or Matroska/WebM file, or None.
+
+	The format is taken from the first bytes, not the extension: some downloaders
+	save Matroska files with an .mp4 extension.
+	"""
+	try:
+		with open(filePath, "rb") as fd:
+			head = fd.read(12)
+			if head[:4] == b"\x1a\x45\xdf\xa3":  # EBML header, Matroska or WebM.
+				reader = _matroskaDuration
+			elif head[4:8] in (b"ftyp", b"moov", b"mdat", b"free", b"skip", b"wide", b"pnot"):
+				reader = _mp4Duration
+			else:
+				return None
+			return reader(fd, stat(filePath).st_size)
+	except (OSError, ValueError, OverflowError) as err:
+		print("[DownloadedSeries] Unable to read the duration of '%s': %s" % (filePath, err))
+		return None
+
+
+def _writeFile(filePath, data):
+	tempPath = filePath + ".tmp"
+	try:
+		with open(tempPath, "wb") as fd:
+			fd.write(data)
+		replace(tempPath, filePath)
+		return True
+	except OSError as err:
+		print("[DownloadedSeries] Unable to write '%s': %s" % (filePath, err))
+		try:
+			remove(tempPath)
+		except OSError:
+			pass
+		return False
+
+
+def _storeDurationInMeta(filePath, metaPath):
+	"""Fill in the length line of a .meta file that has none. eStaticServiceMP3Info::getLength()
+	takes the length from the .meta when there is one and never looks at the .cuts file."""
+	try:
+		with open(metaPath, "rb") as fd:
+			lines = fd.read().decode("utf-8", "surrogateescape").splitlines()
+	except OSError:
+		durationFailed.add(filePath)
+		return False
+	if len(lines) > META_LENGTH_LINE and lines[META_LENGTH_LINE].strip().isdigit() and int(lines[META_LENGTH_LINE]) > 0:
+		return False
+	seconds = getMediaDuration(filePath)
+	if not seconds:
+		durationFailed.add(filePath)
+		return False
+	lines += [""] * (META_LENGTH_LINE + 1 - len(lines))
+	lines[META_LENGTH_LINE] = str(int(seconds * PTS_PER_SECOND))
+	if _writeFile(metaPath, ("\n".join(lines) + "\n").encode("utf-8", "surrogateescape")):
+		return True
+	durationFailed.add(filePath)
+	return False
+
+
+def storeDuration(filePath):
+	"""Store the duration of an MP4/MKV file where enigma2 can show it.
+
+	With a .meta file it goes in its length line. Otherwise it is added to the .cuts file,
+	at the end, because eServiceMP3::loadCuesheet() stops reading at the first entry with
+	a type above 3. Playback saves the .cuts file without it, so it is added again the next
+	time the list is loaded. Returns True if it was written.
+	"""
+	extension = path.splitext(filePath)[1].lower()
+	if extension not in MP4_EXTENSIONS and extension not in MATROSKA_EXTENSIONS or filePath in durationFailed:
+		return False
+	metaPath = filePath + ".meta"
+	if path.exists(metaPath):
+		return _storeDurationInMeta(filePath, metaPath)
+	cutsPath = filePath + ".cuts"
+	try:
+		with open(cutsPath, "rb") as fd:
+			cuts = fd.read()
+	except FileNotFoundError:
+		cuts = b""
+	except OSError:
+		durationFailed.add(filePath)
+		return False
+	cuts = cuts[:len(cuts) - len(cuts) % CUT_ENTRY_SIZE]
+	for offset in range(0, len(cuts), CUT_ENTRY_SIZE):
+		if unpack(">I", cuts[offset + 8:offset + 12])[0] == CUT_TYPE_LENGTH:
+			return False
+	seconds = getMediaDuration(filePath)
+	if not seconds:
+		durationFailed.add(filePath)
+		return False
+	if _writeFile(cutsPath, cuts + pack(">QI", int(seconds * PTS_PER_SECOND), CUT_TYPE_LENGTH)):
+		return True
+	durationFailed.add(filePath)
+	return False
 
 
 # TVMaze lookup, done on a single background thread.
