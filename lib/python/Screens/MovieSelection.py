@@ -2,6 +2,7 @@ from os import access, listdir, mkdir, path as ospath, remove, rename, stat, sta
 import time
 import pickle
 import shutil
+from re import IGNORECASE, compile as reCompile
 from enigma import eServiceReference, eServiceCenter, eTimer, eSize, iPlayableService, iServiceInformation, getPrevAsciiCode, eRCInput
 
 from Components.Button import Button
@@ -61,8 +62,9 @@ config.movielist.root = ConfigSelection(default="/media/hdd/movie", choices=["/"
 config.movielist.hide_extensions = ConfigYesNo(default=False)
 config.movielist.stop_service = ConfigYesNo(default=True)
 config.movielist.enable_collections = ConfigSelection(default=0, choices=[(0, _("Off")), (1, _("On except in same named directory")), (2, _("On"))])
-config.movielist.group_downloaded_series = ConfigYesNo(default=False)
+config.movielist.group_downloaded_series = ConfigYesNo(default=True)
 config.movielist.fetch_series_eit = ConfigYesNo(default=False)
+config.movielist.strip_language_prefix = ConfigYesNo(default=True)
 
 userDefinedButtons = None
 last_selected_dest = []
@@ -188,6 +190,21 @@ canCopy = canMove
 canRename = canMove
 
 
+# Subtitle files that belong to a video: "Name.srt", "Name.en.srt", "Name.eng.forced.srt".
+SUBTITLE_SUFFIX_PATTERN = reCompile(r"^(?:\.[a-z]{2,3}(?:[-_][a-z]{2,4})?)?(?:\.(?:forced|sdh|cc))?\.srt$", IGNORECASE)
+
+
+def getSubtitleFiles(videoPath):
+	"""Names of the subtitle files next to videoPath that belong to it."""
+	folder, fileName = ospath.split(videoPath)
+	base = ospath.splitext(fileName)[0]
+	try:
+		names = listdir(folder or ".")
+	except OSError:
+		return []
+	return [name for name in names if name.startswith(base) and SUBTITLE_SUFFIX_PATTERN.match(name[len(base):])]
+
+
 def createMoveList(serviceref, dest):
 	# normpath is to remove the trailing '/' from directories
 	src = isinstance(serviceref, str) and "%s.%s" % (serviceref, "ts" if ospath.exists("%s.ts" % serviceref) else "stream") or ospath.normpath(serviceref.getPath())
@@ -209,6 +226,8 @@ def createMoveList(serviceref, dest):
 			candidate = src + ext
 			if ospath.exists(candidate):
 				moveList.append((candidate, ospath.join(dest, baseName + ext)))
+		for name in getSubtitleFiles(src):
+			moveList.append((ospath.join(srcPath, name), ospath.join(dest, name)))
 	return moveList
 
 
@@ -271,9 +290,14 @@ def renameServiceFiles(serviceref, newName):
 			newPath = ospath.join(oldDir, newName + ext)
 			rename(oldPath, newPath)
 			cleanupList.remove(ext)
+	oldBase = ospath.basename(oldName)
+	for name in getSubtitleFiles(ospath.join(oldDir, oldBaseName)):  # oldPath was reused above.
+		newSubtitlePath = ospath.join(oldDir, newName + name[len(oldBase):])
+		if not ospath.exists(newSubtitlePath):
+			rename(ospath.join(oldDir, name), newSubtitlePath)
 	try:
 		for item in cleanupList + [oldExt + ".ap", oldExt + ".meta", oldExt + ".sc"]:
-			newPath = ospath.join(oldDir, newName + ext)
+			newPath = ospath.join(oldDir, newName + item)
 			if ospath.exists(newPath):
 				remove(newPath)
 	except Exception as ex:
@@ -2418,6 +2442,10 @@ class MovieSelection(Screen, HelpableScreen, SelectionEventInfo, InfoBarBase, Pr
 				else:
 					if offline.deleteFromDisk(0):
 						raise Exception("Offline delete failed")
+					if not itemRef.flags & eServiceReference.mustDescent:
+						from enigma import eBackgroundFileEraser
+						for name in getSubtitleFiles(path):
+							eBackgroundFileEraser.getInstance().erase(ospath.join(ospath.dirname(path), name))
 				from Screens.InfoBarGenerics import resumePointsInstance
 				resumePointsInstance.delResumePoint(itemRef)
 				deletedList.append(itemRef)

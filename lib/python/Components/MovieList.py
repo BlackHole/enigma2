@@ -12,7 +12,7 @@ from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixm
 from Components.Renderer.Picon import getPiconName
 from Screens.LocationBox import defaultInhibitDirs
 from Tools.Directories import SCOPE_CURRENT_SKIN, resolveFilename
-from Tools.DownloadedSeries import episodeInfoFetcher, getDownloadedSeriesTitle
+from Tools.DownloadedSeries import episodeInfoFetcher, getDownloadedSeriesTitle, stripLanguagePrefixes
 from Tools.FuzzyDate import FuzzyTime
 from Tools.LoadPixmap import LoadPixmap
 from Tools.Trashcan import getTrashFolder, isTrashFolder
@@ -717,6 +717,9 @@ class MovieList(GUIComponent):
 			collectionName = None
 		fetchSeriesInfo = config.movielist.fetch_series_eit.value
 
+		if root and config.movielist.strip_language_prefix.value:
+			playing = NavigationInstance.instance and NavigationInstance.instance.getCurrentlyPlayingServiceReference()
+			stripLanguagePrefixes(path.normpath(root.getPath()), playing and playing.getPath() and path.normpath(playing.getPath()))
 		reflist = root and serviceHandler.list(root)
 		if reflist is None:
 			print("listing of movies failed")
