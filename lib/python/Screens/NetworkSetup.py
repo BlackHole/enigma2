@@ -11,6 +11,7 @@ from Components.ActionMap import ActionMap, NumberActionMap, HelpableActionMap
 from Components.config import config, ConfigSubsection, ConfigYesNo, ConfigIP, ConfigText, ConfigPassword, ConfigSelection, getConfigListEntry, ConfigNumber, ConfigLocations, NoSave, ConfigMacText
 from Components.ConfigList import ConfigListScreen
 from Components.Console import Console
+from Components.ServiceAutostart import setServiceAutostart
 from Components.FileList import MultiFileSelectList
 from Components.Label import Label, MultiColorLabel
 from Components.ScrollLabel import ScrollLabel
@@ -1689,10 +1690,7 @@ class NetworkAfp(NSCommon, Screen):
 			self.ConsoleB.ePopen("/etc/init.d/atalk stop", self.StartStopCallback)
 
 	def activateAfp(self):
-		if ServiceIsEnabled("atalk"):
-			self.ConsoleB.ePopen("update-rc.d -f atalk remove", self.StartStopCallback)
-		else:
-			self.ConsoleB.ePopen("update-rc.d -f atalk defaults", self.StartStopCallback)
+		self.ConsoleB.ePopen(setServiceAutostart("atalk", not ServiceIsEnabled("atalk")), self.StartStopCallback)
 
 	def updateService(self, result=None, retval=None, extra_args=None):
 		import process
@@ -1767,10 +1765,7 @@ class NetworkFtp(NSCommon, Screen):
 
 	def activateFtp(self):
 		commands = []
-		if ServiceIsEnabled("vsftpd"):
-			commands.append("update-rc.d -f vsftpd remove")
-		else:
-			commands.append("update-rc.d -f vsftpd defaults")
+		commands.append(setServiceAutostart("vsftpd", not ServiceIsEnabled("vsftpd")))
 		self.ConsoleB.eBatch(commands, self.StartStopCallback, debug=True)
 
 	def updateService(self):
@@ -1846,10 +1841,7 @@ class NetworkNfs(NSCommon, Screen):
 			self.ConsoleB.ePopen("/etc/init.d/nfsserver stop", self.StartStopCallback)
 
 	def Nfsset(self):
-		if ServiceIsEnabled("nfsserver"):
-			self.ConsoleB.ePopen("update-rc.d -f nfsserver remove", self.StartStopCallback)
-		else:
-			self.ConsoleB.ePopen("update-rc.d -f nfsserver defaults 13", self.StartStopCallback)
+		self.ConsoleB.ePopen(setServiceAutostart("nfsserver", not ServiceIsEnabled("nfsserver")), self.StartStopCallback)
 
 	def updateService(self):
 		import process
@@ -1925,10 +1917,7 @@ class NetworkOpenvpn(NSCommon, Screen):
 			self.ConsoleB.ePopen("/etc/init.d/openvpn stop", self.StartStopCallback)
 
 	def activateVpn(self):
-		if ServiceIsEnabled("openvpn"):
-			self.ConsoleB.ePopen("update-rc.d -f openvpn remove", self.StartStopCallback)
-		else:
-			self.ConsoleB.ePopen("update-rc.d -f openvpn defaults", self.StartStopCallback)
+		self.ConsoleB.ePopen(setServiceAutostart("openvpn", not ServiceIsEnabled("openvpn")), self.StartStopCallback)
 
 	def updateService(self):
 		import process
@@ -2037,10 +2026,7 @@ class NetworkSamba(NSCommon, Screen):
 
 	def activateSamba(self):
 		commands = []
-		if ServiceIsEnabled("samba"):
-			commands.append("update-rc.d -f samba remove")
-		else:
-			commands.append("update-rc.d -f samba defaults")
+		commands.append(setServiceAutostart("samba", not ServiceIsEnabled("samba")))
 		self.ConsoleB.eBatch(commands, self.StartStopCallback, debug=True)
 
 	def updateService(self):
@@ -2121,10 +2107,7 @@ class NetworkTelnet(NSCommon, Screen):
 	def activateTelnet(self):
 		commands = []
 		if fileExists("/etc/init.d/telnetd.busybox"):
-			if ServiceIsEnabled("telnetd.busybox"):
-				commands.append("update-rc.d -f telnetd.busybox remove")
-			else:
-				commands.append("update-rc.d -f telnetd.busybox defaults")
+			commands.append(setServiceAutostart("telnetd.busybox", not ServiceIsEnabled("telnetd.busybox")))
 		self.ConsoleB.eBatch(commands, self.StartStopCallback, debug=True)
 
 	def updateService(self):
@@ -2213,10 +2196,7 @@ class NetworkInadyn(NSCommon, Screen):
 			self.ConsoleB.ePopen("/etc/init.d/inadyn-mt stop", self.StartStopCallback)
 
 	def autostart(self):
-		if ServiceIsEnabled("inadyn-mt"):
-			self.ConsoleB.ePopen("update-rc.d -f inadyn-mt remove", self.StartStopCallback)
-		else:
-			self.ConsoleB.ePopen("update-rc.d -f inadyn-mt defaults", self.StartStopCallback)
+		self.ConsoleB.ePopen(setServiceAutostart("inadyn-mt", not ServiceIsEnabled("inadyn-mt")), self.StartStopCallback)
 
 	def updateService(self):
 		import process
@@ -2448,10 +2428,7 @@ class NetworkuShare(NSCommon, Screen):
 			self.ConsoleB.ePopen("/etc/init.d/ushare stop >> /tmp/uShare.log", self.StartStopCallback)
 
 	def autostart(self):
-		if ServiceIsEnabled("ushare"):
-			self.ConsoleB.ePopen("update-rc.d -f ushare remove", self.StartStopCallback)
-		else:
-			self.ConsoleB.ePopen("update-rc.d -f ushare defaults", self.StartStopCallback)
+		self.ConsoleB.ePopen(setServiceAutostart("ushare", not ServiceIsEnabled("ushare")), self.StartStopCallback)
 
 	def updateService(self):
 		import process
@@ -2820,10 +2797,7 @@ class NetworkMiniDLNA(NSCommon, Screen):
 			self.ConsoleB.ePopen("/etc/init.d/minidlna stop", self.StartStopCallback)
 
 	def autostart(self):
-		if ServiceIsEnabled("minidlna"):
-			self.ConsoleB.ePopen("update-rc.d -f minidlna remove", self.StartStopCallback)
-		else:
-			self.ConsoleB.ePopen("update-rc.d -f minidlna defaults", self.StartStopCallback)
+		self.ConsoleB.ePopen(setServiceAutostart("minidlna", not ServiceIsEnabled("minidlna")), self.StartStopCallback)
 
 	def updateService(self):
 		import process
