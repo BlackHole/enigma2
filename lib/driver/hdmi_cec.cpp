@@ -1,5 +1,8 @@
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
+#include <stddef.h>
+#include <stdint.h>
 #include <sys/ioctl.h>
 #include <string.h>
 
@@ -11,7 +14,20 @@
 #include <lib/driver/input_fake.h>
 #include <lib/driver/hdmi_cec.h>
 #include <lib/driver/avswitch.h>
-#define CEC_LOG_ADDR_TYPE_TUNER		2
+#define CEC_LOG_ADDR_TUNER_1		3
+#define CEC_MAX_MSG_SIZE	16
+#define CEC_VENDOR_ENIGMA2_STB          0x000934
+
+static int hexValue(char value)
+{
+	if (value >= '0' && value <= '9')
+		return value - '0';
+	if (value >= 'A' && value <= 'F')
+		return value - 'A' + 10;
+	if (value >= 'a' && value <= 'f')
+		return value - 'a' + 10;
+	return -1;
+}
 
 eHdmiCEC *eHdmiCEC::instance = NULL;
 
@@ -21,15 +37,22 @@ eHdmiCEC::eCECMessage::eCECMessage(int addr, int cmd, char *data, int length)
 {
 	address = addr;
 	command = cmd;
+	dataLength = 0;
+	memset(messageData, 0, sizeof(messageData));
+	control0 = control1 = control2 = control3 = 0;
+
+	if (length < 0)
+		length = 0;
 	if (length > (int)sizeof(messageData)) length = sizeof(messageData);
-	if (length && data) {
+	if (length && data)
+	{
 		memcpy(messageData, data, length);
-		control0 = data[0];
-		control1 = data[1];
-		control2 = data[2];
-		control3 = data[3];
+		if (length > 0) control0 = data[0];
+		if (length > 1) control1 = data[1];
+		if (length > 2) control2 = data[2];
+		if (length > 3) control3 = data[3];
+		dataLength = length;
 	}
-	dataLength = length;
 }
 
 int eHdmiCEC::eCECMessage::getAddress()
@@ -44,6 +67,8 @@ int eHdmiCEC::eCECMessage::getCommand()
 
 int eHdmiCEC::eCECMessage::getData(char *data, int length)
 {
+	if (!data || length <= 0)
+		return 0;
 	if (length > (int)dataLength) length = dataLength;
 	memcpy(data, messageData, length);
 	return length;
@@ -54,17 +79,34 @@ eHdmiCEC::eHdmiCEC()
 {
 	ASSERT(!instance);
 	instance = this;
+	hdmiFd = -1;
 	fixedAddress = false;
+	cecEnabled = false;
 	physicalAddress[0] = 0x10;
 	physicalAddress[1] = 0x00;
-	logicalAddress = 1;
-	deviceType = CEC_LOG_ADDR_TYPE_TUNER; /* default: tuner */
+	logicalAddress = CEC_LOG_ADDR_TUNER_1;
+	deviceType = CEC_LOG_ADDR_TUNER_1; /* default: tuner / set-top box */
+}
+
+void eHdmiCEC::initializeCEC()
+{
+#ifdef DREAMBOX
+#define HDMIDEV "/dev/misc/hdmi_cec0"
+#else
 #define HDMIDEV "/dev/hdmi_cec"
+#endif
+
 	hdmiFd = ::open(HDMIDEV, O_RDWR | O_NONBLOCK | O_CLOEXEC);
 	eTrace("[eHdmiCEC] ****** open HDMIDEV: %s hdmiFd: %d", HDMIDEV, hdmiFd);
 	if (hdmiFd >= 0)
 	{
+#ifdef DREAMBOX
+		unsigned int val = 0;
+		::ioctl(hdmiFd, 4, &val);
+#else
 		::ioctl(hdmiFd, 0); /* flush old messages */
+#endif
+		eDebug("[eHdmiCEC] using legacy HDMI-CEC backend on %s", HDMIDEV);
 		messageNotifier = eSocketNotifier::create(eApp, hdmiFd, eSocketNotifier::Read | eSocketNotifier::Priority);
 		CONNECT(messageNotifier->activated, eHdmiCEC::hdmiEvent);
 		getAddressInfo();
@@ -78,6 +120,7 @@ eHdmiCEC::eHdmiCEC()
 eHdmiCEC::~eHdmiCEC()
 {
 	if (hdmiFd >= 0) ::close(hdmiFd);
+	eTrace("[eHdmiCEC] *********>> close hdmiFD");	
 }
 
 eHdmiCEC *eHdmiCEC::getInstance()
@@ -107,6 +150,28 @@ void eHdmiCEC::getAddressInfo()
 		if (::ioctl(hdmiFd, 1, &addressinfo) >= 0)
 		{
 			hasdata = true;
+#if DREAMBOX
+			/* we do not get the device type, check the logical address to determine the type */
+			switch (addressinfo.logical)
+			{
+			case 0x1:
+			case 0x2:
+			case 0x9:
+				addressinfo.type = 1; /* recorder */
+				break;
+			case 0x3:
+			case 0x6:
+			case 0x7:
+			case 0xa:
+				addressinfo.type = 3; /* tuner */
+				break;
+			case 0x4:
+			case 0x8:
+			case 0xb:
+				addressinfo.type = 4; /* playback */
+				break;
+			}
+#endif
 		}
 		if (hasdata)
 		{
@@ -159,6 +224,13 @@ int eHdmiCEC::getDeviceType()
 	return deviceType;
 }
 
+void eHdmiCEC::setEnabled(bool enabled)
+{
+	cecEnabled = enabled;
+	if (cecEnabled && hdmiFd < 0)
+		initializeCEC();
+}
+
 bool eHdmiCEC::getActiveStatus()
 {
 	bool active = true;
@@ -178,6 +250,14 @@ void eHdmiCEC::hdmiEvent(int what)
 	{
 		bool hasdata = false;
 		struct cec_rx_message rxmessage;
+#ifdef DREAMBOX
+		if (::ioctl(hdmiFd, 2, &rxmessage) >= 0)
+		{
+			hasdata = true;
+		}
+		unsigned int val = 0;
+		::ioctl(hdmiFd, 4, &val);
+#else
 		if (::read(hdmiFd, &rxmessage, 2) == 2)
 		{
 			if (::read(hdmiFd, &rxmessage.data, rxmessage.length) == rxmessage.length)
@@ -185,41 +265,52 @@ void eHdmiCEC::hdmiEvent(int what)
 				hasdata = true;
 			}
 		}
+#endif
 		bool hdmicec_enabled = eConfigManager::getConfigBoolValue("config.hdmicec.enabled", false);
-		if (hasdata && hdmicec_enabled)
+		if (hasdata && hdmicec_enabled && rxmessage.length > 0)
 		{
 			bool keypressed = false;
 			static unsigned char pressedkey = 0;
-
-			eTraceNoNewLineStart("[eHdmiCEC] received message");
-			eTraceNoNewLine(" %02X", rxmessage.address);
-			for (int i = 0; i < rxmessage.length; i++)
+			/* some TVs send <Device Vendor ID> (0x87) continuously, log only the first one */
+			static bool vendorIdLogged = false;
+			bool logMessage = rxmessage.data[0] != 0x87 || !vendorIdLogged;
+			if (rxmessage.data[0] == 0x87)
+				vendorIdLogged = true;
+			if (logMessage)
 			{
-				eTraceNoNewLine(" %02X", rxmessage.data[i]);
-			}
-			eTraceNoNewLine("\n");
-			bool hdmicec_report_active_menu = eConfigManager::getConfigBoolValue("config.hdmicec.report_active_menu", false);
-			if (hdmicec_report_active_menu)
-			{
-				switch (rxmessage.data[0])
+				eTraceNoNewLineStart("[eHdmiCEC] received message");
+				eTraceNoNewLine(" %02X", rxmessage.address);
+				for (int i = 0; i < rxmessage.length; i++)
 				{
-					case 0x44: /* key pressed */
-						keypressed = true;
-						pressedkey = rxmessage.data[1];
-						[[fallthrough]];
-					case 0x45: /* key released */
+					eTraceNoNewLine(" %02X", rxmessage.data[i]);
+				}
+				eTraceNoNewLine("\n");
+				bool hdmicec_report_active_menu = eConfigManager::getConfigBoolValue("config.hdmicec.report_active_menu", false);
+				if (hdmicec_report_active_menu)
+				{
+					switch (rxmessage.data[0])
 					{
-						long code = translateKey(pressedkey);
-						if (keypressed) code |= 0x80000000;
-						for (std::list<eRCDevice*>::iterator i(listeners.begin()); i != listeners.end(); ++i)
+						case 0x44: /* key pressed */
+							if (rxmessage.length < 2)
+								break;
+							keypressed = true;
+							pressedkey = rxmessage.data[1];
+							[[fallthrough]];
+						case 0x45: /* key released */
 						{
-							(*i)->handleCode(code);
+							long code = translateKey(pressedkey);
+							if (keypressed) code |= 0x80000000;
+							for (std::list<eRCDevice*>::iterator i(listeners.begin()); i != listeners.end(); ++i)
+							{
+								(*i)->handleCode(code);
+							}
+							break;
 						}
-						break;
 					}
 				}
 			}
-			ePtr<iCECMessage> msg = new eCECMessage(rxmessage.address, rxmessage.data[0], (char*)&rxmessage.data[1], rxmessage.length);
+			int operandLength = rxmessage.length > 1 ? rxmessage.length - 1 : 0;
+			ePtr<iCECMessage> msg = new eCECMessage(rxmessage.address, rxmessage.data[0], (char*)&rxmessage.data[1], operandLength);
 			messageReceived(msg);
 		}
 	}
@@ -354,18 +445,60 @@ void eHdmiCEC::sendMessage(struct cec_message &message)
 			eTraceNoNewLine(" %02X", message.data[i]);
 		}
 		eTraceNoNewLine("\n");
-		::write(hdmiFd, &message, 2 + message.length);
+#ifdef DREAMBOX
+		message.flag = 1;
+		::ioctl(hdmiFd, 3, &message);
+#else
+		ssize_t ret = ::write(hdmiFd, &message, 2 + message.length);
+		if (ret < 0) eTrace("[eHdmiCEC] write failed: %m");
+#endif
 	}
 }
 
 void eHdmiCEC::sendMessage(unsigned char address, unsigned char cmd, char *data, int length)
 {
 	struct cec_message message = {};
+	if (length < 0 || !data)
+		length = 0;
+	/* CEC_MAX_MSG_SIZE includes the initiator/destination header byte. */
+	if (length > CEC_MAX_MSG_SIZE - 2)
+		length = CEC_MAX_MSG_SIZE - 2;
 	message.address = address;
 	if (length > (int)(sizeof(message.data) - 1)) length = sizeof(message.data) - 1;
 	message.length = length + 1;
 	message.data[0] = cmd;
-	memcpy(&message.data[1], data, length);
+	if (length)
+		memcpy(&message.data[1], data, length);
+	sendMessage(message);
+}
+
+void eHdmiCEC::sendMessageBytes(unsigned char address, unsigned char cmd, char *hexdata)
+{
+	struct cec_message message = {};
+	message.address = address;
+	message.length = 1;
+	message.data[0] = cmd;
+
+	if (hexdata)
+	{
+		int highNibble = -1;
+		for (const char *item = hexdata; *item && message.length < CEC_MAX_MSG_SIZE - 1 && message.length < sizeof(message.data); ++item)
+		{
+			int nibble = hexValue(*item);
+			if (nibble < 0)
+				continue;
+			if (highNibble < 0)
+			{
+				highNibble = nibble;
+			}
+			else
+			{
+				message.data[message.length++] = (highNibble << 4) | nibble;
+				highNibble = -1;
+			}
+		}
+	}
+
 	sendMessage(message);
 }
 

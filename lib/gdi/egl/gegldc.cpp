@@ -205,7 +205,7 @@ bool gEGLDC::tryInitEGL(int version) {
 		m_egl_context = EGL_NO_CONTEXT;
 		return false;
 	}
- 
+
 	// The context is current now: learn the GPU's size limits before anything
 	// sized to the canvas (shadow FBO, viewport, textures) is created. Only
 	// matters when the canvas exceeds them - see updatePhysicalSize().
