@@ -39,7 +39,8 @@ def setLanguageFromBackup(backupfile):
 			print("[OBH plugin][setLanguageFromBackup] language selected", languageToSelect)
 			from Components.Language import language
 			language.InitLang()
-			language.activateLanguage(languageToSelect)
+			if languageToSelect != language.getActiveLanguage():  # this runs during plugin import, activating fires the language callbacks (plugin reload)
+				language.activateLanguage(languageToSelect)
 			config.misc.languageselected.value = 0		# 0 means found
 			config.misc.languageselected.save()
 			break
