@@ -20,7 +20,6 @@ service/servicehdmi.cpp \
 service/servicepeer.cpp \
 service/servicets.cpp \
 service/servicewebts.cpp \
-service/servicedvbsoftdecoder.cpp \
 service/audiochanneldetector.cpp
 
 if HAS_SOFTWARE_HDR_DETECTION
@@ -33,7 +32,6 @@ serviceincludedir = $(pkgincludedir)/lib/service
 serviceinclude_HEADERS = \
 service/event.h \
 service/iservice.h \
-service/iservicescrambled.h \
 service/listboxservice.h \
 service/listboxservicetpl.h \
 service/service.h \
@@ -49,7 +47,6 @@ service/servicehdmi.h \
 service/servicepeer.h \
 service/servicets.h \
 service/servicewebts.h \
-service/servicedvbsoftdecoder.h \
 service/audiochanneldetector.h
 
 if HAS_SOFTWARE_HDR_DETECTION

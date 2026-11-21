@@ -1,12 +1,8 @@
 #include <lib/service/audiochanneldetector.h>
-#include <lib/service/servicedvbsoftdecoder.h>
 #include <lib/dvb/idemux.h>
 #include <lib/dvb/pmtparse.h>
 #include <lib/base/eerror.h>
 
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/socket.h>
 #include <cstring>
 #include <cerrno>
 
@@ -626,10 +622,9 @@ namespace
 DEFINE_REF(eDVBAudioChannelDetector);
 
 eDVBAudioChannelDetector::eDVBAudioChannelDetector()
-	: m_pid(-1), m_codec(ctUnsupported), m_identity(nullptr), m_softcsa(false),
+	: m_pid(-1), m_codec(ctUnsupported), m_identity(nullptr),
 	  m_scanned(0), m_channels(0), m_atmos(false), m_monitoring(false), m_gaveUp(false)
 {
-	m_monitor_fd[0] = m_monitor_fd[1] = -1;
 	m_timeout = eTimer::create(eApp);
 	CONNECT(m_timeout->timeout, eDVBAudioChannelDetector::onTimeout);
 }
@@ -684,21 +679,6 @@ void eDVBAudioChannelDetector::stop()
 		m_pes_conn = 0;
 		m_pes_reader = 0;
 	}
-
-	if (m_notifier)
-	{
-		m_notifier->stop();
-		m_notifier = 0;
-	}
-
-	if (m_soft_decoder)
-	{
-		m_soft_decoder->setAudioMonitorFD(-1);
-		m_soft_decoder = 0;
-	}
-
-	if (m_monitor_fd[0] >= 0) { ::close(m_monitor_fd[0]); m_monitor_fd[0] = -1; }
-	if (m_monitor_fd[1] >= 0) { ::close(m_monitor_fd[1]); m_monitor_fd[1] = -1; }
 }
 
 void eDVBAudioChannelDetector::start(iDVBDemux *demux, int pid, int codec)
@@ -708,7 +688,6 @@ void eDVBAudioChannelDetector::start(iDVBDemux *demux, int pid, int codec)
 	m_pid = pid;
 	m_codec = codec;
 	m_identity = demux;
-	m_softcsa = false;
 
 	if (pid <= 0 || codec == ctUnsupported || !demux)
 	{
@@ -739,130 +718,9 @@ void eDVBAudioChannelDetector::start(iDVBDemux *demux, int pid, int codec)
 	m_timeout->start(PROBE_TIMEOUT_MS, true);
 }
 
-void eDVBAudioChannelDetector::startSoftCSA(eDVBSoftDecoder *soft_decoder, int pid, int codec)
-{
-	reset();
-
-	m_pid = pid;
-	m_codec = codec;
-	m_identity = soft_decoder;
-	m_softcsa = true;
-
-	if (pid <= 0 || codec == ctUnsupported || !soft_decoder)
-	{
-		eTrace("[eDVBAudioChannelDetector] startSoftCSA: skipping pid=%d codec=%d (unsupported or invalid)", pid, codec);
-		giveUp();
-		return;
-	}
-
-	if (::socketpair(AF_UNIX, SOCK_STREAM, 0, m_monitor_fd) != 0)
-	{
-		eTrace("[eDVBAudioChannelDetector] startSoftCSA: socketpair() failed for pid=%d: %m", pid);
-		m_monitor_fd[0] = m_monitor_fd[1] = -1;
-		giveUp();
-		return;
-	}
-
-	// Both ends non-blocking: the write end is used from the record thread
-	// and must never be allowed to block the real decode path on backpressure.
-	::fcntl(m_monitor_fd[0], F_SETFL, O_NONBLOCK);
-	::fcntl(m_monitor_fd[1], F_SETFL, O_NONBLOCK);
-
-	int bufsz = 256 * 1024;
-	::setsockopt(m_monitor_fd[0], SOL_SOCKET, SO_RCVBUF, &bufsz, sizeof(bufsz));
-	::setsockopt(m_monitor_fd[1], SOL_SOCKET, SO_SNDBUF, &bufsz, sizeof(bufsz));
-
-	if (soft_decoder->setAudioMonitorFD(m_monitor_fd[1]))
-	{
-		eTrace("[eDVBAudioChannelDetector] startSoftCSA: setAudioMonitorFD failed for pid=%d (recorder not active yet?)", pid);
-		::close(m_monitor_fd[0]); m_monitor_fd[0] = -1;
-		::close(m_monitor_fd[1]); m_monitor_fd[1] = -1;
-		giveUp();
-		return;
-	}
-
-	m_soft_decoder = soft_decoder;
-
-	m_notifier = eSocketNotifier::create(eApp, m_monitor_fd[0], eSocketNotifier::Read, false);
-	CONNECT(m_notifier->activated, eDVBAudioChannelDetector::monitorData);
-	m_notifier->start();
-
-	eTrace("[eDVBAudioChannelDetector] probing pid=%04x codec=%d via SoftCSA monitor fd", pid, codec);
-	m_timeout->start(PROBE_TIMEOUT_MS, true);
-}
-
 void eDVBAudioChannelDetector::pesData(const uint8_t *data, int len)
 {
 	feed(data, len);
-}
-
-void eDVBAudioChannelDetector::monitorData(int)
-{
-	uint8_t buffer[16384];
-	for (;;)
-	{
-		int r = ::read(m_monitor_fd[0], buffer, sizeof(buffer));
-
-		if (r == 0)
-		{
-			// Peer (write end, held by the recorder) closed. A closed,
-			// non-blocking socket is always "readable" - if we just return
-			// here and leave the notifier running, it fires again
-			// immediately, forever (a busy-loop / permanent spinner). This
-			// probe can never get more data, so stop it outright.
-			eTrace("[eDVBAudioChannelDetector] monitor fd closed for pid=%04x, giving up", m_pid);
-			giveUp();
-			return;
-		}
-
-		if (r < 0)
-		{
-			if (errno == EAGAIN || errno == EWOULDBLOCK)
-				return; // no data right now - wait for the next real notification
-			eTrace("[eDVBAudioChannelDetector] monitor fd read error for pid=%04x: %m", m_pid);
-			giveUp();
-			return;
-		}
-
-		// The monitor delivers raw 188-byte TS packets for every PID the
-		// SoftCSA recorder carries (video + audio + PCR, ...). Filter down
-		// to our target PID's payload before handing bytes to the same
-		// byte-level scanners used by the PES paths - PES header bytes
-		// embedded in that payload are harmless, exactly as in the
-		// Python proof of concept, which never stripped them either.
-		for (int pos = 0; pos + 188 <= r; pos += 188)
-		{
-			const uint8_t *packet = buffer + pos;
-			if (packet[0] != 0x47)
-				continue;
-
-			int packet_pid = ((packet[1] & 0x1F) << 8) | packet[2];
-			if (packet_pid != m_pid)
-				continue;
-
-			int adaptation_control = (packet[3] >> 4) & 0x03;
-			if (adaptation_control == 0 || adaptation_control == 2)
-				continue; // no payload
-
-			int offset = 4;
-			if (adaptation_control == 3)
-			{
-				if (offset >= 188)
-					continue;
-				int adaptation_length = packet[offset];
-				offset += 1 + adaptation_length;
-			}
-			if (offset >= 188)
-				continue;
-
-			feed(packet + offset, 188 - offset);
-			if (finished())
-				return;
-		}
-
-		if (r != (int)sizeof(buffer))
-			return;
-	}
 }
 
 void eDVBAudioChannelDetector::feed(const uint8_t *data, int len)

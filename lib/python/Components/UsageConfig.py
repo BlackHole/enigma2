@@ -6,7 +6,7 @@ import skin
 
 from enigma import eDVBDB, eEPGCache, setTunerTypePriorityOrder, setPreferredTuner, setSpinnerOnOff, setEnableTtCachingOnOff, eEnv, Misc_Options, eBackgroundFileEraser, eServiceEvent, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, RT_WRAP
 
-from Components.Harddisk import harddiskmanager, bytesToHumanReadable
+from Components.Harddisk import harddiskmanager
 from Components.config import config, ConfigBoolean, ConfigDictionarySet, ConfigDirectory, ConfigInteger, ConfigIP, ConfigLocations, ConfigNumber, ConfigPassword, ConfigSelection, ConfigSelectionNumber, ConfigSet, ConfigSlider, ConfigSubsection, ConfigText, ConfigYesNo, NoSave
 from Tools.camcontrol import CamControl
 from Tools.Directories import resolveFilename, SCOPE_HDD, SCOPE_TIMESHIFT, defaultRecordingLocation
@@ -1291,37 +1291,6 @@ def InitUsageConfig():
 	config.misc.softcamrestarts = ConfigSelection(default="", choices=[
 		("", _("Don't restart")),
 		("s", _("Restart softcam"))])
-	config.misc.softcsa = ConfigSubsection()
-	config.misc.softcsa.enabled = ConfigYesNo(default=True)
-	config.misc.softcsa.decoderRelease = ConfigSelection(default=0, choices=[
-			(0, _("Quick")),
-			(1, _("Normal")),
-			(2, _("Aggressive"))
-	])
-	config.misc.softcsa.syncMode = ConfigSelection(default=0, choices=[
-			(0, _("Automatic")),
-			(1, _("Synchronous"))
-	])
-	config.misc.softcsa.waitForDataTimeout = ConfigSelection(
-		default=0,
-		choices=[(0, _("Disabled"))] + [(x, _("%d ms") % x) for x in range(100, 2001, 100)]
-	)
-	config.misc.softcsa.playbackDelay = ConfigSelection(
-		default=-1,
-		choices=[(0, _("Disabled")), (-1, _("Automatic"))] + [(x, _("%d ms") % x) for x in list(range(250, 2001, 250)) + list(range(2500, 5001, 500))]
-	)
-	config.misc.softcsa.bufferTime = ConfigSelection(
-		default=0,
-		choices=[(0, _("Disabled"))] + [(x, _("%d ms") % x) for x in range(100, 2001, 100)]
-	)
-	config.misc.softcsa.writeBufferSize = ConfigSelection(
-		default=256,
-		choices=[(x, _("%d packets (%s)") % (x, bytesToHumanReadable(x * 188))) for x in (32, 64, 128, 256, 512, 1024)]
-	)
-	def updateBufferSizeLabels(configElement):
-		config.misc.softcsa.writeBufferSize.setChoices(
-			[(x, _("%d packets (%s)") % (x, bytesToHumanReadable(x * 188))) for x in (32, 64, 128, 256, 512, 1024)], default=256)
-	config.usage.storage_size_units.addNotifier(updateBufferSizeLabels, initial_call=False)
 	config.misc.softcam_streamrelay_url = ConfigIP(default=[127, 0, 0, 1], auto_jump=True)
 	config.misc.softcam_streamrelay_port = ConfigInteger(default=17999, limits=(1, 65535))
 	config.misc.softcam_streamrelay_delay = ConfigSelectionNumber(min=0, max=2000, stepwidth=50, default=100, wraparound=True)

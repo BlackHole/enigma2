@@ -3,7 +3,7 @@ from platform import libc_ver
 from re import search, sub
 from requests import get
 from sys import version_info, version as pyversion
-from enigma import eTimer, getDesktop, getEnigmaLastCommitDate, getEnigmaLastCommitHash, getEGLVersionString, getGLESVersionString, eDVBCSAEngine
+from enigma import eTimer, getDesktop, getEnigmaLastCommitDate, getEnigmaLastCommitHash, getEGLVersionString, getGLESVersionString
 from Components.About import getBoxUptime, getCPUArch, getEnigmaUptime, getIfConfig, getIfTransferredData
 from Components.ActionMap import ActionMap
 from Components.Button import Button
@@ -270,8 +270,6 @@ class About(AboutBase):
 		AboutText += _("GCC version:\t%s\n") % getGccVersion()
 		AboutText += _("Glibc version:\t%s\n") % getGlibcVersion()
 		AboutText += _("FFmpeg version:\t%s\n") % getVersionFromOpkg("ffmpeg")
-		if eDVBCSAEngine.isAvailable():
-			AboutText += _("Libdvbcsa version:\t%s\n") % (eDVBCSAEngine.getLibraryVersion())
 		AboutText += _("OpenSSL version:\t%s\n") % getVersionFromOpkg("openssl")
 		if BoxInfo.getItem("rust"):
 			AboutText += _("Rust version:\t%s\n") % str(BoxInfo.getItem("rust"))

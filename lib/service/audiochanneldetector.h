@@ -8,7 +8,6 @@
 #include <vector>
 
 class iDVBDemux;
-class eDVBSoftDecoder;
 
 /*
  * eDVBAudioChannelDetector
@@ -27,29 +26,14 @@ class eDVBSoftDecoder;
  * against native demux data instead of a raw ioctl demux fd opened
  * from Python.
  *
- * Two acquisition paths, selected by the caller:
- *
- *  - start(): live DVB, local .ts/.trp playback, and StreamRelay.
- *    Reads PES for the audio PID via iDVBDemux::createPESReader(),
- *    the same mechanism already used in this codebase for subtitle,
- *    teletext, and radiotext PES (lib/dvb/subtitle.cpp,
- *    lib/dvb/teletext.cpp, lib/dvb/radiotext.cpp). The reader delivers
- *    raw bytes straight off the demux fd (PES headers included,
- *    unaligned to packet boundaries) - the byte-level sync scanners
- *    below tolerate that exactly as the Python proof of concept did.
- *
- *  - startSoftCSA(): SoftCSA. A second independent TSRecorder sharing
- *    the live eDVBCSASession was deliberately rejected: eDVBCSAEngine
- *    keeps reusable scratch buffers (m_batch_even/m_batch_odd) that
- *    are only safe for a single concurrent caller, so two recorders
- *    calling descramble() on the same session/engine at once would
- *    race. Instead this taps the *existing* SoftCSA recorder
- *    (eDVBSoftDecoder::setAudioMonitorFD) right after it descrambles
- *    in place, via a best-effort, non-blocking monitor fd - see
- *    eDVBTSRecorder::setMonitorFD. That delivers raw TS packets for
- *    every PID the recorder carries, so this path additionally filters
- *    down to our target PID's payload before handing bytes to the same
- *    byte-level scanners used everywhere else.
+ * Acquisition (start()): live DVB, local .ts/.trp playback, and
+ * StreamRelay. Reads PES for the audio PID via iDVBDemux::createPESReader(),
+ * the same mechanism already used in this codebase for subtitle,
+ * teletext, and radiotext PES (lib/dvb/subtitle.cpp,
+ * lib/dvb/teletext.cpp, lib/dvb/radiotext.cpp). The reader delivers
+ * raw bytes straight off the demux fd (PES headers included,
+ * unaligned to packet boundaries) - the byte-level sync scanners
+ * below tolerate that exactly as the Python proof of concept did.
  *
  * Initial detection is bounded (a safety byte-cap, and an inactivity
  * timeout that resets on every batch of real data - so a source that's
@@ -62,8 +46,7 @@ class eDVBSoftDecoder;
  * Instead it keeps watching with a small rolling window (see
  * MONITOR_WINDOW_BYTES), so channels()/isAtmos() always reflect the most
  * recently detected value rather than freezing on whatever was seen
- * first. It only actually stops - closing the reader or detaching the
- * monitor fd - on sustained inactivity (the source genuinely stopped
+ * first. It only actually stops - closing the reader - on sustained inactivity (the source genuinely stopped
  * producing data), a setup failure, or when the caller starts a fresh
  * probe for a different pid/codec/source (see matches()).
  */
@@ -89,11 +72,7 @@ public:
 	// will be stopped first.
 	void start(iDVBDemux *demux, int pid, int codec);
 
-	// Start for SoftCSA: taps the post-descramble monitor fd exposed by
-	// 'soft_decoder' (see eDVBSoftDecoder::setAudioMonitorFD).
-	void startSoftCSA(eDVBSoftDecoder *soft_decoder, int pid, int codec);
-
-	// Stop and release any reader/monitor fd. Safe to call repeatedly.
+	// Stop and release the reader. Safe to call repeatedly.
 	void stop();
 
 	// 0 until a channel count has been found at least once. Once settled(),
@@ -144,13 +123,11 @@ private:
 	void giveUp();
 
 	void pesData(const uint8_t *data, int len);
-	void monitorData(int);
 	void onTimeout();
 
 	int m_pid;
 	int m_codec;
 	const void *m_identity;
-	bool m_softcsa;
 
 	std::vector<uint8_t> m_data;
 	size_t m_scanned; // prefix of m_data already ruled out by tryDetect() - see there
@@ -161,10 +138,6 @@ private:
 
 	ePtr<iDVBPESReader> m_pes_reader;
 	ePtr<eConnection> m_pes_conn;
-
-	int m_monitor_fd[2]; // [0] = we read (main thread), [1] = handed to the recorder to write into
-	ePtr<eSocketNotifier> m_notifier;
-	ePtr<eDVBSoftDecoder> m_soft_decoder; // held only to detach the monitor fd again in stop()
 
 	ePtr<eTimer> m_timeout;
 };
