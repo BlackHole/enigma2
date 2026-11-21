@@ -923,7 +923,12 @@ int eMPEGStreamParserTS::processPacket(const unsigned char *pkt, off_t offset)
 			//}
 			//eDebugNoNewLine("\n");
 
-			return 0; /* Return 0 (not -2): missing/invalid PES start code cannot extract a PTS from this packet, but stream not corrupt */
+			/* A PES packet that starts without the 00 00 01 start code is
+			 * not a packet we merely cannot read a PTS from - the transport
+			 * stream itself is damaged at this point. Report it so the
+			 * timeshift recovery logic can hold playback and let the buffer
+			 * refill, instead of playing through the gap. */
+			return -2;
 		}
 
 		if (pkt[7] & 0x80) // PTS present?

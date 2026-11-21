@@ -186,7 +186,13 @@ class InfoBarTimeshift:
 		self["TimeshiftActivateActions"].setEnabled(not self.isSeekable() and self.timeshiftEnabled() and int(config.timeshift.startdelay.value))
 		state = self.getSeek() is not None and self.timeshiftEnabled()
 		self["SeekActionsPTS"].setEnabled(state)
-		self["TimeshiftFileActions"].setEnabled(state)
+		# A RAM buffer cannot be split, saved or exported, so those actions
+		# have nothing to work on.
+		self["TimeshiftFileActions"].setEnabled(state and not self.isRamTimeshift())
+
+		if self.isRamTimeshift():
+			self.restartSubtitle()
+			return
 
 		if not state:
 			self.setSeekState(self.SEEK_STATE_PLAY)
@@ -229,6 +235,16 @@ class InfoBarTimeshift:
 		if not self.timeshiftEnabled():
 			return
 
+		# C++ is holding playback while the buffer refills; moving the play
+		# position here would throw away the delay it is rebuilding.
+		if self.isRecoveringStream():
+			print("[Timeshift] SOF ignored: stream recovery is in progress.")
+			return
+
+		# A RAM ring buffer has no separate per-event files to jump between.
+		if self.isRamTimeshift():
+			return
+
 		# print("[Timeshift]self.pts_currplaying", self.pts_currplaying)
 		self.pts_nextplaying = 0
 		if self.pts_currplaying > 1:
@@ -250,6 +266,16 @@ class InfoBarTimeshift:
 	def __evEOF(self):
 		# print("[Timeshift]!!!!! jumpToNextTimeshiftedEvent")
 		if not self.timeshiftEnabled():
+			return
+
+		# See __evSOF: a pending recovery owns the play position.
+		if self.isRecoveringStream():
+			print("[Timeshift] EOF ignored: stream recovery is in progress.")
+			return
+
+		# In RAM mode EOF means the buffer is empty or has lapped, not that the
+		# next event file is ready. Never switch to live because of it.
+		if self.isRamTimeshift():
 			return
 
 		# print("[Timeshift]self.pts_currplaying", self.pts_currplaying)
@@ -289,6 +315,11 @@ class InfoBarTimeshift:
 		# print("[Timeshift]__evEventInfoChanged")
 		# if not int(config.timeshift.startdelay.value):
 		# 	return
+
+		# A RAM ring keeps running across EPG events; there are no per-event
+		# files to save or roll over.
+		if self.isRamTimeshift():
+			return
 
 		# Get Current Event Info
 		service = self.session.nav.getCurrentService()
@@ -342,6 +373,18 @@ class InfoBarTimeshift:
 		service = self.session.nav.getCurrentService()
 		return service and service.timeshift()
 
+	def isRamTimeshift(self):
+		ts = self.getTimeshift()
+		return bool(ts and hasattr(ts, "isTimeshiftMemory") and ts.isTimeshiftMemory())
+
+	def isRecoveringStream(self):
+		# While C++ holds playback to let the buffer refill, Python must not
+		# juggle buffer files or jump the play position: that would discard
+		# the delay the recovery is trying to rebuild.
+		service = self.session.nav.getCurrentService()
+		info = service and service.info()
+		return bool(info and info.getInfo(iServiceInformation.sIsRecoveringStream) == 1)
+
 	def playpauseService2(self):
 		service = self.session.nav.getCurrentService()
 		playingref = self.session.nav.getCurrentlyPlayingServiceReference()
@@ -379,6 +422,11 @@ class InfoBarTimeshift:
 	def stopTimeshift(self):
 		# print("[Timeshift]stopTimeshift")
 		ts = self.getTimeshift()
+		# RAM buffers hold no files, so there is nothing to save or protect.
+		if ts and ts.isTimeshiftEnabled() and self.isRamTimeshift():
+			ts.stopTimeshift(True)
+			self.__seekableStatusChanged()
+			return
 		if ts and ts.isTimeshiftEnabled():
 			# print("[Timeshift]TEST1")
 			if int(config.timeshift.startdelay.value) and self.isSeekable():
@@ -399,6 +447,11 @@ class InfoBarTimeshift:
 	def stopTimeshiftcheckTimeshiftRunningCallback(self, answer):
 		# print("[Timeshift]stopTimeshiftcheckTimeshiftRunningCallback")
 		# print("[Timeshift] answer", answer)
+		ts = self.getTimeshift()
+		if answer and ts and self.isRamTimeshift():
+			ts.stopTimeshift(True)
+			self.__seekableStatusChanged()
+			return
 		if answer and int(config.timeshift.startdelay.value) and self.switchToLive and self.isSeekable():
 			# print("[Timeshift]TEST4")
 			self.ptsStop = False
@@ -459,6 +512,11 @@ class InfoBarTimeshift:
 	def checkTimeshiftRunning(self, returnFunction):
 		# print("[Timeshift]checkTimeshiftRunning")
 		# print("[Timeshift]self.switchToLive", self.switchToLive)
+		# A RAM buffer has no files that could be exported, so none of the
+		# save prompts below apply and we can stop straight away.
+		if self.isRamTimeshift():
+			returnFunction(True)
+			return
 		if self.ptsStop:
 			returnFunction(True)
 		elif (self.isSeekable() and self.timeshiftEnabled() or self.save_current_timeshift) and config.usage.check_timeshift.value:
@@ -508,6 +566,8 @@ class InfoBarTimeshift:
 			InfoBarTimeshift.saveTimeshiftActions(self, answer, returnFunction)
 
 	def eraseTimeshiftFile(self):
+		if self.isRamTimeshift():
+			return
 		for filename in listdir(config.usage.timeshift_path.value):
 			if filename.startswith("timeshift.") and not filename.endswith((".del", ".copy")):
 				self.BgFileEraser.erase("%s%s" % (config.usage.timeshift_path.value, filename))
@@ -524,6 +584,18 @@ class InfoBarTimeshift:
 
 	def activatePermanentTimeshift(self):
 		if self.ptsCheckTimeshiftPath() is False or self.session.screen["Standby"].boolean is True or self.ptsLiveTVStatus() is False or (config.timeshift.stopwhilerecording.value and self.pts_record_running):
+			return
+
+		# A RAM ring has no per-event files, so the hardlink/next-file
+		# bookkeeping below must be skipped entirely.
+		if self.isRamTimeshift():
+			ts = self.getTimeshift()
+			if not ts.isTimeshiftEnabled() and ts.startTimeshift():
+				print("[Timeshift] Unable to start RAM timeshift.")
+				return
+			self.pts_starttime = time()
+			self.save_timeshift_postaction = None
+			self.__seekableStatusChanged()
 			return
 
 		# Set next-file on event change only when watching latest timeshift ...
@@ -583,6 +655,10 @@ class InfoBarTimeshift:
 		Notifications.AddNotification(MessageBox, _("[TimeShift] Restarting Timeshift!"), MessageBox.TYPE_INFO, timeout=5)
 
 	def saveTimeshiftEventPopup(self):
+		# A RAM buffer holds no files, so there is nothing to offer for saving.
+		if self.isRamTimeshift():
+			self.session.showInfo(_("RAM timeshift cannot be saved as a recording."))
+			return
 		filecount = 0
 		entrylist = [(_("Current Event:") + " %s" % self.pts_curevent_name, "savetimeshift")]
 
@@ -634,6 +710,11 @@ class InfoBarTimeshift:
 
 	def SaveTimeshift(self, timeshiftfile=None, mergelater=False):
 		# print("[Timeshift]SaveTimeshift")
+		# A RAM buffer cannot be exported as a recording.
+		if self.isRamTimeshift():
+			self.session.showInfo(_("RAM timeshift cannot be saved as a recording."))
+			self.save_current_timeshift = False
+			return
 		self.save_current_timeshift = False
 		savefilename = None
 		if timeshiftfile is not None:
@@ -803,7 +884,10 @@ class InfoBarTimeshift:
 
 	def ptsCleanTimeshiftFolder(self):
 		# print("[Timeshift]!!!!!!!!!!!!!!!!!!!!! ptsCleanTimeshiftFolder")
-		if self.ptsCheckTimeshiftPath() is False or self.session.screen["Standby"].boolean is True:
+		# Nothing is written to disk in RAM mode, so there is nothing to clean.
+		if self.isRamTimeshift() or self.session.screen["Standby"].boolean is True:
+			return
+		if self.ptsCheckTimeshiftPath() is False:
 			return
 
 		for filename in listdir(config.usage.timeshift_path.value):
@@ -879,6 +963,9 @@ class InfoBarTimeshift:
 
 	def ptsCreateHardlink(self):
 		# print("[Timeshift]ptsCreateHardlink")
+		# RAM mode has no file in the timeshift directory to link to.
+		if self.isRamTimeshift():
+			return
 		for filename in listdir(config.usage.timeshift_path.value):
 			# if filename.startswith("timeshift") and not os.path.splitext(filename)[1]:
 			if filename.startswith("timeshift.") and not filename.endswith((".sc", ".del", ".copy", ".ap")):
@@ -1219,6 +1306,13 @@ class InfoBarTimeshift:
 		# Reset Seek Pointer
 		self.ptsSeekPointerReset()
 
+		# There are no per-event files in a RAM ring buffer, so the whole
+		# "advance to the next pts_livebuffer_* file" logic below must not
+		# run: it would look for files that never exist and drop playback
+		# back to live as a side effect.
+		if self.isRamTimeshift():
+			return
+
 		# print("[Timeshift]self.pts_switchtolive", self.pts_switchtolive)
 		if self.pts_switchtolive:
 			# print("[Timeshift]!!!!! TEST1")
@@ -1245,8 +1339,9 @@ class InfoBarTimeshift:
 		ts = self.getTimeshift()
 		if ts is None:
 			return
-# Prepend timeshift dir, *unless* we are setting nothing ("")
-		if nexttsfile != "":
+# Prepend timeshift dir, *unless* we are setting nothing ("") or the buffer
+# lives in RAM, where there is no file to point at.
+		if nexttsfile != "" and not self.isRamTimeshift():
 			nexttsfile = "%s%s" % (config.usage.timeshift_path.value, nexttsfile)
 		# print("[Timeshift]!!! SET NextPlaybackFile: %s" % nexttsfile)
 		ts.setNextPlaybackFile(nexttsfile)
@@ -1265,6 +1360,9 @@ class InfoBarTimeshift:
 			self.setSeekState(self.makeStateBackward(int(-self.pts_lastseekspeed)))
 
 	def ptsCheckTimeshiftPath(self):
+		# RAM timeshift does not need a writable directory on a storage device.
+		if self.isRamTimeshift():
+			return True
 		if fileExists(config.usage.timeshift_path.value, "w"):
 			return True
 		else:

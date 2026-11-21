@@ -26,7 +26,8 @@ base_libenigma_base_a_SOURCES = \
 	base/httpsstream.cpp \
 	base/httpstream.cpp \
 	base/wrappers.cpp \
-	base/esimpleconfig.cpp
+	base/esimpleconfig.cpp \
+	base/esettings.cpp
 
 EXTRA_DIST += \
 	base/eenv.cpp.in
@@ -63,4 +64,5 @@ baseinclude_HEADERS = \
 	base/httpsstream.h \
 	base/httpstream.h \
 	base/wrappers.h \
-	base/esimpleconfig.h
+	base/esimpleconfig.h \
+	base/esettings.h
