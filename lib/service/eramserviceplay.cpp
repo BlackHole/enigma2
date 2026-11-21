@@ -3,7 +3,6 @@
 #include <lib/base/cfile.h>
 #include <lib/base/esettings.h>
 #include <lib/base/esimpleconfig.h>
-#include <lib/base/nconfig.h>
 #include <lib/dvb/csasession.h>
 #include <unistd.h>
 

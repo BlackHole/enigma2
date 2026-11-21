@@ -657,7 +657,7 @@ class InfoBarTimeshift:
 	def saveTimeshiftEventPopup(self):
 		# A RAM buffer holds no files, so there is nothing to offer for saving.
 		if self.isRamTimeshift():
-			self.session.showInfo(_("RAM timeshift cannot be saved as a recording."))
+			Notifications.AddNotification(MessageBox, _("RAM timeshift cannot be saved as a recording."), MessageBox.TYPE_INFO, timeout=5)
 			return
 		filecount = 0
 		entrylist = [(_("Current Event:") + " %s" % self.pts_curevent_name, "savetimeshift")]
@@ -712,7 +712,7 @@ class InfoBarTimeshift:
 		# print("[Timeshift]SaveTimeshift")
 		# A RAM buffer cannot be exported as a recording.
 		if self.isRamTimeshift():
-			self.session.showInfo(_("RAM timeshift cannot be saved as a recording."))
+			Notifications.AddNotification(MessageBox, _("RAM timeshift cannot be saved as a recording."), MessageBox.TYPE_INFO, timeout=5)
 			self.save_current_timeshift = False
 			return
 		self.save_current_timeshift = False

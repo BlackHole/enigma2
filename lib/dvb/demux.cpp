@@ -1556,18 +1556,7 @@ int eDVBRecordScrambledThread::writeData(int len)
 		m_serviceDescrambler->descramble(m_buffer, len);
 
 		// Parse AFTER descrambling for correct Access Points (.ap files)
-		if (!getProtocol())
-		{
-			int parse_result = m_ts_parser.parseData(m_current_offset, m_buffer, len);
-			if (parse_result == -2)
-			{
-				/* Same as the non-descrambled path: a corrupt buffer is
-				 * reported instead of being written, so timeshift recovery
-				 * can hold playback rather than record the damage. */
-				m_event(eFilePushThreadRecorder::evtStreamCorrupt);
-				return len;
-			}
-		}
+		m_ts_parser.parseData(m_current_offset, m_buffer, len);
 	}
 
 	// Best-effort passive tap for diagnostic consumers (see

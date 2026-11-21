@@ -3501,24 +3501,6 @@ std::string eDVBServicePlay::getTimeshiftFilename()
 		return "";
 }
 
-long long eDVBServicePlay::getTimeshiftFileSize()
-{
-	if (!m_timeshift_enabled || m_timeshift_file.empty())
-		return -1;
-	struct stat st;
-	if (stat(m_timeshift_file.c_str(), &st) != 0)
-		return -1;
-	/* Only whole TS packets are decodable, so report the confirmed part. */
-	return (long long)(st.st_size / 188 * 188);
-}
-
-RESULT eDVBServicePlay::seekTimeshiftDelay(int /*milliseconds*/)
-{
-	/* Disk timeshift seeks through the cue sheet (seekTo/seekRelative);
-	 * only RAM buffers expose a bounded delay repositioning here. */
-	return -1;
-}
-
 bool eDVBServicePlay::startTapToFD(int fd, const std::vector<int> &pids, int packetsize)
 {
 	ePtr<iDVBDemux> demux;

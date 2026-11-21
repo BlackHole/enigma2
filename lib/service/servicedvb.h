@@ -183,9 +183,6 @@ public:
 	virtual RESULT saveTimeshiftFile();
 	virtual std::string getTimeshiftFilename();
 	virtual void switchToLive();
-	virtual long long getTimeshiftFileSize();
-	virtual bool isTimeshiftMemory() { return false; }
-	virtual RESULT seekTimeshiftDelay(int milliseconds);
 	virtual RESULT setTimeshiftSyncEnabled(bool enabled);
 	virtual RESULT getTimeshiftDelay(pts_t &delay);
 
