@@ -9,7 +9,7 @@ from enigma import eDVBDB, eEPGCache, setTunerTypePriorityOrder, setPreferredTun
 from Components.Harddisk import harddiskmanager
 from Components.config import config, ConfigBoolean, ConfigDictionarySet, ConfigDirectory, ConfigInteger, ConfigIP, ConfigLocations, ConfigNumber, ConfigPassword, ConfigSelection, ConfigSelectionNumber, ConfigSet, ConfigSlider, ConfigSubsection, ConfigText, ConfigYesNo, NoSave
 from Tools.camcontrol import CamControl
-from Tools.Directories import resolveFilename, SCOPE_HDD, SCOPE_TIMESHIFT, defaultRecordingLocation
+from Tools.Directories import resolveFilename, SCOPE_HDD, SCOPE_TIMESHIFT, defaultRecordingLocation, fileWriteLine
 from Components.NimManager import nimmanager
 from Components.ServiceList import refreshServiceList
 from Components.SystemInfo import SystemInfo
@@ -1291,6 +1291,18 @@ def InitUsageConfig():
 	config.misc.softcamrestarts = ConfigSelection(default="", choices=[
 		("", _("Don't restart")),
 		("s", _("Restart softcam"))])
+	def setSoftCSAPlaybackDelay(configElement):
+		if SystemInfo["HasSoftCSA"]:
+			fileWriteLine("/sys/module/dmxcsa/parameters/delay", str(configElement.value), source="UsageConfig")
+
+	config.misc.softcsa = ConfigSubsection()
+	config.misc.softcsa.playbackDelay = ConfigSelection(
+		default=-1,
+		choices=[(0, _("Disabled")), (-1, _("Automatic"))] + [(x, _("%d ms") % x) for x in list(range(250, 2001, 250)) + list(range(2500, 5001, 500))]
+	)
+	config.misc.softcsa.playbackDelay.addNotifier(setSoftCSAPlaybackDelay)
+	config.misc.softcsa.notifications = ConfigYesNo(default=True)
+
 	config.misc.softcam_streamrelay_url = ConfigIP(default=[127, 0, 0, 1], auto_jump=True)
 	config.misc.softcam_streamrelay_port = ConfigInteger(default=17999, limits=(1, 65535))
 	config.misc.softcam_streamrelay_delay = ConfigSelectionNumber(min=0, max=2000, stepwidth=50, default=100, wraparound=True)

@@ -11,6 +11,7 @@
 #include <lib/dvb/db.h>
 #include <lib/dvb/decoder.h>
 #include <lib/driver/avswitch.h>
+#include <lib/dvb/dmxcsastatus.h>
 
 #include <lib/base/cfile.h>
 #include <lib/dvb/pmtparse.h>
@@ -1095,6 +1096,7 @@ eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *serv
 	m_timeshift_changed(0),
 	m_save_timeshift(0),
 	m_timeshift_fd(-1),
+	m_soft_descrambled(false),
 	m_skipmode(0),
 	m_fastforward(0),
 	m_slowmotion(0),
@@ -1111,6 +1113,11 @@ eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *serv
 	eDebug("[servicedvb][eDVBServicePlay] now running: m_is_pvr set to; %d", m_is_pvr);
 	if (connect_event)
 		CONNECT(m_service_handler.serviceEvent, eDVBServicePlay::serviceEvent);
+	if (eDMXCSAStatus *status = eDMXCSAStatus::getInstance())
+	{
+		status->activeChanged.connect(sigc::mem_fun(*this, &eDVBServicePlay::softDescramblingChanged));
+		status->event.connect(sigc::mem_fun(*this, &eDVBServicePlay::softDescramblingEvent));
+	}
 	CONNECT(m_service_handler_timeshift.serviceEvent, eDVBServicePlay::serviceEventTimeshift);
 	CONNECT(m_event_handler.m_eit_changed, eDVBServicePlay::gotNewEvent);
 	CONNECT(m_subtitle_sync_timer->timeout, eDVBServicePlay::checkSubtitleTiming);
@@ -2120,6 +2127,8 @@ int eDVBServicePlay::getInfo(int w)
 		return getLiveBitrate(true);
 	case sHDRType:
 		return m_hdr_type;
+	case sIsSoftCSA:
+		return isSoftDescrambled();
 	case sIsDedicated3D:
 		if (m_dvb_service) return m_dvb_service->isDedicated3D();
 		return false;
@@ -4082,6 +4091,55 @@ void eDVBServicePlay::setPCMDelay(int delay)
 	}
 }
 
+bool eDVBServicePlay::isSoftDescrambled()
+{
+	const eDMXCSAStatus *status = eDMXCSAStatus::getInstance();
+	ePtr<iDVBDemux> demux;
+	uint8_t id = 0;
+
+	if (!status || m_is_pvr || m_is_stream || m_service_handler.getDataDemux(demux) || !demux)
+		return false;
+	demux->getCADemuxID(id);
+	return status->isActive(id);
+}
+
+void eDVBServicePlay::softDescramblingEvent(int demux, int what)
+{
+	ePtr<iDVBDemux> mine;
+	uint8_t id = 0;
+
+	if (m_is_pvr || m_is_stream || m_service_handler.getDataDemux(mine) || !mine)
+		return;
+	mine->getCADemuxID(id);
+	if (id != demux)
+		return;
+	switch (what)
+	{
+	case eDMXCSAStatus::evDelayRaised:
+		m_event((iPlayableService*)this, evDmxcsaDelayRaised);
+		break;
+	case eDMXCSAStatus::evDelayLimit:
+		m_event((iPlayableService*)this, evDmxcsaDelayLimit);
+		break;
+	case eDMXCSAStatus::evBadCw:
+		m_event((iPlayableService*)this, evDmxcsaBadCw);
+		break;
+	default:
+		break;
+	}
+}
+
+void eDVBServicePlay::softDescramblingChanged()
+{
+	bool now = isSoftDescrambled();
+
+	if (now != m_soft_descrambled)
+	{
+		m_soft_descrambled = now;
+		m_event((iPlayableService*)this, evUpdatedInfo);
+	}
+}
+
 void eDVBServicePlay::video_event(struct iTSMPEGDecoder::videoEvent event)
 {
 	switch(event.type) {
@@ -4098,6 +4156,12 @@ void eDVBServicePlay::video_event(struct iTSMPEGDecoder::videoEvent event)
 				m_event((iPlayableService*)this, evFirstFrame);
 			}
 			m_event((iPlayableService*)this, evVideoSizeChanged);
+			// The picture is there: say once more who descrambles it.
+			if (isSoftDescrambled())
+			{
+				m_soft_descrambled = true;
+				m_event((iPlayableService*)this, evUpdatedInfo);
+			}
 			/* First decoded frame — descrambling is now live.
 			 * Always restart detection exactly once on this event, discarding
 			 * any data accumulated before the CAM was ready (scrambled noise

@@ -1,7 +1,7 @@
 from ast import literal_eval
 from hashlib import md5
 from os import listdir, access, R_OK
-from os.path import isfile, join as pathjoin
+from os.path import exists, isfile, join as pathjoin
 from re import split
 from enigma import Misc_Options, eDVBCIInterfaces, eDVBResourceManager, getEnigmaLastCommitHash, getOARev, eglOsdRectSupported
 
@@ -194,6 +194,7 @@ SystemInfo["HasUsbhdd"] = {}
 SystemInfo["ArchIsARM"] = ARCHITECTURE.startswith(("arm", "cortex"))
 SystemInfo["ArchIsARM64"] = "64" in ARCHITECTURE
 SystemInfo["HasInitCam"] = hasInitCam()
+SystemInfo["HasSoftCSA"] = exists("/sys/module/dmxcsa")
 SystemInfo["MachineBrand"] = DISPLAYBRAND
 SystemInfo["MachineName"] = SystemInfo["machinename"]
 SystemInfo["DeveloperImage"] = IMAGETYPE.lower() != "release"

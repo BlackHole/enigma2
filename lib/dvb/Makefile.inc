@@ -38,7 +38,8 @@ dvb_libenigma_dvb_a_SOURCES = \
 	dvb/subtitle.cpp \
 	dvb/teletext.cpp \
 	dvb/tstools.cpp \
-	dvb/volume.cpp
+	dvb/volume.cpp \
+	dvb/dmxcsastatus.cpp
 
 dvbincludedir = $(pkgincludedir)/lib/dvb
 dvbinclude_HEADERS = \
@@ -85,4 +86,5 @@ dvbinclude_HEADERS = \
 	dvb/subtitle.h \
 	dvb/teletext.h \
 	dvb/tstools.h \
-	dvb/volume.h
+	dvb/volume.h \
+	dvb/dmxcsastatus.h

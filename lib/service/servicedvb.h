@@ -272,6 +272,12 @@ protected:
 
 	void updateDecoder(bool sendSeekableStateChanged=false);
 
+	// The software descrambler (dmxcsa) at work on this service: shown, not steered.
+	bool m_soft_descrambled;
+	bool isSoftDescrambled();
+	void softDescramblingChanged();
+	void softDescramblingEvent(int demux, int what);
+
 	int m_skipmode;
 	int m_fastforward;
 	int m_slowmotion;
