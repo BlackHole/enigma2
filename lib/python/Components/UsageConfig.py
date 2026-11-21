@@ -3,7 +3,7 @@ import locale
 import os
 import skin
 
-from enigma import eDVBDB, eEPGCache, setTunerTypePriorityOrder, setPreferredTuner, setSpinnerOnOff, setEnableTtCachingOnOff, eEnv, Misc_Options, eBackgroundFileEraser, eServiceEvent, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, RT_WRAP
+from enigma import eDVBDB, eEPGCache, setTunerTypePriorityOrder, setPreferredTuner, setSpinnerOnOff, setEnableTtCachingOnOff, eEnv, Misc_Options, eBackgroundFileEraser, eServiceEvent, eSettings, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, RT_WRAP
 
 from Components.Harddisk import harddiskmanager
 from Components.config import config, ConfigBoolean, ConfigDictionarySet, ConfigDirectory, ConfigInteger, ConfigIP, ConfigLocations, ConfigNumber, ConfigPassword, ConfigSelection, ConfigSelectionNumber, ConfigSet, ConfigSlider, ConfigSubsection, ConfigText, ConfigYesNo, NoSave
@@ -935,6 +935,23 @@ def InitUsageConfig():
 	config.timeshift.permanentrecording = ConfigYesNo(default=False)
 	config.timeshift.isRecording = NoSave(ConfigYesNo(default=False))
 	config.timeshift.stream_warning = ConfigYesNo(default=True)
+
+	# Precise Recovery System: after a stream error, playback is held until the
+	# buffer has refilled by this much extra, so the gap is skipped instead of
+	# being decoded as glitches.
+	config.timeshift.recoveryBufferDelay = ConfigSelection(default="300", choices=[(str(x), _("%d ms") % x) for x in range(100, 1500, 100)])
+	# Compensation for the box's hardware decode latency (DM9x0). Only used
+	# when the build defines ENABLE_TIMESHIFT_HW_LATENCY_FIX.
+	config.timeshift.hwLatencyCorrection = ConfigSelection(default="2000", choices=[(str(x), _("%d ms") % x) for x in range(0, 2100, 100)])
+
+	# In-memory timeshift. 0 keeps the classic disk-backed buffer. Any other
+	# value makes the buffer live in RAM and makes the box remember that many
+	# seconds of television; the setting is pushed into C++ below.
+	config.timeshift.ramBufferDelay = ConfigSelection(default="0", choices=[("0", _("Disabled"))] + [(str(x), ngettext("%d second", "%d seconds", x) % x) for x in (5, 10, 15, 20, 30)])
+
+	def setRamTimeshiftDelay(configElement):
+		eSettings.setRamTimeshift(int(configElement.value))
+	config.timeshift.ramBufferDelay.addNotifier(setRamTimeshiftDelay, initial_call=True)
 
 	config.seek = ConfigSubsection()
 	config.seek.baractivation = ConfigSelection([("leftright", _("Long Left / Right")), ("ffrw", _("Long << / >>"))], "leftright")

@@ -1200,7 +1200,12 @@ int eDVBRecordFileThread::writeData(int len)
 		// calls parseData AFTER descrambling to ensure we parse clear data.
 		if (!m_serviceDescrambler)
 		{
-			m_ts_parser.parseData(m_current_offset, m_buffer, len);
+			int parse_result = m_ts_parser.parseData(m_current_offset, m_buffer, len);
+			if (parse_result == -2)
+			{
+				m_event(eFilePushThreadRecorder::evtStreamCorrupt);
+				return len;
+			}
 		}
 
 		int written = 0;
@@ -1618,6 +1623,34 @@ eDVBTSRecorder::~eDVBTSRecorder()
 	delete m_thread;
 }
 
+void eDVBTSRecorder::replaceThread(eDVBRecordFileThread *newThread)
+{
+	if (m_running)
+	{
+		eWarning("[eDVBTSRecorder] replaceThread() called while running - ignored");
+		return;
+	}
+	if (!newThread)
+	{
+		eWarning("[eDVBTSRecorder] replaceThread() called with null thread - ignored");
+		return;
+	}
+
+	/* Deleting m_thread destroys its m_event signal, which automatically
+	 * disconnects all slots connected to it (including filepushEvent). */
+	delete m_thread;
+	m_thread = newThread;
+
+	/* Re-connect so filepushEvent() keeps receiving thread events. */
+	CONNECT(m_thread->m_event, eDVBTSRecorder::filepushEvent);
+
+	/* The installed thread has its own sink, so start() must not
+	 * require a target fd. */
+	m_ram_mode = true;
+
+	eDebug("[eDVBTSRecorder] replaceThread() - RAM mode activated");
+}
+
 RESULT eDVBTSRecorder::start()
 {
 	std::map<int,int>::iterator i(m_pids.begin());
@@ -1625,7 +1658,7 @@ RESULT eDVBTSRecorder::start()
 	if (m_running)
 		return -1;
 
-	if (m_target_fd == -1)
+	if (m_target_fd == -1 && !m_ram_mode)
 		return -2;
 
 	if (i == m_pids.end())

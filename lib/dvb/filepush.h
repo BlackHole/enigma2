@@ -7,6 +7,10 @@
 #include <lib/base/message.h>
 #include <sys/types.h>
 #include <lib/base/rawfile.h>
+#include <atomic>
+
+#define FLAGBIT_TIMESHIFT  (1 << 0)
+#define FLAGBIT_RAM_MODE   (1 << 1)
 
 class iFilePushScatterGather
 {
@@ -33,6 +37,13 @@ public:
 	void setStreamMode(int);
 	void setScatterGather(iFilePushScatterGather *);
 
+	/* Force the read position to the given byte offset.
+	 * Thread-safe: stored via std::atomic, picked up by the push
+	 * thread on its next loop iteration via exchange(). Used by RAM
+	 * timeshift for lap recovery because the normal cue-sheet path
+	 * goes through tstools, which has no valid .ap data for RAM. */
+	void forcePosition(off_t pos);
+
 	enum { evtEOF, evtReadError, evtWriteError, evtUser, evtStopped };
 	sigc::signal<void(int)> m_event;
 
@@ -53,6 +64,10 @@ private:
 	size_t m_buffersize;
 	unsigned char* m_buffer;
 	off_t m_current_position;
+
+	/* -1 = no forced position pending; set by forcePosition() and
+	 * consumed via exchange() in the push thread loop. */
+	std::atomic<off_t> m_force_position;
 
 	ePtr<iTsSource> m_source;
 

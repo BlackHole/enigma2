@@ -907,6 +907,8 @@ int eMPEGStreamParserTS::processPacket(const unsigned char *pkt, off_t offset)
 		eWarning("[eMPEGStreamParserTS] dropping huge adaption field");
 		return 0;
 	}
+	if (pkt == end)
+		return 0;
 
 	pts_t pts = 0;
 	int ptsvalid = 0;
@@ -914,6 +916,13 @@ int eMPEGStreamParserTS::processPacket(const unsigned char *pkt, off_t offset)
 	if (pusi)
 	{
 			// ok, we now have the start of the payload, aligned with the PES packet start.
+		if (end - pkt < 9)
+		{
+			/* pkt[0..8] is read below, so a payload shorter than that
+			 * would run past the end of this packet. */
+			eWarning("[eMPEGStreamParserTS] short PES header");
+			return 0;
+		}
 		if (pkt[0] || pkt[1] || (pkt[2] != 1))
 		{
 			eWarning("[eMPEGStreamParserTS] broken startcode");
@@ -923,11 +932,23 @@ int eMPEGStreamParserTS::processPacket(const unsigned char *pkt, off_t offset)
 			//}
 			//eDebugNoNewLine("\n");
 
-			return 0; /* Return 0 (not -2): missing/invalid PES start code cannot extract a PTS from this packet, but stream not corrupt */
+			/* A PES packet that starts without the 00 00 01 start code is
+			 * not a packet we merely cannot read a PTS from - the transport
+			 * stream itself is damaged at this point. Report it so the
+			 * timeshift recovery logic can hold playback and let the buffer
+			 * refill, instead of playing through the gap. */
+			return -2;
 		}
 
 		if (pkt[7] & 0x80) // PTS present?
 		{
+			if (end - pkt < 14)
+			{
+				/* The PTS lives in pkt[9..13]; a shorter payload would
+				 * read past the end of this packet. */
+				eWarning("[eMPEGStreamParserTS] short PTS header");
+				return 0;
+			}
 			pts  = ((unsigned long long)(pkt[ 9]&0xE))  << 29;
 			pts |= ((unsigned long long)(pkt[10]&0xFF)) << 22;
 			pts |= ((unsigned long long)(pkt[11]&0xFE)) << 14;
@@ -943,6 +964,11 @@ int eMPEGStreamParserTS::processPacket(const unsigned char *pkt, off_t offset)
 
 			/* advance to payload */
 		pkt += pkt[8] + 9;
+		if (pkt > end)
+		{
+			eWarning("[eMPEGStreamParserTS] PES header exceeds packet payload");
+			return 0;
+		}
 	}
 
 	for (; pkt < (end-4); ++pkt)

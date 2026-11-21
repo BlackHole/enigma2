@@ -226,6 +226,7 @@ SystemInfo["LCDSKINSetup"] = pathExists("/usr/share/enigma2/display") and not Sy
 SystemInfo["OledDisplay"] = fileExists("/dev/dbox/oled0")
 SystemInfo["LcdDisplay"] = fileExists("/dev/dbox/lcd0")
 SystemInfo["HasNoDisplay"] = False
+SystemInfo["DM9X0"] = MODEL in ("dm900", "dm920")  # Hardware decode latency needs compensation during timeshift recovery.
 SystemInfo["LEDButtons"] = False  # MODEL == "vuultimo", For some reason this causes a cpp crash on vuultimo (which we no longer build). The cause needs investigating or the dead code in surrounding modules that this change causes should be removed.
 SystemInfo["Fan"] = fileCheck("/proc/stb/fp/fan")
 SystemInfo["FanPWM"] = SystemInfo["Fan"] and fileCheck("/proc/stb/fp/fan_pwm")
