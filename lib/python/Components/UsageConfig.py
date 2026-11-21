@@ -940,10 +940,6 @@ def InitUsageConfig():
 	# buffer has refilled by this much extra, so the gap is skipped instead of
 	# being decoded as glitches.
 	config.timeshift.recoveryBufferDelay = ConfigSelection(default="300", choices=[(str(x), _("%d ms") % x) for x in range(100, 1500, 100)])
-	# Compensation for the box's hardware decode latency (DM9x0). Only used
-	# when the build defines ENABLE_TIMESHIFT_HW_LATENCY_FIX.
-	config.timeshift.hwLatencyCorrection = ConfigSelection(default="2000", choices=[(str(x), _("%d ms") % x) for x in range(0, 2100, 100)])
-
 	# In-memory timeshift. 0 keeps the classic disk-backed buffer. Any other
 	# value makes the buffer live in RAM and makes the box remember that many
 	# seconds of television; the setting is pushed into C++ below.

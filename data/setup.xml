@@ -408,7 +408,6 @@
 			<item level="2" text="Use timeshift seekbar while timeshifting?" description="If set to 'yes', allows you to use the seekbar to jump to a point within the event.">config.timeshift.showinfobar</item>
 			<item level="2" text="Skip jumping to live TV while timeshifting with plugins" description="If set to 'yes', allows you to use timeshift with alternative audio plugins.">config.usage.timeshift_skipreturntolive</item>
 			<item level="1" text="Stream recovery" description="After a stream error, playback is paused and the buffer is refilled before playback continues, so the damaged part is skipped instead of being shown as glitches.">config.timeshift.recoveryBufferDelay</item>
-			<item level="2" text="Hardware latency correction" description="Compensation for the hardware decode latency of this box. Raise it if playback resumes too close to the damaged part, lower it if you get a visible pause." requires="DM9X0">config.timeshift.hwLatencyCorrection</item>
 			<item level="1" text="RAM timeshift buffer" description="Keep the timeshift buffer in memory instead of on a storage device. Useful on boxes without a fast storage device, or to avoid wearing out an SD card. Seeking is not available in RAM mode, but pausing and stream recovery are.">config.timeshift.ramBufferDelay</item>
 		</if>
 	</setup>

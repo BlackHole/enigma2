@@ -128,11 +128,6 @@ AS_IF([test "$BOXTYPE" == "vuuno4kse"],[AC_DEFINE(HWVUUNO4KSE, 1,[vuuno4kse])])
 AS_IF([test "$BOXTYPE" == "vuzero"],[AC_DEFINE(HWVUZERO, 1,[vuzero])])
 AS_IF([test "$BOXTYPE" == "vuzero4k"],[AC_DEFINE(HWVUZERO4K, 1,[vuzero4k])])
 
-dnl The DM9x0 hardware buffers a few seconds of video before it is shown, so
-dnl stream recovery must not ask for the full delay back or playback resumes
-dnl inside the damaged part. Only these boxes get the correction setting.
-AS_IF([test "$BOXTYPE" == "dm900" -o "$BOXTYPE" == "dm920"],[AC_DEFINE(ENABLE_TIMESHIFT_HW_LATENCY_FIX, 1,[compensate DM9x0 hardware decode latency during timeshift recovery])])
-
 dnl Software HDR detection (HEVC bitstream parser + TS recorder tap).
 dnl Enabled for VU+ 4K boxes and GigaBlue 4K boxes, which have capable
 dnl enough SoCs and GStreamer stacks to support the detection pipeline.

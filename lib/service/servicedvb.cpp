@@ -1616,19 +1616,6 @@ void eDVBServicePlay::startPreciseRecoveryCheck()
 				return;
 		}
 
-#ifdef ENABLE_TIMESHIFT_HW_LATENCY_FIX
-		int hw_latency_ms = m_timeshift_sync_enabled ? 0 : eConfigManager::getConfigIntValue("config.timeshift.hwLatencyCorrection", 2000);
-		if (hw_latency_ms < 0)
-			hw_latency_ms = 0;
-		if (hw_latency_ms > 5000)
-			hw_latency_ms = 5000;
-		const pts_t latency_correction = hw_latency_ms * 90;
-		if (final_target_delay > latency_correction)
-			final_target_delay -= latency_correction;
-		else
-			final_target_delay = 9000;
-#endif
-
 		if (m_recovery_phase == RecoveryPhase::Playing)
 		{
 			// The first recovered timestamp can jump across missing video. Wait
