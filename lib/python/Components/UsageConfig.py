@@ -83,7 +83,6 @@ def updateServiceListTemplateChoices():
 
 def InitUsageConfig():
 	config.version = ConfigNumber(default=0)
-	config.misc.remotecontrol_text_support = ConfigYesNo(default=SystemInfo["brand"] in ('vuplus', ))
 
 	config.misc.longkey_threshold = ConfigSelection(default="4", choices=[(str(i), _("%d") % i) for i in range(1, 7)])
 
@@ -138,8 +137,6 @@ def InitUsageConfig():
 		("keep", _("Keep Service")),
 		("reverseB", _("Reverse Bouquet Buttons")),
 		("keep reverseB", _("Keep service") + " + " + _("Reverse Bouquet Buttons"))])
-
-	config.usage.multiepg_ask_bouquet = ConfigYesNo(default=False)
 
 	config.usage.panicbutton = ConfigYesNo(default=True)
 	config.usage.quickzap_bouquet_change = ConfigYesNo(default=False)
@@ -244,7 +241,6 @@ def InitUsageConfig():
 	for i in [60, 300, 600, 900, 1800, 2700, 3600]:
 		m = i // 60
 		choicelist.append((str(i), ngettext("%d minute", "%d minutes", m) % m))
-	config.usage.pip_last_service_timeout = ConfigSelection(default="0", choices=choicelist)
 
 	if not os.path.exists(resolveFilename(SCOPE_HDD)):
 		try:
@@ -432,8 +428,14 @@ def InitUsageConfig():
 		config.usage.wakeOnLAN = ConfigYesNo(default=False)
 		config.usage.wakeOnLAN.addNotifier(wakeOnLANChanged)
 
+	# displaytype (box-hardware.inc in oe-alliance-core) is one of: "" (no display), "textlcd", "7segment", "textlcd7segment",
+	# "bwlcd96", "bwlcd128", "bwlcd140", "bwlcd255", "bwlcd96colorlcd", "colorlcd", "colorlcd128", "colorlcd220", "colorlcd240",
+	# "colorlcd390", "colorlcd400", "colorlcd480", "colorlcd720", "colorlcd800"
+	displayType = SystemInfo["displaytype"]
+	segmentDisplay = displayType in ("7segment", "textlcd7segment")
+
 	# standby
-	if SystemInfo["displaytype"] == "textlcd7segment":
+	if segmentDisplay:
 		config.usage.blinking_display_clock_during_recording = ConfigSelection(default="Rec", choices=[
 			("Rec", _("REC")),
 			("RecBlink", _("Blinking REC")),
@@ -442,12 +444,12 @@ def InitUsageConfig():
 		config.usage.blinking_display_clock_during_recording = ConfigYesNo(default=False)
 
 	# in use
-	if SystemInfo["displaytype"] in ("textlcd"):
+	if displayType == "textlcd":
 		config.usage.blinking_rec_symbol_during_recording = ConfigSelection(default="Channel", choices=[
 			("Rec", _("REC Symbol")),
 			("RecBlink", _("Blinking REC Symbol")),
 			("Channel", _("Channelname"))])
-	if SystemInfo["displaytype"] in ("textlcd7segment"):
+	elif segmentDisplay:
 		config.usage.blinking_rec_symbol_during_recording = ConfigSelection(default="Rec", choices=[
 			("Rec", _("REC")),
 			("RecBlink", _("Blinking REC")),
@@ -455,10 +457,10 @@ def InitUsageConfig():
 	else:
 		config.usage.blinking_rec_symbol_during_recording = ConfigYesNo(default=True)
 
-	if SystemInfo["displaytype"] in ("textlcd7segment"):
-		config.usage.show_in_standby = ConfigSelection(default="time", choices=[
-			("time", _("Time")),
-			("nothing", _("Nothing"))])
+	# always defined, as display skins may refer to it; the setup only shows it for 7 segment displays
+	config.usage.show_in_standby = ConfigSelection(default="time", choices=[
+		("time", _("Time")),
+		("nothing", _("Nothing"))])
 
 	config.usage.show_message_when_recording_starts = ConfigYesNo(default=True)
 
@@ -969,15 +971,6 @@ def InitUsageConfig():
 		keytranslation = eEnv.resolve("${datadir}/enigma2/keytranslation.xml")
 	config.usage.keytrans = ConfigText(default=keytranslation)
 
-	config.network = ConfigSubsection()
-
-	config.network.AFP_autostart = ConfigYesNo(default=True)
-	config.network.NFS_autostart = ConfigYesNo(default=True)
-	config.network.OpenVPN_autostart = ConfigYesNo(default=False)
-	config.network.Samba_autostart = ConfigYesNo(default=True)
-	config.network.Inadyn_autostart = ConfigYesNo(default=True)
-	config.network.uShare_autostart = ConfigYesNo(default=True)
-
 	config.softwareupdate = ConfigSubsection()
 	config.softwareupdate.autosettingsbackup = ConfigYesNo(default=True)
 	config.softwareupdate.autoimagebackup = ConfigYesNo(default=False)
@@ -1002,7 +995,6 @@ def InitUsageConfig():
 	config.timeshift.favoriteSaveAction = ConfigSelection([("askuser", _("Ask user")), ("savetimeshift", _("Save and stop")), ("savetimeshiftandrecord", _("Save and record")), ("noSave", _("Don't save"))], "askuser")
 	config.timeshift.permanentrecording = ConfigYesNo(default=False)
 	config.timeshift.isRecording = NoSave(ConfigYesNo(default=False))
-	config.timeshift.stream_warning = ConfigYesNo(default=True)
 
 	config.seek = ConfigSubsection()
 	config.seek.baractivation = ConfigSelection([("leftright", _("Long Left / Right")), ("ffrw", _("Long << / >>"))], "leftright")
@@ -1293,9 +1285,8 @@ def InitUsageConfig():
 	config.oscaminfo.username = ConfigText(default="username", fixed_size=False, visible_width=12)
 	config.oscaminfo.password = ConfigPassword(default="password", fixed_size=False)
 	config.oscaminfo.ip = ConfigIP(default=[127, 0, 0, 1], auto_jump=True)
-	config.oscaminfo.port = ConfigInteger(default=16002, limits=(0, 65536))
+	config.oscaminfo.port = ConfigInteger(default=16002, limits=(1, 65535))
 	config.oscaminfo.intervall = ConfigSelectionNumber(min=1, max=600, stepwidth=1, default=10, wraparound=True)
-	config.misc.enableCamscript = ConfigYesNo(default=False)
 	config.misc.softcams = ConfigSelection(default="None", choices=[(x, _(x)) for x in CamControl("softcam").getList()])
 	config.misc.softcamrestarts = ConfigSelection(default="", choices=[
 		("", _("Don't restart")),
@@ -1332,26 +1323,20 @@ def InitUsageConfig():
 			[(x, _("%d packets (%s)") % (x, bytesToHumanReadable(x * 188))) for x in (32, 64, 128, 256, 512, 1024)], default=256)
 	config.usage.storage_size_units.addNotifier(updateBufferSizeLabels, initial_call=False)
 	config.misc.softcam_streamrelay_url = ConfigIP(default=[127, 0, 0, 1], auto_jump=True)
-	config.misc.softcam_streamrelay_port = ConfigInteger(default=17999, limits=(0, 65535))
+	config.misc.softcam_streamrelay_port = ConfigInteger(default=17999, limits=(1, 65535))
 	config.misc.softcam_streamrelay_delay = ConfigSelectionNumber(min=0, max=2000, stepwidth=50, default=100, wraparound=True)
 	SystemInfo["OScamInstalled"] = False
 
 	config.cccaminfo = ConfigSubsection()
 	config.cccaminfo.showInExtensions = ConfigYesNo(default=False)
-	config.cccaminfo.serverNameLength = ConfigSelectionNumber(min=10, max=100, stepwidth=1, default=22, wraparound=True)
 	config.cccaminfo.name = ConfigText(default="Profile", fixed_size=False)
-	config.cccaminfo.ip = ConfigText(default="192.168.2.12", fixed_size=False)
+	config.cccaminfo.ip = ConfigText(default="192.168.2.12", fixed_size=False)  # default is obviously someone's personal ip
 	config.cccaminfo.username = ConfigText(default="", fixed_size=False)
 	config.cccaminfo.password = ConfigText(default="", fixed_size=False)
 	config.cccaminfo.port = ConfigInteger(default=16001, limits=(1, 65535))
 	config.cccaminfo.profile = ConfigText(default="", fixed_size=False)
-	config.cccaminfo.ecmInfoEnabled = ConfigYesNo(default=True)
-	config.cccaminfo.ecmInfoTime = ConfigSelectionNumber(min=1, max=10, stepwidth=1, default=5, wraparound=True)
-	config.cccaminfo.ecmInfoForceHide = ConfigYesNo(default=True)
-	config.cccaminfo.ecmInfoPositionX = ConfigInteger(default=50)
-	config.cccaminfo.ecmInfoPositionY = ConfigInteger(default=50)
-	config.cccaminfo.blacklist = ConfigText(default="/media/cf/CCcamInfo.blacklisted", fixed_size=False)
-	config.cccaminfo.profiles = ConfigText(default="/media/cf/CCcamInfo.profiles", fixed_size=False)
+	config.cccaminfo.blacklist = ConfigText(default="/media/cf/CCcamInfo.blacklisted", fixed_size=False)  # default, /media/cf, why?
+	config.cccaminfo.profiles = ConfigText(default="/media/cf/CCcamInfo.profiles", fixed_size=False)  # default, /media/cf, why?
 	SystemInfo["CCcamInstalled"] = False
 	for softcam in softcams:
 		if softcam.lower().startswith("ncam_cccam"):
@@ -1416,7 +1401,6 @@ def InitUsageConfig():
 		choicelist.append(("%d" % i, _("%d sec") % i))
 	config.hdmicec.repeat_wakeup_timer = ConfigSelection(default="3", choices=[("0", _("Disabled"))] + choicelist)
 	config.hdmicec.debug = ConfigSelection(default="0", choices=[("0", _("Disabled")), ("1", _("print debug")), ("2", _("Log Messages")), ("3", _("Log Key Events")), ("4", _("Log All"))])
-	config.hdmicec.bookmarks = ConfigLocations(default="/hdd/")
 	config.hdmicec.log_path = ConfigDirectory("/hdd/")
 	config.hdmicec.next_boxes_detect = ConfigYesNo(default=False)  # Before switching the TV to standby, receiver tests if any devices plugged to TV are in standby. If they are not, the 'sourceinactive' command will be sent to the TV instead of the 'standby' command.
 	config.hdmicec.sourceactive_zaptimers = ConfigYesNo(default=False)				# Command the TV to switch to the correct HDMI input when zap timers activate.

@@ -746,6 +746,9 @@ class InfoBarShowHide(InfoBarScreenSaver):
 
 	def __onShow(self):
 		self.__state = self.STATE_SHOWN
+		if self.secondInfoBarScreen and self.secondInfoBarScreen.shown:  # never show both infobars
+			self.secondInfoBarScreen.hide()
+			self.secondInfoBarWasShown = False
 		for x in self.onShowHideNotifiers:
 			x(True)
 		self.startHideTimer()
@@ -841,7 +844,10 @@ class InfoBarShowHide(InfoBarScreenSaver):
 				self.autocampop_active = 0
 #end
 			if config.usage.show_infobar_on_zap.value:
-				self.doShow()
+				if self.secondInfoBarScreen and self.secondInfoBarScreen.shown:
+					self.startHideTimer()  # CH+/- keep the second infobar open, it already shows the new channel
+				else:
+					self.doShow()
 		self.showHideVBI()
 
 	def startHideTimer(self):

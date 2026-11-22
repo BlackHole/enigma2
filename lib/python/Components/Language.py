@@ -6,6 +6,14 @@ from time import time, localtime, strftime
 from Tools.Directories import SCOPE_LANGUAGE, resolveFilename
 
 LPATH = resolveFilename(SCOPE_LANGUAGE, "")
+
+
+def alphabeticSortKey(name):
+	# Sort key for names in the alphabet of the current language (LC_COLLATE, set by activateLanguage()), ignoring case.
+	# Without that language's collation data this is the same as plain character order.
+	return locale.strxfrm(name.lower()) if name else ""
+
+
 Lpackagename = "enigma2-locale-"
 
 
@@ -103,8 +111,9 @@ class Language:
 		for category in [locale.LC_CTYPE, locale.LC_COLLATE, locale.LC_TIME, locale.LC_MONETARY, locale.LC_MESSAGES, locale.LC_NUMERIC]:
 			try:
 				locale.setlocale(category, (self.gotLanguage, 'UTF-8'))
-			except:
-				pass
+			except locale.Error:
+				if category == locale.LC_COLLATE:  # do not keep sorting by the previous language's rules
+					locale.setlocale(category, "C")
 
 		# Also write a locale.conf as /home/root/.config/locale.conf to apply language to interactive shells as well:
 		if not path.exists('/home/root/.config'):
