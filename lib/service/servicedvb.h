@@ -137,10 +137,10 @@ public:
 	RESULT setFastForward(int ratio);
 
 		// iSeekableService
-	RESULT getLength(pts_t &len);
-	RESULT seekTo(pts_t to);
-	RESULT seekRelative(int direction, pts_t to);
-	RESULT getPlayPosition(pts_t &pos);
+	virtual RESULT getLength(pts_t &len);
+	virtual RESULT seekTo(pts_t to);
+	virtual RESULT seekRelative(int direction, pts_t to);
+	virtual RESULT getPlayPosition(pts_t &pos);
 	RESULT setTrickmode(int trick=0);
 	RESULT isCurrentlySeekable();
 
@@ -174,14 +174,14 @@ public:
 	RESULT getSubservice(eServiceReference &subservice, unsigned int n);
 
 		// iTimeshiftService
-	RESULT startTimeshift();
-	RESULT stopTimeshift(bool swToLive=true);
+	virtual RESULT startTimeshift();
+	virtual RESULT stopTimeshift(bool swToLive=true);
 	int isTimeshiftActive();
 	int isTimeshiftEnabled();
-	RESULT activateTimeshift();
-	RESULT setNextPlaybackFile(const char *fn);
-	RESULT saveTimeshiftFile();
-	std::string getTimeshiftFilename();
+	virtual RESULT activateTimeshift();
+	virtual RESULT setNextPlaybackFile(const char *fn);
+	virtual RESULT saveTimeshiftFile();
+	virtual std::string getTimeshiftFilename();
 	virtual void switchToLive();
 	virtual RESULT setTimeshiftSyncEnabled(bool enabled);
 	virtual RESULT getTimeshiftDelay(pts_t &delay);
@@ -253,7 +253,7 @@ protected:
 	void gotNewEvent(int error);
 
 	void serviceEvent(int event);
-	void serviceEventTimeshift(int event);
+	virtual void serviceEventTimeshift(int event);
 	sigc::signal<void(iPlayableService*,int)> m_event;
 
 		/* fix tuxtxt for streams */
@@ -385,7 +385,7 @@ protected:
 	virtual ePtr<iTsSource> createTsSource(eServiceReferenceDVB &ref, int packetsize = 188);
 
 	ePtr<eConnection> m_con_record_event;
-	void recordEvent(int event);
+	virtual void recordEvent(int event);
 
 	// Software descrambling
 	virtual void setupSpeculativeDescrambling();
@@ -408,6 +408,7 @@ protected:
 	ePtr<eTimer> m_precise_recovery_timer;
 
 	pts_t m_original_timeshift_delay; // target timeshift delay, in PTS
+	std::atomic<bool> m_stream_corruption_detected; // read from other threads
 
 	bool m_delay_calculated = false; // delay fingerprint taken once per recovery
 	enum class RecoveryPhase { Waiting, Playing, Refilling };
@@ -426,9 +427,6 @@ protected:
 	bool getTimeshiftRecoveryDelay(pts_t &delay, pts_t &position);
 	virtual void onRecoveryPaused() {} // hook after playback is actually paused
 	// -- END: Precise Recovery System --
-private:
-	// Written by the recorder thread, read by the playback/recovery timer.
-	std::atomic<bool> m_stream_corruption_detected;
 };
 
 class eStaticServiceDVBBouquetInformation: public iStaticServiceInformation

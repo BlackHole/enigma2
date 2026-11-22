@@ -32,7 +32,9 @@
 #include <lib/dvb/demux.h>
 #include <lib/base/httpsstream.h>
 #include <lib/base/httpstream.h>
+#include <lib/base/esettings.h>
 #include <lib/service/servicedvbfcc.h>
+#include <lib/service/eramserviceplay.h>
 #include <lib/service/servicemp3.h>
 #include "servicepeer.h"
 
@@ -999,6 +1001,10 @@ RESULT eServiceFactoryDVB::play(const eServiceReference &ref, ePtr<iPlayableServ
 		// check resources...
 	if (eFCCServiceManager::checkAvailable(ref))
 		ptr = new eDVBServiceFCCPlay(ref, service);
+	else if (ref.path.empty() && eSettings::ram_timeshift_delay_seconds > 0)
+		// In-memory timeshift: same playback logic, but the buffer lives in
+		// RAM instead of on a storage device.
+		ptr = new eRamServicePlay(ref, service, eSettings::ram_timeshift_delay_seconds);
 	else
 		ptr = new eDVBServicePlay(ref, service);
 	return 0;

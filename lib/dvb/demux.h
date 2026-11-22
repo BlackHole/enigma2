@@ -164,12 +164,12 @@ class eDVBRecordFileThread: public eFilePushThreadRecorder
 {
 public:
 	eDVBRecordFileThread(int packetsize, int bufferCount, int buffersize = -1, bool sync_mode = false);
-	~eDVBRecordFileThread();
+	virtual ~eDVBRecordFileThread();
 	void setTimingPID(int pid, iDVBTSRecorder::timing_pid_type pidtype, int streamtype);
 	void startSaveMetaInformation(const std::string &filename);
 	void stopSaveMetaInformation();
 	int getLastPTS(pts_t &pts);
-	int getFirstPTS(pts_t &pts);
+	virtual int getFirstPTS(pts_t &pts);
 	void setTargetFD(int fd) { m_fd_dest = fd; m_dest_is_file = -1; }
 	void enableAccessPoints(bool enable) { m_ts_parser.enableAccessPoints(enable); }
 	void setDescrambler(ePtr<iServiceScrambled> serviceDescrambler) { m_serviceDescrambler = serviceDescrambler; };
@@ -330,6 +330,10 @@ public:
 	bool waitForFirstData(int timeout_ms);
 	void setMinWrite(size_t size) override;
 	void setServiceFilter(int serviceId, int pmtPid, bool shared) override;
+	/* Install a replacement push thread before start(). Used by RAM
+	 * timeshift, which needs a thread that writes into a ring buffer
+	 * instead of a file. Takes ownership of newThread. */
+	void replaceThread(eDVBRecordFileThread *newThread);
 private:
 	RESULT startPID(int pid);
 	void stopPID(int pid);
@@ -347,6 +351,9 @@ private:
 	eDVBRecordFileThread *m_thread;
 	std::string m_target_filename;
 	int m_packetsize;
+	/* set by replaceThread(): the installed thread has its own sink, so
+	 * start() must not insist on a target fd. */
+	bool m_ram_mode = false;
 };
 
 #endif

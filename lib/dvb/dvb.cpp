@@ -1648,8 +1648,8 @@ bool eDVBResourceManager::canMeasureFrontendInputPower()
 class eDVBChannelFilePush: public eFilePushThread
 {
 public:
-	eDVBChannelFilePush(int packetsize = 188):
-		eFilePushThread(packetsize, packetsize * 512),
+	eDVBChannelFilePush(int packetsize = 188, int flags = 0):
+		eFilePushThread(packetsize, packetsize * 512, flags),
 		m_iframe_search(0),
 		m_iframe_state(0),
 		m_pid(0),
@@ -2365,7 +2365,19 @@ RESULT eDVBChannel::playSource(ePtr<iTsSource> &source, const char *streaminfo_f
 		}
 	}
 
-	m_pvr_thread = new eDVBChannelFilePush(m_source->getPacketSize());
+	int flags = 0;
+	if (streaminfo_file && strstr(streaminfo_file, "timeshift"))
+	{
+		eDebug("[eDVBChannel] playsource timeshift mode");
+		flags = FLAGBIT_TIMESHIFT;
+		if (strstr(streaminfo_file, "ram_timeshift"))
+		{
+			eDebug("[eDVBChannel] playsource RAM timeshift mode");
+			flags |= FLAGBIT_RAM_MODE;
+		}
+	}
+
+	m_pvr_thread = new eDVBChannelFilePush(m_source->getPacketSize(), flags);
 	m_pvr_thread->enablePVRCommit(1);
 	m_pvr_thread->setStreamMode(m_source->isStream());
 	m_pvr_thread->setScatterGather(this);
@@ -2449,6 +2461,26 @@ RESULT eDVBChannel::getCurrentPosition(iDVBDemux *decoding_demux, pts_t &pos, in
 
 	pos = now;
 
+	return 0;
+}
+
+void eDVBChannel::forceSourcePosition(off_t offset)
+{
+	if (m_pvr_thread)
+		m_pvr_thread->forcePosition(offset);
+}
+
+RESULT eDVBChannel::seekSourcePosition(off_t offset)
+{
+	if (!m_pvr_thread || offset < 0 || offset % 188)
+		return -1;
+	// Apply the new source position while stopped, then flush in playback order.
+	m_pvr_thread->pause();
+	m_pvr_thread->forcePosition(offset);
+	::ioctl(m_pvr_fd_dst, 0);
+	if (m_cue && m_cue->m_decoding_demux)
+		m_cue->m_decoding_demux->flush();
+	m_pvr_thread->resume();
 	return 0;
 }
 

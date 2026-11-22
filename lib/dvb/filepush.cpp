@@ -21,6 +21,8 @@ eFilePushThread::eFilePushThread(int blocksize, size_t buffersize, int flags):
 	 m_messagepump(eApp, 0, "eFilePushThread"),
 	 m_run_state(0)
 {
+	m_current_position = 0;
+	m_force_position.store(-1);
 	if (m_buffer == NULL)
 		eFatal("[eFilePushThread] Failed to allocate %zu bytes", buffersize);
 	CONNECT(m_messagepump.recv_msg, eFilePushThread::recvEvent);
@@ -71,7 +73,18 @@ void eFilePushThread::thread()
 
 		while (!m_stop)
 		{
-			// eTrace("[FilePushThread][DATA] Pumping data at pos=%lld", (long long)m_current_position);
+			/* A forced position (RAM lap recovery) wins over the
+			 * normal scatter-gather advance. exchange() reads and
+			 * resets in one operation, so a concurrent request is
+			 * never lost. */
+			off_t forced = m_force_position.exchange(-1);
+			if (forced >= 0)
+			{
+				m_current_position = forced;
+				current_span_remaining = 0;
+				eDebug("[eFilePushThread] applied forced position %lld", (long long)forced);
+			}
+
 			if (m_sg && !current_span_remaining)
 			{
 				m_sg->getNextSourceSpan(m_current_position, bytes_read, current_span_offset, current_span_remaining, m_blocksize, m_sof);
@@ -160,10 +173,25 @@ void eFilePushThread::thread()
 				if (m_stop)
 					break;
 
-				/* in stream_mode, we are sending EOF events
-				   over and over until somebody responds.
-
-				   in stream_mode, think of evtEOF as "buffer underrun occurred". */
+				if (m_flags & FLAGBIT_TIMESHIFT)
+				{
+					/* RAM mode has no file growing behind us: suppressing
+					 * the repeated EOF avoids a flood of spurious "End of
+					 * file!" events, and the push thread just waits for
+					 * the ring buffer to be filled further. */
+					if (!(m_flags & FLAGBIT_RAM_MODE) || eofcount == 0)
+					{
+						if (m_sof == 0)
+							sendEvent(evtEOF);
+						else
+							sendEvent(evtUser);
+					}
+					++eofcount;
+					usleep(200000);  /* 200ms */
+					continue;
+				}
+				/* In stream_mode, we send EOF events repeatedly until
+				 * somebody responds.  Think of evtEOF as "buffer underrun". */
 				if (m_sof == 0)
 					sendEvent(evtEOF);
 				else
@@ -172,10 +200,6 @@ void eFilePushThread::thread()
 				if (m_stream_mode) {
 					eDebug("[eFilePushThread] reached EOF, but we are in stream mode. delaying 1 second.");
 					sleep(1);
-					continue;
-				}
-				else if (m_flags == 1) { // timeshift
-					usleep(200000);  // 200 milliseconds
 					continue;
 				}
 				else if (++eofcount < 10)
@@ -250,9 +274,18 @@ void eFilePushThread::start(ePtr<iTsSource> &source, int fd_dest)
 	m_source = source;
 	m_fd_dest = fd_dest;
 	m_current_position = 0;
+	m_force_position.store(-1);
 	m_run_state = 1;
 	m_stop = 0;
 	run();
+}
+
+void eFilePushThread::forcePosition(off_t pos)
+{
+	/* The push thread picks this up on its next loop iteration via
+	 * exchange(). Relaxed ordering is enough: only this value itself
+	 * is exchanged, no other shared state depends on the store. */
+	m_force_position.store(pos);
 }
 
 void eFilePushThread::stop()

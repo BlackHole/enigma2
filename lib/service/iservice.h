@@ -694,6 +694,13 @@ public:
 	virtual RESULT saveTimeshiftFile()=0;
 	virtual std::string getTimeshiftFilename()=0;
 	virtual void switchToLive()=0;
+	// Confirmed, complete TS packets across all parts; -1 when unavailable.
+	virtual long long getTimeshiftFileSize() { return -1; }
+	// RAM sources have no recording file and must bypass disk PTS bookkeeping.
+	virtual bool isTimeshiftMemory() { return false; }
+	// Optional, bounded RAM-buffer repositioning for external-audio synchronization.
+	// Does not enable general seeking or change ordinary timeshift recovery.
+	virtual RESULT seekTimeshiftDelay(int /*milliseconds*/) { return -1; }
 	// Opt-in recovery for plugin-owned external-audio synchronization buffers.
 	virtual RESULT setTimeshiftSyncEnabled(bool /*enabled*/) { return -1; }
 	// Incoming and decoded timestamps in the same 90 kHz stream clock domain.

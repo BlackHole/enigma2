@@ -687,6 +687,14 @@ public:
 		*/
 	virtual RESULT getCurrentPosition(iDVBDemux *decoding_demux, pts_t &pos, int mode) = 0;
 		/* skipping must be done with a cue sheet */
+
+		/* Force the push thread's read position to an absolute byte offset
+		   without going through the cue sheet. Used by RAM timeshift, whose
+		   source has no .ap metadata for eDVBTSTools to seek with. */
+	virtual void forceSourcePosition(off_t /*offset*/) {}
+		/* Move the source position while the push thread is paused and flush
+		   the decoder demux so no stale data is decoded afterwards. */
+	virtual RESULT seekSourcePosition(off_t /*offset*/) { return -1; }
 };
 
 class iDVBSectionReader;
