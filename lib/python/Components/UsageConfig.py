@@ -1004,6 +1004,11 @@ def InitUsageConfig():
 	config.timeshift.isRecording = NoSave(ConfigYesNo(default=False))
 	config.timeshift.stream_warning = ConfigYesNo(default=True)
 
+	# Precise Recovery System: after a stream error, playback is held until the
+	# buffer has refilled by this much extra, so the gap is skipped instead of
+	# being decoded as glitches.
+	config.timeshift.recoveryBufferDelay = ConfigSelection(default="300", choices=[(str(x), _("%d ms") % x) for x in range(100, 1500, 100)])
+
 	config.seek = ConfigSubsection()
 	config.seek.baractivation = ConfigSelection([("leftright", _("Long Left / Right")), ("ffrw", _("Long << / >>"))], "leftright")
 	config.seek.sensibility = ConfigSelectionNumber(min=1, max=10, stepwidth=1, default=10, wraparound=True)

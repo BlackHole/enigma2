@@ -9,6 +9,7 @@
 #include <lib/dvb/subtitle.h>
 #include <lib/dvb/teletext.h>
 #include <lib/dvb/radiotext.h>
+#include <atomic>
 
 class eStaticServiceDVBInformation;
 class eStaticServiceDVBBouquetInformation;
@@ -182,6 +183,8 @@ public:
 	RESULT saveTimeshiftFile();
 	std::string getTimeshiftFilename();
 	virtual void switchToLive();
+	virtual RESULT setTimeshiftSyncEnabled(bool enabled);
+	virtual RESULT getTimeshiftDelay(pts_t &delay);
 
 		// iTapService
 	bool startTapToFD(int fd, const std::vector<int> &pids, int packetsize = 188);
@@ -397,8 +400,35 @@ protected:
 
 	// Audio cache helper
 	void updateAudioCache(int apid, int apidtype);
+
+	// -- START: Precise Recovery System --
+	// Handles stream corruption during timeshift: playback is paused when the
+	// buffer is damaged and resumes only once the delay has been refilled, so
+	// the gap is skipped instead of being decoded as glitches.
+	ePtr<eTimer> m_precise_recovery_timer;
+
+	pts_t m_original_timeshift_delay; // target timeshift delay, in PTS
+
+	bool m_delay_calculated = false; // delay fingerprint taken once per recovery
+	enum class RecoveryPhase { Waiting, Playing, Refilling };
+	RecoveryPhase m_recovery_phase = RecoveryPhase::Waiting;
+	pts_t m_recovery_check_position = 0;
+	bool m_timeshift_sync_enabled = false;
+	pts_t m_timeshift_sync_playback_pts = -1;
+	pts_t m_timeshift_sync_live_pts = -1;
+	int64_t m_timeshift_sync_log_time = -1;
+	unsigned int m_timeshift_sync_eof_count = 0;
+	bool getTimeshiftSyncPosition(pts_t &live, pts_t &playback);
+
+	virtual void handleEofRecovery();
+	virtual void startPreciseRecoveryCheck();
+	void resetRecoveryState(); // resets all recovery state variables
+	bool getTimeshiftRecoveryDelay(pts_t &delay, pts_t &position);
+	virtual void onRecoveryPaused() {} // hook after playback is actually paused
+	// -- END: Precise Recovery System --
 private:
-	bool m_stream_corruption_detected;
+	// Written by the recorder thread, read by the playback/recovery timer.
+	std::atomic<bool> m_stream_corruption_detected;
 };
 
 class eStaticServiceDVBBouquetInformation: public iStaticServiceInformation

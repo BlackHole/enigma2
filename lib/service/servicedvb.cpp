@@ -1130,6 +1130,8 @@ eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *serv
 	m_cutlist_enabled(1),
 	m_subtitle_widget(0),
 	m_subtitle_sync_timer(eTimer::create(eApp)),
+	m_precise_recovery_timer(eTimer::create(eApp)),
+	m_original_timeshift_delay(0),
 	m_stream_corruption_detected(false),
 	m_soft_decoder_video_info_valid(false),
 	m_nownext_timer(eTimer::create(eApp))
@@ -1142,6 +1144,7 @@ eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *serv
 	CONNECT(m_service_handler_timeshift.serviceEvent, eDVBServicePlay::serviceEventTimeshift);
 	CONNECT(m_event_handler.m_eit_changed, eDVBServicePlay::gotNewEvent);
 	CONNECT(m_subtitle_sync_timer->timeout, eDVBServicePlay::checkSubtitleTiming);
+	CONNECT(m_precise_recovery_timer->timeout, eDVBServicePlay::startPreciseRecoveryCheck);
 	CONNECT(m_nownext_timer->timeout, eDVBServicePlay::updateEpgCacheNowNext);
 }
 
@@ -1291,12 +1294,47 @@ void eDVBServicePlay::serviceEvent(int event)
 		break;
 	}
 	case eDVBServicePMTHandler::eventNoResources:
-	case eDVBServicePMTHandler::eventNoPAT:
 	case eDVBServicePMTHandler::eventNoPATEntry:
-	case eDVBServicePMTHandler::eventNoPMT:
-	case eDVBServicePMTHandler::eventTuneFailed:
 	case eDVBServicePMTHandler::eventMisconfiguration:
 	{
+		eDebug("[eDVBServicePlay] DVB service failed to tune - error %d", event);
+		m_event((iPlayableService*)this, evTuneFailed);
+		break;
+	}
+	case eDVBServicePMTHandler::eventSignalLost:
+	{
+		// Keep existing timeshift recovery: a lost lock during a timeshift
+		// session is handled by the buffer, not reported as a tune failure.
+		if (m_stream_corruption_detected)
+			break;
+
+		if (m_timeshift_enabled)
+		{
+			eTrace("[PreciseRecovery] Signal lost during timeshift. Initiating recovery.");
+			m_stream_corruption_detected = true;
+			handleEofRecovery();
+		}
+		break;
+	}
+	case eDVBServicePMTHandler::eventTuneFailed:
+	case eDVBServicePMTHandler::eventNoPAT:
+	case eDVBServicePMTHandler::eventNoPMT:
+	{
+		// Do not re-trigger if a recovery is already in progress.
+		if (m_stream_corruption_detected)
+			break;
+
+		// A PAT/PMT loss or a failed tune during timeshift is a stream
+		// problem, not a reason to drop the whole timeshift session: hold
+		// playback and wait for the buffer to refill like any other gap.
+		if (m_timeshift_enabled)
+		{
+			eTrace("[PreciseRecovery] Tune failed/PAT/PMT loss during timeshift. Initiating recovery.");
+			m_stream_corruption_detected = true;
+			handleEofRecovery();
+			break;
+		}
+
 		eDebug("[eDVBServicePlay] DVB service failed to tune - error %d", event);
 		m_event((iPlayableService*)this, evTuneFailed);
 		break;
@@ -1306,6 +1344,12 @@ void eDVBServicePlay::serviceEvent(int event)
 		eDebug("[eDVBServicePlay] eventNewProgramInfo timeshift_enabled=%d timeshift_active=%d", m_timeshift_enabled, m_timeshift_active);
 		if (m_timeshift_enabled)
 			updateTimeshiftPids();
+
+		// Re-tuned during an active recovery: let the recovery state machine
+		// keep control and resume playback at the preserved delay.
+		if (m_stream_corruption_detected)
+			break;
+
 		if (m_csa_session && !m_csa_session->isEcmAnalyzed())
 		{
 			eDVBServicePMTHandler::program program;
@@ -1389,6 +1433,261 @@ void eDVBServicePlay::serviceEvent(int event)
 	}
 }
 
+void eDVBServicePlay::resetRecoveryState()
+{
+	m_original_timeshift_delay = 0;
+	m_delay_calculated = false;
+	m_stream_corruption_detected = false;
+	m_recovery_phase = RecoveryPhase::Waiting;
+	m_recovery_check_position = 0;
+	m_timeshift_sync_playback_pts = -1;
+	m_timeshift_sync_live_pts = -1;
+	if (m_precise_recovery_timer->isActive())
+		m_precise_recovery_timer->stop();
+}
+
+bool eDVBServicePlay::getTimeshiftRecoveryDelay(pts_t &delay, pts_t &position)
+{
+	if (m_timeshift_sync_enabled)
+	{
+		pts_t live = 0;
+		if (!getTimeshiftSyncPosition(live, position))
+			return false;
+		// Preserve the decoder timestamp while paused, including on drivers
+		// which continue advancing getPTS() after pause().
+		if (m_timeshift_sync_playback_pts < 0)
+			m_timeshift_sync_playback_pts = position;
+		if (m_timeshift_sync_live_pts < 0)
+			m_timeshift_sync_live_pts = live;
+		delay = (live - position) & 0x1FFFFFFFFLL;
+		return true;
+	}
+	pts_t length = 0;
+	// Both values use the recording timeline. getCurrentPCR() returns a raw
+	// stream timestamp and must not be compared with a relative play position.
+	if (getLength(length) != 0 || getPlayPosition(position) != 0 || length <= 0 || position < 0 || position > length)
+		return false;
+	delay = length - position;
+	return true;
+}
+
+RESULT eDVBServicePlay::setTimeshiftSyncEnabled(bool enabled)
+{
+	if (enabled && !m_timeshift_enabled)
+		return -1;
+	if (m_timeshift_sync_enabled != enabled)
+	{
+		// Release only a pause owned by recovery, never a user pause.
+		if (m_stream_corruption_detected && m_precise_recovery_timer->isActive() && m_is_paused)
+			unpause();
+		resetRecoveryState();
+		m_timeshift_sync_enabled = enabled;
+		m_timeshift_sync_log_time = -1;
+		m_timeshift_sync_eof_count = 0;
+		eTrace("[TimeshiftSync] Stream-clock recovery enabled=%d, active=%d", enabled, m_timeshift_active);
+	}
+	return 0;
+}
+
+bool eDVBServicePlay::getTimeshiftSyncPosition(pts_t &live, pts_t &playback)
+{
+	if (!m_timeshift_active || !m_record || !m_decoder)
+		return false;
+	live = playback = -1;
+	// Despite its name, getCurrentPCR() returns the timing PID's latest PTS.
+	// Match video to video (or audio on radio), not a normalized seek position.
+	if (m_record->getCurrentPCR(live) || live < 0)
+		return false;
+	if (m_stream_corruption_detected && m_timeshift_sync_playback_pts >= 0)
+		playback = m_timeshift_sync_playback_pts;
+	else if (m_decoder->getPTS(m_have_video_pid ? 1 : 2, playback) || playback < 0)
+		return false;
+	live &= 0x1FFFFFFFFLL;
+	playback &= 0x1FFFFFFFFLL;
+	// Reject a decoder ahead of the input or an unrelated clock reset.
+	return ((live - playback) & 0x1FFFFFFFFLL) < 0x100000000LL;
+}
+
+RESULT eDVBServicePlay::getTimeshiftDelay(pts_t &delay)
+{
+	pts_t live = -1, playback = -1;
+	delay = 0;
+	const bool valid = getTimeshiftSyncPosition(live, playback);
+	if (valid)
+		delay = (live - playback) & 0x1FFFFFFFFLL;
+	// No extra decoder read or per-packet logging. These are the exact
+	// clock samples returned to the plugin, including failed measurements.
+	if (debugLvl >= lvlTrace)
+	{
+		struct timespec now;
+		if (!clock_gettime(CLOCK_MONOTONIC, &now) && (m_timeshift_sync_log_time < 0 || now.tv_sec - m_timeshift_sync_log_time >= 2))
+		{
+			m_timeshift_sync_log_time = now.tv_sec;
+			eTrace("[TimeshiftSync] live=%lld playback=%lld delay=%lld valid=%d enabled=%d paused=%d recovering=%d held=%lld eofCount=%u", live, playback, delay, valid, m_timeshift_sync_enabled, m_is_paused, m_stream_corruption_detected.load(), m_timeshift_sync_playback_pts, m_timeshift_sync_eof_count);
+		}
+	}
+	return valid ? 0 : -1;
+}
+
+void eDVBServicePlay::handleEofRecovery()
+{
+	// Background PTS has no playback position or delay to recover. Pausing
+	// live TV here would wait forever for a PVR position that does not exist.
+	if (!m_timeshift_active)
+	{
+		resetRecoveryState();
+		return;
+	}
+	if (m_is_paused)
+		return;
+
+	eTrace("[PreciseRecovery] Corruption detected. Pausing playback, recording continues.");
+
+	// A second corruption indication can arrive before the decoder has
+	// crossed the first gap. Its temporary lag is not a new target delay.
+	const bool continuingRecovery = m_recovery_phase == RecoveryPhase::Playing && m_delay_calculated;
+	if (!continuingRecovery)
+	{
+		m_delay_calculated = false;
+		m_original_timeshift_delay = 0;
+	}
+	m_recovery_phase = RecoveryPhase::Waiting;
+	m_recovery_check_position = 0;
+	m_timeshift_sync_playback_pts = -1;
+	m_timeshift_sync_live_pts = -1;
+	/* Take the delay fingerprint BEFORE pausing: pause() freezes the decoder
+	 * clock, and a getPlayPosition() taken after it would read a stale or
+	 * zero PTS, corrupting the fingerprint. */
+	pts_t position = 0;
+	if (!continuingRecovery && m_record && getTimeshiftRecoveryDelay(m_original_timeshift_delay, position))
+	{
+		m_delay_calculated = true;
+		eTrace("[PreciseRecovery] Original delay fingerprint set: %lld PTS", m_original_timeshift_delay);
+		if (m_timeshift_sync_enabled)
+			eTrace("[TimeshiftSync] Recovery snapshot: live=%lld playback=%lld delay=%lld", m_timeshift_sync_live_pts, m_timeshift_sync_playback_pts, m_original_timeshift_delay);
+	}
+	else if (continuingRecovery)
+		eTrace("[PreciseRecovery] Further corruption before recovery completed; preserving target=%lld PTS", m_original_timeshift_delay);
+
+	if (m_decoder)
+	{
+		m_decoder->pause();
+		m_is_paused = 1;
+		onRecoveryPaused();
+	}
+
+	m_precise_recovery_timer->start(100, false);
+}
+
+void eDVBServicePlay::startPreciseRecoveryCheck()
+{
+	if ((!m_stream_corruption_detected && m_recovery_phase != RecoveryPhase::Playing) || !m_record || !m_timeshift_active)
+	{
+		resetRecoveryState();
+		return;
+	}
+	// A manual pause or trick mode takes precedence over the delay check.
+	if (m_recovery_phase == RecoveryPhase::Playing && (m_is_paused || m_skipmode || m_fastforward || m_slowmotion))
+	{
+		resetRecoveryState();
+		return;
+	}
+
+	/* The fingerprint is taken in handleEofRecovery() before the pause, so by
+	 * the time this timer runs m_delay_calculated is expected to be set. If it
+	 * is not (reads failed), keep retrying once per tick rather than stopping
+	 * the recovery outright. */
+	if (!m_delay_calculated)
+	{
+		pts_t position = 0;
+		if (getTimeshiftRecoveryDelay(m_original_timeshift_delay, position))
+		{
+			m_delay_calculated = true;
+			eTrace("[PreciseRecovery] Delayed fingerprint set: %lld PTS", m_original_timeshift_delay);
+		}
+		if (!m_delay_calculated)
+		{
+			m_precise_recovery_timer->start(100, false);
+			return;
+		}
+	}
+
+	int recovery_delay_ms = m_timeshift_sync_enabled ? 0 : eConfigManager::getConfigIntValue("config.timeshift.recoveryBufferDelay", 300);
+	const pts_t safety_buffer_pts = recovery_delay_ms * 90;
+
+	bool recovery_complete = false;
+	pts_t position = 0, current_delay = 0;
+
+	{
+		if (!getTimeshiftRecoveryDelay(current_delay, position))
+		{
+			m_precise_recovery_timer->start(100, false);
+			return;
+		}
+
+		pts_t final_target_delay = m_original_timeshift_delay + safety_buffer_pts;
+		if (m_timeshift_sync_enabled)
+		{
+			pts_t live = 0, playback = 0;
+			// A stale timestamp already satisfies the old delay at fault onset.
+			// Wait for incoming data before resuming, even without an extra reserve.
+			if (!getTimeshiftSyncPosition(live, playback) || live == m_timeshift_sync_live_pts)
+				return;
+		}
+
+		if (m_recovery_phase == RecoveryPhase::Playing)
+		{
+			// The first recovered timestamp can jump across missing video. Wait
+			// until the decoder reaches it before checking the remaining buffer.
+			if (position < m_recovery_check_position)
+				return;
+			if (current_delay >= final_target_delay)
+			{
+				eTrace("[PreciseRecovery] Delay preserved after discontinuity: %lld PTS", current_delay);
+				resetRecoveryState();
+				return;
+			}
+			if (!m_decoder)
+			{
+				resetRecoveryState();
+				return;
+			}
+			eTrace("[PreciseRecovery] Refilling after discontinuity: delay=%lld PTS, target=%lld PTS", current_delay, final_target_delay);
+			m_recovery_phase = RecoveryPhase::Refilling;
+			m_stream_corruption_detected = true;
+			m_decoder->pause();
+			m_is_paused = 1;
+			onRecoveryPaused();
+		}
+
+		if (current_delay >= final_target_delay)
+		{
+			eTrace("[PreciseRecovery] Buffer ready: delay=%lld PTS, target=%lld PTS", current_delay, final_target_delay);
+			recovery_complete = true;
+		}
+	}
+
+	if (recovery_complete)
+	{
+		// External-audio synchronization has one recovery owner. Indexed-length
+		// jitter must not start a second pause after playback has resumed.
+		const bool check_discontinuity = !m_timeshift_sync_enabled && m_recovery_phase == RecoveryPhase::Waiting;
+		m_recovery_check_position = position + current_delay;
+		m_stream_corruption_detected = false;
+
+		if (m_is_paused)
+			unpause();
+		if (check_discontinuity)
+			m_recovery_phase = RecoveryPhase::Playing;
+		else
+			resetRecoveryState();
+
+		m_event((iPlayableService*)this, evSeekableStatusChanged);
+	} else {
+		m_precise_recovery_timer->start(100, false);
+	}
+}
+
 void eDVBServicePlay::serviceEventTimeshift(int event)
 {
 	switch (event)
@@ -1450,6 +1749,22 @@ void eDVBServicePlay::serviceEventTimeshift(int event)
 			m_event((iPlayableService*)this, evSOF);
 		break;
 	case eDVBServicePMTHandler::eventEOF:
+		// A plugin-owned buffer may temporarily run out of decodable data.
+		// Keep recording and let its delay controller recover instead of
+		// silently discarding the requested delay by switching to live.
+		if (m_timeshift_sync_enabled && m_timeshift_active)
+		{
+			++m_timeshift_sync_eof_count;
+			break;
+		}
+		// Ignore EOF while a recovery is in progress: the buffer simply has
+		// no new decodable data yet, and switching to live would throw away
+		// the delay we are recovering.
+		if (m_stream_corruption_detected || m_recovery_phase == RecoveryPhase::Playing)
+		{
+			eTrace("[eDVBServicePlay] Ignoring EOF during stream corruption recovery.");
+			break;
+		}
 		if ((!m_is_paused) && (m_skipmode >= 0))
 		{
 			if (m_timeshift_file_next.empty())
@@ -1843,7 +2158,9 @@ RESULT eDVBServicePlay::getLength(pts_t &len)
 RESULT eDVBServicePlay::pause()
 {
 	eDebug("[eDVBServicePlay] pause");
-	setFastForward_internal(0, m_slowmotion || m_fastforward > 1);
+	if (m_timeshift_sync_enabled && m_stream_corruption_detected)
+		resetRecoveryState();
+	setFastForward_internal(0, m_slowmotion || m_fastforward > 1 || m_skipmode != 0);
 	// Check SoftDecoder first (only if session is active AND not in timeshift playback)
 	// During timeshift playback, we use the normal decoder for the timeshift file
 	if (m_soft_decoder && m_csa_session && m_csa_session->isActive() && !m_timeshift_active)
@@ -1866,19 +2183,35 @@ RESULT eDVBServicePlay::pause()
 RESULT eDVBServicePlay::unpause()
 {
 	eDebug("[eDVBServicePlay] unpause");
-	setFastForward_internal(0, m_slowmotion || m_fastforward > 1);
+	setFastForward_internal(0, m_slowmotion || m_fastforward > 1 || m_skipmode != 0);
 	// Check SoftDecoder first (only if session is active AND not in timeshift playback)
 	// During timeshift playback, we use the normal decoder for the timeshift file
 	if (m_soft_decoder && m_csa_session && m_csa_session->isActive() && !m_timeshift_active)
 	{
 		m_slowmotion = 0;
 		m_is_paused = 0;
+		// A user resume overrides a recovery pause: its state is stale.
+		if (m_stream_corruption_detected || m_recovery_phase == RecoveryPhase::Playing)
+		{
+			eTrace("[PreciseRecovery] User resumed playback. Resetting recovery state.");
+			resetRecoveryState();
+		}
 		return m_soft_decoder->play();
 	}
 	if (m_decoder)
 	{
 		m_slowmotion = 0;
 		m_is_paused = 0;
+
+		// If a stream corruption event occurred while the user was paused,
+		// its state will be stale. Reset the recovery state machine
+		// so that new corruption events can be handled correctly.
+		if (m_stream_corruption_detected || m_recovery_phase == RecoveryPhase::Playing)
+		{
+			eTrace("[PreciseRecovery] User resumed playback. Resetting recovery state.");
+			resetRecoveryState();
+		}
+
 		return m_decoder->play();
 	} else
 		return -1;
@@ -1887,6 +2220,8 @@ RESULT eDVBServicePlay::unpause()
 RESULT eDVBServicePlay::seekTo(pts_t to)
 {
 	eDebug("[eDVBServicePlay] seekTo %lld", to);
+	if (m_recovery_phase == RecoveryPhase::Playing)
+		resetRecoveryState();
 
 	if (!m_decode_demux)
 		return -1;
@@ -1909,6 +2244,8 @@ RESULT eDVBServicePlay::seekTo(pts_t to)
 RESULT eDVBServicePlay::seekRelative(int direction, pts_t to)
 {
 	eDebug("[eDVBServicePlay] seekRelative %d, %lld", direction, to);
+	if (m_recovery_phase == RecoveryPhase::Playing)
+		resetRecoveryState();
 
 	if (!m_decode_demux)
 		return -1;
@@ -2353,6 +2690,8 @@ int eDVBServicePlay::getInfo(int w)
 		return resIsString;
 	case sDVBState:
 		return m_tune_state;
+	case sIsRecoveringStream:
+		return m_stream_corruption_detected ? 1 : 0;
 	default:
 		break;
 	}
@@ -3059,13 +3398,13 @@ void eDVBServicePlay::recordEvent(int event) {
 			eWarning("[eDVBServicePlay] recordEvent write error");
 			return;
 		case iDVBTSRecorder::eventStreamCorrupt: {
-			return; // Disabled for now.
 			// Do not re-trigger if a recovery is already in progress.
 			if (m_stream_corruption_detected)
 				return;
 
 			eWarning("[eDVBServicePlay] recordEvent eventStreamCorrupt, initiating recovery.");
 			m_stream_corruption_detected = true;
+			handleEofRecovery();
 			return;
 		}
 		default:
@@ -3077,6 +3416,10 @@ RESULT eDVBServicePlay::stopTimeshift(bool swToLive)
 {
 	if (!m_timeshift_enabled)
 		return -1;
+
+	// Reset the recovery system state for the next timeshift session.
+	resetRecoveryState();
+	m_timeshift_sync_enabled = false;
 
 	// IMPORTANT: Stop the timeshift recorder BEFORE switching to live!
 	// Otherwise the SoftDecoder starts and allocates resources, then the old
@@ -3394,6 +3737,9 @@ void eDVBServicePlay::switchToLive()
 		return;
 
 	eDebug("[eDVBServicePlay] SwitchToLive");
+
+	// Reset the recovery system state.
+	resetRecoveryState();
 
 	resetTimeshift(0);
 

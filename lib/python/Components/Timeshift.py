@@ -230,6 +230,12 @@ class InfoBarTimeshift:
 		if not self.timeshiftEnabled():
 			return
 
+		# C++ is holding playback while the buffer refills; moving the play
+		# position here would throw away the delay it is rebuilding.
+		if self.isRecoveringStream():
+			print("[Timeshift] SOF ignored: stream recovery is in progress.")
+			return
+
 		# print("[Timeshift]self.pts_currplaying", self.pts_currplaying)
 		self.pts_nextplaying = 0
 		if self.pts_currplaying > 1:
@@ -251,6 +257,11 @@ class InfoBarTimeshift:
 	def __evEOF(self):
 		# print("[Timeshift]!!!!! jumpToNextTimeshiftedEvent")
 		if not self.timeshiftEnabled():
+			return
+
+		# See __evSOF: a pending recovery owns the play position.
+		if self.isRecoveringStream():
+			print("[Timeshift] EOF ignored: stream recovery is in progress.")
 			return
 
 		# print("[Timeshift]self.pts_currplaying", self.pts_currplaying)
@@ -342,6 +353,14 @@ class InfoBarTimeshift:
 	def getTimeshift(self):
 		service = self.session.nav.getCurrentService()
 		return service and service.timeshift()
+
+	def isRecoveringStream(self):
+		# While C++ holds playback to let the buffer refill, Python must not
+		# juggle buffer files or jump the play position: that would discard
+		# the delay the recovery is trying to rebuild.
+		service = self.session.nav.getCurrentService()
+		info = service and service.info()
+		return bool(info and info.getInfo(iServiceInformation.sIsRecoveringStream) == 1)
 
 	def playpauseService2(self):
 		service = self.session.nav.getCurrentService()

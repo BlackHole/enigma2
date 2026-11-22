@@ -1742,6 +1742,10 @@ void eDVBChannel::frontendStateChanged(iDVBFrontend*fe)
 		ourstate = state_tuning;
 	} else if (state == iDVBFrontend::stateLostLock)
 	{
+			/* Tell the PMT handler before we touch the frontend: a running
+			   timeshift session uses this to freeze playback and recover,
+			   instead of letting the buffer drain into a decode gap. */
+		m_event(this, evtSignalLost);
 			/* on managed channels, we try to retune in order to re-acquire lock. */
 		if (m_current_frontend_parameters)
 		{

@@ -1195,7 +1195,12 @@ int eDVBRecordFileThread::_syncWrite(int len, bool parse, const unsigned char *d
 	// calls parseData AFTER descrambling to ensure we parse clear data.
 	if (parse && !m_serviceDescrambler)
 	{
-		m_ts_parser.parseData(m_current_offset, src, len);
+		int parse_result = m_ts_parser.parseData(m_current_offset, src, len);
+		if (parse_result == -2)
+		{
+			m_event(eFilePushThreadRecorder::evtStreamCorrupt);
+			return len;
+		}
 	}
 
 	// AIO writes use explicit offsets and never move the file position, so a

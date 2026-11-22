@@ -118,6 +118,8 @@ public:
 		eventStopped,
 		eventStartPvrDescramble,   // start PVR Descramble Convert
 		eventChannelAllocated,
+		eventStreamCorrupt,        // recorder detected a corrupt TS buffer
+		eventSignalLost,           // frontend signal lost during stable operation
 	};
 #ifndef SWIG
 	sigc::signal<void(int)> serviceEvent;
