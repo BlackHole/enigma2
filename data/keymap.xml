@@ -909,7 +909,7 @@
 	</map>
 
 	<map context="InfobarTeletextActions">
-		<key id="KEY_TEXT" mapto="startTeletext" flags="m" />
+		<key id="KEY_TEXT" mapto="startTeletext" flags="b" />
 	</map>
 
 	<map context="TeletextActions">
