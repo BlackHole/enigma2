@@ -34,6 +34,10 @@ eDMXCSAStatus::eDMXCSAStatus()
 	struct sockaddr_nl sa = {};
 	sa.nl_family = AF_NETLINK;
 	sa.nl_groups = 1;	// The events the kernel sends itself.
+	// Not 0: an auto-bound socket takes the pid as its port id, and
+	// Python code (Components.Netlink) binds its uevent socket to getpid().
+	// Use an id of our own so both can coexist.
+	sa.nl_pid = 0x80000000u | ((unsigned int)getpid() & 0x7fffffffu);
 	m_uevent_fd = ::socket(AF_NETLINK, SOCK_DGRAM | SOCK_CLOEXEC, NETLINK_KOBJECT_UEVENT);
 	if (m_uevent_fd >= 0 && ::bind(m_uevent_fd, (struct sockaddr *)&sa, sizeof(sa)) < 0)
 	{

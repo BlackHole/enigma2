@@ -1,6 +1,5 @@
 # Listen to hotplug events. Can be used to listen for hotplug events and
 # similar things, like network connections being (un)plugged.
-from os import getpid
 import socket
 
 
@@ -8,7 +7,10 @@ class NetlinkSocket(socket.socket):
 	def __init__(self):
 		NETLINK_KOBJECT_UEVENT = 15  # hasn't landed in socket yet, see linux/netlink.h
 		socket.socket.__init__(self, socket.AF_NETLINK, socket.SOCK_DGRAM, NETLINK_KOBJECT_UEVENT)
-		self.bind((getpid(), -1))
+		# Port id 0: let the kernel pick a free one. The first netlink socket of
+		# the process is auto-bound to its pid, so binding to getpid() fails
+		# with EADDRINUSE once C++ (eDMXCSAStatus) has opened one already.
+		self.bind((0, -1))
 
 	def parse(self):
 		data = self.recv(512)
