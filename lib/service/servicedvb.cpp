@@ -1118,6 +1118,8 @@ eDVBServicePlay::eDVBServicePlay(const eServiceReference &ref, eDVBService *serv
 		status->activeChanged.connect(sigc::mem_fun(*this, &eDVBServicePlay::softDescramblingChanged));
 		status->event.connect(sigc::mem_fun(*this, &eDVBServicePlay::softDescramblingEvent));
 	}
+	m_reader_hold_timer = eTimer::create(eApp);
+	CONNECT(m_reader_hold_timer->timeout, eDVBServicePlay::readerHoldTimeout);
 	CONNECT(m_service_handler_timeshift.serviceEvent, eDVBServicePlay::serviceEventTimeshift);
 	CONNECT(m_event_handler.m_eit_changed, eDVBServicePlay::gotNewEvent);
 	CONNECT(m_subtitle_sync_timer->timeout, eDVBServicePlay::checkSubtitleTiming);
@@ -1283,6 +1285,8 @@ void eDVBServicePlay::serviceEvent(int event)
 		eDebug("[eDVBServicePlay] eventNewProgramInfo timeshift_enabled=%d timeshift_active=%d", m_timeshift_enabled, m_timeshift_active);
 		if (m_timeshift_enabled)
 			updateTimeshiftPids();
+		if (!m_readers_ready && mayBeSoftDescrambled() && !m_reader_hold_timer->isActive())
+			m_reader_hold_timer->start(5000, true); /* dmxcsa did not take the service: read the live demux */
 		updateScrambleMonitor();
 
 		if (!m_timeshift_active)
@@ -2119,6 +2123,8 @@ int eDVBServicePlay::getInfo(int w)
 			return -1;
 		if (m_scramble_monitor)
 			return m_scramble_monitor->getState();
+		if (!m_readers_ready && mayBeSoftDescrambled())
+			return 2; /* being determined: held back, see mayBeSoftDescrambled() */
 		/* not tuned yet, or no program info yet: it will be known shortly, unless the PMT turned out to have nothing to watch */
 		return m_scramble_nopid ? -1 : 2;
 	case sVideoBitrate:
@@ -2410,10 +2416,11 @@ RESULT eDVBServicePlay::getTrackInfo(struct iAudioTrackInfo &info, unsigned int 
 			if (!m_audio_channel_detector)
 				m_audio_channel_detector = new eDVBAudioChannelDetector();
 
-			const void *identity = static_cast<const void*>(m_decode_demux.operator->());
-
-			if (!m_audio_channel_detector->matches(info.m_pid, codec, identity) && m_decode_demux)
-				m_audio_channel_detector->start(m_decode_demux, info.m_pid, codec);
+			ePtr<iDVBDemux> probe_demux;
+			if (getReaderDemux(probe_demux, true) || !probe_demux)
+				m_audio_channel_detector->stop(); /* held back or nothing to read, see mayBeSoftDescrambled() */
+			else if (!m_audio_channel_detector->matches(info.m_pid, codec, static_cast<const void*>(probe_demux.operator->())))
+				m_audio_channel_detector->start(probe_demux, info.m_pid, codec);
 
 			info.m_channels = m_audio_channel_detector->channels();
 
@@ -3233,21 +3240,35 @@ void eDVBServicePlay::updateScrambleMonitor()
 		/* a real PMT (not the cached start) without video or audio: nothing to watch */
 		m_scramble_nopid = (pid <= 0 || pid >= 0x2000) && !program.isCached;
 	}
+	ePtr<iDVBDemux> demux;
+	int dres = getReaderDemux(demux, false);
+	if (dres > 0)
+	{
+		/* held back, see mayBeSoftDescrambled() */
+		m_scramble_monitor = 0;
+		m_scramble_pid = -1;
+		m_scramble_demux = nullptr;
+		return;
+	}
+	if (m_scramble_monitor && m_scramble_demux != demux.operator->())
+	{
+		m_scramble_monitor = 0;
+		m_scramble_pid = -1;
+	}
 	if (pid <= 0 || pid >= 0x2000 || (m_scramble_monitor && m_scramble_pid == pid))
 		return;
 
 	if (!m_scramble_monitor)
 	{
-		ePtr<iDVBDemux> demux;
-		int dres = m_service_handler.getDataDemux(demux);
 		int cres = (!dres && demux) ? demux->createScrambleMonitor(m_scramble_monitor) : -1;
 		if (dres || !demux || cres)
 		{
-			eDebug("[eDVBServicePlay] scramble monitor not created: getDataDemux=%d demux=%d createScrambleMonitor=%d", dres, demux ? 1 : 0, cres);
+			eDebug("[eDVBServicePlay] scramble monitor not created: getReaderDemux=%d demux=%d createScrambleMonitor=%d", dres, demux ? 1 : 0, cres);
 			m_scramble_monitor = 0;
 			m_scramble_failed = true;
 			return;
 		}
+		m_scramble_demux = demux.operator->();
 	}
 	m_scramble_pid = pid;
 	if (m_scramble_monitor->start(pid))
@@ -3279,7 +3300,7 @@ int eDVBServicePlay::getLiveBitrate(bool audio)
 {
 	ePtr<iDVBDemux> demux;
 	/* a DVB IPTV stream (m_is_stream) is fed through a PVR channel into a demux, like live TV, so it can be counted */
-	if (m_is_pvr || m_timeshift_active || m_service_handler.getDataDemux(demux) || !demux)
+	if (m_is_pvr || m_timeshift_active || getReaderDemux(demux, false) || !demux)
 	{
 		/* drop the counters: when this is live again the data demux may be another one */
 		releaseLiveBitrate();
@@ -4136,8 +4157,75 @@ void eDVBServicePlay::softDescramblingChanged()
 	if (now != m_soft_descrambled)
 	{
 		m_soft_descrambled = now;
+		/* dmxcsa has taken the service or let it go: read where the stream now is */
+		m_readers_ready = true;
+		restartLiveReaders();
 		m_event((iPlayableService*)this, evUpdatedInfo);
 	}
+}
+
+/* see servicedvb.h */
+bool eDVBServicePlay::mayBeSoftDescrambled()
+{
+	const eDMXCSAStatus *status = eDMXCSAStatus::getInstance();
+	if (!status || !status->isLoaded() || m_is_pvr || m_is_stream || m_timeshift_active)
+		return false;
+	eDVBServicePMTHandler::program program;
+	if (m_service_handler.getProgramInfo(program))
+		return false;
+	/* cached PIDs at zap time may not tell yet that the service is encrypted */
+	return program.isCached || program.isCrypted();
+}
+
+/* 0: read from demux, >0: hold back for now, <0: nothing to read from */
+int eDVBServicePlay::getReaderDemux(ePtr<iDVBDemux> &demux, bool decode)
+{
+	demux = nullptr;
+	if (mayBeSoftDescrambled())
+	{
+		if (isSoftDescrambled())
+		{
+			const eDMXCSAStatus *status = eDMXCSAStatus::getInstance();
+			if (status->shadowDemux() < 0)
+				return -1;
+			if (!m_shadow_demux)
+				m_shadow_demux = new eDVBDemux(status->adapter(), status->shadowDemux());
+			demux = m_shadow_demux;
+			return 0;
+		}
+		if (!m_readers_ready)
+			return 1;
+	}
+	if (decode)
+	{
+		demux = m_decode_demux;
+		return demux ? 0 : -1;
+	}
+	return (m_service_handler.getDataDemux(demux) || !demux) ? -1 : 0;
+}
+
+void eDVBServicePlay::restartLiveReaders()
+{
+	m_scramble_monitor = 0;
+	m_scramble_pid = -1;
+	m_scramble_demux = nullptr;
+	m_scramble_failed = false;
+	releaseLiveBitrate();
+	m_bitrate_failed = false;
+	/* a new probe, so that it starts again on the right demux */
+	if (m_audio_channel_detector)
+		m_audio_channel_detector->stop();
+	m_audio_channel_detector = nullptr;
+	updateScrambleMonitor();
+}
+
+void eDVBServicePlay::readerHoldTimeout()
+{
+	if (m_readers_ready)
+		return;
+	eDebug("[eDVBServicePlay] dmxcsa did not take the service, reading the live demux");
+	m_readers_ready = true;
+	restartLiveReaders();
 }
 
 void eDVBServicePlay::video_event(struct iTSMPEGDecoder::videoEvent event)
@@ -4156,6 +4244,13 @@ void eDVBServicePlay::video_event(struct iTSMPEGDecoder::videoEvent event)
 				m_event((iPlayableService*)this, evFirstFrame);
 			}
 			m_event((iPlayableService*)this, evVideoSizeChanged);
+			// The picture is there: dmxcsa has decided by now.
+			if (!m_readers_ready)
+			{
+				m_readers_ready = true;
+				m_reader_hold_timer->stop();
+				restartLiveReaders();
+			}
 			// The picture is there: say once more who descrambles it.
 			if (isSoftDescrambled())
 			{
@@ -4267,8 +4362,17 @@ void eDVBServicePlay::startHDRDetection(int vpid)
 	 * so the data demux may still carry scrambled TS even after the first
 	 * decoded frame. */
 	ePtr<iDVBDemux> demuxA, demuxB;
-	m_service_handler.getDecodeDemux(demuxA);
-	m_service_handler.getDataDemux(demuxB);  /* fallback if decode demux has PID conflict */
+	if (mayBeSoftDescrambled())
+	{
+		/* dmxcsa: only its shadow demux carries the clear stream, see mayBeSoftDescrambled() */
+		if (getReaderDemux(demuxA, true) || !demuxA)
+			return; /* held back: the first picture starts the detection again */
+	}
+	else
+	{
+		m_service_handler.getDecodeDemux(demuxA);
+		m_service_handler.getDataDemux(demuxB);  /* fallback if decode demux has PID conflict */
+	}
 
 	m_hdr_detector = new eHDRStreamDetector();
 	m_hdr_detector->resultChanged.connect(

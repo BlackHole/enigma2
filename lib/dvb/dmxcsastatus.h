@@ -16,6 +16,7 @@ class eDMXCSAStatus: public sigc::trackable
 	static eDMXCSAStatus *instance;
 	int m_fd;
 	unsigned int m_active;	/* one bit per demux */
+	int m_adapter, m_shadow;
 	ePtr<eSocketNotifier> m_sn;
 	int m_uevent_fd;
 	ePtr<eSocketNotifier> m_uevent_sn;
@@ -29,6 +30,12 @@ public:
 	eDMXCSAStatus(const eDMXCSAStatus &) = delete;
 	eDMXCSAStatus &operator=(const eDMXCSAStatus &) = delete;
 	static eDMXCSAStatus *getInstance() { return instance; }
+	/* The module is loaded on this box */
+	bool isLoaded() const { return m_fd >= 0; }
+	/* Where the decoder of a service the module descrambles is fed from:
+	 * the descrambled stream of that service is on this demux. -1 = not known */
+	int adapter() const { return m_adapter; }
+	int shadowDemux() const { return m_shadow; }
 	bool isActive(int demux) const { return demux >= 0 && demux < 32 && (m_active & (1u << demux)); }
 	sigc::signal<void()> activeChanged;
 	sigc::signal<void(int, int)> event;	/* demux, one of the events above */

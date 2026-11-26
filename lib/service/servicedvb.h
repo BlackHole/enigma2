@@ -275,6 +275,18 @@ protected:
 	// The software descrambler (dmxcsa) at work on this service: shown, not steered.
 	bool m_soft_descrambled;
 	bool isSoftDescrambled();
+	/* Our own readers of the live stream (scramble monitor, bitrate counters,
+	 * channel-count probe) must not open further filters on the PIDs dmxcsa
+	 * reroutes: on some drivers (vuultimo4k) that starves the module's feed and
+	 * the picture stays black. They read the shadow demux of the module instead. */
+	bool mayBeSoftDescrambled();
+	int getReaderDemux(ePtr<iDVBDemux> &demux, bool decode);
+	void restartLiveReaders();
+	void readerHoldTimeout();
+	bool m_readers_ready = false;
+	ePtr<eTimer> m_reader_hold_timer;
+	ePtr<iDVBDemux> m_shadow_demux;
+	const iDVBDemux *m_scramble_demux = nullptr;
 	void softDescramblingChanged();
 	void softDescramblingEvent(int demux, int what);
 

@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <lib/base/cfile.h>
 #include <lib/base/eerror.h>
 #include <lib/base/init.h>
 #include <lib/base/init_num.h>
@@ -17,7 +18,7 @@
 eDMXCSAStatus *eDMXCSAStatus::instance = nullptr;
 
 eDMXCSAStatus::eDMXCSAStatus()
-	: m_fd(-1), m_active(0), m_uevent_fd(-1)
+	: m_fd(-1), m_active(0), m_adapter(0), m_shadow(-1), m_uevent_fd(-1)
 {
 	instance = this;
 
@@ -26,6 +27,10 @@ eDMXCSAStatus::eDMXCSAStatus()
 		return;	// No software descrambler on this box.
 
 	readActive();
+	CFile::parseInt(&m_adapter, "/sys/module/dmxcsa/parameters/adapter");
+	if (CFile::parseInt(&m_shadow, "/sys/module/dmxcsa/parameters/shadow") < 0)
+		m_shadow = -1;
+	eDebug("[eDMXCSAStatus] shadow demux %d on adapter %d", m_shadow, m_adapter);
 	// A sysfs file is always readable; a change shows as POLLPRI.
 	m_sn = eSocketNotifier::create(eApp, m_fd, eSocketNotifier::Priority);
 	CONNECT(m_sn->activated, eDMXCSAStatus::notified);
