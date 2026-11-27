@@ -42,6 +42,51 @@ def partedSizeToHumanReadable(size):
 	return size
 
 
+def readActiveSwaps():
+	"""The devices and files of the swaps in use (/proc/swaps), each as (name, type)."""
+	try:
+		with open("/proc/swaps") as f:
+			return [(parts[0], parts[1]) for parts in (line.split() for line in f.readlines()[1:]) if len(parts) > 1]
+	except OSError:
+		return []
+
+
+def swapPartitionMB(device):
+	"""The size of a partition in MB, from its number of 512 byte sectors in /sys (0 if unknown)."""
+	try:
+		with open("/sys/class/block/%s/size" % path.basename(device)) as f:
+			return int(f.read()) * 512 // 1000000
+	except (OSError, ValueError):
+		return 0
+
+
+def swapPartitions(blkid):
+	"""Return disk and eMMC swap partitions from blkid, excluding zram."""
+	disks, mmc = [], []
+	for line in (blkid or "").splitlines():
+		match = re.match(r'(/dev/[^:\s]+):.*\bTYPE="swap"', line)
+		if not match or "/zram" in match.group(1):
+			continue
+		label = re.search(r'\bPARTLABEL="([^"]*)"', line)
+		(mmc if "/mmcblk" in match.group(1) else disks).append((match.group(1), label.group(1) if label else ""))
+	return disks, mmc
+
+
+def partitionName(device, label):
+	"""Format a swap partition with its optional partition label."""
+	return "%s: %s" % (device, label) if label else device
+
+
+def swapFiles():
+	"""Find swap files at the top of mounted local devices."""
+	files = []
+	for p in harddiskmanager.getMountedPartitions():
+		d = path.normpath(p.mountpoint)
+		if path.exists(p.mountpoint) and p.mountpoint != "/" and not p.mountpoint.startswith(("/media/net/", "/media/autofs/")):
+			files.extend(filename for filename in glob(d + "/swap*") if path.exists(filename))
+	return files
+
+
 def SwapAutostart(reason, session=None, **kwargs):
 	global startswap
 	if reason == 0:
@@ -57,44 +102,23 @@ class StartSwap:
 		self.Console = Console()
 
 	def start(self):
-		self.Console.ePopen("parted -l /dev/sd? | grep swap", self.startSwap2)
+		self.Console.ePopen("/sbin/blkid", self.startSwap2)
 
-	def startSwap2(self, result=None, retval=None, extra_args=None):		# lets find swap partitions(normally receiver specific and part of image build or user swap files
-		swap_Pname = ""
-		swap_Fname = ""
-		# print("[SwapManager][StartSwap] Found a SWAP partition:", result)
-		if result and result.find("swap") > 0:		# so much garbage from parted command with eMMC partitions need further exclude.
-			for line in result.split("\n"):
-				# print("[SwapManager][StartSwap] grep lines in result", line)
-				if "swap" not in line:
-					continue
-				swap_Pname = line.strip().rsplit(" ", 1)[-1]
-				print("[SwapManager][StartSwap] Found a SWAP partition:", swap_Pname)
-		devicelist = []
-		for p in harddiskmanager.getMountedPartitions():
-			d = path.normpath(p.mountpoint)
-			if (path.exists(p.mountpoint) and p.mountpoint != "/" and not p.mountpoint.startswith(("/media/net/", "/media/autofs/"))):
-				devicelist.append((p.description, d))
-		if len(devicelist):
-			for device in devicelist:
-				for filename in glob(device[1] + "/swap*"):
-					if path.exists(filename):
-						swap_Fname = filename
-						print("[SwapManager][StartSwap] Found a SWAP file on ", swap_Fname)
-# basically a swap file if created, is now given higher priority than system swap partition if built in image.
-# swapmanager can now set a user swap file to be active, or deleted and if present system swap partition will be used.
-# if both are present, then swap file is used ahead of swap partition (based on priority) in /proc/swaps.
-		f = open("/proc/swaps")
-		swapfile = f.read()
-		f.close()
-		print("[SwapManager][StartSwap] partition/filename", swap_Fname, "   ", swap_Pname)
-		if swap_Fname and swapfile.find(swap_Fname) == -1:
-			system("swapon -p 10 " + swap_Fname)
+	def startSwap2(self, result=None, retval=None, extra_args=None):
+		disks, mmc = swapPartitions(result)
+		files = swapFiles()
+		swap_Fname = files[-1] if files else ""
+		activeNames = [name for name, _type in readActiveSwaps()]
+		print("[SwapManager][StartSwap] swap partitions of disks", disks, "eMMC", mmc, "swap file", swap_Fname)
+		if disks:
+			if swap_Fname:
+				print("[SwapManager][StartSwap] SWAP file %s not switched on: the SWAP partition %s is used" % (swap_Fname, disks[0][0]))
+			return
+		if swap_Fname and swap_Fname not in activeNames:
+			system("swapon -p 10 " + quote(swap_Fname))
 			print("[SwapManager][StartSwap] SWAP file active on ", swap_Fname)
-		if swap_Pname and not swap_Fname:
-			print("[SwapManager][StartSwap] SWAP partition active on ", swap_Pname)
-		if swap_Pname and swap_Fname:
-			print("[SwapManager][StartSwap] SWAP file %s chosen before swap partition on %s by priority" % (swap_Fname, swap_Pname))
+		if mmc and swap_Fname:
+			print("[SwapManager][StartSwap] SWAP file %s chosen before swap partition on %s by priority" % (swap_Fname, mmc[0][0]))
 
 
 class OpenBhSwap(Screen):
@@ -119,7 +143,7 @@ class OpenBhSwap(Screen):
 		10, 100, 150, 30, 20,
 		10, 150, 150, 30, 20,
 		10, 200, 150, 30, 20,
-		160, 100, 220, 30, 20,
+		160, 100, 380, 30, 20,  # enough width for multiple swap partitions
 		160, 150, 220, 30, 20,
 		160, 200, 100, 30, 20,
 		160, 200, 100, 30, 20,
@@ -150,6 +174,9 @@ class OpenBhSwap(Screen):
 		self.new_name = ""
 		self.creatingswap = False
 		self.swap_active = False
+		self.swap_Pactive = False
+		self.diskSwaps = []
+		self.inactiveDiskSwaps = []
 		self["actions"] = ActionMap(["WizardActions", "ColorActions", "MenuActions"],
 		{
 			"back": self.close,
@@ -186,7 +213,7 @@ class OpenBhSwap(Screen):
 			config.swapmanager.swapautostart.save()
 		if path.exists("/tmp/swapdevices.tmp"):
 			remove("/tmp/swapdevices.tmp")
-		self.Console.ePopen("parted -l /dev/sd? | grep swap", self.updateSwap2)
+		self.Console.ePopen("/sbin/blkid", self.updateSwap2)
 
 	def updateSwap2(self, result=None, retval=None, extra_args=None):
 		self.swap_active = False
@@ -200,82 +227,68 @@ class OpenBhSwap(Screen):
 		self.swapdevice = 0
 		self.swapcount = 0
 		self.swapsize = 0
-		swaps = result.count("swap")
 		scanning = _("No SWAP found")
-		print(f"[SwapManager][updateSwap2] swaps:{swaps}")
-		if result.find("linux-swap") > 0:					# lets find swap partition
-			for line in result.split("\n"):
-				if "linux-swap" not in line:				# so much garbage from parted command with eMMC partitions need further exclude.
-					continue
-				if result.count("swap") == 1:				# only linux-swap zram0.
-					swaps -= 1
-					continue
-				parts = line.strip().split()
-				# print("[SwapManager][updateSwap2] parts = ", parts, "   ", parts[3])
-				self.swap_Pname = line.strip().split(" ", 1)[-1]
-				self.Pswapsize = partedSizeToHumanReadable(parts[3])
-				print(f"[SwapManager][updateSwap2]1 self.swap_Pname:{self.swap_Pname} self.Pswapsize:{self.Pswapsize}")
-				if self.swap_Pname == "sfdisk:":
-					self.swap_Pname = ""
-				f = open("/proc/swaps", "r")
-				for line2 in f.readlines():
-					parts = line2.strip().split()
-					if line2.find("partition") != -1:
-						self.Pswapsize = bytesToHumanReadable(int(parts[2]) * 1024)
-						if "mmc" in parts[0]:
-							self.MMCdevice = True
-							self.swap_Pname = parts[0]
-							# self["key_blue"].setText("")
-							self.swap_name = _("manufacturer defined swap")
-						self.swap_Pactive = True
-				f.close()
-		print(f"[SwapManager][updateSwap2]2 self.swap_Pname:{self.swap_Pname} self.Pswapsize:{self.Pswapsize}")
-		self["key_blue"].setText(_("Create"))
-		devicelist = []						# lets find swap file, independent of any swap partition found by parted (e.g. only zram0)
-		for p in harddiskmanager.getMountedPartitions():
-			d = path.normpath(p.mountpoint)
-			if path.exists(p.mountpoint) and p.mountpoint != "/" and not p.mountpoint.startswith(("/media/net/", "/media/autofs/")):
-				devicelist.append((p.description, d))
-		if len(devicelist):
-			print("[SwapManager][{updateSwap2] devicelist = ", devicelist)
-			for device in devicelist:
-				print("[SwapManager][{updateSwap2] device = ", device, device[1])
-				for filename in glob(device[1] + "/swap*"):
-					self.swap_name = self.swap_Fname = filename
-					self["key_blue"].setText(_("Delete"))
-					info = mystat(self.swap_name)
-					self.Fswapsize = info[stat.ST_SIZE]
+		activeSwaps = readActiveSwaps()
+		activeNames = [name for name, _type in activeSwaps]
+		disks, mmc = swapPartitions(result)
+		self.diskSwaps = [device for device, _label in disks]
+		self.inactiveDiskSwaps = [device for device in self.diskSwaps if device not in activeNames]
+		self.swap_Pactive = len(self.inactiveDiskSwaps) < len(self.diskSwaps)
+		labels = dict(disks + mmc)
+		if not self.diskSwaps:
+			for device, _label in mmc:
+				if device not in activeNames:
+					self.swap_Pname = device
+			for name, swapType in activeSwaps:
+				if swapType == "partition" and "mmc" in name:
+					self.MMCdevice = True
+					self.swap_Pname = name
+					self.swap_name = _("manufacturer defined swap")
+			if self.swap_Pname:
+				self.Pswapsize = "%d MB" % swapPartitionMB(self.swap_Pname)
+		else:
+			self.Pswapsize = "%d MB" % sum(swapPartitionMB(device) for device in self.diskSwaps)
+		print("[SwapManager][updateSwap2] disks:%s inactive:%s partition:%s size:%s" % (self.diskSwaps, self.inactiveDiskSwaps, self.swap_Pname, self.Pswapsize))
 
-		if self.swap_Fname:						# if swap file
+		self["key_blue"].setText(_("Create"))
+		for filename in swapFiles():
+			self.swap_name = self.swap_Fname = filename
+			self["key_blue"].setText(_("Delete"))
+			info = mystat(self.swap_name)
+			self.Fswapsize = info[stat.ST_SIZE]
+
+		if self.diskSwaps:
+			self["labplace"].setText(", ".join(partitionName(device, labels[device]) for device in self.diskSwaps))
+		elif self.swap_Fname:
 			self["labplace"].setText(self.swap_Fname)
 			self["autostart_on"].hide()
 			self["autostart_off"].show()
-		elif self.swap_Pname:						# if only swap partition
-			self["labplace"].setText(self.swap_Pname.replace("/dev/", ""))
+		elif self.swap_Pname:
+			self["labplace"].setText(partitionName(self.swap_Pname, labels.get(self.swap_Pname, "")))
 		else:
 			self["labplace"].setText("")
 		self["labplace"].show()
-		print(f"[SwapManager][updateSwap2]3 self.swap_Pname:{self.swap_Pname} self.Pswapsize:{self.Pswapsize}")
-		f = open("/proc/swaps", "r")
-		for line in f.readlines():
-			parts = line.strip().split()
-			if line.find("file") != -1:					# if swap file - takes precedence over swap parition
+
+		for name, swapType in activeSwaps:
+			if swapType == "file":
 				self["autostart_on"].show()
 				self["autostart_off"].hide()
 				self.swap_active = self.swap_Factive = True
-				continue
-			elif line.find("partition") != -1 and not self.swap_Fname:  # only swap partition
-				self.swap_active = self.swap_Pactive = True
-				continue
+			elif name == self.swap_Pname and not self.swap_Fname:
+				self.swap_active = True
+		if self.swap_Pactive:
+			self.swap_active = True
 
-		f.close()
-		if self.swap_Fname:
+		if self.diskSwaps:
+			self.swapsize = self.Pswapsize
+		elif self.swap_Fname:
 			self.swapsize = bytesToHumanReadable(self.Fswapsize) if self.Fswapsize > 0 else ""
 		elif self.swap_Pname:
-			self.swapsize = self.Pswapsize					# picked up from parted command
+			self.swapsize = self.Pswapsize
 		self["labsize"].setText(self.swapsize)
 		self["labsize"].show()
-		if self.swap_Fname or self.swap_Pname:
+
+		if self.swap_Fname or self.swap_Pname or self.diskSwaps:
 			if self.swap_active:
 				self["inactive"].hide()
 				self["active"].show()
@@ -286,34 +299,51 @@ class OpenBhSwap(Screen):
 				self["active"].hide()
 				self["key_green"].setText(_("Activate"))
 				self["swapactive_summary"].setText(_("Current status:") + " " + _("Inactive"))
-			if self.swap_name == _("manufacturer defined swap"):
-				self["key_green"].setText("")
-				scanning = _("manufacturer defined swap enabled at startup")
-			else:
-				scanning = _("Enable SWAP at startup")
-
-			if config.swapmanager.swapautostart.value or self.swap_name == _("manufacturer defined swap"):
+			if self.diskSwaps:
+				scanning = _("SWAP partition enabled at startup")
 				self["autostart_off"].hide()
 				self["autostart_on"].show()
-				self["key_yellow"].setText(_("Disable Autostart"))
+				self["key_green"].setText(_("Activate") if self.inactiveDiskSwaps else "")
+				self["key_yellow"].setText("")
+				if not self.swap_Fname:
+					self["key_blue"].setText("")
 			else:
-				config.swapmanager.swapautostart.setValue(False)
-				config.swapmanager.swapautostart.save()
-				configfile.save()
-				self["autostart_on"].hide()
-				self["autostart_off"].show()
-				self["key_yellow"].setText(_("Enable Autostart"))
+				if self.swap_name == _("manufacturer defined swap"):
+					self["key_green"].setText("")
+					scanning = _("manufacturer defined swap enabled at startup")
+				else:
+					scanning = _("Enable SWAP at startup")
+				if self.swap_name == _("manufacturer defined swap"):
+					self["autostart_off"].hide()
+					self["autostart_on"].show()
+					self["key_yellow"].setText("")
+				elif config.swapmanager.swapautostart.value:
+					self["autostart_off"].hide()
+					self["autostart_on"].show()
+					self["key_yellow"].setText(_("Disable Autostart"))
+				else:
+					config.swapmanager.swapautostart.setValue(False)
+					config.swapmanager.swapautostart.save()
+					configfile.save()
+					self["autostart_on"].hide()
+					self["autostart_off"].show()
+					self["key_yellow"].setText(_("Enable Autostart"))
 			self["lab1"].setText(scanning)
 			self["lab1"].show()
 			self["actions"].setEnabled(True)
-			name = self["labplace"].text
-			self["swapname_summary"].setText(name)
+			self["swapname_summary"].setText(self["labplace"].text)
 		else:
 			self["lab1"].setText(scanning)
 			self["lab1"].show()
 			self["actions"].setEnabled(True)
 
 	def actDeact(self):
+		if self.diskSwaps:
+			if self.inactiveDiskSwaps:
+				self.Console.ePopen("; ".join("swapon " + quote(device) for device in self.inactiveDiskSwaps), self.updateSwap)
+			return
+		if self.swap_name == _("manufacturer defined swap"):
+			return
 		if self.swap_Factive:
 			self.Console.ePopen("swapoff " + self.swap_Fname, self.updateSwap)
 			self.swap_Factive = False
@@ -330,6 +360,8 @@ class OpenBhSwap(Screen):
 		self.updateSwap()
 
 	def createDel(self):
+		if self.diskSwaps and not self.swap_Fname:
+			return
 		if self.swap_Fname:
 			if self.swap_Factive:
 				self.Console.ePopen("swapoff " + self.swap_Fname, self.createDel2)
@@ -339,8 +371,6 @@ class OpenBhSwap(Screen):
 			self.doCreateSwap()
 
 	def createDel2(self, result, retval, extra_args=None):
-		if self.swap_name == _("manufacturer defined swap"):
-			self.updateSwap()
 		if retval == 0:
 			# print("[SwapManager][createDel2] delete swap = ", self.swap_Fname)
 			self.Console.ePopen("rm " + self.swap_Fname, self.createDel3)
@@ -392,6 +422,8 @@ class OpenBhSwap(Screen):
 			self.Console.eBatch(self.commands, self.updateSwap, debug=True)
 
 	def autoSsWap(self):
+		if self.diskSwaps or self.swap_name == _("manufacturer defined swap"):
+			return
 		if self.swap_name:
 			if config.swapmanager.swapautostart.value:
 				config.swapmanager.swapautostart.setValue(False)
