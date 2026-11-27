@@ -270,9 +270,8 @@ class About(AboutBase):
 		AboutText += _("GCC version:\t%s\n") % getGccVersion()
 		AboutText += _("Glibc version:\t%s\n") % getGlibcVersion()
 		AboutText += _("FFmpeg version:\t%s\n") % getVersionFromOpkg("ffmpeg")
-		if fileReadLine("/sys/module/dmxcsa/initstate") == "live":
-			dmxcsaVersion = fileReadLine("/sys/module/dmxcsa/version")
-			AboutText += _("Software descrambling:\t%s\n") % (f"{_('Available')}, dmxcsa {dmxcsaVersion}" if dmxcsaVersion else _("Available"))
+		dmxcsaVersion = fileReadLine("/sys/module/dmxcsa/version") if fileReadLine("/sys/module/dmxcsa/initstate") == "live" else ""
+		AboutText += _("Software descrambling:\t%s\n") % (f"{_('Available')}, dmxcsa {dmxcsaVersion}" if dmxcsaVersion else _("No -check dmxcsa installation and Oscam status"))
 		AboutText += _("OpenSSL version:\t%s\n") % getVersionFromOpkg("openssl")
 		if BoxInfo.getItem("rust"):
 			AboutText += _("Rust version:\t%s\n") % str(BoxInfo.getItem("rust"))
